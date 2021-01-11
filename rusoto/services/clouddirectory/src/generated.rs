@@ -9693,7 +9693,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10417,7 +10417,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10450,7 +10450,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10577,7 +10577,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10769,7 +10769,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10833,7 +10833,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10866,7 +10866,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10931,7 +10931,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -10964,7 +10964,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
@@ -11029,7 +11029,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
+        request.add_optional_header_ref("x-amz-consistency-level", &input.consistency_level);
         request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self

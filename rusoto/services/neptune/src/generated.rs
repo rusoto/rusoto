@@ -15555,15 +15555,16 @@ impl Neptune for NeptuneClient {
             .map_err(CreateDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBClusterEndpointOutputDeserializer::deserialize(
+            result = CreateDBClusterEndpointOutputDeserializer::deserialize(
                 "CreateDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15831,15 +15832,16 @@ impl Neptune for NeptuneClient {
             .map_err(DeleteDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteDBClusterEndpointOutputDeserializer::deserialize(
+            result = DeleteDBClusterEndpointOutputDeserializer::deserialize(
                 "DeleteDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16031,15 +16033,16 @@ impl Neptune for NeptuneClient {
             .map_err(DescribeDBClusterEndpointsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterEndpointMessageDeserializer::deserialize(
+            result = DBClusterEndpointMessageDeserializer::deserialize(
                 "DescribeDBClusterEndpointsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16802,15 +16805,16 @@ impl Neptune for NeptuneClient {
             .map_err(ModifyDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyDBClusterEndpointOutputDeserializer::deserialize(
+            result = ModifyDBClusterEndpointOutputDeserializer::deserialize(
                 "ModifyDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

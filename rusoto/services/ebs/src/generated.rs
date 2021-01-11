@@ -865,15 +865,12 @@ impl Ebs for EbsClient {
             "x-amz-ChangedBlocksCount",
             &input.changed_blocks_count.to_string(),
         );
-        request.add_optional_header("x-amz-Checksum", input.checksum.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-Checksum", &input.checksum);
+        request.add_optional_header_ref(
             "x-amz-Checksum-Aggregation-Method",
-            input.checksum_aggregation_method.as_ref(),
+            &input.checksum_aggregation_method,
         );
-        request.add_optional_header(
-            "x-amz-Checksum-Algorithm",
-            input.checksum_algorithm.as_ref(),
-        );
+        request.add_optional_header_ref("x-amz-Checksum-Algorithm", &input.checksum_algorithm);
 
         let mut response = self
             .client
@@ -1048,7 +1045,7 @@ impl Ebs for EbsClient {
             &input.checksum_algorithm.to_string(),
         );
         request.add_header("x-amz-Data-Length", &input.data_length.to_string());
-        request.add_optional_header("x-amz-Progress", input.progress.as_ref());
+        request.add_optional_header_ref("x-amz-Progress", &input.progress);
 
         let mut response = self
             .client

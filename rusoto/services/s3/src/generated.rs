@@ -20474,11 +20474,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
@@ -20504,11 +20502,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
@@ -20562,61 +20558,53 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
         request.add_header("x-amz-copy-source", &input.copy_source.to_string());
-        request.add_optional_header(
-            "x-amz-copy-source-if-match",
-            input.copy_source_if_match.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-if-match", &input.copy_source_if_match);
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-modified-since",
-            input.copy_source_if_modified_since.as_ref(),
+            &input.copy_source_if_modified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-none-match",
-            input.copy_source_if_none_match.as_ref(),
+            &input.copy_source_if_none_match,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-unmodified-since",
-            input.copy_source_if_unmodified_since.as_ref(),
+            &input.copy_source_if_unmodified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-algorithm",
-            input.copy_source_sse_customer_algorithm.as_ref(),
+            &input.copy_source_sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key",
-            input.copy_source_sse_customer_key.as_ref(),
+            &input.copy_source_sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-            input.copy_source_sse_customer_key_md5.as_ref(),
+            &input.copy_source_sse_customer_key_md5,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-source-expected-bucket-owner",
-            input.expected_source_bucket_owner.as_ref(),
+            &input.expected_source_bucket_owner,
         );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -20624,50 +20612,47 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
-            "x-amz-metadata-directive",
-            input.metadata_directive.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-metadata-directive", &input.metadata_directive);
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header("x-amz-tagging-directive", input.tagging_directive.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref("x-amz-tagging-directive", &input.tagging_directive);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
 
         let mut response = self
@@ -20717,18 +20702,15 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
+        request.add_optional_header_ref(
             "x-amz-bucket-object-lock-enabled",
-            input.object_lock_enabled_for_bucket.as_ref(),
+            &input.object_lock_enabled_for_bucket,
         );
 
         if input.create_bucket_configuration.is_some() {
@@ -20764,28 +20746,23 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -20793,45 +20770,45 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
         let mut params = Params::new();
         params.put_key("uploads");
@@ -20883,10 +20860,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -20907,10 +20882,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
@@ -20935,10 +20908,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -20962,10 +20933,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -21013,10 +20982,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
@@ -21041,10 +21008,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -21068,10 +21033,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
@@ -21096,10 +21059,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
@@ -21123,10 +21084,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
@@ -21150,10 +21109,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -21177,10 +21134,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -21204,10 +21159,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -21231,16 +21184,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21273,10 +21224,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21305,16 +21254,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put_key("delete");
         request.set_params(params);
@@ -21350,10 +21297,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -21380,10 +21325,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
@@ -21418,10 +21361,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
@@ -21456,10 +21397,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
@@ -21495,10 +21434,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -21530,10 +21467,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -21579,11 +21514,13 @@ impl S3 for S3Client {
             .map_err(GetBucketIntelligentTieringConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21604,10 +21541,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
@@ -21643,10 +21578,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -21681,10 +21614,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -21719,10 +21650,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("location");
         request.set_params(params);
@@ -21754,10 +21683,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
@@ -21790,10 +21717,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
@@ -21829,10 +21754,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -21868,10 +21791,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -21904,10 +21825,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
@@ -21918,8 +21837,11 @@ impl S3 for S3Client {
             .map_err(GetBucketOwnershipControlsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketOwnershipControlsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetBucketOwnershipControlsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21937,10 +21859,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
@@ -21968,10 +21888,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policyStatus");
         request.set_params(params);
@@ -22003,10 +21921,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -22038,10 +21954,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
@@ -22074,10 +21988,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -22109,10 +22021,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
@@ -22144,10 +22054,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -22179,27 +22087,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("If-Match", input.if_match.as_ref());
-        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
-        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
-        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
-        request.add_optional_header("Range", input.range.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("If-Match", &input.if_match);
+        request.add_optional_header_ref("If-Modified-Since", &input.if_modified_since);
+        request.add_optional_header_ref("If-None-Match", &input.if_none_match);
+        request.add_optional_header_ref("If-Unmodified-Since", &input.if_unmodified_since);
+        request.add_optional_header_ref("Range", &input.range);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
@@ -22316,11 +22222,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22355,11 +22259,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22395,10 +22297,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
@@ -22431,11 +22331,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22470,10 +22368,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22508,11 +22404,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
@@ -22538,10 +22432,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -22573,10 +22465,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -22597,27 +22487,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("If-Match", input.if_match.as_ref());
-        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
-        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
-        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
-        request.add_optional_header("Range", input.range.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("If-Match", &input.if_match);
+        request.add_optional_header_ref("If-Modified-Since", &input.if_modified_since);
+        request.add_optional_header_ref("If-None-Match", &input.if_none_match);
+        request.add_optional_header_ref("If-Unmodified-Since", &input.if_unmodified_since);
+        request.add_optional_header_ref("Range", &input.range);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
@@ -22715,10 +22603,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -22772,11 +22658,13 @@ impl S3 for S3Client {
             .map_err(ListBucketIntelligentTieringConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -22797,10 +22685,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -22841,10 +22727,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -22906,10 +22790,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -22959,10 +22841,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -23012,11 +22892,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -23062,11 +22940,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -23119,11 +22995,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.max_parts {
             params.put("max-parts", x);
@@ -23163,10 +23037,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
@@ -23197,20 +23069,15 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
@@ -23246,10 +23113,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
@@ -23281,11 +23146,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -23317,11 +23180,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -23384,10 +23245,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
@@ -23419,11 +23278,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -23459,10 +23316,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -23498,11 +23353,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
@@ -23534,10 +23387,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
@@ -23569,11 +23420,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -23605,10 +23454,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -23639,11 +23486,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
@@ -23675,15 +23520,13 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-confirm-remove-self-bucket-access",
-            input.confirm_remove_self_bucket_access.as_ref(),
+            &input.confirm_remove_self_bucket_access,
         );
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
@@ -23709,12 +23552,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-bucket-object-lock-token", &input.token);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -23746,11 +23587,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
@@ -23782,11 +23621,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -23814,12 +23651,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
@@ -23851,11 +23686,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -23887,30 +23720,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Length", input.content_length.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Length", &input.content_length);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -23918,45 +23746,45 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
 
         if let Some(__body) = input.body {
@@ -24004,21 +23832,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24059,12 +23882,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24106,13 +23927,11 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref("x-amz-bucket-object-lock-token", &input.token);
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
@@ -24150,16 +23969,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24200,11 +24017,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24237,11 +24052,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -24273,11 +24086,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24318,21 +24129,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put_key("select");
@@ -24365,24 +24174,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-Length", input.content_length.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("Content-Length", &input.content_length);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
@@ -24429,55 +24236,50 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
         request.add_header("x-amz-copy-source", &input.copy_source.to_string());
-        request.add_optional_header(
-            "x-amz-copy-source-if-match",
-            input.copy_source_if_match.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-if-match", &input.copy_source_if_match);
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-modified-since",
-            input.copy_source_if_modified_since.as_ref(),
+            &input.copy_source_if_modified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-none-match",
-            input.copy_source_if_none_match.as_ref(),
+            &input.copy_source_if_none_match,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-unmodified-since",
-            input.copy_source_if_unmodified_since.as_ref(),
+            &input.copy_source_if_unmodified_since,
         );
-        request.add_optional_header("x-amz-copy-source-range", input.copy_source_range.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-range", &input.copy_source_range);
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-algorithm",
-            input.copy_source_sse_customer_algorithm.as_ref(),
+            &input.copy_source_sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key",
-            input.copy_source_sse_customer_key.as_ref(),
+            &input.copy_source_sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-            input.copy_source_sse_customer_key_md5.as_ref(),
+            &input.copy_source_sse_customer_key_md5,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-source-expected-bucket-owner",
-            input.expected_source_bucket_owner.as_ref(),
+            &input.expected_source_bucket_owner,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);

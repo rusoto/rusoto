@@ -5479,7 +5479,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5511,7 +5511,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5546,7 +5546,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5582,7 +5582,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5617,7 +5617,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionid", x);
@@ -5654,7 +5654,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5689,7 +5689,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5758,7 +5758,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5791,7 +5791,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5825,7 +5825,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5857,7 +5857,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.delete_all {
             params.put("deleteAll", x);
@@ -5903,7 +5903,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5932,7 +5932,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5964,7 +5964,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -5996,7 +5996,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.delete_all {
             params.put("deleteAll", x);
@@ -6067,7 +6067,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -6096,7 +6096,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.activity_types {
             params.put("activityTypes", x);
@@ -6159,7 +6159,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
@@ -6200,7 +6200,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.fields {
             params.put("fields", x);
@@ -6247,7 +6247,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.include {
             params.put("include", x);
@@ -6297,7 +6297,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
@@ -6388,7 +6388,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
@@ -6467,7 +6467,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.fields {
             params.put("fields", x);
@@ -6559,7 +6559,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.include_custom_metadata {
             params.put("includeCustomMetadata", x);
@@ -6597,7 +6597,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.fields {
             params.put("fields", x);
@@ -6642,7 +6642,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.fields {
             params.put("fields", x);
@@ -6680,7 +6680,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.include_custom_metadata {
             params.put("includeCustomMetadata", x);
@@ -6718,7 +6718,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.fields {
             params.put("fields", x);
@@ -6759,7 +6759,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.collection_type {
             params.put("collectionType", x);
@@ -6808,7 +6808,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -6841,7 +6841,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -6874,7 +6874,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
         let mut params = Params::new();
         if let Some(ref x) = input.principal_type {
             params.put("type", x);
@@ -6913,7 +6913,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -6948,7 +6948,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -6979,7 +6979,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client
@@ -7010,7 +7010,7 @@ impl Workdocs for WorkdocsClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Authentication", input.authentication_token.as_ref());
+        request.add_optional_header_ref("Authentication", &input.authentication_token);
 
         let mut response = self
             .client

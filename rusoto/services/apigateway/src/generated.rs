@@ -13911,7 +13911,7 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Accept", input.accepts.as_ref());
+        request.add_optional_header_ref("Accept", &input.accepts);
         let mut params = Params::new();
         if let Some(ref x) = input.parameters {
             for (key, val) in x.iter() {

@@ -13735,8 +13735,11 @@ impl Route53 for Route53Client {
             .map_err(ActivateKeySigningKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ActivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ActivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -13970,8 +13973,10 @@ impl Route53 for Route53Client {
             .map_err(CreateKeySigningKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14252,8 +14257,11 @@ impl Route53 for Route53Client {
             .map_err(DeactivateKeySigningKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DeactivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                DeactivateKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14341,8 +14349,10 @@ impl Route53 for Route53Client {
             .map_err(DeleteKeySigningKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DeleteKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = DeleteKeySigningKeyResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14513,8 +14523,11 @@ impl Route53 for Route53Client {
             .map_err(DisableHostedZoneDNSSECError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DisableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                DisableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14592,8 +14605,11 @@ impl Route53 for Route53Client {
             .map_err(EnableHostedZoneDNSSECError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            EnableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                EnableHostedZoneDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -14710,8 +14726,10 @@ impl Route53 for Route53Client {
             .map_err(GetDNSSECError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetDNSSECResponseDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;

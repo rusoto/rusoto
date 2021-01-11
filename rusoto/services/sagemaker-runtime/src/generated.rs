@@ -203,18 +203,15 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         request.set_endpoint_prefix("runtime.sagemaker".to_string());
         let encoded = Some(input.body.to_owned());
         request.set_payload(encoded);
-        request.add_optional_header("Accept", input.accept.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("Accept", &input.accept);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
+        request.add_optional_header_ref(
             "X-Amzn-SageMaker-Custom-Attributes",
-            input.custom_attributes.as_ref(),
+            &input.custom_attributes,
         );
-        request.add_optional_header("X-Amzn-SageMaker-Inference-Id", input.inference_id.as_ref());
-        request.add_optional_header("X-Amzn-SageMaker-Target-Model", input.target_model.as_ref());
-        request.add_optional_header(
-            "X-Amzn-SageMaker-Target-Variant",
-            input.target_variant.as_ref(),
-        );
+        request.add_optional_header_ref("X-Amzn-SageMaker-Inference-Id", &input.inference_id);
+        request.add_optional_header_ref("X-Amzn-SageMaker-Target-Model", &input.target_model);
+        request.add_optional_header_ref("X-Amzn-SageMaker-Target-Variant", &input.target_variant);
 
         let mut response = self
             .client

@@ -36672,15 +36672,16 @@ impl Rds for RdsClient {
             .map_err(StartDBInstanceAutomatedBackupsReplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = StartDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
+            result = StartDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
                 "StartDBInstanceAutomatedBackupsReplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -36844,15 +36845,16 @@ impl Rds for RdsClient {
             .map_err(StopDBInstanceAutomatedBackupsReplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = StopDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
+            result = StopDBInstanceAutomatedBackupsReplicationResultDeserializer::deserialize(
                 "StopDBInstanceAutomatedBackupsReplicationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

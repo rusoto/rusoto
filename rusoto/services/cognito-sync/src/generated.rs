@@ -2635,7 +2635,7 @@ impl CognitoSync for CognitoSyncClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-Client-Context", input.client_context.as_ref());
+        request.add_optional_header_ref("x-amz-Client-Context", &input.client_context);
 
         let mut response = self
             .client

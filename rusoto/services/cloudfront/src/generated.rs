@@ -18499,8 +18499,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(CreateCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18770,8 +18772,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(CreateKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18808,8 +18812,13 @@ impl CloudFront for CloudFrontClient {
             .map_err(CreateMonitoringSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateMonitoringSubscriptionResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18841,8 +18850,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(CreateOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18912,8 +18924,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(CreateRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19014,7 +19029,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19038,7 +19053,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19059,7 +19074,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19080,7 +19095,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19104,7 +19119,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19125,7 +19140,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19171,7 +19186,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19192,7 +19207,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19241,7 +19256,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
             .sign_and_dispatch(request)
@@ -19268,8 +19283,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19293,8 +19310,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetCachePolicyConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCachePolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCachePolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19609,8 +19628,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19634,8 +19655,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetKeyGroupConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetKeyGroupConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetKeyGroupConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19662,8 +19685,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetMonitoringSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19687,8 +19713,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19716,8 +19744,13 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetOriginRequestPolicyConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetOriginRequestPolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetOriginRequestPolicyConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19804,8 +19837,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(GetRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19905,8 +19940,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListCachePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListCachePoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListCachePoliciesResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20023,8 +20060,13 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListDistributionsByCachePolicyIdError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByCachePolicyIdResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByCachePolicyIdResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20061,8 +20103,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListDistributionsByKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListDistributionsByKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20101,11 +20146,13 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListDistributionsByOriginRequestPolicyIdError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByOriginRequestPolicyIdResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByOriginRequestPolicyIdResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20141,11 +20188,13 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListDistributionsByRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByRealtimeLogConfigResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByRealtimeLogConfigResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20342,8 +20391,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListKeyGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListKeyGroupsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListKeyGroupsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20379,8 +20430,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListOriginRequestPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListOriginRequestPoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListOriginRequestPoliciesResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20449,8 +20503,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(ListRealtimeLogConfigsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListRealtimeLogConfigsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListRealtimeLogConfigsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20591,7 +20647,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         CachePolicyConfigSerializer::serialize(
@@ -20607,8 +20663,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(UpdateCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20632,7 +20690,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         CloudFrontOriginAccessIdentityConfigSerializer::serialize(
@@ -20672,7 +20730,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         DistributionConfigSerializer::serialize(
@@ -20715,7 +20773,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionConfigSerializer::serialize(
@@ -20761,7 +20819,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionProfileConfigSerializer::serialize(
@@ -20801,7 +20859,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         KeyGroupConfigSerializer::serialize(&mut writer, "KeyGroupConfig", &input.key_group_config);
@@ -20813,8 +20871,10 @@ impl CloudFront for CloudFrontClient {
             .map_err(UpdateKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20832,7 +20892,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         OriginRequestPolicyConfigSerializer::serialize(
@@ -20848,8 +20908,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(UpdateOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20867,7 +20930,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         PublicKeyConfigSerializer::serialize(
@@ -20919,8 +20982,11 @@ impl CloudFront for CloudFrontClient {
             .map_err(UpdateRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20942,7 +21008,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         StreamingDistributionConfigSerializer::serialize(

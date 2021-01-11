@@ -8468,7 +8468,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8506,7 +8506,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8540,7 +8540,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8576,7 +8576,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8611,7 +8611,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8643,7 +8643,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8681,7 +8681,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8713,7 +8713,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8751,7 +8751,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8785,7 +8785,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8821,7 +8821,7 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8858,7 +8858,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8890,7 +8890,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8928,7 +8928,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8960,7 +8960,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -8998,7 +8998,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -9032,7 +9032,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -9065,7 +9065,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -9103,7 +9103,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -11042,7 +11042,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
@@ -11074,7 +11074,7 @@ impl GreenGrass for GreenGrassClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("X-Amzn-Client-Token", input.amzn_client_token.as_ref());
+        request.add_optional_header_ref("X-Amzn-Client-Token", &input.amzn_client_token);
 
         let mut response = self
             .client
