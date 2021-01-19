@@ -1,4 +1,3 @@
-use lazy_static::lazy_static;
 /// a limited implementation of JMESPath (https://jmespath.org/)
 /// this only supports the tiny subset of features used as part of the
 /// pagination definitions
@@ -7,6 +6,7 @@ use lazy_static::lazy_static;
 /// foo.bar
 /// foo[-1]
 /// foo || bar
+use lazy_static::lazy_static;
 use regex::Regex;
 
 #[derive(Clone, Debug, PartialEq, Eq)]

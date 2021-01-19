@@ -43,6 +43,7 @@ pub mod encoding;
 pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
+pub mod pagination;
 
 pub use crate::error::{RusotoError, RusotoResult};
 pub use crate::region::Region;

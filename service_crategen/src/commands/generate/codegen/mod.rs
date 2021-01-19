@@ -154,19 +154,14 @@ where
 
         use std::error::Error;
         use std::fmt;
-        use std::pin::Pin;
 
         use async_trait::async_trait;
-        #[allow(unused_imports)]
-        use futures::{{stream, Stream as FStream, TryStreamExt}};
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoError}};
-
-        // todo: make a concrete type for this in rusoto_core
-        #[allow(dead_code)]
-        type RusotoStream<I, E> = Pin<Box<dyn FStream<Item = Result<I, RusotoError<E>>> + Send>>;
+        #[allow(unused_imports)]
+        use rusoto_core::pagination::{{PagedRequest, PagedOutput, RusotoStream, all_pages}};
     "
     )?;
 
@@ -304,7 +299,6 @@ pub fn get_pagination_item_type(
     service: &Service,
     operation: &Operation,
     for_timestamps: &str,
-    inner: bool,
 ) -> Option<String> {
     // Paginated operations typically return
     // and output shape with a member of type Vec<T>
@@ -314,7 +308,7 @@ pub fn get_pagination_item_type(
 
     let mut shape = service.get_shape(&shape_name)?;
 
-    if inner && shape.shape_type == ShapeType::List {
+    if shape.shape_type == ShapeType::List {
         shape_name = shape.member_type().to_owned();
         shape = service.get_shape(&shape_name)?;
     }
@@ -367,90 +361,20 @@ fn write_paged_version(
     operation: &Operation,
     writer: &mut FileWriter,
 ) -> IoResult {
-    if let Some(pagination) = service.pagination(operation_name) {
-        let page_shape_name = get_pagination_item_shape(&pagination, service, operation)
-            .expect("pagination needs a page");
-        let page_shape = service
-            .get_shape(&page_shape_name)
-            .expect("pagination needs a page");
-        if page_shape.shape_type == ShapeType::List {
-            writeln!(
-                writer,
-                "
-                /// Auto-paginating version of `{wrapped_operation}`
-                {method_signature} {{
-                    let clone = self.clone();
-                    enum PageState<I> {{
-                        Next(I),
-                        End,
-                    }}
-                    Box::pin(
-                        stream::try_unfold((PageState::Next(input), clone), move |(state, clone)| {{
-                            async move {{
-                                let input = match state {{
-                                    PageState::Next(input) => input,
-                                    PageState::End => return Ok(None)  as Result<_, RusotoError<{error_type}>>,
-                                }};
-
-                                let resp = clone.{wrapped_operation}(input.clone()).await?;
-                                let next_state = if resp.has_another_page() {{
-                                    PageState::Next(input.with_pagination_token(resp.pagination_token()))
-                                }} else {{
-                                    PageState::End
-                                }};
-                                Ok(Some((
-                                    stream::iter(resp.into_pagination_page().into_iter().map(Ok)),
-                                    (next_state, clone),
-                                )))
-                            }}
-                        }})
-                        .try_flatten()
-                    )
-                }}
-                ",
-                method_signature = generate_method_signature_paged(operation_name, service, operation),
-                wrapped_operation = operation.name().to_snake_case(),
-                error_type = error_type_name(service, operation_name)
-            )?;
-        } else {
-            writeln!(
-                writer,
-                "
-                /// Auto-paginating version of `{wrapped_operation}`
-                {method_signature} {{
-                    let clone = self.clone();
-                    enum PageState<I> {{
-                        Next(I),
-                        End,
-                    }}
-                    Box::pin(
-                        stream::try_unfold((PageState::Next(input), clone), move |(state, clone)| {{
-                            async move {{
-                                let input = match state {{
-                                    PageState::Next(input) => input,
-                                    PageState::End => return Ok(None)  as Result<_, RusotoError<{error_type}>>,
-                                }};
-
-                                let resp = clone.{wrapped_operation}(input.clone()).await?;
-                                let next_state = if resp.has_another_page() {{
-                                    PageState::Next(input.with_pagination_token(resp.pagination_token()))
-                                }} else {{
-                                    PageState::End
-                                }};
-                                Ok(Some((
-                                    resp.into_pagination_page(),
-                                    (next_state, clone),
-                                )))
-                            }}
-                        }})
-                    )
-                }}
-                ",
-                method_signature = generate_method_signature_paged(operation_name, service, operation),
-                wrapped_operation = operation.name().to_snake_case(),
-                error_type = error_type_name(service, operation_name)
-            )?;
-        }
+    if service.pagination(operation_name).is_some() {
+        writeln!(
+            writer,
+            "
+            /// Auto-paginating version of `{wrapped_operation}`
+            {method_signature} {{
+                all_pages(self.clone(), input, move |client, state| {{
+                    client.{wrapped_operation}(state.clone())
+                }})
+            }}
+            ",
+            method_signature = generate_method_signature_paged(operation_name, service, operation),
+            wrapped_operation = operation.name().to_snake_case()
+        )?;
     }
     Ok(())
 }
@@ -464,8 +388,8 @@ fn generate_method_signature_paged(
     let pagination = service
         .pagination(operation_name)
         .expect("auto_paging needs pagination");
-    let output_type = get_pagination_item_type(&pagination, &service, &operation, "String", true)
-        .expect(&format!(
+    let output_type =
+        get_pagination_item_type(&pagination, &service, &operation, "String").expect(&format!(
             "Failed to resolve a pagination result type for {} operation {}",
             service.name(),
             operation_name
@@ -972,7 +896,11 @@ where
     let mut implementation = "".to_owned();
 
     for operation in service.operations_for_shape(name) {
-        doc.push_str(&format!("/// see [{}::{}]\n", service.service_type_name(), operation.name().to_snake_case()));
+        doc.push_str(&format!(
+            "/// see [{}::{}]\n",
+            service.service_type_name(),
+            operation.name().to_snake_case()
+        ));
         if let Some(pagination) = service.pagination(&operation.name()) {
             let key_type = get_pagination_key_type(
                 &pagination,
@@ -986,7 +914,6 @@ where
                 service,
                 operation,
                 protocol_generator.timestamp_type(),
-                false,
             )
             .expect(&format!(
                 "pagination should have a item type {} {:?}",
@@ -1011,8 +938,9 @@ where
 
                 implementation = format!(
                     "
-                    impl {name} {{
-                        pub fn with_pagination_token(mut self, key: {key_type}) -> Self {{
+                    impl PagedRequest for {name} {{
+                        type Token = {key_type};
+                        fn with_pagination_token(mut self, key: {key_type}) -> Self {{
                             {key_code}
                             self
                         }}
@@ -1023,10 +951,53 @@ where
                     key_type = key_type
                 );
             } else {
-                let page_code = if let Some(result_key) = pagination.result_key.only() {
-                    extract_pagination_output(&JMESPath::parse(&result_key), service, name, true)
+                let mut impls = vec![];
+                let mut trait_impls = vec![];
+                if let Some(result_key) = pagination.result_key.only() {
+                    let shape_name = get_pagination_item_shape(pagination, service, operation)
+                        .expect("pagination result should exist");
+
+                    let shape = service
+                        .get_shape(&shape_name)
+                        .expect("pagination result shape should exist");
+
+                    let mapper = if shape.shape_type == ShapeType::List {
+                        ""
+                    } else {
+                        ".map(|x| vec![x])"
+                    };
+                    impls.push(format!(
+                        "
+                    fn pagination_page_opt(self) -> Option<Vec<{page_type}>> {{
+                        {page_code}{mapper}
+                    }}",
+                        page_code = extract_pagination_output(
+                            &JMESPath::parse(&result_key),
+                            service,
+                            name,
+                            true
+                        ),
+                        page_type = page_type,
+                        mapper = mapper
+                    ));
+
+                    trait_impls.push(format!(
+                        "
+                      fn into_pagination_page(self) -> Vec<{page_type}> {{
+                        self.pagination_page_opt().unwrap_or_default()
+                      }}
+                    ",
+                        page_type = page_type
+                    ));
                 } else {
-                    "Some(self)".to_owned()
+                    trait_impls.push(format!(
+                        "
+                    fn into_pagination_page(self) -> Vec<{page_type}> {{
+                        vec![self]
+                      }}
+                    ",
+                        page_type = page_type
+                    ));
                 };
 
                 let key_code = if let Some(output_token) = pagination.output_token.only() {
@@ -1044,17 +1015,12 @@ where
                     )
                 };
 
-                let more_results = if let Some(more_results) = &pagination.more_results {
-                    format!(
+                if let Some(more_results) = &pagination.more_results {
+                    impls.push(format!(
                         "
-                        pub fn has_another_page_opt(&self) -> Option<bool> {{
+                        fn has_another_page_opt(&self) -> Option<bool> {{
                             {}
                         }}
-
-                        pub fn has_another_page(&self) -> bool {{
-                            self.has_another_page_opt().unwrap_or(false)
-                        }}
-
                     ",
                         extract_pagination_output(
                             &JMESPath::parse(&more_results),
@@ -1062,38 +1028,46 @@ where
                             name,
                             true
                         )
-                    )
+                    ));
+                    trait_impls.push(
+                        "
+                        fn has_another_page(&self) -> bool {{
+                            self.has_another_page_opt().unwrap_or(false)
+                        }}
+                    "
+                        .to_owned(),
+                    );
                 } else {
-                    "pub fn has_another_page(&self) -> bool {{
+                    trait_impls.push(
+                        "
+                    fn has_another_page(&self) -> bool {{
                         self.pagination_token().is_some()
                     }}"
-                    .to_owned()
+                        .to_owned(),
+                    );
                 };
 
                 implementation = format!(
                     "
                     impl {name} {{
-                        pub fn pagination_token(&self) -> {key_type} {{
+                        {impls}
+                    }}
+
+                    impl PagedOutput for {name} {{
+                        type Item = {page_type};
+                        type Token = {key_type};
+                        fn pagination_token(&self) -> {key_type} {{
                             {key_code}
                         }}
-
-                        fn pagination_page_opt(self) -> Option<{page_type}> {{
-                            {page_code}
-                        }}
-
-                        pub fn into_pagination_page(self) -> {page_type} {{
-                            self.pagination_page_opt().unwrap_or_default()
-                        }}
-
-                        {more_results}
+                        {trait_impls}
                     }}
                     ",
                     name = name,
                     key_type = key_type,
                     key_code = key_code,
-                    more_results = more_results,
                     page_type = page_type,
-                    page_code = page_code
+                    impls = impls.join("\n"),
+                    trait_impls = trait_impls.join("\n")
                 );
             }
         }
