@@ -16,6 +16,7 @@ pub use crate::static_provider::StaticProvider;
 pub use crate::variable::Variable;
 
 pub mod claims;
+mod config;
 mod container;
 mod environment;
 mod instance_metadata;

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   match `rusoto_credential`
 - Swap the non-RustCrypto `md5` crate for the RustCrypto `md-5` crate, to match
   usage of RustCrypto `sha2` crate
+- Refactor the parsing of configuration and credentials files
 
 ## [0.46.0] - 2021-01-05
 
