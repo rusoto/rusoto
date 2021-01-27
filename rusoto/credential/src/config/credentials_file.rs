@@ -18,11 +18,16 @@ where
     })
 }
 
+/// The AWS [credentials] file. Located at `~/.aws/credentials` by default, its location can be overriden with the
+/// `AWS_SHARED_CREDENTIALS_FILE` environment variable.
+///
+/// [credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 pub struct CredentialsFile {
     ini: Ini,
 }
 
 impl CredentialsFile {
+    /// Parses the credentials file at the given location.
     pub fn new<L>(location: L) -> Result<Self, CredentialsError>
     where
         L: AsRef<Path>,
@@ -31,6 +36,7 @@ impl CredentialsFile {
         Ok(CredentialsFile { ini })
     }
 
+    /// Returns the profile with the given name.
     pub fn profile(&self, profile_name: &str) -> Option<CredentialsProfile<'_>> {
         self.ini
             .section(Some(profile_name))
@@ -38,6 +44,7 @@ impl CredentialsFile {
     }
 }
 
+/// A profile defined in the AWS [credentials] file.
 pub struct CredentialsProfile<'a> {
     properties: &'a Properties,
 }
@@ -49,22 +56,27 @@ impl<'a> From<&'a Properties> for CredentialsProfile<'a> {
 }
 
 impl<'a> CredentialsProfile<'a> {
+    /// Returns the region property of this profile.
     pub fn region(&self) -> Option<&'a str> {
         self.properties.get("region")
     }
 
+    /// Returns the aws_access_key_id property of this profile.
     pub fn aws_access_key_id(&self) -> Option<&'a str> {
         self.properties.get("aws_access_key_id")
     }
 
+    /// Returns the aws_secret_access_key property of this profile.
     pub fn aws_secret_access_key(&self) -> Option<&'a str> {
         self.properties.get("aws_secret_access_key")
     }
 
+    /// Returns the aws_session_token property of this profile.
     pub fn aws_session_token(&self) -> Option<&'a str> {
         self.properties.get("aws_session_token")
     }
 
+    /// Returns the aws_security_token property of this profile.
     pub fn aws_security_token(&self) -> Option<&'a str> {
         self.properties.get("aws_security_token")
     }

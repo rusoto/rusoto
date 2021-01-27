@@ -48,3 +48,35 @@ pub fn lock_env() -> MutexGuard<'static, ()> {
         }
     }
 }
+
+/// Temporarily sets or removes an environment variable.
+#[derive(Debug)]
+pub struct VarGuard {
+    name: String,
+    previous_value: Option<String>,
+}
+
+impl VarGuard {
+    pub fn new(name: String, value: Option<String>) -> VarGuard {
+        let previous_value = std::env::var(&name).map(Some).unwrap_or(None);
+        if let Some(value) = value {
+            std::env::set_var(&name, value);
+        } else {
+            std::env::remove_var(&name);
+        }
+        VarGuard {
+            name,
+            previous_value,
+        }
+    }
+}
+
+impl Drop for VarGuard {
+    fn drop(&mut self) {
+        if let Some(value) = self.previous_value.take() {
+            std::env::set_var(&self.name, value);
+        } else {
+            std::env::remove_var(&self.name)
+        }
+    }
+}

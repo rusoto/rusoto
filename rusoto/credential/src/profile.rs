@@ -127,8 +127,10 @@ impl ProfileProvider {
 #[async_trait]
 impl ProvideAwsCredentials for ProfileProvider {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        match ConfigFile::new_default()?
-            .default_profile()
+        let config_file = ConfigFile::new_default().ok();
+        match config_file
+            .as_ref()
+            .and_then(|config_file| config_file.default_profile())
             .and_then(|profile| profile.credential_process())
             .map(std::borrow::ToOwned::to_owned)
         {
@@ -215,9 +217,7 @@ mod tests {
     use crate::{
         config::{
             default_profile_name,
-            test_utils::{
-                with_env_config_file, with_env_profile, with_env_shared_credentials_file,
-            },
+            tests::{with_env_config_file, with_env_profile, with_env_shared_credentials_file},
         },
         test_utils::lock_env,
         CredentialsError, ProvideAwsCredentials,

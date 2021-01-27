@@ -90,40 +90,12 @@ where
 }
 
 #[cfg(test)]
-pub mod test_utils {
-    use super::{AWS_CONFIG_FILE, AWS_PROFILE, AWS_SHARED_CREDENTIALS_FILE};
-    use std::env;
+pub mod test_utils {}
 
-    #[derive(Debug)]
-    pub struct VarGuard {
-        variable: String,
-        previous_value: Option<String>,
-    }
-
-    impl VarGuard {
-        fn new(variable: String, value: Option<String>) -> VarGuard {
-            let previous_value = env::var(&variable).map(Some).unwrap_or(None);
-            if let Some(value) = value {
-                env::set_var(&variable, value);
-            } else {
-                env::remove_var(&variable);
-            }
-            VarGuard {
-                variable,
-                previous_value,
-            }
-        }
-    }
-
-    impl Drop for VarGuard {
-        fn drop(&mut self) {
-            if let Some(value) = self.previous_value.take() {
-                env::set_var(&self.variable, value);
-            } else {
-                env::remove_var(&self.variable)
-            }
-        }
-    }
+#[cfg(test)]
+pub mod tests {
+    use super::*;
+    use crate::test_utils::{lock_env, VarGuard};
 
     pub fn with_env_profile(value: Option<&str>) -> VarGuard {
         VarGuard::new(AWS_PROFILE.to_string(), value.map(ToString::to_string))
@@ -139,13 +111,6 @@ pub mod test_utils {
             value.map(ToString::to_string),
         )
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::test_utils::lock_env;
-    use test_utils::{with_env_profile, with_env_shared_credentials_file};
 
     #[test]
     fn default_profile_name_from_env_var() {

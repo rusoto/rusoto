@@ -6,6 +6,10 @@ use crate::CredentialsError;
 
 use super::{default_config_location, default_profile_name, try_parse_ini};
 
+/// The AWS [config] file. Located at `~/.aws/config` by default, its location can be overriden with the
+/// `AWS_CONFIG_FILE` environment variable.
+///
+/// [config]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 pub struct ConfigFile {
     ini: Ini,
 }
@@ -20,6 +24,7 @@ where
 }
 
 impl ConfigFile {
+    /// Parses the config file at the given location.
     pub fn new<L>(location: L) -> Result<Self, CredentialsError>
     where
         L: AsRef<Path>,
@@ -28,23 +33,32 @@ impl ConfigFile {
         Ok(ConfigFile { ini })
     }
 
+    /// Parses the config file at the default location.
     pub fn new_default() -> Result<Self, CredentialsError> {
         let location = default_config_location()?;
         Self::new(&location)
     }
 
+    /// Returns the profile with the given name.
     pub fn profile(&self, profile_name: &str) -> Option<ConfigProfile<'_>> {
         self.ini
             .section(Some(profile_name))
+            // As mentioned in the documentation:
+            // > The credentials file uses a different naming format than the CLI config file for named profiles.
+            // > Include the prefix word "profile" only when configuring a named profile in the config file. Do not use
+            // > the word profile when creating an entry in the credentials file.
+            // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html
             .or_else(|| self.ini.section(Some(&format!("profile {}", profile_name))))
             .map(ConfigProfile::from)
     }
 
+    /// Returns the default profile.
     pub fn default_profile(&self) -> Option<ConfigProfile<'_>> {
         self.profile(&default_profile_name())
     }
 }
 
+/// A profile defined in the AWS [config] file.
 pub struct ConfigProfile<'a> {
     properties: &'a Properties,
 }
@@ -56,10 +70,12 @@ impl<'a> From<&'a Properties> for ConfigProfile<'a> {
 }
 
 impl<'a> ConfigProfile<'a> {
+    /// Returns the region property of this profile.
     pub fn region(&self) -> Option<&'a str> {
         self.properties.get("region")
     }
 
+    /// Returns the credential_process property of this profile.
     pub fn credential_process(&self) -> Option<&'a str> {
         self.properties.get("credential_process")
     }
