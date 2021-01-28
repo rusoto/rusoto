@@ -380,9 +380,10 @@ where
             let header_value = match HeaderValue::from_bytes(v) {
                 Ok(value) => value,
                 Err(err) => {
-                    return Err(HttpDispatchError {
-                        message: format!("error parsing header value: {}", err),
-                    });
+                    return Err(HttpDispatchError::new(format!(
+                        "Value of header {:?} contains invalid header byte. Error: {}",
+                        h.0, err
+                    )));
                 }
             };
             hyper_headers.append(&header_name, header_value);
