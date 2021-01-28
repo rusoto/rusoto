@@ -18,6 +18,20 @@ You may be looking for:
 * [API documentation][api-documentation]
 * [Getting help with Rusoto][rusoto-help]
 
+## Maintenance status
+
+⚠️ Rusoto is in **maintenance mode.** ⚠️
+
+The current maintainers only have the bandwidth to review dependency bumps and
+obvious bugfixes. Our bandwidth for reviewing new features is extremely limited.
+
+While you are welcome to submit PRs that implement new features or refactor
+existing code, they are unlikely to be merged unless we can find more active
+maintainers.
+
+Please see [Meta: future of Rusoto (#1651)](https://github.com/rusoto/rusoto/issues/1651)
+for details.
+
 ## Installation
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto_core).
