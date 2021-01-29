@@ -35,15 +35,14 @@ impl ServiceQuotasClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -767,6 +766,20 @@ impl AssociateServiceQuotaTemplateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AssociateServiceQuotaTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AssociateServiceQuotaTemplateError {
     #[allow(unused_variables)]
@@ -839,6 +852,20 @@ _ => {}
                             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteServiceQuotaIncreaseRequestFromTemplateError {
@@ -953,6 +980,20 @@ impl DisassociateServiceQuotaTemplateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DisassociateServiceQuotaTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DisassociateServiceQuotaTemplateError {
     #[allow(unused_variables)]
@@ -1031,6 +1072,20 @@ impl GetAWSDefaultServiceQuotaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetAWSDefaultServiceQuotaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetAWSDefaultServiceQuotaError {
@@ -1127,6 +1182,20 @@ impl GetAssociationForServiceQuotaTemplateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetAssociationForServiceQuotaTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetAssociationForServiceQuotaTemplateError {
     #[allow(unused_variables)]
@@ -1212,6 +1281,20 @@ impl GetRequestedServiceQuotaChangeError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRequestedServiceQuotaChangeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRequestedServiceQuotaChangeError {
     #[allow(unused_variables)]
@@ -1271,6 +1354,18 @@ impl GetServiceQuotaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetServiceQuotaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetServiceQuotaError {
@@ -1372,6 +1467,20 @@ impl GetServiceQuotaIncreaseRequestFromTemplateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetServiceQuotaIncreaseRequestFromTemplateError {
     #[allow(unused_variables)]
@@ -1465,6 +1574,20 @@ impl ListAWSDefaultServiceQuotasError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListAWSDefaultServiceQuotasError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListAWSDefaultServiceQuotasError {
     #[allow(unused_variables)]
@@ -1542,6 +1665,20 @@ impl ListRequestedServiceQuotaChangeHistoryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListRequestedServiceQuotaChangeHistoryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListRequestedServiceQuotaChangeHistoryError {
@@ -1634,6 +1771,20 @@ impl ListRequestedServiceQuotaChangeHistoryByQuotaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListRequestedServiceQuotaChangeHistoryByQuotaError {
@@ -1741,6 +1892,20 @@ impl ListServiceQuotaIncreaseRequestsInTemplateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListServiceQuotaIncreaseRequestsInTemplateError {
     #[allow(unused_variables)]
@@ -1821,6 +1986,18 @@ impl ListServiceQuotasError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListServiceQuotasError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListServiceQuotasError {
     #[allow(unused_variables)]
@@ -1876,6 +2053,18 @@ impl ListServicesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListServicesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListServicesError {
     #[allow(unused_variables)]
@@ -1929,6 +2118,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2036,6 +2237,20 @@ impl PutServiceQuotaIncreaseRequestIntoTemplateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutServiceQuotaIncreaseRequestIntoTemplateError {
@@ -2154,6 +2369,20 @@ impl RequestServiceQuotaIncreaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RequestServiceQuotaIncreaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RequestServiceQuotaIncreaseError {
     #[allow(unused_variables)]
@@ -2228,6 +2457,18 @@ impl TagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for TagResourceError {
     #[allow(unused_variables)]
@@ -2283,6 +2524,18 @@ impl UntagResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2497,8 +2750,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, AssociateServiceQuotaTemplateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssociateServiceQuotaTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2522,11 +2776,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DeleteServiceQuotaIncreaseRequestFromTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteServiceQuotaIncreaseRequestFromTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2548,11 +2800,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DisassociateServiceQuotaTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisassociateServiceQuotaTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2574,8 +2824,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetAWSDefaultServiceQuotaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAWSDefaultServiceQuotaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2597,11 +2848,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetAssociationForServiceQuotaTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAssociationForServiceQuotaTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2625,8 +2874,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRequestedServiceQuotaChangeError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRequestedServiceQuotaChangeError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2644,8 +2894,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetServiceQuotaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceQuotaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetServiceQuotaResponse, _>()
@@ -2668,11 +2919,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetServiceQuotaIncreaseRequestFromTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceQuotaIncreaseRequestFromTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2694,8 +2943,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListAWSDefaultServiceQuotasError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAWSDefaultServiceQuotasError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2719,11 +2969,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ListRequestedServiceQuotaChangeHistoryError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRequestedServiceQuotaChangeHistoryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2747,11 +2995,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ListRequestedServiceQuotaChangeHistoryByQuotaError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRequestedServiceQuotaChangeHistoryByQuotaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2775,11 +3021,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ListServiceQuotaIncreaseRequestsInTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListServiceQuotaIncreaseRequestsInTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2797,8 +3041,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListServiceQuotasError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListServiceQuotasError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListServiceQuotasResponse, _>()
@@ -2815,8 +3060,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListServicesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListServicesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
@@ -2833,8 +3079,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
@@ -2857,11 +3104,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                PutServiceQuotaIncreaseRequestIntoTemplateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutServiceQuotaIncreaseRequestIntoTemplateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2883,8 +3128,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RequestServiceQuotaIncreaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RequestServiceQuotaIncreaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2902,8 +3148,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
@@ -2920,8 +3167,9 @@ impl ServiceQuotas for ServiceQuotasClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()

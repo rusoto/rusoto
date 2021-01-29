@@ -45,15 +45,14 @@ impl ElastiCacheClient {
         params
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -10022,6 +10021,18 @@ impl AddTagsToResourceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AddTagsToResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10074,6 +10085,20 @@ impl AuthorizeCacheSecurityGroupIngressError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AuthorizeCacheSecurityGroupIngressError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10145,6 +10170,20 @@ impl BatchApplyUpdateActionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchApplyUpdateActionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10199,6 +10238,20 @@ impl BatchStopUpdateActionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchStopUpdateActionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10266,6 +10319,18 @@ impl CompleteMigrationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CompleteMigrationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10353,6 +10418,18 @@ impl CopySnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CopySnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10521,6 +10598,18 @@ impl CreateCacheClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateCacheClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10642,6 +10731,20 @@ impl CreateCacheParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateCacheParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10727,6 +10830,20 @@ impl CreateCacheSecurityGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateCacheSecurityGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10818,6 +10935,20 @@ impl CreateCacheSubnetGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateCacheSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10912,6 +11043,20 @@ impl CreateGlobalReplicationGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10999,6 +11144,20 @@ impl CreateReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11163,6 +11322,18 @@ impl CreateSnapshotError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11245,6 +11416,18 @@ impl CreateUserError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11330,6 +11513,18 @@ impl CreateUserGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateUserGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11380,6 +11575,20 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DecreaseNodeGroupsInGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11524,6 +11733,20 @@ impl DecreaseReplicaCountError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DecreaseReplicaCountError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11653,6 +11876,18 @@ impl DeleteCacheClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteCacheClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11742,6 +11977,20 @@ impl DeleteCacheParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteCacheParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11826,6 +12075,20 @@ impl DeleteCacheSecurityGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteCacheSecurityGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11890,6 +12153,20 @@ impl DeleteCacheSubnetGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteCacheSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11957,6 +12234,20 @@ impl DeleteGlobalReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12067,6 +12358,20 @@ impl DeleteReplicationGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12150,6 +12455,18 @@ impl DeleteSnapshotError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12220,6 +12537,18 @@ impl DeleteUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12281,6 +12610,18 @@ impl DeleteUserGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteUserGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12347,6 +12688,20 @@ impl DescribeCacheClustersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheClustersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12389,6 +12744,20 @@ impl DescribeCacheEngineVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheEngineVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12453,6 +12822,20 @@ impl DescribeCacheParameterGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheParameterGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12525,6 +12908,20 @@ impl DescribeCacheParametersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12601,6 +12998,20 @@ impl DescribeCacheSecurityGroupsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheSecurityGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12653,6 +13064,20 @@ impl DescribeCacheSubnetGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeCacheSubnetGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12714,6 +13139,20 @@ impl DescribeEngineDefaultParametersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeEngineDefaultParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12768,6 +13207,18 @@ impl DescribeEventsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeEventsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12833,6 +13284,20 @@ impl DescribeGlobalReplicationGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeGlobalReplicationGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12905,6 +13370,20 @@ impl DescribeReplicationGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeReplicationGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12981,6 +13460,20 @@ impl DescribeReservedCacheNodesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeReservedCacheNodesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13032,6 +13525,20 @@ impl DescribeReservedCacheNodesOfferingsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeReservedCacheNodesOfferingsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13104,6 +13611,20 @@ impl DescribeServiceUpdatesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeServiceUpdatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13179,6 +13700,18 @@ impl DescribeSnapshotsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13237,6 +13770,20 @@ impl DescribeUpdateActionsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeUpdateActionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13293,6 +13840,18 @@ impl DescribeUserGroupsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeUserGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13347,6 +13906,18 @@ impl DescribeUsersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeUsersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13393,6 +13964,20 @@ impl DisassociateGlobalReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DisassociateGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13453,6 +14038,20 @@ impl FailoverGlobalReplicationGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<FailoverGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13507,6 +14106,20 @@ impl IncreaseNodeGroupsInGlobalReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<IncreaseNodeGroupsInGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13648,6 +14261,20 @@ impl IncreaseReplicaCountError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<IncreaseReplicaCountError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13752,6 +14379,20 @@ impl ListAllowedNodeTypeModificationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListAllowedNodeTypeModificationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13821,6 +14462,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13961,6 +14614,18 @@ impl ModifyCacheClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyCacheClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14071,6 +14736,20 @@ impl ModifyCacheParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyCacheParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14163,6 +14842,20 @@ impl ModifyCacheSubnetGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyCacheSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14233,6 +14926,20 @@ impl ModifyGlobalReplicationGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14422,6 +15129,20 @@ impl ModifyReplicationGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14524,6 +15245,20 @@ impl ModifyReplicationGroupShardConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyReplicationGroupShardConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14596,6 +15331,18 @@ impl ModifyUserError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14687,6 +15434,18 @@ impl ModifyUserGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyUserGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14740,6 +15499,20 @@ impl PurchaseReservedCacheNodesOfferingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PurchaseReservedCacheNodesOfferingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14801,6 +15574,20 @@ impl RebalanceSlotsInGlobalReplicationGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RebalanceSlotsInGlobalReplicationGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14856,6 +15643,18 @@ impl RebootCacheClusterError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RebootCacheClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14928,6 +15727,20 @@ impl RemoveTagsFromResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveTagsFromResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15015,6 +15828,20 @@ impl ResetCacheParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ResetCacheParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15113,6 +15940,20 @@ impl RevokeCacheSecurityGroupIngressError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RevokeCacheSecurityGroupIngressError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15196,6 +16037,18 @@ impl StartMigrationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartMigrationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15307,6 +16160,18 @@ impl TestFailoverError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TestFailoverError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15823,16 +16688,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AddTagsToResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddTagsToResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TagListMessageDeserializer::deserialize("AddTagsToResourceResult", stack)?;
+            result = TagListMessageDeserializer::deserialize("AddTagsToResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15856,22 +16723,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                AuthorizeCacheSecurityGroupIngressError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AuthorizeCacheSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
+            result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
                 "AuthorizeCacheSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15892,19 +16758,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, BatchApplyUpdateActionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchApplyUpdateActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionResultsMessageDeserializer::deserialize(
+            result = UpdateActionResultsMessageDeserializer::deserialize(
                 "BatchApplyUpdateActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15925,19 +16793,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, BatchStopUpdateActionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchStopUpdateActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionResultsMessageDeserializer::deserialize(
+            result = UpdateActionResultsMessageDeserializer::deserialize(
                 "BatchStopUpdateActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15958,19 +16828,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CompleteMigrationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CompleteMigrationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CompleteMigrationResponseDeserializer::deserialize(
+            result = CompleteMigrationResponseDeserializer::deserialize(
                 "CompleteMigrationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15991,16 +16863,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CopySnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopySnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", stack)?;
+            result = CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16021,19 +16895,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateCacheClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheClusterResultDeserializer::deserialize(
+            result = CreateCacheClusterResultDeserializer::deserialize(
                 "CreateCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16054,19 +16930,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateCacheParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheParameterGroupResultDeserializer::deserialize(
+            result = CreateCacheParameterGroupResultDeserializer::deserialize(
                 "CreateCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16087,19 +16965,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateCacheSecurityGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCacheSecurityGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheSecurityGroupResultDeserializer::deserialize(
+            result = CreateCacheSecurityGroupResultDeserializer::deserialize(
                 "CreateCacheSecurityGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16120,19 +17000,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateCacheSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCacheSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateCacheSubnetGroupResultDeserializer::deserialize(
+            result = CreateCacheSubnetGroupResultDeserializer::deserialize(
                 "CreateCacheSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16154,19 +17036,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateGlobalReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateGlobalReplicationGroupResultDeserializer::deserialize(
+            result = CreateGlobalReplicationGroupResultDeserializer::deserialize(
                 "CreateGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16187,19 +17071,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateReplicationGroupResultDeserializer::deserialize(
+            result = CreateReplicationGroupResultDeserializer::deserialize(
                 "CreateReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16220,17 +17106,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", stack)?;
+            result = CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16251,16 +17138,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserDeserializer::deserialize("CreateUserResult", stack)?;
+            result = UserDeserializer::deserialize("CreateUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16281,16 +17170,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateUserGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateUserGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserGroupDeserializer::deserialize("CreateUserGroupResult", stack)?;
+            result = UserGroupDeserializer::deserialize("CreateUserGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16318,22 +17209,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DecreaseNodeGroupsInGlobalReplicationGroupError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DecreaseNodeGroupsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "DecreaseNodeGroupsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16354,19 +17244,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DecreaseReplicaCountError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DecreaseReplicaCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecreaseReplicaCountResultDeserializer::deserialize(
+            result = DecreaseReplicaCountResultDeserializer::deserialize(
                 "DecreaseReplicaCountResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16387,19 +17279,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteCacheClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteCacheClusterResultDeserializer::deserialize(
+            result = DeleteCacheClusterResultDeserializer::deserialize(
                 "DeleteCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16420,8 +17314,9 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteCacheParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCacheParameterGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -16440,8 +17335,9 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteCacheSecurityGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCacheSecurityGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -16460,8 +17356,9 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteCacheSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCacheSubnetGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -16481,19 +17378,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteGlobalReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DeleteGlobalReplicationGroupResultDeserializer::deserialize(
                 "DeleteGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16514,19 +17413,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteReplicationGroupResultDeserializer::deserialize(
+            result = DeleteReplicationGroupResultDeserializer::deserialize(
                 "DeleteReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16547,17 +17448,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", stack)?;
+            result = DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16578,16 +17480,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserDeserializer::deserialize("DeleteUserResult", stack)?;
+            result = UserDeserializer::deserialize("DeleteUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16608,16 +17512,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserGroupDeserializer::deserialize("DeleteUserGroupResult", stack)?;
+            result = UserGroupDeserializer::deserialize("DeleteUserGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16638,17 +17544,19 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheClustersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheClustersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CacheClusterMessageDeserializer::deserialize("DescribeCacheClustersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16669,19 +17577,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheEngineVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheEngineVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheEngineVersionMessageDeserializer::deserialize(
+            result = CacheEngineVersionMessageDeserializer::deserialize(
                 "DescribeCacheEngineVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16702,19 +17612,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheParameterGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheParameterGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupsMessageDeserializer::deserialize(
+            result = CacheParameterGroupsMessageDeserializer::deserialize(
                 "DescribeCacheParameterGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16735,19 +17647,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupDetailsDeserializer::deserialize(
+            result = CacheParameterGroupDetailsDeserializer::deserialize(
                 "DescribeCacheParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16768,19 +17682,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheSecurityGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheSecurityGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheSecurityGroupMessageDeserializer::deserialize(
+            result = CacheSecurityGroupMessageDeserializer::deserialize(
                 "DescribeCacheSecurityGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16801,19 +17717,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeCacheSubnetGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeCacheSubnetGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheSubnetGroupMessageDeserializer::deserialize(
+            result = CacheSubnetGroupMessageDeserializer::deserialize(
                 "DescribeCacheSubnetGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16837,19 +17755,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEngineDefaultParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEngineDefaultParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+            result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
                 "DescribeEngineDefaultParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16870,16 +17790,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEventsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16903,19 +17825,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeGlobalReplicationGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeGlobalReplicationGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeGlobalReplicationGroupsResultDeserializer::deserialize(
+            result = DescribeGlobalReplicationGroupsResultDeserializer::deserialize(
                 "DescribeGlobalReplicationGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16936,19 +17860,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeReplicationGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeReplicationGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReplicationGroupMessageDeserializer::deserialize(
+            result = ReplicationGroupMessageDeserializer::deserialize(
                 "DescribeReplicationGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16969,19 +17895,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeReservedCacheNodesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeReservedCacheNodesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedCacheNodeMessageDeserializer::deserialize(
+            result = ReservedCacheNodeMessageDeserializer::deserialize(
                 "DescribeReservedCacheNodesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17005,22 +17933,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeReservedCacheNodesOfferingsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeReservedCacheNodesOfferingsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
+            result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
                 "DescribeReservedCacheNodesOfferingsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17041,19 +17968,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeServiceUpdatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeServiceUpdatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ServiceUpdatesMessageDeserializer::deserialize(
+            result = ServiceUpdatesMessageDeserializer::deserialize(
                 "DescribeServiceUpdatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17074,19 +18003,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeSnapshotsListMessageDeserializer::deserialize(
+            result = DescribeSnapshotsListMessageDeserializer::deserialize(
                 "DescribeSnapshotsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17107,19 +18038,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeUpdateActionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeUpdateActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateActionsMessageDeserializer::deserialize(
+            result = UpdateActionsMessageDeserializer::deserialize(
                 "DescribeUpdateActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17140,19 +18073,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeUserGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeUserGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeUserGroupsResultDeserializer::deserialize(
+            result = DescribeUserGroupsResultDeserializer::deserialize(
                 "DescribeUserGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17173,17 +18108,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeUsersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeUsersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DescribeUsersResultDeserializer::deserialize("DescribeUsersResult", stack)?;
+            result = DescribeUsersResultDeserializer::deserialize("DescribeUsersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17207,22 +18143,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DisassociateGlobalReplicationGroupError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisassociateGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DisassociateGlobalReplicationGroupResultDeserializer::deserialize(
+            result = DisassociateGlobalReplicationGroupResultDeserializer::deserialize(
                 "DisassociateGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17246,19 +18181,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, FailoverGlobalReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(FailoverGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = FailoverGlobalReplicationGroupResultDeserializer::deserialize(
+            result = FailoverGlobalReplicationGroupResultDeserializer::deserialize(
                 "FailoverGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17286,22 +18223,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                IncreaseNodeGroupsInGlobalReplicationGroupError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(IncreaseNodeGroupsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "IncreaseNodeGroupsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17322,19 +18258,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, IncreaseReplicaCountError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(IncreaseReplicaCountError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = IncreaseReplicaCountResultDeserializer::deserialize(
+            result = IncreaseReplicaCountResultDeserializer::deserialize(
                 "IncreaseReplicaCountResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17358,22 +18296,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ListAllowedNodeTypeModificationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAllowedNodeTypeModificationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
+            result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
                 "ListAllowedNodeTypeModificationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17394,17 +18331,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
+            result = TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17425,19 +18363,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyCacheClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyCacheClusterResultDeserializer::deserialize(
+            result = ModifyCacheClusterResultDeserializer::deserialize(
                 "ModifyCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17458,19 +18398,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyCacheParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupNameMessageDeserializer::deserialize(
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17491,19 +18433,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyCacheSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyCacheSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
+            result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
                 "ModifyCacheSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17525,19 +18469,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyGlobalReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyGlobalReplicationGroupResultDeserializer::deserialize(
+            result = ModifyGlobalReplicationGroupResultDeserializer::deserialize(
                 "ModifyGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17558,19 +18504,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyReplicationGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyReplicationGroupResultDeserializer::deserialize(
+            result = ModifyReplicationGroupResultDeserializer::deserialize(
                 "ModifyReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17598,22 +18546,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ModifyReplicationGroupShardConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyReplicationGroupShardConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
+            result = ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
                 "ModifyReplicationGroupShardConfigurationResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17634,16 +18581,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserDeserializer::deserialize("ModifyUserResult", stack)?;
+            result = UserDeserializer::deserialize("ModifyUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17664,16 +18613,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyUserGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyUserGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UserGroupDeserializer::deserialize("ModifyUserGroupResult", stack)?;
+            result = UserGroupDeserializer::deserialize("ModifyUserGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17697,22 +18648,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                PurchaseReservedCacheNodesOfferingError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PurchaseReservedCacheNodesOfferingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
+            result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
                 "PurchaseReservedCacheNodesOfferingResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17736,22 +18686,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                RebalanceSlotsInGlobalReplicationGroupError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebalanceSlotsInGlobalReplicationGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RebalanceSlotsInGlobalReplicationGroupResultDeserializer::deserialize(
+            result = RebalanceSlotsInGlobalReplicationGroupResultDeserializer::deserialize(
                 "RebalanceSlotsInGlobalReplicationGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17772,19 +18721,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RebootCacheClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebootCacheClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RebootCacheClusterResultDeserializer::deserialize(
+            result = RebootCacheClusterResultDeserializer::deserialize(
                 "RebootCacheClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17805,17 +18756,19 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RemoveTagsFromResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveTagsFromResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 TagListMessageDeserializer::deserialize("RemoveTagsFromResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17836,19 +18789,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ResetCacheParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetCacheParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CacheParameterGroupNameMessageDeserializer::deserialize(
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
                 "ResetCacheParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17872,19 +18827,21 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RevokeCacheSecurityGroupIngressError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RevokeCacheSecurityGroupIngressError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
+            result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
                 "RevokeCacheSecurityGroupIngressResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17905,17 +18862,19 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, StartMigrationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartMigrationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 StartMigrationResponseDeserializer::deserialize("StartMigrationResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -17936,16 +18895,18 @@ impl ElastiCache for ElastiCacheClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, TestFailoverError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TestFailoverError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = TestFailoverResultDeserializer::deserialize("TestFailoverResult", stack)?;
+            result = TestFailoverResultDeserializer::deserialize("TestFailoverResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

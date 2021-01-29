@@ -45,15 +45,14 @@ impl NeptuneClient {
         params
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -9256,6 +9255,18 @@ impl AddRoleToDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AddRoleToDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -9322,6 +9333,20 @@ impl AddSourceIdentifierToSubscriptionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AddSourceIdentifierToSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -9385,6 +9410,18 @@ impl AddTagsToResourceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AddTagsToResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -9433,6 +9470,20 @@ impl ApplyPendingMaintenanceActionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ApplyPendingMaintenanceActionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9501,6 +9552,20 @@ impl CopyDBClusterParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CopyDBClusterParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9602,6 +9667,20 @@ impl CopyDBClusterSnapshotError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CopyDBClusterSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -9681,6 +9760,20 @@ impl CopyDBParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CopyDBParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9841,6 +9934,18 @@ impl CreateDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -9954,6 +10059,20 @@ impl CreateDBClusterEndpointError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDBClusterEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10026,6 +10145,20 @@ impl CreateDBClusterParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDBClusterParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10113,6 +10246,20 @@ impl CreateDBClusterSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDBClusterSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10308,6 +10455,18 @@ impl CreateDBInstanceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDBInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10394,6 +10553,20 @@ impl CreateDBParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDBParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10477,6 +10650,18 @@ impl CreateDBSubnetGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDBSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10589,6 +10774,20 @@ impl CreateEventSubscriptionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateEventSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10681,6 +10880,18 @@ impl DeleteDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10753,6 +10964,20 @@ impl DeleteDBClusterEndpointError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDBClusterEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10818,6 +11043,20 @@ impl DeleteDBClusterParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDBClusterParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -10876,6 +11115,20 @@ impl DeleteDBClusterSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDBClusterSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10959,6 +11212,18 @@ impl DeleteDBInstanceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDBInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11018,6 +11283,20 @@ impl DeleteDBParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDBParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11089,6 +11368,18 @@ impl DeleteDBSubnetGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDBSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11152,6 +11443,20 @@ impl DeleteEventSubscriptionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteEventSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11205,6 +11510,20 @@ impl DescribeDBClusterEndpointsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBClusterEndpointsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11253,6 +11572,20 @@ impl DescribeDBClusterParameterGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBClusterParameterGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11305,6 +11638,20 @@ impl DescribeDBClusterParametersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBClusterParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11351,6 +11698,20 @@ impl DescribeDBClusterSnapshotAttributesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBClusterSnapshotAttributesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11403,6 +11764,20 @@ impl DescribeDBClusterSnapshotsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBClusterSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11449,6 +11824,18 @@ impl DescribeDBClustersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeDBClustersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11483,6 +11870,20 @@ impl DescribeDBEngineVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBEngineVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11525,6 +11926,18 @@ impl DescribeDBInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeDBInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11571,6 +11984,20 @@ impl DescribeDBParameterGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBParameterGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11621,6 +12048,20 @@ impl DescribeDBParametersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11669,6 +12110,20 @@ impl DescribeDBSubnetGroupsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeDBSubnetGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11709,6 +12164,20 @@ impl DescribeEngineDefaultClusterParametersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeEngineDefaultClusterParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11745,6 +12214,20 @@ impl DescribeEngineDefaultParametersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeEngineDefaultParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11777,6 +12260,20 @@ impl DescribeEventCategoriesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeEventCategoriesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11825,6 +12322,20 @@ impl DescribeEventSubscriptionsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeEventSubscriptionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11863,6 +12374,18 @@ impl DescribeEventsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeEventsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11897,6 +12420,20 @@ impl DescribeOrderableDBInstanceOptionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeOrderableDBInstanceOptionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11943,6 +12480,20 @@ impl DescribePendingMaintenanceActionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribePendingMaintenanceActionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12002,6 +12553,20 @@ impl DescribeValidDBInstanceModificationsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeValidDBInstanceModificationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12071,6 +12636,18 @@ impl FailoverDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<FailoverDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12131,6 +12708,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12255,6 +12844,18 @@ impl ModifyDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12353,6 +12954,20 @@ impl ModifyDBClusterEndpointError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyDBClusterEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12424,6 +13039,20 @@ impl ModifyDBClusterParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyDBClusterParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12491,6 +13120,20 @@ impl ModifyDBClusterSnapshotAttributeError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyDBClusterSnapshotAttributeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12670,6 +13313,18 @@ impl ModifyDBInstanceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyDBInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12756,6 +13411,20 @@ impl ModifyDBParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyDBParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12837,6 +13506,18 @@ impl ModifyDBSubnetGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ModifyDBSubnetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12940,6 +13621,20 @@ impl ModifyEventSubscriptionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ModifyEventSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13012,6 +13707,20 @@ impl PromoteReadReplicaDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PromoteReadReplicaDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13068,6 +13777,18 @@ impl RebootDBInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RebootDBInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13135,6 +13856,20 @@ impl RemoveRoleFromDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveRoleFromDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13198,6 +13933,20 @@ impl RemoveSourceIdentifierFromSubscriptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveSourceIdentifierFromSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13269,6 +14018,20 @@ impl RemoveTagsFromResourceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveTagsFromResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13334,6 +14097,20 @@ impl ResetDBClusterParameterGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ResetDBClusterParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13392,6 +14169,20 @@ impl ResetDBParameterGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ResetDBParameterGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13576,6 +14367,20 @@ impl RestoreDBClusterFromSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RestoreDBClusterFromSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13809,6 +14614,20 @@ impl RestoreDBClusterToPointInTimeError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RestoreDBClusterToPointInTimeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13915,6 +14734,18 @@ impl StartDBClusterError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13973,6 +14804,18 @@ impl StopDBClusterError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopDBClusterError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14452,8 +15295,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AddRoleToDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddRoleToDBClusterError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -14475,22 +15319,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                AddSourceIdentifierToSubscriptionError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddSourceIdentifierToSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
+            result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
                 "AddSourceIdentifierToSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14511,8 +15354,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AddTagsToResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddTagsToResourceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -14532,19 +15376,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ApplyPendingMaintenanceActionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ApplyPendingMaintenanceActionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+            result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
                 "ApplyPendingMaintenanceActionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14566,19 +15412,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CopyDBClusterParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopyDBClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+            result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
                 "CopyDBClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14599,19 +15447,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CopyDBClusterSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopyDBClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+            result = CopyDBClusterSnapshotResultDeserializer::deserialize(
                 "CopyDBClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14632,19 +15482,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CopyDBParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopyDBParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CopyDBParameterGroupResultDeserializer::deserialize(
+            result = CopyDBParameterGroupResultDeserializer::deserialize(
                 "CopyDBParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14665,17 +15517,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CreateDBClusterResultDeserializer::deserialize("CreateDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14696,19 +15550,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBClusterEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBClusterEndpointOutputDeserializer::deserialize(
+            result = CreateDBClusterEndpointOutputDeserializer::deserialize(
                 "CreateDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14730,19 +15586,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBClusterParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+            result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
                 "CreateDBClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14763,19 +15621,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBClusterSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+            result = CreateDBClusterSnapshotResultDeserializer::deserialize(
                 "CreateDBClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14796,17 +15656,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CreateDBInstanceResultDeserializer::deserialize("CreateDBInstanceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14827,19 +15689,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBParameterGroupResultDeserializer::deserialize(
+            result = CreateDBParameterGroupResultDeserializer::deserialize(
                 "CreateDBParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14860,19 +15724,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateDBSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDBSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateDBSubnetGroupResultDeserializer::deserialize(
+            result = CreateDBSubnetGroupResultDeserializer::deserialize(
                 "CreateDBSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14893,19 +15759,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateEventSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateEventSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateEventSubscriptionResultDeserializer::deserialize(
+            result = CreateEventSubscriptionResultDeserializer::deserialize(
                 "CreateEventSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14926,17 +15794,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DeleteDBClusterResultDeserializer::deserialize("DeleteDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14957,19 +15827,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBClusterEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteDBClusterEndpointOutputDeserializer::deserialize(
+            result = DeleteDBClusterEndpointOutputDeserializer::deserialize(
                 "DeleteDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -14990,8 +15862,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBClusterParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBClusterParameterGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -15010,19 +15883,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBClusterSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBClusterSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+            result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
                 "DeleteDBClusterSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15043,17 +15918,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DeleteDBInstanceResultDeserializer::deserialize("DeleteDBInstanceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15074,8 +15951,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBParameterGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -15094,8 +15972,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteDBSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDBSubnetGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -15114,19 +15993,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteEventSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteEventSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteEventSubscriptionResultDeserializer::deserialize(
+            result = DeleteEventSubscriptionResultDeserializer::deserialize(
                 "DeleteEventSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15147,19 +16028,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBClusterEndpointsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClusterEndpointsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterEndpointMessageDeserializer::deserialize(
+            result = DBClusterEndpointMessageDeserializer::deserialize(
                 "DescribeDBClusterEndpointsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15181,22 +16064,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeDBClusterParameterGroupsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClusterParameterGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+            result = DBClusterParameterGroupsMessageDeserializer::deserialize(
                 "DescribeDBClusterParameterGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15217,19 +16099,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBClusterParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClusterParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+            result = DBClusterParameterGroupDetailsDeserializer::deserialize(
                 "DescribeDBClusterParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15253,22 +16137,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeDBClusterSnapshotAttributesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClusterSnapshotAttributesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+            result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
                 "DescribeDBClusterSnapshotAttributesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15289,19 +16172,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBClusterSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClusterSnapshotsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterSnapshotMessageDeserializer::deserialize(
+            result = DBClusterSnapshotMessageDeserializer::deserialize(
                 "DescribeDBClusterSnapshotsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15322,17 +16207,18 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBClustersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBClustersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", stack)?;
+            result = DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15353,19 +16239,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBEngineVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBEngineVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBEngineVersionMessageDeserializer::deserialize(
+            result = DBEngineVersionMessageDeserializer::deserialize(
                 "DescribeDBEngineVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15386,17 +16274,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBInstancesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 DBInstanceMessageDeserializer::deserialize("DescribeDBInstancesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15417,19 +16307,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBParameterGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBParameterGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBParameterGroupsMessageDeserializer::deserialize(
+            result = DBParameterGroupsMessageDeserializer::deserialize(
                 "DescribeDBParameterGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15450,19 +16342,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBParameterGroupDetailsDeserializer::deserialize(
+            result = DBParameterGroupDetailsDeserializer::deserialize(
                 "DescribeDBParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15483,19 +16377,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeDBSubnetGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeDBSubnetGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBSubnetGroupMessageDeserializer::deserialize(
+            result = DBSubnetGroupMessageDeserializer::deserialize(
                 "DescribeDBSubnetGroupsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15519,22 +16415,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeEngineDefaultClusterParametersError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEngineDefaultClusterParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
+            result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
                 "DescribeEngineDefaultClusterParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15558,19 +16453,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEngineDefaultParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEngineDefaultParametersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+            result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
                 "DescribeEngineDefaultParametersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15591,19 +16488,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEventCategoriesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEventCategoriesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventCategoriesMessageDeserializer::deserialize(
+            result = EventCategoriesMessageDeserializer::deserialize(
                 "DescribeEventCategoriesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15624,19 +16523,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEventSubscriptionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEventSubscriptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventSubscriptionsMessageDeserializer::deserialize(
+            result = EventSubscriptionsMessageDeserializer::deserialize(
                 "DescribeEventSubscriptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15657,16 +16558,18 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DescribeEventsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEventsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15690,22 +16593,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeOrderableDBInstanceOptionsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeOrderableDBInstanceOptionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+            result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
                 "DescribeOrderableDBInstanceOptionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15727,22 +16629,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribePendingMaintenanceActionsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribePendingMaintenanceActionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+            result = PendingMaintenanceActionsMessageDeserializer::deserialize(
                 "DescribePendingMaintenanceActionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15766,22 +16667,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeValidDBInstanceModificationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeValidDBInstanceModificationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
+            result = DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
                 "DescribeValidDBInstanceModificationsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15802,17 +16702,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, FailoverDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(FailoverDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 FailoverDBClusterResultDeserializer::deserialize("FailoverDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15833,17 +16735,18 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
+            result = TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15864,17 +16767,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ModifyDBClusterResultDeserializer::deserialize("ModifyDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15895,19 +16800,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBClusterEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBClusterEndpointError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyDBClusterEndpointOutputDeserializer::deserialize(
+            result = ModifyDBClusterEndpointOutputDeserializer::deserialize(
                 "ModifyDBClusterEndpointResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15929,19 +16836,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBClusterParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyDBClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -15965,22 +16874,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ModifyDBClusterSnapshotAttributeError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBClusterSnapshotAttributeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+            result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
                 "ModifyDBClusterSnapshotAttributeResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16001,17 +16909,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ModifyDBInstanceResultDeserializer::deserialize("ModifyDBInstanceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16032,19 +16942,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBParameterGroupNameMessageDeserializer::deserialize(
+            result = DBParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyDBParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16065,19 +16977,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyDBSubnetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyDBSubnetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+            result = ModifyDBSubnetGroupResultDeserializer::deserialize(
                 "ModifyDBSubnetGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16098,19 +17012,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ModifyEventSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ModifyEventSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ModifyEventSubscriptionResultDeserializer::deserialize(
+            result = ModifyEventSubscriptionResultDeserializer::deserialize(
                 "ModifyEventSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16132,19 +17048,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PromoteReadReplicaDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PromoteReadReplicaDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
+            result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
                 "PromoteReadReplicaDBClusterResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16165,17 +17083,19 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RebootDBInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebootDBInstanceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 RebootDBInstanceResultDeserializer::deserialize("RebootDBInstanceResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16196,8 +17116,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RemoveRoleFromDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveRoleFromDBClusterError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -16219,22 +17140,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                RemoveSourceIdentifierFromSubscriptionError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveSourceIdentifierFromSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
+            result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
                 "RemoveSourceIdentifierFromSubscriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16255,8 +17175,9 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RemoveTagsFromResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveTagsFromResourceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -16276,19 +17197,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ResetDBClusterParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetDBClusterParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ResetDBClusterParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16309,19 +17232,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ResetDBParameterGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetDBParameterGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DBParameterGroupNameMessageDeserializer::deserialize(
+            result = DBParameterGroupNameMessageDeserializer::deserialize(
                 "ResetDBParameterGroupResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16343,19 +17268,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RestoreDBClusterFromSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreDBClusterFromSnapshotError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+            result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
                 "RestoreDBClusterFromSnapshotResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16377,19 +17304,21 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RestoreDBClusterToPointInTimeError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreDBClusterToPointInTimeError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+            result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
                 "RestoreDBClusterToPointInTimeResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16410,17 +17339,18 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, StartDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", stack)?;
+            result = StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -16441,17 +17371,18 @@ impl Neptune for NeptuneClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, StopDBClusterError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopDBClusterError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", stack)?;
+            result = StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

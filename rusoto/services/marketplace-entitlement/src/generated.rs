@@ -36,15 +36,14 @@ impl MarketplaceEntitlementClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -167,6 +166,18 @@ impl GetEntitlementsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetEntitlementsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetEntitlementsError {
     #[allow(unused_variables)]
@@ -239,8 +250,9 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetEntitlementsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetEntitlementsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetEntitlementsResult, _>()

@@ -38,15 +38,14 @@ use xml::EventReader;
 use xml::EventWriter;
 
 impl CloudFrontClient {
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -539,13 +538,13 @@ impl CacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.cache_policy_id {
-            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+            write_characters_element(writer, "CachePolicyId", &value)?;
         }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
         }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
@@ -555,27 +554,23 @@ impl CacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.origin_request_policy_id {
-            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
+            write_characters_element(writer, "OriginRequestPolicyId", &value)?;
         }
-        write_characters_element(writer, "PathPattern", &obj.path_pattern.to_string())?;
+        write_characters_element(writer, "PathPattern", &obj.path_pattern)?;
         if let Some(ref value) = obj.realtime_log_config_arn {
-            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+            write_characters_element(writer, "RealtimeLogConfigArn", &value)?;
         }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id)?;
         if let Some(ref value) = obj.trusted_key_groups {
             &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
         }
         if let Some(ref value) = obj.trusted_signers {
             &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
         }
-        write_characters_element(
-            writer,
-            "ViewerProtocolPolicy",
-            &obj.viewer_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "ViewerProtocolPolicy", &obj.viewer_protocol_policy)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -790,7 +785,7 @@ impl CachePolicyConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         if let Some(ref value) = obj.default_ttl {
             write_characters_element(writer, "DefaultTTL", &value.to_string())?;
@@ -799,7 +794,7 @@ impl CachePolicyConfigSerializer {
             write_characters_element(writer, "MaxTTL", &value.to_string())?;
         }
         write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         if let Some(ref value) = obj.parameters_in_cache_key_and_forwarded_to_origin {
             &ParametersInCacheKeyAndForwardedToOriginSerializer::serialize(
                 &mut writer,
@@ -887,7 +882,7 @@ impl CachePolicyCookiesConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior)?;
         if let Some(ref value) = obj.cookies {
             &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
         }
@@ -971,7 +966,7 @@ impl CachePolicyHeadersConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior)?;
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
@@ -1104,11 +1099,7 @@ impl CachePolicyQueryStringsConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "QueryStringBehavior",
-            &obj.query_string_behavior.to_string(),
-        )?;
+        write_characters_element(writer, "QueryStringBehavior", &obj.query_string_behavior)?;
         if let Some(ref value) = obj.query_strings {
             &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
         }
@@ -1344,8 +1335,8 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -1551,10 +1542,10 @@ impl ContentTypeProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ContentType", &obj.content_type.to_string())?;
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "ContentType", &obj.content_type)?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.profile_id {
-            write_characters_element(writer, "ProfileId", &value.to_string())?;
+            write_characters_element(writer, "ProfileId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2422,10 +2413,10 @@ impl CustomErrorResponseSerializer {
         }
         write_characters_element(writer, "ErrorCode", &obj.error_code.to_string())?;
         if let Some(ref value) = obj.response_code {
-            write_characters_element(writer, "ResponseCode", &value.to_string())?;
+            write_characters_element(writer, "ResponseCode", &value)?;
         }
         if let Some(ref value) = obj.response_page_path {
-            write_characters_element(writer, "ResponsePagePath", &value.to_string())?;
+            write_characters_element(writer, "ResponsePagePath", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2668,11 +2659,7 @@ impl CustomOriginConfigSerializer {
         if let Some(ref value) = obj.origin_keepalive_timeout {
             write_characters_element(writer, "OriginKeepaliveTimeout", &value.to_string())?;
         }
-        write_characters_element(
-            writer,
-            "OriginProtocolPolicy",
-            &obj.origin_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "OriginProtocolPolicy", &obj.origin_protocol_policy)?;
         if let Some(ref value) = obj.origin_read_timeout {
             write_characters_element(writer, "OriginReadTimeout", &value.to_string())?;
         }
@@ -2810,13 +2797,13 @@ impl DefaultCacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.cache_policy_id {
-            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+            write_characters_element(writer, "CachePolicyId", &value)?;
         }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
         }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
@@ -2826,26 +2813,22 @@ impl DefaultCacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.origin_request_policy_id {
-            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
+            write_characters_element(writer, "OriginRequestPolicyId", &value)?;
         }
         if let Some(ref value) = obj.realtime_log_config_arn {
-            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+            write_characters_element(writer, "RealtimeLogConfigArn", &value)?;
         }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id)?;
         if let Some(ref value) = obj.trusted_key_groups {
             &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
         }
         if let Some(ref value) = obj.trusted_signers {
             &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
         }
-        write_characters_element(
-            writer,
-            "ViewerProtocolPolicy",
-            &obj.viewer_protocol_policy.to_string(),
-        )?;
+        write_characters_element(writer, "ViewerProtocolPolicy", &obj.viewer_protocol_policy)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3229,8 +3212,8 @@ impl DistributionConfigSerializer {
         if let Some(ref value) = obj.cache_behaviors {
             &CacheBehaviorsSerializer::serialize(&mut writer, "CacheBehaviors", value)?;
         }
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         if let Some(ref value) = obj.custom_error_responses {
             &CustomErrorResponsesSerializer::serialize(&mut writer, "CustomErrorResponses", value)?;
         }
@@ -3240,11 +3223,11 @@ impl DistributionConfigSerializer {
             &obj.default_cache_behavior,
         )?;
         if let Some(ref value) = obj.default_root_object {
-            write_characters_element(writer, "DefaultRootObject", &value.to_string())?;
+            write_characters_element(writer, "DefaultRootObject", &value)?;
         }
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.http_version {
-            write_characters_element(writer, "HttpVersion", &value.to_string())?;
+            write_characters_element(writer, "HttpVersion", &value)?;
         }
         if let Some(ref value) = obj.is_ipv6_enabled {
             write_characters_element(writer, "IsIPV6Enabled", &value.to_string())?;
@@ -3257,7 +3240,7 @@ impl DistributionConfigSerializer {
         }
         OriginsSerializer::serialize(&mut writer, "Origins", &obj.origins)?;
         if let Some(ref value) = obj.price_class {
-            write_characters_element(writer, "PriceClass", &value.to_string())?;
+            write_characters_element(writer, "PriceClass", &value)?;
         }
         if let Some(ref value) = obj.restrictions {
             &RestrictionsSerializer::serialize(&mut writer, "Restrictions", value)?;
@@ -3266,7 +3249,7 @@ impl DistributionConfigSerializer {
             &ViewerCertificateSerializer::serialize(&mut writer, "ViewerCertificate", value)?;
         }
         if let Some(ref value) = obj.web_acl_id {
-            write_characters_element(writer, "WebACLId", &value.to_string())?;
+            write_characters_element(writer, "WebACLId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3697,8 +3680,8 @@ impl EncryptionEntitySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         FieldPatternsSerializer::serialize(&mut writer, "FieldPatterns", &obj.field_patterns)?;
-        write_characters_element(writer, "ProviderId", &obj.provider_id.to_string())?;
-        write_characters_element(writer, "PublicKeyId", &obj.public_key_id.to_string())?;
+        write_characters_element(writer, "ProviderId", &obj.provider_id)?;
+        write_characters_element(writer, "PublicKeyId", &obj.public_key_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3797,7 +3780,7 @@ impl EndPointSerializer {
         if let Some(ref value) = obj.kinesis_stream_config {
             &KinesisStreamConfigSerializer::serialize(&mut writer, "KinesisStreamConfig", value)?;
         }
-        write_characters_element(writer, "StreamType", &obj.stream_type.to_string())?;
+        write_characters_element(writer, "StreamType", &obj.stream_type)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3976,9 +3959,9 @@ impl FieldLevelEncryptionConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         if let Some(ref value) = obj.content_type_profile_config {
             &ContentTypeProfileConfigSerializer::serialize(
@@ -4159,16 +4142,16 @@ impl FieldLevelEncryptionProfileConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         EncryptionEntitiesSerializer::serialize(
             &mut writer,
             "EncryptionEntities",
             &obj.encryption_entities,
         )?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -4610,7 +4593,7 @@ impl GeoRestrictionSerializer {
             &LocationListSerializer::serialize(&mut writer, "Items", value)?;
         }
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
-        write_characters_element(writer, "RestrictionType", &obj.restriction_type.to_string())?;
+        write_characters_element(writer, "RestrictionType", &obj.restriction_type)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5619,7 +5602,7 @@ impl InvalidationBatchSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         PathsSerializer::serialize(&mut writer, "Paths", &obj.paths)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5879,10 +5862,10 @@ impl KeyGroupConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         PublicKeyIdListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6077,8 +6060,8 @@ impl KinesisStreamConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "RoleARN", &obj.role_arn.to_string())?;
-        write_characters_element(writer, "StreamARN", &obj.stream_arn.to_string())?;
+        write_characters_element(writer, "RoleARN", &obj.role_arn)?;
+        write_characters_element(writer, "StreamARN", &obj.stream_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6164,15 +6147,11 @@ impl LambdaFunctionAssociationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "EventType", &obj.event_type.to_string())?;
+        write_characters_element(writer, "EventType", &obj.event_type)?;
         if let Some(ref value) = obj.include_body {
             write_characters_element(writer, "IncludeBody", &value.to_string())?;
         }
-        write_characters_element(
-            writer,
-            "LambdaFunctionARN",
-            &obj.lambda_function_arn.to_string(),
-        )?;
+        write_characters_element(writer, "LambdaFunctionARN", &obj.lambda_function_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6995,10 +6974,10 @@ impl LoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         write_characters_element(writer, "IncludeCookies", &obj.include_cookies.to_string())?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7278,10 +7257,10 @@ impl OriginSerializer {
         if let Some(ref value) = obj.custom_origin_config {
             &CustomOriginConfigSerializer::serialize(&mut writer, "CustomOriginConfig", value)?;
         }
-        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "DomainName", &obj.domain_name)?;
+        write_characters_element(writer, "Id", &obj.id)?;
         if let Some(ref value) = obj.origin_path {
-            write_characters_element(writer, "OriginPath", &value.to_string())?;
+            write_characters_element(writer, "OriginPath", &value)?;
         }
         if let Some(ref value) = obj.origin_shield {
             &OriginShieldSerializer::serialize(&mut writer, "OriginShield", value)?;
@@ -7339,8 +7318,8 @@ impl OriginCustomHeaderSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderName", &obj.header_name.to_string())?;
-        write_characters_element(writer, "HeaderValue", &obj.header_value.to_string())?;
+        write_characters_element(writer, "HeaderName", &obj.header_name)?;
+        write_characters_element(writer, "HeaderValue", &obj.header_value)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7446,7 +7425,7 @@ impl OriginGroupSerializer {
             "FailoverCriteria",
             &obj.failover_criteria,
         )?;
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         OriginGroupMembersSerializer::serialize(&mut writer, "Members", &obj.members)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7583,7 +7562,7 @@ impl OriginGroupMemberSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "OriginId", &obj.origin_id.to_string())?;
+        write_characters_element(writer, "OriginId", &obj.origin_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7924,7 +7903,7 @@ impl OriginRequestPolicyConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
         OriginRequestPolicyCookiesConfigSerializer::serialize(
             &mut writer,
@@ -7936,7 +7915,7 @@ impl OriginRequestPolicyConfigSerializer {
             "HeadersConfig",
             &obj.headers_config,
         )?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Name", &obj.name)?;
         OriginRequestPolicyQueryStringsConfigSerializer::serialize(
             &mut writer,
             "QueryStringsConfig",
@@ -8023,7 +8002,7 @@ impl OriginRequestPolicyCookiesConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior)?;
         if let Some(ref value) = obj.cookies {
             &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
         }
@@ -8108,7 +8087,7 @@ impl OriginRequestPolicyHeadersConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior)?;
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
@@ -8248,11 +8227,7 @@ impl OriginRequestPolicyQueryStringsConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "QueryStringBehavior",
-            &obj.query_string_behavior.to_string(),
-        )?;
+        write_characters_element(writer, "QueryStringBehavior", &obj.query_string_behavior)?;
         if let Some(ref value) = obj.query_strings {
             &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
         }
@@ -8396,7 +8371,7 @@ impl OriginShieldSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.origin_shield_region {
-            write_characters_element(writer, "OriginShieldRegion", &value.to_string())?;
+            write_characters_element(writer, "OriginShieldRegion", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8849,12 +8824,12 @@ impl PublicKeyConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
         if let Some(ref value) = obj.comment {
-            write_characters_element(writer, "Comment", &value.to_string())?;
+            write_characters_element(writer, "Comment", &value)?;
         }
-        write_characters_element(writer, "EncodedKey", &obj.encoded_key.to_string())?;
-        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "EncodedKey", &obj.encoded_key)?;
+        write_characters_element(writer, "Name", &obj.name)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9056,8 +9031,8 @@ impl QueryArgProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ProfileId", &obj.profile_id.to_string())?;
-        write_characters_element(writer, "QueryArg", &obj.query_arg.to_string())?;
+        write_characters_element(writer, "ProfileId", &obj.profile_id)?;
+        write_characters_element(writer, "QueryArg", &obj.query_arg)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9497,7 +9472,7 @@ impl RealtimeMetricsSubscriptionConfigSerializer {
         write_characters_element(
             writer,
             "RealtimeMetricsSubscriptionStatus",
-            &obj.realtime_metrics_subscription_status.to_string(),
+            &obj.realtime_metrics_subscription_status,
         )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9636,12 +9611,8 @@ impl S3OriginSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
-        write_characters_element(
-            writer,
-            "OriginAccessIdentity",
-            &obj.origin_access_identity.to_string(),
-        )?;
+        write_characters_element(writer, "DomainName", &obj.domain_name)?;
+        write_characters_element(writer, "OriginAccessIdentity", &obj.origin_access_identity)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9688,11 +9659,7 @@ impl S3OriginConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(
-            writer,
-            "OriginAccessIdentity",
-            &obj.origin_access_identity.to_string(),
-        )?;
+        write_characters_element(writer, "OriginAccessIdentity", &obj.origin_access_identity)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -10080,14 +10047,14 @@ impl StreamingDistributionConfigSerializer {
         if let Some(ref value) = obj.aliases {
             &AliasesSerializer::serialize(&mut writer, "Aliases", value)?;
         }
-        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
-        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference)?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.logging {
             &StreamingLoggingConfigSerializer::serialize(&mut writer, "Logging", value)?;
         }
         if let Some(ref value) = obj.price_class {
-            write_characters_element(writer, "PriceClass", &value.to_string())?;
+            write_characters_element(writer, "PriceClass", &value)?;
         }
         S3OriginSerializer::serialize(&mut writer, "S3Origin", &obj.s3_origin)?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
@@ -10343,9 +10310,9 @@ impl StreamingLoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -10417,9 +10384,9 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11284,19 +11251,19 @@ impl ViewerCertificateSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.acm_certificate_arn {
-            write_characters_element(writer, "ACMCertificateArn", &value.to_string())?;
+            write_characters_element(writer, "ACMCertificateArn", &value)?;
         }
         if let Some(ref value) = obj.cloud_front_default_certificate {
             write_characters_element(writer, "CloudFrontDefaultCertificate", &value.to_string())?;
         }
         if let Some(ref value) = obj.iam_certificate_id {
-            write_characters_element(writer, "IAMCertificateId", &value.to_string())?;
+            write_characters_element(writer, "IAMCertificateId", &value)?;
         }
         if let Some(ref value) = obj.minimum_protocol_version {
-            write_characters_element(writer, "MinimumProtocolVersion", &value.to_string())?;
+            write_characters_element(writer, "MinimumProtocolVersion", &value)?;
         }
         if let Some(ref value) = obj.ssl_support_method {
-            write_characters_element(writer, "SSLSupportMethod", &value.to_string())?;
+            write_characters_element(writer, "SSLSupportMethod", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11408,6 +11375,18 @@ impl CreateCachePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateCachePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11468,6 +11447,20 @@ impl CreateCloudFrontOriginAccessIdentityError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateCloudFrontOriginAccessIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11613,6 +11606,18 @@ impl CreateDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11811,6 +11816,20 @@ impl CreateDistributionWithTagsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDistributionWithTagsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11918,6 +11937,20 @@ impl CreateFieldLevelEncryptionConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateFieldLevelEncryptionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11978,6 +12011,20 @@ impl CreateFieldLevelEncryptionProfileError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateFieldLevelEncryptionProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12075,6 +12122,18 @@ impl CreateInvalidationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateInvalidationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12148,6 +12207,18 @@ impl CreateKeyGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateKeyGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12204,6 +12275,20 @@ impl CreateMonitoringSubscriptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateMonitoringSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12312,6 +12397,20 @@ impl CreateOriginRequestPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateOriginRequestPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12389,6 +12488,18 @@ impl CreatePublicKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreatePublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12458,6 +12569,20 @@ impl CreateRealtimeLogConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateRealtimeLogConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12606,6 +12731,20 @@ impl CreateStreamingDistributionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateStreamingDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12696,6 +12835,20 @@ impl CreateStreamingDistributionWithTagsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateStreamingDistributionWithTagsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12815,6 +12968,18 @@ impl DeleteCachePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteCachePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12867,6 +13032,20 @@ impl DeleteCloudFrontOriginAccessIdentityError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteCloudFrontOriginAccessIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12955,6 +13134,18 @@ impl DeleteDistributionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13041,6 +13232,20 @@ impl DeleteFieldLevelEncryptionConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteFieldLevelEncryptionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13137,6 +13342,20 @@ impl DeleteFieldLevelEncryptionProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteFieldLevelEncryptionProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13216,6 +13435,18 @@ impl DeleteKeyGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteKeyGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13272,6 +13503,20 @@ impl DeleteMonitoringSubscriptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteMonitoringSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13364,6 +13609,20 @@ impl DeleteOriginRequestPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteOriginRequestPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13447,6 +13706,18 @@ impl DeletePublicKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeletePublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13518,6 +13789,20 @@ impl DeleteRealtimeLogConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteRealtimeLogConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13609,6 +13894,20 @@ impl DeleteStreamingDistributionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteStreamingDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13672,6 +13971,18 @@ impl GetCachePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCachePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13724,6 +14035,20 @@ impl GetCachePolicyConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetCachePolicyConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13766,6 +14091,20 @@ impl GetCloudFrontOriginAccessIdentityError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetCloudFrontOriginAccessIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13814,6 +14153,20 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetCloudFrontOriginAccessIdentityConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13872,6 +14225,18 @@ impl GetDistributionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13922,6 +14287,20 @@ impl GetDistributionConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDistributionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13976,6 +14355,20 @@ impl GetFieldLevelEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetFieldLevelEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14036,6 +14429,20 @@ impl GetFieldLevelEncryptionConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetFieldLevelEncryptionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14094,6 +14501,20 @@ impl GetFieldLevelEncryptionProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetFieldLevelEncryptionProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14138,6 +14559,20 @@ impl GetFieldLevelEncryptionProfileConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetFieldLevelEncryptionProfileConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14203,6 +14638,18 @@ impl GetInvalidationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInvalidationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14249,6 +14696,18 @@ impl GetKeyGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetKeyGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14291,6 +14750,18 @@ impl GetKeyGroupConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetKeyGroupConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14346,6 +14817,20 @@ impl GetMonitoringSubscriptionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetMonitoringSubscriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14398,6 +14883,20 @@ impl GetOriginRequestPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOriginRequestPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14458,6 +14957,20 @@ impl GetOriginRequestPolicyConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOriginRequestPolicyConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14512,6 +15025,18 @@ impl GetPublicKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14562,6 +15087,18 @@ impl GetPublicKeyConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPublicKeyConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14625,6 +15162,20 @@ impl GetRealtimeLogConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRealtimeLogConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14678,6 +15229,20 @@ impl GetStreamingDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetStreamingDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14736,6 +15301,20 @@ impl GetStreamingDistributionConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetStreamingDistributionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14799,6 +15378,18 @@ impl ListCachePoliciesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListCachePoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14849,6 +15440,20 @@ impl ListCloudFrontOriginAccessIdentitiesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListCloudFrontOriginAccessIdentitiesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14893,6 +15498,18 @@ impl ListDistributionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListDistributionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14961,6 +15578,20 @@ impl ListDistributionsByCachePolicyIdError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDistributionsByCachePolicyIdError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15020,6 +15651,20 @@ impl ListDistributionsByKeyGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDistributionsByKeyGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15087,6 +15732,20 @@ impl ListDistributionsByOriginRequestPolicyIdError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDistributionsByOriginRequestPolicyIdError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15141,6 +15800,20 @@ impl ListDistributionsByRealtimeLogConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDistributionsByRealtimeLogConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15198,6 +15871,20 @@ impl ListDistributionsByWebACLIdError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDistributionsByWebACLIdError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15245,6 +15932,20 @@ impl ListFieldLevelEncryptionConfigsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListFieldLevelEncryptionConfigsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15295,6 +15996,20 @@ impl ListFieldLevelEncryptionProfilesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListFieldLevelEncryptionProfilesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15357,6 +16072,18 @@ impl ListInvalidationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListInvalidationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15401,6 +16128,18 @@ impl ListKeyGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListKeyGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15463,6 +16202,20 @@ impl ListOriginRequestPoliciesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListOriginRequestPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15509,6 +16262,18 @@ impl ListPublicKeysError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListPublicKeysError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15571,6 +16336,20 @@ impl ListRealtimeLogConfigsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListRealtimeLogConfigsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15619,6 +16398,20 @@ impl ListStreamingDistributionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListStreamingDistributionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15684,6 +16477,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15754,6 +16559,18 @@ impl TagResourceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15820,6 +16637,18 @@ impl UntagResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15945,6 +16774,18 @@ impl UpdateCachePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateCachePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16014,6 +16855,20 @@ impl UpdateCloudFrontOriginAccessIdentityError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateCloudFrontOriginAccessIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16180,6 +17035,18 @@ impl UpdateDistributionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16292,6 +17159,20 @@ impl UpdateFieldLevelEncryptionConfigError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateFieldLevelEncryptionConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16363,6 +17244,20 @@ impl UpdateFieldLevelEncryptionProfileError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateFieldLevelEncryptionProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16453,6 +17348,18 @@ impl UpdateKeyGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateKeyGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16588,6 +17495,20 @@ impl UpdateOriginRequestPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateOriginRequestPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16700,6 +17621,18 @@ impl UpdatePublicKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdatePublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16766,6 +17699,20 @@ impl UpdateRealtimeLogConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateRealtimeLogConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16918,6 +17865,20 @@ impl UpdateStreamingDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateStreamingDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17533,12 +18494,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateCachePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17569,18 +18533,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                CreateCloudFrontOriginAccessIdentityError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCloudFrontOriginAccessIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17608,12 +18572,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17645,12 +18612,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateDistributionWithTagsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDistributionWithTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateDistributionWithTagsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateDistributionWithTagsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17681,15 +18652,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                CreateFieldLevelEncryptionConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFieldLevelEncryptionConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17720,15 +18694,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                CreateFieldLevelEncryptionProfileError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateFieldLevelEncryptionProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17759,12 +18736,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateInvalidationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateInvalidationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateInvalidationResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateInvalidationResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17787,12 +18767,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateKeyGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17824,12 +18807,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateMonitoringSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateMonitoringSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateMonitoringSubscriptionResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17856,12 +18845,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateOriginRequestPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17889,12 +18882,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreatePublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreatePublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17923,12 +18919,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateRealtimeLogConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17956,12 +18956,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, CreateStreamingDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateStreamingDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CreateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -17995,18 +18999,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                CreateStreamingDistributionWithTagsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateStreamingDistributionWithTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18025,11 +19029,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteCachePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCachePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18048,14 +19053,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteCloudFrontOriginAccessIdentityError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCloudFrontOriginAccessIdentityError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18071,11 +19074,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDistributionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18091,14 +19095,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteFieldLevelEncryptionConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFieldLevelEncryptionConfigError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18117,14 +19119,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteFieldLevelEncryptionProfileError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteFieldLevelEncryptionProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18140,11 +19140,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteKeyGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteKeyGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18165,8 +19166,9 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteMonitoringSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteMonitoringSubscriptionError::refine)?;
 
         let result = DeleteMonitoringSubscriptionResult::default();
         let mut result = result;
@@ -18184,11 +19186,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteOriginRequestPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteOriginRequestPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18204,11 +19207,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeletePublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePublicKeyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18234,8 +19238,9 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteRealtimeLogConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRealtimeLogConfigError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18251,11 +19256,12 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteStreamingDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteStreamingDistributionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -18272,12 +19278,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetCachePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18296,12 +19305,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetCachePolicyConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCachePolicyConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCachePolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCachePolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18326,15 +19338,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetCloudFrontOriginAccessIdentityError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCloudFrontOriginAccessIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18359,18 +19374,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetCloudFrontOriginAccessIdentityConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCloudFrontOriginAccessIdentityConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18389,12 +19404,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18413,12 +19431,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetDistributionConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetDistributionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetDistributionConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18437,12 +19458,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetFieldLevelEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFieldLevelEncryptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetFieldLevelEncryptionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetFieldLevelEncryptionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18465,12 +19490,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetFieldLevelEncryptionConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFieldLevelEncryptionConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18495,12 +19526,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetFieldLevelEncryptionProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFieldLevelEncryptionProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18525,18 +19562,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetFieldLevelEncryptionProfileConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFieldLevelEncryptionProfileConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18559,12 +19596,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetInvalidationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInvalidationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetInvalidationResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetInvalidationResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18583,12 +19623,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetKeyGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18607,12 +19650,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetKeyGroupConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetKeyGroupConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetKeyGroupConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetKeyGroupConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18634,12 +19680,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetMonitoringSubscriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMonitoringSubscriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18658,12 +19708,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetOriginRequestPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18686,12 +19739,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetOriginRequestPolicyConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOriginRequestPolicyConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetOriginRequestPolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetOriginRequestPolicyConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18710,12 +19769,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetPublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetPublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetPublicKeyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18734,12 +19796,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetPublicKeyConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPublicKeyConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetPublicKeyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetPublicKeyConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18767,12 +19832,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, GetRealtimeLogConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18791,12 +19859,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetStreamingDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetStreamingDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18821,12 +19893,18 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, GetStreamingDistributionConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetStreamingDistributionConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetStreamingDistributionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetStreamingDistributionConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18857,12 +19935,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListCachePoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListCachePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListCachePoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListCachePoliciesResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18893,18 +19974,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListCloudFrontOriginAccessIdentitiesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListCloudFrontOriginAccessIdentitiesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18932,12 +20013,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListDistributionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -18971,15 +20055,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListDistributionsByCachePolicyIdError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsByCachePolicyIdError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByCachePolicyIdResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByCachePolicyIdResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19011,12 +20098,16 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListDistributionsByKeyGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsByKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListDistributionsByKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19050,18 +20141,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListDistributionsByOriginRequestPolicyIdError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsByOriginRequestPolicyIdError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByOriginRequestPolicyIdResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByOriginRequestPolicyIdResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19092,18 +20183,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListDistributionsByRealtimeLogConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsByRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByRealtimeLogConfigResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListDistributionsByRealtimeLogConfigResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19135,12 +20226,16 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListDistributionsByWebACLIdError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDistributionsByWebACLIdError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListDistributionsByWebACLIdResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListDistributionsByWebACLIdResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19171,12 +20266,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListFieldLevelEncryptionConfigsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFieldLevelEncryptionConfigsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19207,15 +20308,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListFieldLevelEncryptionProfilesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListFieldLevelEncryptionProfilesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19246,12 +20350,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListInvalidationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListInvalidationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListInvalidationsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListInvalidationsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19279,12 +20386,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListKeyGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListKeyGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListKeyGroupsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListKeyGroupsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19315,12 +20425,16 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListOriginRequestPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListOriginRequestPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListOriginRequestPoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListOriginRequestPoliciesResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19348,12 +20462,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListPublicKeysError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPublicKeysError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListPublicKeysResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListPublicKeysResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19381,12 +20498,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListRealtimeLogConfigsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRealtimeLogConfigsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListRealtimeLogConfigsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListRealtimeLogConfigsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19415,12 +20535,16 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListStreamingDistributionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListStreamingDistributionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListStreamingDistributionsResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                ListStreamingDistributionsResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19443,12 +20567,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListTagsForResourceResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListTagsForResourceResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19475,8 +20602,9 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19501,8 +20629,9 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19518,7 +20647,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         CachePolicyConfigSerializer::serialize(
@@ -19529,12 +20658,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateCachePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateCachePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19558,7 +20690,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         CloudFrontOriginAccessIdentityConfigSerializer::serialize(
@@ -19569,18 +20701,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                UpdateCloudFrontOriginAccessIdentityError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateCloudFrontOriginAccessIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19598,7 +20730,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         DistributionConfigSerializer::serialize(
@@ -19609,12 +20741,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19638,7 +20773,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionConfigSerializer::serialize(
@@ -19649,15 +20784,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                UpdateFieldLevelEncryptionConfigError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFieldLevelEncryptionConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19681,7 +20819,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionProfileConfigSerializer::serialize(
@@ -19692,15 +20830,18 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                UpdateFieldLevelEncryptionProfileError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateFieldLevelEncryptionProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19718,19 +20859,22 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         KeyGroupConfigSerializer::serialize(&mut writer, "KeyGroupConfig", &input.key_group_config);
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateKeyGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateKeyGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19748,7 +20892,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         OriginRequestPolicyConfigSerializer::serialize(
@@ -19759,12 +20903,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateOriginRequestPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateOriginRequestPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19782,7 +20930,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         PublicKeyConfigSerializer::serialize(
@@ -19793,12 +20941,15 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdatePublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdatePublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UpdatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19826,12 +20977,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateRealtimeLogConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRealtimeLogConfigError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19853,7 +21008,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header_ref("If-Match", &input.if_match);
 
         let mut writer = EventWriter::new(Vec::new());
         StreamingDistributionConfigSerializer::serialize(
@@ -19864,12 +21019,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, UpdateStreamingDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateStreamingDistributionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UpdateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                UpdateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;

@@ -45,15 +45,14 @@ impl StsClient {
         params
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -1123,6 +1122,18 @@ impl AssumeRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AssumeRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -1203,6 +1214,18 @@ impl AssumeRoleWithSAMLError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AssumeRoleWithSAMLError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1304,6 +1327,20 @@ impl AssumeRoleWithWebIdentityError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AssumeRoleWithWebIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -1366,6 +1403,20 @@ impl DecodeAuthorizationMessageError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DecodeAuthorizationMessageError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -1404,6 +1455,18 @@ impl GetAccessKeyInfoError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetAccessKeyInfoError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -1436,6 +1499,18 @@ impl GetCallerIdentityError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCallerIdentityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1494,6 +1569,18 @@ impl GetFederationTokenError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetFederationTokenError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -1538,6 +1625,18 @@ impl GetSessionTokenError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetSessionTokenError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1661,16 +1760,18 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AssumeRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssumeRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", stack)?;
+            result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1691,19 +1792,21 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AssumeRoleWithSAMLError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssumeRoleWithSAMLError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
+            result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
                 "AssumeRoleWithSAMLResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1725,19 +1828,21 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AssumeRoleWithWebIdentityError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AssumeRoleWithWebIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
+            result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
                 "AssumeRoleWithWebIdentityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1759,19 +1864,21 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DecodeAuthorizationMessageError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DecodeAuthorizationMessageError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
+            result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
                 "DecodeAuthorizationMessageResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1792,17 +1899,19 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetAccessKeyInfoError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccessKeyInfoError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetAccessKeyInfoResponseDeserializer::deserialize("GetAccessKeyInfoResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1823,19 +1932,21 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetCallerIdentityError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCallerIdentityError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetCallerIdentityResponseDeserializer::deserialize(
+            result = GetCallerIdentityResponseDeserializer::deserialize(
                 "GetCallerIdentityResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1856,19 +1967,21 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetFederationTokenError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetFederationTokenError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetFederationTokenResponseDeserializer::deserialize(
+            result = GetFederationTokenResponseDeserializer::deserialize(
                 "GetFederationTokenResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -1889,17 +2002,19 @@ impl Sts for StsClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetSessionTokenError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSessionTokenError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSessionTokenResponseDeserializer::deserialize("GetSessionTokenResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

@@ -34,15 +34,14 @@ impl GlueClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -8027,6 +8026,20 @@ impl BatchCreatePartitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchCreatePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchCreatePartitionError {
     #[allow(unused_variables)]
@@ -8073,6 +8086,20 @@ impl BatchDeleteConnectionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchDeleteConnectionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchDeleteConnectionError {
@@ -8124,6 +8151,20 @@ impl BatchDeletePartitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchDeletePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchDeletePartitionError {
     #[allow(unused_variables)]
@@ -8171,6 +8212,18 @@ impl BatchDeleteTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchDeleteTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchDeleteTableError {
@@ -8228,6 +8281,20 @@ impl BatchDeleteTableVersionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchDeleteTableVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchDeleteTableVersionError {
     #[allow(unused_variables)]
@@ -8265,6 +8332,18 @@ impl BatchGetCrawlersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetCrawlersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetCrawlersError {
@@ -8316,6 +8395,20 @@ impl BatchGetDevEndpointsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetDevEndpointsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetDevEndpointsError {
     #[allow(unused_variables)]
@@ -8358,6 +8451,18 @@ impl BatchGetJobsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetJobsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetJobsError {
@@ -8411,6 +8516,18 @@ impl BatchGetPartitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetPartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetPartitionError {
     #[allow(unused_variables)]
@@ -8455,6 +8572,18 @@ impl BatchGetTriggersError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetTriggersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetTriggersError {
     #[allow(unused_variables)]
@@ -8496,6 +8625,18 @@ impl BatchGetWorkflowsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetWorkflowsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetWorkflowsError {
@@ -8540,6 +8681,18 @@ impl GlueBatchStopJobRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GlueBatchStopJobRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GlueBatchStopJobRunError {
@@ -8597,6 +8750,20 @@ impl BatchUpdatePartitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchUpdatePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchUpdatePartitionError {
     #[allow(unused_variables)]
@@ -8645,6 +8812,18 @@ impl CancelMLTaskRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CancelMLTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CancelMLTaskRunError {
@@ -8697,6 +8876,20 @@ impl CheckSchemaVersionValidityError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CheckSchemaVersionValidityError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CheckSchemaVersionValidityError {
     #[allow(unused_variables)]
@@ -8738,6 +8931,18 @@ impl CreateClassifierError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateClassifierError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateClassifierError {
@@ -8793,6 +8998,18 @@ impl CreateConnectionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateConnectionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateConnectionError {
     #[allow(unused_variables)]
@@ -8843,6 +9060,18 @@ impl CreateCrawlerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateCrawlerError {
@@ -8903,6 +9132,18 @@ impl CreateDatabaseError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDatabaseError {
@@ -8972,6 +9213,18 @@ impl CreateDevEndpointError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDevEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDevEndpointError {
@@ -9047,6 +9300,18 @@ impl CreateJobError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateJobError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateJobError {
     #[allow(unused_variables)]
@@ -9116,6 +9381,18 @@ impl CreateMLTransformError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateMLTransformError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateMLTransformError {
@@ -9189,6 +9466,18 @@ impl CreatePartitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreatePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreatePartitionError {
     #[allow(unused_variables)]
@@ -9261,6 +9550,20 @@ impl CreatePartitionIndexError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreatePartitionIndexError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreatePartitionIndexError {
     #[allow(unused_variables)]
@@ -9320,6 +9623,18 @@ impl CreateRegistryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateRegistryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateRegistryError {
@@ -9382,6 +9697,18 @@ impl CreateSchemaError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateSchemaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateSchemaError {
     #[allow(unused_variables)]
@@ -9426,6 +9753,18 @@ impl CreateScriptError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateScriptError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateScriptError {
@@ -9490,6 +9829,20 @@ impl CreateSecurityConfigurationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateSecurityConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateSecurityConfigurationError {
@@ -9558,6 +9911,18 @@ impl CreateTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateTableError {
@@ -9635,6 +10000,18 @@ impl CreateTriggerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateTriggerError {
@@ -9717,6 +10094,20 @@ impl CreateUserDefinedFunctionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateUserDefinedFunctionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateUserDefinedFunctionError {
     #[allow(unused_variables)]
@@ -9784,6 +10175,18 @@ impl CreateWorkflowError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateWorkflowError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateWorkflowError {
     #[allow(unused_variables)]
@@ -9823,6 +10226,18 @@ impl DeleteClassifierError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteClassifierError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteClassifierError {
@@ -9886,6 +10301,20 @@ impl DeleteColumnStatisticsForPartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteColumnStatisticsForPartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteColumnStatisticsForPartitionError {
@@ -9963,6 +10392,20 @@ impl DeleteColumnStatisticsForTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteColumnStatisticsForTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteColumnStatisticsForTableError {
     #[allow(unused_variables)]
@@ -10009,6 +10452,18 @@ impl DeleteConnectionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteConnectionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -10058,6 +10513,18 @@ impl DeleteCrawlerError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteCrawlerError {
     #[allow(unused_variables)]
@@ -10105,6 +10572,18 @@ impl DeleteDatabaseError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDatabaseError {
@@ -10154,6 +10633,18 @@ impl DeleteDevEndpointError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDevEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteDevEndpointError {
     #[allow(unused_variables)]
@@ -10196,6 +10687,18 @@ impl DeleteJobError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteJobError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteJobError {
@@ -10244,6 +10747,18 @@ impl DeleteMLTransformError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteMLTransformError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteMLTransformError {
     #[allow(unused_variables)]
@@ -10291,6 +10806,18 @@ impl DeletePartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeletePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeletePartitionError {
@@ -10354,6 +10881,20 @@ impl DeletePartitionIndexError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeletePartitionIndexError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeletePartitionIndexError {
     #[allow(unused_variables)]
@@ -10405,6 +10946,18 @@ impl DeleteRegistryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteRegistryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteRegistryError {
@@ -10465,6 +11018,20 @@ impl DeleteResourcePolicyError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteResourcePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteResourcePolicyError {
     #[allow(unused_variables)]
@@ -10513,6 +11080,18 @@ impl DeleteSchemaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteSchemaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteSchemaError {
@@ -10563,6 +11142,20 @@ impl DeleteSchemaVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteSchemaVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteSchemaVersionsError {
@@ -10622,6 +11215,20 @@ impl DeleteSecurityConfigurationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteSecurityConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     #[allow(unused_variables)]
@@ -10670,6 +11277,18 @@ impl DeleteTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteTableError {
     #[allow(unused_variables)]
@@ -10717,6 +11336,18 @@ impl DeleteTableVersionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteTableVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteTableVersionError {
@@ -10767,6 +11398,18 @@ impl DeleteTriggerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteTriggerError {
@@ -10824,6 +11467,20 @@ impl DeleteUserDefinedFunctionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteUserDefinedFunctionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteUserDefinedFunctionError {
     #[allow(unused_variables)]
@@ -10874,6 +11531,18 @@ impl DeleteWorkflowError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteWorkflowError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteWorkflowError {
     #[allow(unused_variables)]
@@ -10916,6 +11585,20 @@ impl GetCatalogImportStatusError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetCatalogImportStatusError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetCatalogImportStatusError {
     #[allow(unused_variables)]
@@ -10952,6 +11635,18 @@ impl GetClassifierError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetClassifierError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetClassifierError {
     #[allow(unused_variables)]
@@ -10982,6 +11677,18 @@ impl GetClassifiersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetClassifiersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetClassifiersError {
@@ -11044,6 +11751,20 @@ impl GetColumnStatisticsForPartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetColumnStatisticsForPartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetColumnStatisticsForPartitionError {
@@ -11119,6 +11840,20 @@ impl GetColumnStatisticsForTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetColumnStatisticsForTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetColumnStatisticsForTableError {
     #[allow(unused_variables)]
@@ -11168,6 +11903,18 @@ impl GetConnectionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetConnectionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetConnectionError {
     #[allow(unused_variables)]
@@ -11216,6 +11963,18 @@ impl GetConnectionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetConnectionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetConnectionsError {
     #[allow(unused_variables)]
@@ -11254,6 +12013,18 @@ impl GetCrawlerError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetCrawlerError {
     #[allow(unused_variables)]
@@ -11285,6 +12056,18 @@ impl GetCrawlerMetricsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCrawlerMetricsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetCrawlerMetricsError {
     #[allow(unused_variables)]
@@ -11314,6 +12097,18 @@ impl GetCrawlersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCrawlersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetCrawlersError {
@@ -11362,6 +12157,20 @@ impl GetDataCatalogEncryptionSettingsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDataCatalogEncryptionSettingsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDataCatalogEncryptionSettingsError {
@@ -11421,6 +12230,18 @@ impl GetDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDatabaseError {
     #[allow(unused_variables)]
@@ -11470,6 +12291,18 @@ impl GetDatabasesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDatabasesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDatabasesError {
     #[allow(unused_variables)]
@@ -11512,6 +12345,18 @@ impl GetDataflowGraphError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDataflowGraphError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDataflowGraphError {
@@ -11559,6 +12404,18 @@ impl GetDevEndpointError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDevEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDevEndpointError {
@@ -11608,6 +12465,18 @@ impl GetDevEndpointsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDevEndpointsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDevEndpointsError {
     #[allow(unused_variables)]
@@ -11655,6 +12524,18 @@ impl GetJobError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetJobError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetJobError {
@@ -11704,6 +12585,18 @@ impl GetJobBookmarkError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetJobBookmarkError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetJobBookmarkError {
     #[allow(unused_variables)]
@@ -11751,6 +12644,18 @@ impl GetJobRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetJobRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetJobRunError {
@@ -11800,6 +12705,18 @@ impl GetJobRunsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetJobRunsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetJobRunsError {
     #[allow(unused_variables)]
@@ -11847,6 +12764,18 @@ impl GetJobsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetJobsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetJobsError {
@@ -11896,6 +12825,18 @@ impl GetMLTaskRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetMLTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetMLTaskRunError {
     #[allow(unused_variables)]
@@ -11943,6 +12884,18 @@ impl GetMLTaskRunsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetMLTaskRunsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetMLTaskRunsError {
@@ -11992,6 +12945,18 @@ impl GetMLTransformError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetMLTransformError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetMLTransformError {
     #[allow(unused_variables)]
@@ -12040,6 +13005,18 @@ impl GetMLTransformsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetMLTransformsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetMLTransformsError {
     #[allow(unused_variables)]
@@ -12087,6 +13064,18 @@ impl GetMappingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetMappingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetMappingError {
@@ -12140,6 +13129,18 @@ impl GetPartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetPartitionError {
@@ -12197,6 +13198,18 @@ impl GetPartitionIndexesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPartitionIndexesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetPartitionIndexesError {
     #[allow(unused_variables)]
@@ -12251,6 +13264,18 @@ impl GetPartitionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPartitionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetPartitionsError {
     #[allow(unused_variables)]
@@ -12294,6 +13319,18 @@ impl GetPlanError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPlanError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetPlanError {
@@ -12341,6 +13378,18 @@ impl GetRegistryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetRegistryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRegistryError {
@@ -12392,6 +13441,18 @@ impl GetResourcePoliciesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetResourcePoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetResourcePoliciesError {
     #[allow(unused_variables)]
@@ -12440,6 +13501,18 @@ impl GetResourcePolicyError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetResourcePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetResourcePolicyError {
     #[allow(unused_variables)]
@@ -12487,6 +13560,18 @@ impl GetSchemaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetSchemaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetSchemaError {
@@ -12540,6 +13625,20 @@ impl GetSchemaByDefinitionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetSchemaByDefinitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetSchemaByDefinitionError {
     #[allow(unused_variables)]
@@ -12587,6 +13686,18 @@ impl GetSchemaVersionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetSchemaVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetSchemaVersionError {
@@ -12639,6 +13750,20 @@ impl GetSchemaVersionsDiffError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetSchemaVersionsDiffError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetSchemaVersionsDiffError {
@@ -12696,6 +13821,20 @@ impl GetSecurityConfigurationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetSecurityConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetSecurityConfigurationError {
     #[allow(unused_variables)]
@@ -12752,6 +13891,20 @@ impl GetSecurityConfigurationsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetSecurityConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetSecurityConfigurationsError {
     #[allow(unused_variables)]
@@ -12804,6 +13957,18 @@ impl GetTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetTableError {
@@ -12859,6 +14024,18 @@ impl GetTableVersionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTableVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetTableVersionError {
     #[allow(unused_variables)]
@@ -12912,6 +14089,18 @@ impl GetTableVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTableVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetTableVersionsError {
@@ -12967,6 +14156,18 @@ impl GetTablesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTablesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetTablesError {
     #[allow(unused_variables)]
@@ -13016,6 +14217,18 @@ impl GetTagsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTagsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetTagsError {
     #[allow(unused_variables)]
@@ -13064,6 +14277,18 @@ impl GetTriggerError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetTriggerError {
     #[allow(unused_variables)]
@@ -13111,6 +14336,18 @@ impl GetTriggersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetTriggersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetTriggersError {
@@ -13172,6 +14409,20 @@ impl GetUserDefinedFunctionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetUserDefinedFunctionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetUserDefinedFunctionError {
@@ -13237,6 +14488,20 @@ impl GetUserDefinedFunctionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetUserDefinedFunctionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetUserDefinedFunctionsError {
     #[allow(unused_variables)]
@@ -13286,6 +14551,18 @@ impl GetWorkflowError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetWorkflowError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetWorkflowError {
     #[allow(unused_variables)]
@@ -13333,6 +14610,18 @@ impl GetWorkflowRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetWorkflowRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetWorkflowRunError {
@@ -13390,6 +14679,20 @@ impl GetWorkflowRunPropertiesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetWorkflowRunPropertiesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetWorkflowRunPropertiesError {
     #[allow(unused_variables)]
@@ -13438,6 +14741,18 @@ impl GetWorkflowRunsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetWorkflowRunsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetWorkflowRunsError {
     #[allow(unused_variables)]
@@ -13478,6 +14793,18 @@ impl ImportCatalogToGlueError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ImportCatalogToGlueError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ImportCatalogToGlueError {
     #[allow(unused_variables)]
@@ -13508,6 +14835,18 @@ impl ListCrawlersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListCrawlersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListCrawlersError {
@@ -13553,6 +14892,18 @@ impl ListDevEndpointsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListDevEndpointsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListDevEndpointsError {
@@ -13602,6 +14953,18 @@ impl ListJobsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListJobsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListJobsError {
     #[allow(unused_variables)]
@@ -13650,6 +15013,18 @@ impl ListMLTransformsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListMLTransformsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListMLTransformsError {
     #[allow(unused_variables)]
@@ -13692,6 +15067,18 @@ impl ListRegistriesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListRegistriesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListRegistriesError {
@@ -13739,6 +15126,18 @@ impl ListSchemaVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListSchemaVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListSchemaVersionsError {
@@ -13788,6 +15187,18 @@ impl ListSchemasError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListSchemasError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListSchemasError {
     #[allow(unused_variables)]
@@ -13836,6 +15247,18 @@ impl ListTriggersError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTriggersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListTriggersError {
     #[allow(unused_variables)]
@@ -13878,6 +15301,18 @@ impl ListWorkflowsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListWorkflowsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListWorkflowsError {
@@ -13928,6 +15363,20 @@ impl PutDataCatalogEncryptionSettingsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutDataCatalogEncryptionSettingsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutDataCatalogEncryptionSettingsError {
@@ -13988,6 +15437,18 @@ impl PutResourcePolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutResourcePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -14052,6 +15513,20 @@ impl PutSchemaVersionMetadataError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutSchemaVersionMetadataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutSchemaVersionMetadataError {
@@ -14133,6 +15608,20 @@ impl PutWorkflowRunPropertiesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutWorkflowRunPropertiesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for PutWorkflowRunPropertiesError {
     #[allow(unused_variables)]
@@ -14190,6 +15679,20 @@ impl QuerySchemaVersionMetadataError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<QuerySchemaVersionMetadataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for QuerySchemaVersionMetadataError {
@@ -14256,6 +15759,20 @@ impl RegisterSchemaVersionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RegisterSchemaVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RegisterSchemaVersionError {
     #[allow(unused_variables)]
@@ -14311,6 +15828,20 @@ impl RemoveSchemaVersionMetadataError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveSchemaVersionMetadataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RemoveSchemaVersionMetadataError {
     #[allow(unused_variables)]
@@ -14357,6 +15888,18 @@ impl ResetJobBookmarkError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ResetJobBookmarkError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ResetJobBookmarkError {
@@ -14420,6 +15963,18 @@ impl ResumeWorkflowRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ResumeWorkflowRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ResumeWorkflowRunError {
     #[allow(unused_variables)]
@@ -14465,6 +16020,18 @@ impl SearchTablesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<SearchTablesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for SearchTablesError {
     #[allow(unused_variables)]
@@ -14506,6 +16073,18 @@ impl StartCrawlerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StartCrawlerError {
@@ -14565,6 +16144,20 @@ impl StartCrawlerScheduleError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartCrawlerScheduleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartCrawlerScheduleError {
     #[allow(unused_variables)]
@@ -14621,6 +16214,20 @@ impl StartExportLabelsTaskRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartExportLabelsTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StartExportLabelsTaskRunError {
@@ -14685,6 +16292,20 @@ impl StartImportLabelsTaskRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartImportLabelsTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartImportLabelsTaskRunError {
     #[allow(unused_variables)]
@@ -14747,6 +16368,18 @@ impl StartJobRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartJobRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StartJobRunError {
@@ -14820,6 +16453,20 @@ impl StartMLEvaluationTaskRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartMLEvaluationTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartMLEvaluationTaskRunError {
     #[allow(unused_variables)]
@@ -14888,6 +16535,20 @@ impl StartMLLabelingSetGenerationTaskRunError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartMLLabelingSetGenerationTaskRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StartMLLabelingSetGenerationTaskRunError {
@@ -14960,6 +16621,18 @@ impl StartTriggerError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartTriggerError {
     #[allow(unused_variables)]
@@ -15024,6 +16697,18 @@ impl StartWorkflowRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartWorkflowRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartWorkflowRunError {
     #[allow(unused_variables)]
@@ -15073,6 +16758,18 @@ impl StopCrawlerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StopCrawlerError {
@@ -15128,6 +16825,18 @@ impl StopCrawlerScheduleError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopCrawlerScheduleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StopCrawlerScheduleError {
     #[allow(unused_variables)]
@@ -15180,6 +16889,18 @@ impl StopTriggerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StopTriggerError {
@@ -15237,6 +16958,18 @@ impl StopWorkflowRunError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopWorkflowRunError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StopWorkflowRunError {
     #[allow(unused_variables)]
@@ -15286,6 +17019,18 @@ impl TagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for TagResourceError {
     #[allow(unused_variables)]
@@ -15334,6 +17079,18 @@ impl UntagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UntagResourceError {
     #[allow(unused_variables)]
@@ -15381,6 +17138,18 @@ impl UpdateClassifierError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateClassifierError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateClassifierError {
@@ -15446,6 +17215,20 @@ impl UpdateColumnStatisticsForPartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateColumnStatisticsForPartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateColumnStatisticsForPartitionError {
@@ -15523,6 +17306,20 @@ impl UpdateColumnStatisticsForTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateColumnStatisticsForTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateColumnStatisticsForTableError {
     #[allow(unused_variables)]
@@ -15580,6 +17377,18 @@ impl UpdateConnectionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateConnectionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateConnectionError {
     #[allow(unused_variables)]
@@ -15632,6 +17441,18 @@ impl UpdateCrawlerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateCrawlerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateCrawlerError {
@@ -15695,6 +17516,20 @@ impl UpdateCrawlerScheduleError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateCrawlerScheduleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateCrawlerScheduleError {
     #[allow(unused_variables)]
@@ -15749,6 +17584,18 @@ impl UpdateDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateDatabaseError {
     #[allow(unused_variables)]
@@ -15797,6 +17644,18 @@ impl UpdateDevEndpointError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDevEndpointError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateDevEndpointError {
@@ -15850,6 +17709,18 @@ impl UpdateJobError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateJobError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -15905,6 +17776,18 @@ impl UpdateMLTransformError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateMLTransformError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateMLTransformError {
     #[allow(unused_variables)]
@@ -15958,6 +17841,18 @@ impl UpdatePartitionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdatePartitionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdatePartitionError {
@@ -16015,6 +17910,18 @@ impl UpdateRegistryError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateRegistryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateRegistryError {
     #[allow(unused_variables)]
@@ -16068,6 +17975,18 @@ impl UpdateSchemaError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateSchemaError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateSchemaError {
@@ -16135,6 +18054,18 @@ impl UpdateTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateTableError {
     #[allow(unused_variables)]
@@ -16192,6 +18123,18 @@ impl UpdateTriggerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTriggerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateTriggerError {
@@ -16257,6 +18200,20 @@ impl UpdateUserDefinedFunctionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateUserDefinedFunctionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateUserDefinedFunctionError {
     #[allow(unused_variables)]
@@ -16312,6 +18269,18 @@ impl UpdateWorkflowError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateWorkflowError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateWorkflowError {
@@ -17347,8 +19316,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchCreatePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchCreatePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17366,8 +19336,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchDeleteConnectionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchDeleteConnectionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17385,8 +19356,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchDeletePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchDeletePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17404,8 +19376,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchDeleteTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchDeleteTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteTableResponse, _>()
@@ -17422,8 +19395,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchDeleteTableVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchDeleteTableVersionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17441,8 +19415,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetCrawlersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetCrawlersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCrawlersResponse, _>()
@@ -17459,8 +19434,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetDevEndpointsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetDevEndpointsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17478,8 +19454,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetJobsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetJobsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetJobsResponse, _>()
@@ -17496,8 +19473,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetPartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetPartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetPartitionResponse, _>()
@@ -17514,8 +19492,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetTriggersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetTriggersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetTriggersResponse, _>()
@@ -17532,8 +19511,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetWorkflowsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetWorkflowsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetWorkflowsResponse, _>()
@@ -17550,8 +19530,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GlueBatchStopJobRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GlueBatchStopJobRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchStopJobRunResponse, _>()
@@ -17568,8 +19549,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchUpdatePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchUpdatePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17587,8 +19569,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CancelMLTaskRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CancelMLTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CancelMLTaskRunResponse, _>()
@@ -17606,8 +19589,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CheckSchemaVersionValidityError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CheckSchemaVersionValidityError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17625,8 +19609,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateClassifierError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateClassifierError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateClassifierResponse, _>()
@@ -17643,8 +19628,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateConnectionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateConnectionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionResponse, _>()
@@ -17661,8 +19647,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateCrawlerResponse, _>()
@@ -17679,8 +19666,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDatabaseResponse, _>()
@@ -17697,8 +19685,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDevEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDevEndpointError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDevEndpointResponse, _>()
@@ -17715,8 +19704,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateJobError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateJobError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>()
@@ -17733,8 +19723,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateMLTransformError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateMLTransformError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateMLTransformResponse, _>()
@@ -17751,8 +19742,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreatePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreatePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreatePartitionResponse, _>()
@@ -17769,8 +19761,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreatePartitionIndexError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreatePartitionIndexError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17788,8 +19781,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateRegistryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRegistryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateRegistryResponse, _>()
@@ -17806,8 +19800,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateSchemaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSchemaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateSchemaResponse, _>()
@@ -17824,8 +19819,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateScriptError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateScriptError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateScriptResponse, _>()
@@ -17843,8 +19839,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateSecurityConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSecurityConfigurationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17862,8 +19859,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTableResponse, _>()
@@ -17880,8 +19878,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTriggerResponse, _>()
@@ -17899,8 +19898,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateUserDefinedFunctionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateUserDefinedFunctionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17918,8 +19918,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateWorkflowError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateWorkflowError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkflowResponse, _>()
@@ -17936,8 +19937,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteClassifierError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteClassifierError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteClassifierResponse, _>()
@@ -17957,11 +19959,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DeleteColumnStatisticsForPartitionError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteColumnStatisticsForPartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17982,8 +19982,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteColumnStatisticsForTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteColumnStatisticsForTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18001,8 +20002,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteConnectionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteConnectionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionResponse, _>()
@@ -18019,8 +20021,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteCrawlerResponse, _>()
@@ -18037,8 +20040,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDatabaseResponse, _>()
@@ -18055,8 +20059,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDevEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDevEndpointError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDevEndpointResponse, _>()
@@ -18073,8 +20078,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteJobError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteJobError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResponse, _>()
@@ -18091,8 +20097,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteMLTransformError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteMLTransformError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteMLTransformResponse, _>()
@@ -18109,8 +20116,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeletePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeletePartitionResponse, _>()
@@ -18127,8 +20135,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeletePartitionIndexError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePartitionIndexError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18146,8 +20155,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteRegistryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRegistryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteRegistryResponse, _>()
@@ -18164,8 +20174,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteResourcePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteResourcePolicyError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18183,8 +20194,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteSchemaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSchemaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteSchemaResponse, _>()
@@ -18201,8 +20213,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteSchemaVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSchemaVersionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18221,8 +20234,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteSecurityConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSecurityConfigurationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18240,8 +20254,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableResponse, _>()
@@ -18258,8 +20273,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteTableVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTableVersionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableVersionResponse, _>()
@@ -18276,8 +20292,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTriggerResponse, _>()
@@ -18295,8 +20312,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserDefinedFunctionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserDefinedFunctionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18314,8 +20332,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteWorkflowError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteWorkflowError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkflowResponse, _>()
@@ -18332,8 +20351,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCatalogImportStatusError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCatalogImportStatusError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18351,8 +20371,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetClassifierError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetClassifierError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetClassifierResponse, _>()
@@ -18369,8 +20390,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetClassifiersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetClassifiersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetClassifiersResponse, _>()
@@ -18390,8 +20412,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetColumnStatisticsForPartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetColumnStatisticsForPartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18410,8 +20433,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetColumnStatisticsForTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetColumnStatisticsForTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18429,8 +20453,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetConnectionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetConnectionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionResponse, _>()
@@ -18447,8 +20472,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetConnectionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetConnectionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionsResponse, _>()
@@ -18465,8 +20491,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlerResponse, _>()
@@ -18483,8 +20510,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCrawlerMetricsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCrawlerMetricsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlerMetricsResponse, _>()
@@ -18501,8 +20529,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCrawlersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCrawlersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlersResponse, _>()
@@ -18522,11 +20551,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetDataCatalogEncryptionSettingsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDataCatalogEncryptionSettingsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18544,8 +20571,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDatabaseResponse, _>()
@@ -18562,8 +20590,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDatabasesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDatabasesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDatabasesResponse, _>()
@@ -18580,8 +20609,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDataflowGraphError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDataflowGraphError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDataflowGraphResponse, _>()
@@ -18598,8 +20628,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDevEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDevEndpointError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointResponse, _>()
@@ -18616,8 +20647,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDevEndpointsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDevEndpointsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointsResponse, _>()
@@ -18634,8 +20666,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetJobError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetJobError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()
@@ -18652,8 +20685,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetJobBookmarkError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetJobBookmarkError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobBookmarkResponse, _>()
@@ -18670,8 +20704,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetJobRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetJobRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunResponse, _>()
@@ -18688,8 +20723,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetJobRunsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetJobRunsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunsResponse, _>()
@@ -18706,8 +20742,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetJobsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetJobsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobsResponse, _>()
@@ -18724,8 +20761,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetMLTaskRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMLTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunResponse, _>()
@@ -18742,8 +20780,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetMLTaskRunsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMLTaskRunsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunsResponse, _>()
@@ -18760,8 +20799,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetMLTransformError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMLTransformError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformResponse, _>()
@@ -18778,8 +20818,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetMLTransformsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMLTransformsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformsResponse, _>()
@@ -18796,8 +20837,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetMappingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetMappingError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetMappingResponse, _>()
@@ -18814,8 +20856,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetPartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionResponse, _>()
@@ -18832,8 +20875,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetPartitionIndexesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPartitionIndexesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionIndexesResponse, _>()
@@ -18850,8 +20894,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetPartitionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPartitionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionsResponse, _>()
@@ -18868,8 +20913,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetPlanError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPlanError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
@@ -18886,8 +20932,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRegistryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRegistryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetRegistryResponse, _>()
@@ -18904,8 +20951,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetResourcePoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourcePoliciesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePoliciesResponse, _>()
@@ -18922,8 +20970,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetResourcePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetResourcePolicyError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePolicyResponse, _>()
@@ -18940,8 +20989,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSchemaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSchemaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetSchemaResponse, _>()
@@ -18958,8 +21008,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSchemaByDefinitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSchemaByDefinitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18977,8 +21028,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSchemaVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSchemaVersionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetSchemaVersionResponse, _>()
@@ -18995,8 +21047,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSchemaVersionsDiffError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSchemaVersionsDiffError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19014,8 +21067,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSecurityConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSecurityConfigurationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19034,8 +21088,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetSecurityConfigurationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSecurityConfigurationsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19053,8 +21108,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTableResponse, _>()
@@ -19071,8 +21127,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTableVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTableVersionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTableVersionResponse, _>()
@@ -19089,8 +21146,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTableVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTableVersionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTableVersionsResponse, _>()
@@ -19107,8 +21165,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTablesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTablesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTablesResponse, _>()
@@ -19125,8 +21184,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTagsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTagsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
@@ -19143,8 +21203,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTriggerResponse, _>()
@@ -19161,8 +21222,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetTriggersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetTriggersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetTriggersResponse, _>()
@@ -19179,8 +21241,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetUserDefinedFunctionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetUserDefinedFunctionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19198,8 +21261,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetUserDefinedFunctionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetUserDefinedFunctionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19217,8 +21281,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetWorkflowError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetWorkflowError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowResponse, _>()
@@ -19235,8 +21300,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetWorkflowRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetWorkflowRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunResponse, _>()
@@ -19253,8 +21319,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetWorkflowRunPropertiesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetWorkflowRunPropertiesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19272,8 +21339,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetWorkflowRunsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetWorkflowRunsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunsResponse, _>()
@@ -19290,8 +21358,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ImportCatalogToGlueError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ImportCatalogToGlueError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ImportCatalogToGlueResponse, _>()
@@ -19308,8 +21377,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListCrawlersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListCrawlersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListCrawlersResponse, _>()
@@ -19326,8 +21396,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDevEndpointsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDevEndpointsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDevEndpointsResponse, _>()
@@ -19344,8 +21415,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListJobsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListJobsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>()
@@ -19362,8 +21434,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListMLTransformsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListMLTransformsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListMLTransformsResponse, _>()
@@ -19380,8 +21453,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListRegistriesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRegistriesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListRegistriesResponse, _>()
@@ -19398,8 +21472,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListSchemaVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSchemaVersionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListSchemaVersionsResponse, _>()
@@ -19416,8 +21491,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListSchemasError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSchemasError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListSchemasResponse, _>()
@@ -19434,8 +21510,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTriggersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTriggersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTriggersResponse, _>()
@@ -19452,8 +21529,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListWorkflowsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListWorkflowsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListWorkflowsResponse, _>()
@@ -19473,11 +21551,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                PutDataCatalogEncryptionSettingsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutDataCatalogEncryptionSettingsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19495,8 +21571,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutResourcePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutResourcePolicyError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyResponse, _>()
@@ -19513,8 +21590,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutSchemaVersionMetadataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutSchemaVersionMetadataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19532,8 +21610,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutWorkflowRunPropertiesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutWorkflowRunPropertiesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19552,8 +21631,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, QuerySchemaVersionMetadataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(QuerySchemaVersionMetadataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19571,8 +21651,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RegisterSchemaVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RegisterSchemaVersionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19591,8 +21672,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RemoveSchemaVersionMetadataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveSchemaVersionMetadataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19610,8 +21692,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ResetJobBookmarkError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetJobBookmarkError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ResetJobBookmarkResponse, _>()
@@ -19628,8 +21711,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ResumeWorkflowRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResumeWorkflowRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ResumeWorkflowRunResponse, _>()
@@ -19646,8 +21730,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, SearchTablesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SearchTablesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<SearchTablesResponse, _>()
@@ -19664,8 +21749,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartCrawlerResponse, _>()
@@ -19682,8 +21768,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartCrawlerScheduleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartCrawlerScheduleError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19701,8 +21788,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartExportLabelsTaskRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartExportLabelsTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19720,8 +21808,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartImportLabelsTaskRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartImportLabelsTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19739,8 +21828,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartJobRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartJobRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartJobRunResponse, _>()
@@ -19757,8 +21847,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartMLEvaluationTaskRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartMLEvaluationTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19782,11 +21873,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                StartMLLabelingSetGenerationTaskRunError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartMLLabelingSetGenerationTaskRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19804,8 +21893,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartTriggerResponse, _>()
@@ -19822,8 +21912,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartWorkflowRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartWorkflowRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartWorkflowRunResponse, _>()
@@ -19840,8 +21931,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopCrawlerResponse, _>()
@@ -19858,8 +21950,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopCrawlerScheduleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopCrawlerScheduleError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopCrawlerScheduleResponse, _>()
@@ -19876,8 +21969,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopTriggerResponse, _>()
@@ -19894,8 +21988,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopWorkflowRunError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopWorkflowRunError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopWorkflowRunResponse, _>()
@@ -19912,8 +22007,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
@@ -19930,8 +22026,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
@@ -19948,8 +22045,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateClassifierError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateClassifierError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateClassifierResponse, _>()
@@ -19969,11 +22067,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                UpdateColumnStatisticsForPartitionError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateColumnStatisticsForPartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19994,8 +22090,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateColumnStatisticsForTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateColumnStatisticsForTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -20013,8 +22110,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateConnectionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateConnectionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateConnectionResponse, _>()
@@ -20031,8 +22129,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateCrawlerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateCrawlerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateCrawlerResponse, _>()
@@ -20049,8 +22148,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateCrawlerScheduleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateCrawlerScheduleError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -20068,8 +22168,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDatabaseResponse, _>()
@@ -20086,8 +22187,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDevEndpointError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDevEndpointError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDevEndpointResponse, _>()
@@ -20104,8 +22206,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateJobError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateJobError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResponse, _>()
@@ -20122,8 +22225,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateMLTransformError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateMLTransformError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateMLTransformResponse, _>()
@@ -20140,8 +22244,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdatePartitionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdatePartitionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdatePartitionResponse, _>()
@@ -20158,8 +22263,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateRegistryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRegistryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateRegistryResponse, _>()
@@ -20176,8 +22282,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateSchemaError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSchemaError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateSchemaResponse, _>()
@@ -20194,8 +22301,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTableResponse, _>()
@@ -20212,8 +22320,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTriggerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTriggerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTriggerResponse, _>()
@@ -20231,8 +22340,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateUserDefinedFunctionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateUserDefinedFunctionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -20250,8 +22360,9 @@ impl Glue for GlueClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateWorkflowError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateWorkflowError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkflowResponse, _>()

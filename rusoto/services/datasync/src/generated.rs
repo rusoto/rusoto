@@ -34,15 +34,14 @@ impl DataSyncClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -1416,6 +1415,18 @@ impl CancelTaskExecutionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CancelTaskExecutionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CancelTaskExecutionError {
     #[allow(unused_variables)]
@@ -1452,6 +1463,18 @@ impl CreateAgentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateAgentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateAgentError {
     #[allow(unused_variables)]
@@ -1487,6 +1510,18 @@ impl CreateLocationEfsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLocationEfsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateLocationEfsError {
@@ -1526,6 +1561,20 @@ impl CreateLocationFsxWindowsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateLocationFsxWindowsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateLocationFsxWindowsError {
     #[allow(unused_variables)]
@@ -1561,6 +1610,18 @@ impl CreateLocationNfsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLocationNfsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateLocationNfsError {
@@ -1604,6 +1665,20 @@ impl CreateLocationObjectStorageError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateLocationObjectStorageError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateLocationObjectStorageError {
     #[allow(unused_variables)]
@@ -1639,6 +1714,18 @@ impl CreateLocationS3Error {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLocationS3Error> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateLocationS3Error {
@@ -1676,6 +1763,18 @@ impl CreateLocationSmbError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLocationSmbError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateLocationSmbError {
     #[allow(unused_variables)]
@@ -1711,6 +1810,18 @@ impl CreateTaskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateTaskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateTaskError {
@@ -1748,6 +1859,18 @@ impl DeleteAgentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteAgentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteAgentError {
     #[allow(unused_variables)]
@@ -1783,6 +1906,18 @@ impl DeleteLocationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteLocationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteLocationError {
@@ -1820,6 +1955,18 @@ impl DeleteTaskError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteTaskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteTaskError {
     #[allow(unused_variables)]
@@ -1856,6 +2003,18 @@ impl DescribeAgentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeAgentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeAgentError {
     #[allow(unused_variables)]
@@ -1891,6 +2050,18 @@ impl DescribeLocationEfsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeLocationEfsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeLocationEfsError {
@@ -1932,6 +2103,20 @@ impl DescribeLocationFsxWindowsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeLocationFsxWindowsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeLocationFsxWindowsError {
     #[allow(unused_variables)]
@@ -1967,6 +2152,18 @@ impl DescribeLocationNfsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeLocationNfsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeLocationNfsError {
@@ -2010,6 +2207,20 @@ impl DescribeLocationObjectStorageError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeLocationObjectStorageError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeLocationObjectStorageError {
     #[allow(unused_variables)]
@@ -2045,6 +2256,18 @@ impl DescribeLocationS3Error {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeLocationS3Error> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeLocationS3Error {
@@ -2082,6 +2305,18 @@ impl DescribeLocationSmbError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeLocationSmbError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeLocationSmbError {
     #[allow(unused_variables)]
@@ -2117,6 +2352,18 @@ impl DescribeTaskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeTaskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeTaskError {
@@ -2156,6 +2403,20 @@ impl DescribeTaskExecutionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeTaskExecutionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeTaskExecutionError {
     #[allow(unused_variables)]
@@ -2191,6 +2452,18 @@ impl ListAgentsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListAgentsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListAgentsError {
@@ -2228,6 +2501,18 @@ impl ListLocationsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListLocationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListLocationsError {
     #[allow(unused_variables)]
@@ -2263,6 +2548,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2300,6 +2597,18 @@ impl ListTaskExecutionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTaskExecutionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListTaskExecutionsError {
     #[allow(unused_variables)]
@@ -2335,6 +2644,18 @@ impl ListTasksError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTasksError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTasksError {
@@ -2372,6 +2693,18 @@ impl StartTaskExecutionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartTaskExecutionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartTaskExecutionError {
     #[allow(unused_variables)]
@@ -2407,6 +2740,18 @@ impl TagResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2444,6 +2789,18 @@ impl UntagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UntagResourceError {
     #[allow(unused_variables)]
@@ -2479,6 +2836,18 @@ impl UpdateAgentError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateAgentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateAgentError {
@@ -2516,6 +2885,18 @@ impl UpdateTaskError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTaskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateTaskError {
     #[allow(unused_variables)]
@@ -2551,6 +2932,18 @@ impl UpdateTaskExecutionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTaskExecutionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateTaskExecutionError {
@@ -2812,8 +3205,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CancelTaskExecutionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CancelTaskExecutionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CancelTaskExecutionResponse, _>()
@@ -2830,8 +3224,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateAgentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateAgentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateAgentResponse, _>()
@@ -2848,8 +3243,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationEfsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationEfsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationEfsResponse, _>()
@@ -2866,8 +3262,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationFsxWindowsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationFsxWindowsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2885,8 +3282,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationNfsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationNfsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationNfsResponse, _>()
@@ -2904,8 +3302,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationObjectStorageError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationObjectStorageError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -2923,8 +3322,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationS3Error::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationS3Error::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationS3Response, _>()
@@ -2941,8 +3341,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLocationSmbError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLocationSmbError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLocationSmbResponse, _>()
@@ -2959,8 +3360,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateTaskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTaskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTaskResponse, _>()
@@ -2977,8 +3379,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteAgentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAgentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteAgentResponse, _>()
@@ -2995,8 +3398,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteLocationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLocationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteLocationResponse, _>()
@@ -3013,8 +3417,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteTaskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTaskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTaskResponse, _>()
@@ -3031,8 +3436,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeAgentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeAgentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeAgentResponse, _>()
@@ -3049,8 +3455,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationEfsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationEfsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationEfsResponse, _>()
@@ -3068,8 +3475,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationFsxWindowsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationFsxWindowsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -3087,8 +3495,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationNfsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationNfsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationNfsResponse, _>()
@@ -3108,8 +3517,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationObjectStorageError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationObjectStorageError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -3127,8 +3537,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationS3Error::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationS3Error::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationS3Response, _>()
@@ -3145,8 +3556,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLocationSmbError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLocationSmbError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLocationSmbResponse, _>()
@@ -3163,8 +3575,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeTaskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeTaskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTaskResponse, _>()
@@ -3181,8 +3594,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeTaskExecutionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeTaskExecutionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -3200,8 +3614,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListAgentsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAgentsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListAgentsResponse, _>()
@@ -3218,8 +3633,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListLocationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListLocationsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListLocationsResponse, _>()
@@ -3236,8 +3652,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
@@ -3254,8 +3671,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTaskExecutionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTaskExecutionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTaskExecutionsResponse, _>()
@@ -3272,8 +3690,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTasksError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTasksError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTasksResponse, _>()
@@ -3290,8 +3709,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartTaskExecutionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartTaskExecutionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartTaskExecutionResponse, _>()
@@ -3308,8 +3728,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
@@ -3326,8 +3747,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
@@ -3344,8 +3766,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateAgentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateAgentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateAgentResponse, _>()
@@ -3362,8 +3785,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTaskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTaskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskResponse, _>()
@@ -3380,8 +3804,9 @@ impl DataSync for DataSyncClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTaskExecutionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTaskExecutionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskExecutionResponse, _>()

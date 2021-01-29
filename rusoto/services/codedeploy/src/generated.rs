@@ -34,15 +34,14 @@ impl CodeDeployClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -2478,6 +2477,20 @@ impl AddTagsToOnPremisesInstancesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AddTagsToOnPremisesInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
     #[allow(unused_variables)]
@@ -2563,6 +2576,20 @@ impl BatchGetApplicationRevisionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetApplicationRevisionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetApplicationRevisionsError {
     #[allow(unused_variables)]
@@ -2630,6 +2657,20 @@ impl BatchGetApplicationsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetApplicationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetApplicationsError {
@@ -2707,6 +2748,20 @@ impl BatchGetDeploymentGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetDeploymentGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
@@ -2801,6 +2856,20 @@ impl BatchGetDeploymentInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetDeploymentInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetDeploymentInstancesError {
@@ -2910,6 +2979,20 @@ impl BatchGetDeploymentTargetsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetDeploymentTargetsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetDeploymentTargetsError {
     #[allow(unused_variables)]
@@ -2982,6 +3065,18 @@ impl BatchGetDeploymentsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetDeploymentsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchGetDeploymentsError {
     #[allow(unused_variables)]
@@ -3031,6 +3126,20 @@ impl BatchGetOnPremisesInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchGetOnPremisesInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
@@ -3121,6 +3230,18 @@ impl ContinueDeploymentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ContinueDeploymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ContinueDeploymentError {
     #[allow(unused_variables)]
@@ -3198,6 +3319,18 @@ impl CreateApplicationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateApplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -3387,6 +3520,18 @@ impl CreateDeploymentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDeploymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateDeploymentError {
     #[allow(unused_variables)]
@@ -3491,6 +3636,20 @@ impl CreateDeploymentConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDeploymentConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDeploymentConfigError {
@@ -3758,6 +3917,20 @@ impl CreateDeploymentGroupError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDeploymentGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateDeploymentGroupError {
     #[allow(unused_variables)]
@@ -3872,6 +4045,18 @@ impl DeleteApplicationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteApplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteApplicationError {
     #[allow(unused_variables)]
@@ -3926,6 +4111,20 @@ impl DeleteDeploymentConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDeploymentConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDeploymentConfigError {
@@ -3991,6 +4190,20 @@ impl DeleteDeploymentGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteDeploymentGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDeploymentGroupError {
@@ -4062,6 +4275,20 @@ impl DeleteGitHubAccountTokenError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteGitHubAccountTokenError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteGitHubAccountTokenError {
     #[allow(unused_variables)]
@@ -4099,6 +4326,20 @@ impl DeleteResourcesByExternalIdError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteResourcesByExternalIdError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteResourcesByExternalIdError {
@@ -4138,6 +4379,20 @@ impl DeregisterOnPremisesInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeregisterOnPremisesInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
@@ -4189,6 +4444,18 @@ impl GetApplicationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetApplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -4259,6 +4526,20 @@ impl GetApplicationRevisionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetApplicationRevisionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetApplicationRevisionError {
     #[allow(unused_variables)]
@@ -4311,6 +4592,18 @@ impl GetDeploymentError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDeploymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDeploymentError {
@@ -4366,6 +4659,18 @@ impl GetDeploymentConfigError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDeploymentConfigError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDeploymentConfigError {
@@ -4449,6 +4754,18 @@ impl GetDeploymentGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDeploymentGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDeploymentGroupError {
@@ -4538,6 +4855,20 @@ impl GetDeploymentInstanceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDeploymentInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDeploymentInstanceError {
     #[allow(unused_variables)]
@@ -4625,6 +4956,18 @@ impl GetDeploymentTargetError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDeploymentTargetError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDeploymentTargetError {
     #[allow(unused_variables)]
@@ -4683,6 +5026,20 @@ impl GetOnPremisesInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOnPremisesInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetOnPremisesInstanceError {
@@ -4781,6 +5138,20 @@ impl ListApplicationRevisionsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListApplicationRevisionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListApplicationRevisionsError {
     #[allow(unused_variables)]
@@ -4834,6 +5205,18 @@ impl ListApplicationsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListApplicationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListApplicationsError {
     #[allow(unused_variables)]
@@ -4865,6 +5248,20 @@ impl ListDeploymentConfigsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDeploymentConfigsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListDeploymentConfigsError {
@@ -4918,6 +5315,20 @@ impl ListDeploymentGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDeploymentGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListDeploymentGroupsError {
@@ -5016,6 +5427,20 @@ impl ListDeploymentInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDeploymentInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListDeploymentInstancesError {
@@ -5116,6 +5541,20 @@ impl ListDeploymentTargetsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListDeploymentTargetsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListDeploymentTargetsError {
@@ -5220,6 +5659,18 @@ impl ListDeploymentsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListDeploymentsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListDeploymentsError {
     #[allow(unused_variables)]
@@ -5278,6 +5729,20 @@ impl ListGitHubAccountTokenNamesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListGitHubAccountTokenNamesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
     #[allow(unused_variables)]
@@ -5330,6 +5795,20 @@ impl ListOnPremisesInstancesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListOnPremisesInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListOnPremisesInstancesError {
     #[allow(unused_variables)]
@@ -5375,6 +5854,18 @@ impl ListTagsForResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -5425,6 +5916,20 @@ _ => {}
                             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutLifecycleEventHookExecutionStatusError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
@@ -5514,6 +6019,20 @@ impl RegisterApplicationRevisionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RegisterApplicationRevisionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for RegisterApplicationRevisionError {
@@ -5625,6 +6144,20 @@ impl RegisterOnPremisesInstanceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RegisterOnPremisesInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RegisterOnPremisesInstanceError {
     #[allow(unused_variables)]
@@ -5726,6 +6259,20 @@ impl RemoveTagsFromOnPremisesInstancesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveTagsFromOnPremisesInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
     #[allow(unused_variables)]
@@ -5817,6 +6364,20 @@ impl SkipWaitTimeForInstanceTerminationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SkipWaitTimeForInstanceTerminationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
     #[allow(unused_variables)]
@@ -5897,6 +6458,18 @@ impl StopDeploymentError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopDeploymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StopDeploymentError {
     #[allow(unused_variables)]
@@ -5972,6 +6545,18 @@ impl TagResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for TagResourceError {
@@ -6051,6 +6636,18 @@ impl UntagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UntagResourceError {
     #[allow(unused_variables)]
@@ -6110,6 +6707,18 @@ impl UpdateApplicationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateApplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -6347,6 +6956,20 @@ impl UpdateDeploymentGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateDeploymentGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateDeploymentGroupError {
@@ -6768,8 +7391,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AddTagsToOnPremisesInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddTagsToOnPremisesInstancesError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -6789,8 +7413,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetApplicationRevisionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetApplicationRevisionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6808,8 +7433,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetApplicationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetApplicationsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetApplicationsOutput, _>()
@@ -6829,8 +7455,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetDeploymentGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetDeploymentGroupsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6852,8 +7479,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetDeploymentInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetDeploymentInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6874,8 +7502,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetDeploymentTargetsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetDeploymentTargetsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6893,8 +7522,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetDeploymentsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetDeploymentsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetDeploymentsOutput, _>()
@@ -6915,8 +7545,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetOnPremisesInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetOnPremisesInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6934,8 +7565,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ContinueDeploymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ContinueDeploymentError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -6951,8 +7583,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateApplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateApplicationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationOutput, _>()
@@ -6969,8 +7602,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDeploymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeploymentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentOutput, _>()
@@ -6987,8 +7621,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDeploymentConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeploymentConfigError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7006,8 +7641,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDeploymentGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDeploymentGroupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentGroupOutput, _>()
@@ -7024,8 +7660,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteApplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteApplicationError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7041,8 +7678,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDeploymentConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDeploymentConfigError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7058,8 +7696,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDeploymentGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDeploymentGroupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDeploymentGroupOutput, _>()
@@ -7079,8 +7718,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteGitHubAccountTokenError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGitHubAccountTokenError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7102,8 +7742,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteResourcesByExternalIdError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteResourcesByExternalIdError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7124,8 +7765,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeregisterOnPremisesInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeregisterOnPremisesInstanceError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7141,8 +7783,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetApplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetApplicationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetApplicationOutput, _>()
@@ -7159,8 +7802,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetApplicationRevisionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetApplicationRevisionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7178,8 +7822,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDeploymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentOutput, _>()
@@ -7196,8 +7841,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDeploymentConfigError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentConfigError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentConfigOutput, _>()
@@ -7214,8 +7860,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDeploymentGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentGroupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentGroupOutput, _>()
@@ -7232,8 +7879,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDeploymentInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentInstanceOutput, _>()
@@ -7250,8 +7898,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDeploymentTargetError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDeploymentTargetError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentTargetOutput, _>()
@@ -7268,8 +7917,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetOnPremisesInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOnPremisesInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetOnPremisesInstanceOutput, _>()
@@ -7289,8 +7939,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListApplicationRevisionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListApplicationRevisionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7308,8 +7959,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListApplicationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListApplicationsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationsOutput, _>()
@@ -7326,8 +7978,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDeploymentConfigsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentConfigsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentConfigsOutput, _>()
@@ -7344,8 +7997,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDeploymentGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentGroupsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentGroupsOutput, _>()
@@ -7365,8 +8019,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDeploymentInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7384,8 +8039,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDeploymentTargetsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentTargetsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentTargetsOutput, _>()
@@ -7402,8 +8058,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListDeploymentsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListDeploymentsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentsOutput, _>()
@@ -7424,8 +8081,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListGitHubAccountTokenNamesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGitHubAccountTokenNamesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7446,8 +8104,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListOnPremisesInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListOnPremisesInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7465,8 +8124,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsForResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
@@ -7489,11 +8149,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                PutLifecycleEventHookExecutionStatusError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutLifecycleEventHookExecutionStatusError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7514,8 +8172,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RegisterApplicationRevisionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RegisterApplicationRevisionError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7534,8 +8193,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RegisterOnPremisesInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RegisterOnPremisesInstanceError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7554,11 +8214,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                RemoveTagsFromOnPremisesInstancesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveTagsFromOnPremisesInstancesError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7577,11 +8235,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                SkipWaitTimeForInstanceTerminationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SkipWaitTimeForInstanceTerminationError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7597,8 +8253,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopDeploymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopDeploymentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopDeploymentOutput, _>()
@@ -7615,8 +8272,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
@@ -7633,8 +8291,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
@@ -7651,8 +8310,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateApplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateApplicationError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7668,8 +8328,9 @@ impl CodeDeploy for CodeDeployClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDeploymentGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDeploymentGroupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeploymentGroupOutput, _>()

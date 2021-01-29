@@ -34,15 +34,14 @@ impl LightsailClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -6143,6 +6142,18 @@ impl AllocateStaticIpError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AllocateStaticIpError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AllocateStaticIpError {
     #[allow(unused_variables)]
@@ -6218,6 +6229,20 @@ impl AttachCertificateToDistributionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AttachCertificateToDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AttachCertificateToDistributionError {
     #[allow(unused_variables)]
@@ -6286,6 +6311,18 @@ impl AttachDiskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AttachDiskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for AttachDiskError {
@@ -6368,6 +6405,20 @@ impl AttachInstancesToLoadBalancerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AttachInstancesToLoadBalancerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
@@ -6457,6 +6508,20 @@ impl AttachLoadBalancerTlsCertificateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AttachLoadBalancerTlsCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
     #[allow(unused_variables)]
@@ -6535,6 +6600,18 @@ impl AttachStaticIpError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AttachStaticIpError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for AttachStaticIpError {
     #[allow(unused_variables)]
@@ -6611,6 +6688,20 @@ impl CloseInstancePublicPortsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CloseInstancePublicPortsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CloseInstancePublicPortsError {
     #[allow(unused_variables)]
@@ -6679,6 +6770,18 @@ impl CopySnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CopySnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CopySnapshotError {
     #[allow(unused_variables)]
@@ -6734,6 +6837,18 @@ impl CreateCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateCertificateError {
@@ -6809,6 +6924,20 @@ impl CreateCloudFormationStackError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateCloudFormationStackError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateCloudFormationStackError {
     #[allow(unused_variables)]
@@ -6874,6 +7003,18 @@ impl CreateContactMethodError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateContactMethodError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateContactMethodError {
     #[allow(unused_variables)]
@@ -6930,6 +7071,20 @@ impl CreateContainerServiceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateContainerServiceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateContainerServiceError {
@@ -6996,6 +7151,20 @@ impl CreateContainerServiceDeploymentError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateContainerServiceDeploymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateContainerServiceDeploymentError {
@@ -7069,6 +7238,20 @@ impl CreateContainerServiceRegistryLoginError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateContainerServiceRegistryLoginError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateContainerServiceRegistryLoginError {
     #[allow(unused_variables)]
@@ -7138,6 +7321,18 @@ impl CreateDiskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDiskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDiskError {
@@ -7211,6 +7406,20 @@ impl CreateDiskFromSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateDiskFromSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
     #[allow(unused_variables)]
@@ -7281,6 +7490,18 @@ impl CreateDiskSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDiskSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateDiskSnapshotError {
     #[allow(unused_variables)]
@@ -7341,6 +7562,18 @@ impl CreateDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDistributionError {
@@ -7406,6 +7639,18 @@ impl CreateDomainError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDomainError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -7474,6 +7719,18 @@ impl CreateDomainEntryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateDomainEntryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateDomainEntryError {
@@ -7547,6 +7804,20 @@ impl CreateInstanceSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateInstanceSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateInstanceSnapshotError {
     #[allow(unused_variables)]
@@ -7616,6 +7887,18 @@ impl CreateInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateInstancesError {
@@ -7697,6 +7980,20 @@ impl CreateInstancesFromSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateInstancesFromSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
     #[allow(unused_variables)]
@@ -7767,6 +8064,18 @@ impl CreateKeyPairError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateKeyPairError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateKeyPairError {
     #[allow(unused_variables)]
@@ -7834,6 +8143,18 @@ impl CreateLoadBalancerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLoadBalancerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateLoadBalancerError {
@@ -7916,6 +8237,20 @@ impl CreateLoadBalancerTlsCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateLoadBalancerTlsCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
@@ -8003,6 +8338,20 @@ impl CreateRelationalDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateRelationalDatabaseError {
     #[allow(unused_variables)]
@@ -8086,6 +8435,20 @@ impl CreateRelationalDatabaseFromSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateRelationalDatabaseFromSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
@@ -8181,6 +8544,20 @@ impl CreateRelationalDatabaseSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateRelationalDatabaseSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
     #[allow(unused_variables)]
@@ -8252,6 +8629,18 @@ impl DeleteAlarmError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteAlarmError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteAlarmError {
     #[allow(unused_variables)]
@@ -8312,6 +8701,18 @@ impl DeleteAutoSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteAutoSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteAutoSnapshotError {
     #[allow(unused_variables)]
@@ -8366,6 +8767,18 @@ impl DeleteCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteCertificateError {
@@ -8428,6 +8841,18 @@ impl DeleteContactMethodError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteContactMethodError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteContactMethodError {
     #[allow(unused_variables)]
@@ -8485,6 +8910,20 @@ impl DeleteContainerImageError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteContainerImageError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteContainerImageError {
     #[allow(unused_variables)]
@@ -8540,6 +8979,20 @@ impl DeleteContainerServiceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteContainerServiceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteContainerServiceError {
@@ -8604,6 +9057,18 @@ impl DeleteDiskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDiskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDiskError {
@@ -8673,6 +9138,18 @@ impl DeleteDiskSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDiskSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteDiskSnapshotError {
     #[allow(unused_variables)]
@@ -8733,6 +9210,18 @@ impl DeleteDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDistributionError {
@@ -8798,6 +9287,18 @@ impl DeleteDomainError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDomainError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -8867,6 +9368,18 @@ impl DeleteDomainEntryError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteDomainEntryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteDomainEntryError {
     #[allow(unused_variables)]
@@ -8934,6 +9447,18 @@ impl DeleteInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteInstanceError {
@@ -9007,6 +9532,20 @@ impl DeleteInstanceSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteInstanceSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
     #[allow(unused_variables)]
@@ -9076,6 +9615,18 @@ impl DeleteKeyPairError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteKeyPairError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteKeyPairError {
@@ -9147,6 +9698,18 @@ impl DeleteKnownHostKeysError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteKnownHostKeysError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteKnownHostKeysError {
     #[allow(unused_variables)]
@@ -9214,6 +9777,18 @@ impl DeleteLoadBalancerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteLoadBalancerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -9296,6 +9871,20 @@ impl DeleteLoadBalancerTlsCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteLoadBalancerTlsCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
@@ -9383,6 +9972,20 @@ impl DeleteRelationalDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
     #[allow(unused_variables)]
@@ -9466,6 +10069,20 @@ impl DeleteRelationalDatabaseSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteRelationalDatabaseSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
@@ -9552,6 +10169,20 @@ impl DetachCertificateFromDistributionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DetachCertificateFromDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DetachCertificateFromDistributionError {
     #[allow(unused_variables)]
@@ -9624,6 +10255,18 @@ impl DetachDiskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DetachDiskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DetachDiskError {
@@ -9707,6 +10350,20 @@ impl DetachInstancesFromLoadBalancerError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DetachInstancesFromLoadBalancerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
     #[allow(unused_variables)]
@@ -9781,6 +10438,18 @@ impl DetachStaticIpError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DetachStaticIpError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DetachStaticIpError {
     #[allow(unused_variables)]
@@ -9841,6 +10510,18 @@ impl DisableAddOnError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DisableAddOnError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DisableAddOnError {
@@ -9913,6 +10594,20 @@ impl DownloadDefaultKeyPairError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DownloadDefaultKeyPairError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
     #[allow(unused_variables)]
@@ -9975,6 +10670,18 @@ impl EnableAddOnError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<EnableAddOnError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for EnableAddOnError {
@@ -10042,6 +10749,18 @@ impl ExportSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ExportSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ExportSnapshotError {
@@ -10111,6 +10830,18 @@ impl GetActiveNamesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetActiveNamesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetActiveNamesError {
     #[allow(unused_variables)]
@@ -10172,6 +10903,18 @@ impl GetAlarmsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetAlarmsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetAlarmsError {
     #[allow(unused_variables)]
@@ -10231,6 +10974,18 @@ impl GetAutoSnapshotsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetAutoSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetAutoSnapshotsError {
@@ -10299,6 +11054,18 @@ impl GetBlueprintsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBlueprintsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetBlueprintsError {
     #[allow(unused_variables)]
@@ -10365,6 +11132,18 @@ impl GetBundlesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBundlesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetBundlesError {
     #[allow(unused_variables)]
@@ -10420,6 +11199,18 @@ impl GetCertificatesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCertificatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetCertificatesError {
@@ -10501,6 +11292,20 @@ impl GetCloudFormationStackRecordsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetCloudFormationStackRecordsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
     #[allow(unused_variables)]
@@ -10568,6 +11373,18 @@ impl GetContactMethodsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetContactMethodsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetContactMethodsError {
     #[allow(unused_variables)]
@@ -10616,6 +11433,20 @@ impl GetContainerAPIMetadataError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContainerAPIMetadataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetContainerAPIMetadataError {
@@ -10668,6 +11499,18 @@ impl GetContainerImagesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetContainerImagesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetContainerImagesError {
@@ -10722,6 +11565,18 @@ impl GetContainerLogError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetContainerLogError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetContainerLogError {
@@ -10788,6 +11643,20 @@ impl GetContainerServiceDeploymentsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContainerServiceDeploymentsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetContainerServiceDeploymentsError {
@@ -10857,6 +11726,20 @@ impl GetContainerServiceMetricDataError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContainerServiceMetricDataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetContainerServiceMetricDataError {
     #[allow(unused_variables)]
@@ -10919,6 +11802,20 @@ impl GetContainerServicePowersError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContainerServicePowersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetContainerServicePowersError {
     #[allow(unused_variables)]
@@ -10974,6 +11871,20 @@ impl GetContainerServicesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContainerServicesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetContainerServicesError {
@@ -11036,6 +11947,18 @@ impl GetDiskError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDiskError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDiskError {
@@ -11105,6 +12028,18 @@ impl GetDiskSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDiskSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDiskSnapshotError {
     #[allow(unused_variables)]
@@ -11173,6 +12108,18 @@ impl GetDiskSnapshotsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDiskSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDiskSnapshotsError {
     #[allow(unused_variables)]
@@ -11236,6 +12183,18 @@ impl GetDisksError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDisksError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDisksError {
@@ -11301,6 +12260,20 @@ impl GetDistributionBundlesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDistributionBundlesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDistributionBundlesError {
@@ -11376,6 +12349,20 @@ impl GetDistributionLatestCacheResetError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDistributionLatestCacheResetError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDistributionLatestCacheResetError {
     #[allow(unused_variables)]
@@ -11448,6 +12435,20 @@ impl GetDistributionMetricDataError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetDistributionMetricDataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDistributionMetricDataError {
     #[allow(unused_variables)]
@@ -11507,6 +12508,18 @@ impl GetDistributionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDistributionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDistributionsError {
@@ -11573,6 +12586,18 @@ impl GetDomainError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDomainError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetDomainError {
     #[allow(unused_variables)]
@@ -11638,6 +12663,18 @@ impl GetDomainsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetDomainsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetDomainsError {
@@ -11715,6 +12752,20 @@ impl GetExportSnapshotRecordsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetExportSnapshotRecordsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
     #[allow(unused_variables)]
@@ -11782,6 +12833,18 @@ impl GetInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetInstanceError {
@@ -11859,6 +12922,20 @@ impl GetInstanceAccessDetailsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetInstanceAccessDetailsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
     #[allow(unused_variables)]
@@ -11933,6 +13010,20 @@ impl GetInstanceMetricDataError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetInstanceMetricDataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetInstanceMetricDataError {
     #[allow(unused_variables)]
@@ -12005,6 +13096,20 @@ impl GetInstancePortStatesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetInstancePortStatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetInstancePortStatesError {
     #[allow(unused_variables)]
@@ -12074,6 +13179,18 @@ impl GetInstanceSnapshotError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInstanceSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetInstanceSnapshotError {
@@ -12147,6 +13264,20 @@ impl GetInstanceSnapshotsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetInstanceSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetInstanceSnapshotsError {
     #[allow(unused_variables)]
@@ -12215,6 +13346,18 @@ impl GetInstanceStateError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInstanceStateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetInstanceStateError {
     #[allow(unused_variables)]
@@ -12280,6 +13423,18 @@ impl GetInstancesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInstancesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetInstancesError {
@@ -12347,6 +13502,18 @@ impl GetKeyPairError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetKeyPairError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetKeyPairError {
     #[allow(unused_variables)]
@@ -12412,6 +13579,18 @@ impl GetKeyPairsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetKeyPairsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetKeyPairsError {
@@ -12480,6 +13659,18 @@ impl GetLoadBalancerError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetLoadBalancerError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetLoadBalancerError {
@@ -12556,6 +13747,20 @@ impl GetLoadBalancerMetricDataError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetLoadBalancerMetricDataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
@@ -12641,6 +13846,20 @@ impl GetLoadBalancerTlsCertificatesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetLoadBalancerTlsCertificatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
     #[allow(unused_variables)]
@@ -12715,6 +13934,18 @@ impl GetLoadBalancersError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetLoadBalancersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetLoadBalancersError {
     #[allow(unused_variables)]
@@ -12780,6 +14011,18 @@ impl GetOperationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetOperationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetOperationError {
@@ -12848,6 +14091,18 @@ impl GetOperationsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetOperationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetOperationsError {
@@ -12925,6 +14180,20 @@ impl GetOperationsForResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOperationsForResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetOperationsForResourceError {
     #[allow(unused_variables)]
@@ -12992,6 +14261,18 @@ impl GetRegionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetRegionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRegionsError {
@@ -13064,6 +14345,20 @@ impl GetRelationalDatabaseError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseError {
@@ -13146,6 +14441,20 @@ impl GetRelationalDatabaseBlueprintsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseBlueprintsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
@@ -13235,6 +14544,20 @@ impl GetRelationalDatabaseBundlesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseBundlesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
     #[allow(unused_variables)]
@@ -13319,6 +14642,20 @@ impl GetRelationalDatabaseEventsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseEventsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
     #[allow(unused_variables)]
@@ -13402,6 +14739,20 @@ impl GetRelationalDatabaseLogEventsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseLogEventsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
@@ -13490,6 +14841,20 @@ impl GetRelationalDatabaseLogStreamsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseLogStreamsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
@@ -13580,6 +14945,20 @@ impl GetRelationalDatabaseMasterUserPasswordError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseMasterUserPasswordError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
@@ -13677,6 +15056,20 @@ impl GetRelationalDatabaseMetricDataError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseMetricDataError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
     #[allow(unused_variables)]
@@ -13764,6 +15157,20 @@ impl GetRelationalDatabaseParametersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
@@ -13853,6 +15260,20 @@ impl GetRelationalDatabaseSnapshotError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseSnapshotError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
     #[allow(unused_variables)]
@@ -13941,6 +15362,20 @@ impl GetRelationalDatabaseSnapshotsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabaseSnapshotsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
     #[allow(unused_variables)]
@@ -14019,6 +15454,20 @@ impl GetRelationalDatabasesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetRelationalDatabasesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetRelationalDatabasesError {
     #[allow(unused_variables)]
@@ -14087,6 +15536,18 @@ impl GetStaticIpError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetStaticIpError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetStaticIpError {
     #[allow(unused_variables)]
@@ -14152,6 +15613,18 @@ impl GetStaticIpsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetStaticIpsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for GetStaticIpsError {
@@ -14221,6 +15694,18 @@ impl ImportKeyPairError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ImportKeyPairError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ImportKeyPairError {
     #[allow(unused_variables)]
@@ -14286,6 +15771,18 @@ impl IsVpcPeeredError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<IsVpcPeeredError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for IsVpcPeeredError {
@@ -14363,6 +15860,20 @@ impl OpenInstancePublicPortsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<OpenInstancePublicPortsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for OpenInstancePublicPortsError {
     #[allow(unused_variables)]
@@ -14429,6 +15940,18 @@ impl PeerVpcError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PeerVpcError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for PeerVpcError {
     #[allow(unused_variables)]
@@ -14487,6 +16010,18 @@ impl PutAlarmError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutAlarmError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for PutAlarmError {
@@ -14559,6 +16094,20 @@ impl PutInstancePublicPortsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutInstancePublicPortsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for PutInstancePublicPortsError {
     #[allow(unused_variables)]
@@ -14628,6 +16177,18 @@ impl RebootInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RebootInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for RebootInstanceError {
@@ -14705,6 +16266,20 @@ impl RebootRelationalDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RebootRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RebootRelationalDatabaseError {
     #[allow(unused_variables)]
@@ -14764,6 +16339,20 @@ impl RegisterContainerImageError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RegisterContainerImageError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for RegisterContainerImageError {
@@ -14831,6 +16420,18 @@ impl ReleaseStaticIpError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ReleaseStaticIpError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ReleaseStaticIpError {
     #[allow(unused_variables)]
@@ -14895,6 +16496,20 @@ impl ResetDistributionCacheError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ResetDistributionCacheError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ResetDistributionCacheError {
@@ -14970,6 +16585,20 @@ impl SendContactMethodVerificationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SendContactMethodVerificationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for SendContactMethodVerificationError {
     #[allow(unused_variables)]
@@ -15040,6 +16669,18 @@ impl StartInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StartInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StartInstanceError {
@@ -15117,6 +16758,20 @@ impl StartRelationalDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StartRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StartRelationalDatabaseError {
     #[allow(unused_variables)]
@@ -15184,6 +16839,18 @@ impl StopInstanceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<StopInstanceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for StopInstanceError {
@@ -15257,6 +16924,20 @@ impl StopRelationalDatabaseError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<StopRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for StopRelationalDatabaseError {
     #[allow(unused_variables)]
@@ -15325,6 +17006,18 @@ impl TagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for TagResourceError {
     #[allow(unused_variables)]
@@ -15385,6 +17078,18 @@ impl TestAlarmError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TestAlarmError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for TestAlarmError {
@@ -15450,6 +17155,18 @@ impl UnpeerVpcError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UnpeerVpcError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UnpeerVpcError {
@@ -15519,6 +17236,18 @@ impl UntagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UntagResourceError {
     #[allow(unused_variables)]
@@ -15576,6 +17305,20 @@ impl UpdateContainerServiceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateContainerServiceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateContainerServiceError {
@@ -15635,6 +17378,18 @@ impl UpdateDistributionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDistributionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateDistributionError {
@@ -15704,6 +17459,20 @@ impl UpdateDistributionBundleError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateDistributionBundleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateDistributionBundleError {
     #[allow(unused_variables)]
@@ -15770,6 +17539,18 @@ impl UpdateDomainEntryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateDomainEntryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateDomainEntryError {
@@ -15851,6 +17632,20 @@ impl UpdateLoadBalancerAttributeError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateLoadBalancerAttributeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
     #[allow(unused_variables)]
@@ -15928,6 +17723,20 @@ impl UpdateRelationalDatabaseError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateRelationalDatabaseError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
@@ -16012,6 +17821,20 @@ impl UpdateRelationalDatabaseParametersError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateRelationalDatabaseParametersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {
@@ -16991,8 +18814,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AllocateStaticIpError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AllocateStaticIpError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AllocateStaticIpResult, _>()
@@ -17015,8 +18839,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AttachCertificateToDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachCertificateToDistributionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17034,8 +18859,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AttachDiskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachDiskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AttachDiskResult, _>()
@@ -17056,8 +18882,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AttachInstancesToLoadBalancerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachInstancesToLoadBalancerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17081,11 +18908,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                AttachLoadBalancerTlsCertificateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachLoadBalancerTlsCertificateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17103,8 +18928,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, AttachStaticIpError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachStaticIpError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AttachStaticIpResult, _>()
@@ -17124,8 +18950,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CloseInstancePublicPortsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CloseInstancePublicPortsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17143,8 +18970,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CopySnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopySnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CopySnapshotResult, _>()
@@ -17161,8 +18989,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCertificateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateCertificateResult, _>()
@@ -17182,8 +19011,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateCloudFormationStackError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateCloudFormationStackError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17201,8 +19031,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateContactMethodError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateContactMethodError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateContactMethodResult, _>()
@@ -17219,8 +19050,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateContainerServiceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateContainerServiceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17244,11 +19076,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                CreateContainerServiceDeploymentError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateContainerServiceDeploymentError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17270,11 +19100,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                CreateContainerServiceRegistryLoginError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateContainerServiceRegistryLoginError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17292,8 +19120,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDiskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDiskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskResult, _>()
@@ -17310,8 +19139,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDiskFromSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDiskFromSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17329,8 +19159,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDiskSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDiskSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskSnapshotResult, _>()
@@ -17347,8 +19178,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDistributionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDistributionResult, _>()
@@ -17365,8 +19197,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDomainError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDomainError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainResult, _>()
@@ -17383,8 +19216,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateDomainEntryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateDomainEntryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainEntryResult, _>()
@@ -17401,8 +19235,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateInstanceSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateInstanceSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17420,8 +19255,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateInstancesResult, _>()
@@ -17442,8 +19278,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateInstancesFromSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateInstancesFromSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17461,8 +19298,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateKeyPairError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateKeyPairError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateKeyPairResult, _>()
@@ -17479,8 +19317,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateLoadBalancerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLoadBalancerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateLoadBalancerResult, _>()
@@ -17503,11 +19342,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                CreateLoadBalancerTlsCertificateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLoadBalancerTlsCertificateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17528,8 +19365,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17553,11 +19391,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                CreateRelationalDatabaseFromSnapshotError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRelationalDatabaseFromSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17581,11 +19417,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                CreateRelationalDatabaseSnapshotError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRelationalDatabaseSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17603,8 +19437,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteAlarmError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAlarmError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteAlarmResult, _>()
@@ -17621,8 +19456,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteAutoSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAutoSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteAutoSnapshotResult, _>()
@@ -17639,8 +19475,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteCertificateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteCertificateResult, _>()
@@ -17657,8 +19494,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteContactMethodError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteContactMethodError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteContactMethodResult, _>()
@@ -17675,8 +19513,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteContainerImageError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteContainerImageError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteContainerImageResult, _>()
@@ -17693,8 +19532,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteContainerServiceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteContainerServiceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17712,8 +19552,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDiskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDiskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskResult, _>()
@@ -17730,8 +19571,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDiskSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDiskSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskSnapshotResult, _>()
@@ -17748,8 +19590,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDistributionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDistributionResult, _>()
@@ -17766,8 +19609,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDomainError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDomainError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainResult, _>()
@@ -17784,8 +19628,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteDomainEntryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteDomainEntryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainEntryResult, _>()
@@ -17802,8 +19647,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteInstanceResult, _>()
@@ -17820,8 +19666,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteInstanceSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteInstanceSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17839,8 +19686,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteKeyPairError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteKeyPairError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteKeyPairResult, _>()
@@ -17857,8 +19705,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteKnownHostKeysError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteKnownHostKeysError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteKnownHostKeysResult, _>()
@@ -17875,8 +19724,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteLoadBalancerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLoadBalancerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteLoadBalancerResult, _>()
@@ -17899,11 +19749,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DeleteLoadBalancerTlsCertificateError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLoadBalancerTlsCertificateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17924,8 +19772,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17949,11 +19798,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DeleteRelationalDatabaseSnapshotError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRelationalDatabaseSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17977,11 +19824,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DetachCertificateFromDistributionError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachCertificateFromDistributionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -17999,8 +19844,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DetachDiskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachDiskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DetachDiskResult, _>()
@@ -18023,8 +19869,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DetachInstancesFromLoadBalancerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachInstancesFromLoadBalancerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18042,8 +19889,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DetachStaticIpError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachStaticIpError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DetachStaticIpResult, _>()
@@ -18060,8 +19908,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DisableAddOnError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisableAddOnError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DisableAddOnResult, _>()
@@ -18076,8 +19925,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, DownloadDefaultKeyPairError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DownloadDefaultKeyPairError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18095,8 +19945,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, EnableAddOnError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(EnableAddOnError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<EnableAddOnResult, _>()
@@ -18113,8 +19964,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ExportSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExportSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ExportSnapshotResult, _>()
@@ -18131,8 +19983,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetActiveNamesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetActiveNamesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetActiveNamesResult, _>()
@@ -18149,8 +20002,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetAlarmsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAlarmsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetAlarmsResult, _>()
@@ -18167,8 +20021,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetAutoSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAutoSnapshotsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetAutoSnapshotsResult, _>()
@@ -18185,8 +20040,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetBlueprintsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBlueprintsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetBlueprintsResult, _>()
@@ -18203,8 +20059,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetBundlesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBundlesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetBundlesResult, _>()
@@ -18221,8 +20078,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCertificatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCertificatesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetCertificatesResult, _>()
@@ -18243,8 +20101,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetCloudFormationStackRecordsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCloudFormationStackRecordsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18262,8 +20121,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContactMethodsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContactMethodsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetContactMethodsResult, _>()
@@ -18278,8 +20138,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerAPIMetadataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerAPIMetadataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18297,8 +20158,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerImagesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerImagesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetContainerImagesResult, _>()
@@ -18315,8 +20177,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerLogError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerLogError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetContainerLogResult, _>()
@@ -18339,8 +20202,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerServiceDeploymentsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerServiceDeploymentsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18362,8 +20226,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerServiceMetricDataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerServiceMetricDataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18382,8 +20247,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerServicePowersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerServicePowersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18401,8 +20267,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetContainerServicesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContainerServicesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ContainerServicesListResult, _>()
@@ -18419,8 +20286,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDiskError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDiskError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDiskResult, _>()
@@ -18437,8 +20305,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDiskSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDiskSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotResult, _>()
@@ -18455,8 +20324,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDiskSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDiskSnapshotsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotsResult, _>()
@@ -18473,8 +20343,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDisksError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDisksError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDisksResult, _>()
@@ -18489,8 +20360,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, GetDistributionBundlesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionBundlesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18514,8 +20386,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDistributionLatestCacheResetError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionLatestCacheResetError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18536,8 +20409,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDistributionMetricDataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionMetricDataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18555,8 +20429,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDistributionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDistributionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDistributionsResult, _>()
@@ -18573,8 +20448,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDomainError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDomainError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDomainResult, _>()
@@ -18591,8 +20467,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetDomainsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetDomainsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDomainsResult, _>()
@@ -18612,8 +20489,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetExportSnapshotRecordsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetExportSnapshotRecordsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18631,8 +20509,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResult, _>()
@@ -18652,8 +20531,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceAccessDetailsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceAccessDetailsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18671,8 +20551,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceMetricDataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceMetricDataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceMetricDataResult, _>()
@@ -18689,8 +20570,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstancePortStatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstancePortStatesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstancePortStatesResult, _>()
@@ -18707,8 +20589,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceSnapshotResult, _>()
@@ -18725,8 +20608,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceSnapshotsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceSnapshotsResult, _>()
@@ -18743,8 +20627,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceStateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceStateError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceStateResult, _>()
@@ -18761,8 +20646,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetInstancesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstancesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetInstancesResult, _>()
@@ -18779,8 +20665,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetKeyPairError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetKeyPairError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairResult, _>()
@@ -18797,8 +20684,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetKeyPairsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetKeyPairsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairsResult, _>()
@@ -18815,8 +20703,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetLoadBalancerError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoadBalancerError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancerResult, _>()
@@ -18836,8 +20725,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetLoadBalancerMetricDataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoadBalancerMetricDataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18861,8 +20751,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetLoadBalancerTlsCertificatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoadBalancerTlsCertificatesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18880,8 +20771,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetLoadBalancersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoadBalancersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancersResult, _>()
@@ -18898,8 +20790,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetOperationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOperationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResult, _>()
@@ -18916,8 +20809,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetOperationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOperationsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetOperationsResult, _>()
@@ -18937,8 +20831,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetOperationsForResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOperationsForResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -18956,8 +20851,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRegionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRegionsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetRegionsResult, _>()
@@ -18974,8 +20870,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetRelationalDatabaseResult, _>()
@@ -18998,8 +20895,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseBlueprintsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseBlueprintsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19021,8 +20919,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseBundlesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseBundlesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19044,8 +20943,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseEventsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseEventsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19069,8 +20969,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseLogEventsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseLogEventsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19094,8 +20995,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseLogStreamsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseLogStreamsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19119,11 +21021,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetRelationalDatabaseMasterUserPasswordError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseMasterUserPasswordError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19147,8 +21047,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseMetricDataError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseMetricDataError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19172,8 +21073,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseParametersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseParametersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19195,8 +21097,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseSnapshotError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseSnapshotError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19220,8 +21123,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabaseSnapshotsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabaseSnapshotsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19239,8 +21143,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetRelationalDatabasesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRelationalDatabasesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19258,8 +21163,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetStaticIpError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetStaticIpError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpResult, _>()
@@ -19276,8 +21182,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetStaticIpsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetStaticIpsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpsResult, _>()
@@ -19294,8 +21201,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ImportKeyPairError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ImportKeyPairError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ImportKeyPairResult, _>()
@@ -19308,8 +21216,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, IsVpcPeeredError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(IsVpcPeeredError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<IsVpcPeeredResult, _>()
@@ -19326,8 +21235,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, OpenInstancePublicPortsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(OpenInstancePublicPortsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19341,8 +21251,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, PeerVpcError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PeerVpcError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PeerVpcResult, _>()
@@ -19359,8 +21270,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutAlarmError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutAlarmError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PutAlarmResult, _>()
@@ -19377,8 +21289,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutInstancePublicPortsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutInstancePublicPortsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19396,8 +21309,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RebootInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebootInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<RebootInstanceResult, _>()
@@ -19417,8 +21331,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RebootRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RebootRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19436,8 +21351,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RegisterContainerImageError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RegisterContainerImageError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19455,8 +21371,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ReleaseStaticIpError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ReleaseStaticIpError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ReleaseStaticIpResult, _>()
@@ -19473,8 +21390,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ResetDistributionCacheError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetDistributionCacheError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19496,8 +21414,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, SendContactMethodVerificationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SendContactMethodVerificationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19515,8 +21434,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StartInstanceResult, _>()
@@ -19533,8 +21453,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StartRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StartRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19552,8 +21473,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopInstanceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopInstanceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopInstanceResult, _>()
@@ -19570,8 +21492,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, StopRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(StopRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19589,8 +21512,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResult, _>()
@@ -19607,8 +21531,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TestAlarmError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TestAlarmError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TestAlarmResult, _>()
@@ -19621,8 +21546,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, UnpeerVpcError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UnpeerVpcError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UnpeerVpcResult, _>()
@@ -19639,8 +21565,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResult, _>()
@@ -19657,8 +21584,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateContainerServiceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateContainerServiceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19676,8 +21604,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDistributionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDistributionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDistributionResult, _>()
@@ -19697,8 +21626,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDistributionBundleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDistributionBundleError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19716,8 +21646,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateDomainEntryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateDomainEntryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDomainEntryResult, _>()
@@ -19738,8 +21669,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateLoadBalancerAttributeError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateLoadBalancerAttributeError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19760,8 +21692,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateRelationalDatabaseError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRelationalDatabaseError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -19785,11 +21718,9 @@ impl Lightsail for LightsailClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                UpdateRelationalDatabaseParametersError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRelationalDatabaseParametersError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)

@@ -45,15 +45,14 @@ impl IamClient {
         params
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -11404,6 +11403,20 @@ impl AddClientIDToOpenIDConnectProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AddClientIDToOpenIDConnectProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11489,6 +11502,20 @@ impl AddRoleToInstanceProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AddRoleToInstanceProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11549,6 +11576,18 @@ impl AddUserToGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AddUserToGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11623,6 +11662,18 @@ impl AttachGroupPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AttachGroupPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11708,6 +11759,18 @@ impl AttachRolePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AttachRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11783,6 +11846,18 @@ impl AttachUserPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<AttachUserPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11870,6 +11945,18 @@ impl ChangePasswordError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ChangePasswordError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11933,6 +12020,18 @@ impl CreateAccessKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateAccessKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -11991,6 +12090,18 @@ impl CreateAccountAliasError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateAccountAliasError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12060,6 +12171,18 @@ impl CreateGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12119,6 +12242,20 @@ impl CreateInstanceProfileError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateInstanceProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12195,6 +12332,18 @@ impl CreateLoginProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateLoginProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12266,6 +12415,20 @@ impl CreateOpenIDConnectProviderError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateOpenIDConnectProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12345,6 +12508,18 @@ impl CreatePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreatePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12419,6 +12594,18 @@ impl CreatePolicyVersionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreatePolicyVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12504,6 +12691,18 @@ impl CreateRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12574,6 +12773,18 @@ impl CreateSAMLProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateSAMLProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12640,6 +12851,20 @@ impl CreateServiceLinkedRoleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateServiceLinkedRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12709,6 +12934,20 @@ impl CreateServiceSpecificCredentialError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateServiceSpecificCredentialError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12796,6 +13035,18 @@ impl CreateUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12857,6 +13108,20 @@ impl CreateVirtualMFADeviceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateVirtualMFADeviceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12928,6 +13193,18 @@ impl DeactivateMFADeviceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeactivateMFADeviceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -12991,6 +13268,18 @@ impl DeleteAccessKeyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteAccessKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13049,6 +13338,18 @@ impl DeleteAccountAliasError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteAccountAliasError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13111,6 +13412,20 @@ impl DeleteAccountPasswordPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteAccountPasswordPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13180,6 +13495,18 @@ impl DeleteGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13239,6 +13566,18 @@ impl DeleteGroupPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteGroupPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13306,6 +13645,20 @@ impl DeleteInstanceProfileError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteInstanceProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13378,6 +13731,18 @@ impl DeleteLoginProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteLoginProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13441,6 +13806,20 @@ impl DeleteOpenIDConnectProviderError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteOpenIDConnectProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13517,6 +13896,18 @@ impl DeletePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeletePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13591,6 +13982,18 @@ impl DeletePolicyVersionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeletePolicyVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13676,6 +14079,18 @@ impl DeleteRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13743,6 +14158,20 @@ impl DeleteRolePermissionsBoundaryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteRolePermissionsBoundaryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13814,6 +14243,18 @@ impl DeleteRolePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13882,6 +14323,18 @@ impl DeleteSAMLProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteSAMLProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -13927,6 +14380,18 @@ impl DeleteSSHPublicKeyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteSSHPublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13994,6 +14459,20 @@ impl DeleteServerCertificateError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteServerCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14055,6 +14534,20 @@ impl DeleteServiceLinkedRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteServiceLinkedRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14103,6 +14596,20 @@ impl DeleteServiceSpecificCredentialError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteServiceSpecificCredentialError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14161,6 +14668,20 @@ impl DeleteSigningCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteSigningCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14237,6 +14758,18 @@ impl DeleteUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14296,6 +14829,20 @@ impl DeleteUserPermissionsBoundaryError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteUserPermissionsBoundaryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14353,6 +14900,18 @@ impl DeleteUserPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteUserPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14422,6 +14981,20 @@ impl DeleteVirtualMFADeviceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteVirtualMFADeviceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14488,6 +15061,18 @@ impl DetachGroupPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DetachGroupPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14565,6 +15150,18 @@ impl DetachRolePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DetachRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14632,6 +15229,18 @@ impl DetachUserPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DetachUserPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14718,6 +15327,18 @@ impl EnableMFADeviceError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<EnableMFADeviceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14776,6 +15397,20 @@ impl GenerateCredentialReportError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GenerateCredentialReportError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14823,6 +15458,20 @@ impl GenerateOrganizationsAccessReportError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GenerateOrganizationsAccessReportError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14884,6 +15533,20 @@ impl GenerateServiceLastAccessedDetailsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GenerateServiceLastAccessedDetailsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -14923,6 +15586,20 @@ impl GetAccessKeyLastUsedError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetAccessKeyLastUsedError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14969,6 +15646,20 @@ impl GetAccountAuthorizationDetailsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetAccountAuthorizationDetailsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15024,6 +15715,20 @@ impl GetAccountPasswordPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetAccountPasswordPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15067,6 +15772,18 @@ impl GetAccountSummaryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetAccountSummaryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15113,6 +15830,20 @@ impl GetContextKeysForCustomPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContextKeysForCustomPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15170,6 +15901,20 @@ impl GetContextKeysForPrincipalPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetContextKeysForPrincipalPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15246,6 +15991,18 @@ impl GetCredentialReportError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetCredentialReportError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15302,6 +16059,18 @@ impl GetGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15352,6 +16121,18 @@ impl GetGroupPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetGroupPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15406,6 +16187,18 @@ impl GetInstanceProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetInstanceProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15456,6 +16249,18 @@ impl GetLoginProfileError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetLoginProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15517,6 +16322,20 @@ impl GetOpenIDConnectProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOpenIDConnectProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15563,6 +16382,20 @@ impl GetOrganizationsAccessReportError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetOrganizationsAccessReportError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15621,6 +16454,18 @@ impl GetPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15683,6 +16528,18 @@ impl GetPolicyVersionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetPolicyVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15736,6 +16593,18 @@ impl GetRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15786,6 +16655,18 @@ impl GetRolePolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15847,6 +16728,18 @@ impl GetSAMLProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetSAMLProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15900,6 +16793,18 @@ impl GetSSHPublicKeyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetSSHPublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15956,6 +16861,20 @@ impl GetServerCertificateError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetServerCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16008,6 +16927,20 @@ impl GetServiceLastAccessedDetailsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetServiceLastAccessedDetailsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16066,6 +16999,20 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetServiceLastAccessedDetailsWithEntitiesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16139,6 +17086,20 @@ impl GetServiceLinkedRoleDeletionStatusError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetServiceLinkedRoleDeletionStatusError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16198,6 +17159,18 @@ impl GetUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16248,6 +17221,18 @@ impl GetUserPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetUserPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16302,6 +17287,18 @@ impl ListAccessKeysError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListAccessKeysError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16345,6 +17342,18 @@ impl ListAccountAliasesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListAccountAliasesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16403,6 +17412,20 @@ impl ListAttachedGroupPoliciesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListAttachedGroupPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16465,6 +17488,20 @@ impl ListAttachedRolePoliciesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListAttachedRolePoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16523,6 +17560,20 @@ impl ListAttachedUserPoliciesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListAttachedUserPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16585,6 +17636,20 @@ impl ListEntitiesForPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListEntitiesForPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16638,6 +17703,18 @@ impl ListGroupPoliciesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListGroupPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16681,6 +17758,18 @@ impl ListGroupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListGroupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16734,6 +17823,18 @@ impl ListGroupsForUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListGroupsForUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16777,6 +17878,20 @@ impl ListInstanceProfilesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListInstanceProfilesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16832,6 +17947,20 @@ impl ListInstanceProfilesForRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListInstanceProfilesForRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16884,6 +18013,18 @@ impl ListMFADevicesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListMFADevicesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16931,6 +18072,20 @@ impl ListOpenIDConnectProvidersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListOpenIDConnectProvidersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16973,6 +18128,18 @@ impl ListPoliciesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17030,6 +18197,20 @@ impl ListPoliciesGrantingServiceAccessError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListPoliciesGrantingServiceAccessError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17095,6 +18276,18 @@ impl ListPolicyVersionsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListPolicyVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17146,6 +18339,18 @@ impl ListRolePoliciesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListRolePoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17200,6 +18405,18 @@ impl ListRoleTagsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListRoleTagsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17243,6 +18460,18 @@ impl ListRolesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListRolesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17289,6 +18518,18 @@ impl ListSAMLProvidersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListSAMLProvidersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17333,6 +18574,18 @@ impl ListSSHPublicKeysError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListSSHPublicKeysError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17375,6 +18628,20 @@ impl ListServerCertificatesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListServerCertificatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17432,6 +18699,20 @@ impl ListServiceSpecificCredentialsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListServiceSpecificCredentialsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17486,6 +18767,20 @@ impl ListSigningCertificatesError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListSigningCertificatesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17536,6 +18831,18 @@ impl ListUserPoliciesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListUserPoliciesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17590,6 +18897,18 @@ impl ListUserTagsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListUserTagsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17635,6 +18954,18 @@ impl ListUsersError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListUsersError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17669,6 +19000,20 @@ impl ListVirtualMFADevicesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListVirtualMFADevicesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17732,6 +19077,18 @@ impl PutGroupPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutGroupPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17815,6 +19172,20 @@ impl PutRolePermissionsBoundaryError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutRolePermissionsBoundaryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17895,6 +19266,18 @@ impl PutRolePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17968,6 +19351,20 @@ impl PutUserPermissionsBoundaryError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutUserPermissionsBoundaryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18038,6 +19435,18 @@ impl PutUserPolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutUserPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18105,6 +19514,20 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveClientIDFromOpenIDConnectProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18186,6 +19609,20 @@ impl RemoveRoleFromInstanceProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RemoveRoleFromInstanceProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18249,6 +19686,18 @@ impl RemoveUserFromGroupError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RemoveUserFromGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18295,6 +19744,20 @@ impl ResetServiceSpecificCredentialError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ResetServiceSpecificCredentialError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18360,6 +19823,18 @@ impl ResyncMFADeviceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ResyncMFADeviceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18430,6 +19905,20 @@ impl SetDefaultPolicyVersionError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SetDefaultPolicyVersionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18479,6 +19968,20 @@ impl SetSecurityTokenServicePreferencesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SetSecurityTokenServicePreferencesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18532,6 +20035,20 @@ impl SimulateCustomPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SimulateCustomPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18591,6 +20108,20 @@ impl SimulatePrincipalPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<SimulatePrincipalPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18665,6 +20196,18 @@ impl TagRoleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18743,6 +20286,18 @@ impl TagUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18805,6 +20360,18 @@ impl UntagRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18865,6 +20432,18 @@ impl UntagUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18923,6 +20502,18 @@ impl UpdateAccessKeyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateAccessKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18994,6 +20585,20 @@ impl UpdateAccountPasswordPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateAccountPasswordPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19075,6 +20680,20 @@ impl UpdateAssumeRolePolicyError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateAssumeRolePolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19144,6 +20763,18 @@ impl UpdateGroupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateGroupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19223,6 +20854,18 @@ impl UpdateLoginProfileError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateLoginProfileError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19295,6 +20938,20 @@ impl UpdateOpenIDConnectProviderThumbprintError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateOpenIDConnectProviderThumbprintError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19361,6 +21018,18 @@ impl UpdateRoleError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateRoleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19419,6 +21088,20 @@ impl UpdateRoleDescriptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateRoleDescriptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19488,6 +21171,18 @@ impl UpdateSAMLProviderError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateSAMLProviderError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19533,6 +21228,18 @@ impl UpdateSSHPublicKeyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateSSHPublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19600,6 +21307,20 @@ impl UpdateServerCertificateError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateServerCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19649,6 +21370,20 @@ impl UpdateServiceSpecificCredentialError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateServiceSpecificCredentialError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19707,6 +21442,20 @@ impl UpdateSigningCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateSigningCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19790,6 +21539,18 @@ impl UpdateUserError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateUserError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -19867,6 +21628,18 @@ impl UploadSSHPublicKeyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UploadSSHPublicKeyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19947,6 +21720,20 @@ impl UploadServerCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UploadServerCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20043,6 +21830,20 @@ impl UploadSigningCertificateError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UploadSigningCertificateError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20981,11 +22782,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                AddClientIDToOpenIDConnectProviderError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddClientIDToOpenIDConnectProviderError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21004,8 +22803,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AddRoleToInstanceProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddRoleToInstanceProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21024,8 +22824,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AddUserToGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AddUserToGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21044,8 +22845,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AttachGroupPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachGroupPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21064,8 +22866,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AttachRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachRolePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21084,8 +22887,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, AttachUserPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AttachUserPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21104,8 +22908,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ChangePasswordError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ChangePasswordError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21124,17 +22929,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateAccessKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateAccessKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21155,8 +22962,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateAccountAliasError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateAccountAliasError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21175,16 +22983,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", stack)?;
+            result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21205,19 +23015,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateInstanceProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateInstanceProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateInstanceProfileResponseDeserializer::deserialize(
+            result = CreateInstanceProfileResponseDeserializer::deserialize(
                 "CreateInstanceProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21238,19 +23050,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateLoginProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateLoginProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateLoginProfileResponseDeserializer::deserialize(
+            result = CreateLoginProfileResponseDeserializer::deserialize(
                 "CreateLoginProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21272,19 +23086,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateOpenIDConnectProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateOpenIDConnectProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
+            result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
                 "CreateOpenIDConnectProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21305,17 +23121,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreatePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreatePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", stack)?;
+            result = CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21336,19 +23153,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreatePolicyVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreatePolicyVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreatePolicyVersionResponseDeserializer::deserialize(
+            result = CreatePolicyVersionResponseDeserializer::deserialize(
                 "CreatePolicyVersionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21369,16 +23188,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", stack)?;
+            result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21399,19 +23220,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateSAMLProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateSAMLProviderResponseDeserializer::deserialize(
+            result = CreateSAMLProviderResponseDeserializer::deserialize(
                 "CreateSAMLProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21432,19 +23255,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateServiceLinkedRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateServiceLinkedRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
+            result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
                 "CreateServiceLinkedRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21468,19 +23293,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateServiceSpecificCredentialError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateServiceSpecificCredentialError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
+            result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
                 "CreateServiceSpecificCredentialResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21501,16 +23328,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateUserResponseDeserializer::deserialize("CreateUserResult", stack)?;
+            result = CreateUserResponseDeserializer::deserialize("CreateUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21531,19 +23360,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, CreateVirtualMFADeviceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateVirtualMFADeviceError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
+            result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
                 "CreateVirtualMFADeviceResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21564,8 +23395,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeactivateMFADeviceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeactivateMFADeviceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21584,8 +23416,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteAccessKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAccessKeyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21604,8 +23437,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteAccountAliasError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAccountAliasError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21622,8 +23456,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteAccountPasswordPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteAccountPasswordPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21642,8 +23477,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21662,8 +23498,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteGroupPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteGroupPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21682,8 +23519,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteInstanceProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteInstanceProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21702,8 +23540,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteLoginProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteLoginProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21722,8 +23561,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteOpenIDConnectProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteOpenIDConnectProviderError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21742,8 +23582,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeletePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21762,8 +23603,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeletePolicyVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePolicyVersionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21782,8 +23624,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRoleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21802,8 +23645,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteRolePermissionsBoundaryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRolePermissionsBoundaryError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21822,8 +23666,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteRolePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21842,8 +23687,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteSAMLProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSAMLProviderError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21862,8 +23708,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteSSHPublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSSHPublicKeyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21882,8 +23729,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteServerCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteServerCertificateError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21902,19 +23750,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteServiceLinkedRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteServiceLinkedRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
+            result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
                 "DeleteServiceLinkedRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -21935,8 +23785,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteServiceSpecificCredentialError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteServiceSpecificCredentialError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21955,8 +23806,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteSigningCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteSigningCertificateError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21975,8 +23827,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21995,8 +23848,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserPermissionsBoundaryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserPermissionsBoundaryError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22015,8 +23869,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteUserPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteUserPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22035,8 +23890,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DeleteVirtualMFADeviceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteVirtualMFADeviceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22055,8 +23911,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DetachGroupPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachGroupPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22075,8 +23932,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DetachRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachRolePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22095,8 +23953,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, DetachUserPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DetachUserPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22115,8 +23974,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, EnableMFADeviceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(EnableMFADeviceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22133,19 +23993,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GenerateCredentialReportError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GenerateCredentialReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateCredentialReportResponseDeserializer::deserialize(
+            result = GenerateCredentialReportResponseDeserializer::deserialize(
                 "GenerateCredentialReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22169,22 +24031,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GenerateOrganizationsAccessReportError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GenerateOrganizationsAccessReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
+            result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GenerateOrganizationsAccessReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22208,22 +24069,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GenerateServiceLastAccessedDetailsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GenerateServiceLastAccessedDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
+            result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GenerateServiceLastAccessedDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22244,19 +24104,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetAccessKeyLastUsedError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccessKeyLastUsedError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
+            result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
                 "GetAccessKeyLastUsedResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22280,19 +24142,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetAccountAuthorizationDetailsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccountAuthorizationDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
+            result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
                 "GetAccountAuthorizationDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22311,19 +24175,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetAccountPasswordPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccountPasswordPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
+            result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
                 "GetAccountPasswordPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22342,19 +24208,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetAccountSummaryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetAccountSummaryError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetAccountSummaryResponseDeserializer::deserialize(
+            result = GetAccountSummaryResponseDeserializer::deserialize(
                 "GetAccountSummaryResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22376,19 +24244,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetContextKeysForCustomPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContextKeysForCustomPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForCustomPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22410,22 +24280,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetContextKeysForPrincipalPolicyError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetContextKeysForPrincipalPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForPrincipalPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22444,19 +24313,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetCredentialReportError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetCredentialReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetCredentialReportResponseDeserializer::deserialize(
+            result = GetCredentialReportResponseDeserializer::deserialize(
                 "GetCredentialReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22477,16 +24348,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetGroupResponseDeserializer::deserialize("GetGroupResult", stack)?;
+            result = GetGroupResponseDeserializer::deserialize("GetGroupResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22507,17 +24380,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetGroupPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetGroupPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22538,19 +24413,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetInstanceProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetInstanceProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetInstanceProfileResponseDeserializer::deserialize(
+            result = GetInstanceProfileResponseDeserializer::deserialize(
                 "GetInstanceProfileResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22571,17 +24448,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetLoginProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetLoginProfileError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22602,19 +24481,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetOpenIDConnectProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOpenIDConnectProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
+            result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
                 "GetOpenIDConnectProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22636,19 +24517,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetOrganizationsAccessReportError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetOrganizationsAccessReportError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
+            result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GetOrganizationsAccessReportResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22669,16 +24552,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", stack)?;
+            result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22699,17 +24584,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetPolicyVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPolicyVersionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22730,16 +24617,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetRoleResponseDeserializer::deserialize("GetRoleResult", stack)?;
+            result = GetRoleResponseDeserializer::deserialize("GetRoleResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22760,17 +24649,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetRolePolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", stack)?;
+            result = GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22791,17 +24681,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetSAMLProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22822,17 +24714,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetSSHPublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetSSHPublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22853,19 +24747,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetServerCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServerCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServerCertificateResponseDeserializer::deserialize(
+            result = GetServerCertificateResponseDeserializer::deserialize(
                 "GetServerCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22889,19 +24785,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetServiceLastAccessedDetailsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceLastAccessedDetailsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
+            result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GetServiceLastAccessedDetailsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22929,23 +24827,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetServiceLastAccessedDetailsWithEntitiesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceLastAccessedDetailsWithEntitiesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
-                    "GetServiceLastAccessedDetailsWithEntitiesResult",
-                    stack,
-                )?;
+            result = GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
+                "GetServiceLastAccessedDetailsWithEntitiesResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -22969,22 +24865,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                GetServiceLinkedRoleDeletionStatusError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetServiceLinkedRoleDeletionStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
+            result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
                 "GetServiceLinkedRoleDeletionStatusResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23005,16 +24900,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = GetUserResponseDeserializer::deserialize("GetUserResult", stack)?;
+            result = GetUserResponseDeserializer::deserialize("GetUserResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23035,17 +24932,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, GetUserPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetUserPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", stack)?;
+            result = GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23066,17 +24964,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListAccessKeysError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAccessKeysError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23097,19 +24997,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListAccountAliasesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAccountAliasesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAccountAliasesResponseDeserializer::deserialize(
+            result = ListAccountAliasesResponseDeserializer::deserialize(
                 "ListAccountAliasesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23131,19 +25033,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListAttachedGroupPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAttachedGroupPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
+            result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
                 "ListAttachedGroupPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23164,19 +25068,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListAttachedRolePoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAttachedRolePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
+            result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
                 "ListAttachedRolePoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23197,19 +25103,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListAttachedUserPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListAttachedUserPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
+            result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
                 "ListAttachedUserPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23230,19 +25138,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListEntitiesForPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListEntitiesForPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListEntitiesForPolicyResponseDeserializer::deserialize(
+            result = ListEntitiesForPolicyResponseDeserializer::deserialize(
                 "ListEntitiesForPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23263,19 +25173,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListGroupPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupPoliciesResponseDeserializer::deserialize(
+            result = ListGroupPoliciesResponseDeserializer::deserialize(
                 "ListGroupPoliciesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23296,16 +25208,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListGroupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", stack)?;
+            result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23326,19 +25240,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListGroupsForUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGroupsForUserError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListGroupsForUserResponseDeserializer::deserialize(
+            result = ListGroupsForUserResponseDeserializer::deserialize(
                 "ListGroupsForUserResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23359,19 +25275,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListInstanceProfilesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListInstanceProfilesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListInstanceProfilesResponseDeserializer::deserialize(
+            result = ListInstanceProfilesResponseDeserializer::deserialize(
                 "ListInstanceProfilesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23393,19 +25311,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListInstanceProfilesForRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListInstanceProfilesForRoleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
+            result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
                 "ListInstanceProfilesForRoleResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23426,17 +25346,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListMFADevicesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListMFADevicesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23458,19 +25380,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListOpenIDConnectProvidersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListOpenIDConnectProvidersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
+            result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
                 "ListOpenIDConnectProvidersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23491,17 +25415,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", stack)?;
+            result = ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23525,22 +25450,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                ListPoliciesGrantingServiceAccessError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPoliciesGrantingServiceAccessError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
+            result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
                 "ListPoliciesGrantingServiceAccessResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23561,19 +25485,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListPolicyVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPolicyVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListPolicyVersionsResponseDeserializer::deserialize(
+            result = ListPolicyVersionsResponseDeserializer::deserialize(
                 "ListPolicyVersionsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23594,17 +25520,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListRolePoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRolePoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23625,17 +25553,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListRoleTagsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRoleTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", stack)?;
+            result = ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23656,16 +25585,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListRolesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListRolesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListRolesResponseDeserializer::deserialize("ListRolesResult", stack)?;
+            result = ListRolesResponseDeserializer::deserialize("ListRolesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23686,19 +25617,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListSAMLProvidersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSAMLProvidersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSAMLProvidersResponseDeserializer::deserialize(
+            result = ListSAMLProvidersResponseDeserializer::deserialize(
                 "ListSAMLProvidersResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23719,19 +25652,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListSSHPublicKeysError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSSHPublicKeysError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSSHPublicKeysResponseDeserializer::deserialize(
+            result = ListSSHPublicKeysResponseDeserializer::deserialize(
                 "ListSSHPublicKeysResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23752,19 +25687,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListServerCertificatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListServerCertificatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListServerCertificatesResponseDeserializer::deserialize(
+            result = ListServerCertificatesResponseDeserializer::deserialize(
                 "ListServerCertificatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23788,19 +25725,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListServiceSpecificCredentialsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListServiceSpecificCredentialsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
+            result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
                 "ListServiceSpecificCredentialsResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23821,19 +25760,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListSigningCertificatesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListSigningCertificatesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListSigningCertificatesResponseDeserializer::deserialize(
+            result = ListSigningCertificatesResponseDeserializer::deserialize(
                 "ListSigningCertificatesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23854,17 +25795,19 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListUserPoliciesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListUserPoliciesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
+            result =
                 ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23885,17 +25828,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListUserTagsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListUserTagsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result =
-                ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", stack)?;
+            result = ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23916,16 +25860,18 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListUsersError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListUsersError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListUsersResponseDeserializer::deserialize("ListUsersResult", stack)?;
+            result = ListUsersResponseDeserializer::deserialize("ListUsersResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23946,19 +25892,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ListVirtualMFADevicesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListVirtualMFADevicesError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ListVirtualMFADevicesResponseDeserializer::deserialize(
+            result = ListVirtualMFADevicesResponseDeserializer::deserialize(
                 "ListVirtualMFADevicesResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -23979,8 +25927,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PutGroupPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutGroupPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -23999,8 +25948,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PutRolePermissionsBoundaryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutRolePermissionsBoundaryError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24019,8 +25969,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PutRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutRolePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24039,8 +25990,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PutUserPermissionsBoundaryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutUserPermissionsBoundaryError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24059,8 +26011,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, PutUserPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutUserPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24083,11 +26036,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                RemoveClientIDFromOpenIDConnectProviderError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveClientIDFromOpenIDConnectProviderError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24106,8 +26057,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RemoveRoleFromInstanceProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveRoleFromInstanceProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24126,8 +26078,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, RemoveUserFromGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RemoveUserFromGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24149,19 +26102,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ResetServiceSpecificCredentialError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResetServiceSpecificCredentialError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
+            result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
                 "ResetServiceSpecificCredentialResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24182,8 +26137,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, ResyncMFADeviceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ResyncMFADeviceError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24202,8 +26158,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, SetDefaultPolicyVersionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SetDefaultPolicyVersionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24222,11 +26179,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                SetSecurityTokenServicePreferencesError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SetSecurityTokenServicePreferencesError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24245,19 +26200,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, SimulateCustomPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SimulateCustomPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SimulatePolicyResponseDeserializer::deserialize(
+            result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulateCustomPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24278,19 +26235,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, SimulatePrincipalPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SimulatePrincipalPolicyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = SimulatePolicyResponseDeserializer::deserialize(
+            result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulatePrincipalPolicyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24308,8 +26267,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, TagRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagRoleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24325,8 +26285,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, TagUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagUserError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24342,8 +26303,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UntagRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagRoleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24359,8 +26321,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UntagUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagUserError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24379,8 +26342,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateAccessKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateAccessKeyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24399,8 +26363,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateAccountPasswordPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateAccountPasswordPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24419,8 +26384,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateAssumeRolePolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateAssumeRolePolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24439,8 +26405,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateGroupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGroupError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24459,8 +26426,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateLoginProfileError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateLoginProfileError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24479,11 +26447,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                UpdateOpenIDConnectProviderThumbprintError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateOpenIDConnectProviderThumbprintError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24502,8 +26468,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateRoleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRoleError::refine)?;
 
         let result = UpdateRoleResponse::default();
 
@@ -24524,19 +26491,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateRoleDescriptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateRoleDescriptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateRoleDescriptionResponseDeserializer::deserialize(
+            result = UpdateRoleDescriptionResponseDeserializer::deserialize(
                 "UpdateRoleDescriptionResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24557,19 +26526,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateSAMLProviderError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSAMLProviderError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UpdateSAMLProviderResponseDeserializer::deserialize(
+            result = UpdateSAMLProviderResponseDeserializer::deserialize(
                 "UpdateSAMLProviderResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24590,8 +26561,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateSSHPublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSSHPublicKeyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24610,8 +26582,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateServerCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateServerCertificateError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24630,8 +26603,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateServiceSpecificCredentialError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateServiceSpecificCredentialError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24650,8 +26624,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateSigningCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateSigningCertificateError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24670,8 +26645,9 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UpdateUserError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateUserError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -24690,19 +26666,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UploadSSHPublicKeyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadSSHPublicKeyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadSSHPublicKeyResponseDeserializer::deserialize(
+            result = UploadSSHPublicKeyResponseDeserializer::deserialize(
                 "UploadSSHPublicKeyResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24723,19 +26701,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UploadServerCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadServerCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadServerCertificateResponseDeserializer::deserialize(
+            result = UploadServerCertificateResponseDeserializer::deserialize(
                 "UploadServerCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 
@@ -24756,19 +26736,21 @@ impl Iam for IamClient {
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let response = self
-            .sign_and_dispatch(request, UploadSigningCertificateError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadSigningCertificateError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
-            let result = UploadSigningCertificateResponseDeserializer::deserialize(
+            result = UploadSigningCertificateResponseDeserializer::deserialize(
                 "UploadSigningCertificateResult",
                 stack,
             )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
-            Ok(result)
+            Ok(())
         })
         .await?;
 

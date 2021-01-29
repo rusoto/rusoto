@@ -34,15 +34,14 @@ impl DynamoDbClient {
         request
     }
 
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -3576,6 +3575,20 @@ impl BatchExecuteStatementError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<BatchExecuteStatementError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for BatchExecuteStatementError {
     #[allow(unused_variables)]
@@ -3623,6 +3636,18 @@ impl BatchGetItemError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchGetItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchGetItemError {
@@ -3680,6 +3705,18 @@ impl BatchWriteItemError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<BatchWriteItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for BatchWriteItemError {
@@ -3744,6 +3781,18 @@ impl CreateBackupError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateBackupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateBackupError {
     #[allow(unused_variables)]
@@ -3798,6 +3847,18 @@ impl CreateGlobalTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateGlobalTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for CreateGlobalTableError {
     #[allow(unused_variables)]
@@ -3840,6 +3901,18 @@ impl CreateTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for CreateTableError {
@@ -3887,6 +3960,18 @@ impl DeleteBackupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBackupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DeleteBackupError {
@@ -3955,6 +4040,18 @@ impl DeleteItemError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteItemError {
     #[allow(unused_variables)]
@@ -4006,6 +4103,18 @@ impl DeleteTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DeleteTableError {
     #[allow(unused_variables)]
@@ -4043,6 +4152,18 @@ impl DescribeBackupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeBackupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeBackupError {
@@ -4083,6 +4204,20 @@ impl DescribeContinuousBackupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeContinuousBackupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeContinuousBackupsError {
@@ -4128,6 +4263,20 @@ impl DescribeContributorInsightsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeContributorInsightsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeContributorInsightsError {
     #[allow(unused_variables)]
@@ -4154,6 +4303,18 @@ impl DescribeEndpointsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeEndpointsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeEndpointsError {
@@ -4192,6 +4353,18 @@ impl DescribeExportError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeExportError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeExportError {
@@ -4234,6 +4407,18 @@ impl DescribeGlobalTableError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeGlobalTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeGlobalTableError {
     #[allow(unused_variables)]
@@ -4275,6 +4460,20 @@ impl DescribeGlobalTableSettingsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeGlobalTableSettingsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeGlobalTableSettingsError {
@@ -4322,6 +4521,20 @@ impl DescribeKinesisStreamingDestinationError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeKinesisStreamingDestinationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeKinesisStreamingDestinationError {
     #[allow(unused_variables)]
@@ -4357,6 +4570,18 @@ impl DescribeLimitsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeLimitsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeLimitsError {
     #[allow(unused_variables)]
@@ -4391,6 +4616,18 @@ impl DescribeTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeTableError {
@@ -4434,6 +4671,20 @@ impl DescribeTableReplicaAutoScalingError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DescribeTableReplicaAutoScalingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for DescribeTableReplicaAutoScalingError {
     #[allow(unused_variables)]
@@ -4475,6 +4726,18 @@ impl DescribeTimeToLiveError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DescribeTimeToLiveError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DescribeTimeToLiveError {
@@ -4531,6 +4794,20 @@ impl DisableKinesisStreamingDestinationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DisableKinesisStreamingDestinationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for DisableKinesisStreamingDestinationError {
@@ -4597,6 +4874,20 @@ impl EnableKinesisStreamingDestinationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<EnableKinesisStreamingDestinationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for EnableKinesisStreamingDestinationError {
@@ -4686,6 +4977,18 @@ impl ExecuteStatementError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ExecuteStatementError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ExecuteStatementError {
     #[allow(unused_variables)]
@@ -4769,6 +5072,18 @@ impl ExecuteTransactionError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ExecuteTransactionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ExecuteTransactionError {
     #[allow(unused_variables)]
@@ -4846,6 +5161,20 @@ impl ExportTableToPointInTimeError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ExportTableToPointInTimeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ExportTableToPointInTimeError {
     #[allow(unused_variables)]
@@ -4900,6 +5229,18 @@ impl GetItemError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for GetItemError {
     #[allow(unused_variables)]
@@ -4932,6 +5273,18 @@ impl ListBackupsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListBackupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListBackupsError {
@@ -4972,6 +5325,20 @@ impl ListContributorInsightsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListContributorInsightsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListContributorInsightsError {
     #[allow(unused_variables)]
@@ -5008,6 +5375,18 @@ impl ListExportsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListExportsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListExportsError {
     #[allow(unused_variables)]
@@ -5041,6 +5420,18 @@ impl ListGlobalTablesError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListGlobalTablesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ListGlobalTablesError {
     #[allow(unused_variables)]
@@ -5070,6 +5461,18 @@ impl ListTablesError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTablesError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTablesError {
@@ -5107,6 +5510,18 @@ impl ListTagsOfResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListTagsOfResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for ListTagsOfResourceError {
@@ -5173,6 +5588,18 @@ impl PutItemError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for PutItemError {
     #[allow(unused_variables)]
@@ -5223,6 +5650,18 @@ impl QueryError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<QueryError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for QueryError {
@@ -5289,6 +5728,20 @@ impl RestoreTableFromBackupError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RestoreTableFromBackupError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for RestoreTableFromBackupError {
@@ -5369,6 +5822,20 @@ impl RestoreTableToPointInTimeError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<RestoreTableToPointInTimeError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for RestoreTableToPointInTimeError {
     #[allow(unused_variables)]
@@ -5424,6 +5891,18 @@ impl ScanError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ScanError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for ScanError {
     #[allow(unused_variables)]
@@ -5471,6 +5950,18 @@ impl TagResourceError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5532,6 +6023,18 @@ impl TransactGetItemsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TransactGetItemsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for TransactGetItemsError {
@@ -5611,6 +6114,18 @@ impl TransactWriteItemsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<TransactWriteItemsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for TransactWriteItemsError {
     #[allow(unused_variables)]
@@ -5666,6 +6181,18 @@ impl UntagResourceError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UntagResourceError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UntagResourceError {
     #[allow(unused_variables)]
@@ -5715,6 +6242,20 @@ impl UpdateContinuousBackupsError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateContinuousBackupsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateContinuousBackupsError {
     #[allow(unused_variables)]
@@ -5757,6 +6298,20 @@ impl UpdateContributorInsightsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateContributorInsightsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateContributorInsightsError {
@@ -5816,6 +6371,18 @@ impl UpdateGlobalTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateGlobalTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateGlobalTableError {
@@ -5887,6 +6454,20 @@ impl UpdateGlobalTableSettingsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateGlobalTableSettingsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateGlobalTableSettingsError {
@@ -5961,6 +6542,18 @@ impl UpdateItemError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateItemError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateItemError {
     #[allow(unused_variables)]
@@ -6011,6 +6604,18 @@ impl UpdateTableError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTableError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateTableError {
@@ -6070,6 +6675,20 @@ impl UpdateTableReplicaAutoScalingError {
         }
         RusotoError::Unknown(res)
     }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<UpdateTableReplicaAutoScalingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
 }
 impl fmt::Display for UpdateTableReplicaAutoScalingError {
     #[allow(unused_variables)]
@@ -6123,6 +6742,18 @@ impl UpdateTimeToLiveError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UpdateTimeToLiveError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 }
 impl fmt::Display for UpdateTimeToLiveError {
@@ -6495,8 +7126,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchExecuteStatementError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchExecuteStatementError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchExecuteStatementOutput, _>()
@@ -6513,8 +7145,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchGetItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchGetItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetItemOutput, _>()
@@ -6531,8 +7164,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, BatchWriteItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(BatchWriteItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchWriteItemOutput, _>()
@@ -6549,8 +7183,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateBackupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateBackupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateBackupOutput, _>()
@@ -6567,8 +7202,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateGlobalTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateGlobalTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateGlobalTableOutput, _>()
@@ -6585,8 +7221,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, CreateTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTableOutput, _>()
@@ -6603,8 +7240,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteBackupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBackupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteBackupOutput, _>()
@@ -6621,8 +7259,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteItemOutput, _>()
@@ -6639,8 +7278,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DeleteTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableOutput, _>()
@@ -6657,8 +7297,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeBackupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeBackupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeBackupOutput, _>()
@@ -6678,8 +7319,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeContinuousBackupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeContinuousBackupsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6701,8 +7343,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeContributorInsightsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeContributorInsightsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6718,8 +7361,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, DescribeEndpointsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeEndpointsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeEndpointsResponse, _>()
@@ -6736,8 +7380,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeExportError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeExportError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeExportOutput, _>()
@@ -6754,8 +7399,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeGlobalTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeGlobalTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeGlobalTableOutput, _>()
@@ -6776,8 +7422,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeGlobalTableSettingsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeGlobalTableSettingsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6801,11 +7448,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DescribeKinesisStreamingDestinationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeKinesisStreamingDestinationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6821,8 +7466,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
         let response = self
-            .sign_and_dispatch(request, DescribeLimitsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeLimitsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeLimitsOutput, _>()
@@ -6839,8 +7485,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTableOutput, _>()
@@ -6863,8 +7510,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeTableReplicaAutoScalingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeTableReplicaAutoScalingError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6882,8 +7530,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, DescribeTimeToLiveError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DescribeTimeToLiveError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTimeToLiveOutput, _>()
@@ -6906,11 +7555,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                DisableKinesisStreamingDestinationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DisableKinesisStreamingDestinationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6934,11 +7581,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(
-                request,
-                EnableKinesisStreamingDestinationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(EnableKinesisStreamingDestinationError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -6956,8 +7601,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ExecuteStatementError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExecuteStatementError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ExecuteStatementOutput, _>()
@@ -6974,8 +7620,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ExecuteTransactionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExecuteTransactionError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ExecuteTransactionOutput, _>()
@@ -6992,8 +7639,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ExportTableToPointInTimeError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ExportTableToPointInTimeError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7011,8 +7659,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, GetItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetItemOutput, _>()
@@ -7029,8 +7678,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListBackupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBackupsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListBackupsOutput, _>()
@@ -7047,8 +7697,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListContributorInsightsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListContributorInsightsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7066,8 +7717,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListExportsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListExportsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListExportsOutput, _>()
@@ -7084,8 +7736,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListGlobalTablesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListGlobalTablesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListGlobalTablesOutput, _>()
@@ -7102,8 +7755,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTablesError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTablesError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTablesOutput, _>()
@@ -7120,8 +7774,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ListTagsOfResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListTagsOfResourceError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsOfResourceOutput, _>()
@@ -7138,8 +7793,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, PutItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PutItemOutput, _>()
@@ -7153,8 +7809,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, QueryError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(QueryError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<QueryOutput, _>()
@@ -7171,8 +7828,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RestoreTableFromBackupError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreTableFromBackupError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7193,8 +7851,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, RestoreTableToPointInTimeError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreTableToPointInTimeError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7209,8 +7868,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, ScanError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ScanError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ScanOutput, _>()
@@ -7227,8 +7887,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TagResourceError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7244,8 +7905,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TransactGetItemsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TransactGetItemsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TransactGetItemsOutput, _>()
@@ -7262,8 +7924,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, TransactWriteItemsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(TransactWriteItemsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<TransactWriteItemsOutput, _>()
@@ -7280,8 +7943,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UntagResourceError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UntagResourceError::refine)?;
         std::mem::drop(response);
         Ok(())
     }
@@ -7297,8 +7961,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateContinuousBackupsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateContinuousBackupsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7319,8 +7984,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateContributorInsightsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateContributorInsightsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7338,8 +8004,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateGlobalTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGlobalTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateGlobalTableOutput, _>()
@@ -7359,8 +8026,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateGlobalTableSettingsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateGlobalTableSettingsError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7378,8 +8046,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateItemError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateItemError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateItemOutput, _>()
@@ -7396,8 +8065,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTableError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTableError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTableOutput, _>()
@@ -7418,8 +8088,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTableReplicaAutoScalingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTableReplicaAutoScalingError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
@@ -7437,8 +8108,9 @@ impl DynamoDb for DynamoDbClient {
         request.set_payload(Some(encoded));
 
         let response = self
-            .sign_and_dispatch(request, UpdateTimeToLiveError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UpdateTimeToLiveError::refine)?;
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateTimeToLiveOutput, _>()

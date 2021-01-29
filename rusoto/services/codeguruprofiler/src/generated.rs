@@ -2534,7 +2534,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             SignedRequest::new("GET", "codeguru-profiler", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_optional_header("Accept", input.accept.as_ref());
+        request.add_optional_header_ref("Accept", &input.accept);
         let mut params = Params::new();
         if let Some(ref x) = input.end_time {
             params.put("endTime", x);

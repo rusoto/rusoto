@@ -26135,7 +26135,7 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-tagging", input.tags.as_ref());
+        request.add_optional_header_ref("x-amz-tagging", &input.tags);
 
         let mut response = self
             .client

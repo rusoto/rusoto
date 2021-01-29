@@ -1023,17 +1023,11 @@ impl LexRuntime for LexRuntimeClient {
         request.set_endpoint_prefix("runtime.lex".to_string());
         let encoded = Some(input.input_stream.to_owned());
         request.set_payload(encoded);
-        request.add_optional_header("Accept", input.accept.as_ref());
-        request.add_optional_header("x-amz-lex-active-contexts", input.active_contexts.as_ref());
+        request.add_optional_header_ref("Accept", &input.accept);
+        request.add_optional_header_ref("x-amz-lex-active-contexts", &input.active_contexts);
         request.add_header("Content-Type", &input.content_type.to_string());
-        request.add_optional_header(
-            "x-amz-lex-request-attributes",
-            input.request_attributes.as_ref(),
-        );
-        request.add_optional_header(
-            "x-amz-lex-session-attributes",
-            input.session_attributes.as_ref(),
-        );
+        request.add_optional_header_ref("x-amz-lex-request-attributes", &input.request_attributes);
+        request.add_optional_header_ref("x-amz-lex-session-attributes", &input.session_attributes);
 
         let mut response = self
             .client
@@ -1126,7 +1120,7 @@ impl LexRuntime for LexRuntimeClient {
         request.set_endpoint_prefix("runtime.lex".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_optional_header("Accept", input.accept.as_ref());
+        request.add_optional_header_ref("Accept", &input.accept);
 
         let mut response = self
             .client

@@ -28,8 +28,8 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                                      location_name = location_name,
                                      field_name = generate_field_name(member_name)))
                     } else {
-                        Some(format!("request.add_optional_header(\"{location_name}\",
-                                      input.{field_name}.as_ref());",
+                        Some(format!("request.add_optional_header_ref(\"{location_name}\",
+                                      &input.{field_name});",
                                      location_name = location_name,
                                      field_name = generate_field_name(member_name)))
                     }

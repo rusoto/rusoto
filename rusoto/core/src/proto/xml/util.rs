@@ -11,7 +11,7 @@ use xml;
 use xml::reader::{EventReader, Events, ParserConfig, XmlEvent};
 use xml::writer::EventWriter;
 
-use crate::{error::RusotoError, request::HttpResponse};
+use crate::{request::HttpResponse, HttpDispatchError, RusotoError};
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -121,10 +121,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
         }
     }
     match stack.next() {
-        Some(Ok(XmlEvent::Characters(data))) |
-        Some(Ok(XmlEvent::CData(data))) => {
-            Ok(data)
-        },
+        Some(Ok(XmlEvent::Characters(data))) | Some(Ok(XmlEvent::CData(data))) => Ok(data),
         _ => Err(XmlParseError::new("Expected characters")),
     }
 }
@@ -258,16 +255,30 @@ where
     Ok(obj)
 }
 
-pub async fn parse_response<T, E>(
+pub enum XmlResponseError {
+    HttpDispatch(HttpDispatchError),
+    Parse(XmlParseError),
+}
+
+impl<E> From<XmlResponseError> for RusotoError<E> {
+    fn from(err: XmlResponseError) -> Self {
+        match err {
+            XmlResponseError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            XmlResponseError::Parse(err) => RusotoError::from(err),
+        }
+    }
+}
+
+pub async fn parse_response(
     response: &mut HttpResponse,
-    deserialize: fn(&str, &mut XmlResponse<'_>) -> Result<T, XmlParseError>,
-) -> Result<T, RusotoError<E>>
-where
-    T: Default,
-{
-    let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+    deserialize: &mut (dyn FnMut(&str, &mut XmlResponse<'_>) -> Result<(), XmlParseError> + Send),
+) -> Result<(), XmlResponseError> {
+    let xml_response = response
+        .buffer()
+        .await
+        .map_err(XmlResponseError::HttpDispatch)?;
     if xml_response.body.is_empty() {
-        Ok(T::default())
+        Ok(())
     } else {
         let reader = EventReader::new_with_config(
             xml_response.body.as_ref(),
@@ -275,8 +286,8 @@ where
         );
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         let _start_document = stack.next();
-        let actual_tag_name = peek_at_name(&mut stack)?;
-        Ok(deserialize(&actual_tag_name, &mut stack)?)
+        let actual_tag_name = peek_at_name(&mut stack).map_err(XmlResponseError::Parse)?;
+        Ok(deserialize(&actual_tag_name, &mut stack).map_err(XmlResponseError::Parse)?)
     }
 }
 

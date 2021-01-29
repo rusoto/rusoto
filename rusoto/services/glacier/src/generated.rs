@@ -3456,8 +3456,8 @@ impl Glacier for GlacierClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.add_optional_header("x-amz-archive-size", input.archive_size.as_ref());
-        request.add_optional_header("x-amz-sha256-tree-hash", input.checksum.as_ref());
+        request.add_optional_header_ref("x-amz-archive-size", &input.archive_size);
+        request.add_optional_header_ref("x-amz-sha256-tree-hash", &input.checksum);
 
         let mut response = self
             .client
@@ -3791,7 +3791,7 @@ impl Glacier for GlacierClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.add_optional_header("Range", input.range.as_ref());
+        request.add_optional_header_ref("Range", &input.range);
 
         let mut response = self
             .client
@@ -3971,11 +3971,8 @@ impl Glacier for GlacierClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        request.add_optional_header(
-            "x-amz-archive-description",
-            input.archive_description.as_ref(),
-        );
-        request.add_optional_header("x-amz-part-size", input.part_size.as_ref());
+        request.add_optional_header_ref("x-amz-archive-description", &input.archive_description);
+        request.add_optional_header_ref("x-amz-part-size", &input.part_size);
 
         let mut response = self
             .client
@@ -4468,11 +4465,8 @@ impl Glacier for GlacierClient {
             None
         };
         request.set_payload(encoded);
-        request.add_optional_header(
-            "x-amz-archive-description",
-            input.archive_description.as_ref(),
-        );
-        request.add_optional_header("x-amz-sha256-tree-hash", input.checksum.as_ref());
+        request.add_optional_header_ref("x-amz-archive-description", &input.archive_description);
+        request.add_optional_header_ref("x-amz-sha256-tree-hash", &input.checksum);
 
         let mut response = self
             .client
@@ -4517,8 +4511,8 @@ impl Glacier for GlacierClient {
             None
         };
         request.set_payload(encoded);
-        request.add_optional_header("x-amz-sha256-tree-hash", input.checksum.as_ref());
-        request.add_optional_header("Content-Range", input.range.as_ref());
+        request.add_optional_header_ref("x-amz-sha256-tree-hash", &input.checksum);
+        request.add_optional_header_ref("Content-Range", &input.range);
 
         let mut response = self
             .client

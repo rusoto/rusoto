@@ -46,7 +46,7 @@ impl GenerateProtocol for JsonGenerator {
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
+                    let response = self.sign_and_dispatch(request).await.map_err({error_type}::refine)?;
                     {ok_response}
                 }}
                 ",
@@ -91,15 +91,14 @@ impl GenerateProtocol for JsonGenerator {
                     request
                 }}
 
-                async fn sign_and_dispatch<E>(
+                async fn sign_and_dispatch(
                     &self,
                     request: SignedRequest,
-                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
-                ) -> Result<HttpResponse, RusotoError<E>> {{
+                ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {{
                     let mut response = self.client.sign_and_dispatch(request).await?;
                     if !response.status.is_success() {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        return Err(from_response(response));
+                        let response = response.buffer().await?;
+                        return Err(RusotoError::Unknown(response));
                     }}
 
                     Ok(response)

@@ -2922,11 +2922,8 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(input.content.to_owned());
         request.set_payload(encoded);
         request.add_header("Content-Type", &input.content_type.to_string());
-        request.add_optional_header("Description", input.description.as_ref());
-        request.add_optional_header(
-            "Latest-Version-Number",
-            input.latest_version_number.as_ref(),
-        );
+        request.add_optional_header_ref("Description", &input.description);
+        request.add_optional_header_ref("Latest-Version-Number", &input.latest_version_number);
 
         let mut response = self
             .client

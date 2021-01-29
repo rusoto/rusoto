@@ -38,15 +38,14 @@ use xml::EventReader;
 use xml::EventWriter;
 
 impl S3Client {
-    async fn sign_and_dispatch<E>(
+    async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
-    ) -> Result<HttpResponse, RusotoError<E>> {
+    ) -> Result<HttpResponse, RusotoError<std::convert::Infallible>> {
         let mut response = self.client.sign_and_dispatch(request).await?;
         if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(from_response(response));
+            let response = response.buffer().await?;
+            return Err(RusotoError::Unknown(response));
         }
 
         Ok(response)
@@ -167,7 +166,7 @@ impl AccelerateConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -250,7 +249,7 @@ impl AccessControlTranslationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Owner", &obj.owner.to_string())?;
+        write_characters_element(writer, "Owner", &obj.owner)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -556,7 +555,7 @@ impl AnalyticsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -622,7 +621,7 @@ impl AnalyticsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &AnalyticsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         StorageClassAnalysisSerializer::serialize(
             &mut writer,
             "StorageClassAnalysis",
@@ -775,7 +774,7 @@ impl AnalyticsFilterSerializer {
             &AnalyticsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -872,13 +871,13 @@ impl AnalyticsS3BucketDestinationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.bucket_account_id {
-            write_characters_element(writer, "BucketAccountId", &value.to_string())?;
+            write_characters_element(writer, "BucketAccountId", &value)?;
         }
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1408,22 +1407,22 @@ impl CSVInputSerializer {
             write_characters_element(writer, "AllowQuotedRecordDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.comments {
-            write_characters_element(writer, "Comments", &value.to_string())?;
+            write_characters_element(writer, "Comments", &value)?;
         }
         if let Some(ref value) = obj.field_delimiter {
-            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
+            write_characters_element(writer, "FieldDelimiter", &value)?;
         }
         if let Some(ref value) = obj.file_header_info {
-            write_characters_element(writer, "FileHeaderInfo", &value.to_string())?;
+            write_characters_element(writer, "FileHeaderInfo", &value)?;
         }
         if let Some(ref value) = obj.quote_character {
-            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value)?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1458,19 +1457,19 @@ impl CSVOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.field_delimiter {
-            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
+            write_characters_element(writer, "FieldDelimiter", &value)?;
         }
         if let Some(ref value) = obj.quote_character {
-            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value)?;
         }
         if let Some(ref value) = obj.quote_fields {
-            write_characters_element(writer, "QuoteFields", &value.to_string())?;
+            write_characters_element(writer, "QuoteFields", &value)?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1569,16 +1568,16 @@ impl CloudFunctionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function {
-            write_characters_element(writer, "CloudFunction", &value.to_string())?;
+            write_characters_element(writer, "CloudFunction", &value)?;
         }
         if let Some(ref value) = obj.events {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.invocation_role {
-            write_characters_element(writer, "InvocationRole", &value.to_string())?;
+            write_characters_element(writer, "InvocationRole", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1809,7 +1808,7 @@ impl CompletedPartSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.e_tag {
-            write_characters_element(writer, "ETag", &value.to_string())?;
+            write_characters_element(writer, "ETag", &value)?;
         }
         if let Some(ref value) = obj.part_number {
             write_characters_element(writer, "PartNumber", &value.to_string())?;
@@ -1905,10 +1904,10 @@ impl ConditionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.http_error_code_returned_equals {
-            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value.to_string())?;
+            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value)?;
         }
         if let Some(ref value) = obj.key_prefix_equals {
-            write_characters_element(writer, "KeyPrefixEquals", &value.to_string())?;
+            write_characters_element(writer, "KeyPrefixEquals", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2154,7 +2153,7 @@ impl CreateBucketConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.location_constraint {
-            write_characters_element(writer, "LocationConstraint", &value.to_string())?;
+            write_characters_element(writer, "LocationConstraint", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2465,7 +2464,7 @@ impl DefaultRetentionSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.mode {
-            write_characters_element(writer, "Mode", &value.to_string())?;
+            write_characters_element(writer, "Mode", &value)?;
         }
         if let Some(ref value) = obj.years {
             write_characters_element(writer, "Years", &value.to_string())?;
@@ -2736,7 +2735,7 @@ impl DeleteMarkerReplicationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3157,9 +3156,9 @@ impl DestinationSerializer {
             )?;
         }
         if let Some(ref value) = obj.account {
-            write_characters_element(writer, "Account", &value.to_string())?;
+            write_characters_element(writer, "Account", &value)?;
         }
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.encryption_configuration {
             &EncryptionConfigurationSerializer::serialize(
                 &mut writer,
@@ -3174,7 +3173,7 @@ impl DestinationSerializer {
             &ReplicationTimeSerializer::serialize(&mut writer, "ReplicationTime", value)?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3315,12 +3314,12 @@ impl EncryptionSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "EncryptionType", &obj.encryption_type.to_string())?;
+        write_characters_element(writer, "EncryptionType", &obj.encryption_type)?;
         if let Some(ref value) = obj.kms_context {
-            write_characters_element(writer, "KMSContext", &value.to_string())?;
+            write_characters_element(writer, "KMSContext", &value)?;
         }
         if let Some(ref value) = obj.kms_key_id {
-            write_characters_element(writer, "KMSKeyId", &value.to_string())?;
+            write_characters_element(writer, "KMSKeyId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3375,7 +3374,7 @@ impl EncryptionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.replica_kms_key_id {
-            write_characters_element(writer, "ReplicaKmsKeyID", &value.to_string())?;
+            write_characters_element(writer, "ReplicaKmsKeyID", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3504,7 +3503,7 @@ impl ErrorDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3655,7 +3654,7 @@ impl ExistingObjectReplicationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3925,10 +3924,10 @@ impl FilterRuleSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            write_characters_element(writer, "Name", &value.to_string())?;
+            write_characters_element(writer, "Name", &value)?;
         }
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5166,7 +5165,7 @@ impl GlacierJobParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Tier", &obj.tier.to_string())?;
+        write_characters_element(writer, "Tier", &obj.tier)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5219,7 +5218,7 @@ impl GrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            write_characters_element(writer, "Permission", &value.to_string())?;
+            write_characters_element(writer, "Permission", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5291,17 +5290,17 @@ impl GranteeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            write_characters_element(writer, "DisplayName", &value.to_string())?;
+            write_characters_element(writer, "DisplayName", &value)?;
         }
         if let Some(ref value) = obj.email_address {
-            write_characters_element(writer, "EmailAddress", &value.to_string())?;
+            write_characters_element(writer, "EmailAddress", &value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
-        write_characters_element(writer, "xsi:type", &obj.type_.to_string())?;
+        write_characters_element(writer, "xsi:type", &obj.type_)?;
         if let Some(ref value) = obj.uri {
-            write_characters_element(writer, "URI", &value.to_string())?;
+            write_characters_element(writer, "URI", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5605,7 +5604,7 @@ impl IndexDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Suffix", &obj.suffix.to_string())?;
+        write_characters_element(writer, "Suffix", &obj.suffix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5681,7 +5680,7 @@ impl InputSerializationSerializer {
             &CSVInputSerializer::serialize(&mut writer, "CSV", value)?;
         }
         if let Some(ref value) = obj.compression_type {
-            write_characters_element(writer, "CompressionType", &value.to_string())?;
+            write_characters_element(writer, "CompressionType", &value)?;
         }
         if let Some(ref value) = obj.json {
             &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
@@ -5770,7 +5769,7 @@ impl IntelligentTieringAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -5846,8 +5845,8 @@ impl IntelligentTieringConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &IntelligentTieringFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
+        write_characters_element(writer, "Status", &obj.status)?;
         TieringListSerializer::serialize(&mut writer, "Tiering", &obj.tierings)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5967,7 +5966,7 @@ impl IntelligentTieringFilterSerializer {
             &IntelligentTieringAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -6106,11 +6105,11 @@ impl InventoryConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &InventoryFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         write_characters_element(
             writer,
             "IncludedObjectVersions",
-            &obj.included_object_versions.to_string(),
+            &obj.included_object_versions,
         )?;
         write_characters_element(writer, "IsEnabled", &obj.is_enabled.to_string())?;
         if let Some(ref value) = obj.optional_fields {
@@ -6302,7 +6301,7 @@ impl InventoryFilterSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6538,15 +6537,15 @@ impl InventoryS3BucketDestinationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.account_id {
-            write_characters_element(writer, "AccountId", &value.to_string())?;
+            write_characters_element(writer, "AccountId", &value)?;
         }
-        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Bucket", &obj.bucket)?;
         if let Some(ref value) = obj.encryption {
             &InventoryEncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        write_characters_element(writer, "Format", &obj.format.to_string())?;
+        write_characters_element(writer, "Format", &obj.format)?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6594,7 +6593,7 @@ impl InventoryScheduleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Frequency", &obj.frequency.to_string())?;
+        write_characters_element(writer, "Frequency", &obj.frequency)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6668,7 +6667,7 @@ impl JSONInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.type_ {
-            write_characters_element(writer, "Type", &value.to_string())?;
+            write_characters_element(writer, "Type", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6695,7 +6694,7 @@ impl JSONOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.record_delimiter {
-            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
+            write_characters_element(writer, "RecordDelimiter", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6879,13 +6878,9 @@ impl LambdaFunctionConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(
-            writer,
-            "CloudFunction",
-            &obj.lambda_function_arn.to_string(),
-        )?;
+        write_characters_element(writer, "CloudFunction", &obj.lambda_function_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7147,7 +7142,7 @@ impl LifecycleRuleSerializer {
             &LifecycleRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -7163,7 +7158,7 @@ impl LifecycleRuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         if let Some(ref value) = obj.transitions {
             &TransitionListSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -7224,7 +7219,7 @@ impl LifecycleRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -7289,7 +7284,7 @@ impl LifecycleRuleFilterSerializer {
             &LifecycleRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8312,11 +8307,11 @@ impl LoggingEnabledSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "TargetBucket", &obj.target_bucket.to_string())?;
+        write_characters_element(writer, "TargetBucket", &obj.target_bucket)?;
         if let Some(ref value) = obj.target_grants {
             &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
-        write_characters_element(writer, "TargetPrefix", &obj.target_prefix.to_string())?;
+        write_characters_element(writer, "TargetPrefix", &obj.target_prefix)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8495,10 +8490,10 @@ impl MetadataEntrySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            write_characters_element(writer, "Name", &value.to_string())?;
+            write_characters_element(writer, "Name", &value)?;
         }
         if let Some(ref value) = obj.value {
-            write_characters_element(writer, "Value", &value.to_string())?;
+            write_characters_element(writer, "Value", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8586,7 +8581,7 @@ impl MetricsSerializer {
         if let Some(ref value) = obj.event_threshold {
             &ReplicationTimeValueSerializer::serialize(&mut writer, "EventThreshold", value)?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8640,7 +8635,7 @@ impl MetricsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8698,7 +8693,7 @@ impl MetricsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &MetricsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(writer, "Id", &obj.id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8788,7 +8783,7 @@ impl MetricsFilterSerializer {
             &MetricsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -9137,7 +9132,7 @@ impl NoncurrentVersionTransitionSerializer {
             write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9538,9 +9533,9 @@ impl ObjectIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
         if let Some(ref value) = obj.version_id {
-            write_characters_element(writer, "VersionId", &value.to_string())?;
+            write_characters_element(writer, "VersionId", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9670,7 +9665,7 @@ impl ObjectLockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.object_lock_enabled {
-            write_characters_element(writer, "ObjectLockEnabled", &value.to_string())?;
+            write_characters_element(writer, "ObjectLockEnabled", &value)?;
         }
         if let Some(ref value) = obj.rule {
             &ObjectLockRuleSerializer::serialize(&mut writer, "Rule", value)?;
@@ -9747,7 +9742,7 @@ impl ObjectLockLegalHoldSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9827,7 +9822,7 @@ impl ObjectLockRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mode {
-            write_characters_element(writer, "Mode", &value.to_string())?;
+            write_characters_element(writer, "Mode", &value)?;
         }
         if let Some(ref value) = obj.retain_until_date {
             write_characters_element(writer, "RetainUntilDate", &value.to_string())?;
@@ -10178,10 +10173,10 @@ impl OwnerSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            write_characters_element(writer, "DisplayName", &value.to_string())?;
+            write_characters_element(writer, "DisplayName", &value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10301,7 +10296,7 @@ impl OwnershipControlsRuleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "ObjectOwnership", &obj.object_ownership.to_string())?;
+        write_characters_element(writer, "ObjectOwnership", &obj.object_ownership)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11490,9 +11485,9 @@ impl QueueConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(writer, "Queue", &obj.queue_arn.to_string())?;
+        write_characters_element(writer, "Queue", &obj.queue_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11557,10 +11552,10 @@ impl QueueConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.queue {
-            write_characters_element(writer, "Queue", &value.to_string())?;
+            write_characters_element(writer, "Queue", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11789,19 +11784,19 @@ impl RedirectSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.host_name {
-            write_characters_element(writer, "HostName", &value.to_string())?;
+            write_characters_element(writer, "HostName", &value)?;
         }
         if let Some(ref value) = obj.http_redirect_code {
-            write_characters_element(writer, "HttpRedirectCode", &value.to_string())?;
+            write_characters_element(writer, "HttpRedirectCode", &value)?;
         }
         if let Some(ref value) = obj.protocol {
-            write_characters_element(writer, "Protocol", &value.to_string())?;
+            write_characters_element(writer, "Protocol", &value)?;
         }
         if let Some(ref value) = obj.replace_key_prefix_with {
-            write_characters_element(writer, "ReplaceKeyPrefixWith", &value.to_string())?;
+            write_characters_element(writer, "ReplaceKeyPrefixWith", &value)?;
         }
         if let Some(ref value) = obj.replace_key_with {
-            write_characters_element(writer, "ReplaceKeyWith", &value.to_string())?;
+            write_characters_element(writer, "ReplaceKeyWith", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11853,9 +11848,9 @@ impl RedirectAllRequestsToSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "HostName", &obj.host_name.to_string())?;
+        write_characters_element(writer, "HostName", &obj.host_name)?;
         if let Some(ref value) = obj.protocol {
-            write_characters_element(writer, "Protocol", &value.to_string())?;
+            write_characters_element(writer, "Protocol", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11975,7 +11970,7 @@ impl ReplicaModificationsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12055,7 +12050,7 @@ impl ReplicationConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Role", &obj.role.to_string())?;
+        write_characters_element(writer, "Role", &obj.role)?;
         ReplicationRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12168,7 +12163,7 @@ impl ReplicationRuleSerializer {
             &ReplicationRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.priority {
             write_characters_element(writer, "Priority", &value.to_string())?;
@@ -12180,7 +12175,7 @@ impl ReplicationRuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12238,7 +12233,7 @@ impl ReplicationRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12304,7 +12299,7 @@ impl ReplicationRuleFilterSerializer {
             &ReplicationRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            write_characters_element(writer, "Prefix", &value.to_string())?;
+            write_characters_element(writer, "Prefix", &value)?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12430,7 +12425,7 @@ impl ReplicationTimeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         ReplicationTimeValueSerializer::serialize(&mut writer, "Time", &obj.time)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12528,7 +12523,7 @@ impl RequestPaymentConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Payer", &obj.payer.to_string())?;
+        write_characters_element(writer, "Payer", &obj.payer)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12726,7 +12721,7 @@ impl RestoreRequestSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.description {
-            write_characters_element(writer, "Description", &value.to_string())?;
+            write_characters_element(writer, "Description", &value)?;
         }
         if let Some(ref value) = obj.glacier_job_parameters {
             &GlacierJobParametersSerializer::serialize(&mut writer, "GlacierJobParameters", value)?;
@@ -12738,10 +12733,10 @@ impl RestoreRequestSerializer {
             &SelectParametersSerializer::serialize(&mut writer, "SelectParameters", value)?;
         }
         if let Some(ref value) = obj.tier {
-            write_characters_element(writer, "Tier", &value.to_string())?;
+            write_characters_element(writer, "Tier", &value)?;
         }
         if let Some(ref value) = obj.type_ {
-            write_characters_element(writer, "Type", &value.to_string())?;
+            write_characters_element(writer, "Type", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12976,7 +12971,7 @@ impl RuleSerializer {
             &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "ID", &value.to_string())?;
+            write_characters_element(writer, "ID", &value)?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -12992,8 +12987,8 @@ impl RuleSerializer {
                 value,
             )?;
         }
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
+        write_characters_element(writer, "Status", &obj.status)?;
         if let Some(ref value) = obj.transition {
             &TransitionSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -13133,16 +13128,16 @@ impl S3LocationSerializer {
         if let Some(ref value) = obj.access_control_list {
             &GrantsSerializer::serialize(&mut writer, "AccessControlList", value)?;
         }
-        write_characters_element(writer, "BucketName", &obj.bucket_name.to_string())?;
+        write_characters_element(writer, "BucketName", &obj.bucket_name)?;
         if let Some(ref value) = obj.canned_acl {
-            write_characters_element(writer, "CannedACL", &value.to_string())?;
+            write_characters_element(writer, "CannedACL", &value)?;
         }
         if let Some(ref value) = obj.encryption {
             &EncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix)?;
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         if let Some(ref value) = obj.tagging {
             &TaggingSerializer::serialize(&mut writer, "Tagging", value)?;
@@ -13192,7 +13187,7 @@ impl SSEKMSSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "KeyId", &obj.key_id.to_string())?;
+        write_characters_element(writer, "KeyId", &obj.key_id)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13407,8 +13402,8 @@ impl SelectParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Expression", &obj.expression.to_string())?;
-        write_characters_element(writer, "ExpressionType", &obj.expression_type.to_string())?;
+        write_characters_element(writer, "Expression", &obj.expression)?;
+        write_characters_element(writer, "ExpressionType", &obj.expression_type)?;
         InputSerializationSerializer::serialize(
             &mut writer,
             "InputSerialization",
@@ -13502,9 +13497,9 @@ impl ServerSideEncryptionByDefaultSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.kms_master_key_id {
-            write_characters_element(writer, "KMSMasterKeyID", &value.to_string())?;
+            write_characters_element(writer, "KMSMasterKeyID", &value)?;
         }
-        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm.to_string())?;
+        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13828,7 +13823,7 @@ impl SseKmsEncryptedObjectsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Status", &obj.status.to_string())?;
+        write_characters_element(writer, "Status", &obj.status)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14104,11 +14099,7 @@ impl StorageClassAnalysisDataExportSerializer {
             "Destination",
             &obj.destination,
         )?;
-        write_characters_element(
-            writer,
-            "OutputSchemaVersion",
-            &obj.output_schema_version.to_string(),
-        )?;
+        write_characters_element(writer, "OutputSchemaVersion", &obj.output_schema_version)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14204,8 +14195,8 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Key", &obj.key.to_string())?;
-        write_characters_element(writer, "Value", &obj.value.to_string())?;
+        write_characters_element(writer, "Key", &obj.key)?;
+        write_characters_element(writer, "Value", &obj.value)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14351,7 +14342,7 @@ impl TargetGrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            write_characters_element(writer, "Permission", &value.to_string())?;
+            write_characters_element(writer, "Permission", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14482,7 +14473,7 @@ impl TieringSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "AccessTier", &obj.access_tier.to_string())?;
+        write_characters_element(writer, "AccessTier", &obj.access_tier)?;
         write_characters_element(writer, "Days", &obj.days.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14645,9 +14636,9 @@ impl TopicConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
-        write_characters_element(writer, "Topic", &obj.topic_arn.to_string())?;
+        write_characters_element(writer, "Topic", &obj.topic_arn)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14712,10 +14703,10 @@ impl TopicConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            write_characters_element(writer, "Id", &value.to_string())?;
+            write_characters_element(writer, "Id", &value)?;
         }
         if let Some(ref value) = obj.topic {
-            write_characters_element(writer, "Topic", &value.to_string())?;
+            write_characters_element(writer, "Topic", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14831,7 +14822,7 @@ impl TransitionSerializer {
             write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            write_characters_element(writer, "StorageClass", &value.to_string())?;
+            write_characters_element(writer, "StorageClass", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15212,10 +15203,10 @@ impl VersioningConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mfa_delete {
-            write_characters_element(writer, "MfaDelete", &value.to_string())?;
+            write_characters_element(writer, "MfaDelete", &value)?;
         }
         if let Some(ref value) = obj.status {
-            write_characters_element(writer, "Status", &value.to_string())?;
+            write_characters_element(writer, "Status", &value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15318,6 +15309,20 @@ impl AbortMultipartUploadError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<AbortMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15351,6 +15356,20 @@ impl CompleteMultipartUploadError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CompleteMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15392,6 +15411,18 @@ impl CopyObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CopyObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15444,6 +15475,18 @@ impl CreateBucketError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<CreateBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15480,6 +15523,20 @@ impl CreateMultipartUploadError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<CreateMultipartUploadError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15511,6 +15568,18 @@ impl DeleteBucketError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15548,6 +15617,20 @@ impl DeleteBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15581,6 +15664,18 @@ impl DeleteBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15612,6 +15707,20 @@ impl DeleteBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15649,6 +15758,20 @@ impl DeleteBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15684,6 +15807,20 @@ impl DeleteBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15715,6 +15852,20 @@ impl DeleteBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15752,6 +15903,20 @@ impl DeleteBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15787,6 +15952,20 @@ impl DeleteBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15818,6 +15997,18 @@ impl DeleteBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15853,6 +16044,20 @@ impl DeleteBucketReplicationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeleteBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15884,6 +16089,18 @@ impl DeleteBucketTaggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15919,6 +16136,18 @@ impl DeleteBucketWebsiteError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -15950,6 +16179,18 @@ impl DeleteObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15985,6 +16226,18 @@ impl DeleteObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16018,6 +16271,18 @@ impl DeleteObjectsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<DeleteObjectsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16049,6 +16314,20 @@ impl DeletePublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<DeletePublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16086,6 +16365,20 @@ impl GetBucketAccelerateConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketAccelerateConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16117,6 +16410,18 @@ impl GetBucketAclError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16154,6 +16459,20 @@ impl GetBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16187,6 +16506,18 @@ impl GetBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16218,6 +16549,18 @@ impl GetBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16255,6 +16598,20 @@ impl GetBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16290,6 +16647,20 @@ impl GetBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16321,6 +16692,18 @@ impl GetBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16358,6 +16741,20 @@ impl GetBucketLifecycleConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketLifecycleConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16391,6 +16788,18 @@ impl GetBucketLocationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLocationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16422,6 +16831,18 @@ impl GetBucketLoggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketLoggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16459,6 +16880,20 @@ impl GetBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16490,6 +16925,20 @@ impl GetBucketNotificationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketNotificationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16527,6 +16976,20 @@ impl GetBucketNotificationConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketNotificationConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16562,6 +17025,20 @@ impl GetBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16593,6 +17070,18 @@ impl GetBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16628,6 +17117,20 @@ impl GetBucketPolicyStatusError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketPolicyStatusError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16659,6 +17162,20 @@ impl GetBucketReplicationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16694,6 +17211,20 @@ impl GetBucketRequestPaymentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetBucketRequestPaymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16725,6 +17256,18 @@ impl GetBucketTaggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16760,6 +17303,18 @@ impl GetBucketVersioningError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketVersioningError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16791,6 +17346,18 @@ impl GetBucketWebsiteError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16841,6 +17408,18 @@ impl GetObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16885,6 +17464,18 @@ impl GetObjectAclError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16918,6 +17509,18 @@ impl GetObjectLegalHoldError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectLegalHoldError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16955,6 +17558,20 @@ impl GetObjectLockConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetObjectLockConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -16986,6 +17603,18 @@ impl GetObjectRetentionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectRetentionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17021,6 +17650,18 @@ impl GetObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17054,6 +17695,18 @@ impl GetObjectTorrentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<GetObjectTorrentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17085,6 +17738,20 @@ impl GetPublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<GetPublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17126,6 +17793,18 @@ impl HeadBucketError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<HeadBucketError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17171,6 +17850,18 @@ impl HeadObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<HeadObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17208,6 +17899,20 @@ impl ListBucketAnalyticsConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketAnalyticsConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17241,6 +17946,20 @@ impl ListBucketIntelligentTieringConfigurationsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketIntelligentTieringConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17278,6 +17997,20 @@ impl ListBucketInventoryConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketInventoryConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17313,6 +18046,20 @@ impl ListBucketMetricsConfigurationsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListBucketMetricsConfigurationsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17344,6 +18091,18 @@ impl ListBucketsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListBucketsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17379,6 +18138,20 @@ impl ListMultipartUploadsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<ListMultipartUploadsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17410,6 +18183,18 @@ impl ListObjectVersionsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectVersionsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17451,6 +18236,18 @@ impl ListObjectsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17496,6 +18293,18 @@ impl ListObjectsV2Error {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListObjectsV2Error> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17529,6 +18338,18 @@ impl ListPartsError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<ListPartsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17566,6 +18387,20 @@ impl PutBucketAccelerateConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketAccelerateConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17597,6 +18432,18 @@ impl PutBucketAclError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17634,6 +18481,20 @@ impl PutBucketAnalyticsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketAnalyticsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17667,6 +18528,18 @@ impl PutBucketCorsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketCorsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17698,6 +18571,18 @@ impl PutBucketEncryptionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketEncryptionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17735,6 +18620,20 @@ impl PutBucketIntelligentTieringConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketIntelligentTieringConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17770,6 +18669,20 @@ impl PutBucketInventoryConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketInventoryConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17801,6 +18714,18 @@ impl PutBucketLifecycleError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketLifecycleError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17838,6 +18763,20 @@ impl PutBucketLifecycleConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketLifecycleConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17869,6 +18808,18 @@ impl PutBucketLoggingError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketLoggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17906,6 +18857,20 @@ impl PutBucketMetricsConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketMetricsConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -17937,6 +18902,20 @@ impl PutBucketNotificationError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketNotificationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17974,6 +18953,20 @@ impl PutBucketNotificationConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketNotificationConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18009,6 +19002,20 @@ impl PutBucketOwnershipControlsError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketOwnershipControlsError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18040,6 +19047,18 @@ impl PutBucketPolicyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketPolicyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18075,6 +19094,20 @@ impl PutBucketReplicationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketReplicationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18106,6 +19139,20 @@ impl PutBucketRequestPaymentError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutBucketRequestPaymentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18141,6 +19188,18 @@ impl PutBucketTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18172,6 +19231,18 @@ impl PutBucketVersioningError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketVersioningError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18207,6 +19278,18 @@ impl PutBucketWebsiteError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutBucketWebsiteError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18238,6 +19321,18 @@ impl PutObjectError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18281,6 +19376,18 @@ impl PutObjectAclError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectAclError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18314,6 +19421,18 @@ impl PutObjectLegalHoldError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectLegalHoldError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18351,6 +19470,20 @@ impl PutObjectLockConfigurationError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutObjectLockConfigurationError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18382,6 +19515,18 @@ impl PutObjectRetentionError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectRetentionError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18417,6 +19562,18 @@ impl PutObjectTaggingError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<PutObjectTaggingError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18448,6 +19605,20 @@ impl PutPublicAccessBlockError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(
+        err: RusotoError<std::convert::Infallible>,
+    ) -> RusotoError<PutPublicAccessBlockError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18493,6 +19664,18 @@ impl RestoreObjectError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<RestoreObjectError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18528,6 +19711,18 @@ impl SelectObjectContentError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<SelectObjectContentError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18561,6 +19756,18 @@ impl UploadPartError {
         RusotoError::Unknown(res)
     }
 
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UploadPartError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
+    }
+
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
     where
         T: Peek + Next,
@@ -18592,6 +19799,18 @@ impl UploadPartCopyError {
             }
         }
         RusotoError::Unknown(res)
+    }
+
+    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<UploadPartCopyError> {
+        match err {
+            RusotoError::Service(err) => match err {},
+            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+            RusotoError::Validation(err) => RusotoError::Validation(err),
+            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+            RusotoError::Unknown(res) => Self::from_response(res),
+            RusotoError::Blocking => RusotoError::Blocking,
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19255,18 +20474,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, AbortMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(AbortMultipartUploadError::refine)?;
 
         let result = AbortMultipartUploadOutput::default();
         let mut result = result;
@@ -19284,11 +20502,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
@@ -19305,12 +20521,16 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, CompleteMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CompleteMultipartUploadError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19338,61 +20558,53 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
         request.add_header("x-amz-copy-source", &input.copy_source.to_string());
-        request.add_optional_header(
-            "x-amz-copy-source-if-match",
-            input.copy_source_if_match.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-if-match", &input.copy_source_if_match);
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-modified-since",
-            input.copy_source_if_modified_since.as_ref(),
+            &input.copy_source_if_modified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-none-match",
-            input.copy_source_if_none_match.as_ref(),
+            &input.copy_source_if_none_match,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-unmodified-since",
-            input.copy_source_if_unmodified_since.as_ref(),
+            &input.copy_source_if_unmodified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-algorithm",
-            input.copy_source_sse_customer_algorithm.as_ref(),
+            &input.copy_source_sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key",
-            input.copy_source_sse_customer_key.as_ref(),
+            &input.copy_source_sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-            input.copy_source_sse_customer_key_md5.as_ref(),
+            &input.copy_source_sse_customer_key_md5,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-source-expected-bucket-owner",
-            input.expected_source_bucket_owner.as_ref(),
+            &input.expected_source_bucket_owner,
         );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -19400,59 +20612,59 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
-            "x-amz-metadata-directive",
-            input.metadata_directive.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-metadata-directive", &input.metadata_directive);
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header("x-amz-tagging-directive", input.tagging_directive.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref("x-amz-tagging-directive", &input.tagging_directive);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
 
         let mut response = self
-            .sign_and_dispatch(request, CopyObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CopyObjectError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19490,18 +20702,15 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
+        request.add_optional_header_ref(
             "x-amz-bucket-object-lock-enabled",
-            input.object_lock_enabled_for_bucket.as_ref(),
+            &input.object_lock_enabled_for_bucket,
         );
 
         if input.create_bucket_configuration.is_some() {
@@ -19517,8 +20726,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, CreateBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateBucketError::refine)?;
 
         let result = CreateBucketOutput::default();
         let mut result = result;
@@ -19536,28 +20746,23 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -19565,57 +20770,60 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
         let mut params = Params::new();
         params.put_key("uploads");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, CreateMultipartUploadError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(CreateMultipartUploadError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -19652,14 +20860,13 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19675,21 +20882,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketAnalyticsConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketAnalyticsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19705,17 +20908,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketCorsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19731,17 +20933,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketEncryptionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19763,11 +20964,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketIntelligentTieringConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19783,21 +20982,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketInventoryConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketInventoryConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19813,17 +21008,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketLifecycleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19839,21 +21033,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                DeleteBucketMetricsConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketMetricsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19869,17 +21059,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketOwnershipControlsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19895,17 +21084,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19921,17 +21109,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketReplicationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19947,17 +21134,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketTaggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19973,17 +21159,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteBucketWebsiteError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -19999,16 +21184,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -20016,8 +21199,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectError::refine)?;
 
         let result = DeleteObjectOutput::default();
         let mut result = result;
@@ -20040,10 +21224,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -20052,8 +21234,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectTaggingError::refine)?;
 
         let result = DeleteObjectTaggingOutput::default();
         let mut result = result;
@@ -20071,16 +21254,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put_key("delete");
         request.set_params(params);
@@ -20090,12 +21271,15 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, DeleteObjectsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeleteObjectsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20113,17 +21297,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, DeletePublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(DeletePublicAccessBlockError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -20142,24 +21325,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketAccelerateConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAccelerateConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAccelerateConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20177,21 +21361,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAclError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20212,22 +21397,26 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketAnalyticsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketAnalyticsConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20245,21 +21434,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketCorsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20277,21 +21467,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketEncryptionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20318,18 +21509,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketIntelligentTieringConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketIntelligentTieringConfigurationOutputDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20350,22 +21541,26 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketInventoryConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketInventoryConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketInventoryConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20383,21 +21578,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLifecycleError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20418,21 +21614,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLifecycleConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLifecycleConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLifecycleConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20450,21 +21650,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("location");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLocationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLocationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20482,21 +21683,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketLoggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketLoggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20515,22 +21717,26 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketMetricsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketMetricsConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketMetricsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20548,21 +21754,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketNotificationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketNotificationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            NotificationConfigurationDeprecatedDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = NotificationConfigurationDeprecatedDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20581,24 +21791,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                GetBucketNotificationConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketNotificationConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20617,21 +21825,23 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketOwnershipControlsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketOwnershipControlsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetBucketOwnershipControlsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20649,17 +21859,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketPolicyError::refine)?;
 
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
@@ -20679,21 +21888,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policyStatus");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketPolicyStatusError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketPolicyStatusError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20711,21 +21921,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketReplicationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20743,21 +21954,23 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketRequestPaymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketRequestPaymentError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20775,21 +21988,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketTaggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20807,21 +22021,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketVersioningError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketVersioningError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20839,21 +22054,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetBucketWebsiteError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -20871,27 +22087,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("If-Match", input.if_match.as_ref());
-        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
-        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
-        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
-        request.add_optional_header("Range", input.range.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("If-Match", &input.if_match);
+        request.add_optional_header_ref("If-Modified-Since", &input.if_modified_since);
+        request.add_optional_header_ref("If-None-Match", &input.if_none_match);
+        request.add_optional_header_ref("If-Unmodified-Since", &input.if_unmodified_since);
+        request.add_optional_header_ref("Range", &input.range);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
@@ -20921,8 +22135,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectError::refine)?;
 
         let mut result = GetObjectOutput::default();
         result.body = Some(response.body);
@@ -21007,11 +22222,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21020,12 +22233,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectAclError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21043,11 +22259,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21056,12 +22270,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectLegalHoldError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectLegalHoldError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21080,21 +22297,23 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectLockConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectLockConfigurationError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result =
+                GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21112,11 +22331,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21125,12 +22342,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectRetentionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectRetentionError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21148,10 +22368,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21160,12 +22378,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectTaggingError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21183,18 +22404,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetObjectTorrentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetObjectTorrentError::refine)?;
 
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
@@ -21212,21 +22432,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, GetPublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(GetPublicAccessBlockError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21244,14 +22465,13 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
 
         let mut response = self
-            .sign_and_dispatch(request, HeadBucketError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(HeadBucketError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21267,27 +22487,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("If-Match", input.if_match.as_ref());
-        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
-        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
-        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
-        request.add_optional_header("Range", input.range.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("If-Match", &input.if_match);
+        request.add_optional_header_ref("If-Modified-Since", &input.if_modified_since);
+        request.add_optional_header_ref("If-None-Match", &input.if_none_match);
+        request.add_optional_header_ref("If-Unmodified-Since", &input.if_unmodified_since);
+        request.add_optional_header_ref("Range", &input.range);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
@@ -21299,8 +22517,9 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, HeadObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(HeadObjectError::refine)?;
 
         let result = HeadObjectOutput::default();
         let mut result = result;
@@ -21384,10 +22603,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -21396,15 +22613,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketAnalyticsConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketAnalyticsConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21433,18 +22653,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketIntelligentTieringConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketIntelligentTieringConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketIntelligentTieringConfigurationsOutputDeserializer::deserialize(
                 actual_tag_name,
                 stack,
-            )
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21465,10 +22685,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -21477,15 +22695,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                ListBucketInventoryConfigurationsError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketInventoryConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketInventoryConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21506,10 +22727,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -21518,12 +22737,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListBucketMetricsConfigurationsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketMetricsConfigurationsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketMetricsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21539,12 +22764,15 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .sign_and_dispatch(request, ListBucketsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListBucketsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21562,10 +22790,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -21589,12 +22815,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListMultipartUploadsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListMultipartUploadsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21612,10 +22841,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -21639,12 +22866,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectVersionsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectVersionsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21662,11 +22892,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -21686,12 +22914,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21709,11 +22940,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -21740,12 +22969,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListObjectsV2Error::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListObjectsV2Error::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21763,11 +22995,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.max_parts {
             params.put("max-parts", x);
@@ -21779,12 +23009,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, ListPartsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(ListPartsError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;
@@ -21804,10 +23037,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
@@ -21820,11 +23051,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketAccelerateConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAccelerateConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21840,20 +23069,15 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
@@ -21871,8 +23095,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAclError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21888,10 +23113,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("analytics");
@@ -21905,8 +23128,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketAnalyticsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketAnalyticsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21922,11 +23146,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -21940,8 +23162,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketCorsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketCorsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -21957,11 +23180,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -21975,8 +23196,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketEncryptionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketEncryptionError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22005,11 +23227,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketIntelligentTieringConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketIntelligentTieringConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22025,10 +23245,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("inventory");
@@ -22042,8 +23260,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketInventoryConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketInventoryConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22059,11 +23278,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -22081,8 +23298,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLifecycleError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLifecycleError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22098,10 +23316,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -22119,8 +23335,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLifecycleConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLifecycleConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22136,11 +23353,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
@@ -22154,8 +23369,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketLoggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketLoggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22171,10 +23387,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put("id", &input.id);
         params.put_key("metrics");
@@ -22188,8 +23402,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketMetricsConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketMetricsConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22205,11 +23420,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -22223,8 +23436,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketNotificationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketNotificationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22240,10 +23454,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -22256,11 +23468,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(
-                request,
-                PutBucketNotificationConfigurationError::from_response,
-            )
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketNotificationConfigurationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22276,11 +23486,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
@@ -22294,8 +23502,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketOwnershipControlsError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketOwnershipControlsError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22311,15 +23520,13 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-confirm-remove-self-bucket-access",
-            input.confirm_remove_self_bucket_access.as_ref(),
+            &input.confirm_remove_self_bucket_access,
         );
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
@@ -22327,8 +23534,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketPolicyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketPolicyError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22344,12 +23552,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-bucket-object-lock-token", &input.token);
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -22363,8 +23569,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketReplicationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketReplicationError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22380,11 +23587,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
@@ -22398,8 +23603,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketRequestPaymentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketRequestPaymentError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22415,11 +23621,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -22429,8 +23633,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketTaggingError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22446,12 +23651,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-mfa", &input.mfa);
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
@@ -22465,8 +23668,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketVersioningError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketVersioningError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22482,11 +23686,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -22500,8 +23702,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutBucketWebsiteError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutBucketWebsiteError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22517,30 +23720,25 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-bucket-key-enabled",
-            input.bucket_key_enabled.as_ref(),
+            &input.bucket_key_enabled,
         );
-        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
-        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
-        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
-        request.add_optional_header("Content-Language", input.content_language.as_ref());
-        request.add_optional_header("Content-Length", input.content_length.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header("Content-Type", input.content_type.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("Expires", input.expires.as_ref());
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header_ref("Cache-Control", &input.cache_control);
+        request.add_optional_header_ref("Content-Disposition", &input.content_disposition);
+        request.add_optional_header_ref("Content-Encoding", &input.content_encoding);
+        request.add_optional_header_ref("Content-Language", &input.content_language);
+        request.add_optional_header_ref("Content-Length", &input.content_length);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request.add_optional_header_ref("Content-Type", &input.content_type);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("Expires", &input.expires);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -22548,45 +23746,45 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-object-lock-legal-hold",
-            input.object_lock_legal_hold_status.as_ref(),
+            &input.object_lock_legal_hold_status,
         );
-        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-object-lock-mode", &input.object_lock_mode);
+        request.add_optional_header_ref(
             "x-amz-object-lock-retain-until-date",
-            input.object_lock_retain_until_date.as_ref(),
+            &input.object_lock_retain_until_date,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-context",
-            input.ssekms_encryption_context.as_ref(),
+            &input.ssekms_encryption_context,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-aws-kms-key-id",
-            input.ssekms_key_id.as_ref(),
+            &input.ssekms_key_id,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption",
-            input.server_side_encryption.as_ref(),
+            &input.server_side_encryption,
         );
-        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
-        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-storage-class", &input.storage_class);
+        request.add_optional_header_ref("x-amz-tagging", &input.tagging);
+        request.add_optional_header_ref(
             "x-amz-website-redirect-location",
-            input.website_redirect_location.as_ref(),
+            &input.website_redirect_location,
         );
 
         if let Some(__body) = input.body {
@@ -22594,8 +23792,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectError::refine)?;
 
         let result = PutObjectOutput::default();
         let mut result = result;
@@ -22633,21 +23832,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("x-amz-acl", input.acl.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
-            "x-amz-grant-full-control",
-            input.grant_full_control.as_ref(),
-        );
-        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
-        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
-        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
-        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("x-amz-acl", &input.acl);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-grant-full-control", &input.grant_full_control);
+        request.add_optional_header_ref("x-amz-grant-read", &input.grant_read);
+        request.add_optional_header_ref("x-amz-grant-read-acp", &input.grant_read_acp);
+        request.add_optional_header_ref("x-amz-grant-write", &input.grant_write);
+        request.add_optional_header_ref("x-amz-grant-write-acp", &input.grant_write_acp);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22668,8 +23862,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectAclError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectAclError::refine)?;
 
         let result = PutObjectAclOutput::default();
         let mut result = result;
@@ -22687,12 +23882,10 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22713,8 +23906,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectLegalHoldError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectLegalHoldError::refine)?;
 
         let result = PutObjectLegalHoldOutput::default();
         let mut result = result;
@@ -22733,13 +23927,11 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref("x-amz-bucket-object-lock-token", &input.token);
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
@@ -22757,8 +23949,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectLockConfigurationError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectLockConfigurationError::refine)?;
 
         let result = PutObjectLockConfigurationOutput::default();
         let mut result = result;
@@ -22776,16 +23969,14 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-bypass-governance-retention",
-            input.bypass_governance_retention.as_ref(),
+            &input.bypass_governance_retention,
         );
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22806,8 +23997,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectRetentionError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectRetentionError::refine)?;
 
         let result = PutObjectRetentionOutput::default();
         let mut result = result;
@@ -22825,11 +24017,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22842,8 +24032,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutObjectTaggingError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutObjectTaggingError::refine)?;
 
         let result = PutObjectTaggingOutput::default();
         let mut result = result;
@@ -22861,11 +24052,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -22879,8 +24068,9 @@ impl S3 for S3Client {
         request.maybe_set_content_md5_header();
 
         let mut response = self
-            .sign_and_dispatch(request, PutPublicAccessBlockError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(PutPublicAccessBlockError::refine)?;
 
         std::mem::drop(response);
         Ok(())
@@ -22896,11 +24086,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22920,8 +24108,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, RestoreObjectError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RestoreObjectError::refine)?;
 
         let result = RestoreObjectOutput::default();
         let mut result = result;
@@ -22940,21 +24129,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put_key("select");
@@ -22970,8 +24157,9 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .sign_and_dispatch(request, SelectObjectContentError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(SelectObjectContentError::refine)?;
 
         unimplemented!()
     }
@@ -22986,24 +24174,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_optional_header("Content-Length", input.content_length.as_ref());
-        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("Content-Length", &input.content_length);
+        request.add_optional_header_ref("Content-MD5", &input.content_md5);
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
@@ -23014,8 +24200,9 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .sign_and_dispatch(request, UploadPartError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadPartError::refine)?;
 
         let result = UploadPartOutput::default();
         let mut result = result;
@@ -23049,55 +24236,50 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
         request.add_header("x-amz-copy-source", &input.copy_source.to_string());
-        request.add_optional_header(
-            "x-amz-copy-source-if-match",
-            input.copy_source_if_match.as_ref(),
-        );
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-if-match", &input.copy_source_if_match);
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-modified-since",
-            input.copy_source_if_modified_since.as_ref(),
+            &input.copy_source_if_modified_since,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-none-match",
-            input.copy_source_if_none_match.as_ref(),
+            &input.copy_source_if_none_match,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-if-unmodified-since",
-            input.copy_source_if_unmodified_since.as_ref(),
+            &input.copy_source_if_unmodified_since,
         );
-        request.add_optional_header("x-amz-copy-source-range", input.copy_source_range.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-copy-source-range", &input.copy_source_range);
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-algorithm",
-            input.copy_source_sse_customer_algorithm.as_ref(),
+            &input.copy_source_sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key",
-            input.copy_source_sse_customer_key.as_ref(),
+            &input.copy_source_sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-            input.copy_source_sse_customer_key_md5.as_ref(),
+            &input.copy_source_sse_customer_key_md5,
         );
-        request.add_optional_header(
-            "x-amz-expected-bucket-owner",
-            input.expected_bucket_owner.as_ref(),
-        );
-        request.add_optional_header(
+        request
+            .add_optional_header_ref("x-amz-expected-bucket-owner", &input.expected_bucket_owner);
+        request.add_optional_header_ref(
             "x-amz-source-expected-bucket-owner",
-            input.expected_source_bucket_owner.as_ref(),
+            &input.expected_source_bucket_owner,
         );
-        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
-        request.add_optional_header(
+        request.add_optional_header_ref("x-amz-request-payer", &input.request_payer);
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-algorithm",
-            input.sse_customer_algorithm.as_ref(),
+            &input.sse_customer_algorithm,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key",
-            input.sse_customer_key.as_ref(),
+            &input.sse_customer_key,
         );
-        request.add_optional_header(
+        request.add_optional_header_ref(
             "x-amz-server-side-encryption-customer-key-MD5",
-            input.sse_customer_key_md5.as_ref(),
+            &input.sse_customer_key_md5,
         );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
@@ -23105,12 +24287,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .sign_and_dispatch(request, UploadPartCopyError::from_response)
-            .await?;
+            .sign_and_dispatch(request)
+            .await
+            .map_err(UploadPartCopyError::refine)?;
 
         let mut response = response;
-        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
-            UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)
+        let mut result = Default::default();
+        xml_util::parse_response(&mut response, &mut |actual_tag_name, stack| {
+            result = UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)?;
+            Ok(())
         })
         .await?;
         let mut result = result;

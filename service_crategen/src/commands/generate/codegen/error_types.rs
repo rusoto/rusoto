@@ -173,6 +173,18 @@ impl GenerateErrorTypes for XmlErrorTypes {
                        RusotoError::Unknown(res)
                     }}
 
+                    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<{type_name}> {{
+                        match err {{
+                            RusotoError::Service(err) => match err {{}},
+                            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+                            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+                            RusotoError::Validation(err) => RusotoError::Validation(err),
+                            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+                            RusotoError::Unknown(res) => Self::from_response(res),
+                            RusotoError::Blocking => RusotoError::Blocking,
+                        }}
+                    }}
+
                     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError> where T: Peek + Next {{
                         {error_deserializer}
                     }}
@@ -253,6 +265,18 @@ impl GenerateErrorTypes for JsonErrorTypes {
                             }}
                         }}
                         RusotoError::Unknown(res)
+                    }}
+
+                    fn refine(err: RusotoError<std::convert::Infallible>) -> RusotoError<{type_name}> {{
+                        match err {{
+                            RusotoError::Service(err) => match err {{}},
+                            RusotoError::HttpDispatch(err) => RusotoError::HttpDispatch(err),
+                            RusotoError::Credentials(err) => RusotoError::Credentials(err),
+                            RusotoError::Validation(err) => RusotoError::Validation(err),
+                            RusotoError::ParseError(err) => RusotoError::ParseError(err),
+                            RusotoError::Unknown(res) => Self::from_response(res),
+                            RusotoError::Blocking => RusotoError::Blocking,
+                        }}
                     }}
                 }}",
             type_name = error_type_name(service, operation_name),

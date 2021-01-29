@@ -7339,9 +7339,9 @@ impl Lambda for LambdaClient {
             None
         };
         request.set_payload(encoded);
-        request.add_optional_header("X-Amz-Client-Context", input.client_context.as_ref());
-        request.add_optional_header("X-Amz-Invocation-Type", input.invocation_type.as_ref());
-        request.add_optional_header("X-Amz-Log-Type", input.log_type.as_ref());
+        request.add_optional_header_ref("X-Amz-Client-Context", &input.client_context);
+        request.add_optional_header_ref("X-Amz-Invocation-Type", &input.invocation_type);
+        request.add_optional_header_ref("X-Amz-Log-Type", &input.log_type);
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
