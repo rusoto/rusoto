@@ -481,7 +481,7 @@ fn build_user_agent(prepend: &Option<String>, append: &Option<String>) -> Header
     agent.unwrap_or_else(|_| DEFAULT_USER_AGENT.parse().unwrap())
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 /// An error produced when the user has an invalid TLS client
 pub struct TlsError {
     message: String,
