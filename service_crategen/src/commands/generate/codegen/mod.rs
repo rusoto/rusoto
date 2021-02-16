@@ -940,9 +940,8 @@ where
                     "
                     impl PagedRequest for {name} {{
                         type Token = {key_type};
-                        fn with_pagination_token(mut self, key: {key_type}) -> Self {{
+                        fn set_pagination_token(&mut self, key: {key_type}) {{
                             {key_code}
-                            self
                         }}
                     }}
                     ",

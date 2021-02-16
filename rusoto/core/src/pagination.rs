@@ -14,7 +14,7 @@ pub trait PagedRequest {
 
     /// Set the token to get the next page
     /// See [PagedOutput::pagination_token]
-    fn with_pagination_token(self, key: Self::Token) -> Self;
+    fn set_pagination_token(&mut self, key: Self::Token);
 } 
 
 
@@ -56,10 +56,11 @@ pub fn all_pages<C, R, O, I, T, F, E>(client: C, init: R, f: F) -> RusotoStream<
         stream::try_unfold(
             PageState::Next(client, init, f),
             move |state| { async move {
-                if let PageState::Next(client, input, mut f) = state {
+                if let PageState::Next(client, mut input, mut f) = state {
                     let resp: O = f(&client, &input).await?;
                     let next_state = if resp.has_another_page() {
-                        PageState::Next(client, input.with_pagination_token(resp.pagination_token()), f)
+                        input.set_pagination_token(resp.pagination_token());
+                        PageState::Next(client, input, f)
                     } else {
                         PageState::End
                     };
