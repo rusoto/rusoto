@@ -17,19 +17,18 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
+use ::digest::Digest;
 use base64;
 use bytes::Bytes;
-use chrono::{DateTime, Utc, NaiveDate};
-use digest::Digest;
+use chrono::{DateTime, NaiveDate, Utc};
 use hex;
-use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5::Md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
-use sha2::Sha256;
+use ring::{digest, hmac};
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
@@ -218,8 +217,12 @@ impl SignedRequest {
             "organizations" => {
                 // Matches https://docs.aws.amazon.com/general/latest/gr/ao.html
                 match self.region {
-                    Region::CnNorth1 | Region::CnNorthwest1 => Region::CnNorthwest1.name().to_string(),
-                    Region::UsGovEast1 | Region::UsGovWest1 => Region::UsGovWest1.name().to_string(),
+                    Region::CnNorth1 | Region::CnNorthwest1 => {
+                        Region::CnNorthwest1.name().to_string()
+                    }
+                    Region::UsGovEast1 | Region::UsGovWest1 => {
+                        Region::UsGovWest1.name().to_string()
+                    }
                     _ => Region::UsEast1.name().to_string(),
                 }
             }
@@ -585,10 +588,9 @@ fn digest_payload(payload: &[u8]) -> (String, usize) {
 }
 
 #[inline]
-fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
-    let mut hmac = Hmac::<Sha256>::new_varkey(secret).expect("failed to create hmac");
-    hmac.update(message);
-    hmac
+fn hmac(secret: &[u8], message: &[u8]) -> hmac::Tag {
+    let key = hmac::Key::new(hmac::HMAC_SHA256, secret);
+    hmac::sign(&key, message)
 }
 
 /// Takes a message and signs it using AWS secret, time, region keys and service keys.
@@ -600,23 +602,11 @@ fn sign_string(
     service: &str,
 ) -> String {
     let date_str = date.format("%Y%m%d").to_string();
-    let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
-        .finalize()
-        .into_bytes();
-    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes())
-        .finalize()
-        .into_bytes();
-    let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes())
-        .finalize()
-        .into_bytes();
-    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request")
-        .finalize()
-        .into_bytes();
-    hex::encode(
-        hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
-            .finalize()
-            .into_bytes(),
-    )
+    let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes());
+    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes());
+    let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes());
+    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request");
+    hex::encode(hmac(signing_hmac.as_ref(), string_to_sign.as_bytes()).as_ref())
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -761,7 +751,7 @@ pub fn decode_uri(uri: &str) -> String {
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
-    let h = Sha256::digest(t.as_ref());
+    let h = digest::digest(&digest::SHA256, t.as_ref());
     hex::encode(h)
 }
 
@@ -793,8 +783,12 @@ fn build_hostname(service: &str, region: &Region) -> String {
         "organizations" => match *region {
             // organizations is routed specially: see https://docs.aws.amazon.com/organizations/latest/APIReference/Welcome.html and https://docs.aws.amazon.com/general/latest/gr/ao.html
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
-            Region::CnNorth1 | Region::CnNorthwest1 => "organizations.cn-northwest-1.amazonaws.com.cn".to_owned(),
-            Region::UsGovEast1 | Region::UsGovWest1 => "organizations.us-gov-west-1.amazonaws.com".to_owned(),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                "organizations.cn-northwest-1.amazonaws.com.cn".to_owned()
+            }
+            Region::UsGovEast1 | Region::UsGovWest1 => {
+                "organizations.us-gov-west-1.amazonaws.com".to_owned()
+            }
             _ => "organizations.us-east-1.amazonaws.com".to_owned(),
         },
         "iam" => match *region {
