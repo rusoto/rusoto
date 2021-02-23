@@ -3,8 +3,8 @@ use std::io::Write;
 use inflector::Inflector;
 
 use super::{
-    error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
-    GenerateProtocol, IoResult,
+    error_type_name, generate_field_name, rest_request_generator, rest_response_parser,
+    write_paged_version, FileWriter, GenerateProtocol, IoResult,
 };
 use crate::botocore::{Operation, Shape, ShapeType};
 use crate::Service;
@@ -38,7 +38,9 @@ impl GenerateProtocol for RestJsonGenerator {
                 method_signature = generate_method_signature(operation, *input_shape),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
-            )?
+            )?;
+
+            write_paged_version(operation_name, service, operation, writer)?;
         }
         Ok(())
     }

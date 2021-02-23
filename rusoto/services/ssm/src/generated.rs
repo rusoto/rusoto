@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -110,6 +114,7 @@ pub struct Activation {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ssm::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
@@ -124,6 +129,7 @@ pub struct AddTagsToResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Ssm::add_tags_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResult {}
@@ -812,6 +818,7 @@ pub struct AutomationExecutionMetadata {
 }
 
 /// <p><p/></p>
+/// see [Ssm::cancel_command]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCommandRequest {
@@ -825,10 +832,12 @@ pub struct CancelCommandRequest {
 }
 
 /// <p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>
+/// see [Ssm::cancel_command]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelCommandResult {}
 
+/// see [Ssm::cancel_maintenance_window_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMaintenanceWindowExecutionRequest {
@@ -837,6 +846,7 @@ pub struct CancelMaintenanceWindowExecutionRequest {
     pub window_execution_id: String,
 }
 
+/// see [Ssm::cancel_maintenance_window_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelMaintenanceWindowExecutionResult {
@@ -1228,6 +1238,7 @@ pub struct CompliantSummary {
     pub severity_summary: Option<SeveritySummary>,
 }
 
+/// see [Ssm::create_activation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActivationRequest {
@@ -1256,6 +1267,7 @@ pub struct CreateActivationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ssm::create_activation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActivationResult {
@@ -1269,6 +1281,7 @@ pub struct CreateActivationResult {
     pub activation_id: Option<String>,
 }
 
+/// see [Ssm::create_association_batch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationBatchRequest {
@@ -1341,6 +1354,7 @@ pub struct CreateAssociationBatchRequestEntry {
     pub targets: Option<Vec<Target>>,
 }
 
+/// see [Ssm::create_association_batch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssociationBatchResult {
@@ -1354,6 +1368,7 @@ pub struct CreateAssociationBatchResult {
     pub successful: Option<Vec<AssociationDescription>>,
 }
 
+/// see [Ssm::create_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationRequest {
@@ -1418,6 +1433,7 @@ pub struct CreateAssociationRequest {
     pub targets: Option<Vec<Target>>,
 }
 
+/// see [Ssm::create_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssociationResult {
@@ -1427,6 +1443,7 @@ pub struct CreateAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
+/// see [Ssm::create_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentRequest {
@@ -1466,6 +1483,7 @@ pub struct CreateDocumentRequest {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::create_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDocumentResult {
@@ -1475,6 +1493,7 @@ pub struct CreateDocumentResult {
     pub document_description: Option<DocumentDescription>,
 }
 
+/// see [Ssm::create_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMaintenanceWindowRequest {
@@ -1523,6 +1542,7 @@ pub struct CreateMaintenanceWindowRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ssm::create_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMaintenanceWindowResult {
@@ -1532,6 +1552,7 @@ pub struct CreateMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
+/// see [Ssm::create_ops_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpsItemRequest {
@@ -1594,6 +1615,7 @@ pub struct CreateOpsItemRequest {
     pub title: String,
 }
 
+/// see [Ssm::create_ops_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOpsItemResponse {
@@ -1603,6 +1625,7 @@ pub struct CreateOpsItemResponse {
     pub ops_item_id: Option<String>,
 }
 
+/// see [Ssm::create_ops_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpsMetadataRequest {
@@ -1615,6 +1638,7 @@ pub struct CreateOpsMetadataRequest {
     pub resource_id: String,
 }
 
+/// see [Ssm::create_ops_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOpsMetadataResult {
@@ -1624,6 +1648,7 @@ pub struct CreateOpsMetadataResult {
     pub ops_metadata_arn: Option<String>,
 }
 
+/// see [Ssm::create_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePatchBaselineRequest {
@@ -1680,6 +1705,7 @@ pub struct CreatePatchBaselineRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ssm::create_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePatchBaselineResult {
@@ -1689,6 +1715,7 @@ pub struct CreatePatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
+/// see [Ssm::create_resource_data_sync]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDataSyncRequest {
@@ -1709,10 +1736,12 @@ pub struct CreateResourceDataSyncRequest {
     pub sync_type: Option<String>,
 }
 
+/// see [Ssm::create_resource_data_sync]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDataSyncResult {}
 
+/// see [Ssm::delete_activation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActivationRequest {
@@ -1721,10 +1750,12 @@ pub struct DeleteActivationRequest {
     pub activation_id: String,
 }
 
+/// see [Ssm::delete_activation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActivationResult {}
 
+/// see [Ssm::delete_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssociationRequest {
@@ -1742,10 +1773,12 @@ pub struct DeleteAssociationRequest {
     pub name: Option<String>,
 }
 
+/// see [Ssm::delete_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssociationResult {}
 
+/// see [Ssm::delete_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentRequest {
@@ -1766,10 +1799,12 @@ pub struct DeleteDocumentRequest {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::delete_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentResult {}
 
+/// see [Ssm::delete_inventory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInventoryRequest {
@@ -1790,6 +1825,7 @@ pub struct DeleteInventoryRequest {
     pub type_name: String,
 }
 
+/// see [Ssm::delete_inventory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInventoryResult {
@@ -1807,6 +1843,7 @@ pub struct DeleteInventoryResult {
     pub type_name: Option<String>,
 }
 
+/// see [Ssm::delete_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMaintenanceWindowRequest {
@@ -1815,6 +1852,7 @@ pub struct DeleteMaintenanceWindowRequest {
     pub window_id: String,
 }
 
+/// see [Ssm::delete_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMaintenanceWindowResult {
@@ -1824,6 +1862,7 @@ pub struct DeleteMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
+/// see [Ssm::delete_ops_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOpsMetadataRequest {
@@ -1832,10 +1871,12 @@ pub struct DeleteOpsMetadataRequest {
     pub ops_metadata_arn: String,
 }
 
+/// see [Ssm::delete_ops_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOpsMetadataResult {}
 
+/// see [Ssm::delete_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParameterRequest {
@@ -1844,10 +1885,12 @@ pub struct DeleteParameterRequest {
     pub name: String,
 }
 
+/// see [Ssm::delete_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParameterResult {}
 
+/// see [Ssm::delete_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParametersRequest {
@@ -1856,6 +1899,7 @@ pub struct DeleteParametersRequest {
     pub names: Vec<String>,
 }
 
+/// see [Ssm::delete_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParametersResult {
@@ -1869,6 +1913,7 @@ pub struct DeleteParametersResult {
     pub invalid_parameters: Option<Vec<String>>,
 }
 
+/// see [Ssm::delete_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePatchBaselineRequest {
@@ -1877,6 +1922,7 @@ pub struct DeletePatchBaselineRequest {
     pub baseline_id: String,
 }
 
+/// see [Ssm::delete_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePatchBaselineResult {
@@ -1886,6 +1932,7 @@ pub struct DeletePatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
+/// see [Ssm::delete_resource_data_sync]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceDataSyncRequest {
@@ -1898,10 +1945,12 @@ pub struct DeleteResourceDataSyncRequest {
     pub sync_type: Option<String>,
 }
 
+/// see [Ssm::delete_resource_data_sync]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceDataSyncResult {}
 
+/// see [Ssm::deregister_managed_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterManagedInstanceRequest {
@@ -1910,10 +1959,12 @@ pub struct DeregisterManagedInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [Ssm::deregister_managed_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterManagedInstanceResult {}
 
+/// see [Ssm::deregister_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterPatchBaselineForPatchGroupRequest {
@@ -1925,6 +1976,7 @@ pub struct DeregisterPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
+/// see [Ssm::deregister_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterPatchBaselineForPatchGroupResult {
@@ -1938,6 +1990,7 @@ pub struct DeregisterPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
+/// see [Ssm::deregister_target_from_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
@@ -1953,6 +2006,7 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
     pub window_target_id: String,
 }
 
+/// see [Ssm::deregister_target_from_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
@@ -1966,6 +2020,7 @@ pub struct DeregisterTargetFromMaintenanceWindowResult {
     pub window_target_id: Option<String>,
 }
 
+/// see [Ssm::deregister_task_from_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTaskFromMaintenanceWindowRequest {
@@ -1977,6 +2032,7 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
     pub window_task_id: String,
 }
 
+/// see [Ssm::deregister_task_from_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
@@ -2004,6 +2060,7 @@ pub struct DescribeActivationsFilter {
     pub filter_values: Option<Vec<String>>,
 }
 
+/// see [Ssm::describe_activations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivationsRequest {
@@ -2021,6 +2078,23 @@ pub struct DescribeActivationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeActivationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeActivationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_activations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivationsResult {
@@ -2034,6 +2108,29 @@ pub struct DescribeActivationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeActivationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeActivationsResult {
+    type Item = Activation;
+
+    fn into_pagination_page(self) -> Vec<Activation> {
+        self.activation_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_association_execution_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationExecutionTargetsRequest {
@@ -2057,6 +2154,23 @@ pub struct DescribeAssociationExecutionTargetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAssociationExecutionTargetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAssociationExecutionTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_association_execution_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationExecutionTargetsResult {
@@ -2070,6 +2184,29 @@ pub struct DescribeAssociationExecutionTargetsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAssociationExecutionTargetsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAssociationExecutionTargetsResult {
+    type Item = AssociationExecutionTarget;
+
+    fn into_pagination_page(self) -> Vec<AssociationExecutionTarget> {
+        self.association_execution_targets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_association_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationExecutionsRequest {
@@ -2090,6 +2227,23 @@ pub struct DescribeAssociationExecutionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAssociationExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAssociationExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_association_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationExecutionsResult {
@@ -2103,6 +2257,29 @@ pub struct DescribeAssociationExecutionsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAssociationExecutionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAssociationExecutionsResult {
+    type Item = AssociationExecution;
+
+    fn into_pagination_page(self) -> Vec<AssociationExecution> {
+        self.association_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssociationRequest {
@@ -2124,6 +2301,7 @@ pub struct DescribeAssociationRequest {
     pub name: Option<String>,
 }
 
+/// see [Ssm::describe_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssociationResult {
@@ -2133,6 +2311,7 @@ pub struct DescribeAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
+/// see [Ssm::describe_automation_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutomationExecutionsRequest {
@@ -2150,6 +2329,23 @@ pub struct DescribeAutomationExecutionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAutomationExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAutomationExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_automation_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAutomationExecutionsResult {
@@ -2163,6 +2359,29 @@ pub struct DescribeAutomationExecutionsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAutomationExecutionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAutomationExecutionsResult {
+    type Item = AutomationExecutionMetadata;
+
+    fn into_pagination_page(self) -> Vec<AutomationExecutionMetadata> {
+        self.automation_execution_metadata_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_automation_step_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutomationStepExecutionsRequest {
@@ -2187,6 +2406,23 @@ pub struct DescribeAutomationStepExecutionsRequest {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for DescribeAutomationStepExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAutomationStepExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_automation_step_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAutomationStepExecutionsResult {
@@ -2200,6 +2436,29 @@ pub struct DescribeAutomationStepExecutionsResult {
     pub step_executions: Option<Vec<StepExecution>>,
 }
 
+impl Paged for DescribeAutomationStepExecutionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAutomationStepExecutionsResult {
+    type Item = StepExecution;
+
+    fn into_pagination_page(self) -> Vec<StepExecution> {
+        self.step_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_available_patches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailablePatchesRequest {
@@ -2217,6 +2476,23 @@ pub struct DescribeAvailablePatchesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAvailablePatchesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAvailablePatchesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_available_patches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAvailablePatchesResult {
@@ -2230,6 +2506,29 @@ pub struct DescribeAvailablePatchesResult {
     pub patches: Option<Vec<Patch>>,
 }
 
+impl Paged for DescribeAvailablePatchesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAvailablePatchesResult {
+    type Item = Patch;
+
+    fn into_pagination_page(self) -> Vec<Patch> {
+        self.patches.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_document_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentPermissionRequest {
@@ -2241,6 +2540,7 @@ pub struct DescribeDocumentPermissionRequest {
     pub permission_type: String,
 }
 
+/// see [Ssm::describe_document_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentPermissionResponse {
@@ -2254,6 +2554,7 @@ pub struct DescribeDocumentPermissionResponse {
     pub account_sharing_info_list: Option<Vec<AccountSharingInfo>>,
 }
 
+/// see [Ssm::describe_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentRequest {
@@ -2270,6 +2571,7 @@ pub struct DescribeDocumentRequest {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::describe_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentResult {
@@ -2279,6 +2581,7 @@ pub struct DescribeDocumentResult {
     pub document: Option<DocumentDescription>,
 }
 
+/// see [Ssm::describe_effective_instance_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEffectiveInstanceAssociationsRequest {
@@ -2295,6 +2598,23 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeEffectiveInstanceAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEffectiveInstanceAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_effective_instance_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEffectiveInstanceAssociationsResult {
@@ -2308,6 +2628,29 @@ pub struct DescribeEffectiveInstanceAssociationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeEffectiveInstanceAssociationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeEffectiveInstanceAssociationsResult {
+    type Item = InstanceAssociation;
+
+    fn into_pagination_page(self) -> Vec<InstanceAssociation> {
+        self.associations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_effective_patches_for_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEffectivePatchesForPatchBaselineRequest {
@@ -2324,6 +2667,23 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeEffectivePatchesForPatchBaselineRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEffectivePatchesForPatchBaselineRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_effective_patches_for_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
@@ -2337,6 +2697,29 @@ pub struct DescribeEffectivePatchesForPatchBaselineResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeEffectivePatchesForPatchBaselineResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeEffectivePatchesForPatchBaselineResult {
+    type Item = EffectivePatch;
+
+    fn into_pagination_page(self) -> Vec<EffectivePatch> {
+        self.effective_patches.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_instance_associations_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceAssociationsStatusRequest {
@@ -2353,6 +2736,23 @@ pub struct DescribeInstanceAssociationsStatusRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstanceAssociationsStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInstanceAssociationsStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_instance_associations_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceAssociationsStatusResult {
@@ -2366,6 +2766,29 @@ pub struct DescribeInstanceAssociationsStatusResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstanceAssociationsStatusResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInstanceAssociationsStatusResult {
+    type Item = InstanceAssociationStatusInfo;
+
+    fn into_pagination_page(self) -> Vec<InstanceAssociationStatusInfo> {
+        self.instance_association_status_infos.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_instance_information]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceInformationRequest {
@@ -2387,6 +2810,23 @@ pub struct DescribeInstanceInformationRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstanceInformationRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInstanceInformationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_instance_information]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstanceInformationResult {
@@ -2400,6 +2840,29 @@ pub struct DescribeInstanceInformationResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstanceInformationResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInstanceInformationResult {
+    type Item = InstanceInformation;
+
+    fn into_pagination_page(self) -> Vec<InstanceInformation> {
+        self.instance_information_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_instance_patch_states_for_patch_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
@@ -2420,6 +2883,23 @@ pub struct DescribeInstancePatchStatesForPatchGroupRequest {
     pub patch_group: String,
 }
 
+impl Paged for DescribeInstancePatchStatesForPatchGroupRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInstancePatchStatesForPatchGroupRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_instance_patch_states_for_patch_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
@@ -2433,6 +2913,29 @@ pub struct DescribeInstancePatchStatesForPatchGroupResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstancePatchStatesForPatchGroupResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInstancePatchStatesForPatchGroupResult {
+    type Item = InstancePatchState;
+
+    fn into_pagination_page(self) -> Vec<InstancePatchState> {
+        self.instance_patch_states.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_instance_patch_states]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchStatesRequest {
@@ -2449,6 +2952,23 @@ pub struct DescribeInstancePatchStatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstancePatchStatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInstancePatchStatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_instance_patch_states]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchStatesResult {
@@ -2462,6 +2982,29 @@ pub struct DescribeInstancePatchStatesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstancePatchStatesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInstancePatchStatesResult {
+    type Item = InstancePatchState;
+
+    fn into_pagination_page(self) -> Vec<InstancePatchState> {
+        self.instance_patch_states.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_instance_patches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancePatchesRequest {
@@ -2482,6 +3025,23 @@ pub struct DescribeInstancePatchesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInstancePatchesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInstancePatchesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_instance_patches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancePatchesResult {
@@ -2495,6 +3055,29 @@ pub struct DescribeInstancePatchesResult {
     pub patches: Option<Vec<PatchComplianceData>>,
 }
 
+impl Paged for DescribeInstancePatchesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInstancePatchesResult {
+    type Item = PatchComplianceData;
+
+    fn into_pagination_page(self) -> Vec<PatchComplianceData> {
+        self.patches.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_inventory_deletions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInventoryDeletionsRequest {
@@ -2512,6 +3095,23 @@ pub struct DescribeInventoryDeletionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInventoryDeletionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeInventoryDeletionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_inventory_deletions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInventoryDeletionsResult {
@@ -2525,6 +3125,29 @@ pub struct DescribeInventoryDeletionsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeInventoryDeletionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeInventoryDeletionsResult {
+    type Item = InventoryDeletionStatusItem;
+
+    fn into_pagination_page(self) -> Vec<InventoryDeletionStatusItem> {
+        self.inventory_deletions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_execution_task_invocations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
@@ -2548,6 +3171,23 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     pub window_execution_id: String,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_execution_task_invocations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
@@ -2562,6 +3202,30 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
         Option<Vec<MaintenanceWindowExecutionTaskInvocationIdentity>>,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionTaskInvocationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowExecutionTaskInvocationsResult {
+    type Item = MaintenanceWindowExecutionTaskInvocationIdentity;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowExecutionTaskInvocationIdentity> {
+        self.window_execution_task_invocation_identities
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_execution_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionTasksRequest {
@@ -2582,6 +3246,23 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     pub window_execution_id: String,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionTasksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowExecutionTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_execution_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
@@ -2595,6 +3276,29 @@ pub struct DescribeMaintenanceWindowExecutionTasksResult {
     pub window_execution_task_identities: Option<Vec<MaintenanceWindowExecutionTaskIdentity>>,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionTasksResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowExecutionTasksResult {
+    type Item = MaintenanceWindowExecutionTaskIdentity;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowExecutionTaskIdentity> {
+        self.window_execution_task_identities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowExecutionsRequest {
@@ -2615,6 +3319,23 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
     pub window_id: String,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionsResult {
@@ -2628,6 +3349,29 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
     pub window_executions: Option<Vec<MaintenanceWindowExecution>>,
 }
 
+impl Paged for DescribeMaintenanceWindowExecutionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowExecutionsResult {
+    type Item = MaintenanceWindowExecution;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowExecution> {
+        self.window_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowScheduleRequest {
@@ -2657,6 +3401,23 @@ pub struct DescribeMaintenanceWindowScheduleRequest {
     pub window_id: Option<String>,
 }
 
+impl Paged for DescribeMaintenanceWindowScheduleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowScheduleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowScheduleResult {
@@ -2670,6 +3431,29 @@ pub struct DescribeMaintenanceWindowScheduleResult {
     pub scheduled_window_executions: Option<Vec<ScheduledWindowExecution>>,
 }
 
+impl Paged for DescribeMaintenanceWindowScheduleResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowScheduleResult {
+    type Item = ScheduledWindowExecution;
+
+    fn into_pagination_page(self) -> Vec<ScheduledWindowExecution> {
+        self.scheduled_window_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowTargetsRequest {
@@ -2690,6 +3474,23 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
     pub window_id: String,
 }
 
+impl Paged for DescribeMaintenanceWindowTargetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowTargetsResult {
@@ -2703,6 +3504,29 @@ pub struct DescribeMaintenanceWindowTargetsResult {
     pub targets: Option<Vec<MaintenanceWindowTarget>>,
 }
 
+impl Paged for DescribeMaintenanceWindowTargetsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowTargetsResult {
+    type Item = MaintenanceWindowTarget;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowTarget> {
+        self.targets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowTasksRequest {
@@ -2723,6 +3547,23 @@ pub struct DescribeMaintenanceWindowTasksRequest {
     pub window_id: String,
 }
 
+impl Paged for DescribeMaintenanceWindowTasksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_window_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowTasksResult {
@@ -2736,6 +3577,29 @@ pub struct DescribeMaintenanceWindowTasksResult {
     pub tasks: Option<Vec<MaintenanceWindowTask>>,
 }
 
+impl Paged for DescribeMaintenanceWindowTasksResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowTasksResult {
+    type Item = MaintenanceWindowTask;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowTask> {
+        self.tasks.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_windows_for_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowsForTargetRequest {
@@ -2755,6 +3619,23 @@ pub struct DescribeMaintenanceWindowsForTargetRequest {
     pub targets: Vec<Target>,
 }
 
+impl Paged for DescribeMaintenanceWindowsForTargetRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowsForTargetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_windows_for_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowsForTargetResult {
@@ -2768,6 +3649,29 @@ pub struct DescribeMaintenanceWindowsForTargetResult {
     pub window_identities: Option<Vec<MaintenanceWindowIdentityForTarget>>,
 }
 
+impl Paged for DescribeMaintenanceWindowsForTargetResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowsForTargetResult {
+    type Item = MaintenanceWindowIdentityForTarget;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowIdentityForTarget> {
+        self.window_identities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_maintenance_windows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceWindowsRequest {
@@ -2785,6 +3689,23 @@ pub struct DescribeMaintenanceWindowsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeMaintenanceWindowsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMaintenanceWindowsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_maintenance_windows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceWindowsResult {
@@ -2798,6 +3719,29 @@ pub struct DescribeMaintenanceWindowsResult {
     pub window_identities: Option<Vec<MaintenanceWindowIdentity>>,
 }
 
+impl Paged for DescribeMaintenanceWindowsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeMaintenanceWindowsResult {
+    type Item = MaintenanceWindowIdentity;
+
+    fn into_pagination_page(self) -> Vec<MaintenanceWindowIdentity> {
+        self.window_identities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_ops_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOpsItemsRequest {
@@ -2815,6 +3759,23 @@ pub struct DescribeOpsItemsRequest {
     pub ops_item_filters: Option<Vec<OpsItemFilter>>,
 }
 
+impl Paged for DescribeOpsItemsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeOpsItemsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_ops_items]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOpsItemsResponse {
@@ -2828,6 +3789,29 @@ pub struct DescribeOpsItemsResponse {
     pub ops_item_summaries: Option<Vec<OpsItemSummary>>,
 }
 
+impl Paged for DescribeOpsItemsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeOpsItemsResponse {
+    type Item = OpsItemSummary;
+
+    fn into_pagination_page(self) -> Vec<OpsItemSummary> {
+        self.ops_item_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeParametersRequest {
@@ -2849,6 +3833,23 @@ pub struct DescribeParametersRequest {
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
 }
 
+impl Paged for DescribeParametersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeParametersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeParametersResult {
@@ -2862,6 +3863,29 @@ pub struct DescribeParametersResult {
     pub parameters: Option<Vec<ParameterMetadata>>,
 }
 
+impl Paged for DescribeParametersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeParametersResult {
+    type Item = ParameterMetadata;
+
+    fn into_pagination_page(self) -> Vec<ParameterMetadata> {
+        self.parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_patch_baselines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchBaselinesRequest {
@@ -2879,6 +3903,23 @@ pub struct DescribePatchBaselinesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribePatchBaselinesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePatchBaselinesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_patch_baselines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchBaselinesResult {
@@ -2892,6 +3933,29 @@ pub struct DescribePatchBaselinesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribePatchBaselinesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribePatchBaselinesResult {
+    type Item = PatchBaselineIdentity;
+
+    fn into_pagination_page(self) -> Vec<PatchBaselineIdentity> {
+        self.baseline_identities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_patch_group_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchGroupStateRequest {
@@ -2900,6 +3964,7 @@ pub struct DescribePatchGroupStateRequest {
     pub patch_group: String,
 }
 
+/// see [Ssm::describe_patch_group_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchGroupStateResult {
@@ -2941,6 +4006,7 @@ pub struct DescribePatchGroupStateResult {
     pub instances_with_unreported_not_applicable_patches: Option<i64>,
 }
 
+/// see [Ssm::describe_patch_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchGroupsRequest {
@@ -2958,6 +4024,23 @@ pub struct DescribePatchGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribePatchGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePatchGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_patch_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchGroupsResult {
@@ -2971,6 +4054,29 @@ pub struct DescribePatchGroupsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribePatchGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribePatchGroupsResult {
+    type Item = PatchGroupPatchBaselineMapping;
+
+    fn into_pagination_page(self) -> Vec<PatchGroupPatchBaselineMapping> {
+        self.mappings.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_patch_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchPropertiesRequest {
@@ -2994,6 +4100,23 @@ pub struct DescribePatchPropertiesRequest {
     pub property: String,
 }
 
+impl Paged for DescribePatchPropertiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePatchPropertiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_patch_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePatchPropertiesResult {
@@ -3007,6 +4130,29 @@ pub struct DescribePatchPropertiesResult {
     pub properties: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
+impl Paged for DescribePatchPropertiesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribePatchPropertiesResult {
+    type Item = ::std::collections::HashMap<String, String>;
+
+    fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, String>> {
+        self.properties.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::describe_sessions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSessionsRequest {
@@ -3027,6 +4173,23 @@ pub struct DescribeSessionsRequest {
     pub state: String,
 }
 
+impl Paged for DescribeSessionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSessionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::describe_sessions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSessionsResponse {
@@ -3038,6 +4201,28 @@ pub struct DescribeSessionsResponse {
     #[serde(rename = "Sessions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sessions: Option<Vec<Session>>,
+}
+
+impl Paged for DescribeSessionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeSessionsResponse {
+    type Item = Session;
+
+    fn into_pagination_page(self) -> Vec<Session> {
+        self.sessions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>A default version of a document.</p>
@@ -3444,6 +4629,7 @@ pub struct FailureDetails {
     pub failure_type: Option<String>,
 }
 
+/// see [Ssm::get_automation_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutomationExecutionRequest {
@@ -3452,6 +4638,7 @@ pub struct GetAutomationExecutionRequest {
     pub automation_execution_id: String,
 }
 
+/// see [Ssm::get_automation_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutomationExecutionResult {
@@ -3461,6 +4648,7 @@ pub struct GetAutomationExecutionResult {
     pub automation_execution: Option<AutomationExecution>,
 }
 
+/// see [Ssm::get_calendar_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCalendarStateRequest {
@@ -3473,6 +4661,7 @@ pub struct GetCalendarStateRequest {
     pub calendar_names: Vec<String>,
 }
 
+/// see [Ssm::get_calendar_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCalendarStateResponse {
@@ -3490,6 +4679,7 @@ pub struct GetCalendarStateResponse {
     pub state: Option<String>,
 }
 
+/// see [Ssm::get_command_invocation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommandInvocationRequest {
@@ -3505,6 +4695,7 @@ pub struct GetCommandInvocationRequest {
     pub plugin_name: Option<String>,
 }
 
+/// see [Ssm::get_command_invocation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommandInvocationResult {
@@ -3578,6 +4769,7 @@ pub struct GetCommandInvocationResult {
     pub status_details: Option<String>,
 }
 
+/// see [Ssm::get_connection_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionStatusRequest {
@@ -3586,6 +4778,7 @@ pub struct GetConnectionStatusRequest {
     pub target: String,
 }
 
+/// see [Ssm::get_connection_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionStatusResponse {
@@ -3599,6 +4792,7 @@ pub struct GetConnectionStatusResponse {
     pub target: Option<String>,
 }
 
+/// see [Ssm::get_default_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDefaultPatchBaselineRequest {
@@ -3608,6 +4802,7 @@ pub struct GetDefaultPatchBaselineRequest {
     pub operating_system: Option<String>,
 }
 
+/// see [Ssm::get_default_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDefaultPatchBaselineResult {
@@ -3621,6 +4816,7 @@ pub struct GetDefaultPatchBaselineResult {
     pub operating_system: Option<String>,
 }
 
+/// see [Ssm::get_deployable_patch_snapshot_for_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeployablePatchSnapshotForInstanceRequest {
@@ -3632,6 +4828,7 @@ pub struct GetDeployablePatchSnapshotForInstanceRequest {
     pub snapshot_id: String,
 }
 
+/// see [Ssm::get_deployable_patch_snapshot_for_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeployablePatchSnapshotForInstanceResult {
@@ -3653,6 +4850,7 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
     pub snapshot_id: Option<String>,
 }
 
+/// see [Ssm::get_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentRequest {
@@ -3673,6 +4871,7 @@ pub struct GetDocumentRequest {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::get_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentResult {
@@ -3722,6 +4921,7 @@ pub struct GetDocumentResult {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::get_inventory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInventoryRequest {
@@ -3747,6 +4947,23 @@ pub struct GetInventoryRequest {
     pub result_attributes: Option<Vec<ResultAttribute>>,
 }
 
+impl Paged for GetInventoryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetInventoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::get_inventory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInventoryResult {
@@ -3760,6 +4977,29 @@ pub struct GetInventoryResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetInventoryResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetInventoryResult {
+    type Item = InventoryResultEntity;
+
+    fn into_pagination_page(self) -> Vec<InventoryResultEntity> {
+        self.entities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::get_inventory_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInventorySchemaRequest {
@@ -3785,6 +5025,23 @@ pub struct GetInventorySchemaRequest {
     pub type_name: Option<String>,
 }
 
+impl Paged for GetInventorySchemaRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetInventorySchemaRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::get_inventory_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInventorySchemaResult {
@@ -3798,6 +5055,29 @@ pub struct GetInventorySchemaResult {
     pub schemas: Option<Vec<InventoryItemSchema>>,
 }
 
+impl Paged for GetInventorySchemaResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetInventorySchemaResult {
+    type Item = InventoryItemSchema;
+
+    fn into_pagination_page(self) -> Vec<InventoryItemSchema> {
+        self.schemas.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::get_maintenance_window_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionRequest {
@@ -3806,6 +5086,7 @@ pub struct GetMaintenanceWindowExecutionRequest {
     pub window_execution_id: String,
 }
 
+/// see [Ssm::get_maintenance_window_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionResult {
@@ -3835,6 +5116,7 @@ pub struct GetMaintenanceWindowExecutionResult {
     pub window_execution_id: Option<String>,
 }
 
+/// see [Ssm::get_maintenance_window_execution_task_invocation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
@@ -3849,6 +5131,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
     pub window_execution_id: String,
 }
 
+/// see [Ssm::get_maintenance_window_execution_task_invocation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
@@ -3902,6 +5185,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     pub window_target_id: Option<String>,
 }
 
+/// see [Ssm::get_maintenance_window_execution_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowExecutionTaskRequest {
@@ -3913,6 +5197,7 @@ pub struct GetMaintenanceWindowExecutionTaskRequest {
     pub window_execution_id: String,
 }
 
+/// see [Ssm::get_maintenance_window_execution_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskResult {
@@ -3972,6 +5257,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     pub window_execution_id: Option<String>,
 }
 
+/// see [Ssm::get_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowRequest {
@@ -3980,6 +5266,7 @@ pub struct GetMaintenanceWindowRequest {
     pub window_id: String,
 }
 
+/// see [Ssm::get_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowResult {
@@ -4045,6 +5332,7 @@ pub struct GetMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
+/// see [Ssm::get_maintenance_window_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMaintenanceWindowTaskRequest {
@@ -4056,6 +5344,7 @@ pub struct GetMaintenanceWindowTaskRequest {
     pub window_task_id: String,
 }
 
+/// see [Ssm::get_maintenance_window_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMaintenanceWindowTaskResult {
@@ -4118,6 +5407,7 @@ pub struct GetMaintenanceWindowTaskResult {
     pub window_task_id: Option<String>,
 }
 
+/// see [Ssm::get_ops_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsItemRequest {
@@ -4126,6 +5416,7 @@ pub struct GetOpsItemRequest {
     pub ops_item_id: String,
 }
 
+/// see [Ssm::get_ops_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpsItemResponse {
@@ -4135,6 +5426,7 @@ pub struct GetOpsItemResponse {
     pub ops_item: Option<OpsItem>,
 }
 
+/// see [Ssm::get_ops_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsMetadataRequest {
@@ -4151,6 +5443,7 @@ pub struct GetOpsMetadataRequest {
     pub ops_metadata_arn: String,
 }
 
+/// see [Ssm::get_ops_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpsMetadataResult {
@@ -4168,6 +5461,7 @@ pub struct GetOpsMetadataResult {
     pub resource_id: Option<String>,
 }
 
+/// see [Ssm::get_ops_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsSummaryRequest {
@@ -4197,6 +5491,23 @@ pub struct GetOpsSummaryRequest {
     pub sync_name: Option<String>,
 }
 
+impl Paged for GetOpsSummaryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetOpsSummaryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::get_ops_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpsSummaryResult {
@@ -4210,6 +5521,29 @@ pub struct GetOpsSummaryResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetOpsSummaryResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetOpsSummaryResult {
+    type Item = OpsEntity;
+
+    fn into_pagination_page(self) -> Vec<OpsEntity> {
+        self.entities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::get_parameter_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParameterHistoryRequest {
@@ -4230,6 +5564,23 @@ pub struct GetParameterHistoryRequest {
     pub with_decryption: Option<bool>,
 }
 
+impl Paged for GetParameterHistoryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetParameterHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::get_parameter_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParameterHistoryResult {
@@ -4243,6 +5594,29 @@ pub struct GetParameterHistoryResult {
     pub parameters: Option<Vec<ParameterHistory>>,
 }
 
+impl Paged for GetParameterHistoryResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetParameterHistoryResult {
+    type Item = ParameterHistory;
+
+    fn into_pagination_page(self) -> Vec<ParameterHistory> {
+        self.parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::get_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParameterRequest {
@@ -4255,6 +5629,7 @@ pub struct GetParameterRequest {
     pub with_decryption: Option<bool>,
 }
 
+/// see [Ssm::get_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParameterResult {
@@ -4264,6 +5639,7 @@ pub struct GetParameterResult {
     pub parameter: Option<Parameter>,
 }
 
+/// see [Ssm::get_parameters_by_path]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersByPathRequest {
@@ -4292,6 +5668,23 @@ pub struct GetParametersByPathRequest {
     pub with_decryption: Option<bool>,
 }
 
+impl Paged for GetParametersByPathRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetParametersByPathRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::get_parameters_by_path]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersByPathResult {
@@ -4305,6 +5698,29 @@ pub struct GetParametersByPathResult {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+impl Paged for GetParametersByPathResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetParametersByPathResult {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::get_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParametersRequest {
@@ -4317,6 +5733,7 @@ pub struct GetParametersRequest {
     pub with_decryption: Option<bool>,
 }
 
+/// see [Ssm::get_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersResult {
@@ -4330,6 +5747,7 @@ pub struct GetParametersResult {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+/// see [Ssm::get_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPatchBaselineForPatchGroupRequest {
@@ -4342,6 +5760,7 @@ pub struct GetPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
+/// see [Ssm::get_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPatchBaselineForPatchGroupResult {
@@ -4359,6 +5778,7 @@ pub struct GetPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
+/// see [Ssm::get_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPatchBaselineRequest {
@@ -4367,6 +5787,7 @@ pub struct GetPatchBaselineRequest {
     pub baseline_id: String,
 }
 
+/// see [Ssm::get_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPatchBaselineResult {
@@ -4433,6 +5854,7 @@ pub struct GetPatchBaselineResult {
 }
 
 /// <p>The request body of the GetServiceSetting API action.</p>
+/// see [Ssm::get_service_setting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingRequest {
@@ -4442,6 +5864,7 @@ pub struct GetServiceSettingRequest {
 }
 
 /// <p>The query result body of the GetServiceSetting API action.</p>
+/// see [Ssm::get_service_setting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceSettingResult {
@@ -4970,6 +6393,7 @@ pub struct InventoryResultItem {
     pub type_name: String,
 }
 
+/// see [Ssm::label_parameter_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LabelParameterVersionRequest {
@@ -4985,6 +6409,7 @@ pub struct LabelParameterVersionRequest {
     pub parameter_version: Option<i64>,
 }
 
+/// see [Ssm::label_parameter_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelParameterVersionResult {
@@ -4998,6 +6423,7 @@ pub struct LabelParameterVersionResult {
     pub parameter_version: Option<i64>,
 }
 
+/// see [Ssm::list_association_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationVersionsRequest {
@@ -5014,6 +6440,23 @@ pub struct ListAssociationVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssociationVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssociationVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_association_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationVersionsResult {
@@ -5027,6 +6470,29 @@ pub struct ListAssociationVersionsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssociationVersionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssociationVersionsResult {
+    type Item = AssociationVersionInfo;
+
+    fn into_pagination_page(self) -> Vec<AssociationVersionInfo> {
+        self.association_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsRequest {
@@ -5044,6 +6510,23 @@ pub struct ListAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationsResult {
@@ -5057,6 +6540,29 @@ pub struct ListAssociationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssociationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssociationsResult {
+    type Item = Association;
+
+    fn into_pagination_page(self) -> Vec<Association> {
+        self.associations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_command_invocations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCommandInvocationsRequest {
@@ -5086,6 +6592,23 @@ pub struct ListCommandInvocationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCommandInvocationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCommandInvocationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_command_invocations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCommandInvocationsResult {
@@ -5099,6 +6622,29 @@ pub struct ListCommandInvocationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCommandInvocationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCommandInvocationsResult {
+    type Item = CommandInvocation;
+
+    fn into_pagination_page(self) -> Vec<CommandInvocation> {
+        self.command_invocations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_commands]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCommandsRequest {
@@ -5124,6 +6670,23 @@ pub struct ListCommandsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCommandsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCommandsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_commands]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCommandsResult {
@@ -5137,6 +6700,29 @@ pub struct ListCommandsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCommandsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCommandsResult {
+    type Item = Command;
+
+    fn into_pagination_page(self) -> Vec<Command> {
+        self.commands.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_compliance_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceItemsRequest {
@@ -5162,6 +6748,23 @@ pub struct ListComplianceItemsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
+impl Paged for ListComplianceItemsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListComplianceItemsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_compliance_items]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceItemsResult {
@@ -5175,6 +6778,29 @@ pub struct ListComplianceItemsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListComplianceItemsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListComplianceItemsResult {
+    type Item = ComplianceItem;
+
+    fn into_pagination_page(self) -> Vec<ComplianceItem> {
+        self.compliance_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_compliance_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceSummariesRequest {
@@ -5192,6 +6818,23 @@ pub struct ListComplianceSummariesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListComplianceSummariesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListComplianceSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_compliance_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceSummariesResult {
@@ -5205,6 +6848,29 @@ pub struct ListComplianceSummariesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListComplianceSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListComplianceSummariesResult {
+    type Item = ComplianceSummaryItem;
+
+    fn into_pagination_page(self) -> Vec<ComplianceSummaryItem> {
+        self.compliance_summary_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_document_metadata_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentMetadataHistoryRequest {
@@ -5228,6 +6894,7 @@ pub struct ListDocumentMetadataHistoryRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Ssm::list_document_metadata_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentMetadataHistoryResponse {
@@ -5253,6 +6920,7 @@ pub struct ListDocumentMetadataHistoryResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Ssm::list_document_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentVersionsRequest {
@@ -5269,6 +6937,23 @@ pub struct ListDocumentVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_document_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentVersionsResult {
@@ -5282,6 +6967,29 @@ pub struct ListDocumentVersionsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentVersionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDocumentVersionsResult {
+    type Item = DocumentVersionInfo;
+
+    fn into_pagination_page(self) -> Vec<DocumentVersionInfo> {
+        self.document_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_documents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentsRequest {
@@ -5303,6 +7011,23 @@ pub struct ListDocumentsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_documents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentsResult {
@@ -5316,6 +7041,29 @@ pub struct ListDocumentsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDocumentsResult {
+    type Item = DocumentIdentifier;
+
+    fn into_pagination_page(self) -> Vec<DocumentIdentifier> {
+        self.document_identifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_inventory_entries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInventoryEntriesRequest {
@@ -5339,6 +7087,7 @@ pub struct ListInventoryEntriesRequest {
     pub type_name: String,
 }
 
+/// see [Ssm::list_inventory_entries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInventoryEntriesResult {
@@ -5368,6 +7117,7 @@ pub struct ListInventoryEntriesResult {
     pub type_name: Option<String>,
 }
 
+/// see [Ssm::list_ops_item_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpsItemEventsRequest {
@@ -5385,6 +7135,23 @@ pub struct ListOpsItemEventsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOpsItemEventsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOpsItemEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_ops_item_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOpsItemEventsResponse {
@@ -5398,6 +7165,29 @@ pub struct ListOpsItemEventsResponse {
     pub summaries: Option<Vec<OpsItemEventSummary>>,
 }
 
+impl Paged for ListOpsItemEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOpsItemEventsResponse {
+    type Item = OpsItemEventSummary;
+
+    fn into_pagination_page(self) -> Vec<OpsItemEventSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_ops_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpsMetadataRequest {
@@ -5415,6 +7205,23 @@ pub struct ListOpsMetadataRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOpsMetadataRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOpsMetadataRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_ops_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOpsMetadataResult {
@@ -5428,6 +7235,29 @@ pub struct ListOpsMetadataResult {
     pub ops_metadata_list: Option<Vec<OpsMetadata>>,
 }
 
+impl Paged for ListOpsMetadataResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOpsMetadataResult {
+    type Item = OpsMetadata;
+
+    fn into_pagination_page(self) -> Vec<OpsMetadata> {
+        self.ops_metadata_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_resource_compliance_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceComplianceSummariesRequest {
@@ -5445,6 +7275,23 @@ pub struct ListResourceComplianceSummariesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResourceComplianceSummariesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceComplianceSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_resource_compliance_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceComplianceSummariesResult {
@@ -5458,6 +7305,29 @@ pub struct ListResourceComplianceSummariesResult {
     pub resource_compliance_summary_items: Option<Vec<ResourceComplianceSummaryItem>>,
 }
 
+impl Paged for ListResourceComplianceSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResourceComplianceSummariesResult {
+    type Item = ResourceComplianceSummaryItem;
+
+    fn into_pagination_page(self) -> Vec<ResourceComplianceSummaryItem> {
+        self.resource_compliance_summary_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_resource_data_sync]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDataSyncRequest {
@@ -5475,6 +7345,23 @@ pub struct ListResourceDataSyncRequest {
     pub sync_type: Option<String>,
 }
 
+impl Paged for ListResourceDataSyncRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceDataSyncRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ssm::list_resource_data_sync]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDataSyncResult {
@@ -5488,6 +7375,29 @@ pub struct ListResourceDataSyncResult {
     pub resource_data_sync_items: Option<Vec<ResourceDataSyncItem>>,
 }
 
+impl Paged for ListResourceDataSyncResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResourceDataSyncResult {
+    type Item = ResourceDataSyncItem;
+
+    fn into_pagination_page(self) -> Vec<ResourceDataSyncItem> {
+        self.resource_data_sync_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ssm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -5499,6 +7409,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_type: String,
 }
 
+/// see [Ssm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -5955,6 +7866,7 @@ pub struct MetadataValue {
     pub value: Option<String>,
 }
 
+/// see [Ssm::modify_document_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDocumentPermissionRequest {
@@ -5978,6 +7890,7 @@ pub struct ModifyDocumentPermissionRequest {
     pub shared_document_version: Option<String>,
 }
 
+/// see [Ssm::modify_document_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyDocumentPermissionResponse {}
@@ -6894,6 +8807,7 @@ pub struct ProgressCounters {
     pub total_steps: Option<i64>,
 }
 
+/// see [Ssm::put_compliance_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComplianceItemsRequest {
@@ -6922,10 +8836,12 @@ pub struct PutComplianceItemsRequest {
     pub upload_type: Option<String>,
 }
 
+/// see [Ssm::put_compliance_items]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComplianceItemsResult {}
 
+/// see [Ssm::put_inventory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInventoryRequest {
@@ -6937,6 +8853,7 @@ pub struct PutInventoryRequest {
     pub items: Vec<InventoryItem>,
 }
 
+/// see [Ssm::put_inventory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutInventoryResult {
@@ -6946,6 +8863,7 @@ pub struct PutInventoryResult {
     pub message: Option<String>,
 }
 
+/// see [Ssm::put_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutParameterRequest {
@@ -6993,6 +8911,7 @@ pub struct PutParameterRequest {
     pub value: String,
 }
 
+/// see [Ssm::put_parameter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutParameterResult {
@@ -7006,6 +8925,7 @@ pub struct PutParameterResult {
     pub version: Option<i64>,
 }
 
+/// see [Ssm::register_default_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDefaultPatchBaselineRequest {
@@ -7014,6 +8934,7 @@ pub struct RegisterDefaultPatchBaselineRequest {
     pub baseline_id: String,
 }
 
+/// see [Ssm::register_default_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDefaultPatchBaselineResult {
@@ -7023,6 +8944,7 @@ pub struct RegisterDefaultPatchBaselineResult {
     pub baseline_id: Option<String>,
 }
 
+/// see [Ssm::register_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterPatchBaselineForPatchGroupRequest {
@@ -7034,6 +8956,7 @@ pub struct RegisterPatchBaselineForPatchGroupRequest {
     pub patch_group: String,
 }
 
+/// see [Ssm::register_patch_baseline_for_patch_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterPatchBaselineForPatchGroupResult {
@@ -7047,6 +8970,7 @@ pub struct RegisterPatchBaselineForPatchGroupResult {
     pub patch_group: Option<String>,
 }
 
+/// see [Ssm::register_target_with_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTargetWithMaintenanceWindowRequest {
@@ -7077,6 +9001,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     pub window_id: String,
 }
 
+/// see [Ssm::register_target_with_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTargetWithMaintenanceWindowResult {
@@ -7086,6 +9011,7 @@ pub struct RegisterTargetWithMaintenanceWindowResult {
     pub window_target_id: Option<String>,
 }
 
+/// see [Ssm::register_task_with_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTaskWithMaintenanceWindowRequest {
@@ -7145,6 +9071,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     pub window_id: String,
 }
 
+/// see [Ssm::register_task_with_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTaskWithMaintenanceWindowResult {
@@ -7162,6 +9089,7 @@ pub struct RelatedOpsItem {
     pub ops_item_id: String,
 }
 
+/// see [Ssm::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceRequest {
@@ -7176,11 +9104,13 @@ pub struct RemoveTagsFromResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Ssm::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
 /// <p>The request body of the ResetServiceSetting API action.</p>
+/// see [Ssm::reset_service_setting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetServiceSettingRequest {
@@ -7190,6 +9120,7 @@ pub struct ResetServiceSettingRequest {
 }
 
 /// <p>The result body of the ResetServiceSetting API action.</p>
+/// see [Ssm::reset_service_setting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetServiceSettingResult {
@@ -7408,6 +9339,7 @@ pub struct ResultAttribute {
     pub type_name: String,
 }
 
+/// see [Ssm::resume_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeSessionRequest {
@@ -7416,6 +9348,7 @@ pub struct ResumeSessionRequest {
     pub session_id: String,
 }
 
+/// see [Ssm::resume_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResumeSessionResponse {
@@ -7532,6 +9465,7 @@ pub struct ScheduledWindowExecution {
     pub window_id: Option<String>,
 }
 
+/// see [Ssm::send_automation_signal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAutomationSignalRequest {
@@ -7547,10 +9481,12 @@ pub struct SendAutomationSignalRequest {
     pub signal_type: String,
 }
 
+/// see [Ssm::send_automation_signal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendAutomationSignalResult {}
 
+/// see [Ssm::send_command]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCommandRequest {
@@ -7623,6 +9559,7 @@ pub struct SendCommandRequest {
     pub timeout_seconds: Option<i64>,
 }
 
+/// see [Ssm::send_command]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendCommandResult {
@@ -7760,6 +9697,7 @@ pub struct SeveritySummary {
     pub unspecified_count: Option<i64>,
 }
 
+/// see [Ssm::start_associations_once]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssociationsOnceRequest {
@@ -7768,10 +9706,12 @@ pub struct StartAssociationsOnceRequest {
     pub association_ids: Vec<String>,
 }
 
+/// see [Ssm::start_associations_once]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAssociationsOnceResult {}
 
+/// see [Ssm::start_automation_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAutomationExecutionRequest {
@@ -7824,6 +9764,7 @@ pub struct StartAutomationExecutionRequest {
     pub targets: Option<Vec<Target>>,
 }
 
+/// see [Ssm::start_automation_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAutomationExecutionResult {
@@ -7833,6 +9774,7 @@ pub struct StartAutomationExecutionResult {
     pub automation_execution_id: Option<String>,
 }
 
+/// see [Ssm::start_change_request_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChangeRequestExecutionRequest {
@@ -7868,6 +9810,7 @@ pub struct StartChangeRequestExecutionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ssm::start_change_request_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChangeRequestExecutionResult {
@@ -7877,6 +9820,7 @@ pub struct StartChangeRequestExecutionResult {
     pub automation_execution_id: Option<String>,
 }
 
+/// see [Ssm::start_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSessionRequest {
@@ -7893,6 +9837,7 @@ pub struct StartSessionRequest {
     pub target: String,
 }
 
+/// see [Ssm::start_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSessionResponse {
@@ -8016,6 +9961,7 @@ pub struct StepExecutionFilter {
     pub values: Vec<String>,
 }
 
+/// see [Ssm::stop_automation_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutomationExecutionRequest {
@@ -8028,6 +9974,7 @@ pub struct StopAutomationExecutionRequest {
     pub type_: Option<String>,
 }
 
+/// see [Ssm::stop_automation_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAutomationExecutionResult {}
@@ -8081,6 +10028,7 @@ pub struct TargetLocation {
     pub target_location_max_errors: Option<String>,
 }
 
+/// see [Ssm::terminate_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateSessionRequest {
@@ -8089,6 +10037,7 @@ pub struct TerminateSessionRequest {
     pub session_id: String,
 }
 
+/// see [Ssm::terminate_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateSessionResponse {
@@ -8098,6 +10047,7 @@ pub struct TerminateSessionResponse {
     pub session_id: Option<String>,
 }
 
+/// see [Ssm::update_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationRequest {
@@ -8166,6 +10116,7 @@ pub struct UpdateAssociationRequest {
     pub targets: Option<Vec<Target>>,
 }
 
+/// see [Ssm::update_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAssociationResult {
@@ -8175,6 +10126,7 @@ pub struct UpdateAssociationResult {
     pub association_description: Option<AssociationDescription>,
 }
 
+/// see [Ssm::update_association_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationStatusRequest {
@@ -8189,6 +10141,7 @@ pub struct UpdateAssociationStatusRequest {
     pub name: String,
 }
 
+/// see [Ssm::update_association_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAssociationStatusResult {
@@ -8198,6 +10151,7 @@ pub struct UpdateAssociationStatusResult {
     pub association_description: Option<AssociationDescription>,
 }
 
+/// see [Ssm::update_document_default_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentDefaultVersionRequest {
@@ -8209,6 +10163,7 @@ pub struct UpdateDocumentDefaultVersionRequest {
     pub name: String,
 }
 
+/// see [Ssm::update_document_default_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDocumentDefaultVersionResult {
@@ -8218,6 +10173,7 @@ pub struct UpdateDocumentDefaultVersionResult {
     pub description: Option<DocumentDefaultVersionDescription>,
 }
 
+/// see [Ssm::update_document_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentMetadataRequest {
@@ -8233,10 +10189,12 @@ pub struct UpdateDocumentMetadataRequest {
     pub name: String,
 }
 
+/// see [Ssm::update_document_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDocumentMetadataResponse {}
 
+/// see [Ssm::update_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentRequest {
@@ -8268,6 +10226,7 @@ pub struct UpdateDocumentRequest {
     pub version_name: Option<String>,
 }
 
+/// see [Ssm::update_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDocumentResult {
@@ -8277,6 +10236,7 @@ pub struct UpdateDocumentResult {
     pub document_description: Option<DocumentDescription>,
 }
 
+/// see [Ssm::update_maintenance_window]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowRequest {
@@ -8333,6 +10293,7 @@ pub struct UpdateMaintenanceWindowRequest {
     pub window_id: String,
 }
 
+/// see [Ssm::update_maintenance_window]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowResult {
@@ -8386,6 +10347,7 @@ pub struct UpdateMaintenanceWindowResult {
     pub window_id: Option<String>,
 }
 
+/// see [Ssm::update_maintenance_window_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowTargetRequest {
@@ -8417,6 +10379,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
     pub window_target_id: String,
 }
 
+/// see [Ssm::update_maintenance_window_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowTargetResult {
@@ -8446,6 +10409,7 @@ pub struct UpdateMaintenanceWindowTargetResult {
     pub window_target_id: Option<String>,
 }
 
+/// see [Ssm::update_maintenance_window_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceWindowTaskRequest {
@@ -8506,6 +10470,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     pub window_task_id: String,
 }
 
+/// see [Ssm::update_maintenance_window_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceWindowTaskResult {
@@ -8564,6 +10529,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     pub window_task_id: Option<String>,
 }
 
+/// see [Ssm::update_managed_instance_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateManagedInstanceRoleRequest {
@@ -8575,10 +10541,12 @@ pub struct UpdateManagedInstanceRoleRequest {
     pub instance_id: String,
 }
 
+/// see [Ssm::update_managed_instance_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateManagedInstanceRoleResult {}
 
+/// see [Ssm::update_ops_item]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpsItemRequest {
@@ -8643,10 +10611,12 @@ pub struct UpdateOpsItemRequest {
     pub title: Option<String>,
 }
 
+/// see [Ssm::update_ops_item]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOpsItemResponse {}
 
+/// see [Ssm::update_ops_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpsMetadataRequest {
@@ -8663,6 +10633,7 @@ pub struct UpdateOpsMetadataRequest {
     pub ops_metadata_arn: String,
 }
 
+/// see [Ssm::update_ops_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOpsMetadataResult {
@@ -8672,6 +10643,7 @@ pub struct UpdateOpsMetadataResult {
     pub ops_metadata_arn: Option<String>,
 }
 
+/// see [Ssm::update_patch_baseline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePatchBaselineRequest {
@@ -8724,6 +10696,7 @@ pub struct UpdatePatchBaselineRequest {
     pub sources: Option<Vec<PatchSource>>,
 }
 
+/// see [Ssm::update_patch_baseline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePatchBaselineResult {
@@ -8785,6 +10758,7 @@ pub struct UpdatePatchBaselineResult {
     pub sources: Option<Vec<PatchSource>>,
 }
 
+/// see [Ssm::update_resource_data_sync]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceDataSyncRequest {
@@ -8799,11 +10773,13 @@ pub struct UpdateResourceDataSyncRequest {
     pub sync_type: String,
 }
 
+/// see [Ssm::update_resource_data_sync]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceDataSyncResult {}
 
 /// <p>The request body of the UpdateServiceSetting API action.</p>
+/// see [Ssm::update_service_setting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingRequest {
@@ -8816,6 +10792,7 @@ pub struct UpdateServiceSettingRequest {
 }
 
 /// <p>The result body of the UpdateServiceSetting API action.</p>
+/// see [Ssm::update_service_setting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceSettingResult {}
@@ -15932,7 +17909,7 @@ impl fmt::Display for UpdateServiceSettingError {
 impl Error for UpdateServiceSettingError {}
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 #[async_trait]
-pub trait Ssm {
+pub trait Ssm: Clone + Sync + Send + 'static {
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to and are interpreted strictly as a string of characters. </p> <p>For more information about using tags with EC2 instances, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging your Amazon EC2 resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     async fn add_tags_to_resource(
         &self,
@@ -16107,6 +18084,17 @@ pub trait Ssm {
         input: DescribeActivationsRequest,
     ) -> Result<DescribeActivationsResult, RusotoError<DescribeActivationsError>>;
 
+    /// Auto-paginating version of `describe_activations`
+    fn describe_activations_pages<'a>(
+        &'a self,
+        mut input: DescribeActivationsRequest,
+    ) -> RusotoStream<'a, Activation, DescribeActivationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_activations(input.clone())
+        }))
+    }
+
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
     async fn describe_association(
         &self,
@@ -16122,17 +18110,51 @@ pub trait Ssm {
         RusotoError<DescribeAssociationExecutionTargetsError>,
     >;
 
+    /// Auto-paginating version of `describe_association_execution_targets`
+    fn describe_association_execution_targets_pages<'a>(
+        &'a self,
+        mut input: DescribeAssociationExecutionTargetsRequest,
+    ) -> RusotoStream<'a, AssociationExecutionTarget, DescribeAssociationExecutionTargetsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_association_execution_targets(input.clone())
+        }))
+    }
+
     /// <p>Use this API action to view all executions for a specific association ID. </p>
     async fn describe_association_executions(
         &self,
         input: DescribeAssociationExecutionsRequest,
     ) -> Result<DescribeAssociationExecutionsResult, RusotoError<DescribeAssociationExecutionsError>>;
 
+    /// Auto-paginating version of `describe_association_executions`
+    fn describe_association_executions_pages<'a>(
+        &'a self,
+        mut input: DescribeAssociationExecutionsRequest,
+    ) -> RusotoStream<'a, AssociationExecution, DescribeAssociationExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_association_executions(input.clone())
+        }))
+    }
+
     /// <p>Provides details about all active and terminated Automation executions.</p>
     async fn describe_automation_executions(
         &self,
         input: DescribeAutomationExecutionsRequest,
     ) -> Result<DescribeAutomationExecutionsResult, RusotoError<DescribeAutomationExecutionsError>>;
+
+    /// Auto-paginating version of `describe_automation_executions`
+    fn describe_automation_executions_pages<'a>(
+        &'a self,
+        mut input: DescribeAutomationExecutionsRequest,
+    ) -> RusotoStream<'a, AutomationExecutionMetadata, DescribeAutomationExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_automation_executions(input.clone())
+        }))
+    }
 
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
     async fn describe_automation_step_executions(
@@ -16143,11 +18165,33 @@ pub trait Ssm {
         RusotoError<DescribeAutomationStepExecutionsError>,
     >;
 
+    /// Auto-paginating version of `describe_automation_step_executions`
+    fn describe_automation_step_executions_pages<'a>(
+        &'a self,
+        mut input: DescribeAutomationStepExecutionsRequest,
+    ) -> RusotoStream<'a, StepExecution, DescribeAutomationStepExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_automation_step_executions(input.clone())
+        }))
+    }
+
     /// <p>Lists all patches eligible to be included in a patch baseline.</p>
     async fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
     ) -> Result<DescribeAvailablePatchesResult, RusotoError<DescribeAvailablePatchesError>>;
+
+    /// Auto-paginating version of `describe_available_patches`
+    fn describe_available_patches_pages<'a>(
+        &'a self,
+        mut input: DescribeAvailablePatchesRequest,
+    ) -> RusotoStream<'a, Patch, DescribeAvailablePatchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_available_patches(input.clone())
+        }))
+    }
 
     /// <p>Describes the specified Systems Manager document.</p>
     async fn describe_document(
@@ -16170,6 +18214,17 @@ pub trait Ssm {
         RusotoError<DescribeEffectiveInstanceAssociationsError>,
     >;
 
+    /// Auto-paginating version of `describe_effective_instance_associations`
+    fn describe_effective_instance_associations_pages<'a>(
+        &'a self,
+        mut input: DescribeEffectiveInstanceAssociationsRequest,
+    ) -> RusotoStream<'a, InstanceAssociation, DescribeEffectiveInstanceAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_effective_instance_associations(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
     async fn describe_effective_patches_for_patch_baseline(
         &self,
@@ -16178,6 +18233,17 @@ pub trait Ssm {
         DescribeEffectivePatchesForPatchBaselineResult,
         RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
     >;
+
+    /// Auto-paginating version of `describe_effective_patches_for_patch_baseline`
+    fn describe_effective_patches_for_patch_baseline_pages<'a>(
+        &'a self,
+        mut input: DescribeEffectivePatchesForPatchBaselineRequest,
+    ) -> RusotoStream<'a, EffectivePatch, DescribeEffectivePatchesForPatchBaselineError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_effective_patches_for_patch_baseline(input.clone())
+        }))
+    }
 
     /// <p>The status of the associations for the instance(s).</p>
     async fn describe_instance_associations_status(
@@ -16188,17 +18254,51 @@ pub trait Ssm {
         RusotoError<DescribeInstanceAssociationsStatusError>,
     >;
 
+    /// Auto-paginating version of `describe_instance_associations_status`
+    fn describe_instance_associations_status_pages<'a>(
+        &'a self,
+        mut input: DescribeInstanceAssociationsStatusRequest,
+    ) -> RusotoStream<'a, InstanceAssociationStatusInfo, DescribeInstanceAssociationsStatusError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_instance_associations_status(input.clone())
+        }))
+    }
+
     /// <p><p>Describes one or more of your instances, including information about the operating system platform, the version of SSM Agent installed on the instance, instance status, and so on.</p> <p>If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error.</p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for EC2 instances.</p> </note></p>
     async fn describe_instance_information(
         &self,
         input: DescribeInstanceInformationRequest,
     ) -> Result<DescribeInstanceInformationResult, RusotoError<DescribeInstanceInformationError>>;
 
+    /// Auto-paginating version of `describe_instance_information`
+    fn describe_instance_information_pages<'a>(
+        &'a self,
+        mut input: DescribeInstanceInformationRequest,
+    ) -> RusotoStream<'a, InstanceInformation, DescribeInstanceInformationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_instance_information(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
     async fn describe_instance_patch_states(
         &self,
         input: DescribeInstancePatchStatesRequest,
     ) -> Result<DescribeInstancePatchStatesResult, RusotoError<DescribeInstancePatchStatesError>>;
+
+    /// Auto-paginating version of `describe_instance_patch_states`
+    fn describe_instance_patch_states_pages<'a>(
+        &'a self,
+        mut input: DescribeInstancePatchStatesRequest,
+    ) -> RusotoStream<'a, InstancePatchState, DescribeInstancePatchStatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_instance_patch_states(input.clone())
+        }))
+    }
 
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
     async fn describe_instance_patch_states_for_patch_group(
@@ -16209,17 +18309,50 @@ pub trait Ssm {
         RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
     >;
 
+    /// Auto-paginating version of `describe_instance_patch_states_for_patch_group`
+    fn describe_instance_patch_states_for_patch_group_pages<'a>(
+        &'a self,
+        mut input: DescribeInstancePatchStatesForPatchGroupRequest,
+    ) -> RusotoStream<'a, InstancePatchState, DescribeInstancePatchStatesForPatchGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_instance_patch_states_for_patch_group(input.clone())
+        }))
+    }
+
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
     async fn describe_instance_patches(
         &self,
         input: DescribeInstancePatchesRequest,
     ) -> Result<DescribeInstancePatchesResult, RusotoError<DescribeInstancePatchesError>>;
 
+    /// Auto-paginating version of `describe_instance_patches`
+    fn describe_instance_patches_pages<'a>(
+        &'a self,
+        mut input: DescribeInstancePatchesRequest,
+    ) -> RusotoStream<'a, PatchComplianceData, DescribeInstancePatchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_instance_patches(input.clone())
+        }))
+    }
+
     /// <p>Describes a specific delete inventory operation.</p>
     async fn describe_inventory_deletions(
         &self,
         input: DescribeInventoryDeletionsRequest,
     ) -> Result<DescribeInventoryDeletionsResult, RusotoError<DescribeInventoryDeletionsError>>;
+
+    /// Auto-paginating version of `describe_inventory_deletions`
+    fn describe_inventory_deletions_pages<'a>(
+        &'a self,
+        mut input: DescribeInventoryDeletionsRequest,
+    ) -> RusotoStream<'a, InventoryDeletionStatusItem, DescribeInventoryDeletionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_inventory_deletions(input.clone())
+        }))
+    }
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
     async fn describe_maintenance_window_execution_task_invocations(
@@ -16230,6 +18363,21 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
     >;
 
+    /// Auto-paginating version of `describe_maintenance_window_execution_task_invocations`
+    fn describe_maintenance_window_execution_task_invocations_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+    ) -> RusotoStream<
+        'a,
+        MaintenanceWindowExecutionTaskInvocationIdentity,
+        DescribeMaintenanceWindowExecutionTaskInvocationsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_execution_task_invocations(input.clone())
+        }))
+    }
+
     /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
     async fn describe_maintenance_window_execution_tasks(
         &self,
@@ -16238,6 +18386,21 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionTasksResult,
         RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
     >;
+
+    /// Auto-paginating version of `describe_maintenance_window_execution_tasks`
+    fn describe_maintenance_window_execution_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowExecutionTasksRequest,
+    ) -> RusotoStream<
+        'a,
+        MaintenanceWindowExecutionTaskIdentity,
+        DescribeMaintenanceWindowExecutionTasksError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_execution_tasks(input.clone())
+        }))
+    }
 
     /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
     async fn describe_maintenance_window_executions(
@@ -16248,6 +18411,18 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowExecutionsError>,
     >;
 
+    /// Auto-paginating version of `describe_maintenance_window_executions`
+    fn describe_maintenance_window_executions_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowExecutionsRequest,
+    ) -> RusotoStream<'a, MaintenanceWindowExecution, DescribeMaintenanceWindowExecutionsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_executions(input.clone())
+        }))
+    }
+
     /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
     async fn describe_maintenance_window_schedule(
         &self,
@@ -16256,6 +18431,17 @@ pub trait Ssm {
         DescribeMaintenanceWindowScheduleResult,
         RusotoError<DescribeMaintenanceWindowScheduleError>,
     >;
+
+    /// Auto-paginating version of `describe_maintenance_window_schedule`
+    fn describe_maintenance_window_schedule_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowScheduleRequest,
+    ) -> RusotoStream<'a, ScheduledWindowExecution, DescribeMaintenanceWindowScheduleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_schedule(input.clone())
+        }))
+    }
 
     /// <p>Lists the targets registered with the maintenance window.</p>
     async fn describe_maintenance_window_targets(
@@ -16266,6 +18452,17 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowTargetsError>,
     >;
 
+    /// Auto-paginating version of `describe_maintenance_window_targets`
+    fn describe_maintenance_window_targets_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowTargetsRequest,
+    ) -> RusotoStream<'a, MaintenanceWindowTarget, DescribeMaintenanceWindowTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_targets(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the tasks in a maintenance window.</p> <note> <p>For maintenance window tasks without a specified target, you cannot supply values for <code>--max-errors</code> and <code>--max-concurrency</code>. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. These values do not affect the running of your task and can be ignored.</p> </note></p>
     async fn describe_maintenance_window_tasks(
         &self,
@@ -16275,11 +18472,33 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowTasksError>,
     >;
 
+    /// Auto-paginating version of `describe_maintenance_window_tasks`
+    fn describe_maintenance_window_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowTasksRequest,
+    ) -> RusotoStream<'a, MaintenanceWindowTask, DescribeMaintenanceWindowTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_window_tasks(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the maintenance windows in an AWS account.</p>
     async fn describe_maintenance_windows(
         &self,
         input: DescribeMaintenanceWindowsRequest,
     ) -> Result<DescribeMaintenanceWindowsResult, RusotoError<DescribeMaintenanceWindowsError>>;
+
+    /// Auto-paginating version of `describe_maintenance_windows`
+    fn describe_maintenance_windows_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowsRequest,
+    ) -> RusotoStream<'a, MaintenanceWindowIdentity, DescribeMaintenanceWindowsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_windows(input.clone())
+        }))
+    }
 
     /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
     async fn describe_maintenance_windows_for_target(
@@ -16290,11 +18509,37 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowsForTargetError>,
     >;
 
+    /// Auto-paginating version of `describe_maintenance_windows_for_target`
+    fn describe_maintenance_windows_for_target_pages<'a>(
+        &'a self,
+        mut input: DescribeMaintenanceWindowsForTargetRequest,
+    ) -> RusotoStream<
+        'a,
+        MaintenanceWindowIdentityForTarget,
+        DescribeMaintenanceWindowsForTargetError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_maintenance_windows_for_target(input.clone())
+        }))
+    }
+
     /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     async fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
     ) -> Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>>;
+
+    /// Auto-paginating version of `describe_ops_items`
+    fn describe_ops_items_pages<'a>(
+        &'a self,
+        mut input: DescribeOpsItemsRequest,
+    ) -> RusotoStream<'a, OpsItemSummary, DescribeOpsItemsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ops_items(input.clone())
+        }))
+    }
 
     /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
     async fn describe_parameters(
@@ -16302,11 +18547,33 @@ pub trait Ssm {
         input: DescribeParametersRequest,
     ) -> Result<DescribeParametersResult, RusotoError<DescribeParametersError>>;
 
+    /// Auto-paginating version of `describe_parameters`
+    fn describe_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeParametersRequest,
+    ) -> RusotoStream<'a, ParameterMetadata, DescribeParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_parameters(input.clone())
+        }))
+    }
+
     /// <p>Lists the patch baselines in your AWS account.</p>
     async fn describe_patch_baselines(
         &self,
         input: DescribePatchBaselinesRequest,
     ) -> Result<DescribePatchBaselinesResult, RusotoError<DescribePatchBaselinesError>>;
+
+    /// Auto-paginating version of `describe_patch_baselines`
+    fn describe_patch_baselines_pages<'a>(
+        &'a self,
+        mut input: DescribePatchBaselinesRequest,
+    ) -> RusotoStream<'a, PatchBaselineIdentity, DescribePatchBaselinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_patch_baselines(input.clone())
+        }))
+    }
 
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
     async fn describe_patch_group_state(
@@ -16320,17 +18587,51 @@ pub trait Ssm {
         input: DescribePatchGroupsRequest,
     ) -> Result<DescribePatchGroupsResult, RusotoError<DescribePatchGroupsError>>;
 
+    /// Auto-paginating version of `describe_patch_groups`
+    fn describe_patch_groups_pages<'a>(
+        &'a self,
+        mut input: DescribePatchGroupsRequest,
+    ) -> RusotoStream<'a, PatchGroupPatchBaselineMapping, DescribePatchGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_patch_groups(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>DEBIAN</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>MACOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION</p> </dd> <dt>ORACLE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>REDHAT<em>ENTERPRISE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> </dl></p>
     async fn describe_patch_properties(
         &self,
         input: DescribePatchPropertiesRequest,
     ) -> Result<DescribePatchPropertiesResult, RusotoError<DescribePatchPropertiesError>>;
 
+    /// Auto-paginating version of `describe_patch_properties`
+    fn describe_patch_properties_pages<'a>(
+        &'a self,
+        mut input: DescribePatchPropertiesRequest,
+    ) -> RusotoStream<'a, ::std::collections::HashMap<String, String>, DescribePatchPropertiesError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_patch_properties(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
     async fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>>;
+
+    /// Auto-paginating version of `describe_sessions`
+    fn describe_sessions_pages<'a>(
+        &'a self,
+        mut input: DescribeSessionsRequest,
+    ) -> RusotoStream<'a, Session, DescribeSessionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_sessions(input.clone())
+        }))
+    }
 
     /// <p>Get detailed information about a particular Automation execution.</p>
     async fn get_automation_execution(
@@ -16383,11 +18684,33 @@ pub trait Ssm {
         input: GetInventoryRequest,
     ) -> Result<GetInventoryResult, RusotoError<GetInventoryError>>;
 
+    /// Auto-paginating version of `get_inventory`
+    fn get_inventory_pages<'a>(
+        &'a self,
+        mut input: GetInventoryRequest,
+    ) -> RusotoStream<'a, InventoryResultEntity, GetInventoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_inventory(input.clone())
+        }))
+    }
+
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type.</p>
     async fn get_inventory_schema(
         &self,
         input: GetInventorySchemaRequest,
     ) -> Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>>;
+
+    /// Auto-paginating version of `get_inventory_schema`
+    fn get_inventory_schema_pages<'a>(
+        &'a self,
+        mut input: GetInventorySchemaRequest,
+    ) -> RusotoStream<'a, InventoryItemSchema, GetInventorySchemaError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_inventory_schema(input.clone())
+        }))
+    }
 
     /// <p>Retrieves a maintenance window.</p>
     async fn get_maintenance_window(
@@ -16443,6 +18766,17 @@ pub trait Ssm {
         input: GetOpsSummaryRequest,
     ) -> Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>>;
 
+    /// Auto-paginating version of `get_ops_summary`
+    fn get_ops_summary_pages<'a>(
+        &'a self,
+        mut input: GetOpsSummaryRequest,
+    ) -> RusotoStream<'a, OpsEntity, GetOpsSummaryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_ops_summary(input.clone())
+        }))
+    }
+
     /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
     async fn get_parameter(
         &self,
@@ -16455,6 +18789,17 @@ pub trait Ssm {
         input: GetParameterHistoryRequest,
     ) -> Result<GetParameterHistoryResult, RusotoError<GetParameterHistoryError>>;
 
+    /// Auto-paginating version of `get_parameter_history`
+    fn get_parameter_history_pages<'a>(
+        &'a self,
+        mut input: GetParameterHistoryRequest,
+    ) -> RusotoStream<'a, ParameterHistory, GetParameterHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_parameter_history(input.clone())
+        }))
+    }
+
     /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
     async fn get_parameters(
         &self,
@@ -16466,6 +18811,17 @@ pub trait Ssm {
         &self,
         input: GetParametersByPathRequest,
     ) -> Result<GetParametersByPathResult, RusotoError<GetParametersByPathError>>;
+
+    /// Auto-paginating version of `get_parameters_by_path`
+    fn get_parameters_by_path_pages<'a>(
+        &'a self,
+        mut input: GetParametersByPathRequest,
+    ) -> RusotoStream<'a, Parameter, GetParametersByPathError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_parameters_by_path(input.clone())
+        }))
+    }
 
     /// <p>Retrieves information about a patch baseline.</p>
     async fn get_patch_baseline(
@@ -16497,11 +18853,33 @@ pub trait Ssm {
         input: ListAssociationVersionsRequest,
     ) -> Result<ListAssociationVersionsResult, RusotoError<ListAssociationVersionsError>>;
 
+    /// Auto-paginating version of `list_association_versions`
+    fn list_association_versions_pages<'a>(
+        &'a self,
+        mut input: ListAssociationVersionsRequest,
+    ) -> RusotoStream<'a, AssociationVersionInfo, ListAssociationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_association_versions(input.clone())
+        }))
+    }
+
     /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
     async fn list_associations(
         &self,
         input: ListAssociationsRequest,
     ) -> Result<ListAssociationsResult, RusotoError<ListAssociationsError>>;
+
+    /// Auto-paginating version of `list_associations`
+    fn list_associations_pages<'a>(
+        &'a self,
+        mut input: ListAssociationsRequest,
+    ) -> RusotoStream<'a, Association, ListAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_associations(input.clone())
+        }))
+    }
 
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
     async fn list_command_invocations(
@@ -16509,11 +18887,33 @@ pub trait Ssm {
         input: ListCommandInvocationsRequest,
     ) -> Result<ListCommandInvocationsResult, RusotoError<ListCommandInvocationsError>>;
 
+    /// Auto-paginating version of `list_command_invocations`
+    fn list_command_invocations_pages<'a>(
+        &'a self,
+        mut input: ListCommandInvocationsRequest,
+    ) -> RusotoStream<'a, CommandInvocation, ListCommandInvocationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_command_invocations(input.clone())
+        }))
+    }
+
     /// <p>Lists the commands requested by users of the AWS account.</p>
     async fn list_commands(
         &self,
         input: ListCommandsRequest,
     ) -> Result<ListCommandsResult, RusotoError<ListCommandsError>>;
+
+    /// Auto-paginating version of `list_commands`
+    fn list_commands_pages<'a>(
+        &'a self,
+        mut input: ListCommandsRequest,
+    ) -> RusotoStream<'a, Command, ListCommandsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_commands(input.clone())
+        }))
+    }
 
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter.</p>
     async fn list_compliance_items(
@@ -16521,11 +18921,33 @@ pub trait Ssm {
         input: ListComplianceItemsRequest,
     ) -> Result<ListComplianceItemsResult, RusotoError<ListComplianceItemsError>>;
 
+    /// Auto-paginating version of `list_compliance_items`
+    fn list_compliance_items_pages<'a>(
+        &'a self,
+        mut input: ListComplianceItemsRequest,
+    ) -> RusotoStream<'a, ComplianceItem, ListComplianceItemsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compliance_items(input.clone())
+        }))
+    }
+
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify.</p>
     async fn list_compliance_summaries(
         &self,
         input: ListComplianceSummariesRequest,
     ) -> Result<ListComplianceSummariesResult, RusotoError<ListComplianceSummariesError>>;
+
+    /// Auto-paginating version of `list_compliance_summaries`
+    fn list_compliance_summaries_pages<'a>(
+        &'a self,
+        mut input: ListComplianceSummariesRequest,
+    ) -> RusotoStream<'a, ComplianceSummaryItem, ListComplianceSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compliance_summaries(input.clone())
+        }))
+    }
 
     /// <p>Information about approval reviews for a version of an SSM document.</p>
     async fn list_document_metadata_history(
@@ -16539,11 +18961,33 @@ pub trait Ssm {
         input: ListDocumentVersionsRequest,
     ) -> Result<ListDocumentVersionsResult, RusotoError<ListDocumentVersionsError>>;
 
+    /// Auto-paginating version of `list_document_versions`
+    fn list_document_versions_pages<'a>(
+        &'a self,
+        mut input: ListDocumentVersionsRequest,
+    ) -> RusotoStream<'a, DocumentVersionInfo, ListDocumentVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_document_versions(input.clone())
+        }))
+    }
+
     /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
     async fn list_documents(
         &self,
         input: ListDocumentsRequest,
     ) -> Result<ListDocumentsResult, RusotoError<ListDocumentsError>>;
+
+    /// Auto-paginating version of `list_documents`
+    fn list_documents_pages<'a>(
+        &'a self,
+        mut input: ListDocumentsRequest,
+    ) -> RusotoStream<'a, DocumentIdentifier, ListDocumentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_documents(input.clone())
+        }))
+    }
 
     /// <p>A list of inventory items returned by the request.</p>
     async fn list_inventory_entries(
@@ -16557,11 +19001,33 @@ pub trait Ssm {
         input: ListOpsItemEventsRequest,
     ) -> Result<ListOpsItemEventsResponse, RusotoError<ListOpsItemEventsError>>;
 
+    /// Auto-paginating version of `list_ops_item_events`
+    fn list_ops_item_events_pages<'a>(
+        &'a self,
+        mut input: ListOpsItemEventsRequest,
+    ) -> RusotoStream<'a, OpsItemEventSummary, ListOpsItemEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ops_item_events(input.clone())
+        }))
+    }
+
     /// <p>Systems Manager calls this API action when displaying all Application Manager OpsMetadata objects or blobs.</p>
     async fn list_ops_metadata(
         &self,
         input: ListOpsMetadataRequest,
     ) -> Result<ListOpsMetadataResult, RusotoError<ListOpsMetadataError>>;
+
+    /// Auto-paginating version of `list_ops_metadata`
+    fn list_ops_metadata_pages<'a>(
+        &'a self,
+        mut input: ListOpsMetadataRequest,
+    ) -> RusotoStream<'a, OpsMetadata, ListOpsMetadataError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ops_metadata(input.clone())
+        }))
+    }
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     async fn list_resource_compliance_summaries(
@@ -16572,11 +19038,33 @@ pub trait Ssm {
         RusotoError<ListResourceComplianceSummariesError>,
     >;
 
+    /// Auto-paginating version of `list_resource_compliance_summaries`
+    fn list_resource_compliance_summaries_pages<'a>(
+        &'a self,
+        mut input: ListResourceComplianceSummariesRequest,
+    ) -> RusotoStream<'a, ResourceComplianceSummaryItem, ListResourceComplianceSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_compliance_summaries(input.clone())
+        }))
+    }
+
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
     async fn list_resource_data_sync(
         &self,
         input: ListResourceDataSyncRequest,
     ) -> Result<ListResourceDataSyncResult, RusotoError<ListResourceDataSyncError>>;
+
+    /// Auto-paginating version of `list_resource_data_sync`
+    fn list_resource_data_sync_pages<'a>(
+        &'a self,
+        mut input: ListResourceDataSyncRequest,
+    ) -> RusotoStream<'a, ResourceDataSyncItem, ListResourceDataSyncError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_data_sync(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
     async fn list_tags_for_resource(

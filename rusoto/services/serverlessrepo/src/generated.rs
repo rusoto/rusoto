@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -91,6 +95,7 @@ pub struct ApplicationSummary {
     pub spdx_license_id: Option<String>,
 }
 
+/// see [ServerlessRepo::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -158,6 +163,7 @@ pub struct CreateApplicationRequest {
     pub template_url: Option<String>,
 }
 
+/// see [ServerlessRepo::create_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
@@ -215,6 +221,7 @@ pub struct CreateApplicationResponse {
     pub version: Option<Version>,
 }
 
+/// see [ServerlessRepo::create_application_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionRequest {
@@ -242,6 +249,7 @@ pub struct CreateApplicationVersionRequest {
     pub template_url: Option<String>,
 }
 
+/// see [ServerlessRepo::create_application_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationVersionResponse {
@@ -308,6 +316,7 @@ pub struct CreateApplicationVersionResponse {
     pub template_url: Option<String>,
 }
 
+/// see [ServerlessRepo::create_cloud_formation_change_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationChangeSetRequest {
@@ -395,6 +404,7 @@ pub struct CreateCloudFormationChangeSetRequest {
     pub template_id: Option<String>,
 }
 
+/// see [ServerlessRepo::create_cloud_formation_change_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationChangeSetResponse {
@@ -418,6 +428,7 @@ pub struct CreateCloudFormationChangeSetResponse {
     pub stack_id: Option<String>,
 }
 
+/// see [ServerlessRepo::create_cloud_formation_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationTemplateRequest {
@@ -432,6 +443,7 @@ pub struct CreateCloudFormationTemplateRequest {
     pub semantic_version: Option<String>,
 }
 
+/// see [ServerlessRepo::create_cloud_formation_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationTemplateResponse {
@@ -470,6 +482,7 @@ pub struct CreateCloudFormationTemplateResponse {
     pub template_url: Option<String>,
 }
 
+/// see [ServerlessRepo::delete_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
@@ -478,6 +491,7 @@ pub struct DeleteApplicationRequest {
     pub application_id: String,
 }
 
+/// see [ServerlessRepo::get_application_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationPolicyRequest {
@@ -486,6 +500,7 @@ pub struct GetApplicationPolicyRequest {
     pub application_id: String,
 }
 
+/// see [ServerlessRepo::get_application_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationPolicyResponse {
@@ -495,6 +510,7 @@ pub struct GetApplicationPolicyResponse {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
+/// see [ServerlessRepo::get_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
@@ -507,6 +523,7 @@ pub struct GetApplicationRequest {
     pub semantic_version: Option<String>,
 }
 
+/// see [ServerlessRepo::get_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationResponse {
@@ -564,6 +581,7 @@ pub struct GetApplicationResponse {
     pub version: Option<Version>,
 }
 
+/// see [ServerlessRepo::get_cloud_formation_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationTemplateRequest {
@@ -575,6 +593,7 @@ pub struct GetCloudFormationTemplateRequest {
     pub template_id: String,
 }
 
+/// see [ServerlessRepo::get_cloud_formation_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCloudFormationTemplateResponse {
@@ -613,6 +632,7 @@ pub struct GetCloudFormationTemplateResponse {
     pub template_url: Option<String>,
 }
 
+/// see [ServerlessRepo::list_application_dependencies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationDependenciesRequest {
@@ -633,6 +653,23 @@ pub struct ListApplicationDependenciesRequest {
     pub semantic_version: Option<String>,
 }
 
+impl Paged for ListApplicationDependenciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationDependenciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerlessRepo::list_application_dependencies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationDependenciesResponse {
@@ -646,6 +683,29 @@ pub struct ListApplicationDependenciesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListApplicationDependenciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListApplicationDependenciesResponse {
+    type Item = ApplicationDependencySummary;
+
+    fn into_pagination_page(self) -> Vec<ApplicationDependencySummary> {
+        self.dependencies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerlessRepo::list_application_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationVersionsRequest {
@@ -662,6 +722,23 @@ pub struct ListApplicationVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListApplicationVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerlessRepo::list_application_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationVersionsResponse {
@@ -675,6 +752,29 @@ pub struct ListApplicationVersionsResponse {
     pub versions: Option<Vec<VersionSummary>>,
 }
 
+impl Paged for ListApplicationVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListApplicationVersionsResponse {
+    type Item = VersionSummary;
+
+    fn into_pagination_page(self) -> Vec<VersionSummary> {
+        self.versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerlessRepo::list_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
@@ -688,6 +788,23 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListApplicationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerlessRepo::list_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
@@ -699,6 +816,28 @@ pub struct ListApplicationsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for ListApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListApplicationsResponse {
+    type Item = ApplicationSummary;
+
+    fn into_pagination_page(self) -> Vec<ApplicationSummary> {
+        self.applications.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Parameters supported by the application.</p>
@@ -787,6 +926,7 @@ pub struct ParameterValue {
     pub value: String,
 }
 
+/// see [ServerlessRepo::put_application_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApplicationPolicyRequest {
@@ -798,6 +938,7 @@ pub struct PutApplicationPolicyRequest {
     pub statements: Vec<ApplicationPolicyStatement>,
 }
 
+/// see [ServerlessRepo::put_application_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutApplicationPolicyResponse {
@@ -856,6 +997,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [ServerlessRepo::unshare_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnshareApplicationRequest {
@@ -867,6 +1009,7 @@ pub struct UnshareApplicationRequest {
     pub organization_id: String,
 }
 
+/// see [ServerlessRepo::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
@@ -899,6 +1042,7 @@ pub struct UpdateApplicationRequest {
     pub readme_url: Option<String>,
 }
 
+/// see [ServerlessRepo::update_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
@@ -1871,7 +2015,7 @@ impl fmt::Display for UpdateApplicationError {
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the AWSServerlessApplicationRepository API. AWSServerlessApplicationRepository clients implement this trait.
 #[async_trait]
-pub trait ServerlessRepo {
+pub trait ServerlessRepo: Clone + Sync + Send + 'static {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
     async fn create_application(
         &self,
@@ -1929,17 +2073,50 @@ pub trait ServerlessRepo {
         input: ListApplicationDependenciesRequest,
     ) -> Result<ListApplicationDependenciesResponse, RusotoError<ListApplicationDependenciesError>>;
 
+    /// Auto-paginating version of `list_application_dependencies`
+    fn list_application_dependencies_pages<'a>(
+        &'a self,
+        mut input: ListApplicationDependenciesRequest,
+    ) -> RusotoStream<'a, ApplicationDependencySummary, ListApplicationDependenciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_dependencies(input.clone())
+        }))
+    }
+
     /// <p>Lists versions for the specified application.</p>
     async fn list_application_versions(
         &self,
         input: ListApplicationVersionsRequest,
     ) -> Result<ListApplicationVersionsResponse, RusotoError<ListApplicationVersionsError>>;
 
+    /// Auto-paginating version of `list_application_versions`
+    fn list_application_versions_pages<'a>(
+        &'a self,
+        mut input: ListApplicationVersionsRequest,
+    ) -> RusotoStream<'a, VersionSummary, ListApplicationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_versions(input.clone())
+        }))
+    }
+
     /// <p>Lists applications owned by the requester.</p>
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
+
+    /// Auto-paginating version of `list_applications`
+    fn list_applications_pages<'a>(
+        &'a self,
+        mut input: ListApplicationsRequest,
+    ) -> RusotoStream<'a, ApplicationSummary, ListApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_applications(input.clone())
+        }))
+    }
 
     /// <p>Sets the permission policy for an application. For the list of actions supported for this operation, see
     /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application

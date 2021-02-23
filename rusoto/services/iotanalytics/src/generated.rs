@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -58,6 +62,7 @@ pub struct BatchPutMessageErrorEntry {
     pub message_id: Option<String>,
 }
 
+/// see [IotAnalytics::batch_put_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutMessageRequest {
@@ -69,6 +74,7 @@ pub struct BatchPutMessageRequest {
     pub messages: Vec<Message>,
 }
 
+/// see [IotAnalytics::batch_put_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageResponse {
@@ -78,6 +84,7 @@ pub struct BatchPutMessageResponse {
     pub batch_put_message_error_entries: Option<Vec<BatchPutMessageErrorEntry>>,
 }
 
+/// see [IotAnalytics::cancel_pipeline_reprocessing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelPipelineReprocessingRequest {
@@ -89,6 +96,7 @@ pub struct CancelPipelineReprocessingRequest {
     pub reprocessing_id: String,
 }
 
+/// see [IotAnalytics::cancel_pipeline_reprocessing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelPipelineReprocessingResponse {}
@@ -252,6 +260,7 @@ pub struct ContainerDatasetAction {
     pub variables: Option<Vec<Variable>>,
 }
 
+/// see [IotAnalytics::create_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
@@ -272,6 +281,7 @@ pub struct CreateChannelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IotAnalytics::create_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
@@ -289,6 +299,7 @@ pub struct CreateChannelResponse {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+/// see [IotAnalytics::create_dataset_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetContentRequest {
@@ -301,6 +312,7 @@ pub struct CreateDatasetContentRequest {
     pub version_id: Option<String>,
 }
 
+/// see [IotAnalytics::create_dataset_content]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetContentResponse {
@@ -310,6 +322,7 @@ pub struct CreateDatasetContentResponse {
     pub version_id: Option<String>,
 }
 
+/// see [IotAnalytics::create_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
@@ -345,6 +358,7 @@ pub struct CreateDatasetRequest {
     pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
+/// see [IotAnalytics::create_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
@@ -362,6 +376,7 @@ pub struct CreateDatasetResponse {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+/// see [IotAnalytics::create_datastore]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatastoreRequest {
@@ -386,6 +401,7 @@ pub struct CreateDatastoreRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IotAnalytics::create_datastore]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatastoreResponse {
@@ -403,6 +419,7 @@ pub struct CreateDatastoreResponse {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+/// see [IotAnalytics::create_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
@@ -418,6 +435,7 @@ pub struct CreatePipelineRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [IotAnalytics::create_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineResponse {
@@ -832,6 +850,7 @@ pub struct DatastoreSummary {
     pub status: Option<String>,
 }
 
+/// see [IotAnalytics::delete_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
@@ -840,6 +859,7 @@ pub struct DeleteChannelRequest {
     pub channel_name: String,
 }
 
+/// see [IotAnalytics::delete_dataset_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetContentRequest {
@@ -852,6 +872,7 @@ pub struct DeleteDatasetContentRequest {
     pub version_id: Option<String>,
 }
 
+/// see [IotAnalytics::delete_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
@@ -860,6 +881,7 @@ pub struct DeleteDatasetRequest {
     pub dataset_name: String,
 }
 
+/// see [IotAnalytics::delete_datastore]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatastoreRequest {
@@ -868,6 +890,7 @@ pub struct DeleteDatastoreRequest {
     pub datastore_name: String,
 }
 
+/// see [IotAnalytics::delete_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
@@ -895,6 +918,7 @@ pub struct DeltaTimeSessionWindowConfiguration {
     pub timeout_in_minutes: i64,
 }
 
+/// see [IotAnalytics::describe_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
@@ -907,6 +931,7 @@ pub struct DescribeChannelRequest {
     pub include_statistics: Option<bool>,
 }
 
+/// see [IotAnalytics::describe_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
@@ -920,6 +945,7 @@ pub struct DescribeChannelResponse {
     pub statistics: Option<ChannelStatistics>,
 }
 
+/// see [IotAnalytics::describe_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
@@ -928,6 +954,7 @@ pub struct DescribeDatasetRequest {
     pub dataset_name: String,
 }
 
+/// see [IotAnalytics::describe_dataset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
@@ -937,6 +964,7 @@ pub struct DescribeDatasetResponse {
     pub dataset: Option<Dataset>,
 }
 
+/// see [IotAnalytics::describe_datastore]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatastoreRequest {
@@ -949,6 +977,7 @@ pub struct DescribeDatastoreRequest {
     pub include_statistics: Option<bool>,
 }
 
+/// see [IotAnalytics::describe_datastore]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatastoreResponse {
@@ -962,10 +991,12 @@ pub struct DescribeDatastoreResponse {
     pub statistics: Option<DatastoreStatistics>,
 }
 
+/// see [IotAnalytics::describe_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingOptionsRequest {}
 
+/// see [IotAnalytics::describe_logging_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoggingOptionsResponse {
@@ -975,6 +1006,7 @@ pub struct DescribeLoggingOptionsResponse {
     pub logging_options: Option<LoggingOptions>,
 }
 
+/// see [IotAnalytics::describe_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineRequest {
@@ -983,6 +1015,7 @@ pub struct DescribePipelineRequest {
     pub pipeline_name: String,
 }
 
+/// see [IotAnalytics::describe_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineResponse {
@@ -1076,6 +1109,7 @@ pub struct FilterActivity {
     pub next: Option<String>,
 }
 
+/// see [IotAnalytics::get_dataset_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatasetContentRequest {
@@ -1088,6 +1122,7 @@ pub struct GetDatasetContentRequest {
     pub version_id: Option<String>,
 }
 
+/// see [IotAnalytics::get_dataset_content]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatasetContentResponse {
@@ -1170,6 +1205,7 @@ pub struct LateDataRuleConfiguration {
     pub delta_time_session_window_configuration: Option<DeltaTimeSessionWindowConfiguration>,
 }
 
+/// see [IotAnalytics::list_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
@@ -1183,6 +1219,23 @@ pub struct ListChannelsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListChannelsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListChannelsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotAnalytics::list_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
@@ -1196,6 +1249,29 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListChannelsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListChannelsResponse {
+    type Item = ChannelSummary;
+
+    fn into_pagination_page(self) -> Vec<ChannelSummary> {
+        self.channel_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotAnalytics::list_dataset_contents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetContentsRequest {
@@ -1220,6 +1296,23 @@ pub struct ListDatasetContentsRequest {
     pub scheduled_on_or_after: Option<f64>,
 }
 
+impl Paged for ListDatasetContentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatasetContentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotAnalytics::list_dataset_contents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetContentsResponse {
@@ -1233,6 +1326,29 @@ pub struct ListDatasetContentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDatasetContentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDatasetContentsResponse {
+    type Item = DatasetContentSummary;
+
+    fn into_pagination_page(self) -> Vec<DatasetContentSummary> {
+        self.dataset_content_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotAnalytics::list_datasets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
@@ -1246,6 +1362,23 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDatasetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatasetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotAnalytics::list_datasets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
@@ -1259,6 +1392,29 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDatasetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDatasetsResponse {
+    type Item = DatasetSummary;
+
+    fn into_pagination_page(self) -> Vec<DatasetSummary> {
+        self.dataset_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotAnalytics::list_datastores]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatastoresRequest {
@@ -1272,6 +1428,23 @@ pub struct ListDatastoresRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDatastoresRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatastoresRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotAnalytics::list_datastores]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatastoresResponse {
@@ -1285,6 +1458,29 @@ pub struct ListDatastoresResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDatastoresResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDatastoresResponse {
+    type Item = DatastoreSummary;
+
+    fn into_pagination_page(self) -> Vec<DatastoreSummary> {
+        self.datastore_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotAnalytics::list_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
@@ -1298,6 +1494,23 @@ pub struct ListPipelinesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListPipelinesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelinesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotAnalytics::list_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesResponse {
@@ -1311,6 +1524,29 @@ pub struct ListPipelinesResponse {
     pub pipeline_summaries: Option<Vec<PipelineSummary>>,
 }
 
+impl Paged for ListPipelinesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPipelinesResponse {
+    type Item = PipelineSummary;
+
+    fn into_pagination_page(self) -> Vec<PipelineSummary> {
+        self.pipeline_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotAnalytics::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1319,6 +1555,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [IotAnalytics::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1491,6 +1728,7 @@ pub struct PipelineSummary {
     pub reprocessing_summaries: Option<Vec<ReprocessingSummary>>,
 }
 
+/// see [IotAnalytics::put_logging_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingOptionsRequest {
@@ -1565,6 +1803,7 @@ pub struct RetentionPeriod {
     pub unlimited: Option<bool>,
 }
 
+/// see [IotAnalytics::run_pipeline_activity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunPipelineActivityRequest {
@@ -1581,6 +1820,7 @@ pub struct RunPipelineActivityRequest {
     pub pipeline_activity: PipelineActivity,
 }
 
+/// see [IotAnalytics::run_pipeline_activity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunPipelineActivityResponse {
@@ -1617,6 +1857,7 @@ pub struct S3DestinationConfiguration {
     pub role_arn: String,
 }
 
+/// see [IotAnalytics::sample_channel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SampleChannelDataRequest {
@@ -1637,6 +1878,7 @@ pub struct SampleChannelDataRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [IotAnalytics::sample_channel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SampleChannelDataResponse {
@@ -1714,6 +1956,7 @@ pub struct SqlQueryDatasetAction {
     pub sql_query: String,
 }
 
+/// see [IotAnalytics::start_pipeline_reprocessing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineReprocessingRequest {
@@ -1734,6 +1977,7 @@ pub struct StartPipelineReprocessingRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [IotAnalytics::start_pipeline_reprocessing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPipelineReprocessingResponse {
@@ -1754,6 +1998,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [IotAnalytics::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1765,6 +2010,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [IotAnalytics::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1777,6 +2023,7 @@ pub struct TriggeringDataset {
     pub name: String,
 }
 
+/// see [IotAnalytics::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1788,10 +2035,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [IotAnalytics::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [IotAnalytics::update_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
@@ -1808,6 +2057,7 @@ pub struct UpdateChannelRequest {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+/// see [IotAnalytics::update_dataset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatasetRequest {
@@ -1839,6 +2089,7 @@ pub struct UpdateDatasetRequest {
     pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
+/// see [IotAnalytics::update_datastore]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatastoreRequest {
@@ -1859,6 +2110,7 @@ pub struct UpdateDatastoreRequest {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+/// see [IotAnalytics::update_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
@@ -3833,7 +4085,7 @@ impl fmt::Display for UpdatePipelineError {
 impl Error for UpdatePipelineError {}
 /// Trait representing the capabilities of the AWS IoT Analytics API. AWS IoT Analytics clients implement this trait.
 #[async_trait]
-pub trait IotAnalytics {
+pub trait IotAnalytics: Clone + Sync + Send + 'static {
     /// <p>Sends messages to a channel.</p>
     async fn batch_put_message(
         &self,
@@ -3947,11 +4199,33 @@ pub trait IotAnalytics {
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
 
+    /// Auto-paginating version of `list_channels`
+    fn list_channels_pages<'a>(
+        &'a self,
+        mut input: ListChannelsRequest,
+    ) -> RusotoStream<'a, ChannelSummary, ListChannelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_channels(input.clone())
+        }))
+    }
+
     /// <p>Lists information about data set contents that have been created.</p>
     async fn list_dataset_contents(
         &self,
         input: ListDatasetContentsRequest,
     ) -> Result<ListDatasetContentsResponse, RusotoError<ListDatasetContentsError>>;
+
+    /// Auto-paginating version of `list_dataset_contents`
+    fn list_dataset_contents_pages<'a>(
+        &'a self,
+        mut input: ListDatasetContentsRequest,
+    ) -> RusotoStream<'a, DatasetContentSummary, ListDatasetContentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dataset_contents(input.clone())
+        }))
+    }
 
     /// <p>Retrieves information about data sets.</p>
     async fn list_datasets(
@@ -3959,17 +4233,50 @@ pub trait IotAnalytics {
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>>;
 
+    /// Auto-paginating version of `list_datasets`
+    fn list_datasets_pages<'a>(
+        &'a self,
+        mut input: ListDatasetsRequest,
+    ) -> RusotoStream<'a, DatasetSummary, ListDatasetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_datasets(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list of data stores.</p>
     async fn list_datastores(
         &self,
         input: ListDatastoresRequest,
     ) -> Result<ListDatastoresResponse, RusotoError<ListDatastoresError>>;
 
+    /// Auto-paginating version of `list_datastores`
+    fn list_datastores_pages<'a>(
+        &'a self,
+        mut input: ListDatastoresRequest,
+    ) -> RusotoStream<'a, DatastoreSummary, ListDatastoresError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_datastores(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list of pipelines.</p>
     async fn list_pipelines(
         &self,
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
+
+    /// Auto-paginating version of `list_pipelines`
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesRequest,
+    ) -> RusotoStream<'a, PipelineSummary, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags (metadata) that you have assigned to the resource.</p>
     async fn list_tags_for_resource(

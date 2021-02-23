@@ -11,7 +11,8 @@ use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
-use crate::botocore::{Member, Shape, ShapeType};
+use crate::botocore::{Member, Operation, Pagination, Shape, ShapeType};
+use crate::jmespath::{JMESPath, JMESTerm};
 use crate::util;
 use crate::Service;
 
@@ -159,6 +160,10 @@ where
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoError}};
+        #[allow(unused_imports)]
+        use rusoto_core::pagination::{{Paged, PagedOutput, PagedRequest, RusotoStream, aws_stream}};
+        #[allow(unused_imports)]
+        use std::borrow::Cow;
     "
     )?;
 
@@ -184,7 +189,7 @@ where
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
         #[async_trait]
-        pub trait {trait_name} {{
+        pub trait {trait_name}: Clone + Sync + Send + 'static {{
         ",
              trait_name = service.service_type_name(),
              service_name = service.name())?;
@@ -242,6 +247,166 @@ where
     writeln!(writer, "}}")
 }
 
+pub fn option_of(shape_name: &str, service: &Service, for_timestamps: &str) -> String {
+    let shape = service
+        .get_shape(&shape_name)
+        .expect("referenenced type should exist");
+    format!(
+        "Option<{}>",
+        get_rust_type(&service, &shape_name, &shape, false, for_timestamps)
+    )
+}
+
+pub fn get_pagination_key_type(
+    pagination: &Pagination,
+    service: &Service,
+    operation: &Operation,
+    for_timestamps: &str,
+) -> Option<String> {
+    // Below we inspect the input toke  and the shape of its member
+    // referred to by pagination's result_key
+    // in order to get the rust type name for T
+    let input_shape_name = operation.input_shape();
+    let input_shape = service.get_shape(&input_shape_name)?;
+    if let Some(input_token) = pagination.input_token.only() {
+        Some(option_of(
+            &input_shape.members_type(&input_token)?,
+            service,
+            for_timestamps,
+        ))
+    } else {
+        Some(format!(
+            "({})",
+            pagination
+                .input_token
+                .as_slice()
+                .iter()
+                .map(|input_token| {
+                    option_of(
+                        &input_shape
+                            .members_type(&input_token)
+                            .expect("page key exists"),
+                        service,
+                        for_timestamps,
+                    )
+                })
+                .collect::<Vec<String>>()
+                .join(", ")
+        ))
+    }
+}
+
+pub fn get_pagination_item_type(
+    pagination: &Pagination,
+    service: &Service,
+    operation: &Operation,
+    for_timestamps: &str,
+) -> Option<String> {
+    // Paginated operations typically return
+    // and output shape with a member of type Vec<T>
+    // Auto-paginating operations return Stream<Item=T, ...>.
+    // So pull the item type out if the shape is a list
+    let mut shape_name = get_pagination_item_shape(pagination, service, operation)?;
+
+    let mut shape = service.get_shape(&shape_name)?;
+
+    if shape.shape_type == ShapeType::List {
+        shape_name = shape.member_type().to_owned();
+        shape = service.get_shape(&shape_name)?;
+    }
+
+    Some(get_rust_type(
+        &service,
+        &shape_name,
+        shape,
+        false,
+        for_timestamps,
+    ))
+}
+
+pub fn get_pagination_item_shape<'a>(
+    pagination: &Pagination,
+    service: &'a Service,
+    operation: &Operation,
+) -> Option<String> {
+    let output_shape_name = operation.output_shape()?;
+    Some(if let Some(vec_path) = pagination.result_key.only() {
+        let path = JMESPath::parse(&vec_path);
+        walk_path(&path, service, &output_shape_name)?
+    } else {
+        // if there are multiple output shape return the result
+        output_shape_name.to_owned()
+    })
+}
+
+// take a JMESPath like 'Contents[-1].Key' and walk throug the shapes to find what it points to
+fn walk_path(path: &JMESPath, service: &Service, start: &str) -> Option<String> {
+    match path {
+        JMESPath::Or(alternatives) => walk_path(alternatives.first().unwrap(), service, start),
+        JMESPath::Path(steps) => {
+            let mut name = start.to_owned();
+            for step in steps {
+                let shape = service.get_shape(&name)?;
+                name = match step {
+                    JMESTerm::Key(key) => shape.members_type(key)?.to_string(),
+                    JMESTerm::Last => shape.member_type().to_string(),
+                }
+            }
+            Some(name)
+        }
+    }
+}
+
+fn write_paged_version(
+    operation_name: &str,
+    service: &Service<'_>,
+    operation: &Operation,
+    writer: &mut FileWriter,
+) -> IoResult {
+    if service.pagination(operation_name).is_some() {
+        writeln!(
+            writer,
+            "
+            /// Auto-paginating version of `{wrapped_operation}`
+            {method_signature} {{
+                Box::new(aws_stream(input.take_pagination_token(), move |token| {{
+                    input.set_pagination_token(token);
+                    self.{wrapped_operation}(input.clone())
+                }}))
+            }}
+            ",
+            method_signature = generate_method_signature_paged(operation_name, service, operation),
+            wrapped_operation = operation.name().to_snake_case()
+        )?;
+    }
+    Ok(())
+}
+
+fn generate_method_signature_paged(
+    operation_name: &str,
+    service: &Service<'_>,
+    operation: &Operation,
+) -> String {
+    let fn_name = format!("{}_pages", operation_name.to_snake_case());
+    let pagination = service
+        .pagination(operation_name)
+        .expect("auto_paging needs pagination");
+    let output_type =
+        get_pagination_item_type(&pagination, &service, &operation, "String").expect(&format!(
+            "Failed to resolve a pagination result type for {} operation {}",
+            service.name(),
+            operation_name
+        ));
+
+    format!(
+        "fn {fn_name}<'a>(&'a self, mut input: {input_type}) -> RusotoStream<'a, {output_type}, {error_type}>",
+        input_type = operation.input.as_ref().unwrap().shape,
+        fn_name = fn_name,
+        output_type = &output_type,
+        error_type = error_type_name(service, operation_name),
+    )
+}
+
 pub fn get_rust_type(
     service: &Service<'_>,
     shape_name: &str,
@@ -295,6 +460,130 @@ pub fn get_rust_type(
         }
     } else {
         mutate_type_name_for_streaming(shape_name)
+    }
+}
+
+#[derive(PartialEq, Eq, Copy, Clone)]
+enum ExtractType {
+    Borrow,
+    Take,
+    Move,
+}
+
+#[derive(PartialEq, Eq, Copy, Clone)]
+enum ReturnType {
+    Option,
+    Default,
+    Cow,
+}
+
+fn extract_pagination_output(
+    path: &JMESPath,
+    service: &Service,
+    shape: &str,
+    extract_type: ExtractType,
+    return_type: ReturnType,
+) -> String {
+    match path {
+        JMESPath::Or(alternatives) => {
+            let bits = alternatives
+                .iter()
+                .map(|or_path| {
+                    extract_pagination_output(
+                        or_path,
+                        service,
+                        shape,
+                        extract_type,
+                        ReturnType::Option,
+                    )
+                })
+                .collect::<Vec<String>>();
+            if return_type == ReturnType::Cow {
+                format!(
+                    "Cow::Owned(({}.as_ref()).cloned())",
+                    bits.join(".as_ref()).or_else(|| ")
+                )
+            } else {
+                "(".to_owned() + &bits.join(").or_else(|| ") + ")"
+            }
+        }
+        JMESPath::Path(steps) => {
+            let mut shape_name: String = shape.to_owned();
+            let mut required = true;
+            let mut used_try = false;
+            let mut lookups = "self".to_string();
+
+            for step in steps {
+                if !required {
+                    if extract_type != ExtractType::Move {
+                        lookups.push_str(".as_ref()");
+                    }
+                    lookups.push_str("?");
+                    used_try = true;
+                }
+
+                let shape = service
+                    .get_shape(&shape_name)
+                    .expect("referenced shape should exist");
+
+                match step {
+                    JMESTerm::Key(name) => {
+                        lookups.push_str(".");
+                        lookups.push_str(&generate_field_name(name));
+                        required = shape.required(name);
+                        shape_name = shape
+                            .members_type(name)
+                            .expect("shape should have paginantion field")
+                            .to_string();
+                    }
+                    JMESTerm::Last => {
+                        lookups.push_str(".last()?");
+                        required = true;
+                        used_try = true;
+                        shape_name = shape.member_type().to_string();
+                    }
+                }
+            }
+
+            // take token from the root, otherwise the token might be part of the results too so clone it
+            if extract_type == ExtractType::Take {
+                if steps.len() == 1 {
+                    if required {
+                        lookups =
+                            format!("std::mem::replace(&mut {}, Default::default())", lookups);
+                    } else {
+                        lookups.push_str(".take()");
+                    }
+                } else {
+                    lookups.push_str(".clone()");
+                }
+            }
+
+            match (return_type, required, used_try) {
+                (ReturnType::Option, true, _) => format!("Some({})", lookups),
+                (ReturnType::Option, false, _) => lookups,
+                (ReturnType::Cow, true, true) => {
+                    format!("Cow::Owned((|| Some({}.clone()))())", lookups)
+                }
+                (ReturnType::Cow, false, true) => format!("Cow::Owned((|| {}.clone())())", lookups),
+                (ReturnType::Cow, true, false) => format!("Cow::Owned(Some({}.clone()))", lookups),
+                (ReturnType::Cow, false, false) => format!("Cow::Borrowed(&{})", lookups),
+                (ReturnType::Default, true, true) if extract_type == ExtractType::Move => {
+                    format!("(move || Some({}))().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, false, true) if extract_type == ExtractType::Move => {
+                    format!("(move || {})().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, true, true) => {
+                    format!("(|| Some({}))().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, false, true) => {
+                    format!("(|| {})().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, true, false) => lookups,
+                (ReturnType::Default, false, false) => format!("{}.unwrap_or_default()", lookups),
+            }
+        }
     }
 }
 
@@ -605,6 +894,7 @@ where
     P: GenerateProtocol,
 {
     let mut derived = vec!["Debug"];
+    let mut doc = "".to_owned();
 
     let not_streaming = !streaming && streaming_members(shape).next().is_none(); // bytestreams
     let contains_eventstreams = contains_eventstreams(service, shape); // structured event streams
@@ -650,7 +940,7 @@ where
             .push_str(&"\n#[cfg_attr(feature = \"deserialize_structs\", derive(Deserialize))]");
     }
 
-    if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
+    let definition = if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
             "{attributes}{test_attributes}
             pub struct {name} {{}}
@@ -676,7 +966,192 @@ where
             struct_fields =
                 generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
         )
+    };
+
+    let mut implementation = "".to_owned();
+
+    for operation in service.operations_for_shape(name) {
+        doc.push_str(&format!(
+            "/// see [{}::{}]\n",
+            service.service_type_name(),
+            operation.name().to_snake_case()
+        ));
+        if let Some(pagination) = service.pagination(&operation.name()) {
+            let key_type = get_pagination_key_type(
+                &pagination,
+                service,
+                operation,
+                protocol_generator.timestamp_type(),
+            )
+            .expect("pagination should have a key type");
+            let page_type = get_pagination_item_type(
+                &pagination,
+                service,
+                operation,
+                protocol_generator.timestamp_type(),
+            )
+            .expect(&format!(
+                "pagination should have a item type {} {:?}",
+                operation.name, pagination
+            ));
+
+            let pagination_token = if operation.input_shape() == name {
+                &pagination.input_token
+            } else {
+                &pagination.output_token
+            };
+
+            let take_token_code = if let Some(token) = pagination_token.only() {
+                extract_pagination_output(
+                    &JMESPath::parse(&token),
+                    service,
+                    name,
+                    ExtractType::Take,
+                    ReturnType::Option,
+                )
+            } else {
+                format!(
+                    "({})",
+                    pagination_token
+                        .as_slice()
+                        .iter()
+                        .map(|token| { format!("self.{}.take()", token.to_snake_case()) })
+                        .collect::<Vec<String>>()
+                        .join(", ")
+                )
+            };
+
+            let get_token_code = if let Some(token) = pagination_token.only() {
+                extract_pagination_output(
+                    &JMESPath::parse(&token),
+                    service,
+                    name,
+                    ExtractType::Borrow,
+                    ReturnType::Cow,
+                )
+            } else {
+                // the token is in multiple parts so we can't return a reference to it, so create a new one
+                // and return it as owned
+                format!(
+                    "Cow::Owned(({}))",
+                    pagination_token
+                        .as_slice()
+                        .iter()
+                        .map(|token| { format!("self.{}.clone()", token.to_snake_case()) })
+                        .collect::<Vec<String>>()
+                        .join(", ")
+                )
+            };
+            implementation = format!(
+                "
+                    impl Paged for {name} {{
+                        type Token = {key_type};
+                        fn take_pagination_token(&mut self) -> {key_type} {{
+                            {take_token_code}
+                        }}
+                        fn pagination_token(&self) -> Cow<{key_type}> {{
+                            {get_token_code}
+                        }}
+                    }}
+                    ",
+                name = name,
+                key_type = key_type,
+                take_token_code = take_token_code,
+                get_token_code = get_token_code
+            );
+            if operation.input_shape() == name {
+                let key_code = if let Some(pagination_token) = pagination_token.only() {
+                    format!("self.{} = key;", pagination_token.to_snake_case())
+                } else {
+                    pagination_token
+                        .as_slice()
+                        .iter()
+                        .enumerate()
+                        .map(|(i, token)| format!("self.{} = key.{};", token.to_snake_case(), i))
+                        .collect::<Vec<String>>()
+                        .join("\n")
+                };
+
+                implementation = format!(
+                    "
+                    {impl_paged}
+
+                    impl PagedRequest for {name} {{
+                        fn set_pagination_token(&mut self, key: {key_type}) {{
+                            {key_code}
+                        }}
+                    }}
+                    ",
+                    impl_paged = implementation,
+                    name = name,
+                    key_code = key_code,
+                    key_type = key_type,
+                );
+            } else {
+                let into_page_code = if let Some(result_key) = pagination.result_key.only() {
+                    let shape_name = get_pagination_item_shape(pagination, service, operation)
+                        .expect("pagination result should exist");
+
+                    let shape = service
+                        .get_shape(&shape_name)
+                        .expect("pagination result shape should exist");
+
+                    let mut page_code = extract_pagination_output(
+                        &JMESPath::parse(&result_key),
+                        service,
+                        name,
+                        ExtractType::Move,
+                        ReturnType::Default,
+                    );
+
+                    if shape.shape_type != ShapeType::List {
+                        page_code =
+                            page_code.replace("unwrap_or_default()", "into_iter().collect()");
+                    };
+
+                    page_code
+                } else {
+                    "vec![self]".to_owned()
+                };
+
+                let has_page_code = if let Some(more_results) = &pagination.more_results {
+                    extract_pagination_output(
+                        &JMESPath::parse(&more_results),
+                        service,
+                        name,
+                        ExtractType::Borrow,
+                        ReturnType::Default,
+                    )
+                } else {
+                    "self.pagination_token().is_some()".to_owned()
+                };
+
+                implementation = format!(
+                    "
+                    {impl_paged}
+
+                    impl PagedOutput for {name} {{
+                        type Item = {page_type};
+
+                        fn into_pagination_page(self) -> Vec<{page_type}> {{
+                            {into_page_code}
+                        }}
+
+                        fn has_another_page(&self) -> bool {{
+                            {has_page_code}
+                        }}
+                    }}
+                    ",
+                    impl_paged = implementation,
+                    name = name,
+                    page_type = page_type,
+                    has_page_code = has_page_code,
+                    into_page_code = into_page_code,
+                );
+            }
+        }
     }
+    doc + &definition + "\n" + &implementation
 }
 
 fn generate_struct_fields<P: GenerateProtocol>(

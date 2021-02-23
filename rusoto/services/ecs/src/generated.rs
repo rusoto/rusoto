@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -661,6 +665,7 @@ pub struct ContainerStateChange {
     pub status: Option<String>,
 }
 
+/// see [Ecs::create_capacity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCapacityProviderRequest {
@@ -676,6 +681,7 @@ pub struct CreateCapacityProviderRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ecs::create_capacity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCapacityProviderResponse {
@@ -685,6 +691,7 @@ pub struct CreateCapacityProviderResponse {
     pub capacity_provider: Option<CapacityProvider>,
 }
 
+/// see [Ecs::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -710,6 +717,7 @@ pub struct CreateClusterRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ecs::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
@@ -719,6 +727,7 @@ pub struct CreateClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Ecs::create_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceRequest {
@@ -807,6 +816,7 @@ pub struct CreateServiceRequest {
     pub task_definition: Option<String>,
 }
 
+/// see [Ecs::create_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServiceResponse {
@@ -816,6 +826,7 @@ pub struct CreateServiceResponse {
     pub service: Option<Service>,
 }
 
+/// see [Ecs::create_task_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTaskSetRequest {
@@ -868,6 +879,7 @@ pub struct CreateTaskSetRequest {
     pub task_definition: String,
 }
 
+/// see [Ecs::create_task_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTaskSetResponse {
@@ -876,6 +888,7 @@ pub struct CreateTaskSetResponse {
     pub task_set: Option<TaskSet>,
 }
 
+/// see [Ecs::delete_account_setting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountSettingRequest {
@@ -888,6 +901,7 @@ pub struct DeleteAccountSettingRequest {
     pub principal_arn: Option<String>,
 }
 
+/// see [Ecs::delete_account_setting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountSettingResponse {
@@ -897,6 +911,7 @@ pub struct DeleteAccountSettingResponse {
     pub setting: Option<Setting>,
 }
 
+/// see [Ecs::delete_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttributesRequest {
@@ -909,6 +924,7 @@ pub struct DeleteAttributesRequest {
     pub cluster: Option<String>,
 }
 
+/// see [Ecs::delete_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAttributesResponse {
@@ -918,6 +934,7 @@ pub struct DeleteAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
+/// see [Ecs::delete_capacity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCapacityProviderRequest {
@@ -926,6 +943,7 @@ pub struct DeleteCapacityProviderRequest {
     pub capacity_provider: String,
 }
 
+/// see [Ecs::delete_capacity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCapacityProviderResponse {
@@ -934,6 +952,7 @@ pub struct DeleteCapacityProviderResponse {
     pub capacity_provider: Option<CapacityProvider>,
 }
 
+/// see [Ecs::delete_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
@@ -942,6 +961,7 @@ pub struct DeleteClusterRequest {
     pub cluster: String,
 }
 
+/// see [Ecs::delete_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
@@ -951,6 +971,7 @@ pub struct DeleteClusterResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Ecs::delete_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceRequest {
@@ -967,6 +988,7 @@ pub struct DeleteServiceRequest {
     pub service: String,
 }
 
+/// see [Ecs::delete_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceResponse {
@@ -976,6 +998,7 @@ pub struct DeleteServiceResponse {
     pub service: Option<Service>,
 }
 
+/// see [Ecs::delete_task_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTaskSetRequest {
@@ -994,6 +1017,7 @@ pub struct DeleteTaskSetRequest {
     pub task_set: String,
 }
 
+/// see [Ecs::delete_task_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTaskSetResponse {
@@ -1104,6 +1128,7 @@ pub struct DeploymentController {
     pub type_: String,
 }
 
+/// see [Ecs::deregister_container_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterContainerInstanceRequest {
@@ -1120,6 +1145,7 @@ pub struct DeregisterContainerInstanceRequest {
     pub force: Option<bool>,
 }
 
+/// see [Ecs::deregister_container_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterContainerInstanceResponse {
@@ -1129,6 +1155,7 @@ pub struct DeregisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
+/// see [Ecs::deregister_task_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTaskDefinitionRequest {
@@ -1137,6 +1164,7 @@ pub struct DeregisterTaskDefinitionRequest {
     pub task_definition: String,
 }
 
+/// see [Ecs::deregister_task_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTaskDefinitionResponse {
@@ -1146,6 +1174,7 @@ pub struct DeregisterTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
+/// see [Ecs::describe_capacity_providers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCapacityProvidersRequest {
@@ -1167,6 +1196,7 @@ pub struct DescribeCapacityProvidersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Ecs::describe_capacity_providers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCapacityProvidersResponse {
@@ -1184,6 +1214,7 @@ pub struct DescribeCapacityProvidersResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Ecs::describe_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersRequest {
@@ -1197,6 +1228,7 @@ pub struct DescribeClustersRequest {
     pub include: Option<Vec<String>>,
 }
 
+/// see [Ecs::describe_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClustersResponse {
@@ -1210,6 +1242,7 @@ pub struct DescribeClustersResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
+/// see [Ecs::describe_container_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContainerInstancesRequest {
@@ -1226,6 +1259,7 @@ pub struct DescribeContainerInstancesRequest {
     pub include: Option<Vec<String>>,
 }
 
+/// see [Ecs::describe_container_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContainerInstancesResponse {
@@ -1239,6 +1273,7 @@ pub struct DescribeContainerInstancesResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
+/// see [Ecs::describe_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServicesRequest {
@@ -1255,6 +1290,7 @@ pub struct DescribeServicesRequest {
     pub services: Vec<String>,
 }
 
+/// see [Ecs::describe_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServicesResponse {
@@ -1268,6 +1304,7 @@ pub struct DescribeServicesResponse {
     pub services: Option<Vec<Service>>,
 }
 
+/// see [Ecs::describe_task_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskDefinitionRequest {
@@ -1280,6 +1317,7 @@ pub struct DescribeTaskDefinitionRequest {
     pub task_definition: String,
 }
 
+/// see [Ecs::describe_task_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskDefinitionResponse {
@@ -1293,6 +1331,7 @@ pub struct DescribeTaskDefinitionResponse {
     pub task_definition: Option<TaskDefinition>,
 }
 
+/// see [Ecs::describe_task_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskSetsRequest {
@@ -1312,6 +1351,7 @@ pub struct DescribeTaskSetsRequest {
     pub task_sets: Option<Vec<String>>,
 }
 
+/// see [Ecs::describe_task_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskSetsResponse {
@@ -1325,6 +1365,7 @@ pub struct DescribeTaskSetsResponse {
     pub task_sets: Option<Vec<TaskSet>>,
 }
 
+/// see [Ecs::describe_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTasksRequest {
@@ -1341,6 +1382,7 @@ pub struct DescribeTasksRequest {
     pub tasks: Vec<String>,
 }
 
+/// see [Ecs::describe_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTasksResponse {
@@ -1370,6 +1412,7 @@ pub struct Device {
     pub permissions: Option<Vec<String>>,
 }
 
+/// see [Ecs::discover_poll_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverPollEndpointRequest {
@@ -1383,6 +1426,7 @@ pub struct DiscoverPollEndpointRequest {
     pub container_instance: Option<String>,
 }
 
+/// see [Ecs::discover_poll_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscoverPollEndpointResponse {
@@ -1651,6 +1695,7 @@ pub struct LinuxParameters {
     pub tmpfs: Option<Vec<Tmpfs>>,
 }
 
+/// see [Ecs::list_account_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountSettingsRequest {
@@ -1680,6 +1725,23 @@ pub struct ListAccountSettingsRequest {
     pub value: Option<String>,
 }
 
+impl Paged for ListAccountSettingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountSettingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_account_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountSettingsResponse {
@@ -1693,6 +1755,29 @@ pub struct ListAccountSettingsResponse {
     pub settings: Option<Vec<Setting>>,
 }
 
+impl Paged for ListAccountSettingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAccountSettingsResponse {
+    type Item = Setting;
+
+    fn into_pagination_page(self) -> Vec<Setting> {
+        self.settings.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttributesRequest {
@@ -1721,6 +1806,23 @@ pub struct ListAttributesRequest {
     pub target_type: String,
 }
 
+impl Paged for ListAttributesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAttributesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttributesResponse {
@@ -1734,6 +1836,29 @@ pub struct ListAttributesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAttributesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAttributesResponse {
+    type Item = Attribute;
+
+    fn into_pagination_page(self) -> Vec<Attribute> {
+        self.attributes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
@@ -1747,6 +1872,23 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClustersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersResponse {
@@ -1760,6 +1902,29 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClustersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListClustersResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.cluster_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_container_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContainerInstancesRequest {
@@ -1785,6 +1950,23 @@ pub struct ListContainerInstancesRequest {
     pub status: Option<String>,
 }
 
+impl Paged for ListContainerInstancesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListContainerInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_container_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContainerInstancesResponse {
@@ -1798,6 +1980,29 @@ pub struct ListContainerInstancesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListContainerInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListContainerInstancesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.container_instance_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
@@ -1823,6 +2028,23 @@ pub struct ListServicesRequest {
     pub scheduling_strategy: Option<String>,
 }
 
+impl Paged for ListServicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServicesResponse {
@@ -1836,6 +2058,29 @@ pub struct ListServicesResponse {
     pub service_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListServicesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.service_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1844,6 +2089,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Ecs::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1853,6 +2099,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ecs::list_task_definition_families]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskDefinitionFamiliesRequest {
@@ -1874,6 +2121,23 @@ pub struct ListTaskDefinitionFamiliesRequest {
     pub status: Option<String>,
 }
 
+impl Paged for ListTaskDefinitionFamiliesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskDefinitionFamiliesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_task_definition_families]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTaskDefinitionFamiliesResponse {
@@ -1887,6 +2151,29 @@ pub struct ListTaskDefinitionFamiliesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTaskDefinitionFamiliesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTaskDefinitionFamiliesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.families.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_task_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskDefinitionsRequest {
@@ -1912,6 +2199,23 @@ pub struct ListTaskDefinitionsRequest {
     pub status: Option<String>,
 }
 
+impl Paged for ListTaskDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_task_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTaskDefinitionsResponse {
@@ -1925,6 +2229,29 @@ pub struct ListTaskDefinitionsResponse {
     pub task_definition_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListTaskDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTaskDefinitionsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.task_definition_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecs::list_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
@@ -1966,6 +2293,23 @@ pub struct ListTasksRequest {
     pub started_by: Option<String>,
 }
 
+impl Paged for ListTasksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecs::list_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTasksResponse {
@@ -1977,6 +2321,28 @@ pub struct ListTasksResponse {
     #[serde(rename = "taskArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arns: Option<Vec<String>>,
+}
+
+impl Paged for ListTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTasksResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.task_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The load balancer configuration to use with a service or task set.</p> <p>For specific notes and restrictions regarding the use of load balancers with services and task sets, see the CreateService and CreateTaskSet actions.</p>
@@ -2177,6 +2543,7 @@ pub struct ProxyConfiguration {
     pub type_: Option<String>,
 }
 
+/// see [Ecs::put_account_setting_default]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSettingDefaultRequest {
@@ -2188,6 +2555,7 @@ pub struct PutAccountSettingDefaultRequest {
     pub value: String,
 }
 
+/// see [Ecs::put_account_setting_default]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSettingDefaultResponse {
@@ -2196,6 +2564,7 @@ pub struct PutAccountSettingDefaultResponse {
     pub setting: Option<Setting>,
 }
 
+/// see [Ecs::put_account_setting]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSettingRequest {
@@ -2211,6 +2580,7 @@ pub struct PutAccountSettingRequest {
     pub value: String,
 }
 
+/// see [Ecs::put_account_setting]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSettingResponse {
@@ -2220,6 +2590,7 @@ pub struct PutAccountSettingResponse {
     pub setting: Option<Setting>,
 }
 
+/// see [Ecs::put_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAttributesRequest {
@@ -2232,6 +2603,7 @@ pub struct PutAttributesRequest {
     pub cluster: Option<String>,
 }
 
+/// see [Ecs::put_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAttributesResponse {
@@ -2241,6 +2613,7 @@ pub struct PutAttributesResponse {
     pub attributes: Option<Vec<Attribute>>,
 }
 
+/// see [Ecs::put_cluster_capacity_providers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutClusterCapacityProvidersRequest {
@@ -2255,6 +2628,7 @@ pub struct PutClusterCapacityProvidersRequest {
     pub default_capacity_provider_strategy: Vec<CapacityProviderStrategyItem>,
 }
 
+/// see [Ecs::put_cluster_capacity_providers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutClusterCapacityProvidersResponse {
@@ -2263,6 +2637,7 @@ pub struct PutClusterCapacityProvidersResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Ecs::register_container_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterContainerInstanceRequest {
@@ -2304,6 +2679,7 @@ pub struct RegisterContainerInstanceRequest {
     pub version_info: Option<VersionInfo>,
 }
 
+/// see [Ecs::register_container_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterContainerInstanceResponse {
@@ -2313,6 +2689,7 @@ pub struct RegisterContainerInstanceResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
+/// see [Ecs::register_task_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTaskDefinitionRequest {
@@ -2375,6 +2752,7 @@ pub struct RegisterTaskDefinitionRequest {
     pub volumes: Option<Vec<Volume>>,
 }
 
+/// see [Ecs::register_task_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTaskDefinitionResponse {
@@ -2436,6 +2814,7 @@ pub struct ResourceRequirement {
     pub value: String,
 }
 
+/// see [Ecs::run_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunTaskRequest {
@@ -2504,6 +2883,7 @@ pub struct RunTaskRequest {
     pub task_definition: String,
 }
 
+/// see [Ecs::run_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunTaskResponse {
@@ -2720,6 +3100,7 @@ pub struct Setting {
     pub value: Option<String>,
 }
 
+/// see [Ecs::start_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTaskRequest {
@@ -2767,6 +3148,7 @@ pub struct StartTaskRequest {
     pub task_definition: String,
 }
 
+/// see [Ecs::start_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTaskResponse {
@@ -2780,6 +3162,7 @@ pub struct StartTaskResponse {
     pub tasks: Option<Vec<Task>>,
 }
 
+/// see [Ecs::stop_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTaskRequest {
@@ -2796,6 +3179,7 @@ pub struct StopTaskRequest {
     pub task: String,
 }
 
+/// see [Ecs::stop_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTaskResponse {
@@ -2805,6 +3189,7 @@ pub struct StopTaskResponse {
     pub task: Option<Task>,
 }
 
+/// see [Ecs::submit_attachment_state_changes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitAttachmentStateChangesRequest {
@@ -2817,6 +3202,7 @@ pub struct SubmitAttachmentStateChangesRequest {
     pub cluster: Option<String>,
 }
 
+/// see [Ecs::submit_attachment_state_changes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubmitAttachmentStateChangesResponse {
@@ -2826,6 +3212,7 @@ pub struct SubmitAttachmentStateChangesResponse {
     pub acknowledgment: Option<String>,
 }
 
+/// see [Ecs::submit_container_state_change]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitContainerStateChangeRequest {
@@ -2863,6 +3250,7 @@ pub struct SubmitContainerStateChangeRequest {
     pub task: Option<String>,
 }
 
+/// see [Ecs::submit_container_state_change]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubmitContainerStateChangeResponse {
@@ -2872,6 +3260,7 @@ pub struct SubmitContainerStateChangeResponse {
     pub acknowledgment: Option<String>,
 }
 
+/// see [Ecs::submit_task_state_change]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitTaskStateChangeRequest {
@@ -2913,6 +3302,7 @@ pub struct SubmitTaskStateChangeRequest {
     pub task: Option<String>,
 }
 
+/// see [Ecs::submit_task_state_change]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubmitTaskStateChangeResponse {
@@ -2948,6 +3338,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Ecs::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2959,6 +3350,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Ecs::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3352,6 +3744,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
+/// see [Ecs::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3363,10 +3756,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Ecs::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Ecs::update_capacity_provider]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCapacityProviderRequest {
@@ -3378,6 +3773,7 @@ pub struct UpdateCapacityProviderRequest {
     pub name: String,
 }
 
+/// see [Ecs::update_capacity_provider]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCapacityProviderResponse {
@@ -3386,6 +3782,7 @@ pub struct UpdateCapacityProviderResponse {
     pub capacity_provider: Option<CapacityProvider>,
 }
 
+/// see [Ecs::update_cluster_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterSettingsRequest {
@@ -3397,6 +3794,7 @@ pub struct UpdateClusterSettingsRequest {
     pub settings: Vec<ClusterSetting>,
 }
 
+/// see [Ecs::update_cluster_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterSettingsResponse {
@@ -3405,6 +3803,7 @@ pub struct UpdateClusterSettingsResponse {
     pub cluster: Option<Cluster>,
 }
 
+/// see [Ecs::update_container_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContainerAgentRequest {
@@ -3417,6 +3816,7 @@ pub struct UpdateContainerAgentRequest {
     pub container_instance: String,
 }
 
+/// see [Ecs::update_container_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContainerAgentResponse {
@@ -3426,6 +3826,7 @@ pub struct UpdateContainerAgentResponse {
     pub container_instance: Option<ContainerInstance>,
 }
 
+/// see [Ecs::update_container_instances_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContainerInstancesStateRequest {
@@ -3441,6 +3842,7 @@ pub struct UpdateContainerInstancesStateRequest {
     pub status: String,
 }
 
+/// see [Ecs::update_container_instances_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContainerInstancesStateResponse {
@@ -3454,6 +3856,7 @@ pub struct UpdateContainerInstancesStateResponse {
     pub failures: Option<Vec<Failure>>,
 }
 
+/// see [Ecs::update_service_primary_task_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServicePrimaryTaskSetRequest {
@@ -3468,6 +3871,7 @@ pub struct UpdateServicePrimaryTaskSetRequest {
     pub service: String,
 }
 
+/// see [Ecs::update_service_primary_task_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServicePrimaryTaskSetResponse {
@@ -3476,6 +3880,7 @@ pub struct UpdateServicePrimaryTaskSetResponse {
     pub task_set: Option<TaskSet>,
 }
 
+/// see [Ecs::update_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceRequest {
@@ -3527,6 +3932,7 @@ pub struct UpdateServiceRequest {
     pub task_definition: Option<String>,
 }
 
+/// see [Ecs::update_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceResponse {
@@ -3536,6 +3942,7 @@ pub struct UpdateServiceResponse {
     pub service: Option<Service>,
 }
 
+/// see [Ecs::update_task_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTaskSetRequest {
@@ -3552,6 +3959,7 @@ pub struct UpdateTaskSetRequest {
     pub task_set: String,
 }
 
+/// see [Ecs::update_task_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTaskSetResponse {
@@ -6328,7 +6736,7 @@ impl fmt::Display for UpdateTaskSetError {
 impl Error for UpdateTaskSetError {}
 /// Trait representing the capabilities of the Amazon ECS API. Amazon ECS clients implement this trait.
 #[async_trait]
-pub trait Ecs {
+pub trait Ecs: Clone + Sync + Send + 'static {
     /// <p>Creates a new capacity provider. Capacity providers are associated with an Amazon ECS cluster and are used in capacity provider strategies to facilitate cluster auto scaling.</p> <p>Only capacity providers using an Auto Scaling group can be created. Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers which are already created and available to all accounts in Regions supported by AWS Fargate.</p>
     async fn create_capacity_provider(
         &self,
@@ -6455,11 +6863,33 @@ pub trait Ecs {
         input: ListAccountSettingsRequest,
     ) -> Result<ListAccountSettingsResponse, RusotoError<ListAccountSettingsError>>;
 
+    /// Auto-paginating version of `list_account_settings`
+    fn list_account_settings_pages<'a>(
+        &'a self,
+        mut input: ListAccountSettingsRequest,
+    ) -> RusotoStream<'a, Setting, ListAccountSettingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_account_settings(input.clone())
+        }))
+    }
+
     /// <p>Lists the attributes for Amazon ECS resources within a specified target type and cluster. When you specify a target type and cluster, <code>ListAttributes</code> returns a list of attribute objects, one for each attribute on each resource. You can filter the list of results to a single attribute name to only return results that have that name. You can also filter the results by attribute name and value, for example, to see which container instances in a cluster are running a Linux AMI (<code>ecs.os-type=linux</code>). </p>
     async fn list_attributes(
         &self,
         input: ListAttributesRequest,
     ) -> Result<ListAttributesResponse, RusotoError<ListAttributesError>>;
+
+    /// Auto-paginating version of `list_attributes`
+    fn list_attributes_pages<'a>(
+        &'a self,
+        mut input: ListAttributesRequest,
+    ) -> RusotoStream<'a, Attribute, ListAttributesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attributes(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of existing clusters.</p>
     async fn list_clusters(
@@ -6467,17 +6897,50 @@ pub trait Ecs {
         input: ListClustersRequest,
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
 
+    /// Auto-paginating version of `list_clusters`
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersRequest,
+    ) -> RusotoStream<'a, String, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of container instances in a specified cluster. You can filter the results of a <code>ListContainerInstances</code> operation with cluster query language statements inside the <code>filter</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     async fn list_container_instances(
         &self,
         input: ListContainerInstancesRequest,
     ) -> Result<ListContainerInstancesResponse, RusotoError<ListContainerInstancesError>>;
 
+    /// Auto-paginating version of `list_container_instances`
+    fn list_container_instances_pages<'a>(
+        &'a self,
+        mut input: ListContainerInstancesRequest,
+    ) -> RusotoStream<'a, String, ListContainerInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_container_instances(input.clone())
+        }))
+    }
+
     /// <p>Lists the services that are running in a specified cluster.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
+
+    /// Auto-paginating version of `list_services`
+    fn list_services_pages<'a>(
+        &'a self,
+        mut input: ListServicesRequest,
+    ) -> RusotoStream<'a, String, ListServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_services(input.clone())
+        }))
+    }
 
     /// <p>List the tags for an Amazon ECS resource.</p>
     async fn list_tags_for_resource(
@@ -6491,17 +6954,50 @@ pub trait Ecs {
         input: ListTaskDefinitionFamiliesRequest,
     ) -> Result<ListTaskDefinitionFamiliesResponse, RusotoError<ListTaskDefinitionFamiliesError>>;
 
+    /// Auto-paginating version of `list_task_definition_families`
+    fn list_task_definition_families_pages<'a>(
+        &'a self,
+        mut input: ListTaskDefinitionFamiliesRequest,
+    ) -> RusotoStream<'a, String, ListTaskDefinitionFamiliesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_definition_families(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of task definitions that are registered to your account. You can filter the results by family name with the <code>familyPrefix</code> parameter or by status with the <code>status</code> parameter.</p>
     async fn list_task_definitions(
         &self,
         input: ListTaskDefinitionsRequest,
     ) -> Result<ListTaskDefinitionsResponse, RusotoError<ListTaskDefinitionsError>>;
 
+    /// Auto-paginating version of `list_task_definitions`
+    fn list_task_definitions_pages<'a>(
+        &'a self,
+        mut input: ListTaskDefinitionsRequest,
+    ) -> RusotoStream<'a, String, ListTaskDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_definitions(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of tasks for a specified cluster. You can filter the results by family name, by a particular container instance, or by the desired status of the task with the <code>family</code>, <code>containerInstance</code>, and <code>desiredStatus</code> parameters.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour. </p>
     async fn list_tasks(
         &self,
         input: ListTasksRequest,
     ) -> Result<ListTasksResponse, RusotoError<ListTasksError>>;
+
+    /// Auto-paginating version of `list_tasks`
+    fn list_tasks_pages<'a>(
+        &'a self,
+        mut input: ListTasksRequest,
+    ) -> RusotoStream<'a, String, ListTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tasks(input.clone())
+        }))
+    }
 
     /// <p>Modifies an account setting. Account settings are set on a per-Region basis.</p> <p>If you change the account setting for the root user, the default settings for all of the IAM users and roles for which no individual account setting has been specified are reset. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-account-settings.html">Account Settings</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>When <code>serviceLongArnFormat</code>, <code>taskLongArnFormat</code>, or <code>containerInstanceLongArnFormat</code> are specified, the Amazon Resource Name (ARN) and resource ID format of the resource type for a specified IAM user, IAM role, or the root user for an account is affected. The opt-in and opt-out account setting must be set for each Amazon ECS resource separately. The ARN and resource ID format of a resource will be defined by the opt-in status of the IAM user or role that created the resource. You must enable this setting to use Amazon ECS features such as resource tagging.</p> <p>When <code>awsvpcTrunking</code> is specified, the elastic network interface (ENI) limit for any new container instances that support the feature is changed. If <code>awsvpcTrunking</code> is enabled, any new container instances that support the feature are launched have the increased ENI limits available to them. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-eni.html">Elastic Network Interface Trunking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>When <code>containerInsights</code> is specified, the default setting indicating whether CloudWatch Container Insights is enabled for your clusters is changed. If <code>containerInsights</code> is enabled, any new clusters that are created will have Container Insights enabled unless you disable it during cluster creation. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-container-insights.html">CloudWatch Container Insights</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     async fn put_account_setting(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [CodeGuruReviewer::associate_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRepositoryRequest {
@@ -41,6 +46,7 @@ pub struct AssociateRepositoryRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CodeGuruReviewer::associate_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateRepositoryResponse {
@@ -198,6 +204,7 @@ pub struct CommitDiffSourceCodeType {
     pub source_commit: Option<String>,
 }
 
+/// see [CodeGuruReviewer::create_code_review]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCodeReviewRequest {
@@ -216,6 +223,7 @@ pub struct CreateCodeReviewRequest {
     pub type_: CodeReviewType,
 }
 
+/// see [CodeGuruReviewer::create_code_review]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCodeReviewResponse {
@@ -224,6 +232,7 @@ pub struct CreateCodeReviewResponse {
     pub code_review: Option<CodeReview>,
 }
 
+/// see [CodeGuruReviewer::describe_code_review]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeReviewRequest {
@@ -232,6 +241,7 @@ pub struct DescribeCodeReviewRequest {
     pub code_review_arn: String,
 }
 
+/// see [CodeGuruReviewer::describe_code_review]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCodeReviewResponse {
@@ -241,6 +251,7 @@ pub struct DescribeCodeReviewResponse {
     pub code_review: Option<CodeReview>,
 }
 
+/// see [CodeGuruReviewer::describe_recommendation_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecommendationFeedbackRequest {
@@ -256,6 +267,7 @@ pub struct DescribeRecommendationFeedbackRequest {
     pub user_id: Option<String>,
 }
 
+/// see [CodeGuruReviewer::describe_recommendation_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecommendationFeedbackResponse {
@@ -265,6 +277,7 @@ pub struct DescribeRecommendationFeedbackResponse {
     pub recommendation_feedback: Option<RecommendationFeedback>,
 }
 
+/// see [CodeGuruReviewer::describe_repository_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoryAssociationRequest {
@@ -273,6 +286,7 @@ pub struct DescribeRepositoryAssociationRequest {
     pub association_arn: String,
 }
 
+/// see [CodeGuruReviewer::describe_repository_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRepositoryAssociationResponse {
@@ -286,6 +300,7 @@ pub struct DescribeRepositoryAssociationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CodeGuruReviewer::disassociate_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRepositoryRequest {
@@ -294,6 +309,7 @@ pub struct DisassociateRepositoryRequest {
     pub association_arn: String,
 }
 
+/// see [CodeGuruReviewer::disassociate_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateRepositoryResponse {
@@ -307,6 +323,7 @@ pub struct DisassociateRepositoryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CodeGuruReviewer::list_code_reviews]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeReviewsRequest {
@@ -335,6 +352,7 @@ pub struct ListCodeReviewsRequest {
     pub type_: String,
 }
 
+/// see [CodeGuruReviewer::list_code_reviews]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCodeReviewsResponse {
@@ -348,6 +366,7 @@ pub struct ListCodeReviewsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [CodeGuruReviewer::list_recommendation_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecommendationFeedbackRequest {
@@ -372,6 +391,7 @@ pub struct ListRecommendationFeedbackRequest {
     pub user_ids: Option<Vec<String>>,
 }
 
+/// see [CodeGuruReviewer::list_recommendation_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecommendationFeedbackResponse {
@@ -385,6 +405,7 @@ pub struct ListRecommendationFeedbackResponse {
     pub recommendation_feedback_summaries: Option<Vec<RecommendationFeedbackSummary>>,
 }
 
+/// see [CodeGuruReviewer::list_recommendations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecommendationsRequest {
@@ -401,6 +422,7 @@ pub struct ListRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [CodeGuruReviewer::list_recommendations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecommendationsResponse {
@@ -414,6 +436,7 @@ pub struct ListRecommendationsResponse {
     pub recommendation_summaries: Option<Vec<RecommendationSummary>>,
 }
 
+/// see [CodeGuruReviewer::list_repository_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoryAssociationsRequest {
@@ -443,6 +466,23 @@ pub struct ListRepositoryAssociationsRequest {
     pub states: Option<Vec<String>>,
 }
 
+impl Paged for ListRepositoryAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRepositoryAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeGuruReviewer::list_repository_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoryAssociationsResponse {
@@ -456,6 +496,29 @@ pub struct ListRepositoryAssociationsResponse {
     pub repository_association_summaries: Option<Vec<RepositoryAssociationSummary>>,
 }
 
+impl Paged for ListRepositoryAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRepositoryAssociationsResponse {
+    type Item = RepositoryAssociationSummary;
+
+    fn into_pagination_page(self) -> Vec<RepositoryAssociationSummary> {
+        self.repository_association_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeGuruReviewer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -464,6 +527,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CodeGuruReviewer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -501,6 +565,7 @@ pub struct MetricsSummary {
     pub metered_lines_of_code_count: Option<i64>,
 }
 
+/// see [CodeGuruReviewer::put_recommendation_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecommendationFeedbackRequest {
@@ -515,6 +580,7 @@ pub struct PutRecommendationFeedbackRequest {
     pub recommendation_id: String,
 }
 
+/// see [CodeGuruReviewer::put_recommendation_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecommendationFeedbackResponse {}
@@ -725,6 +791,7 @@ pub struct SourceCodeType {
     pub repository_head: Option<RepositoryHeadSourceCodeType>,
 }
 
+/// see [CodeGuruReviewer::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -736,6 +803,7 @@ pub struct TagResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CodeGuruReviewer::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -755,6 +823,7 @@ pub struct ThirdPartySourceRepository {
     pub owner: String,
 }
 
+/// see [CodeGuruReviewer::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -766,6 +835,7 @@ pub struct UntagResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [CodeGuruReviewer::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1456,7 +1526,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CodeGuruReviewer API. CodeGuruReviewer clients implement this trait.
 #[async_trait]
-pub trait CodeGuruReviewer {
+pub trait CodeGuruReviewer: Clone + Sync + Send + 'static {
     /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/reviewer-ug/step-one.html#select-repository-source-provider">Connect to a repository source provider</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
     async fn associate_repository(
         &self,
@@ -1522,6 +1592,17 @@ pub trait CodeGuruReviewer {
         &self,
         input: ListRepositoryAssociationsRequest,
     ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>;
+
+    /// Auto-paginating version of `list_repository_associations`
+    fn list_repository_associations_pages<'a>(
+        &'a self,
+        mut input: ListRepositoryAssociationsRequest,
+    ) -> RusotoStream<'a, RepositoryAssociationSummary, ListRepositoryAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_repository_associations(input.clone())
+        }))
+    }
 
     /// <p>Returns the list of tags associated with an associated repository resource.</p>
     async fn list_tags_for_resource(

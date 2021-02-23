@@ -2,7 +2,8 @@ use inflector::Inflector;
 use std::io::Write;
 
 use super::{
-    error_type_name, eventstream_field_name, get_rust_type, FileWriter, GenerateProtocol, IoResult,
+    error_type_name, eventstream_field_name, get_rust_type, write_paged_version, FileWriter,
+    GenerateProtocol, IoResult,
 };
 use crate::botocore::{Operation, Shape};
 use crate::Service;
@@ -28,7 +29,9 @@ impl GenerateProtocol for JsonGenerator {
                 method_signature = generate_method_signature(service, operation),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
-            )?
+            )?;
+
+            write_paged_version(operation_name, service, operation, writer)?;
         }
         Ok(())
     }

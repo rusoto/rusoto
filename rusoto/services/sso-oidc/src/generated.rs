@@ -15,15 +15,20 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [SsoOidc::create_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTokenRequest {
@@ -57,6 +62,7 @@ pub struct CreateTokenRequest {
     pub scope: Option<Vec<String>>,
 }
 
+/// see [SsoOidc::create_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTokenResponse {
@@ -82,6 +88,7 @@ pub struct CreateTokenResponse {
     pub token_type: Option<String>,
 }
 
+/// see [SsoOidc::register_client]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterClientRequest {
@@ -97,6 +104,7 @@ pub struct RegisterClientRequest {
     pub scopes: Option<Vec<String>>,
 }
 
+/// see [SsoOidc::register_client]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterClientResponse {
@@ -126,6 +134,7 @@ pub struct RegisterClientResponse {
     pub token_endpoint: Option<String>,
 }
 
+/// see [SsoOidc::start_device_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeviceAuthorizationRequest {
@@ -140,6 +149,7 @@ pub struct StartDeviceAuthorizationRequest {
     pub start_url: String,
 }
 
+/// see [SsoOidc::start_device_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeviceAuthorizationResponse {
@@ -373,7 +383,7 @@ impl fmt::Display for StartDeviceAuthorizationError {
 impl Error for StartDeviceAuthorizationError {}
 /// Trait representing the capabilities of the SSO OIDC API. SSO OIDC clients implement this trait.
 #[async_trait]
-pub trait SsoOidc {
+pub trait SsoOidc: Clone + Sync + Send + 'static {
     /// <p>Creates and returns an access token for the authorized client. The access token issued will be used to fetch short-term credentials for the assigned roles in the AWS account.</p>
     async fn create_token(
         &self,

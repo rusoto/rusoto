@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -109,6 +113,7 @@ pub struct BackendConnectionErrors {
     pub unknown_host_count: Option<i64>,
 }
 
+/// see [XRay::batch_get_traces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTracesRequest {
@@ -121,6 +126,23 @@ pub struct BatchGetTracesRequest {
     pub trace_ids: Vec<String>,
 }
 
+impl Paged for BatchGetTracesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for BatchGetTracesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::batch_get_traces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetTracesResult {
@@ -138,6 +160,29 @@ pub struct BatchGetTracesResult {
     pub unprocessed_trace_ids: Option<Vec<String>>,
 }
 
+impl Paged for BatchGetTracesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for BatchGetTracesResult {
+    type Item = Trace;
+
+    fn into_pagination_page(self) -> Vec<Trace> {
+        self.traces.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -158,6 +203,7 @@ pub struct CreateGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [XRay::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResult {
@@ -167,6 +213,7 @@ pub struct CreateGroupResult {
     pub group: Option<Group>,
 }
 
+/// see [XRay::create_sampling_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSamplingRuleRequest {
@@ -179,6 +226,7 @@ pub struct CreateSamplingRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [XRay::create_sampling_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSamplingRuleResult {
@@ -188,6 +236,7 @@ pub struct CreateSamplingRuleResult {
     pub sampling_rule_record: Option<SamplingRuleRecord>,
 }
 
+/// see [XRay::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -201,10 +250,12 @@ pub struct DeleteGroupRequest {
     pub group_name: Option<String>,
 }
 
+/// see [XRay::delete_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResult {}
 
+/// see [XRay::delete_sampling_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSamplingRuleRequest {
@@ -218,6 +269,7 @@ pub struct DeleteSamplingRuleRequest {
     pub rule_name: Option<String>,
 }
 
+/// see [XRay::delete_sampling_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSamplingRuleResult {
@@ -471,10 +523,12 @@ pub struct ForecastStatistics {
     pub fault_count_low: Option<i64>,
 }
 
+/// see [XRay::get_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEncryptionConfigRequest {}
 
+/// see [XRay::get_encryption_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEncryptionConfigResult {
@@ -484,6 +538,7 @@ pub struct GetEncryptionConfigResult {
     pub encryption_config: Option<EncryptionConfig>,
 }
 
+/// see [XRay::get_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
@@ -497,6 +552,7 @@ pub struct GetGroupRequest {
     pub group_name: Option<String>,
 }
 
+/// see [XRay::get_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResult {
@@ -506,6 +562,7 @@ pub struct GetGroupResult {
     pub group: Option<Group>,
 }
 
+/// see [XRay::get_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupsRequest {
@@ -515,6 +572,23 @@ pub struct GetGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupsResult {
@@ -528,6 +602,29 @@ pub struct GetGroupsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetGroupsResult {
+    type Item = GroupSummary;
+
+    fn into_pagination_page(self) -> Vec<GroupSummary> {
+        self.groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_insight_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightEventsRequest {
@@ -544,6 +641,7 @@ pub struct GetInsightEventsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [XRay::get_insight_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightEventsResult {
@@ -557,6 +655,7 @@ pub struct GetInsightEventsResult {
     pub next_token: Option<String>,
 }
 
+/// see [XRay::get_insight_impact_graph]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightImpactGraphRequest {
@@ -575,6 +674,7 @@ pub struct GetInsightImpactGraphRequest {
     pub start_time: f64,
 }
 
+/// see [XRay::get_insight_impact_graph]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightImpactGraphResult {
@@ -608,6 +708,7 @@ pub struct GetInsightImpactGraphResult {
     pub start_time: Option<f64>,
 }
 
+/// see [XRay::get_insight]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightRequest {
@@ -616,6 +717,7 @@ pub struct GetInsightRequest {
     pub insight_id: String,
 }
 
+/// see [XRay::get_insight]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightResult {
@@ -625,6 +727,7 @@ pub struct GetInsightResult {
     pub insight: Option<Insight>,
 }
 
+/// see [XRay::get_insight_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightSummariesRequest {
@@ -656,6 +759,7 @@ pub struct GetInsightSummariesRequest {
     pub states: Option<Vec<String>>,
 }
 
+/// see [XRay::get_insight_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightSummariesResult {
@@ -669,6 +773,7 @@ pub struct GetInsightSummariesResult {
     pub next_token: Option<String>,
 }
 
+/// see [XRay::get_sampling_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingRulesRequest {
@@ -678,6 +783,23 @@ pub struct GetSamplingRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetSamplingRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSamplingRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_sampling_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingRulesResult {
@@ -691,6 +813,29 @@ pub struct GetSamplingRulesResult {
     pub sampling_rule_records: Option<Vec<SamplingRuleRecord>>,
 }
 
+impl Paged for GetSamplingRulesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetSamplingRulesResult {
+    type Item = SamplingRuleRecord;
+
+    fn into_pagination_page(self) -> Vec<SamplingRuleRecord> {
+        self.sampling_rule_records.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_sampling_statistic_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingStatisticSummariesRequest {
@@ -700,6 +845,23 @@ pub struct GetSamplingStatisticSummariesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetSamplingStatisticSummariesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSamplingStatisticSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_sampling_statistic_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingStatisticSummariesResult {
@@ -713,6 +875,29 @@ pub struct GetSamplingStatisticSummariesResult {
     pub sampling_statistic_summaries: Option<Vec<SamplingStatisticSummary>>,
 }
 
+impl Paged for GetSamplingStatisticSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetSamplingStatisticSummariesResult {
+    type Item = SamplingStatisticSummary;
+
+    fn into_pagination_page(self) -> Vec<SamplingStatisticSummary> {
+        self.sampling_statistic_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_sampling_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingTargetsRequest {
@@ -721,6 +906,7 @@ pub struct GetSamplingTargetsRequest {
     pub sampling_statistics_documents: Vec<SamplingStatisticsDocument>,
 }
 
+/// see [XRay::get_sampling_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingTargetsResult {
@@ -738,6 +924,7 @@ pub struct GetSamplingTargetsResult {
     pub unprocessed_statistics: Option<Vec<UnprocessedStatistics>>,
 }
 
+/// see [XRay::get_service_graph]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceGraphRequest {
@@ -761,6 +948,23 @@ pub struct GetServiceGraphRequest {
     pub start_time: f64,
 }
 
+impl Paged for GetServiceGraphRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetServiceGraphRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_service_graph]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceGraphResult {
@@ -786,6 +990,29 @@ pub struct GetServiceGraphResult {
     pub start_time: Option<f64>,
 }
 
+impl Paged for GetServiceGraphResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetServiceGraphResult {
+    type Item = Service;
+
+    fn into_pagination_page(self) -> Vec<Service> {
+        self.services.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_time_series_service_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTimeSeriesServiceStatisticsRequest {
@@ -821,6 +1048,23 @@ pub struct GetTimeSeriesServiceStatisticsRequest {
     pub start_time: f64,
 }
 
+impl Paged for GetTimeSeriesServiceStatisticsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTimeSeriesServiceStatisticsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_time_series_service_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTimeSeriesServiceStatisticsResult {
@@ -838,6 +1082,29 @@ pub struct GetTimeSeriesServiceStatisticsResult {
     pub time_series_service_statistics: Option<Vec<TimeSeriesServiceStatistics>>,
 }
 
+impl Paged for GetTimeSeriesServiceStatisticsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetTimeSeriesServiceStatisticsResult {
+    type Item = TimeSeriesServiceStatistics;
+
+    fn into_pagination_page(self) -> Vec<TimeSeriesServiceStatistics> {
+        self.time_series_service_statistics.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_trace_graph]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceGraphRequest {
@@ -850,6 +1117,23 @@ pub struct GetTraceGraphRequest {
     pub trace_ids: Vec<String>,
 }
 
+impl Paged for GetTraceGraphRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTraceGraphRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_trace_graph]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTraceGraphResult {
@@ -863,6 +1147,29 @@ pub struct GetTraceGraphResult {
     pub services: Option<Vec<Service>>,
 }
 
+impl Paged for GetTraceGraphResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetTraceGraphResult {
+    type Item = Service;
+
+    fn into_pagination_page(self) -> Vec<Service> {
+        self.services.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [XRay::get_trace_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceSummariesRequest {
@@ -894,6 +1201,23 @@ pub struct GetTraceSummariesRequest {
     pub time_range_type: Option<String>,
 }
 
+impl Paged for GetTraceSummariesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTraceSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [XRay::get_trace_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTraceSummariesResult {
@@ -913,6 +1237,28 @@ pub struct GetTraceSummariesResult {
     #[serde(rename = "TracesProcessedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traces_processed_count: Option<i64>,
+}
+
+impl Paged for GetTraceSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetTraceSummariesResult {
+    type Item = TraceSummary;
+
+    fn into_pagination_page(self) -> Vec<TraceSummary> {
+        self.trace_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Details and metadata for a group.</p>
@@ -1198,6 +1544,7 @@ pub struct InstanceIdDetail {
     pub id: Option<String>,
 }
 
+/// see [XRay::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1210,6 +1557,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [XRay::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1223,6 +1571,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [XRay::put_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEncryptionConfigRequest {
@@ -1235,6 +1584,7 @@ pub struct PutEncryptionConfigRequest {
     pub type_: String,
 }
 
+/// see [XRay::put_encryption_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEncryptionConfigResult {
@@ -1244,6 +1594,7 @@ pub struct PutEncryptionConfigResult {
     pub encryption_config: Option<EncryptionConfig>,
 }
 
+/// see [XRay::put_telemetry_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTelemetryRecordsRequest {
@@ -1264,10 +1615,12 @@ pub struct PutTelemetryRecordsRequest {
     pub telemetry_records: Vec<TelemetryRecord>,
 }
 
+/// see [XRay::put_telemetry_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutTelemetryRecordsResult {}
 
+/// see [XRay::put_trace_segments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTraceSegmentsRequest {
@@ -1276,6 +1629,7 @@ pub struct PutTraceSegmentsRequest {
     pub trace_segment_documents: Vec<String>,
 }
 
+/// see [XRay::put_trace_segments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutTraceSegmentsResult {
@@ -1730,6 +2084,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [XRay::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1741,6 +2096,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [XRay::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1956,6 +2312,7 @@ pub struct UnprocessedTraceSegment {
     pub message: Option<String>,
 }
 
+/// see [XRay::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1967,10 +2324,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [XRay::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [XRay::update_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
@@ -1992,6 +2351,7 @@ pub struct UpdateGroupRequest {
     pub insights_configuration: Option<InsightsConfiguration>,
 }
 
+/// see [XRay::update_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResult {
@@ -2001,6 +2361,7 @@ pub struct UpdateGroupResult {
     pub group: Option<Group>,
 }
 
+/// see [XRay::update_sampling_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSamplingRuleRequest {
@@ -2009,6 +2370,7 @@ pub struct UpdateSamplingRuleRequest {
     pub sampling_rule_update: SamplingRuleUpdate,
 }
 
+/// see [XRay::update_sampling_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSamplingRuleResult {
@@ -3056,12 +3418,23 @@ impl fmt::Display for UpdateSamplingRuleError {
 impl Error for UpdateSamplingRuleError {}
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
 #[async_trait]
-pub trait XRay {
+pub trait XRay: Clone + Sync + Send + 'static {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
     async fn batch_get_traces(
         &self,
         input: BatchGetTracesRequest,
     ) -> Result<BatchGetTracesResult, RusotoError<BatchGetTracesError>>;
+
+    /// Auto-paginating version of `batch_get_traces`
+    fn batch_get_traces_pages<'a>(
+        &'a self,
+        mut input: BatchGetTracesRequest,
+    ) -> RusotoStream<'a, Trace, BatchGetTracesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.batch_get_traces(input.clone())
+        }))
+    }
 
     /// <p>Creates a group resource with a name and a filter expression. </p>
     async fn create_group(
@@ -3104,6 +3477,17 @@ pub trait XRay {
         input: GetGroupsRequest,
     ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>>;
 
+    /// Auto-paginating version of `get_groups`
+    fn get_groups_pages<'a>(
+        &'a self,
+        mut input: GetGroupsRequest,
+    ) -> RusotoStream<'a, GroupSummary, GetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_groups(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the summary information of an insight. This includes impact to clients and root cause services, the top anomalous services, the category, the state of the insight, and the start and end time of the insight.</p>
     async fn get_insight(
         &self,
@@ -3134,11 +3518,33 @@ pub trait XRay {
         input: GetSamplingRulesRequest,
     ) -> Result<GetSamplingRulesResult, RusotoError<GetSamplingRulesError>>;
 
+    /// Auto-paginating version of `get_sampling_rules`
+    fn get_sampling_rules_pages<'a>(
+        &'a self,
+        mut input: GetSamplingRulesRequest,
+    ) -> RusotoStream<'a, SamplingRuleRecord, GetSamplingRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sampling_rules(input.clone())
+        }))
+    }
+
     /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
     async fn get_sampling_statistic_summaries(
         &self,
         input: GetSamplingStatisticSummariesRequest,
     ) -> Result<GetSamplingStatisticSummariesResult, RusotoError<GetSamplingStatisticSummariesError>>;
+
+    /// Auto-paginating version of `get_sampling_statistic_summaries`
+    fn get_sampling_statistic_summaries_pages<'a>(
+        &'a self,
+        mut input: GetSamplingStatisticSummariesRequest,
+    ) -> RusotoStream<'a, SamplingStatisticSummary, GetSamplingStatisticSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sampling_statistic_summaries(input.clone())
+        }))
+    }
 
     /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
     async fn get_sampling_targets(
@@ -3152,6 +3558,17 @@ pub trait XRay {
         input: GetServiceGraphRequest,
     ) -> Result<GetServiceGraphResult, RusotoError<GetServiceGraphError>>;
 
+    /// Auto-paginating version of `get_service_graph`
+    fn get_service_graph_pages<'a>(
+        &'a self,
+        mut input: GetServiceGraphRequest,
+    ) -> RusotoStream<'a, Service, GetServiceGraphError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_service_graph(input.clone())
+        }))
+    }
+
     /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
     async fn get_time_series_service_statistics(
         &self,
@@ -3161,17 +3578,50 @@ pub trait XRay {
         RusotoError<GetTimeSeriesServiceStatisticsError>,
     >;
 
+    /// Auto-paginating version of `get_time_series_service_statistics`
+    fn get_time_series_service_statistics_pages<'a>(
+        &'a self,
+        mut input: GetTimeSeriesServiceStatisticsRequest,
+    ) -> RusotoStream<'a, TimeSeriesServiceStatistics, GetTimeSeriesServiceStatisticsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_time_series_service_statistics(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
     async fn get_trace_graph(
         &self,
         input: GetTraceGraphRequest,
     ) -> Result<GetTraceGraphResult, RusotoError<GetTraceGraphError>>;
 
+    /// Auto-paginating version of `get_trace_graph`
+    fn get_trace_graph_pages<'a>(
+        &'a self,
+        mut input: GetTraceGraphRequest,
+    ) -> RusotoStream<'a, Service, GetTraceGraphError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_trace_graph(input.clone())
+        }))
+    }
+
     /// <p>Retrieves IDs and annotations for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
     async fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,
     ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>>;
+
+    /// Auto-paginating version of `get_trace_summaries`
+    fn get_trace_summaries_pages<'a>(
+        &'a self,
+        mut input: GetTraceSummariesRequest,
+    ) -> RusotoStream<'a, TraceSummary, GetTraceSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_trace_summaries(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of tags that are applied to the specified AWS X-Ray group or sampling rule.</p>
     async fn list_tags_for_resource(

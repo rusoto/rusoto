@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -183,6 +187,7 @@ pub struct CertificateAuthorityConfiguration {
     pub subject: ASN1Subject,
 }
 
+/// see [AcmPca::create_certificate_authority_audit_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateAuthorityAuditReportRequest {
@@ -197,6 +202,7 @@ pub struct CreateCertificateAuthorityAuditReportRequest {
     pub s3_bucket_name: String,
 }
 
+/// see [AcmPca::create_certificate_authority_audit_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCertificateAuthorityAuditReportResponse {
@@ -210,6 +216,7 @@ pub struct CreateCertificateAuthorityAuditReportResponse {
     pub s3_key: Option<String>,
 }
 
+/// see [AcmPca::create_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateAuthorityRequest {
@@ -233,6 +240,7 @@ pub struct CreateCertificateAuthorityRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [AcmPca::create_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCertificateAuthorityResponse {
@@ -242,6 +250,7 @@ pub struct CreateCertificateAuthorityResponse {
     pub certificate_authority_arn: Option<String>,
 }
 
+/// see [AcmPca::create_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePermissionRequest {
@@ -280,6 +289,7 @@ pub struct CrlConfiguration {
     pub s3_bucket_name: Option<String>,
 }
 
+/// see [AcmPca::delete_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateAuthorityRequest {
@@ -292,6 +302,7 @@ pub struct DeleteCertificateAuthorityRequest {
     pub permanent_deletion_time_in_days: Option<i64>,
 }
 
+/// see [AcmPca::delete_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePermissionRequest {
@@ -307,6 +318,7 @@ pub struct DeletePermissionRequest {
     pub source_account: Option<String>,
 }
 
+/// see [AcmPca::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
@@ -315,6 +327,7 @@ pub struct DeletePolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [AcmPca::describe_certificate_authority_audit_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateAuthorityAuditReportRequest {
@@ -326,6 +339,7 @@ pub struct DescribeCertificateAuthorityAuditReportRequest {
     pub certificate_authority_arn: String,
 }
 
+/// see [AcmPca::describe_certificate_authority_audit_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateAuthorityAuditReportResponse {
@@ -347,6 +361,7 @@ pub struct DescribeCertificateAuthorityAuditReportResponse {
     pub s3_key: Option<String>,
 }
 
+/// see [AcmPca::describe_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateAuthorityRequest {
@@ -355,6 +370,7 @@ pub struct DescribeCertificateAuthorityRequest {
     pub certificate_authority_arn: String,
 }
 
+/// see [AcmPca::describe_certificate_authority]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateAuthorityResponse {
@@ -364,6 +380,7 @@ pub struct DescribeCertificateAuthorityResponse {
     pub certificate_authority: Option<CertificateAuthority>,
 }
 
+/// see [AcmPca::get_certificate_authority_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificateAuthorityCertificateRequest {
@@ -372,6 +389,7 @@ pub struct GetCertificateAuthorityCertificateRequest {
     pub certificate_authority_arn: String,
 }
 
+/// see [AcmPca::get_certificate_authority_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificateAuthorityCertificateResponse {
@@ -385,6 +403,7 @@ pub struct GetCertificateAuthorityCertificateResponse {
     pub certificate_chain: Option<String>,
 }
 
+/// see [AcmPca::get_certificate_authority_csr]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificateAuthorityCsrRequest {
@@ -393,6 +412,7 @@ pub struct GetCertificateAuthorityCsrRequest {
     pub certificate_authority_arn: String,
 }
 
+/// see [AcmPca::get_certificate_authority_csr]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificateAuthorityCsrResponse {
@@ -402,6 +422,7 @@ pub struct GetCertificateAuthorityCsrResponse {
     pub csr: Option<String>,
 }
 
+/// see [AcmPca::get_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificateRequest {
@@ -413,6 +434,7 @@ pub struct GetCertificateRequest {
     pub certificate_authority_arn: String,
 }
 
+/// see [AcmPca::get_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificateResponse {
@@ -426,6 +448,7 @@ pub struct GetCertificateResponse {
     pub certificate_chain: Option<String>,
 }
 
+/// see [AcmPca::get_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -434,6 +457,7 @@ pub struct GetPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [AcmPca::get_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -443,6 +467,7 @@ pub struct GetPolicyResponse {
     pub policy: Option<String>,
 }
 
+/// see [AcmPca::import_certificate_authority_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateAuthorityCertificateRequest {
@@ -468,6 +493,7 @@ pub struct ImportCertificateAuthorityCertificateRequest {
     pub certificate_chain: Option<bytes::Bytes>,
 }
 
+/// see [AcmPca::issue_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IssueCertificateRequest {
@@ -498,6 +524,7 @@ pub struct IssueCertificateRequest {
     pub validity: Validity,
 }
 
+/// see [AcmPca::issue_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IssueCertificateResponse {
@@ -507,6 +534,7 @@ pub struct IssueCertificateResponse {
     pub certificate_arn: Option<String>,
 }
 
+/// see [AcmPca::list_certificate_authorities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificateAuthoritiesRequest {
@@ -524,6 +552,23 @@ pub struct ListCertificateAuthoritiesRequest {
     pub resource_owner: Option<String>,
 }
 
+impl Paged for ListCertificateAuthoritiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCertificateAuthoritiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AcmPca::list_certificate_authorities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificateAuthoritiesResponse {
@@ -537,6 +582,29 @@ pub struct ListCertificateAuthoritiesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCertificateAuthoritiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCertificateAuthoritiesResponse {
+    type Item = CertificateAuthority;
+
+    fn into_pagination_page(self) -> Vec<CertificateAuthority> {
+        self.certificate_authorities.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AcmPca::list_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
@@ -553,6 +621,23 @@ pub struct ListPermissionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListPermissionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPermissionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AcmPca::list_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
@@ -566,6 +651,29 @@ pub struct ListPermissionsResponse {
     pub permissions: Option<Vec<Permission>>,
 }
 
+impl Paged for ListPermissionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPermissionsResponse {
+    type Item = Permission;
+
+    fn into_pagination_page(self) -> Vec<Permission> {
+        self.permissions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AcmPca::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -582,6 +690,23 @@ pub struct ListTagsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTagsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AcmPca::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -593,6 +718,28 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl Paged for ListTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsResponse {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Permissions designate which private CA actions can be performed by an AWS service or entity. In order for ACM to automatically renew private certificates, you must give the ACM service principal all available permissions (<code>IssueCertificate</code>, <code>GetCertificate</code>, and <code>ListPermissions</code>). Permissions can be assigned with the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreatePermission.html">CreatePermission</a> action, removed with the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_DeletePermission.html">DeletePermission</a> action, and listed with the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_ListPermissions.html">ListPermissions</a> action.</p>
@@ -625,6 +772,7 @@ pub struct Permission {
     pub source_account: Option<String>,
 }
 
+/// see [AcmPca::put_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPolicyRequest {
@@ -636,6 +784,7 @@ pub struct PutPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [AcmPca::restore_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreCertificateAuthorityRequest {
@@ -653,6 +802,7 @@ pub struct RevocationConfiguration {
     pub crl_configuration: Option<CrlConfiguration>,
 }
 
+/// see [AcmPca::revoke_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeCertificateRequest {
@@ -679,6 +829,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [AcmPca::tag_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagCertificateAuthorityRequest {
@@ -690,6 +841,7 @@ pub struct TagCertificateAuthorityRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [AcmPca::untag_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagCertificateAuthorityRequest {
@@ -701,6 +853,7 @@ pub struct UntagCertificateAuthorityRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [AcmPca::update_certificate_authority]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCertificateAuthorityRequest {
@@ -2123,7 +2276,7 @@ impl fmt::Display for UpdateCertificateAuthorityError {
 impl Error for UpdateCertificateAuthorityError {}
 /// Trait representing the capabilities of the ACM-PCA API. ACM-PCA clients implement this trait.
 #[async_trait]
-pub trait AcmPca {
+pub trait AcmPca: Clone + Sync + Send + 'static {
     /// <p><p>Creates a root or subordinate private certificate authority (CA). You must specify the CA configuration, the certificate revocation list (CRL) configuration, the CA type, and an optional idempotency token to avoid accidental creation of multiple CAs. The CA configuration specifies the name of the algorithm and key size to be used to create the CA private key, the type of signing algorithm that the CA uses, and X.500 subject information. The CRL configuration specifies the CRL expiration period in days (the validity period of the CRL), the Amazon S3 bucket that will contain the CRL, and a CNAME alias for the S3 bucket that is included in certificates issued by the CA. If successful, this action returns the Amazon Resource Name (ARN) of the CA.</p> <p>ACM Private CAA assets that are stored in Amazon S3 can be protected with encryption. For more information, see <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#crl-encryption">Encrypting Your CRLs</a>.</p> <note> <p>Both PCA and the IAM principal must have permission to write to the S3 bucket that you specify. If the IAM principal making the call does not have permission to write to the bucket, then an exception is thrown. For more information, see <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaAuthAccess.html">Configure Access to ACM Private CA</a>.</p> </note></p>
     async fn create_certificate_authority(
         &self,
@@ -2223,17 +2376,50 @@ pub trait AcmPca {
         input: ListCertificateAuthoritiesRequest,
     ) -> Result<ListCertificateAuthoritiesResponse, RusotoError<ListCertificateAuthoritiesError>>;
 
+    /// Auto-paginating version of `list_certificate_authorities`
+    fn list_certificate_authorities_pages<'a>(
+        &'a self,
+        mut input: ListCertificateAuthoritiesRequest,
+    ) -> RusotoStream<'a, CertificateAuthority, ListCertificateAuthoritiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_certificate_authorities(input.clone())
+        }))
+    }
+
     /// <p><p>List all permissions on a private CA, if any, granted to the AWS Certificate Manager (ACM) service principal (acm.amazonaws.com). </p> <p>These permissions allow ACM to issue and renew ACM certificates that reside in the same AWS account as the CA. </p> <p>Permissions can be granted with the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreatePermission.html">CreatePermission</a> action and revoked with the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_DeletePermission.html">DeletePermission</a> action.</p> <p class="title"> <b>About Permissions</b> </p> <ul> <li> <p>If the private CA and the certificates it issues reside in the same account, you can use <code>CreatePermission</code> to grant permissions for ACM to carry out automatic certificate renewals.</p> </li> <li> <p>For automatic certificate renewal to succeed, the ACM service principal needs permissions to create, retrieve, and list certificates.</p> </li> <li> <p>If the private CA and the ACM certificates reside in different accounts, then permissions cannot be used to enable automatic renewals. Instead, the ACM certificate owner must set up a resource-based policy to enable cross-account issuance and renewals. For more information, see <a href="acm-pca/latest/userguide/pca-rbp.html">Using a Resource Based Policy with ACM Private CA</a>.</p> </li> </ul></p>
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
     ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>>;
 
+    /// Auto-paginating version of `list_permissions`
+    fn list_permissions_pages<'a>(
+        &'a self,
+        mut input: ListPermissionsRequest,
+    ) -> RusotoStream<'a, Permission, ListPermissionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_permissions(input.clone())
+        }))
+    }
+
     /// <p>Lists the tags, if any, that are associated with your private CA or one that has been shared with you. Tags are labels that you can use to identify and organize your CAs. Each tag consists of a key and an optional value. Call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_TagCertificateAuthority.html">TagCertificateAuthority</a> action to add one or more tags to your CA. Call the <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_UntagCertificateAuthority.html">UntagCertificateAuthority</a> action to remove tags. </p>
     async fn list_tags(
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+
+    /// Auto-paginating version of `list_tags`
+    fn list_tags_pages<'a>(
+        &'a self,
+        mut input: ListTagsRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags(input.clone())
+        }))
+    }
 
     /// <p><p>Attaches a resource-based policy to a private CA. </p> <p>A policy can also be applied by <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/pca-ram.html">sharing</a> a private CA through AWS Resource Access Manager (RAM).</p> <p>The policy can be displayed with <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_GetPolicy.html">GetPolicy</a> and removed with <a href="https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_DeletePolicy.html">DeletePolicy</a>.</p> <p class="title"> <b>About Policies</b> </p> <ul> <li> <p>A policy grants access on a private CA to an AWS customer account, to AWS Organizations, or to an AWS Organizations unit. Policies are under the control of a CA administrator. For more information, see <a href="acm-pca/latest/userguide/pca-rbp.html">Using a Resource Based Policy with ACM Private CA</a>.</p> </li> <li> <p>A policy permits a user of AWS Certificate Manager (ACM) to issue ACM certificates signed by a CA in another account.</p> </li> <li> <p>For ACM to manage automatic renewal of these certificates, the ACM user must configure a Service Linked Role (SLR). The SLR allows the ACM service to assume the identity of the user, subject to confirmation against the ACM Private CA policy. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-slr.html">Using a Service Linked Role with ACM</a>.</p> </li> <li> <p>Updates made in AWS Resource Manager (RAM) are reflected in policies. For more information, see <a href="acm-pca/latest/userguide/pca-ram.html">Using AWS Resource Access Manager (RAM) with ACM Private CA</a>.</p> </li> </ul></p>
     async fn put_policy(&self, input: PutPolicyRequest) -> Result<(), RusotoError<PutPolicyError>>;

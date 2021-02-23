@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -80,6 +84,7 @@ pub struct AccountModification {
     pub start_time: Option<f64>,
 }
 
+/// see [Workspaces::associate_connection_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConnectionAliasRequest {
@@ -91,6 +96,7 @@ pub struct AssociateConnectionAliasRequest {
     pub resource_id: String,
 }
 
+/// see [Workspaces::associate_connection_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateConnectionAliasResult {
@@ -100,6 +106,7 @@ pub struct AssociateConnectionAliasResult {
     pub connection_identifier: Option<String>,
 }
 
+/// see [Workspaces::associate_ip_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIpGroupsRequest {
@@ -111,10 +118,12 @@ pub struct AssociateIpGroupsRequest {
     pub group_ids: Vec<String>,
 }
 
+/// see [Workspaces::associate_ip_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateIpGroupsResult {}
 
+/// see [Workspaces::authorize_ip_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeIpRulesRequest {
@@ -126,6 +135,7 @@ pub struct AuthorizeIpRulesRequest {
     pub user_rules: Vec<IpRuleItem>,
 }
 
+/// see [Workspaces::authorize_ip_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizeIpRulesResult {}
@@ -222,6 +232,7 @@ pub struct ConnectionAliasPermission {
     pub shared_account_id: String,
 }
 
+/// see [Workspaces::copy_workspace_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyWorkspaceImageRequest {
@@ -244,6 +255,7 @@ pub struct CopyWorkspaceImageRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Workspaces::copy_workspace_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyWorkspaceImageResult {
@@ -253,6 +265,7 @@ pub struct CopyWorkspaceImageResult {
     pub image_id: Option<String>,
 }
 
+/// see [Workspaces::create_connection_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionAliasRequest {
@@ -265,6 +278,7 @@ pub struct CreateConnectionAliasRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Workspaces::create_connection_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectionAliasResult {
@@ -274,6 +288,7 @@ pub struct CreateConnectionAliasResult {
     pub alias_id: Option<String>,
 }
 
+/// see [Workspaces::create_ip_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIpGroupRequest {
@@ -294,6 +309,7 @@ pub struct CreateIpGroupRequest {
     pub user_rules: Option<Vec<IpRuleItem>>,
 }
 
+/// see [Workspaces::create_ip_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIpGroupResult {
@@ -303,6 +319,7 @@ pub struct CreateIpGroupResult {
     pub group_id: Option<String>,
 }
 
+/// see [Workspaces::create_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
@@ -314,10 +331,12 @@ pub struct CreateTagsRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Workspaces::create_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagsResult {}
 
+/// see [Workspaces::create_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkspacesRequest {
@@ -326,6 +345,7 @@ pub struct CreateWorkspacesRequest {
     pub workspaces: Vec<WorkspaceRequest>,
 }
 
+/// see [Workspaces::create_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkspacesResult {
@@ -369,6 +389,7 @@ pub struct DefaultWorkspaceCreationProperties {
     pub user_enabled_as_local_administrator: Option<bool>,
 }
 
+/// see [Workspaces::delete_connection_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionAliasRequest {
@@ -377,10 +398,12 @@ pub struct DeleteConnectionAliasRequest {
     pub alias_id: String,
 }
 
+/// see [Workspaces::delete_connection_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionAliasResult {}
 
+/// see [Workspaces::delete_ip_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIpGroupRequest {
@@ -389,10 +412,12 @@ pub struct DeleteIpGroupRequest {
     pub group_id: String,
 }
 
+/// see [Workspaces::delete_ip_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIpGroupResult {}
 
+/// see [Workspaces::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
@@ -404,10 +429,12 @@ pub struct DeleteTagsRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Workspaces::delete_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsResult {}
 
+/// see [Workspaces::delete_workspace_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkspaceImageRequest {
@@ -416,10 +443,12 @@ pub struct DeleteWorkspaceImageRequest {
     pub image_id: String,
 }
 
+/// see [Workspaces::delete_workspace_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkspaceImageResult {}
 
+/// see [Workspaces::deregister_workspace_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWorkspaceDirectoryRequest {
@@ -428,10 +457,12 @@ pub struct DeregisterWorkspaceDirectoryRequest {
     pub directory_id: String,
 }
 
+/// see [Workspaces::deregister_workspace_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterWorkspaceDirectoryResult {}
 
+/// see [Workspaces::describe_account_modifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountModificationsRequest {
@@ -441,6 +472,23 @@ pub struct DescribeAccountModificationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAccountModificationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAccountModificationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_account_modifications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountModificationsResult {
@@ -454,10 +502,34 @@ pub struct DescribeAccountModificationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAccountModificationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAccountModificationsResult {
+    type Item = AccountModification;
+
+    fn into_pagination_page(self) -> Vec<AccountModification> {
+        self.account_modifications.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountRequest {}
 
+/// see [Workspaces::describe_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountResult {
@@ -471,6 +543,7 @@ pub struct DescribeAccountResult {
     pub dedicated_tenancy_support: Option<String>,
 }
 
+/// see [Workspaces::describe_client_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientPropertiesRequest {
@@ -479,6 +552,7 @@ pub struct DescribeClientPropertiesRequest {
     pub resource_ids: Vec<String>,
 }
 
+/// see [Workspaces::describe_client_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClientPropertiesResult {
@@ -488,6 +562,7 @@ pub struct DescribeClientPropertiesResult {
     pub client_properties_list: Option<Vec<ClientPropertiesResult>>,
 }
 
+/// see [Workspaces::describe_connection_alias_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionAliasPermissionsRequest {
@@ -504,6 +579,7 @@ pub struct DescribeConnectionAliasPermissionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Workspaces::describe_connection_alias_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionAliasPermissionsResult {
@@ -521,6 +597,7 @@ pub struct DescribeConnectionAliasPermissionsResult {
     pub next_token: Option<String>,
 }
 
+/// see [Workspaces::describe_connection_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionAliasesRequest {
@@ -542,6 +619,7 @@ pub struct DescribeConnectionAliasesRequest {
     pub resource_id: Option<String>,
 }
 
+/// see [Workspaces::describe_connection_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionAliasesResult {
@@ -555,6 +633,7 @@ pub struct DescribeConnectionAliasesResult {
     pub next_token: Option<String>,
 }
 
+/// see [Workspaces::describe_ip_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIpGroupsRequest {
@@ -572,6 +651,23 @@ pub struct DescribeIpGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeIpGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeIpGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_ip_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIpGroupsResult {
@@ -585,6 +681,29 @@ pub struct DescribeIpGroupsResult {
     pub result: Option<Vec<WorkspacesIpGroup>>,
 }
 
+impl Paged for DescribeIpGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeIpGroupsResult {
+    type Item = WorkspacesIpGroup;
+
+    fn into_pagination_page(self) -> Vec<WorkspacesIpGroup> {
+        self.result.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
@@ -593,6 +712,7 @@ pub struct DescribeTagsRequest {
     pub resource_id: String,
 }
 
+/// see [Workspaces::describe_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResult {
@@ -602,6 +722,7 @@ pub struct DescribeTagsResult {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [Workspaces::describe_workspace_bundles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceBundlesRequest {
@@ -619,6 +740,23 @@ pub struct DescribeWorkspaceBundlesRequest {
     pub owner: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceBundlesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceBundlesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_workspace_bundles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceBundlesResult {
@@ -632,6 +770,29 @@ pub struct DescribeWorkspaceBundlesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceBundlesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeWorkspaceBundlesResult {
+    type Item = WorkspaceBundle;
+
+    fn into_pagination_page(self) -> Vec<WorkspaceBundle> {
+        self.bundles.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_workspace_directories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceDirectoriesRequest {
@@ -649,6 +810,23 @@ pub struct DescribeWorkspaceDirectoriesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceDirectoriesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceDirectoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_workspace_directories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceDirectoriesResult {
@@ -662,6 +840,29 @@ pub struct DescribeWorkspaceDirectoriesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceDirectoriesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeWorkspaceDirectoriesResult {
+    type Item = WorkspaceDirectory;
+
+    fn into_pagination_page(self) -> Vec<WorkspaceDirectory> {
+        self.directories.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_workspace_image_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagePermissionsRequest {
@@ -678,6 +879,7 @@ pub struct DescribeWorkspaceImagePermissionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Workspaces::describe_workspace_image_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceImagePermissionsResult {
@@ -695,6 +897,7 @@ pub struct DescribeWorkspaceImagePermissionsResult {
     pub next_token: Option<String>,
 }
 
+/// see [Workspaces::describe_workspace_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagesRequest {
@@ -716,6 +919,23 @@ pub struct DescribeWorkspaceImagesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceImagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_workspace_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceImagesResult {
@@ -729,6 +949,29 @@ pub struct DescribeWorkspaceImagesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeWorkspaceImagesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeWorkspaceImagesResult {
+    type Item = WorkspaceImage;
+
+    fn into_pagination_page(self) -> Vec<WorkspaceImage> {
+        self.images.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_workspace_snapshots]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceSnapshotsRequest {
@@ -737,6 +980,7 @@ pub struct DescribeWorkspaceSnapshotsRequest {
     pub workspace_id: String,
 }
 
+/// see [Workspaces::describe_workspace_snapshots]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceSnapshotsResult {
@@ -750,6 +994,7 @@ pub struct DescribeWorkspaceSnapshotsResult {
     pub restore_snapshots: Option<Vec<Snapshot>>,
 }
 
+/// see [Workspaces::describe_workspaces_connection_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesConnectionStatusRequest {
@@ -763,6 +1008,23 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
+impl Paged for DescribeWorkspacesConnectionStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspacesConnectionStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_workspaces_connection_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
@@ -776,6 +1038,29 @@ pub struct DescribeWorkspacesConnectionStatusResult {
     pub workspaces_connection_status: Option<Vec<WorkspaceConnectionStatus>>,
 }
 
+impl Paged for DescribeWorkspacesConnectionStatusResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeWorkspacesConnectionStatusResult {
+    type Item = WorkspaceConnectionStatus;
+
+    fn into_pagination_page(self) -> Vec<WorkspaceConnectionStatus> {
+        self.workspaces_connection_status.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::describe_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesRequest {
@@ -805,6 +1090,23 @@ pub struct DescribeWorkspacesRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
+impl Paged for DescribeWorkspacesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::describe_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesResult {
@@ -818,6 +1120,29 @@ pub struct DescribeWorkspacesResult {
     pub workspaces: Option<Vec<Workspace>>,
 }
 
+impl Paged for DescribeWorkspacesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeWorkspacesResult {
+    type Item = Workspace;
+
+    fn into_pagination_page(self) -> Vec<Workspace> {
+        self.workspaces.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::disassociate_connection_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectionAliasRequest {
@@ -826,10 +1151,12 @@ pub struct DisassociateConnectionAliasRequest {
     pub alias_id: String,
 }
 
+/// see [Workspaces::disassociate_connection_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateConnectionAliasResult {}
 
+/// see [Workspaces::disassociate_ip_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIpGroupsRequest {
@@ -841,6 +1168,7 @@ pub struct DisassociateIpGroupsRequest {
     pub group_ids: Vec<String>,
 }
 
+/// see [Workspaces::disassociate_ip_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateIpGroupsResult {}
@@ -891,6 +1219,7 @@ pub struct ImagePermission {
     pub shared_account_id: Option<String>,
 }
 
+/// see [Workspaces::import_workspace_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
@@ -916,6 +1245,7 @@ pub struct ImportWorkspaceImageRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Workspaces::import_workspace_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportWorkspaceImageResult {
@@ -938,6 +1268,7 @@ pub struct IpRuleItem {
     pub rule_desc: Option<String>,
 }
 
+/// see [Workspaces::list_available_management_cidr_ranges]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAvailableManagementCidrRangesRequest {
@@ -954,6 +1285,23 @@ pub struct ListAvailableManagementCidrRangesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAvailableManagementCidrRangesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAvailableManagementCidrRangesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workspaces::list_available_management_cidr_ranges]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAvailableManagementCidrRangesResult {
@@ -967,6 +1315,29 @@ pub struct ListAvailableManagementCidrRangesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAvailableManagementCidrRangesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAvailableManagementCidrRangesResult {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.management_cidr_ranges.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workspaces::migrate_workspace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MigrateWorkspaceRequest {
@@ -978,6 +1349,7 @@ pub struct MigrateWorkspaceRequest {
     pub source_workspace_id: String,
 }
 
+/// see [Workspaces::migrate_workspace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MigrateWorkspaceResult {
@@ -1005,6 +1377,7 @@ pub struct ModificationState {
     pub state: Option<String>,
 }
 
+/// see [Workspaces::modify_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyAccountRequest {
@@ -1018,10 +1391,12 @@ pub struct ModifyAccountRequest {
     pub dedicated_tenancy_support: Option<String>,
 }
 
+/// see [Workspaces::modify_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyAccountResult {}
 
+/// see [Workspaces::modify_client_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClientPropertiesRequest {
@@ -1033,10 +1408,12 @@ pub struct ModifyClientPropertiesRequest {
     pub resource_id: String,
 }
 
+/// see [Workspaces::modify_client_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClientPropertiesResult {}
 
+/// see [Workspaces::modify_selfservice_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySelfservicePermissionsRequest {
@@ -1048,10 +1425,12 @@ pub struct ModifySelfservicePermissionsRequest {
     pub selfservice_permissions: SelfservicePermissions,
 }
 
+/// see [Workspaces::modify_selfservice_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifySelfservicePermissionsResult {}
 
+/// see [Workspaces::modify_workspace_access_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceAccessPropertiesRequest {
@@ -1063,10 +1442,12 @@ pub struct ModifyWorkspaceAccessPropertiesRequest {
     pub workspace_access_properties: WorkspaceAccessProperties,
 }
 
+/// see [Workspaces::modify_workspace_access_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceAccessPropertiesResult {}
 
+/// see [Workspaces::modify_workspace_creation_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceCreationPropertiesRequest {
@@ -1078,10 +1459,12 @@ pub struct ModifyWorkspaceCreationPropertiesRequest {
     pub workspace_creation_properties: WorkspaceCreationProperties,
 }
 
+/// see [Workspaces::modify_workspace_creation_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceCreationPropertiesResult {}
 
+/// see [Workspaces::modify_workspace_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspacePropertiesRequest {
@@ -1093,10 +1476,12 @@ pub struct ModifyWorkspacePropertiesRequest {
     pub workspace_properties: WorkspaceProperties,
 }
 
+/// see [Workspaces::modify_workspace_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspacePropertiesResult {}
 
+/// see [Workspaces::modify_workspace_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceStateRequest {
@@ -1108,6 +1493,7 @@ pub struct ModifyWorkspaceStateRequest {
     pub workspace_state: String,
 }
 
+/// see [Workspaces::modify_workspace_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceStateResult {}
@@ -1131,6 +1517,7 @@ pub struct RebootRequest {
     pub workspace_id: String,
 }
 
+/// see [Workspaces::reboot_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootWorkspacesRequest {
@@ -1139,6 +1526,7 @@ pub struct RebootWorkspacesRequest {
     pub reboot_workspace_requests: Vec<RebootRequest>,
 }
 
+/// see [Workspaces::reboot_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootWorkspacesResult {
@@ -1157,6 +1545,7 @@ pub struct RebuildRequest {
     pub workspace_id: String,
 }
 
+/// see [Workspaces::rebuild_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildWorkspacesRequest {
@@ -1165,6 +1554,7 @@ pub struct RebuildWorkspacesRequest {
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
+/// see [Workspaces::rebuild_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebuildWorkspacesResult {
@@ -1174,6 +1564,7 @@ pub struct RebuildWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
+/// see [Workspaces::register_workspace_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkspaceDirectoryRequest {
@@ -1201,10 +1592,12 @@ pub struct RegisterWorkspaceDirectoryRequest {
     pub tenancy: Option<String>,
 }
 
+/// see [Workspaces::register_workspace_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterWorkspaceDirectoryResult {}
 
+/// see [Workspaces::restore_workspace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreWorkspaceRequest {
@@ -1213,10 +1606,12 @@ pub struct RestoreWorkspaceRequest {
     pub workspace_id: String,
 }
 
+/// see [Workspaces::restore_workspace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreWorkspaceResult {}
 
+/// see [Workspaces::revoke_ip_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeIpRulesRequest {
@@ -1228,6 +1623,7 @@ pub struct RevokeIpRulesRequest {
     pub user_rules: Vec<String>,
 }
 
+/// see [Workspaces::revoke_ip_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeIpRulesResult {}
@@ -1287,6 +1683,7 @@ pub struct StartRequest {
     pub workspace_id: Option<String>,
 }
 
+/// see [Workspaces::start_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkspacesRequest {
@@ -1295,6 +1692,7 @@ pub struct StartWorkspacesRequest {
     pub start_workspace_requests: Vec<StartRequest>,
 }
 
+/// see [Workspaces::start_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartWorkspacesResult {
@@ -1314,6 +1712,7 @@ pub struct StopRequest {
     pub workspace_id: Option<String>,
 }
 
+/// see [Workspaces::stop_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkspacesRequest {
@@ -1322,6 +1721,7 @@ pub struct StopWorkspacesRequest {
     pub stop_workspace_requests: Vec<StopRequest>,
 }
 
+/// see [Workspaces::stop_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopWorkspacesResult {
@@ -1352,6 +1752,7 @@ pub struct TerminateRequest {
     pub workspace_id: String,
 }
 
+/// see [Workspaces::terminate_workspaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkspacesRequest {
@@ -1360,6 +1761,7 @@ pub struct TerminateWorkspacesRequest {
     pub terminate_workspace_requests: Vec<TerminateRequest>,
 }
 
+/// see [Workspaces::terminate_workspaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateWorkspacesResult {
@@ -1369,6 +1771,7 @@ pub struct TerminateWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
+/// see [Workspaces::update_connection_alias_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionAliasPermissionRequest {
@@ -1380,10 +1783,12 @@ pub struct UpdateConnectionAliasPermissionRequest {
     pub connection_alias_permission: ConnectionAliasPermission,
 }
 
+/// see [Workspaces::update_connection_alias_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectionAliasPermissionResult {}
 
+/// see [Workspaces::update_rules_of_ip_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRulesOfIpGroupRequest {
@@ -1395,10 +1800,12 @@ pub struct UpdateRulesOfIpGroupRequest {
     pub user_rules: Vec<IpRuleItem>,
 }
 
+/// see [Workspaces::update_rules_of_ip_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
 
+/// see [Workspaces::update_workspace_image_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkspaceImagePermissionRequest {
@@ -1413,6 +1820,7 @@ pub struct UpdateWorkspaceImagePermissionRequest {
     pub shared_account_id: String,
 }
 
+/// see [Workspaces::update_workspace_image_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkspaceImagePermissionResult {}
@@ -4425,7 +4833,7 @@ impl fmt::Display for UpdateWorkspaceImagePermissionError {
 impl Error for UpdateWorkspaceImagePermissionError {}
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 #[async_trait]
-pub trait Workspaces {
+pub trait Workspaces: Clone + Sync + Send + 'static {
     /// <p><p>Associates the specified connection alias with the specified directory to enable cross-Region redirection. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
     async fn associate_connection_alias(
         &self,
@@ -4515,6 +4923,17 @@ pub trait Workspaces {
         input: DescribeAccountModificationsRequest,
     ) -> Result<DescribeAccountModificationsResult, RusotoError<DescribeAccountModificationsError>>;
 
+    /// Auto-paginating version of `describe_account_modifications`
+    fn describe_account_modifications_pages<'a>(
+        &'a self,
+        mut input: DescribeAccountModificationsRequest,
+    ) -> RusotoStream<'a, AccountModification, DescribeAccountModificationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_account_modifications(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
     async fn describe_client_properties(
         &self,
@@ -4542,6 +4961,17 @@ pub trait Workspaces {
         input: DescribeIpGroupsRequest,
     ) -> Result<DescribeIpGroupsResult, RusotoError<DescribeIpGroupsError>>;
 
+    /// Auto-paginating version of `describe_ip_groups`
+    fn describe_ip_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeIpGroupsRequest,
+    ) -> RusotoStream<'a, WorkspacesIpGroup, DescribeIpGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ip_groups(input.clone())
+        }))
+    }
+
     /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
     async fn describe_tags(
         &self,
@@ -4554,11 +4984,33 @@ pub trait Workspaces {
         input: DescribeWorkspaceBundlesRequest,
     ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>>;
 
+    /// Auto-paginating version of `describe_workspace_bundles`
+    fn describe_workspace_bundles_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceBundlesRequest,
+    ) -> RusotoStream<'a, WorkspaceBundle, DescribeWorkspaceBundlesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_bundles(input.clone())
+        }))
+    }
+
     /// <p>Describes the available directories that are registered with Amazon WorkSpaces.</p>
     async fn describe_workspace_directories(
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
     ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>;
+
+    /// Auto-paginating version of `describe_workspace_directories`
+    fn describe_workspace_directories_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceDirectoriesRequest,
+    ) -> RusotoStream<'a, WorkspaceDirectory, DescribeWorkspaceDirectoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_directories(input.clone())
+        }))
+    }
 
     /// <p>Describes the permissions that the owner of an image has granted to other AWS accounts for an image.</p>
     async fn describe_workspace_image_permissions(
@@ -4575,6 +5027,17 @@ pub trait Workspaces {
         input: DescribeWorkspaceImagesRequest,
     ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>>;
 
+    /// Auto-paginating version of `describe_workspace_images`
+    fn describe_workspace_images_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceImagesRequest,
+    ) -> RusotoStream<'a, WorkspaceImage, DescribeWorkspaceImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_images(input.clone())
+        }))
+    }
+
     /// <p>Describes the snapshots for the specified WorkSpace.</p>
     async fn describe_workspace_snapshots(
         &self,
@@ -4587,6 +5050,17 @@ pub trait Workspaces {
         input: DescribeWorkspacesRequest,
     ) -> Result<DescribeWorkspacesResult, RusotoError<DescribeWorkspacesError>>;
 
+    /// Auto-paginating version of `describe_workspaces`
+    fn describe_workspaces_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspacesRequest,
+    ) -> RusotoStream<'a, Workspace, DescribeWorkspacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspaces(input.clone())
+        }))
+    }
+
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
     async fn describe_workspaces_connection_status(
         &self,
@@ -4595,6 +5069,17 @@ pub trait Workspaces {
         DescribeWorkspacesConnectionStatusResult,
         RusotoError<DescribeWorkspacesConnectionStatusError>,
     >;
+
+    /// Auto-paginating version of `describe_workspaces_connection_status`
+    fn describe_workspaces_connection_status_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspacesConnectionStatusRequest,
+    ) -> RusotoStream<'a, WorkspaceConnectionStatus, DescribeWorkspacesConnectionStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspaces_connection_status(input.clone())
+        }))
+    }
 
     /// <p><p>Disassociates a connection alias from a directory. Disassociating a connection alias disables cross-Region redirection between two directories in different AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
     async fn disassociate_connection_alias(
@@ -4622,6 +5107,17 @@ pub trait Workspaces {
         ListAvailableManagementCidrRangesResult,
         RusotoError<ListAvailableManagementCidrRangesError>,
     >;
+
+    /// Auto-paginating version of `list_available_management_cidr_ranges`
+    fn list_available_management_cidr_ranges_pages<'a>(
+        &'a self,
+        mut input: ListAvailableManagementCidrRangesRequest,
+    ) -> RusotoStream<'a, String, ListAvailableManagementCidrRangesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_available_management_cidr_ranges(input.clone())
+        }))
+    }
 
     /// <p>Migrates a WorkSpace from one operating system or bundle type to another, while retaining the data on the user volume.</p> <p>The migration process recreates the WorkSpace by using a new root volume from the target bundle image and the user volume from the last available snapshot of the original WorkSpace. During migration, the original <code>D:\Users\%USERNAME%</code> user profile folder is renamed to <code>D:\Users\%USERNAME%MMddyyTHHmmss%.NotMigrated</code>. A new <code>D:\Users\%USERNAME%\</code> folder is generated by the new OS. Certain files in the old user profile are moved to the new user profile.</p> <p>For available migration scenarios, details about what happens during migration, and best practices, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/migrate-workspaces.html">Migrate a WorkSpace</a>.</p>
     async fn migrate_workspace(

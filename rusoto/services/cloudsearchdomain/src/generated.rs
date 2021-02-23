@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -141,6 +145,7 @@ pub struct Hits {
 }
 
 /// <p>Container for the parameters to the <code>Search</code> request.</p>
+/// see [CloudSearchDomain::search]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
@@ -202,6 +207,7 @@ pub struct SearchRequest {
 }
 
 /// <p>The result of a <code>Search</code> request. Contains the documents that match the specified search criteria and any requested fields, highlights, and facet information.</p>
+/// see [CloudSearchDomain::search]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResponse {
@@ -256,6 +262,7 @@ pub struct SuggestModel {
 }
 
 /// <p>Container for the parameters to the <code>Suggest</code> request.</p>
+/// see [CloudSearchDomain::suggest]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SuggestRequest {
@@ -272,6 +279,7 @@ pub struct SuggestRequest {
 }
 
 /// <p>Contains the response to a <code>Suggest</code> request.</p>
+/// see [CloudSearchDomain::suggest]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuggestResponse {
@@ -318,6 +326,7 @@ pub struct SuggestionMatch {
 }
 
 /// <p>Container for the parameters to the <code>UploadDocuments</code> request.</p>
+/// see [CloudSearchDomain::upload_documents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadDocumentsRequest {
@@ -335,6 +344,7 @@ pub struct UploadDocumentsRequest {
 }
 
 /// <p>Contains the response to an <code>UploadDocuments</code> request.</p>
+/// see [CloudSearchDomain::upload_documents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadDocumentsResponse {
@@ -444,7 +454,7 @@ impl fmt::Display for UploadDocumentsError {
 impl Error for UploadDocumentsError {}
 /// Trait representing the capabilities of the Amazon CloudSearch Domain API. Amazon CloudSearch Domain clients implement this trait.
 #[async_trait]
-pub trait CloudSearchDomain {
+pub trait CloudSearchDomain: Clone + Sync + Send + 'static {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
     async fn search(
         &self,

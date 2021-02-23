@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -52,6 +56,7 @@ impl StorageGatewayClient {
 
 use serde_json;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> </ul></p>
+/// see [StorageGateway::activate_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateGatewayInput {
@@ -86,6 +91,7 @@ pub struct ActivateGatewayInput {
 }
 
 /// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and AWS Region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
+/// see [StorageGateway::activate_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivateGatewayOutput {
@@ -94,6 +100,7 @@ pub struct ActivateGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::add_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCacheInput {
@@ -104,6 +111,7 @@ pub struct AddCacheInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::add_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddCacheOutput {
@@ -113,6 +121,7 @@ pub struct AddCacheOutput {
 }
 
 /// <p>AddTagsToResourceInput</p>
+/// see [StorageGateway::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceInput {
@@ -125,6 +134,7 @@ pub struct AddTagsToResourceInput {
 }
 
 /// <p>AddTagsToResourceOutput</p>
+/// see [StorageGateway::add_tags_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceOutput {
@@ -134,6 +144,7 @@ pub struct AddTagsToResourceOutput {
     pub resource_arn: Option<String>,
 }
 
+/// see [StorageGateway::add_upload_buffer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddUploadBufferInput {
@@ -144,6 +155,7 @@ pub struct AddUploadBufferInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::add_upload_buffer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddUploadBufferOutput {
@@ -153,6 +165,7 @@ pub struct AddUploadBufferOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>AddWorkingStorageInput$DiskIds</a> </p> </li> </ul></p>
+/// see [StorageGateway::add_working_storage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddWorkingStorageInput {
@@ -164,6 +177,7 @@ pub struct AddWorkingStorageInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway for which working storage was configured.</p>
+/// see [StorageGateway::add_working_storage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddWorkingStorageOutput {
@@ -172,6 +186,7 @@ pub struct AddWorkingStorageOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::assign_tape_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignTapePoolInput {
@@ -187,6 +202,7 @@ pub struct AssignTapePoolInput {
     pub tape_arn: String,
 }
 
+/// see [StorageGateway::assign_tape_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssignTapePoolOutput {
@@ -197,6 +213,7 @@ pub struct AssignTapePoolOutput {
 }
 
 /// <p>AttachVolumeInput</p>
+/// see [StorageGateway::attach_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachVolumeInput {
@@ -220,6 +237,7 @@ pub struct AttachVolumeInput {
 }
 
 /// <p>AttachVolumeOutput</p>
+/// see [StorageGateway::attach_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachVolumeOutput {
@@ -362,6 +380,7 @@ pub struct CachediSCSIVolume {
 }
 
 /// <p>CancelArchivalInput</p>
+/// see [StorageGateway::cancel_archival]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelArchivalInput {
@@ -373,6 +392,7 @@ pub struct CancelArchivalInput {
 }
 
 /// <p>CancelArchivalOutput</p>
+/// see [StorageGateway::cancel_archival]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelArchivalOutput {
@@ -383,6 +403,7 @@ pub struct CancelArchivalOutput {
 }
 
 /// <p>CancelRetrievalInput</p>
+/// see [StorageGateway::cancel_retrieval]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelRetrievalInput {
@@ -394,6 +415,7 @@ pub struct CancelRetrievalInput {
 }
 
 /// <p>CancelRetrievalOutput</p>
+/// see [StorageGateway::cancel_retrieval]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelRetrievalOutput {
@@ -425,6 +447,7 @@ pub struct ChapInfo {
     pub target_arn: Option<String>,
 }
 
+/// see [StorageGateway::create_cachedi_scsi_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCachediSCSIVolumeInput {
@@ -464,6 +487,7 @@ pub struct CreateCachediSCSIVolumeInput {
     pub volume_size_in_bytes: i64,
 }
 
+/// see [StorageGateway::create_cachedi_scsi_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCachediSCSIVolumeOutput {
@@ -478,6 +502,7 @@ pub struct CreateCachediSCSIVolumeOutput {
 }
 
 /// <p>CreateNFSFileShareInput</p>
+/// see [StorageGateway::create_nfs_file_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNFSFileShareInput {
@@ -552,6 +577,7 @@ pub struct CreateNFSFileShareInput {
 }
 
 /// <p>CreateNFSFileShareOutput</p>
+/// see [StorageGateway::create_nfs_file_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNFSFileShareOutput {
@@ -562,6 +588,7 @@ pub struct CreateNFSFileShareOutput {
 }
 
 /// <p>CreateSMBFileShareInput</p>
+/// see [StorageGateway::create_smb_file_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSMBFileShareInput {
@@ -656,6 +683,7 @@ pub struct CreateSMBFileShareInput {
 }
 
 /// <p>CreateSMBFileShareOutput</p>
+/// see [StorageGateway::create_smb_file_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSMBFileShareOutput {
@@ -665,6 +693,7 @@ pub struct CreateSMBFileShareOutput {
     pub file_share_arn: Option<String>,
 }
 
+/// see [StorageGateway::create_snapshot_from_volume_recovery_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotFromVolumeRecoveryPointInput {
@@ -680,6 +709,7 @@ pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     pub volume_arn: String,
 }
 
+/// see [StorageGateway::create_snapshot_from_volume_recovery_point]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
@@ -698,6 +728,7 @@ pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateSnapshotInput$SnapshotDescription</a> </p> </li> <li> <p> <a>CreateSnapshotInput$VolumeARN</a> </p> </li> </ul></p>
+/// see [StorageGateway::create_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotInput {
@@ -714,6 +745,7 @@ pub struct CreateSnapshotInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::create_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSnapshotOutput {
@@ -728,6 +760,7 @@ pub struct CreateSnapshotOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>CreateStorediSCSIVolumeInput$DiskId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$NetworkInterfaceId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$PreserveExistingData</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$SnapshotId</a> </p> </li> <li> <p> <a>CreateStorediSCSIVolumeInput$TargetName</a> </p> </li> </ul></p>
+/// see [StorageGateway::create_storedi_scsi_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStorediSCSIVolumeInput {
@@ -764,6 +797,7 @@ pub struct CreateStorediSCSIVolumeInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::create_storedi_scsi_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStorediSCSIVolumeOutput {
@@ -781,6 +815,7 @@ pub struct CreateStorediSCSIVolumeOutput {
     pub volume_size_in_bytes: Option<i64>,
 }
 
+/// see [StorageGateway::create_tape_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTapePoolInput {
@@ -804,6 +839,7 @@ pub struct CreateTapePoolInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [StorageGateway::create_tape_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTapePoolOutput {
@@ -814,6 +850,7 @@ pub struct CreateTapePoolOutput {
 }
 
 /// <p>CreateTapeWithBarcodeInput</p>
+/// see [StorageGateway::create_tape_with_barcode]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTapeWithBarcodeInput {
@@ -849,6 +886,7 @@ pub struct CreateTapeWithBarcodeInput {
 }
 
 /// <p>CreateTapeOutput</p>
+/// see [StorageGateway::create_tape_with_barcode]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTapeWithBarcodeOutput {
@@ -859,6 +897,7 @@ pub struct CreateTapeWithBarcodeOutput {
 }
 
 /// <p>CreateTapesInput</p>
+/// see [StorageGateway::create_tapes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTapesInput {
@@ -900,6 +939,7 @@ pub struct CreateTapesInput {
 }
 
 /// <p>CreateTapeOutput</p>
+/// see [StorageGateway::create_tapes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTapesOutput {
@@ -909,6 +949,7 @@ pub struct CreateTapesOutput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
+/// see [StorageGateway::delete_automatic_tape_creation_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAutomaticTapeCreationPolicyInput {
@@ -916,6 +957,7 @@ pub struct DeleteAutomaticTapeCreationPolicyInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::delete_automatic_tape_creation_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAutomaticTapeCreationPolicyOutput {
@@ -925,6 +967,7 @@ pub struct DeleteAutomaticTapeCreationPolicyOutput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DeleteBandwidthRateLimitInput$BandwidthType</a> </p> </li> </ul></p>
+/// see [StorageGateway::delete_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBandwidthRateLimitInput {
@@ -936,6 +979,7 @@ pub struct DeleteBandwidthRateLimitInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway whose bandwidth rate information was deleted.</p>
+/// see [StorageGateway::delete_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBandwidthRateLimitOutput {
@@ -945,6 +989,7 @@ pub struct DeleteBandwidthRateLimitOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>DeleteChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>DeleteChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
+/// see [StorageGateway::delete_chap_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChapCredentialsInput {
@@ -957,6 +1002,7 @@ pub struct DeleteChapCredentialsInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::delete_chap_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChapCredentialsOutput {
@@ -971,6 +1017,7 @@ pub struct DeleteChapCredentialsOutput {
 }
 
 /// <p>DeleteFileShareInput</p>
+/// see [StorageGateway::delete_file_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileShareInput {
@@ -984,6 +1031,7 @@ pub struct DeleteFileShareInput {
 }
 
 /// <p>DeleteFileShareOutput</p>
+/// see [StorageGateway::delete_file_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileShareOutput {
@@ -994,6 +1042,7 @@ pub struct DeleteFileShareOutput {
 }
 
 /// <p>A JSON object containing the ID of the gateway to delete.</p>
+/// see [StorageGateway::delete_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayInput {
@@ -1002,6 +1051,7 @@ pub struct DeleteGatewayInput {
 }
 
 /// <p>A JSON object containing the ID of the deleted gateway.</p>
+/// see [StorageGateway::delete_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGatewayOutput {
@@ -1010,6 +1060,7 @@ pub struct DeleteGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::delete_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotScheduleInput {
@@ -1018,6 +1069,7 @@ pub struct DeleteSnapshotScheduleInput {
     pub volume_arn: String,
 }
 
+/// see [StorageGateway::delete_snapshot_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSnapshotScheduleOutput {
@@ -1028,6 +1080,7 @@ pub struct DeleteSnapshotScheduleOutput {
 }
 
 /// <p>DeleteTapeArchiveInput</p>
+/// see [StorageGateway::delete_tape_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeArchiveInput {
@@ -1041,6 +1094,7 @@ pub struct DeleteTapeArchiveInput {
 }
 
 /// <p>DeleteTapeArchiveOutput</p>
+/// see [StorageGateway::delete_tape_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTapeArchiveOutput {
@@ -1051,6 +1105,7 @@ pub struct DeleteTapeArchiveOutput {
 }
 
 /// <p>DeleteTapeInput</p>
+/// see [StorageGateway::delete_tape]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapeInput {
@@ -1067,6 +1122,7 @@ pub struct DeleteTapeInput {
 }
 
 /// <p>DeleteTapeOutput</p>
+/// see [StorageGateway::delete_tape]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTapeOutput {
@@ -1076,6 +1132,7 @@ pub struct DeleteTapeOutput {
     pub tape_arn: Option<String>,
 }
 
+/// see [StorageGateway::delete_tape_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTapePoolInput {
@@ -1084,6 +1141,7 @@ pub struct DeleteTapePoolInput {
     pub pool_arn: String,
 }
 
+/// see [StorageGateway::delete_tape_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTapePoolOutput {
@@ -1094,6 +1152,7 @@ pub struct DeleteTapePoolOutput {
 }
 
 /// <p>A JSON object containing the <a>DeleteVolumeInput$VolumeARN</a> to delete.</p>
+/// see [StorageGateway::delete_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVolumeInput {
@@ -1103,6 +1162,7 @@ pub struct DeleteVolumeInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the storage volume that was deleted.</p>
+/// see [StorageGateway::delete_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVolumeOutput {
@@ -1112,6 +1172,7 @@ pub struct DeleteVolumeOutput {
     pub volume_arn: Option<String>,
 }
 
+/// see [StorageGateway::describe_availability_monitor_test]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailabilityMonitorTestInput {
@@ -1119,6 +1180,7 @@ pub struct DescribeAvailabilityMonitorTestInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::describe_availability_monitor_test]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAvailabilityMonitorTestOutput {
@@ -1136,6 +1198,7 @@ pub struct DescribeAvailabilityMonitorTestOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway.</p>
+/// see [StorageGateway::describe_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBandwidthRateLimitInput {
@@ -1144,6 +1207,7 @@ pub struct DescribeBandwidthRateLimitInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::describe_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBandwidthRateLimitOutput {
@@ -1160,6 +1224,7 @@ pub struct DescribeBandwidthRateLimitOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::describe_bandwidth_rate_limit_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBandwidthRateLimitScheduleInput {
@@ -1167,6 +1232,7 @@ pub struct DescribeBandwidthRateLimitScheduleInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::describe_bandwidth_rate_limit_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBandwidthRateLimitScheduleOutput {
@@ -1179,6 +1245,7 @@ pub struct DescribeBandwidthRateLimitScheduleOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::describe_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCacheInput {
@@ -1186,6 +1253,7 @@ pub struct DescribeCacheInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::describe_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCacheOutput {
@@ -1218,6 +1286,7 @@ pub struct DescribeCacheOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::describe_cachedi_scsi_volumes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCachediSCSIVolumesInput {
@@ -1227,6 +1296,7 @@ pub struct DescribeCachediSCSIVolumesInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::describe_cachedi_scsi_volumes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCachediSCSIVolumesOutput {
@@ -1237,6 +1307,7 @@ pub struct DescribeCachediSCSIVolumesOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the iSCSI volume target.</p>
+/// see [StorageGateway::describe_chap_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChapCredentialsInput {
@@ -1246,6 +1317,7 @@ pub struct DescribeChapCredentialsInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::describe_chap_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChapCredentialsOutput {
@@ -1256,6 +1328,7 @@ pub struct DescribeChapCredentialsOutput {
 }
 
 /// <p>A JSON object containing the ID of the gateway.</p>
+/// see [StorageGateway::describe_gateway_information]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGatewayInformationInput {
@@ -1264,6 +1337,7 @@ pub struct DescribeGatewayInformationInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::describe_gateway_information]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGatewayInformationOutput {
@@ -1341,6 +1415,7 @@ pub struct DescribeGatewayInformationOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway.</p>
+/// see [StorageGateway::describe_maintenance_start_time]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMaintenanceStartTimeInput {
@@ -1349,6 +1424,7 @@ pub struct DescribeMaintenanceStartTimeInput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfMonth</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfWeek</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$HourOfDay</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$MinuteOfHour</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$Timezone</a> </p> </li> </ul></p>
+/// see [StorageGateway::describe_maintenance_start_time]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMaintenanceStartTimeOutput {
@@ -1378,6 +1454,7 @@ pub struct DescribeMaintenanceStartTimeOutput {
 }
 
 /// <p>DescribeNFSFileSharesInput</p>
+/// see [StorageGateway::describe_nfs_file_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNFSFileSharesInput {
@@ -1387,6 +1464,7 @@ pub struct DescribeNFSFileSharesInput {
 }
 
 /// <p>DescribeNFSFileSharesOutput</p>
+/// see [StorageGateway::describe_nfs_file_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNFSFileSharesOutput {
@@ -1397,6 +1475,7 @@ pub struct DescribeNFSFileSharesOutput {
 }
 
 /// <p>DescribeSMBFileSharesInput</p>
+/// see [StorageGateway::describe_smb_file_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSMBFileSharesInput {
@@ -1406,6 +1485,7 @@ pub struct DescribeSMBFileSharesInput {
 }
 
 /// <p>DescribeSMBFileSharesOutput</p>
+/// see [StorageGateway::describe_smb_file_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSMBFileSharesOutput {
@@ -1415,6 +1495,7 @@ pub struct DescribeSMBFileSharesOutput {
     pub smb_file_share_info_list: Option<Vec<SMBFileShareInfo>>,
 }
 
+/// see [StorageGateway::describe_smb_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSMBSettingsInput {
@@ -1422,6 +1503,7 @@ pub struct DescribeSMBSettingsInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::describe_smb_settings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSMBSettingsOutput {
@@ -1451,6 +1533,7 @@ pub struct DescribeSMBSettingsOutput {
 }
 
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
+/// see [StorageGateway::describe_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotScheduleInput {
@@ -1459,6 +1542,7 @@ pub struct DescribeSnapshotScheduleInput {
     pub volume_arn: String,
 }
 
+/// see [StorageGateway::describe_snapshot_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSnapshotScheduleOutput {
@@ -1489,6 +1573,7 @@ pub struct DescribeSnapshotScheduleOutput {
 }
 
 /// <p>A JSON object containing a list of <a>DescribeStorediSCSIVolumesInput$VolumeARNs</a>.</p>
+/// see [StorageGateway::describe_storedi_scsi_volumes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStorediSCSIVolumesInput {
@@ -1497,6 +1582,7 @@ pub struct DescribeStorediSCSIVolumesInput {
     pub volume_ar_ns: Vec<String>,
 }
 
+/// see [StorageGateway::describe_storedi_scsi_volumes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStorediSCSIVolumesOutput {
@@ -1507,6 +1593,7 @@ pub struct DescribeStorediSCSIVolumesOutput {
 }
 
 /// <p>DescribeTapeArchivesInput</p>
+/// see [StorageGateway::describe_tape_archives]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapeArchivesInput {
@@ -1524,7 +1611,24 @@ pub struct DescribeTapeArchivesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
+impl Paged for DescribeTapeArchivesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapeArchivesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>DescribeTapeArchivesOutput</p>
+/// see [StorageGateway::describe_tape_archives]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTapeArchivesOutput {
@@ -1538,7 +1642,30 @@ pub struct DescribeTapeArchivesOutput {
     pub tape_archives: Option<Vec<TapeArchive>>,
 }
 
+impl Paged for DescribeTapeArchivesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeTapeArchivesOutput {
+    type Item = TapeArchive;
+
+    fn into_pagination_page(self) -> Vec<TapeArchive> {
+        self.tape_archives.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>DescribeTapeRecoveryPointsInput</p>
+/// see [StorageGateway::describe_tape_recovery_points]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapeRecoveryPointsInput {
@@ -1554,7 +1681,24 @@ pub struct DescribeTapeRecoveryPointsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for DescribeTapeRecoveryPointsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapeRecoveryPointsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>DescribeTapeRecoveryPointsOutput</p>
+/// see [StorageGateway::describe_tape_recovery_points]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTapeRecoveryPointsOutput {
@@ -1571,7 +1715,30 @@ pub struct DescribeTapeRecoveryPointsOutput {
     pub tape_recovery_point_infos: Option<Vec<TapeRecoveryPointInfo>>,
 }
 
+impl Paged for DescribeTapeRecoveryPointsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeTapeRecoveryPointsOutput {
+    type Item = TapeRecoveryPointInfo;
+
+    fn into_pagination_page(self) -> Vec<TapeRecoveryPointInfo> {
+        self.tape_recovery_point_infos.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>DescribeTapesInput</p>
+/// see [StorageGateway::describe_tapes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTapesInput {
@@ -1591,7 +1758,24 @@ pub struct DescribeTapesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
+impl Paged for DescribeTapesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>DescribeTapesOutput</p>
+/// see [StorageGateway::describe_tapes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTapesOutput {
@@ -1605,6 +1789,29 @@ pub struct DescribeTapesOutput {
     pub tapes: Option<Vec<Tape>>,
 }
 
+impl Paged for DescribeTapesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeTapesOutput {
+    type Item = Tape;
+
+    fn into_pagination_page(self) -> Vec<Tape> {
+        self.tapes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [StorageGateway::describe_upload_buffer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUploadBufferInput {
@@ -1612,6 +1819,7 @@ pub struct DescribeUploadBufferInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::describe_upload_buffer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUploadBufferOutput {
@@ -1633,6 +1841,7 @@ pub struct DescribeUploadBufferOutput {
 }
 
 /// <p>DescribeVTLDevicesInput</p>
+/// see [StorageGateway::describe_vtl_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVTLDevicesInput {
@@ -1652,7 +1861,24 @@ pub struct DescribeVTLDevicesInput {
     pub vtl_device_ar_ns: Option<Vec<String>>,
 }
 
+impl Paged for DescribeVTLDevicesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeVTLDevicesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>DescribeVTLDevicesOutput</p>
+/// see [StorageGateway::describe_vtl_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVTLDevicesOutput {
@@ -1669,7 +1895,30 @@ pub struct DescribeVTLDevicesOutput {
     pub vtl_devices: Option<Vec<VTLDevice>>,
 }
 
+impl Paged for DescribeVTLDevicesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeVTLDevicesOutput {
+    type Item = VTLDevice;
+
+    fn into_pagination_page(self) -> Vec<VTLDevice> {
+        self.vtl_devices.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway.</p>
+/// see [StorageGateway::describe_working_storage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkingStorageInput {
@@ -1678,6 +1927,7 @@ pub struct DescribeWorkingStorageInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::describe_working_storage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkingStorageOutput {
@@ -1699,6 +1949,7 @@ pub struct DescribeWorkingStorageOutput {
 }
 
 /// <p>AttachVolumeInput</p>
+/// see [StorageGateway::detach_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachVolumeInput {
@@ -1712,6 +1963,7 @@ pub struct DetachVolumeInput {
 }
 
 /// <p>AttachVolumeOutput</p>
+/// see [StorageGateway::detach_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachVolumeOutput {
@@ -1744,6 +1996,7 @@ pub struct DeviceiSCSIAttributes {
 }
 
 /// <p>DisableGatewayInput</p>
+/// see [StorageGateway::disable_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableGatewayInput {
@@ -1752,6 +2005,7 @@ pub struct DisableGatewayInput {
 }
 
 /// <p>DisableGatewayOutput</p>
+/// see [StorageGateway::disable_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableGatewayOutput {
@@ -1853,6 +2107,7 @@ pub struct GatewayInfo {
 }
 
 /// <p>JoinDomainInput</p>
+/// see [StorageGateway::join_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JoinDomainInput {
@@ -1883,6 +2138,7 @@ pub struct JoinDomainInput {
 }
 
 /// <p>JoinDomainOutput</p>
+/// see [StorageGateway::join_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JoinDomainOutput {
@@ -1896,6 +2152,7 @@ pub struct JoinDomainOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::list_automatic_tape_creation_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAutomaticTapeCreationPoliciesInput {
@@ -1904,6 +2161,7 @@ pub struct ListAutomaticTapeCreationPoliciesInput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::list_automatic_tape_creation_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAutomaticTapeCreationPoliciesOutput {
@@ -1914,6 +2172,7 @@ pub struct ListAutomaticTapeCreationPoliciesOutput {
 }
 
 /// <p>ListFileShareInput</p>
+/// see [StorageGateway::list_file_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFileSharesInput {
@@ -1931,7 +2190,24 @@ pub struct ListFileSharesInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListFileSharesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListFileSharesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>ListFileShareOutput</p>
+/// see [StorageGateway::list_file_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFileSharesOutput {
@@ -1949,7 +2225,30 @@ pub struct ListFileSharesOutput {
     pub next_marker: Option<String>,
 }
 
+impl Paged for ListFileSharesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedOutput for ListFileSharesOutput {
+    type Item = FileShareInfo;
+
+    fn into_pagination_page(self) -> Vec<FileShareInfo> {
+        self.file_share_info_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>A JSON object containing zero or more of the following fields:</p> <ul> <li> <p> <a>ListGatewaysInput$Limit</a> </p> </li> <li> <p> <a>ListGatewaysInput$Marker</a> </p> </li> </ul></p>
+/// see [StorageGateway::list_gateways]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewaysInput {
@@ -1963,6 +2262,23 @@ pub struct ListGatewaysInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListGatewaysInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGatewaysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [StorageGateway::list_gateways]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGatewaysOutput {
@@ -1976,7 +2292,30 @@ pub struct ListGatewaysOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListGatewaysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListGatewaysOutput {
+    type Item = GatewayInfo;
+
+    fn into_pagination_page(self) -> Vec<GatewayInfo> {
+        self.gateways.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway.</p>
+/// see [StorageGateway::list_local_disks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLocalDisksInput {
@@ -1984,6 +2323,7 @@ pub struct ListLocalDisksInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::list_local_disks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLocalDisksOutput {
@@ -1997,6 +2337,7 @@ pub struct ListLocalDisksOutput {
 }
 
 /// <p>ListTagsForResourceInput</p>
+/// see [StorageGateway::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -2013,7 +2354,24 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>ListTagsForResourceOutput</p>
+/// see [StorageGateway::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -2031,6 +2389,29 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceOutput {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [StorageGateway::list_tape_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTapePoolsInput {
@@ -2048,6 +2429,23 @@ pub struct ListTapePoolsInput {
     pub pool_ar_ns: Option<Vec<String>>,
 }
 
+impl Paged for ListTapePoolsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTapePoolsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [StorageGateway::list_tape_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTapePoolsOutput {
@@ -2061,7 +2459,30 @@ pub struct ListTapePoolsOutput {
     pub pool_infos: Option<Vec<PoolInfo>>,
 }
 
+impl Paged for ListTapePoolsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListTapePoolsOutput {
+    type Item = PoolInfo;
+
+    fn into_pagination_page(self) -> Vec<PoolInfo> {
+        self.pool_infos.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListTapesInput$Limit</a> </p> </li> <li> <p> <a>ListTapesInput$Marker</a> </p> </li> <li> <p> <a>ListTapesInput$TapeARNs</a> </p> </li> </ul></p>
+/// see [StorageGateway::list_tapes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTapesInput {
@@ -2078,7 +2499,24 @@ pub struct ListTapesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
+impl Paged for ListTapesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTapesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListTapesOutput$Marker</a> </p> </li> <li> <p> <a>ListTapesOutput$VolumeInfos</a> </p> </li> </ul></p>
+/// see [StorageGateway::list_tapes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTapesOutput {
@@ -2091,7 +2529,30 @@ pub struct ListTapesOutput {
     pub tape_infos: Option<Vec<TapeInfo>>,
 }
 
+impl Paged for ListTapesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListTapesOutput {
+    type Item = TapeInfo;
+
+    fn into_pagination_page(self) -> Vec<TapeInfo> {
+        self.tape_infos.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>ListVolumeInitiatorsInput</p>
+/// see [StorageGateway::list_volume_initiators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumeInitiatorsInput {
@@ -2101,6 +2562,7 @@ pub struct ListVolumeInitiatorsInput {
 }
 
 /// <p>ListVolumeInitiatorsOutput</p>
+/// see [StorageGateway::list_volume_initiators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVolumeInitiatorsOutput {
@@ -2110,6 +2572,7 @@ pub struct ListVolumeInitiatorsOutput {
     pub initiators: Option<Vec<String>>,
 }
 
+/// see [StorageGateway::list_volume_recovery_points]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumeRecoveryPointsInput {
@@ -2117,6 +2580,7 @@ pub struct ListVolumeRecoveryPointsInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::list_volume_recovery_points]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVolumeRecoveryPointsOutput {
@@ -2130,6 +2594,7 @@ pub struct ListVolumeRecoveryPointsOutput {
 }
 
 /// <p><p>A JSON object that contains one or more of the following fields:</p> <ul> <li> <p> <a>ListVolumesInput$Limit</a> </p> </li> <li> <p> <a>ListVolumesInput$Marker</a> </p> </li> </ul></p>
+/// see [StorageGateway::list_volumes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVolumesInput {
@@ -2146,7 +2611,24 @@ pub struct ListVolumesInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListVolumesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVolumesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListVolumesOutput$Marker</a> </p> </li> <li> <p> <a>ListVolumesOutput$VolumeInfos</a> </p> </li> </ul></p>
+/// see [StorageGateway::list_volumes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVolumesOutput {
@@ -2161,6 +2643,28 @@ pub struct ListVolumesOutput {
     #[serde(rename = "VolumeInfos")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_infos: Option<Vec<VolumeInfo>>,
+}
+
+impl Paged for ListVolumesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListVolumesOutput {
+    type Item = VolumeInfo;
+
+    fn into_pagination_page(self) -> Vec<VolumeInfo> {
+        self.volume_infos.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Describes Network File System (NFS) file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported for file gateways.</p>
@@ -2280,6 +2784,7 @@ pub struct NetworkInterface {
     pub mac_address: Option<String>,
 }
 
+/// see [StorageGateway::notify_when_uploaded]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyWhenUploadedInput {
@@ -2287,6 +2792,7 @@ pub struct NotifyWhenUploadedInput {
     pub file_share_arn: String,
 }
 
+/// see [StorageGateway::notify_when_uploaded]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWhenUploadedOutput {
@@ -2329,6 +2835,7 @@ pub struct PoolInfo {
 }
 
 /// <p>RefreshCacheInput</p>
+/// see [StorageGateway::refresh_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshCacheInput {
@@ -2346,6 +2853,7 @@ pub struct RefreshCacheInput {
 }
 
 /// <p>RefreshCacheOutput</p>
+/// see [StorageGateway::refresh_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshCacheOutput {
@@ -2358,6 +2866,7 @@ pub struct RefreshCacheOutput {
 }
 
 /// <p>RemoveTagsFromResourceInput</p>
+/// see [StorageGateway::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceInput {
@@ -2370,6 +2879,7 @@ pub struct RemoveTagsFromResourceInput {
 }
 
 /// <p>RemoveTagsFromResourceOutput</p>
+/// see [StorageGateway::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceOutput {
@@ -2379,6 +2889,7 @@ pub struct RemoveTagsFromResourceOutput {
     pub resource_arn: Option<String>,
 }
 
+/// see [StorageGateway::reset_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetCacheInput {
@@ -2386,6 +2897,7 @@ pub struct ResetCacheInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::reset_cache]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetCacheOutput {
@@ -2395,6 +2907,7 @@ pub struct ResetCacheOutput {
 }
 
 /// <p>RetrieveTapeArchiveInput</p>
+/// see [StorageGateway::retrieve_tape_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveTapeArchiveInput {
@@ -2407,6 +2920,7 @@ pub struct RetrieveTapeArchiveInput {
 }
 
 /// <p>RetrieveTapeArchiveOutput</p>
+/// see [StorageGateway::retrieve_tape_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetrieveTapeArchiveOutput {
@@ -2417,6 +2931,7 @@ pub struct RetrieveTapeArchiveOutput {
 }
 
 /// <p>RetrieveTapeRecoveryPointInput</p>
+/// see [StorageGateway::retrieve_tape_recovery_point]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveTapeRecoveryPointInput {
@@ -2428,6 +2943,7 @@ pub struct RetrieveTapeRecoveryPointInput {
 }
 
 /// <p>RetrieveTapeRecoveryPointOutput</p>
+/// see [StorageGateway::retrieve_tape_recovery_point]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetrieveTapeRecoveryPointOutput {
@@ -2539,6 +3055,7 @@ pub struct SMBFileShareInfo {
 }
 
 /// <p>SetLocalConsolePasswordInput</p>
+/// see [StorageGateway::set_local_console_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLocalConsolePasswordInput {
@@ -2549,6 +3066,7 @@ pub struct SetLocalConsolePasswordInput {
     pub local_console_password: String,
 }
 
+/// see [StorageGateway::set_local_console_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetLocalConsolePasswordOutput {
@@ -2558,6 +3076,7 @@ pub struct SetLocalConsolePasswordOutput {
 }
 
 /// <p>SetSMBGuestPasswordInput</p>
+/// see [StorageGateway::set_smb_guest_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSMBGuestPasswordInput {
@@ -2569,6 +3088,7 @@ pub struct SetSMBGuestPasswordInput {
     pub password: String,
 }
 
+/// see [StorageGateway::set_smb_guest_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetSMBGuestPasswordOutput {
@@ -2578,6 +3098,7 @@ pub struct SetSMBGuestPasswordOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway to shut down.</p>
+/// see [StorageGateway::shutdown_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ShutdownGatewayInput {
@@ -2586,6 +3107,7 @@ pub struct ShutdownGatewayInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway that was shut down.</p>
+/// see [StorageGateway::shutdown_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShutdownGatewayOutput {
@@ -2594,6 +3116,7 @@ pub struct ShutdownGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::start_availability_monitor_test]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAvailabilityMonitorTestInput {
@@ -2601,6 +3124,7 @@ pub struct StartAvailabilityMonitorTestInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::start_availability_monitor_test]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAvailabilityMonitorTestOutput {
@@ -2610,6 +3134,7 @@ pub struct StartAvailabilityMonitorTestOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway to start.</p>
+/// see [StorageGateway::start_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartGatewayInput {
@@ -2618,6 +3143,7 @@ pub struct StartGatewayInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway that was restarted.</p>
+/// see [StorageGateway::start_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartGatewayOutput {
@@ -2885,6 +3411,7 @@ pub struct TapeRecoveryPointInfo {
     pub tape_status: Option<String>,
 }
 
+/// see [StorageGateway::update_automatic_tape_creation_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAutomaticTapeCreationPolicyInput {
@@ -2895,6 +3422,7 @@ pub struct UpdateAutomaticTapeCreationPolicyInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::update_automatic_tape_creation_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAutomaticTapeCreationPolicyOutput {
@@ -2904,6 +3432,7 @@ pub struct UpdateAutomaticTapeCreationPolicyOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageDownloadRateLimitInBitsPerSec</a> </p> </li> <li> <p> <a>UpdateBandwidthRateLimitInput$AverageUploadRateLimitInBitsPerSec</a> </p> </li> </ul></p>
+/// see [StorageGateway::update_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBandwidthRateLimitInput {
@@ -2920,6 +3449,7 @@ pub struct UpdateBandwidthRateLimitInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway whose throttle information was updated.</p>
+/// see [StorageGateway::update_bandwidth_rate_limit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBandwidthRateLimitOutput {
@@ -2928,6 +3458,7 @@ pub struct UpdateBandwidthRateLimitOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::update_bandwidth_rate_limit_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBandwidthRateLimitScheduleInput {
@@ -2938,6 +3469,7 @@ pub struct UpdateBandwidthRateLimitScheduleInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::update_bandwidth_rate_limit_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBandwidthRateLimitScheduleOutput {
@@ -2947,6 +3479,7 @@ pub struct UpdateBandwidthRateLimitScheduleOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateChapCredentialsInput$InitiatorName</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateInitiator</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$SecretToAuthenticateTarget</a> </p> </li> <li> <p> <a>UpdateChapCredentialsInput$TargetARN</a> </p> </li> </ul></p>
+/// see [StorageGateway::update_chap_credentials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChapCredentialsInput {
@@ -2966,6 +3499,7 @@ pub struct UpdateChapCredentialsInput {
 }
 
 /// <p>A JSON object containing the following fields:</p>
+/// see [StorageGateway::update_chap_credentials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChapCredentialsOutput {
@@ -2979,6 +3513,7 @@ pub struct UpdateChapCredentialsOutput {
     pub target_arn: Option<String>,
 }
 
+/// see [StorageGateway::update_gateway_information]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayInformationInput {
@@ -2998,6 +3533,7 @@ pub struct UpdateGatewayInformationInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway that was updated.</p>
+/// see [StorageGateway::update_gateway_information]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewayInformationOutput {
@@ -3011,6 +3547,7 @@ pub struct UpdateGatewayInformationOutput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway to update.</p>
+/// see [StorageGateway::update_gateway_software_now]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewaySoftwareNowInput {
@@ -3019,6 +3556,7 @@ pub struct UpdateGatewaySoftwareNowInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway that was updated.</p>
+/// see [StorageGateway::update_gateway_software_now]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewaySoftwareNowOutput {
@@ -3028,6 +3566,7 @@ pub struct UpdateGatewaySoftwareNowOutput {
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>UpdateMaintenanceStartTimeInput$DayOfMonth</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$DayOfWeek</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$HourOfDay</a> </p> </li> <li> <p> <a>UpdateMaintenanceStartTimeInput$MinuteOfHour</a> </p> </li> </ul></p>
+/// see [StorageGateway::update_maintenance_start_time]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMaintenanceStartTimeInput {
@@ -3050,6 +3589,7 @@ pub struct UpdateMaintenanceStartTimeInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway whose maintenance start time is updated.</p>
+/// see [StorageGateway::update_maintenance_start_time]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMaintenanceStartTimeOutput {
@@ -3059,6 +3599,7 @@ pub struct UpdateMaintenanceStartTimeOutput {
 }
 
 /// <p>UpdateNFSFileShareInput</p>
+/// see [StorageGateway::update_nfs_file_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNFSFileShareInput {
@@ -3120,6 +3661,7 @@ pub struct UpdateNFSFileShareInput {
 }
 
 /// <p>UpdateNFSFileShareOutput</p>
+/// see [StorageGateway::update_nfs_file_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNFSFileShareOutput {
@@ -3130,6 +3672,7 @@ pub struct UpdateNFSFileShareOutput {
 }
 
 /// <p>UpdateSMBFileShareInput</p>
+/// see [StorageGateway::update_smb_file_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBFileShareInput {
@@ -3207,6 +3750,7 @@ pub struct UpdateSMBFileShareInput {
 }
 
 /// <p>UpdateSMBFileShareOutput</p>
+/// see [StorageGateway::update_smb_file_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSMBFileShareOutput {
@@ -3216,6 +3760,7 @@ pub struct UpdateSMBFileShareOutput {
     pub file_share_arn: Option<String>,
 }
 
+/// see [StorageGateway::update_smb_file_share_visibility]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBFileShareVisibilityInput {
@@ -3226,6 +3771,7 @@ pub struct UpdateSMBFileShareVisibilityInput {
     pub gateway_arn: String,
 }
 
+/// see [StorageGateway::update_smb_file_share_visibility]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSMBFileShareVisibilityOutput {
@@ -3234,6 +3780,7 @@ pub struct UpdateSMBFileShareVisibilityOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// see [StorageGateway::update_smb_security_strategy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSMBSecurityStrategyInput {
@@ -3244,6 +3791,7 @@ pub struct UpdateSMBSecurityStrategyInput {
     pub smb_security_strategy: String,
 }
 
+/// see [StorageGateway::update_smb_security_strategy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSMBSecurityStrategyOutput {
@@ -3253,6 +3801,7 @@ pub struct UpdateSMBSecurityStrategyOutput {
 }
 
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>UpdateSnapshotScheduleInput$Description</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$RecurrenceInHours</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$StartAt</a> </p> </li> <li> <p> <a>UpdateSnapshotScheduleInput$VolumeARN</a> </p> </li> </ul></p>
+/// see [StorageGateway::update_snapshot_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSnapshotScheduleInput {
@@ -3276,6 +3825,7 @@ pub struct UpdateSnapshotScheduleInput {
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the updated storage volume.</p>
+/// see [StorageGateway::update_snapshot_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSnapshotScheduleOutput {
@@ -3285,6 +3835,7 @@ pub struct UpdateSnapshotScheduleOutput {
     pub volume_arn: Option<String>,
 }
 
+/// see [StorageGateway::update_vtl_device_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVTLDeviceTypeInput {
@@ -3297,6 +3848,7 @@ pub struct UpdateVTLDeviceTypeInput {
 }
 
 /// <p>UpdateVTLDeviceTypeOutput</p>
+/// see [StorageGateway::update_vtl_device_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVTLDeviceTypeOutput {
@@ -6825,7 +7377,7 @@ impl fmt::Display for UpdateVTLDeviceTypeError {
 impl Error for UpdateVTLDeviceTypeError {}
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
 #[async_trait]
-pub trait StorageGateway {
+pub trait StorageGateway: Clone + Sync + Send + 'static {
     /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account. For more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
     async fn activate_gateway(
         &self,
@@ -7090,17 +7642,50 @@ pub trait StorageGateway {
         input: DescribeTapeArchivesInput,
     ) -> Result<DescribeTapeArchivesOutput, RusotoError<DescribeTapeArchivesError>>;
 
+    /// Auto-paginating version of `describe_tape_archives`
+    fn describe_tape_archives_pages<'a>(
+        &'a self,
+        mut input: DescribeTapeArchivesInput,
+    ) -> RusotoStream<'a, TapeArchive, DescribeTapeArchivesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tape_archives(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway type.</p>
     async fn describe_tape_recovery_points(
         &self,
         input: DescribeTapeRecoveryPointsInput,
     ) -> Result<DescribeTapeRecoveryPointsOutput, RusotoError<DescribeTapeRecoveryPointsError>>;
 
+    /// Auto-paginating version of `describe_tape_recovery_points`
+    fn describe_tape_recovery_points_pages<'a>(
+        &'a self,
+        mut input: DescribeTapeRecoveryPointsInput,
+    ) -> RusotoStream<'a, TapeRecoveryPointInfo, DescribeTapeRecoveryPointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tape_recovery_points(input.clone())
+        }))
+    }
+
     /// <p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway type.</p>
     async fn describe_tapes(
         &self,
         input: DescribeTapesInput,
     ) -> Result<DescribeTapesOutput, RusotoError<DescribeTapesError>>;
+
+    /// Auto-paginating version of `describe_tapes`
+    fn describe_tapes_pages<'a>(
+        &'a self,
+        mut input: DescribeTapesInput,
+    ) -> RusotoStream<'a, Tape, DescribeTapesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tapes(input.clone())
+        }))
+    }
 
     /// <p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>
     async fn describe_upload_buffer(
@@ -7113,6 +7698,17 @@ pub trait StorageGateway {
         &self,
         input: DescribeVTLDevicesInput,
     ) -> Result<DescribeVTLDevicesOutput, RusotoError<DescribeVTLDevicesError>>;
+
+    /// Auto-paginating version of `describe_vtl_devices`
+    fn describe_vtl_devices_pages<'a>(
+        &'a self,
+        mut input: DescribeVTLDevicesInput,
+    ) -> RusotoStream<'a, VTLDevice, DescribeVTLDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_vtl_devices(input.clone())
+        }))
+    }
 
     /// <p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway type. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>
     async fn describe_working_storage(
@@ -7153,11 +7749,33 @@ pub trait StorageGateway {
         input: ListFileSharesInput,
     ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>>;
 
+    /// Auto-paginating version of `list_file_shares`
+    fn list_file_shares_pages<'a>(
+        &'a self,
+        mut input: ListFileSharesInput,
+    ) -> RusotoStream<'a, FileShareInfo, ListFileSharesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_file_shares(input.clone())
+        }))
+    }
+
     /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
     async fn list_gateways(
         &self,
         input: ListGatewaysInput,
     ) -> Result<ListGatewaysOutput, RusotoError<ListGatewaysError>>;
+
+    /// Auto-paginating version of `list_gateways`
+    fn list_gateways_pages<'a>(
+        &'a self,
+        mut input: ListGatewaysInput,
+    ) -> RusotoStream<'a, GatewayInfo, ListGatewaysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_gateways(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>
     async fn list_local_disks(
@@ -7171,17 +7789,50 @@ pub trait StorageGateway {
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
+
     /// <p>Lists custom tape pools. You specify custom tape pools to list by specifying one or more custom tape pool Amazon Resource Names (ARNs). If you don't specify a custom tape pool ARN, the operation lists all custom tape pools.</p> <p>This operation supports pagination. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tape pools in the response. If the number of tape pools returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tape pools.</p>
     async fn list_tape_pools(
         &self,
         input: ListTapePoolsInput,
     ) -> Result<ListTapePoolsOutput, RusotoError<ListTapePoolsError>>;
 
+    /// Auto-paginating version of `list_tape_pools`
+    fn list_tape_pools_pages<'a>(
+        &'a self,
+        mut input: ListTapePoolsInput,
+    ) -> RusotoStream<'a, PoolInfo, ListTapePoolsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tape_pools(input.clone())
+        }))
+    }
+
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
     async fn list_tapes(
         &self,
         input: ListTapesInput,
     ) -> Result<ListTapesOutput, RusotoError<ListTapesError>>;
+
+    /// Auto-paginating version of `list_tapes`
+    fn list_tapes_pages<'a>(
+        &'a self,
+        mut input: ListTapesInput,
+    ) -> RusotoStream<'a, TapeInfo, ListTapesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tapes(input.clone())
+        }))
+    }
 
     /// <p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway types.</p>
     async fn list_volume_initiators(
@@ -7200,6 +7851,17 @@ pub trait StorageGateway {
         &self,
         input: ListVolumesInput,
     ) -> Result<ListVolumesOutput, RusotoError<ListVolumesError>>;
+
+    /// Auto-paginating version of `list_volumes`
+    fn list_volumes_pages<'a>(
+        &'a self,
+        mut input: ListVolumesInput,
+    ) -> RusotoStream<'a, VolumeInfo, ListVolumesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_volumes(input.clone())
+        }))
+    }
 
     /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification">Getting file upload notification</a> in the <i>AWS Storage Gateway User Guide</i>.</p>
     async fn notify_when_uploaded(

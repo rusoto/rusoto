@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -181,6 +185,7 @@ pub struct ComprehendMedicalAsyncJobProperties {
     pub submit_time: Option<f64>,
 }
 
+/// see [ComprehendMedical::describe_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionV2JobRequest {
@@ -189,6 +194,7 @@ pub struct DescribeEntitiesDetectionV2JobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::describe_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntitiesDetectionV2JobResponse {
@@ -198,6 +204,7 @@ pub struct DescribeEntitiesDetectionV2JobResponse {
     pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
 }
 
+/// see [ComprehendMedical::describe_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeICD10CMInferenceJobRequest {
@@ -206,6 +213,7 @@ pub struct DescribeICD10CMInferenceJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::describe_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeICD10CMInferenceJobResponse {
@@ -215,6 +223,7 @@ pub struct DescribeICD10CMInferenceJobResponse {
     pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
 }
 
+/// see [ComprehendMedical::describe_phi_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePHIDetectionJobRequest {
@@ -223,6 +232,7 @@ pub struct DescribePHIDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::describe_phi_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePHIDetectionJobResponse {
@@ -232,6 +242,7 @@ pub struct DescribePHIDetectionJobResponse {
     pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
 }
 
+/// see [ComprehendMedical::describe_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRxNormInferenceJobRequest {
@@ -240,6 +251,7 @@ pub struct DescribeRxNormInferenceJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::describe_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRxNormInferenceJobResponse {
@@ -249,6 +261,7 @@ pub struct DescribeRxNormInferenceJobResponse {
     pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
 }
 
+/// see [ComprehendMedical::detect_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
@@ -257,6 +270,7 @@ pub struct DetectEntitiesRequest {
     pub text: String,
 }
 
+/// see [ComprehendMedical::detect_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
@@ -276,6 +290,7 @@ pub struct DetectEntitiesResponse {
     pub unmapped_attributes: Option<Vec<UnmappedAttribute>>,
 }
 
+/// see [ComprehendMedical::detect_entities_v2]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesV2Request {
@@ -284,6 +299,7 @@ pub struct DetectEntitiesV2Request {
     pub text: String,
 }
 
+/// see [ComprehendMedical::detect_entities_v2]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesV2Response {
@@ -303,6 +319,7 @@ pub struct DetectEntitiesV2Response {
     pub unmapped_attributes: Option<Vec<UnmappedAttribute>>,
 }
 
+/// see [ComprehendMedical::detect_phi]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectPHIRequest {
@@ -311,6 +328,7 @@ pub struct DetectPHIRequest {
     pub text: String,
 }
 
+/// see [ComprehendMedical::detect_phi]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectPHIResponse {
@@ -484,6 +502,7 @@ pub struct ICD10CMTrait {
     pub score: Option<f32>,
 }
 
+/// see [ComprehendMedical::infer_icd10cm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InferICD10CMRequest {
@@ -492,6 +511,7 @@ pub struct InferICD10CMRequest {
     pub text: String,
 }
 
+/// see [ComprehendMedical::infer_icd10cm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InferICD10CMResponse {
@@ -508,6 +528,7 @@ pub struct InferICD10CMResponse {
     pub pagination_token: Option<String>,
 }
 
+/// see [ComprehendMedical::infer_rx_norm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InferRxNormRequest {
@@ -516,6 +537,7 @@ pub struct InferRxNormRequest {
     pub text: String,
 }
 
+/// see [ComprehendMedical::infer_rx_norm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InferRxNormResponse {
@@ -544,6 +566,7 @@ pub struct InputDataConfig {
     pub s3_key: Option<String>,
 }
 
+/// see [ComprehendMedical::list_entities_detection_v2_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionV2JobsRequest {
@@ -561,6 +584,7 @@ pub struct ListEntitiesDetectionV2JobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_entities_detection_v2_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesDetectionV2JobsResponse {
@@ -575,6 +599,7 @@ pub struct ListEntitiesDetectionV2JobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_icd10cm_inference_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListICD10CMInferenceJobsRequest {
@@ -592,6 +617,7 @@ pub struct ListICD10CMInferenceJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_icd10cm_inference_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListICD10CMInferenceJobsResponse {
@@ -606,6 +632,7 @@ pub struct ListICD10CMInferenceJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_phi_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPHIDetectionJobsRequest {
@@ -623,6 +650,7 @@ pub struct ListPHIDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_phi_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPHIDetectionJobsResponse {
@@ -637,6 +665,7 @@ pub struct ListPHIDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_rx_norm_inference_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRxNormInferenceJobsRequest {
@@ -654,6 +683,7 @@ pub struct ListRxNormInferenceJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ComprehendMedical::list_rx_norm_inference_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRxNormInferenceJobsResponse {
@@ -796,6 +826,7 @@ pub struct RxNormTrait {
     pub score: Option<f32>,
 }
 
+/// see [ComprehendMedical::start_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionV2JobRequest {
@@ -825,6 +856,7 @@ pub struct StartEntitiesDetectionV2JobRequest {
     pub output_data_config: OutputDataConfig,
 }
 
+/// see [ComprehendMedical::start_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartEntitiesDetectionV2JobResponse {
@@ -834,6 +866,7 @@ pub struct StartEntitiesDetectionV2JobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::start_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartICD10CMInferenceJobRequest {
@@ -863,6 +896,7 @@ pub struct StartICD10CMInferenceJobRequest {
     pub output_data_config: OutputDataConfig,
 }
 
+/// see [ComprehendMedical::start_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartICD10CMInferenceJobResponse {
@@ -872,6 +906,7 @@ pub struct StartICD10CMInferenceJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::start_phi_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPHIDetectionJobRequest {
@@ -901,6 +936,7 @@ pub struct StartPHIDetectionJobRequest {
     pub output_data_config: OutputDataConfig,
 }
 
+/// see [ComprehendMedical::start_phi_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPHIDetectionJobResponse {
@@ -910,6 +946,7 @@ pub struct StartPHIDetectionJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::start_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRxNormInferenceJobRequest {
@@ -939,6 +976,7 @@ pub struct StartRxNormInferenceJobRequest {
     pub output_data_config: OutputDataConfig,
 }
 
+/// see [ComprehendMedical::start_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRxNormInferenceJobResponse {
@@ -948,6 +986,7 @@ pub struct StartRxNormInferenceJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::stop_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionV2JobRequest {
@@ -956,6 +995,7 @@ pub struct StopEntitiesDetectionV2JobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::stop_entities_detection_v2_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopEntitiesDetectionV2JobResponse {
@@ -965,6 +1005,7 @@ pub struct StopEntitiesDetectionV2JobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::stop_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopICD10CMInferenceJobRequest {
@@ -973,6 +1014,7 @@ pub struct StopICD10CMInferenceJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::stop_icd10cm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopICD10CMInferenceJobResponse {
@@ -982,6 +1024,7 @@ pub struct StopICD10CMInferenceJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::stop_phi_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPHIDetectionJobRequest {
@@ -990,6 +1033,7 @@ pub struct StopPHIDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::stop_phi_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPHIDetectionJobResponse {
@@ -999,6 +1043,7 @@ pub struct StopPHIDetectionJobResponse {
     pub job_id: Option<String>,
 }
 
+/// see [ComprehendMedical::stop_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRxNormInferenceJobRequest {
@@ -1007,6 +1052,7 @@ pub struct StopRxNormInferenceJobRequest {
     pub job_id: String,
 }
 
+/// see [ComprehendMedical::stop_rx_norm_inference_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRxNormInferenceJobResponse {
@@ -2190,7 +2236,7 @@ impl fmt::Display for StopRxNormInferenceJobError {
 impl Error for StopRxNormInferenceJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
 #[async_trait]
-pub trait ComprehendMedical {
+pub trait ComprehendMedical: Clone + Sync + Send + 'static {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_entities_detection_v2_job(
         &self,

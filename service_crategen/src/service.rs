@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
-use crate::botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
+use crate::botocore::{
+    Member, Operation, Pagination, Paginators, ServiceDefinition, Shape, ShapeType, Value,
+};
 use crate::cargo;
 use crate::config::ServiceConfig;
 
@@ -8,11 +10,20 @@ use crate::config::ServiceConfig;
 pub struct Service<'a> {
     config: &'a crate::ServiceConfig,
     definition: ServiceDefinition,
+    paginators: Option<Paginators>,
 }
 
 impl<'b> Service<'b> {
-    pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
-        Service { config, definition }
+    pub fn new(
+        config: &'b ServiceConfig,
+        definition: ServiceDefinition,
+        paginators: Option<Paginators>,
+    ) -> Self {
+        Service {
+            config,
+            definition,
+            paginators,
+        }
     }
 
     pub fn name(&self) -> &str {
@@ -76,6 +87,16 @@ impl<'b> Service<'b> {
 
     pub fn operations(&self) -> &BTreeMap<String, Operation> {
         &self.definition.operations
+    }
+
+    pub fn operations_for_shape(&self, name: &str) -> Vec<&Operation> {
+        self.definition
+            .operations
+            .values()
+            .filter(|operation| {
+                operation.opt_input_shape() == Some(name) || operation.output_shape() == Some(name)
+            })
+            .collect()
     }
 
     pub fn shape_for_value<'a>(&'a self, value: &Value) -> Option<&'a Shape> {
@@ -264,6 +285,10 @@ impl<'b> Service<'b> {
         }
 
         dev_dependencies
+    }
+
+    pub fn pagination(&self, operation_name: &str) -> Option<&Pagination> {
+        self.paginators.as_ref()?.pagination.get(operation_name)
     }
 
     pub fn visit_shapes<F>(&self, shape_name: &str, visitor: &mut F)

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -50,6 +54,7 @@ impl AcmClient {
 }
 
 use serde_json;
+/// see [Acm::add_tags_to_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToCertificateRequest {
@@ -194,6 +199,7 @@ pub struct CertificateSummary {
     pub domain_name: Option<String>,
 }
 
+/// see [Acm::delete_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
@@ -202,6 +208,7 @@ pub struct DeleteCertificateRequest {
     pub certificate_arn: String,
 }
 
+/// see [Acm::describe_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
@@ -210,6 +217,7 @@ pub struct DescribeCertificateRequest {
     pub certificate_arn: String,
 }
 
+/// see [Acm::describe_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateResponse {
@@ -260,6 +268,7 @@ pub struct DomainValidationOption {
     pub validation_domain: String,
 }
 
+/// see [Acm::export_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportCertificateRequest {
@@ -276,6 +285,7 @@ pub struct ExportCertificateRequest {
     pub passphrase: bytes::Bytes,
 }
 
+/// see [Acm::export_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportCertificateResponse {
@@ -325,6 +335,7 @@ pub struct Filters {
     pub key_usage: Option<Vec<String>>,
 }
 
+/// see [Acm::get_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificateRequest {
@@ -333,6 +344,7 @@ pub struct GetCertificateRequest {
     pub certificate_arn: String,
 }
 
+/// see [Acm::get_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificateResponse {
@@ -346,6 +358,7 @@ pub struct GetCertificateResponse {
     pub certificate_chain: Option<String>,
 }
 
+/// see [Acm::import_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateRequest {
@@ -384,6 +397,7 @@ pub struct ImportCertificateRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Acm::import_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportCertificateResponse {
@@ -403,6 +417,7 @@ pub struct KeyUsage {
     pub name: Option<String>,
 }
 
+/// see [Acm::list_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesRequest {
@@ -424,6 +439,23 @@ pub struct ListCertificatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCertificatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Acm::list_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesResponse {
@@ -437,6 +469,29 @@ pub struct ListCertificatesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCertificatesResponse {
+    type Item = CertificateSummary;
+
+    fn into_pagination_page(self) -> Vec<CertificateSummary> {
+        self.certificate_summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Acm::list_tags_for_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForCertificateRequest {
@@ -445,6 +500,7 @@ pub struct ListTagsForCertificateRequest {
     pub certificate_arn: String,
 }
 
+/// see [Acm::list_tags_for_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForCertificateResponse {
@@ -454,6 +510,7 @@ pub struct ListTagsForCertificateResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Acm::remove_tags_from_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromCertificateRequest {
@@ -465,6 +522,7 @@ pub struct RemoveTagsFromCertificateRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Acm::renew_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewCertificateRequest {
@@ -492,6 +550,7 @@ pub struct RenewalSummary {
     pub updated_at: f64,
 }
 
+/// see [Acm::request_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestCertificateRequest {
@@ -528,6 +587,7 @@ pub struct RequestCertificateRequest {
     pub validation_method: Option<String>,
 }
 
+/// see [Acm::request_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestCertificateResponse {
@@ -537,6 +597,7 @@ pub struct RequestCertificateResponse {
     pub certificate_arn: Option<String>,
 }
 
+/// see [Acm::resend_validation_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResendValidationEmailRequest {
@@ -578,6 +639,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Acm::update_certificate_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCertificateOptionsRequest {
@@ -1223,7 +1285,7 @@ impl fmt::Display for UpdateCertificateOptionsError {
 impl Error for UpdateCertificateOptionsError {}
 /// Trait representing the capabilities of the ACM API. ACM clients implement this trait.
 #[async_trait]
-pub trait Acm {
+pub trait Acm: Clone + Sync + Send + 'static {
     /// <p>Adds one or more tags to an ACM certificate. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a <code>key</code> and an optional <code>value</code>. You specify the certificate on input by its Amazon Resource Name (ARN). You specify the tag by using a key-value pair. </p> <p>You can apply a tag to just one certificate if you want to identify a specific characteristic of that certificate, or you can apply the same tag to multiple certificates if you want to filter for a common relationship among those certificates. Similarly, you can apply the same tag to multiple resources if you want to specify a relationship among those resources. For example, you can add the same tag to an ACM certificate and an Elastic Load Balancing load balancer to indicate that they are both used by the same website. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/tags.html">Tagging ACM certificates</a>. </p> <p>To remove one or more tags, use the <a>RemoveTagsFromCertificate</a> action. To view all of the tags that have been applied to the certificate, use the <a>ListTagsForCertificate</a> action. </p>
     async fn add_tags_to_certificate(
         &self,
@@ -1265,6 +1327,17 @@ pub trait Acm {
         &self,
         input: ListCertificatesRequest,
     ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>;
+
+    /// Auto-paginating version of `list_certificates`
+    fn list_certificates_pages<'a>(
+        &'a self,
+        mut input: ListCertificatesRequest,
+    ) -> RusotoStream<'a, CertificateSummary, ListCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_certificates(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags that have been applied to the ACM certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action. </p>
     async fn list_tags_for_certificate(

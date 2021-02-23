@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -46,6 +50,7 @@ pub struct AttachmentItem {
     pub status: Option<String>,
 }
 
+/// see [ConnectParticipant::complete_attachment_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteAttachmentUploadRequest {
@@ -60,6 +65,7 @@ pub struct CompleteAttachmentUploadRequest {
     pub connection_token: String,
 }
 
+/// see [ConnectParticipant::complete_attachment_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompleteAttachmentUploadResponse {}
@@ -78,6 +84,7 @@ pub struct ConnectionCredentials {
     pub expiry: Option<String>,
 }
 
+/// see [ConnectParticipant::create_participant_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParticipantConnectionRequest {
@@ -89,6 +96,7 @@ pub struct CreateParticipantConnectionRequest {
     pub type_: Vec<String>,
 }
 
+/// see [ConnectParticipant::create_participant_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateParticipantConnectionResponse {
@@ -102,6 +110,7 @@ pub struct CreateParticipantConnectionResponse {
     pub websocket: Option<Websocket>,
 }
 
+/// see [ConnectParticipant::disconnect_participant]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisconnectParticipantRequest {
@@ -114,10 +123,12 @@ pub struct DisconnectParticipantRequest {
     pub connection_token: String,
 }
 
+/// see [ConnectParticipant::disconnect_participant]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisconnectParticipantResponse {}
 
+/// see [ConnectParticipant::get_attachment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttachmentRequest {
@@ -129,6 +140,7 @@ pub struct GetAttachmentRequest {
     pub connection_token: String,
 }
 
+/// see [ConnectParticipant::get_attachment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAttachmentResponse {
@@ -142,6 +154,7 @@ pub struct GetAttachmentResponse {
     pub url_expiry: Option<String>,
 }
 
+/// see [ConnectParticipant::get_transcript]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTranscriptRequest {
@@ -174,6 +187,7 @@ pub struct GetTranscriptRequest {
     pub start_position: Option<StartPosition>,
 }
 
+/// see [ConnectParticipant::get_transcript]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTranscriptResponse {
@@ -233,6 +247,7 @@ pub struct Item {
     pub type_: Option<String>,
 }
 
+/// see [ConnectParticipant::send_event]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEventRequest {
@@ -252,6 +267,7 @@ pub struct SendEventRequest {
     pub content_type: String,
 }
 
+/// see [ConnectParticipant::send_event]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendEventResponse {
@@ -265,6 +281,7 @@ pub struct SendEventResponse {
     pub id: Option<String>,
 }
 
+/// see [ConnectParticipant::send_message]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageRequest {
@@ -283,6 +300,7 @@ pub struct SendMessageRequest {
     pub content_type: String,
 }
 
+/// see [ConnectParticipant::send_message]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendMessageResponse {
@@ -296,6 +314,7 @@ pub struct SendMessageResponse {
     pub id: Option<String>,
 }
 
+/// see [ConnectParticipant::start_attachment_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAttachmentUploadRequest {
@@ -316,6 +335,7 @@ pub struct StartAttachmentUploadRequest {
     pub content_type: String,
 }
 
+/// see [ConnectParticipant::start_attachment_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAttachmentUploadResponse {
@@ -757,7 +777,7 @@ impl fmt::Display for StartAttachmentUploadError {
 impl Error for StartAttachmentUploadError {}
 /// Trait representing the capabilities of the Amazon Connect Participant API. Amazon Connect Participant clients implement this trait.
 #[async_trait]
-pub trait ConnectParticipant {
+pub trait ConnectParticipant: Clone + Sync + Send + 'static {
     /// <p>Allows you to confirm that the attachment has been uploaded using the pre-signed URL provided in StartAttachmentUpload API. </p>
     async fn complete_attachment_upload(
         &self,

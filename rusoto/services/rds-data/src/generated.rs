@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -50,6 +54,7 @@ pub struct ArrayValue {
 }
 
 /// <p>The request parameters represent the input of a SQL statement over an array of data.</p>
+/// see [RdsData::batch_execute_statement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
@@ -81,6 +86,7 @@ pub struct BatchExecuteStatementRequest {
 }
 
 /// <p>The response elements represent the output of a SQL statement over an array of data.</p>
+/// see [RdsData::batch_execute_statement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchExecuteStatementResponse {
@@ -91,6 +97,7 @@ pub struct BatchExecuteStatementResponse {
 }
 
 /// <p>The request parameters represent the input of a request to start a SQL transaction.</p>
+/// see [RdsData::begin_transaction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
@@ -111,6 +118,7 @@ pub struct BeginTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a request to start a SQL transaction.</p>
+/// see [RdsData::begin_transaction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BeginTransactionResponse {
@@ -183,6 +191,7 @@ pub struct ColumnMetadata {
 }
 
 /// <p>The request parameters represent the input of a commit transaction request.</p>
+/// see [RdsData::commit_transaction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
@@ -198,6 +207,7 @@ pub struct CommitTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a commit transaction request.</p>
+/// see [RdsData::commit_transaction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommitTransactionResponse {
@@ -208,6 +218,7 @@ pub struct CommitTransactionResponse {
 }
 
 /// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
+/// see [RdsData::execute_sql]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
@@ -231,6 +242,7 @@ pub struct ExecuteSqlRequest {
 }
 
 /// <p>The response elements represent the output of a request to run one or more SQL statements.</p>
+/// see [RdsData::execute_sql]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteSqlResponse {
@@ -241,6 +253,7 @@ pub struct ExecuteSqlResponse {
 }
 
 /// <p>The request parameters represent the input of a request to run a SQL statement against a database.</p>
+/// see [RdsData::execute_statement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
@@ -284,6 +297,7 @@ pub struct ExecuteStatementRequest {
 }
 
 /// <p>The response elements represent the output of a request to run a SQL statement against a database.</p>
+/// see [RdsData::execute_statement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResponse {
@@ -392,6 +406,7 @@ pub struct ResultSetOptions {
 }
 
 /// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
+/// see [RdsData::rollback_transaction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
@@ -407,6 +422,7 @@ pub struct RollbackTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a request to perform a rollback of a transaction.</p>
+/// see [RdsData::rollback_transaction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RollbackTransactionResponse {
@@ -877,7 +893,7 @@ impl fmt::Display for RollbackTransactionError {
 impl Error for RollbackTransactionError {}
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
 #[async_trait]
-pub trait RdsData {
+pub trait RdsData: Clone + Sync + Send + 'static {
     /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>
     async fn batch_execute_statement(
         &self,

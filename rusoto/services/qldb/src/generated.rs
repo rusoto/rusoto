@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Qldb::cancel_journal_kinesis_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJournalKinesisStreamRequest {
@@ -36,6 +41,7 @@ pub struct CancelJournalKinesisStreamRequest {
     pub stream_id: String,
 }
 
+/// see [Qldb::cancel_journal_kinesis_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJournalKinesisStreamResponse {
@@ -45,6 +51,7 @@ pub struct CancelJournalKinesisStreamResponse {
     pub stream_id: Option<String>,
 }
 
+/// see [Qldb::create_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLedgerRequest {
@@ -64,6 +71,7 @@ pub struct CreateLedgerRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Qldb::create_ledger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLedgerResponse {
@@ -89,6 +97,7 @@ pub struct CreateLedgerResponse {
     pub state: Option<String>,
 }
 
+/// see [Qldb::delete_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLedgerRequest {
@@ -97,6 +106,7 @@ pub struct DeleteLedgerRequest {
     pub name: String,
 }
 
+/// see [Qldb::describe_journal_kinesis_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJournalKinesisStreamRequest {
@@ -108,6 +118,7 @@ pub struct DescribeJournalKinesisStreamRequest {
     pub stream_id: String,
 }
 
+/// see [Qldb::describe_journal_kinesis_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJournalKinesisStreamResponse {
@@ -117,6 +128,7 @@ pub struct DescribeJournalKinesisStreamResponse {
     pub stream: Option<JournalKinesisStreamDescription>,
 }
 
+/// see [Qldb::describe_journal_s3_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJournalS3ExportRequest {
@@ -128,6 +140,7 @@ pub struct DescribeJournalS3ExportRequest {
     pub name: String,
 }
 
+/// see [Qldb::describe_journal_s3_export]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJournalS3ExportResponse {
@@ -136,6 +149,7 @@ pub struct DescribeJournalS3ExportResponse {
     pub export_description: JournalS3ExportDescription,
 }
 
+/// see [Qldb::describe_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLedgerRequest {
@@ -144,6 +158,7 @@ pub struct DescribeLedgerRequest {
     pub name: String,
 }
 
+/// see [Qldb::describe_ledger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLedgerResponse {
@@ -169,6 +184,7 @@ pub struct DescribeLedgerResponse {
     pub state: Option<String>,
 }
 
+/// see [Qldb::export_journal_to_s3]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportJournalToS3Request {
@@ -189,6 +205,7 @@ pub struct ExportJournalToS3Request {
     pub s3_export_configuration: S3ExportConfiguration,
 }
 
+/// see [Qldb::export_journal_to_s3]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportJournalToS3Response {
@@ -197,6 +214,7 @@ pub struct ExportJournalToS3Response {
     pub export_id: String,
 }
 
+/// see [Qldb::get_block]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlockRequest {
@@ -212,6 +230,7 @@ pub struct GetBlockRequest {
     pub name: String,
 }
 
+/// see [Qldb::get_block]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlockResponse {
@@ -224,6 +243,7 @@ pub struct GetBlockResponse {
     pub proof: Option<ValueHolder>,
 }
 
+/// see [Qldb::get_digest]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDigestRequest {
@@ -232,6 +252,7 @@ pub struct GetDigestRequest {
     pub name: String,
 }
 
+/// see [Qldb::get_digest]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDigestResponse {
@@ -248,6 +269,7 @@ pub struct GetDigestResponse {
     pub digest_tip_address: ValueHolder,
 }
 
+/// see [Qldb::get_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRevisionRequest {
@@ -266,6 +288,7 @@ pub struct GetRevisionRequest {
     pub name: String,
 }
 
+/// see [Qldb::get_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRevisionResponse {
@@ -381,6 +404,7 @@ pub struct LedgerSummary {
     pub state: Option<String>,
 }
 
+/// see [Qldb::list_journal_kinesis_streams_for_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJournalKinesisStreamsForLedgerRequest {
@@ -397,6 +421,7 @@ pub struct ListJournalKinesisStreamsForLedgerRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_journal_kinesis_streams_for_ledger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJournalKinesisStreamsForLedgerResponse {
@@ -410,6 +435,7 @@ pub struct ListJournalKinesisStreamsForLedgerResponse {
     pub streams: Option<Vec<JournalKinesisStreamDescription>>,
 }
 
+/// see [Qldb::list_journal_s3_exports_for_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJournalS3ExportsForLedgerRequest {
@@ -426,6 +452,7 @@ pub struct ListJournalS3ExportsForLedgerRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_journal_s3_exports_for_ledger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJournalS3ExportsForLedgerResponse {
@@ -439,6 +466,7 @@ pub struct ListJournalS3ExportsForLedgerResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_journal_s3_exports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJournalS3ExportsRequest {
@@ -452,6 +480,7 @@ pub struct ListJournalS3ExportsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_journal_s3_exports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJournalS3ExportsResponse {
@@ -465,6 +494,7 @@ pub struct ListJournalS3ExportsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_ledgers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLedgersRequest {
@@ -478,6 +508,7 @@ pub struct ListLedgersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_ledgers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLedgersResponse {
@@ -491,6 +522,7 @@ pub struct ListLedgersResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Qldb::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -499,6 +531,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Qldb::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -534,6 +567,7 @@ pub struct S3ExportConfiguration {
     pub prefix: String,
 }
 
+/// see [Qldb::stream_journal_to_kinesis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamJournalToKinesisRequest {
@@ -562,6 +596,7 @@ pub struct StreamJournalToKinesisRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Qldb::stream_journal_to_kinesis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamJournalToKinesisResponse {
@@ -571,6 +606,7 @@ pub struct StreamJournalToKinesisResponse {
     pub stream_id: Option<String>,
 }
 
+/// see [Qldb::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -582,10 +618,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Qldb::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Qldb::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -597,10 +635,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Qldb::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Qldb::update_ledger]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLedgerRequest {
@@ -613,6 +653,7 @@ pub struct UpdateLedgerRequest {
     pub name: String,
 }
 
+/// see [Qldb::update_ledger]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLedgerResponse {
@@ -1415,7 +1456,7 @@ impl fmt::Display for UpdateLedgerError {
 impl Error for UpdateLedgerError {}
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
 #[async_trait]
-pub trait Qldb {
+pub trait Qldb: Clone + Sync + Send + 'static {
     /// <p>Ends a given Amazon QLDB journal stream. Before a stream can be canceled, its current status must be <code>ACTIVE</code>.</p> <p>You can't restart a stream after you cancel it. Canceled QLDB stream resources are subject to a 7-day retention period, so they are automatically deleted after this limit expires.</p>
     async fn cancel_journal_kinesis_stream(
         &self,

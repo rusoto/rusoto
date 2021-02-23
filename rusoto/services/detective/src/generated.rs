@@ -15,15 +15,20 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Detective::accept_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -44,6 +49,7 @@ pub struct Account {
     pub email_address: String,
 }
 
+/// see [Detective::create_graph]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGraphResponse {
@@ -53,6 +59,7 @@ pub struct CreateGraphResponse {
     pub graph_arn: Option<String>,
 }
 
+/// see [Detective::create_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
@@ -68,6 +75,7 @@ pub struct CreateMembersRequest {
     pub message: Option<String>,
 }
 
+/// see [Detective::create_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
@@ -81,6 +89,7 @@ pub struct CreateMembersResponse {
     pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
 }
 
+/// see [Detective::delete_graph]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGraphRequest {
@@ -89,6 +98,7 @@ pub struct DeleteGraphRequest {
     pub graph_arn: String,
 }
 
+/// see [Detective::delete_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
@@ -100,6 +110,7 @@ pub struct DeleteMembersRequest {
     pub graph_arn: String,
 }
 
+/// see [Detective::delete_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
@@ -113,6 +124,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
 }
 
+/// see [Detective::disassociate_membership]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembershipRequest {
@@ -121,6 +133,7 @@ pub struct DisassociateMembershipRequest {
     pub graph_arn: String,
 }
 
+/// see [Detective::get_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
@@ -132,6 +145,7 @@ pub struct GetMembersRequest {
     pub graph_arn: String,
 }
 
+/// see [Detective::get_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
@@ -159,6 +173,7 @@ pub struct Graph {
     pub created_time: Option<f64>,
 }
 
+/// see [Detective::list_graphs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGraphsRequest {
@@ -172,6 +187,7 @@ pub struct ListGraphsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Detective::list_graphs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGraphsResponse {
@@ -185,6 +201,7 @@ pub struct ListGraphsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Detective::list_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
@@ -198,6 +215,7 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Detective::list_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
@@ -211,6 +229,7 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Detective::list_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
@@ -227,6 +246,7 @@ pub struct ListMembersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Detective::list_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
@@ -286,6 +306,7 @@ pub struct MemberDetail {
     pub updated_time: Option<f64>,
 }
 
+/// see [Detective::reject_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInvitationRequest {
@@ -294,6 +315,7 @@ pub struct RejectInvitationRequest {
     pub graph_arn: String,
 }
 
+/// see [Detective::start_monitoring_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMemberRequest {
@@ -799,7 +821,7 @@ impl fmt::Display for StartMonitoringMemberError {
 impl Error for StartMonitoringMemberError {}
 /// Trait representing the capabilities of the Amazon Detective API. Amazon Detective clients implement this trait.
 #[async_trait]
-pub trait Detective {
+pub trait Detective: Clone + Sync + Send + 'static {
     /// <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
     async fn accept_invitation(
         &self,

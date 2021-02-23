@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -275,6 +279,7 @@ pub struct BaseConfigurationItem {
     pub version: Option<String>,
 }
 
+/// see [ConfigService::batch_get_aggregate_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetAggregateResourceConfigRequest {
@@ -286,6 +291,7 @@ pub struct BatchGetAggregateResourceConfigRequest {
     pub resource_identifiers: Vec<AggregateResourceIdentifier>,
 }
 
+/// see [ConfigService::batch_get_aggregate_resource_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetAggregateResourceConfigResponse {
@@ -299,6 +305,7 @@ pub struct BatchGetAggregateResourceConfigResponse {
     pub unprocessed_resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
+/// see [ConfigService::batch_get_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetResourceConfigRequest {
@@ -307,6 +314,7 @@ pub struct BatchGetResourceConfigRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
+/// see [ConfigService::batch_get_resource_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetResourceConfigResponse {
@@ -935,6 +943,7 @@ pub struct ConformancePackStatusDetail {
     pub stack_arn: String,
 }
 
+/// see [ConfigService::delete_aggregation_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAggregationAuthorizationRequest {
@@ -947,6 +956,7 @@ pub struct DeleteAggregationAuthorizationRequest {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::delete_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigRuleRequest {
@@ -955,6 +965,7 @@ pub struct DeleteConfigRuleRequest {
     pub config_rule_name: String,
 }
 
+/// see [ConfigService::delete_configuration_aggregator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationAggregatorRequest {
@@ -964,6 +975,7 @@ pub struct DeleteConfigurationAggregatorRequest {
 }
 
 /// <p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>
+/// see [ConfigService::delete_configuration_recorder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationRecorderRequest {
@@ -972,6 +984,7 @@ pub struct DeleteConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
+/// see [ConfigService::delete_conformance_pack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConformancePackRequest {
@@ -981,6 +994,7 @@ pub struct DeleteConformancePackRequest {
 }
 
 /// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data, in JSON format. </p>
+/// see [ConfigService::delete_delivery_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeliveryChannelRequest {
@@ -990,6 +1004,7 @@ pub struct DeleteDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::delete_evaluation_results]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationResultsRequest {
@@ -999,10 +1014,12 @@ pub struct DeleteEvaluationResultsRequest {
 }
 
 /// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
+/// see [ConfigService::delete_evaluation_results]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEvaluationResultsResponse {}
 
+/// see [ConfigService::delete_organization_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConfigRuleRequest {
@@ -1011,6 +1028,7 @@ pub struct DeleteOrganizationConfigRuleRequest {
     pub organization_config_rule_name: String,
 }
 
+/// see [ConfigService::delete_organization_conformance_pack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConformancePackRequest {
@@ -1019,6 +1037,7 @@ pub struct DeleteOrganizationConformancePackRequest {
     pub organization_conformance_pack_name: String,
 }
 
+/// see [ConfigService::delete_pending_aggregation_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePendingAggregationRequestRequest {
@@ -1030,6 +1049,7 @@ pub struct DeletePendingAggregationRequestRequest {
     pub requester_aws_region: String,
 }
 
+/// see [ConfigService::delete_remediation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationConfigurationRequest {
@@ -1042,10 +1062,12 @@ pub struct DeleteRemediationConfigurationRequest {
     pub resource_type: Option<String>,
 }
 
+/// see [ConfigService::delete_remediation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationConfigurationResponse {}
 
+/// see [ConfigService::delete_remediation_exceptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationExceptionsRequest {
@@ -1057,6 +1079,7 @@ pub struct DeleteRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
+/// see [ConfigService::delete_remediation_exceptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationExceptionsResponse {
@@ -1066,6 +1089,7 @@ pub struct DeleteRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedDeleteRemediationExceptionsBatch>>,
 }
 
+/// see [ConfigService::delete_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceConfigRequest {
@@ -1077,6 +1101,7 @@ pub struct DeleteResourceConfigRequest {
     pub resource_type: String,
 }
 
+/// see [ConfigService::delete_retention_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionConfigurationRequest {
@@ -1085,6 +1110,7 @@ pub struct DeleteRetentionConfigurationRequest {
     pub retention_configuration_name: String,
 }
 
+/// see [ConfigService::delete_stored_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStoredQueryRequest {
@@ -1093,11 +1119,13 @@ pub struct DeleteStoredQueryRequest {
     pub query_name: String,
 }
 
+/// see [ConfigService::delete_stored_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStoredQueryResponse {}
 
 /// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
+/// see [ConfigService::deliver_config_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeliverConfigSnapshotRequest {
@@ -1107,6 +1135,7 @@ pub struct DeliverConfigSnapshotRequest {
 }
 
 /// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
+/// see [ConfigService::deliver_config_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliverConfigSnapshotResponse {
@@ -1163,6 +1192,7 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
+/// see [ConfigService::describe_aggregate_compliance_by_config_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregateComplianceByConfigRulesRequest {
@@ -1183,6 +1213,23 @@ pub struct DescribeAggregateComplianceByConfigRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAggregateComplianceByConfigRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAggregateComplianceByConfigRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_aggregate_compliance_by_config_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregateComplianceByConfigRulesResponse {
@@ -1196,6 +1243,30 @@ pub struct DescribeAggregateComplianceByConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAggregateComplianceByConfigRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAggregateComplianceByConfigRulesResponse {
+    type Item = AggregateComplianceByConfigRule;
+
+    fn into_pagination_page(self) -> Vec<AggregateComplianceByConfigRule> {
+        self.aggregate_compliance_by_config_rules
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::describe_aggregation_authorizations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregationAuthorizationsRequest {
@@ -1209,6 +1280,23 @@ pub struct DescribeAggregationAuthorizationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAggregationAuthorizationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAggregationAuthorizationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_aggregation_authorizations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregationAuthorizationsResponse {
@@ -1222,7 +1310,30 @@ pub struct DescribeAggregationAuthorizationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAggregationAuthorizationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAggregationAuthorizationsResponse {
+    type Item = AggregationAuthorization;
+
+    fn into_pagination_page(self) -> Vec<AggregationAuthorization> {
+        self.aggregation_authorizations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_compliance_by_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByConfigRuleRequest {
@@ -1240,7 +1351,24 @@ pub struct DescribeComplianceByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeComplianceByConfigRuleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeComplianceByConfigRuleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_compliance_by_config_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByConfigRuleResponse {
@@ -1254,7 +1382,30 @@ pub struct DescribeComplianceByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeComplianceByConfigRuleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeComplianceByConfigRuleResponse {
+    type Item = ComplianceByConfigRule;
+
+    fn into_pagination_page(self) -> Vec<ComplianceByConfigRule> {
+        self.compliance_by_config_rules.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_compliance_by_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByResourceRequest {
@@ -1280,7 +1431,24 @@ pub struct DescribeComplianceByResourceRequest {
     pub resource_type: Option<String>,
 }
 
+impl Paged for DescribeComplianceByResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeComplianceByResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_compliance_by_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByResourceResponse {
@@ -1294,7 +1462,30 @@ pub struct DescribeComplianceByResourceResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeComplianceByResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeComplianceByResourceResponse {
+    type Item = ComplianceByResource;
+
+    fn into_pagination_page(self) -> Vec<ComplianceByResource> {
+        self.compliance_by_resources.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_config_rule_evaluation_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
@@ -1312,7 +1503,24 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigRuleEvaluationStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeConfigRuleEvaluationStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_config_rule_evaluation_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
@@ -1326,7 +1534,30 @@ pub struct DescribeConfigRuleEvaluationStatusResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigRuleEvaluationStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeConfigRuleEvaluationStatusResponse {
+    type Item = ConfigRuleEvaluationStatus;
+
+    fn into_pagination_page(self) -> Vec<ConfigRuleEvaluationStatus> {
+        self.config_rules_evaluation_status.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_config_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRulesRequest {
@@ -1340,7 +1571,24 @@ pub struct DescribeConfigRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeConfigRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::describe_config_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRulesResponse {
@@ -1354,6 +1602,29 @@ pub struct DescribeConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeConfigRulesResponse {
+    type Item = ConfigRule;
+
+    fn into_pagination_page(self) -> Vec<ConfigRule> {
+        self.config_rules.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::describe_configuration_aggregator_sources_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
@@ -1374,6 +1645,23 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     pub update_status: Option<Vec<String>>,
 }
 
+impl Paged for DescribeConfigurationAggregatorSourcesStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeConfigurationAggregatorSourcesStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_configuration_aggregator_sources_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
@@ -1387,6 +1675,29 @@ pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigurationAggregatorSourcesStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeConfigurationAggregatorSourcesStatusResponse {
+    type Item = AggregatedSourceStatus;
+
+    fn into_pagination_page(self) -> Vec<AggregatedSourceStatus> {
+        self.aggregated_source_status_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::describe_configuration_aggregators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorsRequest {
@@ -1404,6 +1715,23 @@ pub struct DescribeConfigurationAggregatorsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigurationAggregatorsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeConfigurationAggregatorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_configuration_aggregators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorsResponse {
@@ -1417,7 +1745,30 @@ pub struct DescribeConfigurationAggregatorsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeConfigurationAggregatorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeConfigurationAggregatorsResponse {
+    type Item = ConfigurationAggregator;
+
+    fn into_pagination_page(self) -> Vec<ConfigurationAggregator> {
+        self.configuration_aggregators.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>
+/// see [ConfigService::describe_configuration_recorder_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecorderStatusRequest {
@@ -1428,6 +1779,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
+/// see [ConfigService::describe_configuration_recorder_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecorderStatusResponse {
@@ -1438,6 +1790,7 @@ pub struct DescribeConfigurationRecorderStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>
+/// see [ConfigService::describe_configuration_recorders]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecordersRequest {
@@ -1448,6 +1801,7 @@ pub struct DescribeConfigurationRecordersRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
+/// see [ConfigService::describe_configuration_recorders]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecordersResponse {
@@ -1457,6 +1811,7 @@ pub struct DescribeConfigurationRecordersResponse {
     pub configuration_recorders: Option<Vec<ConfigurationRecorder>>,
 }
 
+/// see [ConfigService::describe_conformance_pack_compliance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackComplianceRequest {
@@ -1477,6 +1832,7 @@ pub struct DescribeConformancePackComplianceRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::describe_conformance_pack_compliance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackComplianceResponse {
@@ -1492,6 +1848,7 @@ pub struct DescribeConformancePackComplianceResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::describe_conformance_pack_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackStatusRequest {
@@ -1509,6 +1866,7 @@ pub struct DescribeConformancePackStatusRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::describe_conformance_pack_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackStatusResponse {
@@ -1522,6 +1880,7 @@ pub struct DescribeConformancePackStatusResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::describe_conformance_packs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePacksRequest {
@@ -1539,6 +1898,7 @@ pub struct DescribeConformancePacksRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::describe_conformance_packs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePacksResponse {
@@ -1553,6 +1913,7 @@ pub struct DescribeConformancePacksResponse {
 }
 
 /// <p>The input for the <a>DeliveryChannelStatus</a> action.</p>
+/// see [ConfigService::describe_delivery_channel_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelStatusRequest {
@@ -1563,6 +1924,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
+/// see [ConfigService::describe_delivery_channel_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelStatusResponse {
@@ -1573,6 +1935,7 @@ pub struct DescribeDeliveryChannelStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeDeliveryChannels</a> action.</p>
+/// see [ConfigService::describe_delivery_channels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelsRequest {
@@ -1583,6 +1946,7 @@ pub struct DescribeDeliveryChannelsRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
+/// see [ConfigService::describe_delivery_channels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelsResponse {
@@ -1592,6 +1956,7 @@ pub struct DescribeDeliveryChannelsResponse {
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
 }
 
+/// see [ConfigService::describe_organization_config_rule_statuses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRuleStatusesRequest {
@@ -1609,6 +1974,7 @@ pub struct DescribeOrganizationConfigRuleStatusesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
+/// see [ConfigService::describe_organization_config_rule_statuses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRuleStatusesResponse {
@@ -1622,6 +1988,7 @@ pub struct DescribeOrganizationConfigRuleStatusesResponse {
     pub organization_config_rule_statuses: Option<Vec<OrganizationConfigRuleStatus>>,
 }
 
+/// see [ConfigService::describe_organization_config_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRulesRequest {
@@ -1639,6 +2006,7 @@ pub struct DescribeOrganizationConfigRulesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
+/// see [ConfigService::describe_organization_config_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRulesResponse {
@@ -1652,6 +2020,7 @@ pub struct DescribeOrganizationConfigRulesResponse {
     pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
 }
 
+/// see [ConfigService::describe_organization_conformance_pack_statuses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePackStatusesRequest {
@@ -1669,6 +2038,7 @@ pub struct DescribeOrganizationConformancePackStatusesRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
+/// see [ConfigService::describe_organization_conformance_pack_statuses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePackStatusesResponse {
@@ -1682,6 +2052,7 @@ pub struct DescribeOrganizationConformancePackStatusesResponse {
     pub organization_conformance_pack_statuses: Option<Vec<OrganizationConformancePackStatus>>,
 }
 
+/// see [ConfigService::describe_organization_conformance_packs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePacksRequest {
@@ -1699,6 +2070,7 @@ pub struct DescribeOrganizationConformancePacksRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
+/// see [ConfigService::describe_organization_conformance_packs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePacksResponse {
@@ -1712,6 +2084,7 @@ pub struct DescribeOrganizationConformancePacksResponse {
     pub organization_conformance_packs: Option<Vec<OrganizationConformancePack>>,
 }
 
+/// see [ConfigService::describe_pending_aggregation_requests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingAggregationRequestsRequest {
@@ -1725,6 +2098,23 @@ pub struct DescribePendingAggregationRequestsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribePendingAggregationRequestsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePendingAggregationRequestsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_pending_aggregation_requests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingAggregationRequestsResponse {
@@ -1738,6 +2128,29 @@ pub struct DescribePendingAggregationRequestsResponse {
     pub pending_aggregation_requests: Option<Vec<PendingAggregationRequest>>,
 }
 
+impl Paged for DescribePendingAggregationRequestsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribePendingAggregationRequestsResponse {
+    type Item = PendingAggregationRequest;
+
+    fn into_pagination_page(self) -> Vec<PendingAggregationRequest> {
+        self.pending_aggregation_requests.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::describe_remediation_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationConfigurationsRequest {
@@ -1746,6 +2159,7 @@ pub struct DescribeRemediationConfigurationsRequest {
     pub config_rule_names: Vec<String>,
 }
 
+/// see [ConfigService::describe_remediation_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationConfigurationsResponse {
@@ -1755,6 +2169,7 @@ pub struct DescribeRemediationConfigurationsResponse {
     pub remediation_configurations: Option<Vec<RemediationConfiguration>>,
 }
 
+/// see [ConfigService::describe_remediation_exceptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExceptionsRequest {
@@ -1775,6 +2190,7 @@ pub struct DescribeRemediationExceptionsRequest {
     pub resource_keys: Option<Vec<RemediationExceptionResourceKey>>,
 }
 
+/// see [ConfigService::describe_remediation_exceptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExceptionsResponse {
@@ -1788,6 +2204,7 @@ pub struct DescribeRemediationExceptionsResponse {
     pub remediation_exceptions: Option<Vec<RemediationException>>,
 }
 
+/// see [ConfigService::describe_remediation_execution_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExecutionStatusRequest {
@@ -1808,6 +2225,23 @@ pub struct DescribeRemediationExecutionStatusRequest {
     pub resource_keys: Option<Vec<ResourceKey>>,
 }
 
+impl Paged for DescribeRemediationExecutionStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeRemediationExecutionStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_remediation_execution_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExecutionStatusResponse {
@@ -1821,6 +2255,29 @@ pub struct DescribeRemediationExecutionStatusResponse {
     pub remediation_execution_statuses: Option<Vec<RemediationExecutionStatus>>,
 }
 
+impl Paged for DescribeRemediationExecutionStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeRemediationExecutionStatusResponse {
+    type Item = RemediationExecutionStatus;
+
+    fn into_pagination_page(self) -> Vec<RemediationExecutionStatus> {
+        self.remediation_execution_statuses.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::describe_retention_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRetentionConfigurationsRequest {
@@ -1834,6 +2291,23 @@ pub struct DescribeRetentionConfigurationsRequest {
     pub retention_configuration_names: Option<Vec<String>>,
 }
 
+impl Paged for DescribeRetentionConfigurationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeRetentionConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::describe_retention_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRetentionConfigurationsResponse {
@@ -1845,6 +2319,28 @@ pub struct DescribeRetentionConfigurationsResponse {
     #[serde(rename = "RetentionConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_configurations: Option<Vec<RetentionConfiguration>>,
+}
+
+impl Paged for DescribeRetentionConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeRetentionConfigurationsResponse {
+    type Item = RetentionConfiguration;
+
+    fn into_pagination_page(self) -> Vec<RetentionConfiguration> {
+        self.retention_configurations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
@@ -2007,6 +2503,7 @@ pub struct FieldInfo {
     pub name: Option<String>,
 }
 
+/// see [ConfigService::get_aggregate_compliance_details_by_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
@@ -2036,6 +2533,23 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetAggregateComplianceDetailsByConfigRuleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetAggregateComplianceDetailsByConfigRuleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::get_aggregate_compliance_details_by_config_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
@@ -2049,6 +2563,29 @@ pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetAggregateComplianceDetailsByConfigRuleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetAggregateComplianceDetailsByConfigRuleResponse {
+    type Item = AggregateEvaluationResult;
+
+    fn into_pagination_page(self) -> Vec<AggregateEvaluationResult> {
+        self.aggregate_evaluation_results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::get_aggregate_config_rule_compliance_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryRequest {
@@ -2073,6 +2610,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_aggregate_config_rule_compliance_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryResponse {
@@ -2090,6 +2628,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_aggregate_discovered_resource_counts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateDiscoveredResourceCountsRequest {
@@ -2114,6 +2653,7 @@ pub struct GetAggregateDiscoveredResourceCountsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_aggregate_discovered_resource_counts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateDiscoveredResourceCountsResponse {
@@ -2134,6 +2674,7 @@ pub struct GetAggregateDiscoveredResourceCountsResponse {
     pub total_discovered_resources: i64,
 }
 
+/// see [ConfigService::get_aggregate_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateResourceConfigRequest {
@@ -2145,6 +2686,7 @@ pub struct GetAggregateResourceConfigRequest {
     pub resource_identifier: AggregateResourceIdentifier,
 }
 
+/// see [ConfigService::get_aggregate_resource_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateResourceConfigResponse {
@@ -2155,6 +2697,7 @@ pub struct GetAggregateResourceConfigResponse {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_details_by_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByConfigRuleRequest {
@@ -2175,7 +2718,24 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetComplianceDetailsByConfigRuleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetComplianceDetailsByConfigRuleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_details_by_config_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByConfigRuleResponse {
@@ -2189,7 +2749,30 @@ pub struct GetComplianceDetailsByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetComplianceDetailsByConfigRuleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetComplianceDetailsByConfigRuleResponse {
+    type Item = EvaluationResult;
+
+    fn into_pagination_page(self) -> Vec<EvaluationResult> {
+        self.evaluation_results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_details_by_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByResourceRequest {
@@ -2209,7 +2792,24 @@ pub struct GetComplianceDetailsByResourceRequest {
     pub resource_type: String,
 }
 
+impl Paged for GetComplianceDetailsByResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetComplianceDetailsByResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_details_by_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByResourceResponse {
@@ -2223,7 +2823,30 @@ pub struct GetComplianceDetailsByResourceResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetComplianceDetailsByResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetComplianceDetailsByResourceResponse {
+    type Item = EvaluationResult;
+
+    fn into_pagination_page(self) -> Vec<EvaluationResult> {
+        self.evaluation_results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_summary_by_config_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByConfigRuleResponse {
@@ -2234,6 +2857,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_summary_by_resource_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceSummaryByResourceTypeRequest {
@@ -2244,6 +2868,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::get_compliance_summary_by_resource_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByResourceTypeResponse {
@@ -2253,6 +2878,7 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
+/// see [ConfigService::get_conformance_pack_compliance_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceDetailsRequest {
@@ -2273,6 +2899,7 @@ pub struct GetConformancePackComplianceDetailsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_conformance_pack_compliance_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceDetailsResponse {
@@ -2289,6 +2916,7 @@ pub struct GetConformancePackComplianceDetailsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_conformance_pack_compliance_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceSummaryRequest {
@@ -2305,6 +2933,7 @@ pub struct GetConformancePackComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_conformance_pack_compliance_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceSummaryResponse {
@@ -2318,6 +2947,7 @@ pub struct GetConformancePackComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::get_discovered_resource_counts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredResourceCountsRequest {
@@ -2335,6 +2965,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
+/// see [ConfigService::get_discovered_resource_counts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredResourceCountsResponse {
@@ -2352,6 +2983,7 @@ pub struct GetDiscoveredResourceCountsResponse {
     pub total_discovered_resources: Option<i64>,
 }
 
+/// see [ConfigService::get_organization_config_rule_detailed_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusRequest {
@@ -2372,6 +3004,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusRequest {
     pub organization_config_rule_name: String,
 }
 
+/// see [ConfigService::get_organization_config_rule_detailed_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusResponse {
@@ -2385,6 +3018,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
 }
 
+/// see [ConfigService::get_organization_conformance_pack_detailed_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConformancePackDetailedStatusRequest {
@@ -2405,6 +3039,7 @@ pub struct GetOrganizationConformancePackDetailedStatusRequest {
     pub organization_conformance_pack_name: String,
 }
 
+/// see [ConfigService::get_organization_conformance_pack_detailed_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConformancePackDetailedStatusResponse {
@@ -2420,6 +3055,7 @@ pub struct GetOrganizationConformancePackDetailedStatusResponse {
 }
 
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
+/// see [ConfigService::get_resource_config_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceConfigHistoryRequest {
@@ -2451,7 +3087,24 @@ pub struct GetResourceConfigHistoryRequest {
     pub resource_type: String,
 }
 
+impl Paged for GetResourceConfigHistoryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetResourceConfigHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
+/// see [ConfigService::get_resource_config_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceConfigHistoryResponse {
@@ -2465,6 +3118,29 @@ pub struct GetResourceConfigHistoryResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetResourceConfigHistoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetResourceConfigHistoryResponse {
+    type Item = ConfigurationItem;
+
+    fn into_pagination_page(self) -> Vec<ConfigurationItem> {
+        self.configuration_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::get_stored_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStoredQueryRequest {
@@ -2473,6 +3149,7 @@ pub struct GetStoredQueryRequest {
     pub query_name: String,
 }
 
+/// see [ConfigService::get_stored_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStoredQueryResponse {
@@ -2494,6 +3171,7 @@ pub struct GroupedResourceCount {
     pub resource_count: i64,
 }
 
+/// see [ConfigService::list_aggregate_discovered_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAggregateDiscoveredResourcesRequest {
@@ -2517,6 +3195,23 @@ pub struct ListAggregateDiscoveredResourcesRequest {
     pub resource_type: String,
 }
 
+impl Paged for ListAggregateDiscoveredResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAggregateDiscoveredResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ConfigService::list_aggregate_discovered_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAggregateDiscoveredResourcesResponse {
@@ -2530,7 +3225,30 @@ pub struct ListAggregateDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
+impl Paged for ListAggregateDiscoveredResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAggregateDiscoveredResourcesResponse {
+    type Item = AggregateResourceIdentifier;
+
+    fn into_pagination_page(self) -> Vec<AggregateResourceIdentifier> {
+        self.resource_identifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::list_discovered_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
@@ -2559,7 +3277,24 @@ pub struct ListDiscoveredResourcesRequest {
     pub resource_type: String,
 }
 
+impl Paged for ListDiscoveredResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDiscoveredResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [ConfigService::list_discovered_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoveredResourcesResponse {
@@ -2573,6 +3308,29 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
+impl Paged for ListDiscoveredResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDiscoveredResourcesResponse {
+    type Item = ResourceIdentifier;
+
+    fn into_pagination_page(self) -> Vec<ResourceIdentifier> {
+        self.resource_identifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ConfigService::list_stored_queries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStoredQueriesRequest {
@@ -2586,6 +3344,7 @@ pub struct ListStoredQueriesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::list_stored_queries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStoredQueriesResponse {
@@ -2599,6 +3358,7 @@ pub struct ListStoredQueriesResponse {
     pub stored_query_metadata: Option<Vec<StoredQueryMetadata>>,
 }
 
+/// see [ConfigService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2615,6 +3375,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ConfigService::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2908,6 +3669,7 @@ pub struct PendingAggregationRequest {
     pub requester_aws_region: Option<String>,
 }
 
+/// see [ConfigService::put_aggregation_authorization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAggregationAuthorizationRequest {
@@ -2923,6 +3685,7 @@ pub struct PutAggregationAuthorizationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ConfigService::put_aggregation_authorization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAggregationAuthorizationResponse {
@@ -2932,6 +3695,7 @@ pub struct PutAggregationAuthorizationResponse {
     pub aggregation_authorization: Option<AggregationAuthorization>,
 }
 
+/// see [ConfigService::put_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigRuleRequest {
@@ -2944,6 +3708,7 @@ pub struct PutConfigRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ConfigService::put_configuration_aggregator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationAggregatorRequest {
@@ -2964,6 +3729,7 @@ pub struct PutConfigurationAggregatorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ConfigService::put_configuration_aggregator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationAggregatorResponse {
@@ -2974,6 +3740,7 @@ pub struct PutConfigurationAggregatorResponse {
 }
 
 /// <p>The input for the <a>PutConfigurationRecorder</a> action.</p>
+/// see [ConfigService::put_configuration_recorder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationRecorderRequest {
@@ -2982,6 +3749,7 @@ pub struct PutConfigurationRecorderRequest {
     pub configuration_recorder: ConfigurationRecorder,
 }
 
+/// see [ConfigService::put_conformance_pack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConformancePackRequest {
@@ -3010,6 +3778,7 @@ pub struct PutConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
+/// see [ConfigService::put_conformance_pack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConformancePackResponse {
@@ -3020,6 +3789,7 @@ pub struct PutConformancePackResponse {
 }
 
 /// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
+/// see [ConfigService::put_delivery_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDeliveryChannelRequest {
@@ -3029,6 +3799,7 @@ pub struct PutDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::put_evaluations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEvaluationsRequest {
@@ -3046,6 +3817,7 @@ pub struct PutEvaluationsRequest {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::put_evaluations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEvaluationsResponse {
@@ -3055,6 +3827,7 @@ pub struct PutEvaluationsResponse {
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
+/// see [ConfigService::put_external_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutExternalEvaluationRequest {
@@ -3064,10 +3837,12 @@ pub struct PutExternalEvaluationRequest {
     pub external_evaluation: ExternalEvaluation,
 }
 
+/// see [ConfigService::put_external_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutExternalEvaluationResponse {}
 
+/// see [ConfigService::put_organization_config_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConfigRuleRequest {
@@ -3088,6 +3863,7 @@ pub struct PutOrganizationConfigRuleRequest {
     pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
 }
 
+/// see [ConfigService::put_organization_config_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConfigRuleResponse {
@@ -3097,6 +3873,7 @@ pub struct PutOrganizationConfigRuleResponse {
     pub organization_config_rule_arn: Option<String>,
 }
 
+/// see [ConfigService::put_organization_conformance_pack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConformancePackRequest {
@@ -3129,6 +3906,7 @@ pub struct PutOrganizationConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
+/// see [ConfigService::put_organization_conformance_pack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConformancePackResponse {
@@ -3138,6 +3916,7 @@ pub struct PutOrganizationConformancePackResponse {
     pub organization_conformance_pack_arn: Option<String>,
 }
 
+/// see [ConfigService::put_remediation_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationConfigurationsRequest {
@@ -3146,6 +3925,7 @@ pub struct PutRemediationConfigurationsRequest {
     pub remediation_configurations: Vec<RemediationConfiguration>,
 }
 
+/// see [ConfigService::put_remediation_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationConfigurationsResponse {
@@ -3155,6 +3935,7 @@ pub struct PutRemediationConfigurationsResponse {
     pub failed_batches: Option<Vec<FailedRemediationBatch>>,
 }
 
+/// see [ConfigService::put_remediation_exceptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationExceptionsRequest {
@@ -3174,6 +3955,7 @@ pub struct PutRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
+/// see [ConfigService::put_remediation_exceptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationExceptionsResponse {
@@ -3183,6 +3965,7 @@ pub struct PutRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedRemediationExceptionBatch>>,
 }
 
+/// see [ConfigService::put_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceConfigRequest {
@@ -3208,6 +3991,7 @@ pub struct PutResourceConfigRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ConfigService::put_retention_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionConfigurationRequest {
@@ -3216,6 +4000,7 @@ pub struct PutRetentionConfigurationRequest {
     pub retention_period_in_days: i64,
 }
 
+/// see [ConfigService::put_retention_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionConfigurationResponse {
@@ -3225,6 +4010,7 @@ pub struct PutRetentionConfigurationResponse {
     pub retention_configuration: Option<RetentionConfiguration>,
 }
 
+/// see [ConfigService::put_stored_query]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutStoredQueryRequest {
@@ -3237,6 +4023,7 @@ pub struct PutStoredQueryRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ConfigService::put_stored_query]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutStoredQueryResponse {
@@ -3573,6 +4360,7 @@ pub struct Scope {
     pub tag_value: Option<String>,
 }
 
+/// see [ConfigService::select_aggregate_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectAggregateResourceConfigRequest {
@@ -3596,6 +4384,7 @@ pub struct SelectAggregateResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::select_aggregate_resource_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectAggregateResourceConfigResponse {
@@ -3612,6 +4401,7 @@ pub struct SelectAggregateResourceConfigResponse {
     pub results: Option<Vec<String>>,
 }
 
+/// see [ConfigService::select_resource_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectResourceConfigRequest {
@@ -3628,6 +4418,7 @@ pub struct SelectResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ConfigService::select_resource_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectResourceConfigResponse {
@@ -3691,6 +4482,7 @@ pub struct SsmControls {
 }
 
 /// <p><p/></p>
+/// see [ConfigService::start_config_rules_evaluation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigRulesEvaluationRequest {
@@ -3701,11 +4493,13 @@ pub struct StartConfigRulesEvaluationRequest {
 }
 
 /// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
+/// see [ConfigService::start_config_rules_evaluation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartConfigRulesEvaluationResponse {}
 
 /// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>
+/// see [ConfigService::start_configuration_recorder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigurationRecorderRequest {
@@ -3714,6 +4508,7 @@ pub struct StartConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
+/// see [ConfigService::start_remediation_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRemediationExecutionRequest {
@@ -3725,6 +4520,7 @@ pub struct StartRemediationExecutionRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
+/// see [ConfigService::start_remediation_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRemediationExecutionResponse {
@@ -3761,6 +4557,7 @@ pub struct StatusDetailFilters {
 }
 
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
+/// see [ConfigService::stop_configuration_recorder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopConfigurationRecorderRequest {
@@ -3825,6 +4622,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [ConfigService::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3836,6 +4634,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [ConfigService::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -8009,7 +8808,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 #[async_trait]
-pub trait ConfigService {
+pub trait ConfigService: Clone + Sync + Send + 'static {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
     async fn batch_get_aggregate_resource_config(
         &self,
@@ -8133,6 +8932,21 @@ pub trait ConfigService {
         RusotoError<DescribeAggregateComplianceByConfigRulesError>,
     >;
 
+    /// Auto-paginating version of `describe_aggregate_compliance_by_config_rules`
+    fn describe_aggregate_compliance_by_config_rules_pages<'a>(
+        &'a self,
+        mut input: DescribeAggregateComplianceByConfigRulesRequest,
+    ) -> RusotoStream<
+        'a,
+        AggregateComplianceByConfigRule,
+        DescribeAggregateComplianceByConfigRulesError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_aggregate_compliance_by_config_rules(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
     async fn describe_aggregation_authorizations(
         &self,
@@ -8141,6 +8955,17 @@ pub trait ConfigService {
         DescribeAggregationAuthorizationsResponse,
         RusotoError<DescribeAggregationAuthorizationsError>,
     >;
+
+    /// Auto-paginating version of `describe_aggregation_authorizations`
+    fn describe_aggregation_authorizations_pages<'a>(
+        &'a self,
+        mut input: DescribeAggregationAuthorizationsRequest,
+    ) -> RusotoStream<'a, AggregationAuthorization, DescribeAggregationAuthorizationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_aggregation_authorizations(input.clone())
+        }))
+    }
 
     /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     async fn describe_compliance_by_config_rule(
@@ -8151,11 +8976,33 @@ pub trait ConfigService {
         RusotoError<DescribeComplianceByConfigRuleError>,
     >;
 
+    /// Auto-paginating version of `describe_compliance_by_config_rule`
+    fn describe_compliance_by_config_rule_pages<'a>(
+        &'a self,
+        mut input: DescribeComplianceByConfigRuleRequest,
+    ) -> RusotoStream<'a, ComplianceByConfigRule, DescribeComplianceByConfigRuleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_compliance_by_config_rule(input.clone())
+        }))
+    }
+
     /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     async fn describe_compliance_by_resource(
         &self,
         input: DescribeComplianceByResourceRequest,
     ) -> Result<DescribeComplianceByResourceResponse, RusotoError<DescribeComplianceByResourceError>>;
+
+    /// Auto-paginating version of `describe_compliance_by_resource`
+    fn describe_compliance_by_resource_pages<'a>(
+        &'a self,
+        mut input: DescribeComplianceByResourceRequest,
+    ) -> RusotoStream<'a, ComplianceByResource, DescribeComplianceByResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_compliance_by_resource(input.clone())
+        }))
+    }
 
     /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
     async fn describe_config_rule_evaluation_status(
@@ -8166,11 +9013,33 @@ pub trait ConfigService {
         RusotoError<DescribeConfigRuleEvaluationStatusError>,
     >;
 
+    /// Auto-paginating version of `describe_config_rule_evaluation_status`
+    fn describe_config_rule_evaluation_status_pages<'a>(
+        &'a self,
+        mut input: DescribeConfigRuleEvaluationStatusRequest,
+    ) -> RusotoStream<'a, ConfigRuleEvaluationStatus, DescribeConfigRuleEvaluationStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_config_rule_evaluation_status(input.clone())
+        }))
+    }
+
     /// <p>Returns details about your AWS Config rules.</p>
     async fn describe_config_rules(
         &self,
         input: DescribeConfigRulesRequest,
     ) -> Result<DescribeConfigRulesResponse, RusotoError<DescribeConfigRulesError>>;
+
+    /// Auto-paginating version of `describe_config_rules`
+    fn describe_config_rules_pages<'a>(
+        &'a self,
+        mut input: DescribeConfigRulesRequest,
+    ) -> RusotoStream<'a, ConfigRule, DescribeConfigRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_config_rules(input.clone())
+        }))
+    }
 
     /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config verified authorization between the source account and an aggregator account. In case of a failure, the status contains the related error code or message. </p>
     async fn describe_configuration_aggregator_sources_status(
@@ -8181,6 +9050,18 @@ pub trait ConfigService {
         RusotoError<DescribeConfigurationAggregatorSourcesStatusError>,
     >;
 
+    /// Auto-paginating version of `describe_configuration_aggregator_sources_status`
+    fn describe_configuration_aggregator_sources_status_pages<'a>(
+        &'a self,
+        mut input: DescribeConfigurationAggregatorSourcesStatusRequest,
+    ) -> RusotoStream<'a, AggregatedSourceStatus, DescribeConfigurationAggregatorSourcesStatusError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_configuration_aggregator_sources_status(input.clone())
+        }))
+    }
+
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
     async fn describe_configuration_aggregators(
         &self,
@@ -8189,6 +9070,17 @@ pub trait ConfigService {
         DescribeConfigurationAggregatorsResponse,
         RusotoError<DescribeConfigurationAggregatorsError>,
     >;
+
+    /// Auto-paginating version of `describe_configuration_aggregators`
+    fn describe_configuration_aggregators_pages<'a>(
+        &'a self,
+        mut input: DescribeConfigurationAggregatorsRequest,
+    ) -> RusotoStream<'a, ConfigurationAggregator, DescribeConfigurationAggregatorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_configuration_aggregators(input.clone())
+        }))
+    }
 
     /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     async fn describe_configuration_recorder_status(
@@ -8292,6 +9184,17 @@ pub trait ConfigService {
         RusotoError<DescribePendingAggregationRequestsError>,
     >;
 
+    /// Auto-paginating version of `describe_pending_aggregation_requests`
+    fn describe_pending_aggregation_requests_pages<'a>(
+        &'a self,
+        mut input: DescribePendingAggregationRequestsRequest,
+    ) -> RusotoStream<'a, PendingAggregationRequest, DescribePendingAggregationRequestsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_pending_aggregation_requests(input.clone())
+        }))
+    }
+
     /// <p>Returns the details of one or more remediation configurations.</p>
     async fn describe_remediation_configurations(
         &self,
@@ -8319,6 +9222,17 @@ pub trait ConfigService {
         RusotoError<DescribeRemediationExecutionStatusError>,
     >;
 
+    /// Auto-paginating version of `describe_remediation_execution_status`
+    fn describe_remediation_execution_status_pages<'a>(
+        &'a self,
+        mut input: DescribeRemediationExecutionStatusRequest,
+    ) -> RusotoStream<'a, RemediationExecutionStatus, DescribeRemediationExecutionStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_remediation_execution_status(input.clone())
+        }))
+    }
+
     /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
     async fn describe_retention_configurations(
         &self,
@@ -8328,6 +9242,17 @@ pub trait ConfigService {
         RusotoError<DescribeRetentionConfigurationsError>,
     >;
 
+    /// Auto-paginating version of `describe_retention_configurations`
+    fn describe_retention_configurations_pages<'a>(
+        &'a self,
+        mut input: DescribeRetentionConfigurationsRequest,
+    ) -> RusotoStream<'a, RetentionConfiguration, DescribeRetentionConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_retention_configurations(input.clone())
+        }))
+    }
+
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
     async fn get_aggregate_compliance_details_by_config_rule(
         &self,
@@ -8336,6 +9261,18 @@ pub trait ConfigService {
         GetAggregateComplianceDetailsByConfigRuleResponse,
         RusotoError<GetAggregateComplianceDetailsByConfigRuleError>,
     >;
+
+    /// Auto-paginating version of `get_aggregate_compliance_details_by_config_rule`
+    fn get_aggregate_compliance_details_by_config_rule_pages<'a>(
+        &'a self,
+        mut input: GetAggregateComplianceDetailsByConfigRuleRequest,
+    ) -> RusotoStream<'a, AggregateEvaluationResult, GetAggregateComplianceDetailsByConfigRuleError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_aggregate_compliance_details_by_config_rule(input.clone())
+        }))
+    }
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
     async fn get_aggregate_config_rule_compliance_summary(
@@ -8370,6 +9307,17 @@ pub trait ConfigService {
         RusotoError<GetComplianceDetailsByConfigRuleError>,
     >;
 
+    /// Auto-paginating version of `get_compliance_details_by_config_rule`
+    fn get_compliance_details_by_config_rule_pages<'a>(
+        &'a self,
+        mut input: GetComplianceDetailsByConfigRuleRequest,
+    ) -> RusotoStream<'a, EvaluationResult, GetComplianceDetailsByConfigRuleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_compliance_details_by_config_rule(input.clone())
+        }))
+    }
+
     /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
     async fn get_compliance_details_by_resource(
         &self,
@@ -8378,6 +9326,17 @@ pub trait ConfigService {
         GetComplianceDetailsByResourceResponse,
         RusotoError<GetComplianceDetailsByResourceError>,
     >;
+
+    /// Auto-paginating version of `get_compliance_details_by_resource`
+    fn get_compliance_details_by_resource_pages<'a>(
+        &'a self,
+        mut input: GetComplianceDetailsByResourceRequest,
+    ) -> RusotoStream<'a, EvaluationResult, GetComplianceDetailsByResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_compliance_details_by_resource(input.clone())
+        }))
+    }
 
     /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
     async fn get_compliance_summary_by_config_rule(
@@ -8444,6 +9403,17 @@ pub trait ConfigService {
         input: GetResourceConfigHistoryRequest,
     ) -> Result<GetResourceConfigHistoryResponse, RusotoError<GetResourceConfigHistoryError>>;
 
+    /// Auto-paginating version of `get_resource_config_history`
+    fn get_resource_config_history_pages<'a>(
+        &'a self,
+        mut input: GetResourceConfigHistoryRequest,
+    ) -> RusotoStream<'a, ConfigurationItem, GetResourceConfigHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resource_config_history(input.clone())
+        }))
+    }
+
     /// <p>Returns the details of a specific stored query.</p>
     async fn get_stored_query(
         &self,
@@ -8459,11 +9429,33 @@ pub trait ConfigService {
         RusotoError<ListAggregateDiscoveredResourcesError>,
     >;
 
+    /// Auto-paginating version of `list_aggregate_discovered_resources`
+    fn list_aggregate_discovered_resources_pages<'a>(
+        &'a self,
+        mut input: ListAggregateDiscoveredResourcesRequest,
+    ) -> RusotoStream<'a, AggregateResourceIdentifier, ListAggregateDiscoveredResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aggregate_discovered_resources(input.clone())
+        }))
+    }
+
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     async fn list_discovered_resources(
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>>;
+
+    /// Auto-paginating version of `list_discovered_resources`
+    fn list_discovered_resources_pages<'a>(
+        &'a self,
+        mut input: ListDiscoveredResourcesRequest,
+    ) -> RusotoStream<'a, ResourceIdentifier, ListDiscoveredResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_discovered_resources(input.clone())
+        }))
+    }
 
     /// <p>List the stored queries for an AWS account in an AWS Region. The default is 100. </p>
     async fn list_stored_queries(

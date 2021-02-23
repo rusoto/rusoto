@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -111,6 +115,7 @@ pub struct Address {
     pub street_3: Option<String>,
 }
 
+/// see [Snowball::cancel_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelClusterRequest {
@@ -119,10 +124,12 @@ pub struct CancelClusterRequest {
     pub cluster_id: String,
 }
 
+/// see [Snowball::cancel_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelClusterResult {}
 
+/// see [Snowball::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -131,6 +138,7 @@ pub struct CancelJobRequest {
     pub job_id: String,
 }
 
+/// see [Snowball::cancel_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResult {}
@@ -233,6 +241,7 @@ pub struct CompatibleImage {
     pub name: Option<String>,
 }
 
+/// see [Snowball::create_address]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressRequest {
@@ -241,6 +250,7 @@ pub struct CreateAddressRequest {
     pub address: Address,
 }
 
+/// see [Snowball::create_address]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAddressResult {
@@ -250,6 +260,7 @@ pub struct CreateAddressResult {
     pub address_id: Option<String>,
 }
 
+/// see [Snowball::create_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -294,6 +305,7 @@ pub struct CreateClusterRequest {
     pub tax_documents: Option<TaxDocuments>,
 }
 
+/// see [Snowball::create_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResult {
@@ -303,6 +315,7 @@ pub struct CreateClusterResult {
     pub cluster_id: Option<String>,
 }
 
+/// see [Snowball::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -364,6 +377,7 @@ pub struct CreateJobRequest {
     pub tax_documents: Option<TaxDocuments>,
 }
 
+/// see [Snowball::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResult {
@@ -373,6 +387,7 @@ pub struct CreateJobResult {
     pub job_id: Option<String>,
 }
 
+/// see [Snowball::create_return_shipping_label]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReturnShippingLabelRequest {
@@ -385,6 +400,7 @@ pub struct CreateReturnShippingLabelRequest {
     pub shipping_option: Option<String>,
 }
 
+/// see [Snowball::create_return_shipping_label]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReturnShippingLabelResult {
@@ -416,6 +432,7 @@ pub struct DataTransfer {
     pub total_objects: Option<i64>,
 }
 
+/// see [Snowball::describe_address]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressRequest {
@@ -424,6 +441,7 @@ pub struct DescribeAddressRequest {
     pub address_id: String,
 }
 
+/// see [Snowball::describe_address]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddressResult {
@@ -433,6 +451,7 @@ pub struct DescribeAddressResult {
     pub address: Option<Address>,
 }
 
+/// see [Snowball::describe_addresses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAddressesRequest {
@@ -446,6 +465,23 @@ pub struct DescribeAddressesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAddressesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAddressesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Snowball::describe_addresses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddressesResult {
@@ -459,6 +495,29 @@ pub struct DescribeAddressesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeAddressesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeAddressesResult {
+    type Item = Address;
+
+    fn into_pagination_page(self) -> Vec<Address> {
+        self.addresses.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Snowball::describe_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
@@ -467,6 +526,7 @@ pub struct DescribeClusterRequest {
     pub cluster_id: String,
 }
 
+/// see [Snowball::describe_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterResult {
@@ -476,6 +536,7 @@ pub struct DescribeClusterResult {
     pub cluster_metadata: Option<ClusterMetadata>,
 }
 
+/// see [Snowball::describe_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
@@ -484,6 +545,7 @@ pub struct DescribeJobRequest {
     pub job_id: String,
 }
 
+/// see [Snowball::describe_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobResult {
@@ -497,6 +559,7 @@ pub struct DescribeJobResult {
     pub sub_job_metadata: Option<Vec<JobMetadata>>,
 }
 
+/// see [Snowball::describe_return_shipping_label]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReturnShippingLabelRequest {
@@ -506,6 +569,7 @@ pub struct DescribeReturnShippingLabelRequest {
     pub job_id: Option<String>,
 }
 
+/// see [Snowball::describe_return_shipping_label]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReturnShippingLabelResult {
@@ -549,6 +613,7 @@ pub struct EventTriggerDefinition {
     pub event_resource_arn: Option<String>,
 }
 
+/// see [Snowball::get_job_manifest]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobManifestRequest {
@@ -557,6 +622,7 @@ pub struct GetJobManifestRequest {
     pub job_id: String,
 }
 
+/// see [Snowball::get_job_manifest]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobManifestResult {
@@ -566,6 +632,7 @@ pub struct GetJobManifestResult {
     pub manifest_uri: Option<String>,
 }
 
+/// see [Snowball::get_job_unlock_code]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobUnlockCodeRequest {
@@ -574,6 +641,7 @@ pub struct GetJobUnlockCodeRequest {
     pub job_id: String,
 }
 
+/// see [Snowball::get_job_unlock_code]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobUnlockCodeResult {
@@ -583,10 +651,12 @@ pub struct GetJobUnlockCodeResult {
     pub unlock_code: Option<String>,
 }
 
+/// see [Snowball::get_snowball_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnowballUsageRequest {}
 
+/// see [Snowball::get_snowball_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSnowballUsageResult {
@@ -600,6 +670,7 @@ pub struct GetSnowballUsageResult {
     pub snowballs_in_use: Option<i64>,
 }
 
+/// see [Snowball::get_software_updates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSoftwareUpdatesRequest {
@@ -608,6 +679,7 @@ pub struct GetSoftwareUpdatesRequest {
     pub job_id: String,
 }
 
+/// see [Snowball::get_software_updates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSoftwareUpdatesResult {
@@ -802,6 +874,7 @@ pub struct LambdaResource {
     pub lambda_arn: Option<String>,
 }
 
+/// see [Snowball::list_cluster_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClusterJobsRequest {
@@ -818,6 +891,23 @@ pub struct ListClusterJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClusterJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClusterJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Snowball::list_cluster_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClusterJobsResult {
@@ -831,6 +921,29 @@ pub struct ListClusterJobsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClusterJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListClusterJobsResult {
+    type Item = JobListEntry;
+
+    fn into_pagination_page(self) -> Vec<JobListEntry> {
+        self.job_list_entries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Snowball::list_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
@@ -844,6 +957,23 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClustersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Snowball::list_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersResult {
@@ -857,6 +987,29 @@ pub struct ListClustersResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListClustersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListClustersResult {
+    type Item = ClusterListEntry;
+
+    fn into_pagination_page(self) -> Vec<ClusterListEntry> {
+        self.cluster_list_entries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Snowball::list_compatible_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompatibleImagesRequest {
@@ -870,6 +1023,23 @@ pub struct ListCompatibleImagesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCompatibleImagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCompatibleImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Snowball::list_compatible_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCompatibleImagesResult {
@@ -883,6 +1053,29 @@ pub struct ListCompatibleImagesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCompatibleImagesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCompatibleImagesResult {
+    type Item = CompatibleImage;
+
+    fn into_pagination_page(self) -> Vec<CompatibleImage> {
+        self.compatible_images.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Snowball::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -896,6 +1089,23 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Snowball::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
@@ -907,6 +1117,28 @@ pub struct ListJobsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for ListJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListJobsResult {
+    type Item = JobListEntry;
+
+    fn into_pagination_page(self) -> Vec<JobListEntry> {
+        self.job_list_entries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The Amazon Simple Notification Service (Amazon SNS) notification settings associated with a specific job. The <code>Notification</code> object is returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type.</p> <p>When the notification settings are defined during job creation, you can choose to notify based on a specific set of job states using the <code>JobStatesToNotify</code> array of strings, or you can specify that you want to have Amazon SNS notifications sent out for all job states with <code>NotifyAll</code> set to true.</p>
@@ -988,6 +1220,7 @@ pub struct TaxDocuments {
     pub ind: Option<INDTaxDocuments>,
 }
 
+/// see [Snowball::update_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterRequest {
@@ -1024,10 +1257,12 @@ pub struct UpdateClusterRequest {
     pub shipping_option: Option<String>,
 }
 
+/// see [Snowball::update_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterResult {}
 
+/// see [Snowball::update_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
@@ -1068,10 +1303,12 @@ pub struct UpdateJobRequest {
     pub snowball_capacity_preference: Option<String>,
 }
 
+/// see [Snowball::update_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobResult {}
 
+/// see [Snowball::update_job_shipment_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobShipmentStateRequest {
@@ -1083,6 +1320,7 @@ pub struct UpdateJobShipmentStateRequest {
     pub shipment_state: String,
 }
 
+/// see [Snowball::update_job_shipment_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobShipmentStateResult {}
@@ -1986,7 +2224,7 @@ impl fmt::Display for UpdateJobShipmentStateError {
 impl Error for UpdateJobShipmentStateError {}
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 #[async_trait]
-pub trait Snowball {
+pub trait Snowball: Clone + Sync + Send + 'static {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
     async fn cancel_cluster(
         &self,
@@ -2035,6 +2273,17 @@ pub trait Snowball {
         input: DescribeAddressesRequest,
     ) -> Result<DescribeAddressesResult, RusotoError<DescribeAddressesError>>;
 
+    /// Auto-paginating version of `describe_addresses`
+    fn describe_addresses_pages<'a>(
+        &'a self,
+        mut input: DescribeAddressesRequest,
+    ) -> RusotoStream<'a, Address, DescribeAddressesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_addresses(input.clone())
+        }))
+    }
+
     /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
     async fn describe_cluster(
         &self,
@@ -2082,11 +2331,33 @@ pub trait Snowball {
         input: ListClusterJobsRequest,
     ) -> Result<ListClusterJobsResult, RusotoError<ListClusterJobsError>>;
 
+    /// Auto-paginating version of `list_cluster_jobs`
+    fn list_cluster_jobs_pages<'a>(
+        &'a self,
+        mut input: ListClusterJobsRequest,
+    ) -> RusotoStream<'a, JobListEntry, ListClusterJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_cluster_jobs(input.clone())
+        }))
+    }
+
     /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
     async fn list_clusters(
         &self,
         input: ListClustersRequest,
     ) -> Result<ListClustersResult, RusotoError<ListClustersError>>;
+
+    /// Auto-paginating version of `list_clusters`
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersRequest,
+    ) -> RusotoStream<'a, ClusterListEntry, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
+    }
 
     /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snow device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
     async fn list_compatible_images(
@@ -2094,11 +2365,33 @@ pub trait Snowball {
         input: ListCompatibleImagesRequest,
     ) -> Result<ListCompatibleImagesResult, RusotoError<ListCompatibleImagesError>>;
 
+    /// Auto-paginating version of `list_compatible_images`
+    fn list_compatible_images_pages<'a>(
+        &'a self,
+        mut input: ListCompatibleImagesRequest,
+    ) -> RusotoStream<'a, CompatibleImage, ListCompatibleImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compatible_images(input.clone())
+        }))
+    }
+
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobListEntry, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
+    }
 
     /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
     async fn update_cluster(

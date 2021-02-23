@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -69,6 +73,7 @@ pub struct AgentListEntry {
 }
 
 /// <p>CancelTaskExecutionRequest</p>
+/// see [DataSync::cancel_task_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelTaskExecutionRequest {
@@ -77,11 +82,13 @@ pub struct CancelTaskExecutionRequest {
     pub task_execution_arn: String,
 }
 
+/// see [DataSync::cancel_task_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelTaskExecutionResponse {}
 
 /// <p>CreateAgentRequest</p>
+/// see [DataSync::create_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAgentRequest {
@@ -111,6 +118,7 @@ pub struct CreateAgentRequest {
 }
 
 /// <p>CreateAgentResponse</p>
+/// see [DataSync::create_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAgentResponse {
@@ -121,6 +129,7 @@ pub struct CreateAgentResponse {
 }
 
 /// <p>CreateLocationEfsRequest</p>
+/// see [DataSync::create_location_efs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationEfsRequest {
@@ -141,6 +150,7 @@ pub struct CreateLocationEfsRequest {
 }
 
 /// <p>CreateLocationEfs</p>
+/// see [DataSync::create_location_efs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationEfsResponse {
@@ -150,6 +160,7 @@ pub struct CreateLocationEfsResponse {
     pub location_arn: Option<String>,
 }
 
+/// see [DataSync::create_location_fsx_windows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationFsxWindowsRequest {
@@ -179,6 +190,7 @@ pub struct CreateLocationFsxWindowsRequest {
     pub user: String,
 }
 
+/// see [DataSync::create_location_fsx_windows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationFsxWindowsResponse {
@@ -189,6 +201,7 @@ pub struct CreateLocationFsxWindowsResponse {
 }
 
 /// <p>CreateLocationNfsRequest</p>
+/// see [DataSync::create_location_nfs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationNfsRequest {
@@ -212,6 +225,7 @@ pub struct CreateLocationNfsRequest {
 }
 
 /// <p>CreateLocationNfsResponse</p>
+/// see [DataSync::create_location_nfs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationNfsResponse {
@@ -222,6 +236,7 @@ pub struct CreateLocationNfsResponse {
 }
 
 /// <p>CreateLocationObjectStorageRequest</p>
+/// see [DataSync::create_location_object_storage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationObjectStorageRequest {
@@ -261,6 +276,7 @@ pub struct CreateLocationObjectStorageRequest {
 }
 
 /// <p>CreateLocationObjectStorageResponse</p>
+/// see [DataSync::create_location_object_storage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationObjectStorageResponse {
@@ -271,6 +287,7 @@ pub struct CreateLocationObjectStorageResponse {
 }
 
 /// <p>CreateLocationS3Request</p>
+/// see [DataSync::create_location_s3]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationS3Request {
@@ -298,6 +315,7 @@ pub struct CreateLocationS3Request {
 }
 
 /// <p>CreateLocationS3Response</p>
+/// see [DataSync::create_location_s3]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationS3Response {
@@ -308,6 +326,7 @@ pub struct CreateLocationS3Response {
 }
 
 /// <p>CreateLocationSmbRequest</p>
+/// see [DataSync::create_location_smb]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationSmbRequest {
@@ -341,6 +360,7 @@ pub struct CreateLocationSmbRequest {
 }
 
 /// <p>CreateLocationSmbResponse</p>
+/// see [DataSync::create_location_smb]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationSmbResponse {
@@ -351,6 +371,7 @@ pub struct CreateLocationSmbResponse {
 }
 
 /// <p>CreateTaskRequest</p>
+/// see [DataSync::create_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTaskRequest {
@@ -387,6 +408,7 @@ pub struct CreateTaskRequest {
 }
 
 /// <p>CreateTaskResponse</p>
+/// see [DataSync::create_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTaskResponse {
@@ -397,6 +419,7 @@ pub struct CreateTaskResponse {
 }
 
 /// <p>DeleteAgentRequest</p>
+/// see [DataSync::delete_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAgentRequest {
@@ -405,11 +428,13 @@ pub struct DeleteAgentRequest {
     pub agent_arn: String,
 }
 
+/// see [DataSync::delete_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAgentResponse {}
 
 /// <p>DeleteLocation</p>
+/// see [DataSync::delete_location]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLocationRequest {
@@ -418,11 +443,13 @@ pub struct DeleteLocationRequest {
     pub location_arn: String,
 }
 
+/// see [DataSync::delete_location]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLocationResponse {}
 
 /// <p>DeleteTask</p>
+/// see [DataSync::delete_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTaskRequest {
@@ -431,11 +458,13 @@ pub struct DeleteTaskRequest {
     pub task_arn: String,
 }
 
+/// see [DataSync::delete_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTaskResponse {}
 
 /// <p>DescribeAgent</p>
+/// see [DataSync::describe_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentRequest {
@@ -445,6 +474,7 @@ pub struct DescribeAgentRequest {
 }
 
 /// <p>DescribeAgentResponse</p>
+/// see [DataSync::describe_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentResponse {
@@ -479,6 +509,7 @@ pub struct DescribeAgentResponse {
 }
 
 /// <p>DescribeLocationEfsRequest</p>
+/// see [DataSync::describe_location_efs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationEfsRequest {
@@ -488,6 +519,7 @@ pub struct DescribeLocationEfsRequest {
 }
 
 /// <p>DescribeLocationEfsResponse</p>
+/// see [DataSync::describe_location_efs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationEfsResponse {
@@ -508,6 +540,7 @@ pub struct DescribeLocationEfsResponse {
     pub location_uri: Option<String>,
 }
 
+/// see [DataSync::describe_location_fsx_windows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationFsxWindowsRequest {
@@ -516,6 +549,7 @@ pub struct DescribeLocationFsxWindowsRequest {
     pub location_arn: String,
 }
 
+/// see [DataSync::describe_location_fsx_windows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationFsxWindowsResponse {
@@ -546,6 +580,7 @@ pub struct DescribeLocationFsxWindowsResponse {
 }
 
 /// <p>DescribeLocationNfsRequest</p>
+/// see [DataSync::describe_location_nfs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationNfsRequest {
@@ -555,6 +590,7 @@ pub struct DescribeLocationNfsRequest {
 }
 
 /// <p>DescribeLocationNfsResponse</p>
+/// see [DataSync::describe_location_nfs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationNfsResponse {
@@ -580,6 +616,7 @@ pub struct DescribeLocationNfsResponse {
 }
 
 /// <p>DescribeLocationObjectStorageRequest</p>
+/// see [DataSync::describe_location_object_storage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationObjectStorageRequest {
@@ -589,6 +626,7 @@ pub struct DescribeLocationObjectStorageRequest {
 }
 
 /// <p>DescribeLocationObjectStorageResponse</p>
+/// see [DataSync::describe_location_object_storage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationObjectStorageResponse {
@@ -623,6 +661,7 @@ pub struct DescribeLocationObjectStorageResponse {
 }
 
 /// <p>DescribeLocationS3Request</p>
+/// see [DataSync::describe_location_s3]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationS3Request {
@@ -632,6 +671,7 @@ pub struct DescribeLocationS3Request {
 }
 
 /// <p>DescribeLocationS3Response</p>
+/// see [DataSync::describe_location_s3]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationS3Response {
@@ -661,6 +701,7 @@ pub struct DescribeLocationS3Response {
 }
 
 /// <p>DescribeLocationSmbRequest</p>
+/// see [DataSync::describe_location_smb]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationSmbRequest {
@@ -670,6 +711,7 @@ pub struct DescribeLocationSmbRequest {
 }
 
 /// <p>DescribeLocationSmbResponse</p>
+/// see [DataSync::describe_location_smb]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationSmbResponse {
@@ -704,6 +746,7 @@ pub struct DescribeLocationSmbResponse {
 }
 
 /// <p>DescribeTaskExecutionRequest</p>
+/// see [DataSync::describe_task_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskExecutionRequest {
@@ -713,6 +756,7 @@ pub struct DescribeTaskExecutionRequest {
 }
 
 /// <p>DescribeTaskExecutionResponse</p>
+/// see [DataSync::describe_task_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskExecutionResponse {
@@ -766,6 +810,7 @@ pub struct DescribeTaskExecutionResponse {
 }
 
 /// <p>DescribeTaskRequest</p>
+/// see [DataSync::describe_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskRequest {
@@ -775,6 +820,7 @@ pub struct DescribeTaskRequest {
 }
 
 /// <p>DescribeTaskResponse</p>
+/// see [DataSync::describe_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskResponse {
@@ -865,6 +911,7 @@ pub struct FilterRule {
 }
 
 /// <p>ListAgentsRequest</p>
+/// see [DataSync::list_agents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAgentsRequest {
@@ -878,7 +925,24 @@ pub struct ListAgentsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAgentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAgentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>ListAgentsResponse</p>
+/// see [DataSync::list_agents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAgentsResponse {
@@ -892,7 +956,30 @@ pub struct ListAgentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAgentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAgentsResponse {
+    type Item = AgentListEntry;
+
+    fn into_pagination_page(self) -> Vec<AgentListEntry> {
+        self.agents.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>ListLocationsRequest</p>
+/// see [DataSync::list_locations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLocationsRequest {
@@ -910,7 +997,24 @@ pub struct ListLocationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListLocationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLocationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>ListLocationsResponse</p>
+/// see [DataSync::list_locations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLocationsResponse {
@@ -924,7 +1028,30 @@ pub struct ListLocationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListLocationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListLocationsResponse {
+    type Item = LocationListEntry;
+
+    fn into_pagination_page(self) -> Vec<LocationListEntry> {
+        self.locations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>ListTagsForResourceRequest</p>
+/// see [DataSync::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -941,7 +1068,24 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>ListTagsForResourceResponse</p>
+/// see [DataSync::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -955,7 +1099,30 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<TagListEntry>>,
 }
 
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = TagListEntry;
+
+    fn into_pagination_page(self) -> Vec<TagListEntry> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>ListTaskExecutions</p>
+/// see [DataSync::list_task_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskExecutionsRequest {
@@ -973,7 +1140,24 @@ pub struct ListTaskExecutionsRequest {
     pub task_arn: Option<String>,
 }
 
+impl Paged for ListTaskExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>ListTaskExecutionsResponse</p>
+/// see [DataSync::list_task_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTaskExecutionsResponse {
@@ -987,7 +1171,30 @@ pub struct ListTaskExecutionsResponse {
     pub task_executions: Option<Vec<TaskExecutionListEntry>>,
 }
 
+impl Paged for ListTaskExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTaskExecutionsResponse {
+    type Item = TaskExecutionListEntry;
+
+    fn into_pagination_page(self) -> Vec<TaskExecutionListEntry> {
+        self.task_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>ListTasksRequest</p>
+/// see [DataSync::list_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
@@ -1005,7 +1212,24 @@ pub struct ListTasksRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTasksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>ListTasksResponse</p>
+/// see [DataSync::list_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTasksResponse {
@@ -1017,6 +1241,28 @@ pub struct ListTasksResponse {
     #[serde(rename = "Tasks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tasks: Option<Vec<TaskListEntry>>,
+}
+
+impl Paged for ListTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTasksResponse {
+    type Item = TaskListEntry;
+
+    fn into_pagination_page(self) -> Vec<TaskListEntry> {
+        self.tasks.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>You can use API filters to narrow down the list of resources returned by <code>ListLocations</code>. For example, to retrieve all your Amazon S3 locations, you can use <code>ListLocations</code> with filter name <code>LocationType S3</code> and <code>Operator Equals</code>.</p>
@@ -1162,6 +1408,7 @@ pub struct SmbMountOptions {
 }
 
 /// <p>StartTaskExecutionRequest</p>
+/// see [DataSync::start_task_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTaskExecutionRequest {
@@ -1178,6 +1425,7 @@ pub struct StartTaskExecutionRequest {
 }
 
 /// <p>StartTaskExecutionResponse</p>
+/// see [DataSync::start_task_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTaskExecutionResponse {
@@ -1200,6 +1448,7 @@ pub struct TagListEntry {
 }
 
 /// <p>TagResourceRequest</p>
+/// see [DataSync::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1211,6 +1460,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<TagListEntry>,
 }
 
+/// see [DataSync::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1313,6 +1563,7 @@ pub struct TaskSchedule {
 }
 
 /// <p>UntagResourceRequest</p>
+/// see [DataSync::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1324,11 +1575,13 @@ pub struct UntagResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [DataSync::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>UpdateAgentRequest</p>
+/// see [DataSync::update_agent]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAgentRequest {
@@ -1341,10 +1594,12 @@ pub struct UpdateAgentRequest {
     pub name: Option<String>,
 }
 
+/// see [DataSync::update_agent]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAgentResponse {}
 
+/// see [DataSync::update_task_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTaskExecutionRequest {
@@ -1355,11 +1610,13 @@ pub struct UpdateTaskExecutionRequest {
     pub task_execution_arn: String,
 }
 
+/// see [DataSync::update_task_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTaskExecutionResponse {}
 
 /// <p>UpdateTaskResponse</p>
+/// see [DataSync::update_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTaskRequest {
@@ -1387,6 +1644,7 @@ pub struct UpdateTaskRequest {
     pub task_arn: String,
 }
 
+/// see [DataSync::update_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTaskResponse {}
@@ -2565,7 +2823,7 @@ impl fmt::Display for UpdateTaskExecutionError {
 impl Error for UpdateTaskExecutionError {}
 /// Trait representing the capabilities of the DataSync API. DataSync clients implement this trait.
 #[async_trait]
-pub trait DataSync {
+pub trait DataSync: Clone + Sync + Send + 'static {
     /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files is abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
     async fn cancel_task_execution(
         &self,
@@ -2701,11 +2959,33 @@ pub trait DataSync {
         input: ListAgentsRequest,
     ) -> Result<ListAgentsResponse, RusotoError<ListAgentsError>>;
 
+    /// Auto-paginating version of `list_agents`
+    fn list_agents_pages<'a>(
+        &'a self,
+        mut input: ListAgentsRequest,
+    ) -> RusotoStream<'a, AgentListEntry, ListAgentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_agents(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
     async fn list_locations(
         &self,
         input: ListLocationsRequest,
     ) -> Result<ListLocationsResponse, RusotoError<ListLocationsError>>;
+
+    /// Auto-paginating version of `list_locations`
+    fn list_locations_pages<'a>(
+        &'a self,
+        mut input: ListLocationsRequest,
+    ) -> RusotoStream<'a, LocationListEntry, ListLocationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_locations(input.clone())
+        }))
+    }
 
     /// <p>Returns all the tags associated with a specified resource. </p>
     async fn list_tags_for_resource(
@@ -2713,17 +2993,50 @@ pub trait DataSync {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, TagListEntry, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of executed tasks.</p>
     async fn list_task_executions(
         &self,
         input: ListTaskExecutionsRequest,
     ) -> Result<ListTaskExecutionsResponse, RusotoError<ListTaskExecutionsError>>;
 
+    /// Auto-paginating version of `list_task_executions`
+    fn list_task_executions_pages<'a>(
+        &'a self,
+        mut input: ListTaskExecutionsRequest,
+    ) -> RusotoStream<'a, TaskExecutionListEntry, ListTaskExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_executions(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of all the tasks.</p>
     async fn list_tasks(
         &self,
         input: ListTasksRequest,
     ) -> Result<ListTasksResponse, RusotoError<ListTasksError>>;
+
+    /// Auto-paginating version of `list_tasks`
+    fn list_tasks_pages<'a>(
+        &'a self,
+        mut input: ListTasksRequest,
+    ) -> RusotoStream<'a, TaskListEntry, ListTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tasks(input.clone())
+        }))
+    }
 
     /// <p>Starts a specific invocation of a task. A <code>TaskExecution</code> value represents an individual run of a task. Each task can have at most one <code>TaskExecution</code> at a time.</p> <p> <code>TaskExecution</code> has the following transition phases: INITIALIZING | PREPARING | TRANSFERRING | VERIFYING | SUCCESS/FAILURE. </p> <p>For detailed information, see the Task Execution section in the Components and Terminology topic in the <i>AWS DataSync User Guide</i>.</p>
     async fn start_task_execution(

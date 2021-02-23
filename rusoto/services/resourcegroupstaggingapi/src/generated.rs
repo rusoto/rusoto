@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -68,10 +72,12 @@ pub struct ComplianceDetails {
     pub noncompliant_keys: Option<Vec<String>>,
 }
 
+/// see [ResourceGroupsTaggingApi::describe_report_creation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportCreationInput {}
 
+/// see [ResourceGroupsTaggingApi::describe_report_creation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReportCreationOutput {
@@ -107,6 +113,7 @@ pub struct FailureInfo {
     pub status_code: Option<i64>,
 }
 
+/// see [ResourceGroupsTaggingApi::get_compliance_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceSummaryInput {
@@ -140,6 +147,23 @@ pub struct GetComplianceSummaryInput {
     pub target_id_filters: Option<Vec<String>>,
 }
 
+impl Paged for GetComplianceSummaryInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetComplianceSummaryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.pagination_token = key;
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_compliance_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryOutput {
@@ -153,6 +177,29 @@ pub struct GetComplianceSummaryOutput {
     pub summary_list: Option<Vec<Summary>>,
 }
 
+impl Paged for GetComplianceSummaryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedOutput for GetComplianceSummaryOutput {
+    type Item = Summary;
+
+    fn into_pagination_page(self) -> Vec<Summary> {
+        self.summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesInput {
@@ -186,6 +233,23 @@ pub struct GetResourcesInput {
     pub tags_per_page: Option<i64>,
 }
 
+impl Paged for GetResourcesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetResourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.pagination_token = key;
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcesOutput {
@@ -199,6 +263,29 @@ pub struct GetResourcesOutput {
     pub resource_tag_mapping_list: Option<Vec<ResourceTagMapping>>,
 }
 
+impl Paged for GetResourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedOutput for GetResourcesOutput {
+    type Item = ResourceTagMapping;
+
+    fn into_pagination_page(self) -> Vec<ResourceTagMapping> {
+        self.resource_tag_mapping_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_tag_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagKeysInput {
@@ -208,6 +295,23 @@ pub struct GetTagKeysInput {
     pub pagination_token: Option<String>,
 }
 
+impl Paged for GetTagKeysInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetTagKeysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.pagination_token = key;
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_tag_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagKeysOutput {
@@ -221,6 +325,29 @@ pub struct GetTagKeysOutput {
     pub tag_keys: Option<Vec<String>>,
 }
 
+impl Paged for GetTagKeysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedOutput for GetTagKeysOutput {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.tag_keys.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_tag_values]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagValuesInput {
@@ -233,6 +360,23 @@ pub struct GetTagValuesInput {
     pub pagination_token: Option<String>,
 }
 
+impl Paged for GetTagValuesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetTagValuesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.pagination_token = key;
+    }
+}
+
+/// see [ResourceGroupsTaggingApi::get_tag_values]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagValuesOutput {
@@ -244,6 +388,28 @@ pub struct GetTagValuesOutput {
     #[serde(rename = "TagValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_values: Option<Vec<String>>,
+}
+
+impl Paged for GetTagValuesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedOutput for GetTagValuesOutput {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.tag_values.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>
@@ -264,6 +430,7 @@ pub struct ResourceTagMapping {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ResourceGroupsTaggingApi::start_report_creation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReportCreationInput {
@@ -272,6 +439,7 @@ pub struct StartReportCreationInput {
     pub s3_bucket: String,
 }
 
+/// see [ResourceGroupsTaggingApi::start_report_creation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReportCreationOutput {}
@@ -332,6 +500,7 @@ pub struct TagFilter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [ResourceGroupsTaggingApi::tag_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourcesInput {
@@ -343,6 +512,7 @@ pub struct TagResourcesInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [ResourceGroupsTaggingApi::tag_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourcesOutput {
@@ -352,6 +522,7 @@ pub struct TagResourcesOutput {
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
 }
 
+/// see [ResourceGroupsTaggingApi::untag_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourcesInput {
@@ -363,6 +534,7 @@ pub struct UntagResourcesInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ResourceGroupsTaggingApi::untag_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourcesOutput {
@@ -770,7 +942,7 @@ impl fmt::Display for UntagResourcesError {
 impl Error for UntagResourcesError {}
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
 #[async_trait]
-pub trait ResourceGroupsTaggingApi {
+pub trait ResourceGroupsTaggingApi: Clone + Sync + Send + 'static {
     /// <p>Describes the status of the <code>StartReportCreation</code> operation. </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
     async fn describe_report_creation(
         &self,
@@ -782,11 +954,33 @@ pub trait ResourceGroupsTaggingApi {
         input: GetComplianceSummaryInput,
     ) -> Result<GetComplianceSummaryOutput, RusotoError<GetComplianceSummaryError>>;
 
+    /// Auto-paginating version of `get_compliance_summary`
+    fn get_compliance_summary_pages<'a>(
+        &'a self,
+        mut input: GetComplianceSummaryInput,
+    ) -> RusotoStream<'a, Summary, GetComplianceSummaryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_compliance_summary(input.clone())
+        }))
+    }
+
     /// <p><p>Returns all the tagged or previously tagged resources that are located in the specified Region for the AWS account.</p> <p>Depending on what information you want returned, you can also specify the following:</p> <ul> <li> <p> <i>Filters</i> that specify what tags and resource types you want returned. The response includes all tags that are associated with the requested resources.</p> </li> <li> <p>Information about compliance with the account&#39;s effective tag policy. For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <note> <p>You can check the <code>PaginationToken</code> response parameter to determine if a query is complete. Queries occasionally return fewer results on a page than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display. </p> </note></p>
     async fn get_resources(
         &self,
         input: GetResourcesInput,
     ) -> Result<GetResourcesOutput, RusotoError<GetResourcesError>>;
+
+    /// Auto-paginating version of `get_resources`
+    fn get_resources_pages<'a>(
+        &'a self,
+        mut input: GetResourcesInput,
+    ) -> RusotoStream<'a, ResourceTagMapping, GetResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resources(input.clone())
+        }))
+    }
 
     /// <p>Returns all tag keys in the specified Region for the AWS account.</p>
     async fn get_tag_keys(
@@ -794,11 +988,33 @@ pub trait ResourceGroupsTaggingApi {
         input: GetTagKeysInput,
     ) -> Result<GetTagKeysOutput, RusotoError<GetTagKeysError>>;
 
+    /// Auto-paginating version of `get_tag_keys`
+    fn get_tag_keys_pages<'a>(
+        &'a self,
+        mut input: GetTagKeysInput,
+    ) -> RusotoStream<'a, String, GetTagKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_tag_keys(input.clone())
+        }))
+    }
+
     /// <p>Returns all tag values for the specified key in the specified Region for the AWS account.</p>
     async fn get_tag_values(
         &self,
         input: GetTagValuesInput,
     ) -> Result<GetTagValuesOutput, RusotoError<GetTagValuesError>>;
+
+    /// Auto-paginating version of `get_tag_values`
+    fn get_tag_values_pages<'a>(
+        &'a self,
+        mut input: GetTagValuesInput,
+    ) -> RusotoStream<'a, String, GetTagValuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_tag_values(input.clone())
+        }))
+    }
 
     /// <p>Generates a report that lists all tagged resources in accounts across your organization and tells whether each resource is compliant with the effective tag policy. Compliance data is refreshed daily. </p> <p>The generated report is saved to the following location:</p> <p> <code>s3://example-bucket/AwsTagPolicies/o-exampleorgid/YYYY-MM-ddTHH:mm:ssZ/report.csv</code> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>
     async fn start_report_creation(

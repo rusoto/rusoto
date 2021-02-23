@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -82,6 +86,7 @@ pub struct AuthorizationData {
     pub proxy_endpoint: Option<String>,
 }
 
+/// see [Ecr::batch_check_layer_availability]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCheckLayerAvailabilityRequest {
@@ -97,6 +102,7 @@ pub struct BatchCheckLayerAvailabilityRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::batch_check_layer_availability]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCheckLayerAvailabilityResponse {
@@ -111,6 +117,7 @@ pub struct BatchCheckLayerAvailabilityResponse {
 }
 
 /// <p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>
+/// see [Ecr::batch_delete_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImageRequest {
@@ -126,6 +133,7 @@ pub struct BatchDeleteImageRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::batch_delete_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteImageResponse {
@@ -139,6 +147,7 @@ pub struct BatchDeleteImageResponse {
     pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
+/// see [Ecr::batch_get_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetImageRequest {
@@ -158,6 +167,7 @@ pub struct BatchGetImageRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::batch_get_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetImageResponse {
@@ -171,6 +181,7 @@ pub struct BatchGetImageResponse {
     pub images: Option<Vec<Image>>,
 }
 
+/// see [Ecr::complete_layer_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteLayerUploadRequest {
@@ -189,6 +200,7 @@ pub struct CompleteLayerUploadRequest {
     pub upload_id: String,
 }
 
+/// see [Ecr::complete_layer_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompleteLayerUploadResponse {
@@ -210,6 +222,7 @@ pub struct CompleteLayerUploadResponse {
     pub upload_id: Option<String>,
 }
 
+/// see [Ecr::create_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryRequest {
@@ -234,6 +247,7 @@ pub struct CreateRepositoryRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ecr::create_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRepositoryResponse {
@@ -243,6 +257,7 @@ pub struct CreateRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
+/// see [Ecr::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyRequest {
@@ -255,6 +270,7 @@ pub struct DeleteLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {
@@ -276,10 +292,12 @@ pub struct DeleteLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::delete_registry_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistryPolicyRequest {}
 
+/// see [Ecr::delete_registry_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegistryPolicyResponse {
@@ -293,6 +311,7 @@ pub struct DeleteRegistryPolicyResponse {
     pub registry_id: Option<String>,
 }
 
+/// see [Ecr::delete_repository_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryPolicyRequest {
@@ -305,6 +324,7 @@ pub struct DeleteRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::delete_repository_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryPolicyResponse {
@@ -322,6 +342,7 @@ pub struct DeleteRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::delete_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryRequest {
@@ -338,6 +359,7 @@ pub struct DeleteRepositoryRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::delete_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryResponse {
@@ -347,6 +369,7 @@ pub struct DeleteRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
+/// see [Ecr::describe_image_scan_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageScanFindingsRequest {
@@ -369,6 +392,23 @@ pub struct DescribeImageScanFindingsRequest {
     pub repository_name: String,
 }
 
+impl Paged for DescribeImageScanFindingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeImageScanFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecr::describe_image_scan_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImageScanFindingsResponse {
@@ -397,6 +437,28 @@ pub struct DescribeImageScanFindingsResponse {
     pub repository_name: Option<String>,
 }
 
+impl Paged for DescribeImageScanFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeImageScanFindingsResponse {
+    type Item = ImageScanFinding;
+
+    fn into_pagination_page(self) -> Vec<ImageScanFinding> {
+        (move || self.image_scan_findings?.findings)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -407,6 +469,7 @@ pub struct DescribeImagesFilter {
     pub tag_status: Option<String>,
 }
 
+/// see [Ecr::describe_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesRequest {
@@ -435,6 +498,23 @@ pub struct DescribeImagesRequest {
     pub repository_name: String,
 }
 
+impl Paged for DescribeImagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecr::describe_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImagesResponse {
@@ -448,10 +528,34 @@ pub struct DescribeImagesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeImagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeImagesResponse {
+    type Item = ImageDetail;
+
+    fn into_pagination_page(self) -> Vec<ImageDetail> {
+        self.image_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecr::describe_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegistryRequest {}
 
+/// see [Ecr::describe_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegistryResponse {
@@ -465,6 +569,7 @@ pub struct DescribeRegistryResponse {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
+/// see [Ecr::describe_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoriesRequest {
@@ -486,6 +591,23 @@ pub struct DescribeRepositoriesRequest {
     pub repository_names: Option<Vec<String>>,
 }
 
+impl Paged for DescribeRepositoriesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeRepositoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecr::describe_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRepositoriesResponse {
@@ -497,6 +619,28 @@ pub struct DescribeRepositoriesResponse {
     #[serde(rename = "repositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repositories: Option<Vec<Repository>>,
+}
+
+impl Paged for DescribeRepositoriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeRepositoriesResponse {
+    type Item = Repository;
+
+    fn into_pagination_page(self) -> Vec<Repository> {
+        self.repositories.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.</p> <p>By default, when no encryption configuration is set or the <code>AES256</code> encryption type is used, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts your data at rest using an AES-256 encryption algorithm. This does not require any action on your part.</p> <p>For more control over the encryption of the contents of your repository, you can use server-side encryption with customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) to encrypt your images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html">Amazon ECR encryption at rest</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -511,10 +655,12 @@ pub struct EncryptionConfiguration {
     pub kms_key: Option<String>,
 }
 
+/// see [Ecr::get_authorization_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizationTokenRequest {}
 
+/// see [Ecr::get_authorization_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizationTokenResponse {
@@ -524,6 +670,7 @@ pub struct GetAuthorizationTokenResponse {
     pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
+/// see [Ecr::get_download_url_for_layer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDownloadUrlForLayerRequest {
@@ -539,6 +686,7 @@ pub struct GetDownloadUrlForLayerRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::get_download_url_for_layer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDownloadUrlForLayerResponse {
@@ -552,6 +700,7 @@ pub struct GetDownloadUrlForLayerResponse {
     pub layer_digest: Option<String>,
 }
 
+/// see [Ecr::get_lifecycle_policy_preview]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyPreviewRequest {
@@ -580,6 +729,23 @@ pub struct GetLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
+impl Paged for GetLifecyclePolicyPreviewRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLifecyclePolicyPreviewRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecr::get_lifecycle_policy_preview]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyPreviewResponse {
@@ -613,6 +779,29 @@ pub struct GetLifecyclePolicyPreviewResponse {
     pub summary: Option<LifecyclePolicyPreviewSummary>,
 }
 
+impl Paged for GetLifecyclePolicyPreviewResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetLifecyclePolicyPreviewResponse {
+    type Item = LifecyclePolicyPreviewResult;
+
+    fn into_pagination_page(self) -> Vec<LifecyclePolicyPreviewResult> {
+        self.preview_results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecr::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyRequest {
@@ -625,6 +814,7 @@ pub struct GetLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyResponse {
@@ -646,10 +836,12 @@ pub struct GetLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::get_registry_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegistryPolicyRequest {}
 
+/// see [Ecr::get_registry_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegistryPolicyResponse {
@@ -663,6 +855,7 @@ pub struct GetRegistryPolicyResponse {
     pub registry_id: Option<String>,
 }
 
+/// see [Ecr::get_repository_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryPolicyRequest {
@@ -675,6 +868,7 @@ pub struct GetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::get_repository_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryPolicyResponse {
@@ -884,6 +1078,7 @@ pub struct ImageScanningConfiguration {
     pub scan_on_push: Option<bool>,
 }
 
+/// see [Ecr::initiate_layer_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateLayerUploadRequest {
@@ -896,6 +1091,7 @@ pub struct InitiateLayerUploadRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::initiate_layer_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateLayerUploadResponse {
@@ -1015,6 +1211,7 @@ pub struct ListImagesFilter {
     pub tag_status: Option<String>,
 }
 
+/// see [Ecr::list_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
@@ -1039,6 +1236,23 @@ pub struct ListImagesRequest {
     pub repository_name: String,
 }
 
+impl Paged for ListImagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Ecr::list_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
@@ -1052,6 +1266,29 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListImagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListImagesResponse {
+    type Item = ImageIdentifier;
+
+    fn into_pagination_page(self) -> Vec<ImageIdentifier> {
+        self.image_ids.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Ecr::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1060,6 +1297,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Ecr::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1069,6 +1307,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Ecr::put_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRequest {
@@ -1096,6 +1335,7 @@ pub struct PutImageRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::put_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageResponse {
@@ -1105,6 +1345,7 @@ pub struct PutImageResponse {
     pub image: Option<Image>,
 }
 
+/// see [Ecr::put_image_scanning_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageScanningConfigurationRequest {
@@ -1120,6 +1361,7 @@ pub struct PutImageScanningConfigurationRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::put_image_scanning_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageScanningConfigurationResponse {
@@ -1137,6 +1379,7 @@ pub struct PutImageScanningConfigurationResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::put_image_tag_mutability]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageTagMutabilityRequest {
@@ -1152,6 +1395,7 @@ pub struct PutImageTagMutabilityRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::put_image_tag_mutability]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageTagMutabilityResponse {
@@ -1169,6 +1413,7 @@ pub struct PutImageTagMutabilityResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::put_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecyclePolicyRequest {
@@ -1184,6 +1429,7 @@ pub struct PutLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::put_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecyclePolicyResponse {
@@ -1201,6 +1447,7 @@ pub struct PutLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::put_registry_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRegistryPolicyRequest {
@@ -1209,6 +1456,7 @@ pub struct PutRegistryPolicyRequest {
     pub policy_text: String,
 }
 
+/// see [Ecr::put_registry_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRegistryPolicyResponse {
@@ -1222,6 +1470,7 @@ pub struct PutRegistryPolicyResponse {
     pub registry_id: Option<String>,
 }
 
+/// see [Ecr::put_replication_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutReplicationConfigurationRequest {
@@ -1230,6 +1479,7 @@ pub struct PutReplicationConfigurationRequest {
     pub replication_configuration: ReplicationConfiguration,
 }
 
+/// see [Ecr::put_replication_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutReplicationConfigurationResponse {
@@ -1303,6 +1553,7 @@ pub struct Repository {
     pub repository_uri: Option<String>,
 }
 
+/// see [Ecr::set_repository_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRepositoryPolicyRequest {
@@ -1322,6 +1573,7 @@ pub struct SetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::set_repository_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetRepositoryPolicyResponse {
@@ -1339,6 +1591,7 @@ pub struct SetRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::start_image_scan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImageScanRequest {
@@ -1353,6 +1606,7 @@ pub struct StartImageScanRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::start_image_scan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImageScanResponse {
@@ -1373,6 +1627,7 @@ pub struct StartImageScanResponse {
     pub repository_name: Option<String>,
 }
 
+/// see [Ecr::start_lifecycle_policy_preview]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartLifecyclePolicyPreviewRequest {
@@ -1389,6 +1644,7 @@ pub struct StartLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
+/// see [Ecr::start_lifecycle_policy_preview]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartLifecyclePolicyPreviewResponse {
@@ -1423,6 +1679,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Ecr::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1434,10 +1691,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Ecr::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Ecr::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1449,10 +1708,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Ecr::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Ecr::upload_layer_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadLayerPartRequest {
@@ -1482,6 +1743,7 @@ pub struct UploadLayerPartRequest {
     pub upload_id: String,
 }
 
+/// see [Ecr::upload_layer_part]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadLayerPartResponse {
@@ -3287,7 +3549,7 @@ impl fmt::Display for UploadLayerPartError {
 impl Error for UploadLayerPartError {}
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
 #[async_trait]
-pub trait Ecr {
+pub trait Ecr: Clone + Sync + Send + 'static {
     /// <p><p>Checks the availability of one or more image layers in a repository.</p> <p>When an image is pushed to a repository, each image layer is checked to verify if it has been uploaded before. If it has been uploaded, then the image layer is skipped.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn batch_check_layer_availability(
         &self,
@@ -3347,11 +3609,33 @@ pub trait Ecr {
         input: DescribeImageScanFindingsRequest,
     ) -> Result<DescribeImageScanFindingsResponse, RusotoError<DescribeImageScanFindingsError>>;
 
+    /// Auto-paginating version of `describe_image_scan_findings`
+    fn describe_image_scan_findings_pages<'a>(
+        &'a self,
+        mut input: DescribeImageScanFindingsRequest,
+    ) -> RusotoStream<'a, ImageScanFinding, DescribeImageScanFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_image_scan_findings(input.clone())
+        }))
+    }
+
     /// <p><p>Returns metadata about the images in a repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     async fn describe_images(
         &self,
         input: DescribeImagesRequest,
     ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>>;
+
+    /// Auto-paginating version of `describe_images`
+    fn describe_images_pages<'a>(
+        &'a self,
+        mut input: DescribeImagesRequest,
+    ) -> RusotoStream<'a, ImageDetail, DescribeImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_images(input.clone())
+        }))
+    }
 
     /// <p>Describes the settings for a registry. The replication configuration for a repository can be created or updated with the <a>PutReplicationConfiguration</a> API action.</p>
     async fn describe_registry(
@@ -3363,6 +3647,17 @@ pub trait Ecr {
         &self,
         input: DescribeRepositoriesRequest,
     ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>>;
+
+    /// Auto-paginating version of `describe_repositories`
+    fn describe_repositories_pages<'a>(
+        &'a self,
+        mut input: DescribeRepositoriesRequest,
+    ) -> RusotoStream<'a, Repository, DescribeRepositoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_repositories(input.clone())
+        }))
+    }
 
     /// <p>Retrieves an authorization token. An authorization token represents your IAM authentication credentials and can be used to access any Amazon ECR registry that your IAM principal has access to. The authorization token is valid for 12 hours.</p> <p>The <code>authorizationToken</code> returned is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>get-login-password</code> command that simplifies the login process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth">Registry Authentication</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn get_authorization_token(
@@ -3388,6 +3683,17 @@ pub trait Ecr {
         input: GetLifecyclePolicyPreviewRequest,
     ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>;
 
+    /// Auto-paginating version of `get_lifecycle_policy_preview`
+    fn get_lifecycle_policy_preview_pages<'a>(
+        &'a self,
+        mut input: GetLifecyclePolicyPreviewRequest,
+    ) -> RusotoStream<'a, LifecyclePolicyPreviewResult, GetLifecyclePolicyPreviewError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_lifecycle_policy_preview(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the permissions policy for a registry.</p>
     async fn get_registry_policy(
         &self,
@@ -3410,6 +3716,17 @@ pub trait Ecr {
         &self,
         input: ListImagesRequest,
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
+
+    /// Auto-paginating version of `list_images`
+    fn list_images_pages<'a>(
+        &'a self,
+        mut input: ListImagesRequest,
+    ) -> RusotoStream<'a, ImageIdentifier, ListImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_images(input.clone())
+        }))
+    }
 
     /// <p>List the tags for an Amazon ECR resource.</p>
     async fn list_tags_for_resource(

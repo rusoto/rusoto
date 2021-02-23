@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -218,6 +222,7 @@ pub struct Content {
 }
 
 /// <p>A request to add an event destination to a configuration set.</p>
+/// see [SesV2::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetEventDestinationRequest {
@@ -233,11 +238,13 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to create a configuration set.</p>
+/// see [SesV2::create_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetRequest {
@@ -270,10 +277,12 @@ pub struct CreateConfigurationSetRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::create_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
+/// see [SesV2::create_contact_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactListRequest {
@@ -294,10 +303,12 @@ pub struct CreateContactListRequest {
     pub topics: Option<Vec<Topic>>,
 }
 
+/// see [SesV2::create_contact_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContactListResponse {}
 
+/// see [SesV2::create_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContactRequest {
@@ -321,11 +332,13 @@ pub struct CreateContactRequest {
     pub unsubscribe_all: Option<bool>,
 }
 
+/// see [SesV2::create_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContactResponse {}
 
 /// <p>Represents a request to create a custom verification email template.</p>
+/// see [SesV2::create_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomVerificationEmailTemplateRequest {
@@ -350,11 +363,13 @@ pub struct CreateCustomVerificationEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::create_custom_verification_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomVerificationEmailTemplateResponse {}
 
 /// <p>A request to create a new dedicated IP pool.</p>
+/// see [SesV2::create_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDedicatedIpPoolRequest {
@@ -368,11 +383,13 @@ pub struct CreateDedicatedIpPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::create_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDedicatedIpPoolResponse {}
 
 /// <p>A request to perform a predictive inbox placement test. Predictive inbox placement tests can help you predict how your messages will be handled by various email providers around the world. When you perform a predictive inbox placement test, you provide a sample message that contains the content that you plan to send to your customers. We send that message to special email addresses spread across several major email providers around the world. The test takes about 24 hours to complete. When the test is complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
+/// see [SesV2::create_deliverability_test_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeliverabilityTestReportRequest {
@@ -393,6 +410,7 @@ pub struct CreateDeliverabilityTestReportRequest {
 }
 
 /// <p>Information about the predictive inbox placement test that you created.</p>
+/// see [SesV2::create_deliverability_test_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeliverabilityTestReportResponse {
@@ -405,6 +423,7 @@ pub struct CreateDeliverabilityTestReportResponse {
 }
 
 /// <p>Represents a request to create a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::create_email_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEmailIdentityPolicyRequest {
@@ -420,11 +439,13 @@ pub struct CreateEmailIdentityPolicyRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::create_email_identity_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEmailIdentityPolicyResponse {}
 
 /// <p>A request to begin the verification process for an email identity (an email address or domain).</p>
+/// see [SesV2::create_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEmailIdentityRequest {
@@ -442,6 +463,7 @@ pub struct CreateEmailIdentityRequest {
 }
 
 /// <p>If the email identity is a domain, this object contains information about the DKIM verification status for the domain.</p> <p>If the email identity is an email address, this object is empty. </p>
+/// see [SesV2::create_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEmailIdentityResponse {
@@ -460,6 +482,7 @@ pub struct CreateEmailIdentityResponse {
 }
 
 /// <p>Represents a request to create an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::create_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEmailTemplateRequest {
@@ -472,11 +495,13 @@ pub struct CreateEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::create_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEmailTemplateResponse {}
 
 /// <p>Represents a request to create an import job from a data source for a data destination.</p>
+/// see [SesV2::create_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImportJobRequest {
@@ -489,6 +514,7 @@ pub struct CreateImportJobRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::create_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImportJobResponse {
@@ -562,6 +588,7 @@ pub struct DedicatedIp {
 }
 
 /// <p>A request to delete an event destination from a configuration set.</p>
+/// see [SesV2::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetEventDestinationRequest {
@@ -574,11 +601,13 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to delete a configuration set.</p>
+/// see [SesV2::delete_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetRequest {
@@ -588,10 +617,12 @@ pub struct DeleteConfigurationSetRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
 
+/// see [SesV2::delete_contact_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactListRequest {
@@ -600,10 +631,12 @@ pub struct DeleteContactListRequest {
     pub contact_list_name: String,
 }
 
+/// see [SesV2::delete_contact_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContactListResponse {}
 
+/// see [SesV2::delete_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContactRequest {
@@ -615,11 +648,13 @@ pub struct DeleteContactRequest {
     pub email_address: String,
 }
 
+/// see [SesV2::delete_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContactResponse {}
 
 /// <p>Represents a request to delete an existing custom verification email template.</p>
+/// see [SesV2::delete_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomVerificationEmailTemplateRequest {
@@ -629,11 +664,13 @@ pub struct DeleteCustomVerificationEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::delete_custom_verification_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomVerificationEmailTemplateResponse {}
 
 /// <p>A request to delete a dedicated IP pool.</p>
+/// see [SesV2::delete_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDedicatedIpPoolRequest {
@@ -643,11 +680,13 @@ pub struct DeleteDedicatedIpPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_dedicated_ip_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDedicatedIpPoolResponse {}
 
 /// <p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::delete_email_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEmailIdentityPolicyRequest {
@@ -660,11 +699,13 @@ pub struct DeleteEmailIdentityPolicyRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_email_identity_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEmailIdentityPolicyResponse {}
 
 /// <p>A request to delete an existing email identity. When you delete an identity, you lose the ability to send email from that identity. You can restore your ability to send email by completing the verification process for the identity again.</p>
+/// see [SesV2::delete_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEmailIdentityRequest {
@@ -674,11 +715,13 @@ pub struct DeleteEmailIdentityRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEmailIdentityResponse {}
 
 /// <p>Represents a request to delete an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::delete_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEmailTemplateRequest {
@@ -688,11 +731,13 @@ pub struct DeleteEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::delete_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEmailTemplateResponse {}
 
 /// <p>A request to remove an email address from the suppression list for your account.</p>
+/// see [SesV2::delete_suppressed_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSuppressedDestinationRequest {
@@ -702,6 +747,7 @@ pub struct DeleteSuppressedDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::delete_suppressed_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSuppressedDestinationResponse {}
@@ -1032,11 +1078,13 @@ pub struct FailureInfo {
 }
 
 /// <p>A request to obtain information about the email-sending capabilities of your Amazon SES account.</p>
+/// see [SesV2::get_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {}
 
 /// <p>A list of details about the email-sending capabilities of your Amazon SES account in the current AWS Region.</p>
+/// see [SesV2::get_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
@@ -1071,6 +1119,7 @@ pub struct GetAccountResponse {
 }
 
 /// <p>A request to retrieve a list of the blacklists that your dedicated IP addresses appear on.</p>
+/// see [SesV2::get_blacklist_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlacklistReportsRequest {
@@ -1080,6 +1129,7 @@ pub struct GetBlacklistReportsRequest {
 }
 
 /// <p>An object that contains information about blacklist events.</p>
+/// see [SesV2::get_blacklist_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlacklistReportsResponse {
@@ -1089,6 +1139,7 @@ pub struct GetBlacklistReportsResponse {
 }
 
 /// <p>A request to obtain information about the event destinations for a configuration set.</p>
+/// see [SesV2::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetEventDestinationsRequest {
@@ -1098,6 +1149,7 @@ pub struct GetConfigurationSetEventDestinationsRequest {
 }
 
 /// <p>Information about an event destination for a configuration set.</p>
+/// see [SesV2::get_configuration_set_event_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetEventDestinationsResponse {
@@ -1108,6 +1160,7 @@ pub struct GetConfigurationSetEventDestinationsResponse {
 }
 
 /// <p>A request to obtain information about a configuration set.</p>
+/// see [SesV2::get_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetRequest {
@@ -1117,6 +1170,7 @@ pub struct GetConfigurationSetRequest {
 }
 
 /// <p>Information about a configuration set.</p>
+/// see [SesV2::get_configuration_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetResponse {
@@ -1150,6 +1204,7 @@ pub struct GetConfigurationSetResponse {
     pub tracking_options: Option<TrackingOptions>,
 }
 
+/// see [SesV2::get_contact_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactListRequest {
@@ -1158,6 +1213,7 @@ pub struct GetContactListRequest {
     pub contact_list_name: String,
 }
 
+/// see [SesV2::get_contact_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactListResponse {
@@ -1187,6 +1243,7 @@ pub struct GetContactListResponse {
     pub topics: Option<Vec<Topic>>,
 }
 
+/// see [SesV2::get_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactRequest {
@@ -1198,6 +1255,7 @@ pub struct GetContactRequest {
     pub email_address: String,
 }
 
+/// see [SesV2::get_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactResponse {
@@ -1236,6 +1294,7 @@ pub struct GetContactResponse {
 }
 
 /// <p>Represents a request to retrieve an existing custom verification email template.</p>
+/// see [SesV2::get_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCustomVerificationEmailTemplateRequest {
@@ -1245,6 +1304,7 @@ pub struct GetCustomVerificationEmailTemplateRequest {
 }
 
 /// <p>The following elements are returned by the service.</p>
+/// see [SesV2::get_custom_verification_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCustomVerificationEmailTemplateResponse {
@@ -1275,6 +1335,7 @@ pub struct GetCustomVerificationEmailTemplateResponse {
 }
 
 /// <p>A request to obtain more information about a dedicated IP address.</p>
+/// see [SesV2::get_dedicated_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDedicatedIpRequest {
@@ -1284,6 +1345,7 @@ pub struct GetDedicatedIpRequest {
 }
 
 /// <p>Information about a dedicated IP address.</p>
+/// see [SesV2::get_dedicated_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDedicatedIpResponse {
@@ -1294,6 +1356,7 @@ pub struct GetDedicatedIpResponse {
 }
 
 /// <p>A request to obtain more information about dedicated IP pools.</p>
+/// see [SesV2::get_dedicated_ips]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDedicatedIpsRequest {
@@ -1312,6 +1375,7 @@ pub struct GetDedicatedIpsRequest {
 }
 
 /// <p>Information about the dedicated IP addresses that are associated with your AWS account.</p>
+/// see [SesV2::get_dedicated_ips]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDedicatedIpsResponse {
@@ -1326,11 +1390,13 @@ pub struct GetDedicatedIpsResponse {
 }
 
 /// <p>Retrieve information about the status of the Deliverability dashboard for your AWS account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for your domains. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon SES and other AWS services. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
+/// see [SesV2::get_deliverability_dashboard_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeliverabilityDashboardOptionsRequest {}
 
 /// <p>An object that shows the status of the Deliverability dashboard.</p>
+/// see [SesV2::get_deliverability_dashboard_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeliverabilityDashboardOptionsResponse {
@@ -1356,6 +1422,7 @@ pub struct GetDeliverabilityDashboardOptionsResponse {
 }
 
 /// <p>A request to retrieve the results of a predictive inbox placement test.</p>
+/// see [SesV2::get_deliverability_test_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeliverabilityTestReportRequest {
@@ -1365,6 +1432,7 @@ pub struct GetDeliverabilityTestReportRequest {
 }
 
 /// <p>The results of the predictive inbox placement test.</p>
+/// see [SesV2::get_deliverability_test_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeliverabilityTestReportResponse {
@@ -1388,6 +1456,7 @@ pub struct GetDeliverabilityTestReportResponse {
 }
 
 /// <p>Retrieve all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
+/// see [SesV2::get_domain_deliverability_campaign]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainDeliverabilityCampaignRequest {
@@ -1397,6 +1466,7 @@ pub struct GetDomainDeliverabilityCampaignRequest {
 }
 
 /// <p>An object that contains all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for.</p>
+/// see [SesV2::get_domain_deliverability_campaign]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainDeliverabilityCampaignResponse {
@@ -1406,6 +1476,7 @@ pub struct GetDomainDeliverabilityCampaignResponse {
 }
 
 /// <p>A request to obtain deliverability metrics for a domain.</p>
+/// see [SesV2::get_domain_statistics_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainStatisticsReportRequest {
@@ -1421,6 +1492,7 @@ pub struct GetDomainStatisticsReportRequest {
 }
 
 /// <p>An object that includes statistics that are related to the domain that you specified.</p>
+/// see [SesV2::get_domain_statistics_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainStatisticsReportResponse {
@@ -1433,6 +1505,7 @@ pub struct GetDomainStatisticsReportResponse {
 }
 
 /// <p>A request to return the policies of an email identity.</p>
+/// see [SesV2::get_email_identity_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEmailIdentityPoliciesRequest {
@@ -1442,6 +1515,7 @@ pub struct GetEmailIdentityPoliciesRequest {
 }
 
 /// <p>Identity policies associated with email identity.</p>
+/// see [SesV2::get_email_identity_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEmailIdentityPoliciesResponse {
@@ -1452,6 +1526,7 @@ pub struct GetEmailIdentityPoliciesResponse {
 }
 
 /// <p>A request to return details about an email identity.</p>
+/// see [SesV2::get_email_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEmailIdentityRequest {
@@ -1461,6 +1536,7 @@ pub struct GetEmailIdentityRequest {
 }
 
 /// <p>Details about an email identity.</p>
+/// see [SesV2::get_email_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEmailIdentityResponse {
@@ -1495,6 +1571,7 @@ pub struct GetEmailIdentityResponse {
 }
 
 /// <p>Represents a request to display the template object (which includes the subject line, HTML part and text part) for the template you specify.</p>
+/// see [SesV2::get_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEmailTemplateRequest {
@@ -1504,6 +1581,7 @@ pub struct GetEmailTemplateRequest {
 }
 
 /// <p>The following element is returned by the service.</p>
+/// see [SesV2::get_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEmailTemplateResponse {
@@ -1516,6 +1594,7 @@ pub struct GetEmailTemplateResponse {
 }
 
 /// <p>Represents a request for information about an import job using the import job ID.</p>
+/// see [SesV2::get_import_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImportJobRequest {
@@ -1525,6 +1604,7 @@ pub struct GetImportJobRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::get_import_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImportJobResponse {
@@ -1567,6 +1647,7 @@ pub struct GetImportJobResponse {
 }
 
 /// <p>A request to retrieve information about an email address that's on the suppression list for your account.</p>
+/// see [SesV2::get_suppressed_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSuppressedDestinationRequest {
@@ -1576,6 +1657,7 @@ pub struct GetSuppressedDestinationRequest {
 }
 
 /// <p>Information about the suppressed email address.</p>
+/// see [SesV2::get_suppressed_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSuppressedDestinationResponse {
@@ -1684,6 +1766,7 @@ pub struct KinesisFirehoseDestination {
 }
 
 /// <p>A request to obtain a list of configuration sets for your Amazon SES account in the current AWS Region.</p>
+/// see [SesV2::list_configuration_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationSetsRequest {
@@ -1698,6 +1781,7 @@ pub struct ListConfigurationSetsRequest {
 }
 
 /// <p>A list of configuration sets in your Amazon SES account in the current AWS Region.</p>
+/// see [SesV2::list_configuration_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationSetsResponse {
@@ -1711,6 +1795,7 @@ pub struct ListConfigurationSetsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [SesV2::list_contact_lists]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactListsRequest {
@@ -1724,6 +1809,7 @@ pub struct ListContactListsRequest {
     pub page_size: Option<i64>,
 }
 
+/// see [SesV2::list_contact_lists]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactListsResponse {
@@ -1751,6 +1837,7 @@ pub struct ListContactsFilter {
     pub topic_filter: Option<TopicFilter>,
 }
 
+/// see [SesV2::list_contacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactsRequest {
@@ -1771,6 +1858,7 @@ pub struct ListContactsRequest {
     pub page_size: Option<i64>,
 }
 
+/// see [SesV2::list_contacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactsResponse {
@@ -1785,6 +1873,7 @@ pub struct ListContactsResponse {
 }
 
 /// <p>Represents a request to list the existing custom verification email templates for your account.</p>
+/// see [SesV2::list_custom_verification_email_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomVerificationEmailTemplatesRequest {
@@ -1799,6 +1888,7 @@ pub struct ListCustomVerificationEmailTemplatesRequest {
 }
 
 /// <p>The following elements are returned by the service.</p>
+/// see [SesV2::list_custom_verification_email_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCustomVerificationEmailTemplatesResponse {
@@ -1813,6 +1903,7 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
 }
 
 /// <p>A request to obtain a list of dedicated IP pools.</p>
+/// see [SesV2::list_dedicated_ip_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDedicatedIpPoolsRequest {
@@ -1827,6 +1918,7 @@ pub struct ListDedicatedIpPoolsRequest {
 }
 
 /// <p>A list of dedicated IP pools.</p>
+/// see [SesV2::list_dedicated_ip_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDedicatedIpPoolsResponse {
@@ -1841,6 +1933,7 @@ pub struct ListDedicatedIpPoolsResponse {
 }
 
 /// <p>A request to list all of the predictive inbox placement tests that you've performed.</p>
+/// see [SesV2::list_deliverability_test_reports]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeliverabilityTestReportsRequest {
@@ -1855,6 +1948,7 @@ pub struct ListDeliverabilityTestReportsRequest {
 }
 
 /// <p>A list of the predictive inbox placement test reports that are available for your account, regardless of whether or not those tests are complete.</p>
+/// see [SesV2::list_deliverability_test_reports]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeliverabilityTestReportsResponse {
@@ -1868,6 +1962,7 @@ pub struct ListDeliverabilityTestReportsResponse {
 }
 
 /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard.</p>
+/// see [SesV2::list_domain_deliverability_campaigns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainDeliverabilityCampaignsRequest {
@@ -1891,6 +1986,7 @@ pub struct ListDomainDeliverabilityCampaignsRequest {
 }
 
 /// <p>An array of objects that provide deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard for the domain.</p>
+/// see [SesV2::list_domain_deliverability_campaigns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainDeliverabilityCampaignsResponse {
@@ -1904,6 +2000,7 @@ pub struct ListDomainDeliverabilityCampaignsResponse {
 }
 
 /// <p>A request to list all of the email identities associated with your AWS account. This list includes identities that you've already verified, identities that are unverified, and identities that were verified in the past, but are no longer verified.</p>
+/// see [SesV2::list_email_identities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEmailIdentitiesRequest {
@@ -1918,6 +2015,7 @@ pub struct ListEmailIdentitiesRequest {
 }
 
 /// <p>A list of all of the identities that you've attempted to verify, regardless of whether or not those identities were successfully verified.</p>
+/// see [SesV2::list_email_identities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEmailIdentitiesResponse {
@@ -1932,6 +2030,7 @@ pub struct ListEmailIdentitiesResponse {
 }
 
 /// <p>Represents a request to list the email templates present in your Amazon SES account in the current AWS Region. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::list_email_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEmailTemplatesRequest {
@@ -1946,6 +2045,7 @@ pub struct ListEmailTemplatesRequest {
 }
 
 /// <p>The following elements are returned by the service.</p>
+/// see [SesV2::list_email_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEmailTemplatesResponse {
@@ -1960,6 +2060,7 @@ pub struct ListEmailTemplatesResponse {
 }
 
 /// <p>Represents a request to list all of the import jobs for a data destination within the specified maximum number of import jobs.</p>
+/// see [SesV2::list_import_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImportJobsRequest {
@@ -1978,6 +2079,7 @@ pub struct ListImportJobsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::list_import_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImportJobsResponse {
@@ -2005,6 +2107,7 @@ pub struct ListManagementOptions {
 }
 
 /// <p>A request to obtain a list of email destinations that are on the suppression list for your account.</p>
+/// see [SesV2::list_suppressed_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSuppressedDestinationsRequest {
@@ -2031,6 +2134,7 @@ pub struct ListSuppressedDestinationsRequest {
 }
 
 /// <p>A list of suppressed email addresses.</p>
+/// see [SesV2::list_suppressed_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSuppressedDestinationsResponse {
@@ -2044,6 +2148,7 @@ pub struct ListSuppressedDestinationsResponse {
     pub suppressed_destination_summaries: Option<Vec<SuppressedDestinationSummary>>,
 }
 
+/// see [SesV2::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2052,6 +2157,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [SesV2::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2153,6 +2259,7 @@ pub struct PlacementStatistics {
 }
 
 /// <p>A request to enable or disable the automatic IP address warm-up feature.</p>
+/// see [SesV2::put_account_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountDedicatedIpWarmupAttributesRequest {
@@ -2163,11 +2270,13 @@ pub struct PutAccountDedicatedIpWarmupAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_account_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountDedicatedIpWarmupAttributesResponse {}
 
 /// <p>A request to submit new account details.</p>
+/// see [SesV2::put_account_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountDetailsRequest {
@@ -2195,11 +2304,13 @@ pub struct PutAccountDetailsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_account_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountDetailsResponse {}
 
 /// <p>A request to change the ability of your account to send email.</p>
+/// see [SesV2::put_account_sending_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSendingAttributesRequest {
@@ -2210,11 +2321,13 @@ pub struct PutAccountSendingAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_account_sending_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSendingAttributesResponse {}
 
 /// <p>A request to change your account's suppression preferences.</p>
+/// see [SesV2::put_account_suppression_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccountSuppressionAttributesRequest {
@@ -2225,11 +2338,13 @@ pub struct PutAccountSuppressionAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_account_suppression_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSuppressionAttributesResponse {}
 
 /// <p>A request to associate a configuration set with a dedicated IP pool.</p>
+/// see [SesV2::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetDeliveryOptionsRequest {
@@ -2247,11 +2362,13 @@ pub struct PutConfigurationSetDeliveryOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetDeliveryOptionsResponse {}
 
 /// <p>A request to enable or disable tracking of reputation metrics for a configuration set.</p>
+/// see [SesV2::put_configuration_set_reputation_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetReputationOptionsRequest {
@@ -2265,11 +2382,13 @@ pub struct PutConfigurationSetReputationOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_configuration_set_reputation_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetReputationOptionsResponse {}
 
 /// <p>A request to enable or disable the ability of Amazon SES to send emails that use a specific configuration set.</p>
+/// see [SesV2::put_configuration_set_sending_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetSendingOptionsRequest {
@@ -2283,11 +2402,13 @@ pub struct PutConfigurationSetSendingOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_configuration_set_sending_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetSendingOptionsResponse {}
 
 /// <p>A request to change the account suppression list preferences for a specific configuration set.</p>
+/// see [SesV2::put_configuration_set_suppression_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetSuppressionOptionsRequest {
@@ -2301,11 +2422,13 @@ pub struct PutConfigurationSetSuppressionOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_configuration_set_suppression_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetSuppressionOptionsResponse {}
 
 /// <p>A request to add a custom domain for tracking open and click events to a configuration set.</p>
+/// see [SesV2::put_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetTrackingOptionsRequest {
@@ -2319,11 +2442,13 @@ pub struct PutConfigurationSetTrackingOptionsRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationSetTrackingOptionsResponse {}
 
 /// <p>A request to move a dedicated IP address to a dedicated IP pool.</p>
+/// see [SesV2::put_dedicated_ip_in_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDedicatedIpInPoolRequest {
@@ -2336,11 +2461,13 @@ pub struct PutDedicatedIpInPoolRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_dedicated_ip_in_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDedicatedIpInPoolResponse {}
 
 /// <p>A request to change the warm-up attributes for a dedicated IP address. This operation is useful when you want to resume the warm-up process for an existing IP address.</p>
+/// see [SesV2::put_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDedicatedIpWarmupAttributesRequest {
@@ -2353,11 +2480,13 @@ pub struct PutDedicatedIpWarmupAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_dedicated_ip_warmup_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDedicatedIpWarmupAttributesResponse {}
 
 /// <p>Enable or disable the Deliverability dashboard. When you enable the Deliverability dashboard, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon SES API v2. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon SES and other AWS services. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
+/// see [SesV2::put_deliverability_dashboard_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDeliverabilityDashboardOptionRequest {
@@ -2371,11 +2500,13 @@ pub struct PutDeliverabilityDashboardOptionRequest {
 }
 
 /// <p>A response that indicates whether the Deliverability dashboard is enabled.</p>
+/// see [SesV2::put_deliverability_dashboard_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDeliverabilityDashboardOptionResponse {}
 
 /// <p>A request to enable or disable DKIM signing of email that you send from an email identity.</p>
+/// see [SesV2::put_email_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityDkimAttributesRequest {
@@ -2389,11 +2520,13 @@ pub struct PutEmailIdentityDkimAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_email_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityDkimAttributesResponse {}
 
 /// <p>A request to change the DKIM attributes for an email identity.</p>
+/// see [SesV2::put_email_identity_dkim_signing_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityDkimSigningAttributesRequest {
@@ -2410,6 +2543,7 @@ pub struct PutEmailIdentityDkimSigningAttributesRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p> <p>The following data is returned in JSON format by the service.</p>
+/// see [SesV2::put_email_identity_dkim_signing_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityDkimSigningAttributesResponse {
@@ -2424,6 +2558,7 @@ pub struct PutEmailIdentityDkimSigningAttributesResponse {
 }
 
 /// <p>A request to set the attributes that control how bounce and complaint events are processed.</p>
+/// see [SesV2::put_email_identity_feedback_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityFeedbackAttributesRequest {
@@ -2437,11 +2572,13 @@ pub struct PutEmailIdentityFeedbackAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_email_identity_feedback_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityFeedbackAttributesResponse {}
 
 /// <p>A request to configure the custom MAIL FROM domain for a verified identity.</p>
+/// see [SesV2::put_email_identity_mail_from_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEmailIdentityMailFromAttributesRequest {
@@ -2459,11 +2596,13 @@ pub struct PutEmailIdentityMailFromAttributesRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_email_identity_mail_from_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEmailIdentityMailFromAttributesResponse {}
 
 /// <p>A request to add an email destination to the suppression list for your account.</p>
+/// see [SesV2::put_suppressed_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSuppressedDestinationRequest {
@@ -2476,6 +2615,7 @@ pub struct PutSuppressedDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::put_suppressed_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSuppressedDestinationResponse {}
@@ -2542,6 +2682,7 @@ pub struct ReviewDetails {
 }
 
 /// <p>Represents a request to send email messages to multiple destinations using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::send_bulk_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBulkEmailRequest {
@@ -2582,6 +2723,7 @@ pub struct SendBulkEmailRequest {
 }
 
 /// <p>The following data is returned in JSON format by the service.</p>
+/// see [SesV2::send_bulk_email]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendBulkEmailResponse {
@@ -2590,6 +2732,7 @@ pub struct SendBulkEmailResponse {
 }
 
 /// <p>Represents a request to send a custom verification email to a specified recipient.</p>
+/// see [SesV2::send_custom_verification_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCustomVerificationEmailRequest {
@@ -2606,6 +2749,7 @@ pub struct SendCustomVerificationEmailRequest {
 }
 
 /// <p>The following element is returned by the service.</p>
+/// see [SesV2::send_custom_verification_email]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendCustomVerificationEmailResponse {
@@ -2616,6 +2760,7 @@ pub struct SendCustomVerificationEmailResponse {
 }
 
 /// <p>Represents a request to send a single formatted email using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::send_email]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEmailRequest {
@@ -2661,6 +2806,7 @@ pub struct SendEmailRequest {
 }
 
 /// <p>A unique message ID that you receive when an email is accepted for sending.</p>
+/// see [SesV2::send_email]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendEmailResponse {
@@ -2791,6 +2937,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [SesV2::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2802,6 +2949,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [SesV2::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2825,6 +2973,7 @@ pub struct Template {
 }
 
 /// <p>&gt;Represents a request to create a preview of the MIME content of an email when provided with a template and a set of replacement data.</p>
+/// see [SesV2::test_render_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRenderEmailTemplateRequest {
@@ -2837,6 +2986,7 @@ pub struct TestRenderEmailTemplateRequest {
 }
 
 /// <p>The following element is returned by the service.</p>
+/// see [SesV2::test_render_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRenderEmailTemplateResponse {
@@ -2896,6 +3046,7 @@ pub struct TrackingOptions {
     pub custom_redirect_domain: String,
 }
 
+/// see [SesV2::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2907,11 +3058,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [SesV2::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>A request to change the settings for an event destination for a configuration set.</p>
+/// see [SesV2::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetEventDestinationRequest {
@@ -2927,10 +3080,12 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
 
+/// see [SesV2::update_contact_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactListRequest {
@@ -2947,10 +3102,12 @@ pub struct UpdateContactListRequest {
     pub topics: Option<Vec<Topic>>,
 }
 
+/// see [SesV2::update_contact_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactListResponse {}
 
+/// see [SesV2::update_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactRequest {
@@ -2974,11 +3131,13 @@ pub struct UpdateContactRequest {
     pub unsubscribe_all: Option<bool>,
 }
 
+/// see [SesV2::update_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactResponse {}
 
 /// <p>Represents a request to update an existing custom verification email template.</p>
+/// see [SesV2::update_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomVerificationEmailTemplateRequest {
@@ -3003,11 +3162,13 @@ pub struct UpdateCustomVerificationEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::update_custom_verification_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomVerificationEmailTemplateResponse {}
 
 /// <p>Represents a request to update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::update_email_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmailIdentityPolicyRequest {
@@ -3023,11 +3184,13 @@ pub struct UpdateEmailIdentityPolicyRequest {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [SesV2::update_email_identity_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEmailIdentityPolicyResponse {}
 
 /// <p>Represents a request to update an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [SesV2::update_email_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmailTemplateRequest {
@@ -3040,6 +3203,7 @@ pub struct UpdateEmailTemplateRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+/// see [SesV2::update_email_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEmailTemplateResponse {}
@@ -7116,7 +7280,7 @@ impl fmt::Display for UpdateEmailTemplateError {
 impl Error for UpdateEmailTemplateError {}
 /// Trait representing the capabilities of the Amazon SES V2 API. Amazon SES V2 clients implement this trait.
 #[async_trait]
-pub trait SesV2 {
+pub trait SesV2: Clone + Sync + Send + 'static {
     /// <p>Create a configuration set. <i>Configuration sets</i> are groups of rules that you can apply to the emails that you send. You apply a configuration set to an email by specifying the name of the configuration set when you call the Amazon SES API v2. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. </p>
     async fn create_configuration_set(
         &self,

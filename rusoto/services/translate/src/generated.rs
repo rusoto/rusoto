@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -64,6 +68,7 @@ pub struct AppliedTerminology {
     pub terms: Option<Vec<Term>>,
 }
 
+/// see [Translate::create_parallel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParallelDataRequest {
@@ -85,6 +90,7 @@ pub struct CreateParallelDataRequest {
     pub parallel_data_config: ParallelDataConfig,
 }
 
+/// see [Translate::create_parallel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateParallelDataResponse {
@@ -98,6 +104,7 @@ pub struct CreateParallelDataResponse {
     pub status: Option<String>,
 }
 
+/// see [Translate::delete_parallel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteParallelDataRequest {
@@ -106,6 +113,7 @@ pub struct DeleteParallelDataRequest {
     pub name: String,
 }
 
+/// see [Translate::delete_parallel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteParallelDataResponse {
@@ -119,6 +127,7 @@ pub struct DeleteParallelDataResponse {
     pub status: Option<String>,
 }
 
+/// see [Translate::delete_terminology]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTerminologyRequest {
@@ -127,6 +136,7 @@ pub struct DeleteTerminologyRequest {
     pub name: String,
 }
 
+/// see [Translate::describe_text_translation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTextTranslationJobRequest {
@@ -135,6 +145,7 @@ pub struct DescribeTextTranslationJobRequest {
     pub job_id: String,
 }
 
+/// see [Translate::describe_text_translation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTextTranslationJobResponse {
@@ -155,6 +166,7 @@ pub struct EncryptionKey {
     pub type_: String,
 }
 
+/// see [Translate::get_parallel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetParallelDataRequest {
@@ -163,6 +175,7 @@ pub struct GetParallelDataRequest {
     pub name: String,
 }
 
+/// see [Translate::get_parallel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParallelDataResponse {
@@ -184,6 +197,7 @@ pub struct GetParallelDataResponse {
     pub parallel_data_properties: Option<ParallelDataProperties>,
 }
 
+/// see [Translate::get_terminology]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTerminologyRequest {
@@ -195,6 +209,7 @@ pub struct GetTerminologyRequest {
     pub terminology_data_format: String,
 }
 
+/// see [Translate::get_terminology]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTerminologyResponse {
@@ -208,6 +223,7 @@ pub struct GetTerminologyResponse {
     pub terminology_properties: Option<TerminologyProperties>,
 }
 
+/// see [Translate::import_terminology]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportTerminologyRequest {
@@ -230,6 +246,7 @@ pub struct ImportTerminologyRequest {
     pub terminology_data: TerminologyData,
 }
 
+/// see [Translate::import_terminology]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportTerminologyResponse {
@@ -268,6 +285,7 @@ pub struct JobDetails {
     pub translated_documents_count: Option<i64>,
 }
 
+/// see [Translate::list_parallel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListParallelDataRequest {
@@ -281,6 +299,7 @@ pub struct ListParallelDataRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Translate::list_parallel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListParallelDataResponse {
@@ -294,6 +313,7 @@ pub struct ListParallelDataResponse {
     pub parallel_data_properties_list: Option<Vec<ParallelDataProperties>>,
 }
 
+/// see [Translate::list_terminologies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTerminologiesRequest {
@@ -307,6 +327,23 @@ pub struct ListTerminologiesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTerminologiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTerminologiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Translate::list_terminologies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTerminologiesResponse {
@@ -320,6 +357,29 @@ pub struct ListTerminologiesResponse {
     pub terminology_properties_list: Option<Vec<TerminologyProperties>>,
 }
 
+impl Paged for ListTerminologiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTerminologiesResponse {
+    type Item = TerminologyProperties;
+
+    fn into_pagination_page(self) -> Vec<TerminologyProperties> {
+        self.terminology_properties_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Translate::list_text_translation_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTextTranslationJobsRequest {
@@ -337,6 +397,7 @@ pub struct ListTextTranslationJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Translate::list_text_translation_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTextTranslationJobsResponse {
@@ -454,6 +515,7 @@ pub struct ParallelDataProperties {
     pub target_language_codes: Option<Vec<String>>,
 }
 
+/// see [Translate::start_text_translation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTextTranslationJobRequest {
@@ -489,6 +551,7 @@ pub struct StartTextTranslationJobRequest {
     pub terminology_names: Option<Vec<String>>,
 }
 
+/// see [Translate::start_text_translation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTextTranslationJobResponse {
@@ -502,6 +565,7 @@ pub struct StartTextTranslationJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Translate::stop_text_translation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTextTranslationJobRequest {
@@ -510,6 +574,7 @@ pub struct StopTextTranslationJobRequest {
     pub job_id: String,
 }
 
+/// see [Translate::stop_text_translation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTextTranslationJobResponse {
@@ -696,6 +761,7 @@ pub struct TextTranslationJobProperties {
     pub terminology_names: Option<Vec<String>>,
 }
 
+/// see [Translate::translate_text]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TranslateTextRequest {
@@ -714,6 +780,7 @@ pub struct TranslateTextRequest {
     pub text: String,
 }
 
+/// see [Translate::translate_text]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranslateTextResponse {
@@ -732,6 +799,7 @@ pub struct TranslateTextResponse {
     pub translated_text: String,
 }
 
+/// see [Translate::update_parallel_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateParallelDataRequest {
@@ -750,6 +818,7 @@ pub struct UpdateParallelDataRequest {
     pub parallel_data_config: ParallelDataConfig,
 }
 
+/// see [Translate::update_parallel_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateParallelDataResponse {
@@ -1545,7 +1614,7 @@ impl fmt::Display for UpdateParallelDataError {
 impl Error for UpdateParallelDataError {}
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
 #[async_trait]
-pub trait Translate {
+pub trait Translate: Clone + Sync + Send + 'static {
     /// <p>Creates a parallel data resource in Amazon Translate by importing an input file from Amazon S3. Parallel data files contain examples of source phrases and their translations from your translation memory. By adding parallel data, you can influence the style, tone, and word choice in your translation output.</p>
     async fn create_parallel_data(
         &self,
@@ -1599,6 +1668,17 @@ pub trait Translate {
         &self,
         input: ListTerminologiesRequest,
     ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>;
+
+    /// Auto-paginating version of `list_terminologies`
+    fn list_terminologies_pages<'a>(
+        &'a self,
+        mut input: ListTerminologiesRequest,
+    ) -> RusotoStream<'a, TerminologyProperties, ListTerminologiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_terminologies(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of the batch translation jobs that you have submitted.</p>
     async fn list_text_translation_jobs(

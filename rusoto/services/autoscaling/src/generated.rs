@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -78,6 +82,7 @@ impl ActivitiesDeserializer {
         })
     }
 }
+/// see [Autoscaling::describe_scaling_activities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActivitiesType {
@@ -85,6 +90,28 @@ pub struct ActivitiesType {
     pub activities: Vec<Activity>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ActivitiesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ActivitiesType {
+    type Item = Activity;
+
+    fn into_pagination_page(self) -> Vec<Activity> {
+        self.activities
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -200,6 +227,7 @@ impl ActivityIdsSerializer {
     }
 }
 
+/// see [Autoscaling::terminate_instance_in_auto_scaling_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActivityType {
@@ -340,6 +368,7 @@ impl AssociatePublicIpAddressDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::attach_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachInstancesQuery {
@@ -372,6 +401,7 @@ impl AttachInstancesQuerySerializer {
     }
 }
 
+/// see [Autoscaling::attach_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachLoadBalancerTargetGroupsResultType {}
@@ -393,6 +423,7 @@ impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::attach_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancerTargetGroupsType {
@@ -423,6 +454,7 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::attach_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttachLoadBalancersResultType {}
@@ -444,6 +476,7 @@ impl AttachLoadBalancersResultTypeDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::attach_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachLoadBalancersType {
@@ -736,6 +769,7 @@ impl AutoScalingGroupNamesSerializer {
     }
 }
 
+/// see [Autoscaling::describe_auto_scaling_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutoScalingGroupNamesType {
@@ -745,6 +779,22 @@ pub struct AutoScalingGroupNamesType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for AutoScalingGroupNamesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for AutoScalingGroupNamesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `AutoScalingGroupNamesType` contents to a `SignedRequest`.
@@ -790,6 +840,7 @@ impl AutoScalingGroupsDeserializer {
         })
     }
 }
+/// see [Autoscaling::describe_auto_scaling_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AutoScalingGroupsType {
@@ -797,6 +848,28 @@ pub struct AutoScalingGroupsType {
     pub auto_scaling_groups: Vec<AutoScalingGroup>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for AutoScalingGroupsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for AutoScalingGroupsType {
+    type Item = AutoScalingGroup;
+
+    fn into_pagination_page(self) -> Vec<AutoScalingGroup> {
+        self.auto_scaling_groups
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -945,6 +1018,7 @@ impl AutoScalingInstancesDeserializer {
         })
     }
 }
+/// see [Autoscaling::describe_auto_scaling_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AutoScalingInstancesType {
@@ -952,6 +1026,28 @@ pub struct AutoScalingInstancesType {
     pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for AutoScalingInstancesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for AutoScalingInstancesType {
+    type Item = AutoScalingInstanceDetails;
+
+    fn into_pagination_page(self) -> Vec<AutoScalingInstanceDetails> {
+        self.auto_scaling_instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1050,6 +1146,7 @@ impl AvailabilityZonesSerializer {
     }
 }
 
+/// see [Autoscaling::batch_delete_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchDeleteScheduledActionAnswer {
@@ -1085,6 +1182,7 @@ impl BatchDeleteScheduledActionAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::batch_delete_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteScheduledActionType {
@@ -1115,6 +1213,7 @@ impl BatchDeleteScheduledActionTypeSerializer {
     }
 }
 
+/// see [Autoscaling::batch_put_scheduled_update_group_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchPutScheduledUpdateGroupActionAnswer {
@@ -1152,6 +1251,7 @@ impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::batch_put_scheduled_update_group_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutScheduledUpdateGroupActionType {
@@ -1324,6 +1424,7 @@ impl BlockDeviceMappingsSerializer {
     }
 }
 
+/// see [Autoscaling::cancel_instance_refresh]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelInstanceRefreshAnswer {
@@ -1358,6 +1459,7 @@ impl CancelInstanceRefreshAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::cancel_instance_refresh]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelInstanceRefreshType {
@@ -1421,6 +1523,7 @@ impl ClassicLinkVPCSecurityGroupsSerializer {
     }
 }
 
+/// see [Autoscaling::complete_lifecycle_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CompleteLifecycleActionAnswer {}
@@ -1442,6 +1545,7 @@ impl CompleteLifecycleActionAnswerDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::complete_lifecycle_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteLifecycleActionType {
@@ -1498,6 +1602,7 @@ impl CooldownDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::create_auto_scaling_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAutoScalingGroupType {
@@ -1670,6 +1775,7 @@ impl CreateAutoScalingGroupTypeSerializer {
     }
 }
 
+/// see [Autoscaling::create_launch_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLaunchConfigurationType {
@@ -1806,6 +1912,7 @@ impl CreateLaunchConfigurationTypeSerializer {
     }
 }
 
+/// see [Autoscaling::create_or_update_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOrUpdateTagsType {
@@ -1908,6 +2015,7 @@ impl CustomizedMetricSpecificationSerializer {
     }
 }
 
+/// see [Autoscaling::delete_auto_scaling_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAutoScalingGroupType {
@@ -1936,6 +2044,7 @@ impl DeleteAutoScalingGroupTypeSerializer {
     }
 }
 
+/// see [Autoscaling::delete_lifecycle_hook]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLifecycleHookAnswer {}
@@ -1957,6 +2066,7 @@ impl DeleteLifecycleHookAnswerDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::delete_lifecycle_hook]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecycleHookType {
@@ -1986,6 +2096,7 @@ impl DeleteLifecycleHookTypeSerializer {
     }
 }
 
+/// see [Autoscaling::delete_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationConfigurationType {
@@ -2012,6 +2123,7 @@ impl DeleteNotificationConfigurationTypeSerializer {
     }
 }
 
+/// see [Autoscaling::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyType {
@@ -2040,6 +2152,7 @@ impl DeletePolicyTypeSerializer {
     }
 }
 
+/// see [Autoscaling::delete_scheduled_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledActionType {
@@ -2069,6 +2182,7 @@ impl DeleteScheduledActionTypeSerializer {
     }
 }
 
+/// see [Autoscaling::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsType {
@@ -2089,6 +2203,7 @@ impl DeleteTagsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_account_limits]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsAnswer {
@@ -2150,6 +2265,7 @@ impl DescribeAccountLimitsAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_adjustment_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAdjustmentTypesAnswer {
@@ -2182,6 +2298,7 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_auto_scaling_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutoScalingInstancesType {
@@ -2191,6 +2308,22 @@ pub struct DescribeAutoScalingInstancesType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeAutoScalingInstancesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAutoScalingInstancesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeAutoScalingInstancesType` contents to a `SignedRequest`.
@@ -2218,6 +2351,7 @@ impl DescribeAutoScalingInstancesTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_auto_scaling_notification_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAutoScalingNotificationTypesAnswer {
@@ -2253,6 +2387,7 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_instance_refreshes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstanceRefreshesAnswer {
@@ -2291,6 +2426,7 @@ impl DescribeInstanceRefreshesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_instance_refreshes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceRefreshesType {
@@ -2333,6 +2469,7 @@ impl DescribeInstanceRefreshesTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_lifecycle_hook_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLifecycleHookTypesAnswer {
@@ -2368,6 +2505,7 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_lifecycle_hooks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLifecycleHooksAnswer {
@@ -2400,6 +2538,7 @@ impl DescribeLifecycleHooksAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_lifecycle_hooks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLifecycleHooksType {
@@ -2432,6 +2571,7 @@ impl DescribeLifecycleHooksTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancerTargetGroupsRequest {
@@ -2441,6 +2581,22 @@ pub struct DescribeLoadBalancerTargetGroupsRequest {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeLoadBalancerTargetGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLoadBalancerTargetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
@@ -2465,6 +2621,7 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
     }
 }
 
+/// see [Autoscaling::describe_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancerTargetGroupsResponse {
@@ -2472,6 +2629,28 @@ pub struct DescribeLoadBalancerTargetGroupsResponse {
     pub load_balancer_target_groups: Option<Vec<LoadBalancerTargetGroupState>>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeLoadBalancerTargetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeLoadBalancerTargetGroupsResponse {
+    type Item = LoadBalancerTargetGroupState;
+
+    fn into_pagination_page(self) -> Vec<LoadBalancerTargetGroupState> {
+        self.load_balancer_target_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -2506,6 +2685,7 @@ impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBalancersRequest {
@@ -2515,6 +2695,22 @@ pub struct DescribeLoadBalancersRequest {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeLoadBalancersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLoadBalancersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeLoadBalancersRequest` contents to a `SignedRequest`.
@@ -2539,6 +2735,7 @@ impl DescribeLoadBalancersRequestSerializer {
     }
 }
 
+/// see [Autoscaling::describe_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeLoadBalancersResponse {
@@ -2546,6 +2743,28 @@ pub struct DescribeLoadBalancersResponse {
     pub load_balancers: Option<Vec<LoadBalancerState>>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeLoadBalancersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeLoadBalancersResponse {
+    type Item = LoadBalancerState;
+
+    fn into_pagination_page(self) -> Vec<LoadBalancerState> {
+        self.load_balancers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -2577,6 +2796,7 @@ impl DescribeLoadBalancersResponseDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_metric_collection_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeMetricCollectionTypesAnswer {
@@ -2619,6 +2839,7 @@ impl DescribeMetricCollectionTypesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_notification_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeNotificationConfigurationsAnswer {
@@ -2626,6 +2847,28 @@ pub struct DescribeNotificationConfigurationsAnswer {
     pub next_token: Option<String>,
     /// <p>The notification configurations.</p>
     pub notification_configurations: Vec<NotificationConfiguration>,
+}
+
+impl Paged for DescribeNotificationConfigurationsAnswer {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeNotificationConfigurationsAnswer {
+    type Item = NotificationConfiguration;
+
+    fn into_pagination_page(self) -> Vec<NotificationConfiguration> {
+        self.notification_configurations
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -2660,6 +2903,7 @@ impl DescribeNotificationConfigurationsAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::describe_notification_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationConfigurationsType {
@@ -2669,6 +2913,22 @@ pub struct DescribeNotificationConfigurationsType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeNotificationConfigurationsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeNotificationConfigurationsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeNotificationConfigurationsType` contents to a `SignedRequest`.
@@ -2696,6 +2956,7 @@ impl DescribeNotificationConfigurationsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePoliciesType {
@@ -2709,6 +2970,22 @@ pub struct DescribePoliciesType {
     pub policy_names: Option<Vec<String>>,
     /// <p>One or more policy types. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>.</p>
     pub policy_types: Option<Vec<String>>,
+}
+
+impl Paged for DescribePoliciesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePoliciesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribePoliciesType` contents to a `SignedRequest`.
@@ -2749,6 +3026,7 @@ impl DescribePoliciesTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_scaling_activities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingActivitiesType {
@@ -2760,6 +3038,22 @@ pub struct DescribeScalingActivitiesType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeScalingActivitiesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingActivitiesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeScalingActivitiesType` contents to a `SignedRequest`.
@@ -2793,6 +3087,7 @@ impl DescribeScalingActivitiesTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_scheduled_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledActionsType {
@@ -2808,6 +3103,22 @@ pub struct DescribeScheduledActionsType {
     pub scheduled_action_names: Option<Vec<String>>,
     /// <p>The earliest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>
     pub start_time: Option<String>,
+}
+
+impl Paged for DescribeScheduledActionsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScheduledActionsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeScheduledActionsType` contents to a `SignedRequest`.
@@ -2847,6 +3158,7 @@ impl DescribeScheduledActionsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsType {
@@ -2856,6 +3168,22 @@ pub struct DescribeTagsType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeTagsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeTagsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeTagsType` contents to a `SignedRequest`.
@@ -2879,6 +3207,7 @@ impl DescribeTagsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::describe_termination_policy_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeTerminationPolicyTypesAnswer {
@@ -2914,6 +3243,7 @@ impl DescribeTerminationPolicyTypesAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::detach_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachInstancesAnswer {
@@ -2942,6 +3272,7 @@ impl DetachInstancesAnswerDeserializer {
         })
     }
 }
+/// see [Autoscaling::detach_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachInstancesQuery {
@@ -2980,6 +3311,7 @@ impl DetachInstancesQuerySerializer {
     }
 }
 
+/// see [Autoscaling::detach_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachLoadBalancerTargetGroupsResultType {}
@@ -3001,6 +3333,7 @@ impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::detach_load_balancer_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachLoadBalancerTargetGroupsType {
@@ -3031,6 +3364,7 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
     }
 }
 
+/// see [Autoscaling::detach_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachLoadBalancersResultType {}
@@ -3052,6 +3386,7 @@ impl DetachLoadBalancersResultTypeDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::detach_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachLoadBalancersType {
@@ -3082,6 +3417,7 @@ impl DetachLoadBalancersTypeSerializer {
     }
 }
 
+/// see [Autoscaling::disable_metrics_collection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableMetricsCollectionQuery {
@@ -3226,6 +3562,7 @@ impl EbsOptimizedDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::enable_metrics_collection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableMetricsCollectionQuery {
@@ -3312,6 +3649,7 @@ impl EnabledMetricsDeserializer {
         })
     }
 }
+/// see [Autoscaling::enter_standby]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnterStandbyAnswer {
@@ -3340,6 +3678,7 @@ impl EnterStandbyAnswerDeserializer {
         })
     }
 }
+/// see [Autoscaling::enter_standby]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnterStandbyQuery {
@@ -3386,6 +3725,7 @@ impl EstimatedInstanceWarmupDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::execute_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutePolicyType {
@@ -3429,6 +3769,7 @@ impl ExecutePolicyTypeSerializer {
     }
 }
 
+/// see [Autoscaling::exit_standby]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExitStandbyAnswer {
@@ -3457,6 +3798,7 @@ impl ExitStandbyAnswerDeserializer {
         })
     }
 }
+/// see [Autoscaling::exit_standby]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExitStandbyQuery {
@@ -4316,6 +4658,7 @@ impl LaunchConfigurationDeserializer {
         })
     }
 }
+/// see [Autoscaling::delete_launch_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchConfigurationNameType {
@@ -4350,6 +4693,7 @@ impl LaunchConfigurationNamesSerializer {
     }
 }
 
+/// see [Autoscaling::describe_launch_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchConfigurationNamesType {
@@ -4359,6 +4703,22 @@ pub struct LaunchConfigurationNamesType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for LaunchConfigurationNamesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for LaunchConfigurationNamesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `LaunchConfigurationNamesType` contents to a `SignedRequest`.
@@ -4406,6 +4766,7 @@ impl LaunchConfigurationsDeserializer {
         })
     }
 }
+/// see [Autoscaling::describe_launch_configurations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchConfigurationsType {
@@ -4413,6 +4774,28 @@ pub struct LaunchConfigurationsType {
     pub launch_configurations: Vec<LaunchConfiguration>,
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for LaunchConfigurationsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for LaunchConfigurationsType {
+    type Item = LaunchConfiguration;
+
+    fn into_pagination_page(self) -> Vec<LaunchConfiguration> {
+        self.launch_configurations
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -5563,6 +5946,7 @@ impl OverridesSerializer {
     }
 }
 
+/// see [Autoscaling::describe_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PoliciesType {
@@ -5570,6 +5954,28 @@ pub struct PoliciesType {
     pub next_token: Option<String>,
     /// <p>The scaling policies.</p>
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
+}
+
+impl Paged for PoliciesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for PoliciesType {
+    type Item = ScalingPolicy;
+
+    fn into_pagination_page(self) -> Vec<ScalingPolicy> {
+        self.scaling_policies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -5597,6 +6003,7 @@ impl PoliciesTypeDeserializer {
     }
 }
 /// <p>Contains the output of PutScalingPolicy.</p>
+/// see [Autoscaling::put_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyARNType {
@@ -5780,6 +6187,7 @@ impl ProcessesDeserializer {
         })
     }
 }
+/// see [Autoscaling::describe_scaling_process_types]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProcessesType {
@@ -5824,6 +6232,7 @@ impl PropagateAtLaunchDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::put_lifecycle_hook]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutLifecycleHookAnswer {}
@@ -5845,6 +6254,7 @@ impl PutLifecycleHookAnswerDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::put_lifecycle_hook]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleHookType {
@@ -5913,6 +6323,7 @@ impl PutLifecycleHookTypeSerializer {
     }
 }
 
+/// see [Autoscaling::put_notification_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutNotificationConfigurationType {
@@ -5946,6 +6357,7 @@ impl PutNotificationConfigurationTypeSerializer {
     }
 }
 
+/// see [Autoscaling::put_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScalingPolicyType {
@@ -6044,6 +6456,7 @@ impl PutScalingPolicyTypeSerializer {
     }
 }
 
+/// see [Autoscaling::put_scheduled_update_group_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutScheduledUpdateGroupActionType {
@@ -6108,6 +6521,7 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
     }
 }
 
+/// see [Autoscaling::record_lifecycle_action_heartbeat]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecordLifecycleActionHeartbeatAnswer {}
@@ -6129,6 +6543,7 @@ impl RecordLifecycleActionHeartbeatAnswerDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::record_lifecycle_action_heartbeat]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordLifecycleActionHeartbeatType {
@@ -6380,6 +6795,8 @@ impl ScalingPolicyEnabledDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Autoscaling::resume_processes]
+/// see [Autoscaling::suspend_processes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScalingProcessQuery {
@@ -6423,6 +6840,7 @@ impl ScheduledActionNamesSerializer {
     }
 }
 
+/// see [Autoscaling::describe_scheduled_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledActionsType {
@@ -6430,6 +6848,28 @@ pub struct ScheduledActionsType {
     pub next_token: Option<String>,
     /// <p>The scheduled actions.</p>
     pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
+}
+
+impl Paged for ScheduledActionsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ScheduledActionsType {
+    type Item = ScheduledUpdateGroupAction;
+
+    fn into_pagination_page(self) -> Vec<ScheduledUpdateGroupAction> {
+        self.scheduled_update_group_actions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -6674,6 +7114,7 @@ impl SecurityGroupsSerializer {
     }
 }
 
+/// see [Autoscaling::set_desired_capacity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDesiredCapacityType {
@@ -6708,6 +7149,7 @@ impl SetDesiredCapacityTypeSerializer {
     }
 }
 
+/// see [Autoscaling::set_instance_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetInstanceHealthQuery {
@@ -6739,6 +7181,7 @@ impl SetInstanceHealthQuerySerializer {
     }
 }
 
+/// see [Autoscaling::set_instance_protection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetInstanceProtectionAnswer {}
@@ -6760,6 +7203,7 @@ impl SetInstanceProtectionAnswerDeserializer {
         Ok(obj)
     }
 }
+/// see [Autoscaling::set_instance_protection]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetInstanceProtectionQuery {
@@ -6812,6 +7256,7 @@ impl SpotPriceDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Autoscaling::start_instance_refresh]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartInstanceRefreshAnswer {
@@ -6846,6 +7291,7 @@ impl StartInstanceRefreshAnswerDeserializer {
         )
     }
 }
+/// see [Autoscaling::start_instance_refresh]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRefreshType {
@@ -7182,6 +7628,7 @@ impl TagsSerializer {
     }
 }
 
+/// see [Autoscaling::describe_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagsType {
@@ -7189,6 +7636,28 @@ pub struct TagsType {
     pub next_token: Option<String>,
     /// <p>One or more tags.</p>
     pub tags: Option<Vec<TagDescription>>,
+}
+
+impl Paged for TagsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for TagsType {
+    type Item = TagDescription;
+
+    fn into_pagination_page(self) -> Vec<TagDescription> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -7337,6 +7806,7 @@ impl TargetTrackingConfigurationSerializer {
     }
 }
 
+/// see [Autoscaling::terminate_instance_in_auto_scaling_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateInstanceInAutoScalingGroupType {
@@ -7403,6 +7873,7 @@ impl TimestampTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Autoscaling::update_auto_scaling_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAutoScalingGroupType {
@@ -10785,7 +11256,7 @@ impl fmt::Display for UpdateAutoScalingGroupError {
 impl Error for UpdateAutoScalingGroupError {}
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 #[async_trait]
-pub trait Autoscaling {
+pub trait Autoscaling: Clone + Sync + Send + 'static {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 instances to your Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn attach_instances(
         &self,
@@ -10907,11 +11378,33 @@ pub trait Autoscaling {
         input: AutoScalingGroupNamesType,
     ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>>;
 
+    /// Auto-paginating version of `describe_auto_scaling_groups`
+    fn describe_auto_scaling_groups_pages<'a>(
+        &'a self,
+        mut input: AutoScalingGroupNamesType,
+    ) -> RusotoStream<'a, AutoScalingGroup, DescribeAutoScalingGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_auto_scaling_groups(input.clone())
+        }))
+    }
+
     /// <p>Describes one or more Auto Scaling instances.</p>
     async fn describe_auto_scaling_instances(
         &self,
         input: DescribeAutoScalingInstancesType,
     ) -> Result<AutoScalingInstancesType, RusotoError<DescribeAutoScalingInstancesError>>;
+
+    /// Auto-paginating version of `describe_auto_scaling_instances`
+    fn describe_auto_scaling_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeAutoScalingInstancesType,
+    ) -> RusotoStream<'a, AutoScalingInstanceDetails, DescribeAutoScalingInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_auto_scaling_instances(input.clone())
+        }))
+    }
 
     /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
     async fn describe_auto_scaling_notification_types(
@@ -10933,6 +11426,17 @@ pub trait Autoscaling {
         input: LaunchConfigurationNamesType,
     ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>>;
 
+    /// Auto-paginating version of `describe_launch_configurations`
+    fn describe_launch_configurations_pages<'a>(
+        &'a self,
+        mut input: LaunchConfigurationNamesType,
+    ) -> RusotoStream<'a, LaunchConfiguration, DescribeLaunchConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_launch_configurations(input.clone())
+        }))
+    }
+
     /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
     async fn describe_lifecycle_hook_types(
         &self,
@@ -10953,11 +11457,33 @@ pub trait Autoscaling {
         RusotoError<DescribeLoadBalancerTargetGroupsError>,
     >;
 
+    /// Auto-paginating version of `describe_load_balancer_target_groups`
+    fn describe_load_balancer_target_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeLoadBalancerTargetGroupsRequest,
+    ) -> RusotoStream<'a, LoadBalancerTargetGroupState, DescribeLoadBalancerTargetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancer_target_groups(input.clone())
+        }))
+    }
+
     /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>
     async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
     ) -> Result<DescribeLoadBalancersResponse, RusotoError<DescribeLoadBalancersError>>;
+
+    /// Auto-paginating version of `describe_load_balancers`
+    fn describe_load_balancers_pages<'a>(
+        &'a self,
+        mut input: DescribeLoadBalancersRequest,
+    ) -> RusotoStream<'a, LoadBalancerState, DescribeLoadBalancersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancers(input.clone())
+        }))
+    }
 
     /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling the <a>EnableMetricsCollection</a> API.</p>
     async fn describe_metric_collection_types(
@@ -10973,17 +11499,50 @@ pub trait Autoscaling {
         RusotoError<DescribeNotificationConfigurationsError>,
     >;
 
+    /// Auto-paginating version of `describe_notification_configurations`
+    fn describe_notification_configurations_pages<'a>(
+        &'a self,
+        mut input: DescribeNotificationConfigurationsType,
+    ) -> RusotoStream<'a, NotificationConfiguration, DescribeNotificationConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_notification_configurations(input.clone())
+        }))
+    }
+
     /// <p>Describes the policies for the specified Auto Scaling group.</p>
     async fn describe_policies(
         &self,
         input: DescribePoliciesType,
     ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>>;
 
+    /// Auto-paginating version of `describe_policies`
+    fn describe_policies_pages<'a>(
+        &'a self,
+        mut input: DescribePoliciesType,
+    ) -> RusotoStream<'a, ScalingPolicy, DescribePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_policies(input.clone())
+        }))
+    }
+
     /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
     async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesType,
     ) -> Result<ActivitiesType, RusotoError<DescribeScalingActivitiesError>>;
+
+    /// Auto-paginating version of `describe_scaling_activities`
+    fn describe_scaling_activities_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingActivitiesType,
+    ) -> RusotoStream<'a, Activity, DescribeScalingActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_activities(input.clone())
+        }))
+    }
 
     /// <p>Describes the scaling process types for use with the <a>ResumeProcesses</a> and <a>SuspendProcesses</a> APIs.</p>
     async fn describe_scaling_process_types(
@@ -10996,11 +11555,33 @@ pub trait Autoscaling {
         input: DescribeScheduledActionsType,
     ) -> Result<ScheduledActionsType, RusotoError<DescribeScheduledActionsError>>;
 
+    /// Auto-paginating version of `describe_scheduled_actions`
+    fn describe_scheduled_actions_pages<'a>(
+        &'a self,
+        mut input: DescribeScheduledActionsType,
+    ) -> RusotoStream<'a, ScheduledUpdateGroupAction, DescribeScheduledActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scheduled_actions(input.clone())
+        }))
+    }
+
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling groups and instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn describe_tags(
         &self,
         input: DescribeTagsType,
     ) -> Result<TagsType, RusotoError<DescribeTagsError>>;
+
+    /// Auto-paginating version of `describe_tags`
+    fn describe_tags_pages<'a>(
+        &'a self,
+        mut input: DescribeTagsType,
+    ) -> RusotoStream<'a, TagDescription, DescribeTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tags(input.clone())
+        }))
+    }
 
     /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling which Auto Scaling instances terminate during scale in</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn describe_termination_policy_types(

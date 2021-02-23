@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -26,6 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Provides options to abort a multipart upload identified by the upload ID.</p> <p>For information about the underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a>. For conceptual information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a>.</p>
+/// see [Glacier::abort_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortMultipartUploadInput {
@@ -41,6 +46,7 @@ pub struct AbortMultipartUploadInput {
 }
 
 /// <p>The input values for <code>AbortVaultLock</code>.</p>
+/// see [Glacier::abort_vault_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortVaultLockInput {
@@ -53,6 +59,7 @@ pub struct AbortVaultLockInput {
 }
 
 /// <p>The input values for <code>AddTagsToVault</code>.</p>
+/// see [Glacier::add_tags_to_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToVaultInput {
@@ -69,6 +76,8 @@ pub struct AddTagsToVaultInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a>. For conceptual information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a>.</p>
+/// see [Glacier::complete_multipart_upload]
+/// see [Glacier::upload_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveCreationOutput {
@@ -141,6 +150,7 @@ pub struct CSVOutput {
 }
 
 /// <p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon S3 Glacier (Glacier) can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Glacier returns the URI path of the newly created archive resource.</p>
+/// see [Glacier::complete_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteMultipartUploadInput {
@@ -164,6 +174,7 @@ pub struct CompleteMultipartUploadInput {
 }
 
 /// <p>The input values for <code>CompleteVaultLock</code>.</p>
+/// see [Glacier::complete_vault_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteVaultLockInput {
@@ -179,6 +190,7 @@ pub struct CompleteVaultLockInput {
 }
 
 /// <p>Provides options to create a vault.</p>
+/// see [Glacier::create_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVaultInput {
@@ -191,6 +203,7 @@ pub struct CreateVaultInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::create_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVaultOutput {
@@ -223,6 +236,7 @@ pub struct DataRetrievalRule {
 }
 
 /// <p>Provides options for deleting an archive from an Amazon S3 Glacier vault.</p>
+/// see [Glacier::delete_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArchiveInput {
@@ -238,6 +252,7 @@ pub struct DeleteArchiveInput {
 }
 
 /// <p>DeleteVaultAccessPolicy input.</p>
+/// see [Glacier::delete_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVaultAccessPolicyInput {
@@ -250,6 +265,7 @@ pub struct DeleteVaultAccessPolicyInput {
 }
 
 /// <p>Provides options for deleting a vault from Amazon S3 Glacier.</p>
+/// see [Glacier::delete_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVaultInput {
@@ -262,6 +278,7 @@ pub struct DeleteVaultInput {
 }
 
 /// <p>Provides options for deleting a vault notification configuration from an Amazon Glacier vault.</p>
+/// see [Glacier::delete_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVaultNotificationsInput {
@@ -274,6 +291,7 @@ pub struct DeleteVaultNotificationsInput {
 }
 
 /// <p>Provides options for retrieving a job description.</p>
+/// see [Glacier::describe_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobInput {
@@ -289,6 +307,7 @@ pub struct DescribeJobInput {
 }
 
 /// <p>Provides options for retrieving metadata for a specific vault in Amazon Glacier.</p>
+/// see [Glacier::describe_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVaultInput {
@@ -301,6 +320,7 @@ pub struct DescribeVaultInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::describe_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVaultOutput {
@@ -348,6 +368,7 @@ pub struct Encryption {
 }
 
 /// <p>Input for GetDataRetrievalPolicy.</p>
+/// see [Glacier::get_data_retrieval_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataRetrievalPolicyInput {
@@ -357,6 +378,7 @@ pub struct GetDataRetrievalPolicyInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to the <code>GetDataRetrievalPolicy</code> request.</p>
+/// see [Glacier::get_data_retrieval_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataRetrievalPolicyOutput {
@@ -367,6 +389,7 @@ pub struct GetDataRetrievalPolicyOutput {
 }
 
 /// <p>Provides options for downloading output of an Amazon S3 Glacier job.</p>
+/// see [Glacier::get_job_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobOutputInput {
@@ -386,6 +409,7 @@ pub struct GetJobOutputInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::get_job_output]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetJobOutputOutput {
     /// <p>Indicates the range units accepted. For more information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">RFC2616</a>. </p>
@@ -405,6 +429,7 @@ pub struct GetJobOutputOutput {
 }
 
 /// <p>Input for GetVaultAccessPolicy.</p>
+/// see [Glacier::get_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVaultAccessPolicyInput {
@@ -417,6 +442,7 @@ pub struct GetVaultAccessPolicyInput {
 }
 
 /// <p>Output for GetVaultAccessPolicy.</p>
+/// see [Glacier::get_vault_access_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVaultAccessPolicyOutput {
@@ -427,6 +453,7 @@ pub struct GetVaultAccessPolicyOutput {
 }
 
 /// <p>The input values for <code>GetVaultLock</code>.</p>
+/// see [Glacier::get_vault_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVaultLockInput {
@@ -439,6 +466,7 @@ pub struct GetVaultLockInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::get_vault_lock]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVaultLockOutput {
@@ -461,6 +489,7 @@ pub struct GetVaultLockOutput {
 }
 
 /// <p>Provides options for retrieving the notification configuration set on an Amazon Glacier vault.</p>
+/// see [Glacier::get_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVaultNotificationsInput {
@@ -473,6 +502,7 @@ pub struct GetVaultNotificationsInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::get_vault_notifications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVaultNotificationsOutput {
@@ -483,6 +513,7 @@ pub struct GetVaultNotificationsOutput {
 }
 
 /// <p>Contains the description of an Amazon S3 Glacier job.</p>
+/// see [Glacier::describe_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlacierJobDescription {
@@ -610,6 +641,7 @@ pub struct Grantee {
 }
 
 /// <p>Provides options for initiating an Amazon S3 Glacier job.</p>
+/// see [Glacier::initiate_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateJobInput {
@@ -626,6 +658,7 @@ pub struct InitiateJobInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::initiate_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateJobOutput {
@@ -644,6 +677,7 @@ pub struct InitiateJobOutput {
 }
 
 /// <p>Provides options for initiating a multipart upload to an Amazon S3 Glacier vault.</p>
+/// see [Glacier::initiate_multipart_upload]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateMultipartUploadInput {
@@ -664,6 +698,7 @@ pub struct InitiateMultipartUploadInput {
 }
 
 /// <p>The Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::initiate_multipart_upload]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateMultipartUploadOutput {
@@ -678,6 +713,7 @@ pub struct InitiateMultipartUploadOutput {
 }
 
 /// <p>The input values for <code>InitiateVaultLock</code>.</p>
+/// see [Glacier::initiate_vault_lock]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateVaultLockInput {
@@ -694,6 +730,7 @@ pub struct InitiateVaultLockInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::initiate_vault_lock]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateVaultLockOutput {
@@ -807,6 +844,7 @@ pub struct JobParameters {
 }
 
 /// <p>Provides options for retrieving a job list for an Amazon S3 Glacier vault.</p>
+/// see [Glacier::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsInput {
@@ -834,7 +872,24 @@ pub struct ListJobsInput {
     pub vault_name: String,
 }
 
+impl Paged for ListJobsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListJobsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsOutput {
@@ -848,7 +903,30 @@ pub struct ListJobsOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListJobsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListJobsOutput {
+    type Item = GlacierJobDescription;
+
+    fn into_pagination_page(self) -> Vec<GlacierJobDescription> {
+        self.job_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Provides options for retrieving list of in-progress multipart uploads for an Amazon Glacier vault.</p>
+/// see [Glacier::list_multipart_uploads]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultipartUploadsInput {
@@ -868,7 +946,24 @@ pub struct ListMultipartUploadsInput {
     pub vault_name: String,
 }
 
+impl Paged for ListMultipartUploadsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListMultipartUploadsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::list_multipart_uploads]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMultipartUploadsOutput {
@@ -882,7 +977,30 @@ pub struct ListMultipartUploadsOutput {
     pub uploads_list: Option<Vec<UploadListElement>>,
 }
 
+impl Paged for ListMultipartUploadsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListMultipartUploadsOutput {
+    type Item = UploadListElement;
+
+    fn into_pagination_page(self) -> Vec<UploadListElement> {
+        self.uploads_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Provides options for retrieving a list of parts of an archive that have been uploaded in a specific multipart upload.</p>
+/// see [Glacier::list_parts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartsInput {
@@ -905,7 +1023,24 @@ pub struct ListPartsInput {
     pub vault_name: String,
 }
 
+impl Paged for ListPartsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPartsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::list_parts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPartsOutput {
@@ -939,6 +1074,29 @@ pub struct ListPartsOutput {
     pub vault_arn: Option<String>,
 }
 
+impl Paged for ListPartsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListPartsOutput {
+    type Item = PartListElement;
+
+    fn into_pagination_page(self) -> Vec<PartListElement> {
+        self.parts.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Glacier::list_provisioned_capacity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisionedCapacityInput {
@@ -947,6 +1105,7 @@ pub struct ListProvisionedCapacityInput {
     pub account_id: String,
 }
 
+/// see [Glacier::list_provisioned_capacity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisionedCapacityOutput {
@@ -957,6 +1116,7 @@ pub struct ListProvisionedCapacityOutput {
 }
 
 /// <p>The input value for <code>ListTagsForVaultInput</code>.</p>
+/// see [Glacier::list_tags_for_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForVaultInput {
@@ -969,6 +1129,7 @@ pub struct ListTagsForVaultInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::list_tags_for_vault]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForVaultOutput {
@@ -979,6 +1140,7 @@ pub struct ListTagsForVaultOutput {
 }
 
 /// <p>Provides options to retrieve the vault list owned by the calling user's account. The list provides metadata information for each vault.</p>
+/// see [Glacier::list_vaults]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVaultsInput {
@@ -995,7 +1157,24 @@ pub struct ListVaultsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListVaultsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVaultsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::list_vaults]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVaultsOutput {
@@ -1007,6 +1186,28 @@ pub struct ListVaultsOutput {
     #[serde(rename = "VaultList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vault_list: Option<Vec<DescribeVaultOutput>>,
+}
+
+impl Paged for ListVaultsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListVaultsOutput {
+    type Item = DescribeVaultOutput;
+
+    fn into_pagination_page(self) -> Vec<DescribeVaultOutput> {
+        self.vault_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains information about the location where the select job results are stored.</p>
@@ -1059,6 +1260,7 @@ pub struct ProvisionedCapacityDescription {
     pub start_date: Option<String>,
 }
 
+/// see [Glacier::purchase_provisioned_capacity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseProvisionedCapacityInput {
@@ -1067,6 +1269,7 @@ pub struct PurchaseProvisionedCapacityInput {
     pub account_id: String,
 }
 
+/// see [Glacier::purchase_provisioned_capacity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseProvisionedCapacityOutput {
@@ -1077,6 +1280,7 @@ pub struct PurchaseProvisionedCapacityOutput {
 }
 
 /// <p>The input value for <code>RemoveTagsFromVaultInput</code>.</p>
+/// see [Glacier::remove_tags_from_vault]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromVaultInput {
@@ -1151,6 +1355,7 @@ pub struct SelectParameters {
 }
 
 /// <p>SetDataRetrievalPolicy input.</p>
+/// see [Glacier::set_data_retrieval_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDataRetrievalPolicyInput {
@@ -1164,6 +1369,7 @@ pub struct SetDataRetrievalPolicyInput {
 }
 
 /// <p>SetVaultAccessPolicy input.</p>
+/// see [Glacier::set_vault_access_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetVaultAccessPolicyInput {
@@ -1180,6 +1386,7 @@ pub struct SetVaultAccessPolicyInput {
 }
 
 /// <p>Provides options to configure notifications that will be sent when specific events happen to a vault.</p>
+/// see [Glacier::set_vault_notifications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetVaultNotificationsInput {
@@ -1196,6 +1403,7 @@ pub struct SetVaultNotificationsInput {
 }
 
 /// <p>Provides options to add an archive to a vault.</p>
+/// see [Glacier::upload_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadArchiveInput {
@@ -1251,6 +1459,7 @@ pub struct UploadListElement {
 }
 
 /// <p>Provides options to upload a part of an archive in a multipart upload operation.</p>
+/// see [Glacier::upload_multipart_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadMultipartPartInput {
@@ -1283,6 +1492,7 @@ pub struct UploadMultipartPartInput {
 }
 
 /// <p>Contains the Amazon S3 Glacier response to your request.</p>
+/// see [Glacier::upload_multipart_part]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadMultipartPartOutput {
@@ -3096,7 +3306,7 @@ impl fmt::Display for UploadMultipartPartError {
 impl Error for UploadMultipartPartError {}
 /// Trait representing the capabilities of the Amazon Glacier API. Amazon Glacier clients implement this trait.
 #[async_trait]
-pub trait Glacier {
+pub trait Glacier: Clone + Sync + Send + 'static {
     /// <p>This operation aborts a multipart upload identified by the upload ID.</p> <p>After the Abort Multipart Upload request succeeds, you cannot upload any more parts to the multipart upload or complete the multipart upload. Aborting a completed upload fails. However, aborting an already-aborted upload will succeed, for a short time. For more information about uploading a part and completing a multipart upload, see <a>UploadMultipartPart</a> and <a>CompleteMultipartUpload</a>.</p> <p>This operation is idempotent.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For conceptual information and underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a> and <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     async fn abort_multipart_upload(
         &self,
@@ -3223,17 +3433,50 @@ pub trait Glacier {
         input: ListJobsInput,
     ) -> Result<ListJobsOutput, RusotoError<ListJobsError>>;
 
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsInput,
+    ) -> RusotoStream<'a, GlacierJobDescription, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
+    }
+
     /// <p>This operation lists in-progress multipart uploads for the specified vault. An in-progress multipart upload is a multipart upload that has been initiated by an <a>InitiateMultipartUpload</a> request, but has not yet been completed or aborted. The list returned in the List Multipart Upload response has no guaranteed order. </p> <p>The List Multipart Uploads operation supports pagination. By default, this operation returns up to 50 multipart uploads in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of multipart uploads that begins at a specific upload, set the <code>marker</code> request parameter to the value you obtained from a previous List Multipart Upload request. You can also limit the number of uploads returned in the response by specifying the <code>limit</code> parameter in the request.</p> <p>Note the difference between this operation and listing parts (<a>ListParts</a>). The List Multipart Uploads operation lists all multipart uploads for a vault and does not require a multipart upload ID. The List Parts operation requires a multipart upload ID since parts are associated with a single upload.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a> and <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-uploads.html">List Multipart Uploads </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     async fn list_multipart_uploads(
         &self,
         input: ListMultipartUploadsInput,
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>>;
 
+    /// Auto-paginating version of `list_multipart_uploads`
+    fn list_multipart_uploads_pages<'a>(
+        &'a self,
+        mut input: ListMultipartUploadsInput,
+    ) -> RusotoStream<'a, UploadListElement, ListMultipartUploadsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_multipart_uploads(input.clone())
+        }))
+    }
+
     /// <p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 50 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon S3 Glacier</a> and <a href="https://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     async fn list_parts(
         &self,
         input: ListPartsInput,
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>>;
+
+    /// Auto-paginating version of `list_parts`
+    fn list_parts_pages<'a>(
+        &'a self,
+        mut input: ListPartsInput,
+    ) -> RusotoStream<'a, PartListElement, ListPartsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_parts(input.clone())
+        }))
+    }
 
     /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
     async fn list_provisioned_capacity(
@@ -3252,6 +3495,17 @@ pub trait Glacier {
         &self,
         input: ListVaultsInput,
     ) -> Result<ListVaultsOutput, RusotoError<ListVaultsError>>;
+
+    /// Auto-paginating version of `list_vaults`
+    fn list_vaults_pages<'a>(
+        &'a self,
+        mut input: ListVaultsInput,
+    ) -> RusotoStream<'a, DescribeVaultOutput, ListVaultsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_vaults(input.clone())
+        }))
+    }
 
     /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
     async fn purchase_provisioned_capacity(

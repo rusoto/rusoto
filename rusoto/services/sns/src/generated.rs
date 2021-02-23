@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -80,6 +84,7 @@ impl ActionsListSerializer {
     }
 }
 
+/// see [Sns::add_permission]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddPermissionInput {
@@ -142,6 +147,7 @@ impl BooleanDeserializer {
     }
 }
 /// <p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
+/// see [Sns::check_if_phone_number_is_opted_out]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckIfPhoneNumberIsOptedOutInput {
@@ -163,6 +169,7 @@ impl CheckIfPhoneNumberIsOptedOutInputSerializer {
 }
 
 /// <p>The response from the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
+/// see [Sns::check_if_phone_number_is_opted_out]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CheckIfPhoneNumberIsOptedOutResponse {
@@ -195,6 +202,7 @@ impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
     }
 }
 /// <p>Input for ConfirmSubscription action.</p>
+/// see [Sns::confirm_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmSubscriptionInput {
@@ -227,6 +235,7 @@ impl ConfirmSubscriptionInputSerializer {
 }
 
 /// <p>Response for ConfirmSubscriptions action.</p>
+/// see [Sns::confirm_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfirmSubscriptionResponse {
@@ -261,6 +270,7 @@ impl ConfirmSubscriptionResponseDeserializer {
     }
 }
 /// <p>Response from CreateEndpoint action.</p>
+/// see [Sns::create_platform_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEndpointResponse {
@@ -288,6 +298,7 @@ impl CreateEndpointResponseDeserializer {
     }
 }
 /// <p>Input for CreatePlatformApplication action.</p>
+/// see [Sns::create_platform_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformApplicationInput {
@@ -319,6 +330,7 @@ impl CreatePlatformApplicationInputSerializer {
 }
 
 /// <p>Response from CreatePlatformApplication action.</p>
+/// see [Sns::create_platform_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePlatformApplicationResponse {
@@ -353,6 +365,7 @@ impl CreatePlatformApplicationResponseDeserializer {
     }
 }
 /// <p>Input for CreatePlatformEndpoint action.</p>
+/// see [Sns::create_platform_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformEndpointInput {
@@ -394,6 +407,7 @@ impl CreatePlatformEndpointInputSerializer {
 }
 
 /// <p>Input for CreateTopic action.</p>
+/// see [Sns::create_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicInput {
@@ -429,6 +443,7 @@ impl CreateTopicInputSerializer {
 }
 
 /// <p>Response from CreateTopic action.</p>
+/// see [Sns::create_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTopicResponse {
@@ -468,6 +483,7 @@ impl DelegatesListSerializer {
 }
 
 /// <p>Input for DeleteEndpoint action.</p>
+/// see [Sns::delete_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointInput {
@@ -489,6 +505,7 @@ impl DeleteEndpointInputSerializer {
 }
 
 /// <p>Input for DeletePlatformApplication action.</p>
+/// see [Sns::delete_platform_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlatformApplicationInput {
@@ -512,6 +529,7 @@ impl DeletePlatformApplicationInputSerializer {
     }
 }
 
+/// see [Sns::delete_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicInput {
@@ -541,6 +559,7 @@ impl EndpointDeserializer {
     }
 }
 /// <p>Input for GetEndpointAttributes action.</p>
+/// see [Sns::get_endpoint_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEndpointAttributesInput {
@@ -562,6 +581,7 @@ impl GetEndpointAttributesInputSerializer {
 }
 
 /// <p>Response from GetEndpointAttributes of the EndpointArn.</p>
+/// see [Sns::get_endpoint_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetEndpointAttributesResponse {
@@ -596,6 +616,7 @@ impl GetEndpointAttributesResponseDeserializer {
     }
 }
 /// <p>Input for GetPlatformApplicationAttributes action.</p>
+/// see [Sns::get_platform_application_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlatformApplicationAttributesInput {
@@ -620,6 +641,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
 }
 
 /// <p>Response for GetPlatformApplicationAttributes action.</p>
+/// see [Sns::get_platform_application_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPlatformApplicationAttributesResponse {
@@ -654,6 +676,7 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
     }
 }
 /// <p>The input for the <code>GetSMSAttributes</code> request.</p>
+/// see [Sns::get_sms_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSMSAttributesInput {
@@ -681,6 +704,7 @@ impl GetSMSAttributesInputSerializer {
 }
 
 /// <p>The response from the <code>GetSMSAttributes</code> request.</p>
+/// see [Sns::get_sms_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSMSAttributesResponse {
@@ -715,6 +739,7 @@ impl GetSMSAttributesResponseDeserializer {
     }
 }
 /// <p>Input for GetSubscriptionAttributes.</p>
+/// see [Sns::get_subscription_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionAttributesInput {
@@ -739,6 +764,7 @@ impl GetSubscriptionAttributesInputSerializer {
 }
 
 /// <p>Response for GetSubscriptionAttributes action.</p>
+/// see [Sns::get_subscription_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSubscriptionAttributesResponse {
@@ -773,6 +799,7 @@ impl GetSubscriptionAttributesResponseDeserializer {
     }
 }
 /// <p>Input for GetTopicAttributes action.</p>
+/// see [Sns::get_topic_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicAttributesInput {
@@ -794,6 +821,7 @@ impl GetTopicAttributesInputSerializer {
 }
 
 /// <p>Response for GetTopicAttributes action.</p>
+/// see [Sns::get_topic_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTopicAttributesResponse {
@@ -828,6 +856,7 @@ impl GetTopicAttributesResponseDeserializer {
     }
 }
 /// <p>Input for ListEndpointsByPlatformApplication action.</p>
+/// see [Sns::list_endpoints_by_platform_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsByPlatformApplicationInput {
@@ -835,6 +864,22 @@ pub struct ListEndpointsByPlatformApplicationInput {
     pub next_token: Option<String>,
     /// <p>PlatformApplicationArn for ListEndpointsByPlatformApplicationInput action.</p>
     pub platform_application_arn: String,
+}
+
+impl Paged for ListEndpointsByPlatformApplicationInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEndpointsByPlatformApplicationInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListEndpointsByPlatformApplicationInput` contents to a `SignedRequest`.
@@ -857,6 +902,7 @@ impl ListEndpointsByPlatformApplicationInputSerializer {
 }
 
 /// <p>Response for ListEndpointsByPlatformApplication action.</p>
+/// see [Sns::list_endpoints_by_platform_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListEndpointsByPlatformApplicationResponse {
@@ -864,6 +910,28 @@ pub struct ListEndpointsByPlatformApplicationResponse {
     pub endpoints: Option<Vec<String>>,
     /// <p>NextToken string is returned when calling ListEndpointsByPlatformApplication action if additional records are available after the first page results.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListEndpointsByPlatformApplicationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEndpointsByPlatformApplicationResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.endpoints.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -933,11 +1001,28 @@ impl ListOfPlatformApplicationsDeserializer {
     }
 }
 /// <p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>
+/// see [Sns::list_phone_numbers_opted_out]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersOptedOutInput {
     /// <p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListPhoneNumbersOptedOutInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPhoneNumbersOptedOutInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListPhoneNumbersOptedOutInput` contents to a `SignedRequest`.
@@ -956,6 +1041,7 @@ impl ListPhoneNumbersOptedOutInputSerializer {
 }
 
 /// <p>The response from the <code>ListPhoneNumbersOptedOut</code> action.</p>
+/// see [Sns::list_phone_numbers_opted_out]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPhoneNumbersOptedOutResponse {
@@ -963,6 +1049,28 @@ pub struct ListPhoneNumbersOptedOutResponse {
     pub next_token: Option<String>,
     /// <p>A list of phone numbers that are opted out of receiving SMS messages. The list is paginated, and each page can contain up to 100 phone numbers.</p>
     pub phone_numbers: Option<Vec<String>>,
+}
+
+impl Paged for ListPhoneNumbersOptedOutResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPhoneNumbersOptedOutResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.phone_numbers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -994,11 +1102,28 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
     }
 }
 /// <p>Input for ListPlatformApplications action.</p>
+/// see [Sns::list_platform_applications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformApplicationsInput {
     /// <p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListPlatformApplicationsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlatformApplicationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListPlatformApplicationsInput` contents to a `SignedRequest`.
@@ -1017,6 +1142,7 @@ impl ListPlatformApplicationsInputSerializer {
 }
 
 /// <p>Response for ListPlatformApplications action.</p>
+/// see [Sns::list_platform_applications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformApplicationsResponse {
@@ -1024,6 +1150,28 @@ pub struct ListPlatformApplicationsResponse {
     pub next_token: Option<String>,
     /// <p>Platform applications returned when calling ListPlatformApplications action.</p>
     pub platform_applications: Option<Vec<PlatformApplication>>,
+}
+
+impl Paged for ListPlatformApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPlatformApplicationsResponse {
+    type Item = PlatformApplication;
+
+    fn into_pagination_page(self) -> Vec<PlatformApplication> {
+        self.platform_applications.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1070,6 +1218,7 @@ impl ListStringSerializer {
 }
 
 /// <p>Input for ListSubscriptionsByTopic action.</p>
+/// see [Sns::list_subscriptions_by_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionsByTopicInput {
@@ -1077,6 +1226,22 @@ pub struct ListSubscriptionsByTopicInput {
     pub next_token: Option<String>,
     /// <p>The ARN of the topic for which you wish to find subscriptions.</p>
     pub topic_arn: String,
+}
+
+impl Paged for ListSubscriptionsByTopicInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionsByTopicInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListSubscriptionsByTopicInput` contents to a `SignedRequest`.
@@ -1096,6 +1261,7 @@ impl ListSubscriptionsByTopicInputSerializer {
 }
 
 /// <p>Response for ListSubscriptionsByTopic action.</p>
+/// see [Sns::list_subscriptions_by_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSubscriptionsByTopicResponse {
@@ -1103,6 +1269,28 @@ pub struct ListSubscriptionsByTopicResponse {
     pub next_token: Option<String>,
     /// <p>A list of subscriptions.</p>
     pub subscriptions: Option<Vec<Subscription>>,
+}
+
+impl Paged for ListSubscriptionsByTopicResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSubscriptionsByTopicResponse {
+    type Item = Subscription;
+
+    fn into_pagination_page(self) -> Vec<Subscription> {
+        self.subscriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1135,11 +1323,28 @@ impl ListSubscriptionsByTopicResponseDeserializer {
     }
 }
 /// <p>Input for ListSubscriptions action.</p>
+/// see [Sns::list_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionsInput {
     /// <p>Token returned by the previous <code>ListSubscriptions</code> request.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListSubscriptionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListSubscriptionsInput` contents to a `SignedRequest`.
@@ -1158,6 +1363,7 @@ impl ListSubscriptionsInputSerializer {
 }
 
 /// <p>Response for ListSubscriptions action</p>
+/// see [Sns::list_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSubscriptionsResponse {
@@ -1165,6 +1371,28 @@ pub struct ListSubscriptionsResponse {
     pub next_token: Option<String>,
     /// <p>A list of subscriptions.</p>
     pub subscriptions: Option<Vec<Subscription>>,
+}
+
+impl Paged for ListSubscriptionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSubscriptionsResponse {
+    type Item = Subscription;
+
+    fn into_pagination_page(self) -> Vec<Subscription> {
+        self.subscriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1196,6 +1424,7 @@ impl ListSubscriptionsResponseDeserializer {
         )
     }
 }
+/// see [Sns::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1216,6 +1445,7 @@ impl ListTagsForResourceRequestSerializer {
     }
 }
 
+/// see [Sns::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1248,11 +1478,28 @@ impl ListTagsForResourceResponseDeserializer {
         )
     }
 }
+/// see [Sns::list_topics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsInput {
     /// <p>Token returned by the previous <code>ListTopics</code> request.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListTopicsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTopicsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListTopicsInput` contents to a `SignedRequest`.
@@ -1271,6 +1518,7 @@ impl ListTopicsInputSerializer {
 }
 
 /// <p>Response for ListTopics action.</p>
+/// see [Sns::list_topics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTopicsResponse {
@@ -1278,6 +1526,28 @@ pub struct ListTopicsResponse {
     pub next_token: Option<String>,
     /// <p>A list of topic ARNs.</p>
     pub topics: Option<Vec<Topic>>,
+}
+
+impl Paged for ListTopicsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTopicsResponse {
+    type Item = Topic;
+
+    fn into_pagination_page(self) -> Vec<Topic> {
+        self.topics.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1416,6 +1686,7 @@ impl NextTokenDeserializer {
     }
 }
 /// <p>Input for the OptInPhoneNumber action.</p>
+/// see [Sns::opt_in_phone_number]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OptInPhoneNumberInput {
@@ -1437,6 +1708,7 @@ impl OptInPhoneNumberInputSerializer {
 }
 
 /// <p>The response for the OptInPhoneNumber action.</p>
+/// see [Sns::opt_in_phone_number]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptInPhoneNumberResponse {}
@@ -1531,6 +1803,7 @@ impl ProtocolDeserializer {
     }
 }
 /// <p>Input for Publish action.</p>
+/// see [Sns::publish]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishInput {
@@ -1599,6 +1872,7 @@ impl PublishInputSerializer {
 }
 
 /// <p>Response for Publish action.</p>
+/// see [Sns::publish]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublishResponse {
@@ -1632,6 +1906,7 @@ impl PublishResponseDeserializer {
     }
 }
 /// <p>Input for RemovePermission action.</p>
+/// see [Sns::remove_permission]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionInput {
@@ -1656,6 +1931,7 @@ impl RemovePermissionInputSerializer {
 }
 
 /// <p>Input for SetEndpointAttributes action.</p>
+/// see [Sns::set_endpoint_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetEndpointAttributesInput {
@@ -1684,6 +1960,7 @@ impl SetEndpointAttributesInputSerializer {
 }
 
 /// <p>Input for SetPlatformApplicationAttributes action.</p>
+/// see [Sns::set_platform_application_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPlatformApplicationAttributesInput {
@@ -1715,6 +1992,7 @@ impl SetPlatformApplicationAttributesInputSerializer {
 }
 
 /// <p>The input for the SetSMSAttributes action.</p>
+/// see [Sns::set_sms_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSMSAttributesInput {
@@ -1740,6 +2018,7 @@ impl SetSMSAttributesInputSerializer {
 }
 
 /// <p>The response for the SetSMSAttributes action.</p>
+/// see [Sns::set_sms_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetSMSAttributesResponse {}
@@ -1762,6 +2041,7 @@ impl SetSMSAttributesResponseDeserializer {
     }
 }
 /// <p>Input for SetSubscriptionAttributes action.</p>
+/// see [Sns::set_subscription_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubscriptionAttributesInput {
@@ -1797,6 +2077,7 @@ impl SetSubscriptionAttributesInputSerializer {
 }
 
 /// <p>Input for SetTopicAttributes action.</p>
+/// see [Sns::set_topic_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTopicAttributesInput {
@@ -1837,6 +2118,7 @@ impl StringDeserializer {
     }
 }
 /// <p>Input for Subscribe action.</p>
+/// see [Sns::subscribe]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeInput {
@@ -1883,6 +2165,7 @@ impl SubscribeInputSerializer {
 }
 
 /// <p>Response for Subscribe action.</p>
+/// see [Sns::subscribe]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SubscribeResponse {
@@ -2124,6 +2407,7 @@ impl TagListSerializer {
     }
 }
 
+/// see [Sns::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2147,6 +2431,7 @@ impl TagResourceRequestSerializer {
     }
 }
 
+/// see [Sns::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2268,6 +2553,7 @@ impl TopicsListDeserializer {
     }
 }
 /// <p>Input for Unsubscribe action.</p>
+/// see [Sns::unsubscribe]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeInput {
@@ -2291,6 +2577,7 @@ impl UnsubscribeInputSerializer {
     }
 }
 
+/// see [Sns::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2314,6 +2601,7 @@ impl UntagResourceRequestSerializer {
     }
 }
 
+/// see [Sns::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -4873,7 +5161,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 #[async_trait]
-pub trait Sns {
+pub trait Sns: Clone + Sync + Send + 'static {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
     async fn add_permission(
         &self,
@@ -4970,11 +5258,33 @@ pub trait Sns {
         RusotoError<ListEndpointsByPlatformApplicationError>,
     >;
 
+    /// Auto-paginating version of `list_endpoints_by_platform_application`
+    fn list_endpoints_by_platform_application_pages<'a>(
+        &'a self,
+        mut input: ListEndpointsByPlatformApplicationInput,
+    ) -> RusotoStream<'a, String, ListEndpointsByPlatformApplicationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_endpoints_by_platform_application(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     async fn list_phone_numbers_opted_out(
         &self,
         input: ListPhoneNumbersOptedOutInput,
     ) -> Result<ListPhoneNumbersOptedOutResponse, RusotoError<ListPhoneNumbersOptedOutError>>;
+
+    /// Auto-paginating version of `list_phone_numbers_opted_out`
+    fn list_phone_numbers_opted_out_pages<'a>(
+        &'a self,
+        mut input: ListPhoneNumbersOptedOutInput,
+    ) -> RusotoStream<'a, String, ListPhoneNumbersOptedOutError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_phone_numbers_opted_out(input.clone())
+        }))
+    }
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM (Firebase Cloud Messaging). The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
     async fn list_platform_applications(
@@ -4982,17 +5292,50 @@ pub trait Sns {
         input: ListPlatformApplicationsInput,
     ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>>;
 
+    /// Auto-paginating version of `list_platform_applications`
+    fn list_platform_applications_pages<'a>(
+        &'a self,
+        mut input: ListPlatformApplicationsInput,
+    ) -> RusotoStream<'a, PlatformApplication, ListPlatformApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_platform_applications(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     async fn list_subscriptions(
         &self,
         input: ListSubscriptionsInput,
     ) -> Result<ListSubscriptionsResponse, RusotoError<ListSubscriptionsError>>;
 
+    /// Auto-paginating version of `list_subscriptions`
+    fn list_subscriptions_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionsInput,
+    ) -> RusotoStream<'a, Subscription, ListSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscriptions(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     async fn list_subscriptions_by_topic(
         &self,
         input: ListSubscriptionsByTopicInput,
     ) -> Result<ListSubscriptionsByTopicResponse, RusotoError<ListSubscriptionsByTopicError>>;
+
+    /// Auto-paginating version of `list_subscriptions_by_topic`
+    fn list_subscriptions_by_topic_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionsByTopicInput,
+    ) -> RusotoStream<'a, Subscription, ListSubscriptionsByTopicError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscriptions_by_topic(input.clone())
+        }))
+    }
 
     /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
     async fn list_tags_for_resource(
@@ -5005,6 +5348,17 @@ pub trait Sns {
         &self,
         input: ListTopicsInput,
     ) -> Result<ListTopicsResponse, RusotoError<ListTopicsError>>;
+
+    /// Auto-paginating version of `list_topics`
+    fn list_topics_pages<'a>(
+        &'a self,
+        mut input: ListTopicsInput,
+    ) -> RusotoStream<'a, Topic, ListTopicsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_topics(input.clone())
+        }))
+    }
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     async fn opt_in_phone_number(

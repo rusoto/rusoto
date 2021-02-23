@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -186,6 +190,7 @@ pub struct ApprovalStateChangedEventMetadata {
     pub revision_id: Option<String>,
 }
 
+/// see [CodeCommit::associate_approval_rule_template_with_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovalRuleTemplateWithRepositoryInput {
@@ -215,6 +220,7 @@ pub struct CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError {
     pub repository_name: Option<String>,
 }
 
+/// see [CodeCommit::batch_associate_approval_rule_template_with_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
@@ -226,6 +232,7 @@ pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
     pub repository_names: Vec<String>,
 }
 
+/// see [CodeCommit::batch_associate_approval_rule_template_with_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesOutput {
@@ -252,6 +259,7 @@ pub struct CodeCommitBatchDescribeMergeConflictsError {
     pub message: String,
 }
 
+/// see [CodeCommit::batch_describe_merge_conflicts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeMergeConflictsInput {
@@ -293,6 +301,7 @@ pub struct BatchDescribeMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::batch_describe_merge_conflicts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDescribeMergeConflictsOutput {
@@ -337,6 +346,7 @@ pub struct CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError 
     pub repository_name: Option<String>,
 }
 
+/// see [CodeCommit::batch_disassociate_approval_rule_template_from_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
@@ -348,6 +358,7 @@ pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
     pub repository_names: Vec<String>,
 }
 
+/// see [CodeCommit::batch_disassociate_approval_rule_template_from_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput {
@@ -377,6 +388,7 @@ pub struct CodeCommitBatchGetCommitsError {
     pub error_message: Option<String>,
 }
 
+/// see [CodeCommit::batch_get_commits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCommitsInput {
@@ -388,6 +400,7 @@ pub struct BatchGetCommitsInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::batch_get_commits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetCommitsOutput {
@@ -402,6 +415,7 @@ pub struct BatchGetCommitsOutput {
 }
 
 /// <p>Represents the input of a batch get repositories operation.</p>
+/// see [CodeCommit::batch_get_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetRepositoriesInput {
@@ -411,6 +425,7 @@ pub struct BatchGetRepositoriesInput {
 }
 
 /// <p>Represents the output of a batch get repositories operation.</p>
+/// see [CodeCommit::batch_get_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetRepositoriesOutput {
@@ -686,6 +701,7 @@ pub struct ConflictResolution {
     pub set_file_modes: Option<Vec<SetFileModeEntry>>,
 }
 
+/// see [CodeCommit::create_approval_rule_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApprovalRuleTemplateInput {
@@ -701,6 +717,7 @@ pub struct CreateApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
+/// see [CodeCommit::create_approval_rule_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApprovalRuleTemplateOutput {
@@ -710,6 +727,7 @@ pub struct CreateApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a create branch operation.</p>
+/// see [CodeCommit::create_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchInput {
@@ -724,6 +742,7 @@ pub struct CreateBranchInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::create_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommitInput {
@@ -767,6 +786,7 @@ pub struct CreateCommitInput {
     pub set_file_modes: Option<Vec<SetFileModeEntry>>,
 }
 
+/// see [CodeCommit::create_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCommitOutput {
@@ -792,6 +812,7 @@ pub struct CreateCommitOutput {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::create_pull_request_approval_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestApprovalRuleInput {
@@ -806,6 +827,7 @@ pub struct CreatePullRequestApprovalRuleInput {
     pub pull_request_id: String,
 }
 
+/// see [CodeCommit::create_pull_request_approval_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePullRequestApprovalRuleOutput {
@@ -814,6 +836,7 @@ pub struct CreatePullRequestApprovalRuleOutput {
     pub approval_rule: ApprovalRule,
 }
 
+/// see [CodeCommit::create_pull_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestInput {
@@ -833,6 +856,7 @@ pub struct CreatePullRequestInput {
     pub title: String,
 }
 
+/// see [CodeCommit::create_pull_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePullRequestOutput {
@@ -842,6 +866,7 @@ pub struct CreatePullRequestOutput {
 }
 
 /// <p>Represents the input of a create repository operation.</p>
+/// see [CodeCommit::create_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryInput {
@@ -859,6 +884,7 @@ pub struct CreateRepositoryInput {
 }
 
 /// <p>Represents the output of a create repository operation.</p>
+/// see [CodeCommit::create_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRepositoryOutput {
@@ -868,6 +894,7 @@ pub struct CreateRepositoryOutput {
     pub repository_metadata: Option<RepositoryMetadata>,
 }
 
+/// see [CodeCommit::create_unreferenced_merge_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUnreferencedMergeCommitInput {
@@ -913,6 +940,7 @@ pub struct CreateUnreferencedMergeCommitInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::create_unreferenced_merge_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUnreferencedMergeCommitOutput {
@@ -926,6 +954,7 @@ pub struct CreateUnreferencedMergeCommitOutput {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::delete_approval_rule_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApprovalRuleTemplateInput {
@@ -934,6 +963,7 @@ pub struct DeleteApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
+/// see [CodeCommit::delete_approval_rule_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApprovalRuleTemplateOutput {
@@ -943,6 +973,7 @@ pub struct DeleteApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a delete branch operation.</p>
+/// see [CodeCommit::delete_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchInput {
@@ -955,6 +986,7 @@ pub struct DeleteBranchInput {
 }
 
 /// <p>Represents the output of a delete branch operation.</p>
+/// see [CodeCommit::delete_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchOutput {
@@ -964,6 +996,7 @@ pub struct DeleteBranchOutput {
     pub deleted_branch: Option<BranchInfo>,
 }
 
+/// see [CodeCommit::delete_comment_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentContentInput {
@@ -972,6 +1005,7 @@ pub struct DeleteCommentContentInput {
     pub comment_id: String,
 }
 
+/// see [CodeCommit::delete_comment_content]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCommentContentOutput {
@@ -990,6 +1024,7 @@ pub struct DeleteFileEntry {
     pub file_path: String,
 }
 
+/// see [CodeCommit::delete_file]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileInput {
@@ -1023,6 +1058,7 @@ pub struct DeleteFileInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::delete_file]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileOutput {
@@ -1040,6 +1076,7 @@ pub struct DeleteFileOutput {
     pub tree_id: String,
 }
 
+/// see [CodeCommit::delete_pull_request_approval_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePullRequestApprovalRuleInput {
@@ -1051,6 +1088,7 @@ pub struct DeletePullRequestApprovalRuleInput {
     pub pull_request_id: String,
 }
 
+/// see [CodeCommit::delete_pull_request_approval_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePullRequestApprovalRuleOutput {
@@ -1060,6 +1098,7 @@ pub struct DeletePullRequestApprovalRuleOutput {
 }
 
 /// <p>Represents the input of a delete repository operation.</p>
+/// see [CodeCommit::delete_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryInput {
@@ -1069,6 +1108,7 @@ pub struct DeleteRepositoryInput {
 }
 
 /// <p>Represents the output of a delete repository operation.</p>
+/// see [CodeCommit::delete_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryOutput {
@@ -1078,6 +1118,7 @@ pub struct DeleteRepositoryOutput {
     pub repository_id: Option<String>,
 }
 
+/// see [CodeCommit::describe_merge_conflicts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMergeConflictsInput {
@@ -1114,6 +1155,7 @@ pub struct DescribeMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::describe_merge_conflicts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMergeConflictsOutput {
@@ -1139,6 +1181,7 @@ pub struct DescribeMergeConflictsOutput {
     pub source_commit_id: String,
 }
 
+/// see [CodeCommit::describe_pull_request_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePullRequestEventsInput {
@@ -1163,6 +1206,23 @@ pub struct DescribePullRequestEventsInput {
     pub pull_request_id: String,
 }
 
+impl Paged for DescribePullRequestEventsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePullRequestEventsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeCommit::describe_pull_request_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePullRequestEventsOutput {
@@ -1173,6 +1233,28 @@ pub struct DescribePullRequestEventsOutput {
     /// <p>Information about the pull request events.</p>
     #[serde(rename = "pullRequestEvents")]
     pub pull_request_events: Vec<PullRequestEvent>,
+}
+
+impl Paged for DescribePullRequestEventsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribePullRequestEventsOutput {
+    type Item = PullRequestEvent;
+
+    fn into_pagination_page(self) -> Vec<PullRequestEvent> {
+        self.pull_request_events
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Returns information about a set of differences for a commit specifier.</p>
@@ -1193,6 +1275,7 @@ pub struct Difference {
     pub change_type: Option<String>,
 }
 
+/// see [CodeCommit::disassociate_approval_rule_template_from_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
@@ -1204,6 +1287,7 @@ pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::evaluate_pull_request_approval_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluatePullRequestApprovalRulesInput {
@@ -1215,6 +1299,7 @@ pub struct EvaluatePullRequestApprovalRulesInput {
     pub revision_id: String,
 }
 
+/// see [CodeCommit::evaluate_pull_request_approval_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluatePullRequestApprovalRulesOutput {
@@ -1339,6 +1424,7 @@ pub struct Folder {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::get_approval_rule_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApprovalRuleTemplateInput {
@@ -1347,6 +1433,7 @@ pub struct GetApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
+/// see [CodeCommit::get_approval_rule_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApprovalRuleTemplateOutput {
@@ -1356,6 +1443,7 @@ pub struct GetApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a get blob operation.</p>
+/// see [CodeCommit::get_blob]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlobInput {
@@ -1368,6 +1456,7 @@ pub struct GetBlobInput {
 }
 
 /// <p>Represents the output of a get blob operation.</p>
+/// see [CodeCommit::get_blob]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlobOutput {
@@ -1382,6 +1471,7 @@ pub struct GetBlobOutput {
 }
 
 /// <p>Represents the input of a get branch operation.</p>
+/// see [CodeCommit::get_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchInput {
@@ -1396,6 +1486,7 @@ pub struct GetBranchInput {
 }
 
 /// <p>Represents the output of a get branch operation.</p>
+/// see [CodeCommit::get_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchOutput {
@@ -1405,6 +1496,7 @@ pub struct GetBranchOutput {
     pub branch: Option<BranchInfo>,
 }
 
+/// see [CodeCommit::get_comment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentInput {
@@ -1413,6 +1505,7 @@ pub struct GetCommentInput {
     pub comment_id: String,
 }
 
+/// see [CodeCommit::get_comment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentOutput {
@@ -1422,6 +1515,7 @@ pub struct GetCommentOutput {
     pub comment: Option<Comment>,
 }
 
+/// see [CodeCommit::get_comment_reactions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentReactionsInput {
@@ -1442,6 +1536,7 @@ pub struct GetCommentReactionsInput {
     pub reaction_user_arn: Option<String>,
 }
 
+/// see [CodeCommit::get_comment_reactions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentReactionsOutput {
@@ -1454,6 +1549,7 @@ pub struct GetCommentReactionsOutput {
     pub reactions_for_comment: Vec<ReactionForComment>,
 }
 
+/// see [CodeCommit::get_comments_for_compared_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForComparedCommitInput {
@@ -1477,6 +1573,23 @@ pub struct GetCommentsForComparedCommitInput {
     pub repository_name: String,
 }
 
+impl Paged for GetCommentsForComparedCommitInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCommentsForComparedCommitInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeCommit::get_comments_for_compared_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForComparedCommitOutput {
@@ -1490,6 +1603,29 @@ pub struct GetCommentsForComparedCommitOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetCommentsForComparedCommitOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetCommentsForComparedCommitOutput {
+    type Item = CommentsForComparedCommit;
+
+    fn into_pagination_page(self) -> Vec<CommentsForComparedCommit> {
+        self.comments_for_compared_commit_data.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeCommit::get_comments_for_pull_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForPullRequestInput {
@@ -1518,6 +1654,23 @@ pub struct GetCommentsForPullRequestInput {
     pub repository_name: Option<String>,
 }
 
+impl Paged for GetCommentsForPullRequestInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCommentsForPullRequestInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeCommit::get_comments_for_pull_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForPullRequestOutput {
@@ -1531,7 +1684,30 @@ pub struct GetCommentsForPullRequestOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetCommentsForPullRequestOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetCommentsForPullRequestOutput {
+    type Item = CommentsForPullRequest;
+
+    fn into_pagination_page(self) -> Vec<CommentsForPullRequest> {
+        self.comments_for_pull_request_data.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Represents the input of a get commit operation.</p>
+/// see [CodeCommit::get_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommitInput {
@@ -1544,6 +1720,7 @@ pub struct GetCommitInput {
 }
 
 /// <p>Represents the output of a get commit operation.</p>
+/// see [CodeCommit::get_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommitOutput {
@@ -1552,6 +1729,7 @@ pub struct GetCommitOutput {
     pub commit: Commit,
 }
 
+/// see [CodeCommit::get_differences]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDifferencesInput {
@@ -1583,6 +1761,23 @@ pub struct GetDifferencesInput {
     pub repository_name: String,
 }
 
+impl Paged for GetDifferencesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDifferencesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeCommit::get_differences]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDifferencesOutput {
@@ -1596,6 +1791,29 @@ pub struct GetDifferencesOutput {
     pub differences: Option<Vec<Difference>>,
 }
 
+impl Paged for GetDifferencesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetDifferencesOutput {
+    type Item = Difference;
+
+    fn into_pagination_page(self) -> Vec<Difference> {
+        self.differences.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeCommit::get_file]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileInput {
@@ -1611,6 +1829,7 @@ pub struct GetFileInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::get_file]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileOutput {
@@ -1639,6 +1858,7 @@ pub struct GetFileOutput {
     pub file_size: i64,
 }
 
+/// see [CodeCommit::get_folder]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderInput {
@@ -1654,6 +1874,7 @@ pub struct GetFolderInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::get_folder]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderOutput {
@@ -1685,6 +1906,7 @@ pub struct GetFolderOutput {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::get_merge_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeCommitInput {
@@ -1707,6 +1929,7 @@ pub struct GetMergeCommitInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::get_merge_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeCommitOutput {
@@ -1728,6 +1951,7 @@ pub struct GetMergeCommitOutput {
     pub source_commit_id: Option<String>,
 }
 
+/// see [CodeCommit::get_merge_conflicts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeConflictsInput {
@@ -1761,6 +1985,7 @@ pub struct GetMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::get_merge_conflicts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeConflictsOutput {
@@ -1786,6 +2011,7 @@ pub struct GetMergeConflictsOutput {
     pub source_commit_id: String,
 }
 
+/// see [CodeCommit::get_merge_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeOptionsInput {
@@ -1808,6 +2034,7 @@ pub struct GetMergeOptionsInput {
     pub source_commit_specifier: String,
 }
 
+/// see [CodeCommit::get_merge_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeOptionsOutput {
@@ -1825,6 +2052,7 @@ pub struct GetMergeOptionsOutput {
     pub source_commit_id: String,
 }
 
+/// see [CodeCommit::get_pull_request_approval_states]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestApprovalStatesInput {
@@ -1836,6 +2064,7 @@ pub struct GetPullRequestApprovalStatesInput {
     pub revision_id: String,
 }
 
+/// see [CodeCommit::get_pull_request_approval_states]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestApprovalStatesOutput {
@@ -1845,6 +2074,7 @@ pub struct GetPullRequestApprovalStatesOutput {
     pub approvals: Option<Vec<Approval>>,
 }
 
+/// see [CodeCommit::get_pull_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestInput {
@@ -1853,6 +2083,7 @@ pub struct GetPullRequestInput {
     pub pull_request_id: String,
 }
 
+/// see [CodeCommit::get_pull_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestOutput {
@@ -1861,6 +2092,7 @@ pub struct GetPullRequestOutput {
     pub pull_request: PullRequest,
 }
 
+/// see [CodeCommit::get_pull_request_override_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestOverrideStateInput {
@@ -1872,6 +2104,7 @@ pub struct GetPullRequestOverrideStateInput {
     pub revision_id: String,
 }
 
+/// see [CodeCommit::get_pull_request_override_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestOverrideStateOutput {
@@ -1886,6 +2119,7 @@ pub struct GetPullRequestOverrideStateOutput {
 }
 
 /// <p>Represents the input of a get repository operation.</p>
+/// see [CodeCommit::get_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryInput {
@@ -1895,6 +2129,7 @@ pub struct GetRepositoryInput {
 }
 
 /// <p>Represents the output of a get repository operation.</p>
+/// see [CodeCommit::get_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryOutput {
@@ -1905,6 +2140,7 @@ pub struct GetRepositoryOutput {
 }
 
 /// <p>Represents the input of a get repository triggers operation.</p>
+/// see [CodeCommit::get_repository_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryTriggersInput {
@@ -1914,6 +2150,7 @@ pub struct GetRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a get repository triggers operation.</p>
+/// see [CodeCommit::get_repository_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryTriggersOutput {
@@ -1945,6 +2182,7 @@ pub struct IsBinaryFile {
     pub source: Option<bool>,
 }
 
+/// see [CodeCommit::list_approval_rule_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovalRuleTemplatesInput {
@@ -1958,6 +2196,7 @@ pub struct ListApprovalRuleTemplatesInput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeCommit::list_approval_rule_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApprovalRuleTemplatesOutput {
@@ -1971,6 +2210,7 @@ pub struct ListApprovalRuleTemplatesOutput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeCommit::list_associated_approval_rule_templates_for_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
@@ -1987,6 +2227,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::list_associated_approval_rule_templates_for_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
@@ -2001,6 +2242,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
 }
 
 /// <p>Represents the input of a list branches operation.</p>
+/// see [CodeCommit::list_branches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesInput {
@@ -2013,7 +2255,24 @@ pub struct ListBranchesInput {
     pub repository_name: String,
 }
 
+impl Paged for ListBranchesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBranchesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Represents the output of a list branches operation.</p>
+/// see [CodeCommit::list_branches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesOutput {
@@ -2027,6 +2286,29 @@ pub struct ListBranchesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBranchesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListBranchesOutput {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.branches.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeCommit::list_pull_requests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPullRequestsInput {
@@ -2051,6 +2333,23 @@ pub struct ListPullRequestsInput {
     pub repository_name: String,
 }
 
+impl Paged for ListPullRequestsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPullRequestsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeCommit::list_pull_requests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPullRequestsOutput {
@@ -2063,6 +2362,29 @@ pub struct ListPullRequestsOutput {
     pub pull_request_ids: Vec<String>,
 }
 
+impl Paged for ListPullRequestsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPullRequestsOutput {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.pull_request_ids
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeCommit::list_repositories_for_approval_rule_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateInput {
@@ -2079,6 +2401,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateInput {
     pub next_token: Option<String>,
 }
 
+/// see [CodeCommit::list_repositories_for_approval_rule_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateOutput {
@@ -2093,6 +2416,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a list repositories operation.</p>
+/// see [CodeCommit::list_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesInput {
@@ -2110,7 +2434,24 @@ pub struct ListRepositoriesInput {
     pub sort_by: Option<String>,
 }
 
+impl Paged for ListRepositoriesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRepositoriesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Represents the output of a list repositories operation.</p>
+/// see [CodeCommit::list_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoriesOutput {
@@ -2124,6 +2465,29 @@ pub struct ListRepositoriesOutput {
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
 }
 
+impl Paged for ListRepositoriesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRepositoriesOutput {
+    type Item = RepositoryNameIdPair;
+
+    fn into_pagination_page(self) -> Vec<RepositoryNameIdPair> {
+        self.repositories.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeCommit::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -2136,6 +2500,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [CodeCommit::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -2166,6 +2531,7 @@ pub struct Location {
     pub relative_file_version: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_fast_forward]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByFastForwardInput {
@@ -2184,6 +2550,7 @@ pub struct MergeBranchesByFastForwardInput {
     pub target_branch: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_fast_forward]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByFastForwardOutput {
@@ -2197,6 +2564,7 @@ pub struct MergeBranchesByFastForwardOutput {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_squash]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesBySquashInput {
@@ -2243,6 +2611,7 @@ pub struct MergeBranchesBySquashInput {
     pub target_branch: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_squash]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesBySquashOutput {
@@ -2256,6 +2625,7 @@ pub struct MergeBranchesBySquashOutput {
     pub tree_id: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_three_way]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByThreeWayInput {
@@ -2302,6 +2672,7 @@ pub struct MergeBranchesByThreeWayInput {
     pub target_branch: Option<String>,
 }
 
+/// see [CodeCommit::merge_branches_by_three_way]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByThreeWayOutput {
@@ -2391,6 +2762,7 @@ pub struct MergeOperations {
     pub source: Option<String>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_fast_forward]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByFastForwardInput {
@@ -2406,6 +2778,7 @@ pub struct MergePullRequestByFastForwardInput {
     pub source_commit_id: Option<String>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_fast_forward]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByFastForwardOutput {
@@ -2415,6 +2788,7 @@ pub struct MergePullRequestByFastForwardOutput {
     pub pull_request: Option<PullRequest>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_squash]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestBySquashInput {
@@ -2458,6 +2832,7 @@ pub struct MergePullRequestBySquashInput {
     pub source_commit_id: Option<String>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_squash]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestBySquashOutput {
@@ -2466,6 +2841,7 @@ pub struct MergePullRequestBySquashOutput {
     pub pull_request: Option<PullRequest>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_three_way]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByThreeWayInput {
@@ -2509,6 +2885,7 @@ pub struct MergePullRequestByThreeWayInput {
     pub source_commit_id: Option<String>,
 }
 
+/// see [CodeCommit::merge_pull_request_by_three_way]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByThreeWayOutput {
@@ -2549,6 +2926,7 @@ pub struct OriginApprovalRuleTemplate {
     pub approval_rule_template_name: Option<String>,
 }
 
+/// see [CodeCommit::override_pull_request_approval_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OverridePullRequestApprovalRulesInput {
@@ -2563,6 +2941,7 @@ pub struct OverridePullRequestApprovalRulesInput {
     pub revision_id: String,
 }
 
+/// see [CodeCommit::post_comment_for_compared_commit]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForComparedCommitInput {
@@ -2589,6 +2968,7 @@ pub struct PostCommentForComparedCommitInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::post_comment_for_compared_commit]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForComparedCommitOutput {
@@ -2622,6 +3002,7 @@ pub struct PostCommentForComparedCommitOutput {
     pub repository_name: Option<String>,
 }
 
+/// see [CodeCommit::post_comment_for_pull_request]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForPullRequestInput {
@@ -2650,6 +3031,7 @@ pub struct PostCommentForPullRequestInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::post_comment_for_pull_request]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForPullRequestOutput {
@@ -2687,6 +3069,7 @@ pub struct PostCommentForPullRequestOutput {
     pub repository_name: Option<String>,
 }
 
+/// see [CodeCommit::post_comment_reply]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentReplyInput {
@@ -2702,6 +3085,7 @@ pub struct PostCommentReplyInput {
     pub in_reply_to: String,
 }
 
+/// see [CodeCommit::post_comment_reply]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentReplyOutput {
@@ -2919,6 +3303,7 @@ pub struct PullRequestTarget {
     pub source_reference: Option<String>,
 }
 
+/// see [CodeCommit::put_comment_reaction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutCommentReactionInput {
@@ -2956,6 +3341,7 @@ pub struct PutFileEntry {
     pub source_file: Option<SourceFileSpecifier>,
 }
 
+/// see [CodeCommit::put_file]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileInput {
@@ -2998,6 +3384,7 @@ pub struct PutFileInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::put_file]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutFileOutput {
@@ -3013,6 +3400,7 @@ pub struct PutFileOutput {
 }
 
 /// <p>Represents the input of a put repository triggers operation.</p>
+/// see [CodeCommit::put_repository_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRepositoryTriggersInput {
@@ -3025,6 +3413,7 @@ pub struct PutRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a put repository triggers operation.</p>
+/// see [CodeCommit::put_repository_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRepositoryTriggersOutput {
@@ -3256,6 +3645,7 @@ pub struct SymbolicLink {
     pub relative_path: Option<String>,
 }
 
+/// see [CodeCommit::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -3284,6 +3674,7 @@ pub struct Target {
 }
 
 /// <p>Represents the input of a test repository triggers operation.</p>
+/// see [CodeCommit::test_repository_triggers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRepositoryTriggersInput {
@@ -3296,6 +3687,7 @@ pub struct TestRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a test repository triggers operation.</p>
+/// see [CodeCommit::test_repository_triggers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRepositoryTriggersOutput {
@@ -3309,6 +3701,7 @@ pub struct TestRepositoryTriggersOutput {
     pub successful_executions: Option<Vec<String>>,
 }
 
+/// see [CodeCommit::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -3320,6 +3713,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodeCommit::update_approval_rule_template_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateContentInput {
@@ -3335,6 +3729,7 @@ pub struct UpdateApprovalRuleTemplateContentInput {
     pub new_rule_content: String,
 }
 
+/// see [CodeCommit::update_approval_rule_template_content]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateContentOutput {
@@ -3342,6 +3737,7 @@ pub struct UpdateApprovalRuleTemplateContentOutput {
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
+/// see [CodeCommit::update_approval_rule_template_description]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionInput {
@@ -3353,6 +3749,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionInput {
     pub approval_rule_template_name: String,
 }
 
+/// see [CodeCommit::update_approval_rule_template_description]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionOutput {
@@ -3361,6 +3758,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionOutput {
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
+/// see [CodeCommit::update_approval_rule_template_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateNameInput {
@@ -3372,6 +3770,7 @@ pub struct UpdateApprovalRuleTemplateNameInput {
     pub old_approval_rule_template_name: String,
 }
 
+/// see [CodeCommit::update_approval_rule_template_name]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateNameOutput {
@@ -3380,6 +3779,7 @@ pub struct UpdateApprovalRuleTemplateNameOutput {
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
+/// see [CodeCommit::update_comment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCommentInput {
@@ -3391,6 +3791,7 @@ pub struct UpdateCommentInput {
     pub content: String,
 }
 
+/// see [CodeCommit::update_comment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCommentOutput {
@@ -3401,6 +3802,7 @@ pub struct UpdateCommentOutput {
 }
 
 /// <p>Represents the input of an update default branch operation.</p>
+/// see [CodeCommit::update_default_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDefaultBranchInput {
@@ -3412,6 +3814,7 @@ pub struct UpdateDefaultBranchInput {
     pub repository_name: String,
 }
 
+/// see [CodeCommit::update_pull_request_approval_rule_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalRuleContentInput {
@@ -3430,6 +3833,7 @@ pub struct UpdatePullRequestApprovalRuleContentInput {
     pub pull_request_id: String,
 }
 
+/// see [CodeCommit::update_pull_request_approval_rule_content]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestApprovalRuleContentOutput {
@@ -3438,6 +3842,7 @@ pub struct UpdatePullRequestApprovalRuleContentOutput {
     pub approval_rule: ApprovalRule,
 }
 
+/// see [CodeCommit::update_pull_request_approval_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalStateInput {
@@ -3452,6 +3857,7 @@ pub struct UpdatePullRequestApprovalStateInput {
     pub revision_id: String,
 }
 
+/// see [CodeCommit::update_pull_request_description]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestDescriptionInput {
@@ -3463,6 +3869,7 @@ pub struct UpdatePullRequestDescriptionInput {
     pub pull_request_id: String,
 }
 
+/// see [CodeCommit::update_pull_request_description]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestDescriptionOutput {
@@ -3471,6 +3878,7 @@ pub struct UpdatePullRequestDescriptionOutput {
     pub pull_request: PullRequest,
 }
 
+/// see [CodeCommit::update_pull_request_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestStatusInput {
@@ -3482,6 +3890,7 @@ pub struct UpdatePullRequestStatusInput {
     pub pull_request_status: String,
 }
 
+/// see [CodeCommit::update_pull_request_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestStatusOutput {
@@ -3490,6 +3899,7 @@ pub struct UpdatePullRequestStatusOutput {
     pub pull_request: PullRequest,
 }
 
+/// see [CodeCommit::update_pull_request_title]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestTitleInput {
@@ -3501,6 +3911,7 @@ pub struct UpdatePullRequestTitleInput {
     pub title: String,
 }
 
+/// see [CodeCommit::update_pull_request_title]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestTitleOutput {
@@ -3510,6 +3921,7 @@ pub struct UpdatePullRequestTitleOutput {
 }
 
 /// <p>Represents the input of an update repository description operation.</p>
+/// see [CodeCommit::update_repository_description]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryDescriptionInput {
@@ -3523,6 +3935,7 @@ pub struct UpdateRepositoryDescriptionInput {
 }
 
 /// <p>Represents the input of an update repository description operation.</p>
+/// see [CodeCommit::update_repository_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryNameInput {
@@ -14512,7 +14925,7 @@ impl fmt::Display for UpdateRepositoryNameError {
 impl Error for UpdateRepositoryNameError {}
 /// Trait representing the capabilities of the CodeCommit API. CodeCommit clients implement this trait.
 #[async_trait]
-pub trait CodeCommit {
+pub trait CodeCommit: Clone + Sync + Send + 'static {
     /// <p>Creates an association between an approval rule template and a specified repository. Then, the next time a pull request is created in the repository where the destination reference (if specified) matches the destination reference (branch) for the pull request, an approval rule that matches the template conditions is automatically created for that pull request. If no destination references are specified in the template, an approval rule that matches the template contents is created for all pull requests in that repository.</p>
     async fn associate_approval_rule_template_with_repository(
         &self,
@@ -14645,6 +15058,17 @@ pub trait CodeCommit {
         input: DescribePullRequestEventsInput,
     ) -> Result<DescribePullRequestEventsOutput, RusotoError<DescribePullRequestEventsError>>;
 
+    /// Auto-paginating version of `describe_pull_request_events`
+    fn describe_pull_request_events_pages<'a>(
+        &'a self,
+        mut input: DescribePullRequestEventsInput,
+    ) -> RusotoStream<'a, PullRequestEvent, DescribePullRequestEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_pull_request_events(input.clone())
+        }))
+    }
+
     /// <p>Removes the association between a template and a repository so that approval rules based on the template are not automatically created when pull requests are created in the specified repository. This does not delete any approval rules previously created for pull requests through the template association.</p>
     async fn disassociate_approval_rule_template_from_repository(
         &self,
@@ -14696,11 +15120,33 @@ pub trait CodeCommit {
         input: GetCommentsForComparedCommitInput,
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>;
 
+    /// Auto-paginating version of `get_comments_for_compared_commit`
+    fn get_comments_for_compared_commit_pages<'a>(
+        &'a self,
+        mut input: GetCommentsForComparedCommitInput,
+    ) -> RusotoStream<'a, CommentsForComparedCommit, GetCommentsForComparedCommitError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_comments_for_compared_commit(input.clone())
+        }))
+    }
+
     /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_pull_request(
         &self,
         input: GetCommentsForPullRequestInput,
     ) -> Result<GetCommentsForPullRequestOutput, RusotoError<GetCommentsForPullRequestError>>;
+
+    /// Auto-paginating version of `get_comments_for_pull_request`
+    fn get_comments_for_pull_request_pages<'a>(
+        &'a self,
+        mut input: GetCommentsForPullRequestInput,
+    ) -> RusotoStream<'a, CommentsForPullRequest, GetCommentsForPullRequestError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_comments_for_pull_request(input.clone())
+        }))
+    }
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
     async fn get_commit(
@@ -14713,6 +15159,17 @@ pub trait CodeCommit {
         &self,
         input: GetDifferencesInput,
     ) -> Result<GetDifferencesOutput, RusotoError<GetDifferencesError>>;
+
+    /// Auto-paginating version of `get_differences`
+    fn get_differences_pages<'a>(
+        &'a self,
+        mut input: GetDifferencesInput,
+    ) -> RusotoStream<'a, Difference, GetDifferencesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_differences(input.clone())
+        }))
+    }
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
     async fn get_file(
@@ -14795,17 +15252,50 @@ pub trait CodeCommit {
         input: ListBranchesInput,
     ) -> Result<ListBranchesOutput, RusotoError<ListBranchesError>>;
 
+    /// Auto-paginating version of `list_branches`
+    fn list_branches_pages<'a>(
+        &'a self,
+        mut input: ListBranchesInput,
+    ) -> RusotoStream<'a, String, ListBranchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_branches(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
     async fn list_pull_requests(
         &self,
         input: ListPullRequestsInput,
     ) -> Result<ListPullRequestsOutput, RusotoError<ListPullRequestsError>>;
 
+    /// Auto-paginating version of `list_pull_requests`
+    fn list_pull_requests_pages<'a>(
+        &'a self,
+        mut input: ListPullRequestsInput,
+    ) -> RusotoStream<'a, String, ListPullRequestsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pull_requests(input.clone())
+        }))
+    }
+
     /// <p>Gets information about one or more repositories.</p>
     async fn list_repositories(
         &self,
         input: ListRepositoriesInput,
     ) -> Result<ListRepositoriesOutput, RusotoError<ListRepositoriesError>>;
+
+    /// Auto-paginating version of `list_repositories`
+    fn list_repositories_pages<'a>(
+        &'a self,
+        mut input: ListRepositoriesInput,
+    ) -> RusotoStream<'a, RepositoryNameIdPair, ListRepositoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_repositories(input.clone())
+        }))
+    }
 
     /// <p>Lists all repositories associated with the specified approval rule template.</p>
     async fn list_repositories_for_approval_rule_template(

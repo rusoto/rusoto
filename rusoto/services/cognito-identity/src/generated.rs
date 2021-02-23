@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -69,6 +73,7 @@ pub struct CognitoIdentityProvider {
 }
 
 /// <p>Input to the CreateIdentityPool action.</p>
+/// see [CognitoIdentity::create_identity_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIdentityPoolInput {
@@ -131,6 +136,7 @@ pub struct Credentials {
 }
 
 /// <p>Input to the <code>DeleteIdentities</code> action.</p>
+/// see [CognitoIdentity::delete_identities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentitiesInput {
@@ -140,6 +146,7 @@ pub struct DeleteIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>DeleteIdentities</code> operation.</p>
+/// see [CognitoIdentity::delete_identities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIdentitiesResponse {
@@ -150,6 +157,7 @@ pub struct DeleteIdentitiesResponse {
 }
 
 /// <p>Input to the DeleteIdentityPool action.</p>
+/// see [CognitoIdentity::delete_identity_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityPoolInput {
@@ -159,6 +167,7 @@ pub struct DeleteIdentityPoolInput {
 }
 
 /// <p>Input to the <code>DescribeIdentity</code> action.</p>
+/// see [CognitoIdentity::describe_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityInput {
@@ -168,6 +177,7 @@ pub struct DescribeIdentityInput {
 }
 
 /// <p>Input to the DescribeIdentityPool action.</p>
+/// see [CognitoIdentity::describe_identity_pool]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityPoolInput {
@@ -177,6 +187,7 @@ pub struct DescribeIdentityPoolInput {
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
+/// see [CognitoIdentity::get_credentials_for_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCredentialsForIdentityInput {
@@ -194,6 +205,7 @@ pub struct GetCredentialsForIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetCredentialsForIdentity</code> operation.</p>
+/// see [CognitoIdentity::get_credentials_for_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCredentialsForIdentityResponse {
@@ -208,6 +220,7 @@ pub struct GetCredentialsForIdentityResponse {
 }
 
 /// <p>Input to the GetId action.</p>
+/// see [CognitoIdentity::get_id]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdInput {
@@ -225,6 +238,7 @@ pub struct GetIdInput {
 }
 
 /// <p>Returned in response to a GetId request.</p>
+/// see [CognitoIdentity::get_id]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdResponse {
@@ -235,6 +249,7 @@ pub struct GetIdResponse {
 }
 
 /// <p>Input to the <code>GetIdentityPoolRoles</code> action.</p>
+/// see [CognitoIdentity::get_identity_pool_roles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityPoolRolesInput {
@@ -244,6 +259,7 @@ pub struct GetIdentityPoolRolesInput {
 }
 
 /// <p>Returned in response to a successful <code>GetIdentityPoolRoles</code> operation.</p>
+/// see [CognitoIdentity::get_identity_pool_roles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityPoolRolesResponse {
@@ -262,6 +278,7 @@ pub struct GetIdentityPoolRolesResponse {
 }
 
 /// <p>Input to the <code>GetOpenIdTokenForDeveloperIdentity</code> action.</p>
+/// see [CognitoIdentity::get_open_id_token_for_developer_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityInput {
@@ -282,6 +299,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetOpenIdTokenForDeveloperIdentity</code> request.</p>
+/// see [CognitoIdentity::get_open_id_token_for_developer_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityResponse {
@@ -296,6 +314,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityResponse {
 }
 
 /// <p>Input to the GetOpenIdToken action.</p>
+/// see [CognitoIdentity::get_open_id_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenInput {
@@ -309,6 +328,7 @@ pub struct GetOpenIdTokenInput {
 }
 
 /// <p>Returned in response to a successful GetOpenIdToken request.</p>
+/// see [CognitoIdentity::get_open_id_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenResponse {
@@ -323,6 +343,7 @@ pub struct GetOpenIdTokenResponse {
 }
 
 /// <p>A description of the identity.</p>
+/// see [CognitoIdentity::describe_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityDescription {
@@ -345,6 +366,9 @@ pub struct IdentityDescription {
 }
 
 /// <p>An object representing an Amazon Cognito identity pool.</p>
+/// see [CognitoIdentity::create_identity_pool]
+/// see [CognitoIdentity::describe_identity_pool]
+/// see [CognitoIdentity::update_identity_pool]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IdentityPool {
     /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
@@ -401,6 +425,7 @@ pub struct IdentityPoolShortDescription {
 }
 
 /// <p>Input to the ListIdentities action.</p>
+/// see [CognitoIdentity::list_identities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentitiesInput {
@@ -421,6 +446,7 @@ pub struct ListIdentitiesInput {
 }
 
 /// <p>The response to a ListIdentities request.</p>
+/// see [CognitoIdentity::list_identities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentitiesResponse {
@@ -439,6 +465,7 @@ pub struct ListIdentitiesResponse {
 }
 
 /// <p>Input to the ListIdentityPools action.</p>
+/// see [CognitoIdentity::list_identity_pools]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityPoolsInput {
@@ -451,7 +478,24 @@ pub struct ListIdentityPoolsInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIdentityPoolsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIdentityPoolsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The result of a successful ListIdentityPools action.</p>
+/// see [CognitoIdentity::list_identity_pools]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityPoolsResponse {
@@ -465,6 +509,29 @@ pub struct ListIdentityPoolsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIdentityPoolsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListIdentityPoolsResponse {
+    type Item = IdentityPoolShortDescription;
+
+    fn into_pagination_page(self) -> Vec<IdentityPoolShortDescription> {
+        self.identity_pools.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CognitoIdentity::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -473,6 +540,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [CognitoIdentity::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -483,6 +551,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Input to the <code>LookupDeveloperIdentityInput</code> action.</p>
+/// see [CognitoIdentity::lookup_developer_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupDeveloperIdentityInput {
@@ -508,6 +577,7 @@ pub struct LookupDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>LookupDeveloperIdentity</code> action.</p>
+/// see [CognitoIdentity::lookup_developer_identity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupDeveloperIdentityResponse {
@@ -543,6 +613,7 @@ pub struct MappingRule {
 }
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
+/// see [CognitoIdentity::merge_developer_identities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeDeveloperIdentitiesInput {
@@ -561,6 +632,7 @@ pub struct MergeDeveloperIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>MergeDeveloperIdentities</code> action.</p>
+/// see [CognitoIdentity::merge_developer_identities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeDeveloperIdentitiesResponse {
@@ -595,6 +667,7 @@ pub struct RulesConfigurationType {
 }
 
 /// <p>Input to the <code>SetIdentityPoolRoles</code> action.</p>
+/// see [CognitoIdentity::set_identity_pool_roles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityPoolRolesInput {
@@ -610,6 +683,7 @@ pub struct SetIdentityPoolRolesInput {
     pub roles: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CognitoIdentity::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -621,11 +695,13 @@ pub struct TagResourceInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CognitoIdentity::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
+/// see [CognitoIdentity::unlink_developer_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkDeveloperIdentityInput {
@@ -644,6 +720,7 @@ pub struct UnlinkDeveloperIdentityInput {
 }
 
 /// <p>Input to the UnlinkIdentity action.</p>
+/// see [CognitoIdentity::unlink_identity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkIdentityInput {
@@ -672,6 +749,7 @@ pub struct UnprocessedIdentityId {
     pub identity_id: Option<String>,
 }
 
+/// see [CognitoIdentity::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -683,6 +761,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CognitoIdentity::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -2059,7 +2138,7 @@ impl fmt::Display for UpdateIdentityPoolError {
 impl Error for UpdateIdentityPoolError {}
 /// Trait representing the capabilities of the Amazon Cognito Identity API. Amazon Cognito Identity clients implement this trait.
 #[async_trait]
-pub trait CognitoIdentity {
+pub trait CognitoIdentity: Clone + Sync + Send + 'static {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     async fn create_identity_pool(
         &self,
@@ -2131,6 +2210,17 @@ pub trait CognitoIdentity {
         &self,
         input: ListIdentityPoolsInput,
     ) -> Result<ListIdentityPoolsResponse, RusotoError<ListIdentityPoolsError>>;
+
+    /// Auto-paginating version of `list_identity_pools`
+    fn list_identity_pools_pages<'a>(
+        &'a self,
+        mut input: ListIdentityPoolsInput,
+    ) -> RusotoStream<'a, IdentityPoolShortDescription, ListIdentityPoolsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_identity_pools(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags that are assigned to an Amazon Cognito identity pool.</p> <p>A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
     async fn list_tags_for_resource(

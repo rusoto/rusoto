@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -96,6 +100,7 @@ pub struct AssetSourceEntry {
     pub key: String,
 }
 
+/// see [DataExchange::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -105,6 +110,7 @@ pub struct CancelJobRequest {
 }
 
 /// <p>The request body for CreateDataSet.</p>
+/// see [DataExchange::create_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSetRequest {
@@ -123,6 +129,7 @@ pub struct CreateDataSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [DataExchange::create_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSetResponse {
@@ -173,6 +180,7 @@ pub struct CreateDataSetResponse {
 }
 
 /// <p>The request body for CreateJob.</p>
+/// see [DataExchange::create_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
@@ -184,6 +192,7 @@ pub struct CreateJobRequest {
     pub type_: String,
 }
 
+/// see [DataExchange::create_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
@@ -222,6 +231,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>The request body for CreateRevision.</p>
+/// see [DataExchange::create_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRevisionRequest {
@@ -238,6 +248,7 @@ pub struct CreateRevisionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [DataExchange::create_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRevisionResponse {
@@ -317,6 +328,7 @@ pub struct DataSetEntry {
     pub updated_at: f64,
 }
 
+/// see [DataExchange::delete_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssetRequest {
@@ -331,6 +343,7 @@ pub struct DeleteAssetRequest {
     pub revision_id: String,
 }
 
+/// see [DataExchange::delete_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSetRequest {
@@ -339,6 +352,7 @@ pub struct DeleteDataSetRequest {
     pub data_set_id: String,
 }
 
+/// see [DataExchange::delete_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRevisionRequest {
@@ -450,6 +464,7 @@ pub struct ExportServerSideEncryption {
     pub type_: String,
 }
 
+/// see [DataExchange::get_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssetRequest {
@@ -464,6 +479,7 @@ pub struct GetAssetRequest {
     pub revision_id: String,
 }
 
+/// see [DataExchange::get_asset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssetResponse {
@@ -509,6 +525,7 @@ pub struct GetAssetResponse {
     pub updated_at: Option<f64>,
 }
 
+/// see [DataExchange::get_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataSetRequest {
@@ -517,6 +534,7 @@ pub struct GetDataSetRequest {
     pub data_set_id: String,
 }
 
+/// see [DataExchange::get_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataSetResponse {
@@ -566,6 +584,7 @@ pub struct GetDataSetResponse {
     pub updated_at: Option<f64>,
 }
 
+/// see [DataExchange::get_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
@@ -574,6 +593,7 @@ pub struct GetJobRequest {
     pub job_id: String,
 }
 
+/// see [DataExchange::get_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
@@ -611,6 +631,7 @@ pub struct GetJobResponse {
     pub updated_at: Option<f64>,
 }
 
+/// see [DataExchange::get_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRevisionRequest {
@@ -622,6 +643,7 @@ pub struct GetRevisionRequest {
     pub revision_id: String,
 }
 
+/// see [DataExchange::get_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRevisionResponse {
@@ -807,6 +829,7 @@ pub struct JobError {
     pub resource_type: Option<String>,
 }
 
+/// see [DataExchange::list_data_set_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSetRevisionsRequest {
@@ -823,6 +846,23 @@ pub struct ListDataSetRevisionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDataSetRevisionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataSetRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [DataExchange::list_data_set_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSetRevisionsResponse {
@@ -836,6 +876,29 @@ pub struct ListDataSetRevisionsResponse {
     pub revisions: Option<Vec<RevisionEntry>>,
 }
 
+impl Paged for ListDataSetRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDataSetRevisionsResponse {
+    type Item = RevisionEntry;
+
+    fn into_pagination_page(self) -> Vec<RevisionEntry> {
+        self.revisions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [DataExchange::list_data_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSetsRequest {
@@ -853,6 +916,23 @@ pub struct ListDataSetsRequest {
     pub origin: Option<String>,
 }
 
+impl Paged for ListDataSetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [DataExchange::list_data_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSetsResponse {
@@ -866,6 +946,29 @@ pub struct ListDataSetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDataSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDataSetsResponse {
+    type Item = DataSetEntry;
+
+    fn into_pagination_page(self) -> Vec<DataSetEntry> {
+        self.data_sets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [DataExchange::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -887,6 +990,23 @@ pub struct ListJobsRequest {
     pub revision_id: Option<String>,
 }
 
+impl Paged for ListJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [DataExchange::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
@@ -900,6 +1020,29 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListJobsResponse {
+    type Item = JobEntry;
+
+    fn into_pagination_page(self) -> Vec<JobEntry> {
+        self.jobs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [DataExchange::list_revision_assets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRevisionAssetsRequest {
@@ -919,6 +1062,23 @@ pub struct ListRevisionAssetsRequest {
     pub revision_id: String,
 }
 
+impl Paged for ListRevisionAssetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRevisionAssetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [DataExchange::list_revision_assets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRevisionAssetsResponse {
@@ -932,6 +1092,29 @@ pub struct ListRevisionAssetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListRevisionAssetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRevisionAssetsResponse {
+    type Item = AssetEntry;
+
+    fn into_pagination_page(self) -> Vec<AssetEntry> {
+        self.assets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [DataExchange::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -940,6 +1123,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [DataExchange::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1042,6 +1226,7 @@ pub struct S3SnapshotAsset {
     pub size: f64,
 }
 
+/// see [DataExchange::start_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
@@ -1050,11 +1235,13 @@ pub struct StartJobRequest {
     pub job_id: String,
 }
 
+/// see [DataExchange::start_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResponse {}
 
 /// <p>The request body for TagResource.</p>
+/// see [DataExchange::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1066,6 +1253,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [DataExchange::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1078,6 +1266,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The request body for UpdateAsset.</p>
+/// see [DataExchange::update_asset]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssetRequest {
@@ -1095,6 +1284,7 @@ pub struct UpdateAssetRequest {
     pub revision_id: String,
 }
 
+/// see [DataExchange::update_asset]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAssetResponse {
@@ -1141,6 +1331,7 @@ pub struct UpdateAssetResponse {
 }
 
 /// <p>The request body for UpdateDataSet.</p>
+/// see [DataExchange::update_data_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSetRequest {
@@ -1157,6 +1348,7 @@ pub struct UpdateDataSetRequest {
     pub name: Option<String>,
 }
 
+/// see [DataExchange::update_data_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSetResponse {
@@ -1203,6 +1395,7 @@ pub struct UpdateDataSetResponse {
 }
 
 /// <p>The request body for UpdateRevision.</p>
+/// see [DataExchange::update_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRevisionRequest {
@@ -1222,6 +1415,7 @@ pub struct UpdateRevisionRequest {
     pub revision_id: String,
 }
 
+/// see [DataExchange::update_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRevisionResponse {
@@ -2229,7 +2423,7 @@ impl fmt::Display for UpdateRevisionError {
 impl Error for UpdateRevisionError {}
 /// Trait representing the capabilities of the AWS Data Exchange API. AWS Data Exchange clients implement this trait.
 #[async_trait]
-pub trait DataExchange {
+pub trait DataExchange: Clone + Sync + Send + 'static {
     /// <p>This operation cancels a job. Jobs can be cancelled only when they are in the WAITING state.</p>
     async fn cancel_job(&self, input: CancelJobRequest) -> Result<(), RusotoError<CancelJobError>>;
 
@@ -2299,11 +2493,33 @@ pub trait DataExchange {
         input: ListDataSetRevisionsRequest,
     ) -> Result<ListDataSetRevisionsResponse, RusotoError<ListDataSetRevisionsError>>;
 
+    /// Auto-paginating version of `list_data_set_revisions`
+    fn list_data_set_revisions_pages<'a>(
+        &'a self,
+        mut input: ListDataSetRevisionsRequest,
+    ) -> RusotoStream<'a, RevisionEntry, ListDataSetRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_set_revisions(input.clone())
+        }))
+    }
+
     /// <p>This operation lists your data sets. When listing by origin OWNED, results are sorted by CreatedAt in descending order. When listing by origin ENTITLED, there is no order and the maxResults parameter is ignored.</p>
     async fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
     ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>;
+
+    /// Auto-paginating version of `list_data_sets`
+    fn list_data_sets_pages<'a>(
+        &'a self,
+        mut input: ListDataSetsRequest,
+    ) -> RusotoStream<'a, DataSetEntry, ListDataSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_sets(input.clone())
+        }))
+    }
 
     /// <p>This operation lists your jobs sorted by CreatedAt in descending order.</p>
     async fn list_jobs(
@@ -2311,11 +2527,33 @@ pub trait DataExchange {
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobEntry, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
+    }
+
     /// <p>This operation lists a revision's assets sorted alphabetically in descending order.</p>
     async fn list_revision_assets(
         &self,
         input: ListRevisionAssetsRequest,
     ) -> Result<ListRevisionAssetsResponse, RusotoError<ListRevisionAssetsError>>;
+
+    /// Auto-paginating version of `list_revision_assets`
+    fn list_revision_assets_pages<'a>(
+        &'a self,
+        mut input: ListRevisionAssetsRequest,
+    ) -> RusotoStream<'a, AssetEntry, ListRevisionAssetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_revision_assets(input.clone())
+        }))
+    }
 
     /// <p>This operation lists the tags on the resource.</p>
     async fn list_tags_for_resource(

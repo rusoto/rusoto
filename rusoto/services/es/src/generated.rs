@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -26,6 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Container for the parameters to the <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation.</p>
+/// see [Es::accept_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInboundCrossClusterSearchConnectionRequest {
@@ -35,6 +40,7 @@ pub struct AcceptInboundCrossClusterSearchConnectionRequest {
 }
 
 /// <p>The result of a <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation. Contains details of accepted inbound connection.</p>
+/// see [Es::accept_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInboundCrossClusterSearchConnectionResponse {
@@ -57,6 +63,7 @@ pub struct AccessPoliciesStatus {
 }
 
 /// <p>Container for the parameters to the <code><a>AddTags</a></code> operation. Specify the tags that you want to attach to the Elasticsearch domain.</p>
+/// see [Es::add_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsRequest {
@@ -147,6 +154,7 @@ pub struct AdvancedSecurityOptionsStatus {
 }
 
 /// <p> Container for request parameters to <code> <a>AssociatePackage</a> </code> operation. </p>
+/// see [Es::associate_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePackageRequest {
@@ -159,6 +167,7 @@ pub struct AssociatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>AssociatePackage</a> </code> operation. </p>
+/// see [Es::associate_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePackageResponse {
@@ -169,6 +178,7 @@ pub struct AssociatePackageResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>CancelElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to cancel a service software update on.</p>
+/// see [Es::cancel_elasticsearch_service_software_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelElasticsearchServiceSoftwareUpdateRequest {
@@ -178,6 +188,7 @@ pub struct CancelElasticsearchServiceSoftwareUpdateRequest {
 }
 
 /// <p>The result of a <code>CancelElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>
+/// see [Es::cancel_elasticsearch_service_software_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelElasticsearchServiceSoftwareUpdateResponse {
@@ -233,6 +244,7 @@ pub struct CompatibleVersionsMap {
     pub target_versions: Option<Vec<String>>,
 }
 
+/// see [Es::create_elasticsearch_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateElasticsearchDomainRequest {
@@ -294,6 +306,7 @@ pub struct CreateElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>CreateElasticsearchDomain</code> operation. Contains the status of the newly created Elasticsearch domain.</p>
+/// see [Es::create_elasticsearch_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateElasticsearchDomainResponse {
@@ -304,6 +317,7 @@ pub struct CreateElasticsearchDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>CreateOutboundCrossClusterSearchConnection</a></code> operation.</p>
+/// see [Es::create_outbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOutboundCrossClusterSearchConnectionRequest {
@@ -319,6 +333,7 @@ pub struct CreateOutboundCrossClusterSearchConnectionRequest {
 }
 
 /// <p>The result of a <code><a>CreateOutboundCrossClusterSearchConnection</a></code> request. Contains the details of the newly created cross-cluster search connection.</p>
+/// see [Es::create_outbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOutboundCrossClusterSearchConnectionResponse {
@@ -345,6 +360,7 @@ pub struct CreateOutboundCrossClusterSearchConnectionResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>CreatePackage</a> </code> operation. </p>
+/// see [Es::create_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackageRequest {
@@ -364,6 +380,7 @@ pub struct CreatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>CreatePackage</a> </code> operation. </p>
+/// see [Es::create_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackageResponse {
@@ -374,6 +391,7 @@ pub struct CreatePackageResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DeleteElasticsearchDomain</a></code> operation. Specifies the name of the Elasticsearch domain that you want to delete.</p>
+/// see [Es::delete_elasticsearch_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteElasticsearchDomainRequest {
@@ -383,6 +401,7 @@ pub struct DeleteElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>DeleteElasticsearchDomain</code> request. Contains the status of the pending deletion, or no status if the domain and all of its resources have been deleted.</p>
+/// see [Es::delete_elasticsearch_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteElasticsearchDomainResponse {
@@ -393,6 +412,7 @@ pub struct DeleteElasticsearchDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation.</p>
+/// see [Es::delete_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInboundCrossClusterSearchConnectionRequest {
@@ -402,6 +422,7 @@ pub struct DeleteInboundCrossClusterSearchConnectionRequest {
 }
 
 /// <p>The result of a <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted inbound connection.</p>
+/// see [Es::delete_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInboundCrossClusterSearchConnectionResponse {
@@ -412,6 +433,7 @@ pub struct DeleteInboundCrossClusterSearchConnectionResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation.</p>
+/// see [Es::delete_outbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOutboundCrossClusterSearchConnectionRequest {
@@ -421,6 +443,7 @@ pub struct DeleteOutboundCrossClusterSearchConnectionRequest {
 }
 
 /// <p>The result of a <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted outbound connection.</p>
+/// see [Es::delete_outbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOutboundCrossClusterSearchConnectionResponse {
@@ -431,6 +454,7 @@ pub struct DeleteOutboundCrossClusterSearchConnectionResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>DeletePackage</a> </code> operation. </p>
+/// see [Es::delete_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackageRequest {
@@ -440,6 +464,7 @@ pub struct DeletePackageRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>DeletePackage</a> </code> operation. </p>
+/// see [Es::delete_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackageResponse {
@@ -450,6 +475,7 @@ pub struct DeletePackageResponse {
 }
 
 /// <p> Container for the parameters to the <code>DescribeElasticsearchDomainConfig</code> operation. Specifies the domain name for which you want configuration information.</p>
+/// see [Es::describe_elasticsearch_domain_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainConfigRequest {
@@ -459,6 +485,7 @@ pub struct DescribeElasticsearchDomainConfigRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomainConfig</code> request. Contains the configuration information of the requested domain.</p>
+/// see [Es::describe_elasticsearch_domain_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainConfigResponse {
@@ -468,6 +495,7 @@ pub struct DescribeElasticsearchDomainConfigResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeElasticsearchDomain</a></code> operation.</p>
+/// see [Es::describe_elasticsearch_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainRequest {
@@ -477,6 +505,7 @@ pub struct DescribeElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomain</code> request. Contains the status of the domain specified in the request.</p>
+/// see [Es::describe_elasticsearch_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainResponse {
@@ -486,6 +515,7 @@ pub struct DescribeElasticsearchDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeElasticsearchDomains</a></code> operation. By default, the API returns the status of all Elasticsearch domains.</p>
+/// see [Es::describe_elasticsearch_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainsRequest {
@@ -495,6 +525,7 @@ pub struct DescribeElasticsearchDomainsRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomains</code> request. Contains the status of the specified domains or all domains owned by the account.</p>
+/// see [Es::describe_elasticsearch_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainsResponse {
@@ -504,6 +535,7 @@ pub struct DescribeElasticsearchDomainsResponse {
 }
 
 /// <p> Container for the parameters to <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>
+/// see [Es::describe_elasticsearch_instance_type_limits]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchInstanceTypeLimitsRequest {
@@ -520,6 +552,7 @@ pub struct DescribeElasticsearchInstanceTypeLimitsRequest {
 }
 
 /// <p> Container for the parameters received from <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>
+/// see [Es::describe_elasticsearch_instance_type_limits]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
@@ -529,6 +562,7 @@ pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeInboundCrossClusterSearchConnections</a></code> operation.</p>
+/// see [Es::describe_inbound_cross_cluster_search_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInboundCrossClusterSearchConnectionsRequest {
@@ -547,6 +581,7 @@ pub struct DescribeInboundCrossClusterSearchConnectionsRequest {
 }
 
 /// <p>The result of a <code><a>DescribeInboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+/// see [Es::describe_inbound_cross_cluster_search_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInboundCrossClusterSearchConnectionsResponse {
@@ -561,6 +596,7 @@ pub struct DescribeInboundCrossClusterSearchConnectionsResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> operation.</p>
+/// see [Es::describe_outbound_cross_cluster_search_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOutboundCrossClusterSearchConnectionsRequest {
@@ -579,6 +615,7 @@ pub struct DescribeOutboundCrossClusterSearchConnectionsRequest {
 }
 
 /// <p>The result of a <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+/// see [Es::describe_outbound_cross_cluster_search_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOutboundCrossClusterSearchConnectionsResponse {
@@ -607,6 +644,7 @@ pub struct DescribePackagesFilter {
 }
 
 /// <p> Container for request parameters to <code> <a>DescribePackage</a> </code> operation. </p>
+/// see [Es::describe_packages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagesRequest {
@@ -625,6 +663,7 @@ pub struct DescribePackagesRequest {
 }
 
 /// <p> Container for response returned by <code> <a>DescribePackages</a> </code> operation. </p>
+/// see [Es::describe_packages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagesResponse {
@@ -638,6 +677,7 @@ pub struct DescribePackagesResponse {
 }
 
 /// <p>Container for parameters to <code>DescribeReservedElasticsearchInstanceOfferings</code></p>
+/// see [Es::describe_reserved_elasticsearch_instance_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedElasticsearchInstanceOfferingsRequest {
@@ -655,7 +695,24 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsRequest {
     pub reserved_elasticsearch_instance_offering_id: Option<String>,
 }
 
+impl Paged for DescribeReservedElasticsearchInstanceOfferingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeReservedElasticsearchInstanceOfferingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Container for results from <code>DescribeReservedElasticsearchInstanceOfferings</code></p>
+/// see [Es::describe_reserved_elasticsearch_instance_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservedElasticsearchInstanceOfferingsResponse {
@@ -670,7 +727,31 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsResponse {
         Option<Vec<ReservedElasticsearchInstanceOffering>>,
 }
 
+impl Paged for DescribeReservedElasticsearchInstanceOfferingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeReservedElasticsearchInstanceOfferingsResponse {
+    type Item = ReservedElasticsearchInstanceOffering;
+
+    fn into_pagination_page(self) -> Vec<ReservedElasticsearchInstanceOffering> {
+        self.reserved_elasticsearch_instance_offerings
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Container for parameters to <code>DescribeReservedElasticsearchInstances</code></p>
+/// see [Es::describe_reserved_elasticsearch_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedElasticsearchInstancesRequest {
@@ -688,7 +769,24 @@ pub struct DescribeReservedElasticsearchInstancesRequest {
     pub reserved_elasticsearch_instance_id: Option<String>,
 }
 
+impl Paged for DescribeReservedElasticsearchInstancesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeReservedElasticsearchInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Container for results from <code>DescribeReservedElasticsearchInstances</code></p>
+/// see [Es::describe_reserved_elasticsearch_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservedElasticsearchInstancesResponse {
@@ -702,7 +800,30 @@ pub struct DescribeReservedElasticsearchInstancesResponse {
     pub reserved_elasticsearch_instances: Option<Vec<ReservedElasticsearchInstance>>,
 }
 
+impl Paged for DescribeReservedElasticsearchInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeReservedElasticsearchInstancesResponse {
+    type Item = ReservedElasticsearchInstance;
+
+    fn into_pagination_page(self) -> Vec<ReservedElasticsearchInstance> {
+        self.reserved_elasticsearch_instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Container for request parameters to <code> <a>DissociatePackage</a> </code> operation. </p>
+/// see [Es::dissociate_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DissociatePackageRequest {
@@ -715,6 +836,7 @@ pub struct DissociatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>DissociatePackage</a> </code> operation. </p>
+/// see [Es::dissociate_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DissociatePackageResponse {
@@ -1127,6 +1249,7 @@ pub struct Filter {
 }
 
 /// <p> Container for request parameters to <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
+/// see [Es::get_compatible_elasticsearch_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCompatibleElasticsearchVersionsRequest {
@@ -1136,6 +1259,7 @@ pub struct GetCompatibleElasticsearchVersionsRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
+/// see [Es::get_compatible_elasticsearch_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCompatibleElasticsearchVersionsResponse {
@@ -1146,6 +1270,7 @@ pub struct GetCompatibleElasticsearchVersionsResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>GetPackageVersionHistory</a> </code> operation. </p>
+/// see [Es::get_package_version_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPackageVersionHistoryRequest {
@@ -1163,6 +1288,7 @@ pub struct GetPackageVersionHistoryRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetPackageVersionHistory</a> </code> operation. </p>
+/// see [Es::get_package_version_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPackageVersionHistoryResponse {
@@ -1179,6 +1305,7 @@ pub struct GetPackageVersionHistoryResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>GetUpgradeHistory</a> </code> operation. </p>
+/// see [Es::get_upgrade_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUpgradeHistoryRequest {
@@ -1192,7 +1319,24 @@ pub struct GetUpgradeHistoryRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetUpgradeHistoryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetUpgradeHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> Container for response returned by <code> <a>GetUpgradeHistory</a> </code> operation. </p>
+/// see [Es::get_upgrade_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUpgradeHistoryResponse {
@@ -1206,7 +1350,30 @@ pub struct GetUpgradeHistoryResponse {
     pub upgrade_histories: Option<Vec<UpgradeHistory>>,
 }
 
+impl Paged for GetUpgradeHistoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetUpgradeHistoryResponse {
+    type Item = UpgradeHistory;
+
+    fn into_pagination_page(self) -> Vec<UpgradeHistory> {
+        self.upgrade_histories.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Container for request parameters to <code> <a>GetUpgradeStatus</a> </code> operation. </p>
+/// see [Es::get_upgrade_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUpgradeStatusRequest {
@@ -1215,6 +1382,7 @@ pub struct GetUpgradeStatusRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetUpgradeStatus</a> </code> operation. </p>
+/// see [Es::get_upgrade_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUpgradeStatusResponse {
@@ -1307,6 +1475,7 @@ pub struct Limits {
 }
 
 /// <p>The result of a <code>ListDomainNames</code> operation. Contains the names of all Elasticsearch domains owned by this account.</p>
+/// see [Es::list_domain_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainNamesResponse {
@@ -1317,6 +1486,7 @@ pub struct ListDomainNamesResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
+/// see [Es::list_domains_for_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsForPackageRequest {
@@ -1334,6 +1504,7 @@ pub struct ListDomainsForPackageRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
+/// see [Es::list_domains_for_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsForPackageResponse {
@@ -1347,6 +1518,7 @@ pub struct ListDomainsForPackageResponse {
 }
 
 /// <p> Container for the parameters to the <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>
+/// see [Es::list_elasticsearch_instance_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListElasticsearchInstanceTypesRequest {
@@ -1367,7 +1539,24 @@ pub struct ListElasticsearchInstanceTypesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListElasticsearchInstanceTypesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListElasticsearchInstanceTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> Container for the parameters returned by <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>
+/// see [Es::list_elasticsearch_instance_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListElasticsearchInstanceTypesResponse {
@@ -1381,7 +1570,30 @@ pub struct ListElasticsearchInstanceTypesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListElasticsearchInstanceTypesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListElasticsearchInstanceTypesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.elasticsearch_instance_types.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Container for the parameters to the <code> <a>ListElasticsearchVersions</a> </code> operation. <p> Use <code> <a>MaxResults</a> </code> to control the maximum number of results to retrieve in a single call. </p> <p> Use <code> <a>NextToken</a> </code> in response to retrieve more results. If the received response does not contain a NextToken, then there are no more results to retrieve. </p> </p>
+/// see [Es::list_elasticsearch_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListElasticsearchVersionsRequest {
@@ -1394,7 +1606,24 @@ pub struct ListElasticsearchVersionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListElasticsearchVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListElasticsearchVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> Container for the parameters for response received from <code> <a>ListElasticsearchVersions</a> </code> operation. </p>
+/// see [Es::list_elasticsearch_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListElasticsearchVersionsResponse {
@@ -1406,7 +1635,30 @@ pub struct ListElasticsearchVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListElasticsearchVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListElasticsearchVersionsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.elasticsearch_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Container for request parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
+/// see [Es::list_packages_for_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagesForDomainRequest {
@@ -1424,6 +1676,7 @@ pub struct ListPackagesForDomainRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
+/// see [Es::list_packages_for_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagesForDomainResponse {
@@ -1438,6 +1691,7 @@ pub struct ListPackagesForDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>ListTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain to which the tags are attached that you want to view are attached.</p>
+/// see [Es::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -1447,6 +1701,7 @@ pub struct ListTagsRequest {
 }
 
 /// <p>The result of a <code>ListTags</code> operation. Contains tags for all requested Elasticsearch domains.</p>
+/// see [Es::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -1657,6 +1912,7 @@ pub struct PackageVersionHistory {
 }
 
 /// <p>Container for parameters to <code>PurchaseReservedElasticsearchInstanceOffering</code></p>
+/// see [Es::purchase_reserved_elasticsearch_instance_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedElasticsearchInstanceOfferingRequest {
@@ -1673,6 +1929,7 @@ pub struct PurchaseReservedElasticsearchInstanceOfferingRequest {
 }
 
 /// <p>Represents the output of a <code>PurchaseReservedElasticsearchInstanceOffering</code> operation.</p>
+/// see [Es::purchase_reserved_elasticsearch_instance_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseReservedElasticsearchInstanceOfferingResponse {
@@ -1701,6 +1958,7 @@ pub struct RecurringCharge {
 }
 
 /// <p>Container for the parameters to the <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation.</p>
+/// see [Es::reject_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInboundCrossClusterSearchConnectionRequest {
@@ -1710,6 +1968,7 @@ pub struct RejectInboundCrossClusterSearchConnectionRequest {
 }
 
 /// <p>The result of a <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation. Contains details of rejected inbound connection.</p>
+/// see [Es::reject_inbound_cross_cluster_search_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectInboundCrossClusterSearchConnectionResponse {
@@ -1720,6 +1979,7 @@ pub struct RejectInboundCrossClusterSearchConnectionResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>RemoveTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain from which you want to remove the specified <code>TagKey</code>.</p>
+/// see [Es::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsRequest {
@@ -1958,6 +2218,7 @@ pub struct SnapshotOptionsStatus {
 }
 
 /// <p>Container for the parameters to the <code><a>StartElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to schedule a service software update on.</p>
+/// see [Es::start_elasticsearch_service_software_update]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartElasticsearchServiceSoftwareUpdateRequest {
@@ -1967,6 +2228,7 @@ pub struct StartElasticsearchServiceSoftwareUpdateRequest {
 }
 
 /// <p>The result of a <code>StartElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>
+/// see [Es::start_elasticsearch_service_software_update]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartElasticsearchServiceSoftwareUpdateResponse {
@@ -2018,6 +2280,7 @@ pub struct Tag {
 }
 
 /// <p>Container for the parameters to the <code><a>UpdateElasticsearchDomain</a></code> operation. Specifies the type and number of instances in the domain cluster.</p>
+/// see [Es::update_elasticsearch_domain_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateElasticsearchDomainConfigRequest {
@@ -2067,6 +2330,7 @@ pub struct UpdateElasticsearchDomainConfigRequest {
 }
 
 /// <p>The result of an <code>UpdateElasticsearchDomain</code> request. Contains the status of the Elasticsearch domain being updated.</p>
+/// see [Es::update_elasticsearch_domain_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateElasticsearchDomainConfigResponse {
@@ -2076,6 +2340,7 @@ pub struct UpdateElasticsearchDomainConfigResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>UpdatePackage</a> </code> operation. </p>
+/// see [Es::update_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePackageRequest {
@@ -2095,6 +2360,7 @@ pub struct UpdatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>UpdatePackage</a> </code> operation. </p>
+/// see [Es::update_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePackageResponse {
@@ -2105,6 +2371,7 @@ pub struct UpdatePackageResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>UpgradeElasticsearchDomain</a> </code> operation. </p>
+/// see [Es::upgrade_elasticsearch_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradeElasticsearchDomainRequest {
@@ -2120,6 +2387,7 @@ pub struct UpgradeElasticsearchDomainRequest {
 }
 
 /// <p> Container for response returned by <code> <a>UpgradeElasticsearchDomain</a> </code> operation. </p>
+/// see [Es::upgrade_elasticsearch_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeElasticsearchDomainResponse {
@@ -4277,7 +4545,7 @@ impl fmt::Display for UpgradeElasticsearchDomainError {
 impl Error for UpgradeElasticsearchDomainError {}
 /// Trait representing the capabilities of the Amazon Elasticsearch Service API. Amazon Elasticsearch Service clients implement this trait.
 #[async_trait]
-pub trait Es {
+pub trait Es: Clone + Sync + Send + 'static {
     /// <p>Allows the destination domain owner to accept an inbound cross-cluster search connection request.</p>
     async fn accept_inbound_cross_cluster_search_connection(
         &self,
@@ -4424,6 +4692,21 @@ pub trait Es {
         RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
     >;
 
+    /// Auto-paginating version of `describe_reserved_elasticsearch_instance_offerings`
+    fn describe_reserved_elasticsearch_instance_offerings_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedElasticsearchInstanceOfferingsRequest,
+    ) -> RusotoStream<
+        'a,
+        ReservedElasticsearchInstanceOffering,
+        DescribeReservedElasticsearchInstanceOfferingsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_elasticsearch_instance_offerings(input.clone())
+        }))
+    }
+
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
     async fn describe_reserved_elasticsearch_instances(
         &self,
@@ -4432,6 +4715,18 @@ pub trait Es {
         DescribeReservedElasticsearchInstancesResponse,
         RusotoError<DescribeReservedElasticsearchInstancesError>,
     >;
+
+    /// Auto-paginating version of `describe_reserved_elasticsearch_instances`
+    fn describe_reserved_elasticsearch_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedElasticsearchInstancesRequest,
+    ) -> RusotoStream<'a, ReservedElasticsearchInstance, DescribeReservedElasticsearchInstancesError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_elasticsearch_instances(input.clone())
+        }))
+    }
 
     /// <p>Dissociates a package from the Amazon ES domain.</p>
     async fn dissociate_package(
@@ -4460,6 +4755,17 @@ pub trait Es {
         input: GetUpgradeHistoryRequest,
     ) -> Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>>;
 
+    /// Auto-paginating version of `get_upgrade_history`
+    fn get_upgrade_history_pages<'a>(
+        &'a self,
+        mut input: GetUpgradeHistoryRequest,
+    ) -> RusotoStream<'a, UpgradeHistory, GetUpgradeHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_upgrade_history(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
     async fn get_upgrade_status(
         &self,
@@ -4486,11 +4792,33 @@ pub trait Es {
         RusotoError<ListElasticsearchInstanceTypesError>,
     >;
 
+    /// Auto-paginating version of `list_elasticsearch_instance_types`
+    fn list_elasticsearch_instance_types_pages<'a>(
+        &'a self,
+        mut input: ListElasticsearchInstanceTypesRequest,
+    ) -> RusotoStream<'a, String, ListElasticsearchInstanceTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_elasticsearch_instance_types(input.clone())
+        }))
+    }
+
     /// <p>List all supported Elasticsearch versions</p>
     async fn list_elasticsearch_versions(
         &self,
         input: ListElasticsearchVersionsRequest,
     ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>;
+
+    /// Auto-paginating version of `list_elasticsearch_versions`
+    fn list_elasticsearch_versions_pages<'a>(
+        &'a self,
+        mut input: ListElasticsearchVersionsRequest,
+    ) -> RusotoStream<'a, String, ListElasticsearchVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_elasticsearch_versions(input.clone())
+        }))
+    }
 
     /// <p>Lists all packages associated with the Amazon ES domain.</p>
     async fn list_packages_for_domain(

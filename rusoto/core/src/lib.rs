@@ -39,6 +39,7 @@ pub mod signature;
 pub use crate::client::Client;
 #[doc(hidden)]
 pub mod encoding;
+pub mod pagination;
 #[doc(hidden)]
 pub mod proto;
 #[doc(hidden)]

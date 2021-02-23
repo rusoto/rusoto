@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -83,6 +87,7 @@ pub struct AmiDistributionConfiguration {
     pub target_account_ids: Option<Vec<String>>,
 }
 
+/// see [ImageBuilder::cancel_image_creation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelImageCreationRequest {
@@ -94,6 +99,7 @@ pub struct CancelImageCreationRequest {
     pub image_build_version_arn: String,
 }
 
+/// see [ImageBuilder::cancel_image_creation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelImageCreationResponse {
@@ -411,6 +417,7 @@ pub struct ContainerRecipeSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ImageBuilder::create_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComponentRequest {
@@ -456,6 +463,7 @@ pub struct CreateComponentRequest {
     pub uri: Option<String>,
 }
 
+/// see [ImageBuilder::create_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComponentResponse {
@@ -473,6 +481,7 @@ pub struct CreateComponentResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_container_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContainerRecipeRequest {
@@ -530,6 +539,7 @@ pub struct CreateContainerRecipeRequest {
     pub working_directory: Option<String>,
 }
 
+/// see [ImageBuilder::create_container_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContainerRecipeResponse {
@@ -547,6 +557,7 @@ pub struct CreateContainerRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_distribution_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionConfigurationRequest {
@@ -569,6 +580,7 @@ pub struct CreateDistributionConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ImageBuilder::create_distribution_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDistributionConfigurationResponse {
@@ -586,6 +598,7 @@ pub struct CreateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_image_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImagePipelineRequest {
@@ -636,6 +649,7 @@ pub struct CreateImagePipelineRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ImageBuilder::create_image_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImagePipelineResponse {
@@ -653,6 +667,7 @@ pub struct CreateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_image_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRecipeRequest {
@@ -689,6 +704,7 @@ pub struct CreateImageRecipeRequest {
     pub working_directory: Option<String>,
 }
 
+/// see [ImageBuilder::create_image_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageRecipeResponse {
@@ -706,6 +722,7 @@ pub struct CreateImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
@@ -741,6 +758,7 @@ pub struct CreateImageRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ImageBuilder::create_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageResponse {
@@ -758,6 +776,7 @@ pub struct CreateImageResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::create_infrastructure_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInfrastructureConfigurationRequest {
@@ -812,6 +831,7 @@ pub struct CreateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
+/// see [ImageBuilder::create_infrastructure_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInfrastructureConfigurationResponse {
@@ -829,6 +849,7 @@ pub struct CreateInfrastructureConfigurationResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComponentRequest {
@@ -837,6 +858,7 @@ pub struct DeleteComponentRequest {
     pub component_build_version_arn: String,
 }
 
+/// see [ImageBuilder::delete_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComponentResponse {
@@ -850,6 +872,7 @@ pub struct DeleteComponentResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_container_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContainerRecipeRequest {
@@ -858,6 +881,7 @@ pub struct DeleteContainerRecipeRequest {
     pub container_recipe_arn: String,
 }
 
+/// see [ImageBuilder::delete_container_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContainerRecipeResponse {
@@ -871,6 +895,7 @@ pub struct DeleteContainerRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_distribution_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionConfigurationRequest {
@@ -879,6 +904,7 @@ pub struct DeleteDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
+/// see [ImageBuilder::delete_distribution_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDistributionConfigurationResponse {
@@ -892,6 +918,7 @@ pub struct DeleteDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_image_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImagePipelineRequest {
@@ -900,6 +927,7 @@ pub struct DeleteImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
+/// see [ImageBuilder::delete_image_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImagePipelineResponse {
@@ -913,6 +941,7 @@ pub struct DeleteImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_image_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRecipeRequest {
@@ -921,6 +950,7 @@ pub struct DeleteImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
+/// see [ImageBuilder::delete_image_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageRecipeResponse {
@@ -934,6 +964,7 @@ pub struct DeleteImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
@@ -942,6 +973,7 @@ pub struct DeleteImageRequest {
     pub image_build_version_arn: String,
 }
 
+/// see [ImageBuilder::delete_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResponse {
@@ -955,6 +987,7 @@ pub struct DeleteImageResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::delete_infrastructure_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInfrastructureConfigurationRequest {
@@ -963,6 +996,7 @@ pub struct DeleteInfrastructureConfigurationRequest {
     pub infrastructure_configuration_arn: String,
 }
 
+/// see [ImageBuilder::delete_infrastructure_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInfrastructureConfigurationResponse {
@@ -1114,6 +1148,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [ImageBuilder::get_component_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentPolicyRequest {
@@ -1122,6 +1157,7 @@ pub struct GetComponentPolicyRequest {
     pub component_arn: String,
 }
 
+/// see [ImageBuilder::get_component_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentPolicyResponse {
@@ -1135,6 +1171,7 @@ pub struct GetComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentRequest {
@@ -1143,6 +1180,7 @@ pub struct GetComponentRequest {
     pub component_build_version_arn: String,
 }
 
+/// see [ImageBuilder::get_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentResponse {
@@ -1156,6 +1194,7 @@ pub struct GetComponentResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_container_recipe_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerRecipePolicyRequest {
@@ -1164,6 +1203,7 @@ pub struct GetContainerRecipePolicyRequest {
     pub container_recipe_arn: String,
 }
 
+/// see [ImageBuilder::get_container_recipe_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerRecipePolicyResponse {
@@ -1177,6 +1217,7 @@ pub struct GetContainerRecipePolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_container_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContainerRecipeRequest {
@@ -1185,6 +1226,7 @@ pub struct GetContainerRecipeRequest {
     pub container_recipe_arn: String,
 }
 
+/// see [ImageBuilder::get_container_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContainerRecipeResponse {
@@ -1198,6 +1240,7 @@ pub struct GetContainerRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_distribution_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigurationRequest {
@@ -1206,6 +1249,7 @@ pub struct GetDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
+/// see [ImageBuilder::get_distribution_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionConfigurationResponse {
@@ -1219,6 +1263,7 @@ pub struct GetDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_image_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePipelineRequest {
@@ -1227,6 +1272,7 @@ pub struct GetImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
+/// see [ImageBuilder::get_image_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePipelineResponse {
@@ -1240,6 +1286,7 @@ pub struct GetImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_image_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePolicyRequest {
@@ -1248,6 +1295,7 @@ pub struct GetImagePolicyRequest {
     pub image_arn: String,
 }
 
+/// see [ImageBuilder::get_image_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePolicyResponse {
@@ -1261,6 +1309,7 @@ pub struct GetImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_image_recipe_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipePolicyRequest {
@@ -1269,6 +1318,7 @@ pub struct GetImageRecipePolicyRequest {
     pub image_recipe_arn: String,
 }
 
+/// see [ImageBuilder::get_image_recipe_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipePolicyResponse {
@@ -1282,6 +1332,7 @@ pub struct GetImageRecipePolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_image_recipe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipeRequest {
@@ -1290,6 +1341,7 @@ pub struct GetImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
+/// see [ImageBuilder::get_image_recipe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipeResponse {
@@ -1303,6 +1355,7 @@ pub struct GetImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::get_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRequest {
@@ -1311,6 +1364,7 @@ pub struct GetImageRequest {
     pub image_build_version_arn: String,
 }
 
+/// see [ImageBuilder::get_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageResponse {
@@ -1325,6 +1379,7 @@ pub struct GetImageResponse {
 }
 
 /// <p> GetInfrastructureConfiguration request object. </p>
+/// see [ImageBuilder::get_infrastructure_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInfrastructureConfigurationRequest {
@@ -1334,6 +1389,7 @@ pub struct GetInfrastructureConfigurationRequest {
 }
 
 /// <p>GetInfrastructureConfiguration response object. </p>
+/// see [ImageBuilder::get_infrastructure_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInfrastructureConfigurationResponse {
@@ -1706,6 +1762,7 @@ pub struct ImageVersion {
     pub version: Option<String>,
 }
 
+/// see [ImageBuilder::import_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportComponentRequest {
@@ -1753,6 +1810,7 @@ pub struct ImportComponentRequest {
     pub uri: Option<String>,
 }
 
+/// see [ImageBuilder::import_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportComponentResponse {
@@ -1904,6 +1962,7 @@ pub struct LaunchPermissionConfiguration {
     pub user_ids: Option<Vec<String>>,
 }
 
+/// see [ImageBuilder::list_component_build_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentBuildVersionsRequest {
@@ -1920,6 +1979,7 @@ pub struct ListComponentBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_component_build_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentBuildVersionsResponse {
@@ -1937,6 +1997,7 @@ pub struct ListComponentBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_components]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentsRequest {
@@ -1962,6 +2023,7 @@ pub struct ListComponentsRequest {
     pub owner: Option<String>,
 }
 
+/// see [ImageBuilder::list_components]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentsResponse {
@@ -1979,6 +2041,7 @@ pub struct ListComponentsResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_container_recipes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContainerRecipesRequest {
@@ -2000,6 +2063,7 @@ pub struct ListContainerRecipesRequest {
     pub owner: Option<String>,
 }
 
+/// see [ImageBuilder::list_container_recipes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContainerRecipesResponse {
@@ -2017,6 +2081,7 @@ pub struct ListContainerRecipesResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_distribution_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
@@ -2034,6 +2099,7 @@ pub struct ListDistributionConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_distribution_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDistributionConfigurationsResponse {
@@ -2051,6 +2117,7 @@ pub struct ListDistributionConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_build_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageBuildVersionsRequest {
@@ -2071,6 +2138,7 @@ pub struct ListImageBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_build_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageBuildVersionsResponse {
@@ -2088,6 +2156,7 @@ pub struct ListImageBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_pipeline_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelineImagesRequest {
@@ -2108,6 +2177,7 @@ pub struct ListImagePipelineImagesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_pipeline_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelineImagesResponse {
@@ -2125,6 +2195,7 @@ pub struct ListImagePipelineImagesResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelinesRequest {
@@ -2142,6 +2213,7 @@ pub struct ListImagePipelinesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelinesResponse {
@@ -2159,6 +2231,7 @@ pub struct ListImagePipelinesResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_recipes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageRecipesRequest {
@@ -2180,6 +2253,7 @@ pub struct ListImageRecipesRequest {
     pub owner: Option<String>,
 }
 
+/// see [ImageBuilder::list_image_recipes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageRecipesResponse {
@@ -2197,6 +2271,7 @@ pub struct ListImageRecipesResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
@@ -2226,6 +2301,7 @@ pub struct ListImagesRequest {
     pub owner: Option<String>,
 }
 
+/// see [ImageBuilder::list_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
@@ -2243,6 +2319,7 @@ pub struct ListImagesResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_infrastructure_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInfrastructureConfigurationsRequest {
@@ -2260,6 +2337,7 @@ pub struct ListInfrastructureConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ImageBuilder::list_infrastructure_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInfrastructureConfigurationsResponse {
@@ -2277,6 +2355,7 @@ pub struct ListInfrastructureConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2285,6 +2364,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ImageBuilder::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2317,6 +2397,7 @@ pub struct OutputResources {
     pub containers: Option<Vec<Container>>,
 }
 
+/// see [ImageBuilder::put_component_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComponentPolicyRequest {
@@ -2328,6 +2409,7 @@ pub struct PutComponentPolicyRequest {
     pub policy: String,
 }
 
+/// see [ImageBuilder::put_component_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComponentPolicyResponse {
@@ -2341,6 +2423,7 @@ pub struct PutComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::put_container_recipe_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutContainerRecipePolicyRequest {
@@ -2352,6 +2435,7 @@ pub struct PutContainerRecipePolicyRequest {
     pub policy: String,
 }
 
+/// see [ImageBuilder::put_container_recipe_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutContainerRecipePolicyResponse {
@@ -2365,6 +2449,7 @@ pub struct PutContainerRecipePolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::put_image_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImagePolicyRequest {
@@ -2376,6 +2461,7 @@ pub struct PutImagePolicyRequest {
     pub policy: String,
 }
 
+/// see [ImageBuilder::put_image_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImagePolicyResponse {
@@ -2389,6 +2475,7 @@ pub struct PutImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::put_image_recipe_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRecipePolicyRequest {
@@ -2400,6 +2487,7 @@ pub struct PutImageRecipePolicyRequest {
     pub policy: String,
 }
 
+/// see [ImageBuilder::put_image_recipe_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageRecipePolicyResponse {
@@ -2439,6 +2527,7 @@ pub struct Schedule {
     pub schedule_expression: Option<String>,
 }
 
+/// see [ImageBuilder::start_image_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImagePipelineExecutionRequest {
@@ -2450,6 +2539,7 @@ pub struct StartImagePipelineExecutionRequest {
     pub image_pipeline_arn: String,
 }
 
+/// see [ImageBuilder::start_image_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImagePipelineExecutionResponse {
@@ -2467,6 +2557,7 @@ pub struct StartImagePipelineExecutionResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2478,6 +2569,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [ImageBuilder::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2493,6 +2585,7 @@ pub struct TargetContainerRepository {
     pub service: String,
 }
 
+/// see [ImageBuilder::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2504,10 +2597,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ImageBuilder::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [ImageBuilder::update_distribution_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionConfigurationRequest {
@@ -2526,6 +2621,7 @@ pub struct UpdateDistributionConfigurationRequest {
     pub distributions: Vec<Distribution>,
 }
 
+/// see [ImageBuilder::update_distribution_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionConfigurationResponse {
@@ -2543,6 +2639,7 @@ pub struct UpdateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::update_image_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImagePipelineRequest {
@@ -2589,6 +2686,7 @@ pub struct UpdateImagePipelineRequest {
     pub status: Option<String>,
 }
 
+/// see [ImageBuilder::update_image_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImagePipelineResponse {
@@ -2606,6 +2704,7 @@ pub struct UpdateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
+/// see [ImageBuilder::update_infrastructure_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInfrastructureConfigurationRequest {
@@ -2656,6 +2755,7 @@ pub struct UpdateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
+/// see [ImageBuilder::update_infrastructure_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInfrastructureConfigurationResponse {
@@ -6455,7 +6555,7 @@ impl fmt::Display for UpdateInfrastructureConfigurationError {
 impl Error for UpdateInfrastructureConfigurationError {}
 /// Trait representing the capabilities of the imagebuilder API. imagebuilder clients implement this trait.
 #[async_trait]
-pub trait ImageBuilder {
+pub trait ImageBuilder: Clone + Sync + Send + 'static {
     /// <p>CancelImageCreation cancels the creation of Image. This operation can only be used on images in a non-terminal state.</p>
     async fn cancel_image_creation(
         &self,

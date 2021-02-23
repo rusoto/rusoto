@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -205,6 +209,7 @@ pub struct Cors {
 }
 
 /// <p>Creates a new ApiMapping resource to represent an API mapping.</p>
+/// see [ApiGatewayV2::create_api_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiMappingRequest {
@@ -223,6 +228,7 @@ pub struct CreateApiMappingRequest {
     pub stage: String,
 }
 
+/// see [ApiGatewayV2::create_api_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiMappingResponse {
@@ -245,6 +251,7 @@ pub struct CreateApiMappingResponse {
 }
 
 /// <p>Creates a new Api resource to represent an API.</p>
+/// see [ApiGatewayV2::create_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiRequest {
@@ -300,6 +307,7 @@ pub struct CreateApiRequest {
     pub version: Option<String>,
 }
 
+/// see [ApiGatewayV2::create_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiResponse {
@@ -370,6 +378,7 @@ pub struct CreateApiResponse {
 }
 
 /// <p>Creates a new Authorizer resource to represent an authorizer.</p>
+/// see [ApiGatewayV2::create_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
@@ -416,6 +425,7 @@ pub struct CreateAuthorizerRequest {
     pub name: String,
 }
 
+/// see [ApiGatewayV2::create_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
@@ -467,6 +477,7 @@ pub struct CreateAuthorizerResponse {
 }
 
 /// <p>Creates a new Deployment resource to represent a deployment.</p>
+/// see [ApiGatewayV2::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
@@ -483,6 +494,7 @@ pub struct CreateDeploymentRequest {
     pub stage_name: Option<String>,
 }
 
+/// see [ApiGatewayV2::create_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
@@ -513,6 +525,7 @@ pub struct CreateDeploymentResponse {
 }
 
 /// <p>Creates a new DomainName resource to represent a domain name.</p>
+/// see [ApiGatewayV2::create_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
@@ -533,6 +546,7 @@ pub struct CreateDomainNameRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::create_domain_name]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainNameResponse {
@@ -559,6 +573,7 @@ pub struct CreateDomainNameResponse {
 }
 
 /// <p>Creates a new Integration resource to represent an integration.</p>
+/// see [ApiGatewayV2::create_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationRequest {
@@ -632,6 +647,7 @@ pub struct CreateIntegrationRequest {
 }
 
 /// <p>Creates a new IntegrationResponse resource to represent an integration response.</p>
+/// see [ApiGatewayV2::create_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationResponseRequest {
@@ -662,6 +678,7 @@ pub struct CreateIntegrationResponseRequest {
     pub template_selection_expression: Option<String>,
 }
 
+/// see [ApiGatewayV2::create_integration_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResponseResponse {
@@ -691,6 +708,7 @@ pub struct CreateIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
+/// see [ApiGatewayV2::create_integration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResult {
@@ -774,6 +792,7 @@ pub struct CreateIntegrationResult {
 }
 
 /// <p>Creates a new Model.</p>
+/// see [ApiGatewayV2::create_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
@@ -796,6 +815,7 @@ pub struct CreateModelRequest {
     pub schema: String,
 }
 
+/// see [ApiGatewayV2::create_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelResponse {
@@ -822,6 +842,7 @@ pub struct CreateModelResponse {
 }
 
 /// <p>Creates a new Route resource to represent a route.</p>
+/// see [ApiGatewayV2::create_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteRequest {
@@ -874,6 +895,7 @@ pub struct CreateRouteRequest {
 }
 
 /// <p>Creates a new RouteResponse resource to represent a route response.</p>
+/// see [ApiGatewayV2::create_route_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteResponseRequest {
@@ -900,6 +922,7 @@ pub struct CreateRouteResponseRequest {
     pub route_response_key: String,
 }
 
+/// see [ApiGatewayV2::create_route_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResponseResponse {
@@ -925,6 +948,7 @@ pub struct CreateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
+/// see [ApiGatewayV2::create_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResult {
@@ -983,6 +1007,7 @@ pub struct CreateRouteResult {
 }
 
 /// <p>Creates a new Stage resource to represent a stage.</p>
+/// see [ApiGatewayV2::create_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
@@ -1030,6 +1055,7 @@ pub struct CreateStageRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::create_stage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStageResponse {
@@ -1092,6 +1118,7 @@ pub struct CreateStageResponse {
 }
 
 /// <p>Creates a VPC link</p>
+/// see [ApiGatewayV2::create_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcLinkRequest {
@@ -1111,6 +1138,7 @@ pub struct CreateVpcLinkRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::create_vpc_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcLinkResponse {
@@ -1152,6 +1180,7 @@ pub struct CreateVpcLinkResponse {
     pub vpc_link_version: Option<String>,
 }
 
+/// see [ApiGatewayV2::delete_access_log_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessLogSettingsRequest {
@@ -1163,6 +1192,7 @@ pub struct DeleteAccessLogSettingsRequest {
     pub stage_name: String,
 }
 
+/// see [ApiGatewayV2::delete_api_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiMappingRequest {
@@ -1174,6 +1204,7 @@ pub struct DeleteApiMappingRequest {
     pub domain_name: String,
 }
 
+/// see [ApiGatewayV2::delete_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiRequest {
@@ -1182,6 +1213,7 @@ pub struct DeleteApiRequest {
     pub api_id: String,
 }
 
+/// see [ApiGatewayV2::delete_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
@@ -1193,6 +1225,7 @@ pub struct DeleteAuthorizerRequest {
     pub authorizer_id: String,
 }
 
+/// see [ApiGatewayV2::delete_cors_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCorsConfigurationRequest {
@@ -1201,6 +1234,7 @@ pub struct DeleteCorsConfigurationRequest {
     pub api_id: String,
 }
 
+/// see [ApiGatewayV2::delete_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
@@ -1212,6 +1246,7 @@ pub struct DeleteDeploymentRequest {
     pub deployment_id: String,
 }
 
+/// see [ApiGatewayV2::delete_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
@@ -1220,6 +1255,7 @@ pub struct DeleteDomainNameRequest {
     pub domain_name: String,
 }
 
+/// see [ApiGatewayV2::delete_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
@@ -1231,6 +1267,7 @@ pub struct DeleteIntegrationRequest {
     pub integration_id: String,
 }
 
+/// see [ApiGatewayV2::delete_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
@@ -1245,6 +1282,7 @@ pub struct DeleteIntegrationResponseRequest {
     pub integration_response_id: String,
 }
 
+/// see [ApiGatewayV2::delete_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
@@ -1256,6 +1294,7 @@ pub struct DeleteModelRequest {
     pub model_id: String,
 }
 
+/// see [ApiGatewayV2::delete_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequest {
@@ -1267,6 +1306,7 @@ pub struct DeleteRouteRequest {
     pub route_id: String,
 }
 
+/// see [ApiGatewayV2::delete_route_request_parameter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequestParameterRequest {
@@ -1281,6 +1321,7 @@ pub struct DeleteRouteRequestParameterRequest {
     pub route_id: String,
 }
 
+/// see [ApiGatewayV2::delete_route_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteResponseRequest {
@@ -1295,6 +1336,7 @@ pub struct DeleteRouteResponseRequest {
     pub route_response_id: String,
 }
 
+/// see [ApiGatewayV2::delete_route_settings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteSettingsRequest {
@@ -1309,6 +1351,7 @@ pub struct DeleteRouteSettingsRequest {
     pub stage_name: String,
 }
 
+/// see [ApiGatewayV2::delete_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
@@ -1320,6 +1363,7 @@ pub struct DeleteStageRequest {
     pub stage_name: String,
 }
 
+/// see [ApiGatewayV2::delete_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcLinkRequest {
@@ -1328,6 +1372,7 @@ pub struct DeleteVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
+/// see [ApiGatewayV2::delete_vpc_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcLinkResponse {}
@@ -1428,6 +1473,7 @@ pub struct DomainNameConfiguration {
     pub security_policy: Option<String>,
 }
 
+/// see [ApiGatewayV2::export_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportApiRequest {
@@ -1454,11 +1500,13 @@ pub struct ExportApiRequest {
     pub stage_name: Option<String>,
 }
 
+/// see [ApiGatewayV2::export_api]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExportApiResponse {
     pub body: Option<bytes::Bytes>,
 }
 
+/// see [ApiGatewayV2::get_api_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingRequest {
@@ -1470,6 +1518,7 @@ pub struct GetApiMappingRequest {
     pub domain_name: String,
 }
 
+/// see [ApiGatewayV2::get_api_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingResponse {
@@ -1491,6 +1540,7 @@ pub struct GetApiMappingResponse {
     pub stage: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_api_mappings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingsRequest {
@@ -1507,6 +1557,7 @@ pub struct GetApiMappingsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_api_mappings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingsResponse {
@@ -1520,6 +1571,7 @@ pub struct GetApiMappingsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiRequest {
@@ -1528,6 +1580,7 @@ pub struct GetApiRequest {
     pub api_id: String,
 }
 
+/// see [ApiGatewayV2::get_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiResponse {
@@ -1597,6 +1650,7 @@ pub struct GetApiResponse {
     pub warnings: Option<Vec<String>>,
 }
 
+/// see [ApiGatewayV2::get_apis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApisRequest {
@@ -1610,6 +1664,23 @@ pub struct GetApisRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetApisRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetApisRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_apis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApisResponse {
@@ -1623,6 +1694,29 @@ pub struct GetApisResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetApisResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetApisResponse {
+    type Item = Api;
+
+    fn into_pagination_page(self) -> Vec<Api> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
@@ -1634,6 +1728,7 @@ pub struct GetAuthorizerRequest {
     pub authorizer_id: String,
 }
 
+/// see [ApiGatewayV2::get_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizerResponse {
@@ -1684,6 +1779,7 @@ pub struct GetAuthorizerResponse {
     pub name: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_authorizers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
@@ -1700,6 +1796,23 @@ pub struct GetAuthorizersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetAuthorizersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetAuthorizersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_authorizers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizersResponse {
@@ -1713,6 +1826,29 @@ pub struct GetAuthorizersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetAuthorizersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetAuthorizersResponse {
+    type Item = Authorizer;
+
+    fn into_pagination_page(self) -> Vec<Authorizer> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
@@ -1724,6 +1860,7 @@ pub struct GetDeploymentRequest {
     pub deployment_id: String,
 }
 
+/// see [ApiGatewayV2::get_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentResponse {
@@ -1753,6 +1890,7 @@ pub struct GetDeploymentResponse {
     pub description: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
@@ -1769,6 +1907,23 @@ pub struct GetDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetDeploymentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDeploymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentsResponse {
@@ -1782,6 +1937,29 @@ pub struct GetDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetDeploymentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetDeploymentsResponse {
+    type Item = Deployment;
+
+    fn into_pagination_page(self) -> Vec<Deployment> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
@@ -1790,6 +1968,7 @@ pub struct GetDomainNameRequest {
     pub domain_name: String,
 }
 
+/// see [ApiGatewayV2::get_domain_name]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNameResponse {
@@ -1815,6 +1994,7 @@ pub struct GetDomainNameResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::get_domain_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
@@ -1828,6 +2008,23 @@ pub struct GetDomainNamesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetDomainNamesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDomainNamesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_domain_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNamesResponse {
@@ -1841,6 +2038,29 @@ pub struct GetDomainNamesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetDomainNamesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetDomainNamesResponse {
+    type Item = DomainName;
+
+    fn into_pagination_page(self) -> Vec<DomainName> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
@@ -1852,6 +2072,7 @@ pub struct GetIntegrationRequest {
     pub integration_id: String,
 }
 
+/// see [ApiGatewayV2::get_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
@@ -1866,6 +2087,7 @@ pub struct GetIntegrationResponseRequest {
     pub integration_response_id: String,
 }
 
+/// see [ApiGatewayV2::get_integration_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
@@ -1895,6 +2117,7 @@ pub struct GetIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_integration_responses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponsesRequest {
@@ -1914,6 +2137,23 @@ pub struct GetIntegrationResponsesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetIntegrationResponsesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetIntegrationResponsesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_integration_responses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponsesResponse {
@@ -1927,6 +2167,29 @@ pub struct GetIntegrationResponsesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetIntegrationResponsesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetIntegrationResponsesResponse {
+    type Item = IntegrationResponse;
+
+    fn into_pagination_page(self) -> Vec<IntegrationResponse> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_integration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResult {
@@ -2009,6 +2272,7 @@ pub struct GetIntegrationResult {
     pub tls_config: Option<TlsConfig>,
 }
 
+/// see [ApiGatewayV2::get_integrations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationsRequest {
@@ -2025,6 +2289,23 @@ pub struct GetIntegrationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetIntegrationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetIntegrationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_integrations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationsResponse {
@@ -2038,6 +2319,29 @@ pub struct GetIntegrationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetIntegrationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetIntegrationsResponse {
+    type Item = Integration;
+
+    fn into_pagination_page(self) -> Vec<Integration> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
@@ -2049,6 +2353,7 @@ pub struct GetModelRequest {
     pub model_id: String,
 }
 
+/// see [ApiGatewayV2::get_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelResponse {
@@ -2074,6 +2379,7 @@ pub struct GetModelResponse {
     pub schema: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_model_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
@@ -2085,6 +2391,7 @@ pub struct GetModelTemplateRequest {
     pub model_id: String,
 }
 
+/// see [ApiGatewayV2::get_model_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelTemplateResponse {
@@ -2094,6 +2401,7 @@ pub struct GetModelTemplateResponse {
     pub value: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
@@ -2110,6 +2418,23 @@ pub struct GetModelsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetModelsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetModelsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResponse {
@@ -2123,6 +2448,29 @@ pub struct GetModelsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetModelsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetModelsResponse {
+    type Item = Model;
+
+    fn into_pagination_page(self) -> Vec<Model> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteRequest {
@@ -2134,6 +2482,7 @@ pub struct GetRouteRequest {
     pub route_id: String,
 }
 
+/// see [ApiGatewayV2::get_route_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponseRequest {
@@ -2148,6 +2497,7 @@ pub struct GetRouteResponseRequest {
     pub route_response_id: String,
 }
 
+/// see [ApiGatewayV2::get_route_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponseResponse {
@@ -2173,6 +2523,7 @@ pub struct GetRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_route_responses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponsesRequest {
@@ -2192,6 +2543,23 @@ pub struct GetRouteResponsesRequest {
     pub route_id: String,
 }
 
+impl Paged for GetRouteResponsesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetRouteResponsesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_route_responses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponsesResponse {
@@ -2205,6 +2573,29 @@ pub struct GetRouteResponsesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetRouteResponsesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetRouteResponsesResponse {
+    type Item = RouteResponse;
+
+    fn into_pagination_page(self) -> Vec<RouteResponse> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResult {
@@ -2262,6 +2653,7 @@ pub struct GetRouteResult {
     pub target: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoutesRequest {
@@ -2278,6 +2670,23 @@ pub struct GetRoutesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetRoutesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetRoutesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoutesResponse {
@@ -2291,6 +2700,29 @@ pub struct GetRoutesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetRoutesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetRoutesResponse {
+    type Item = Route;
+
+    fn into_pagination_page(self) -> Vec<Route> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
@@ -2302,6 +2734,7 @@ pub struct GetStageRequest {
     pub stage_name: String,
 }
 
+/// see [ApiGatewayV2::get_stage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStageResponse {
@@ -2363,6 +2796,7 @@ pub struct GetStageResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::get_stages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
@@ -2379,6 +2813,23 @@ pub struct GetStagesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetStagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetStagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ApiGatewayV2::get_stages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStagesResponse {
@@ -2392,6 +2843,29 @@ pub struct GetStagesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetStagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetStagesResponse {
+    type Item = Stage;
+
+    fn into_pagination_page(self) -> Vec<Stage> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ApiGatewayV2::get_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
@@ -2400,6 +2874,7 @@ pub struct GetTagsRequest {
     pub resource_arn: String,
 }
 
+/// see [ApiGatewayV2::get_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
@@ -2408,6 +2883,7 @@ pub struct GetTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::get_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinkRequest {
@@ -2416,6 +2892,7 @@ pub struct GetVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
+/// see [ApiGatewayV2::get_vpc_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVpcLinkResponse {
@@ -2457,6 +2934,7 @@ pub struct GetVpcLinkResponse {
     pub vpc_link_version: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_vpc_links]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinksRequest {
@@ -2470,6 +2948,7 @@ pub struct GetVpcLinksRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ApiGatewayV2::get_vpc_links]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVpcLinksResponse {
@@ -2484,6 +2963,7 @@ pub struct GetVpcLinksResponse {
 }
 
 /// <p></p>
+/// see [ApiGatewayV2::import_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiRequest {
@@ -2500,6 +2980,7 @@ pub struct ImportApiRequest {
     pub fail_on_warnings: Option<bool>,
 }
 
+/// see [ApiGatewayV2::import_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportApiResponse {
@@ -2760,6 +3241,7 @@ pub struct ParameterConstraints {
 }
 
 /// <p></p>
+/// see [ApiGatewayV2::reimport_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReimportApiRequest {
@@ -2779,6 +3261,7 @@ pub struct ReimportApiRequest {
     pub fail_on_warnings: Option<bool>,
 }
 
+/// see [ApiGatewayV2::reimport_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReimportApiResponse {
@@ -2848,6 +3331,7 @@ pub struct ReimportApiResponse {
     pub warnings: Option<Vec<String>>,
 }
 
+/// see [ApiGatewayV2::reset_authorizers_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetAuthorizersCacheRequest {
@@ -3028,6 +3512,7 @@ pub struct Stage {
 }
 
 /// <p>Creates a new Tag resource to represent a tag.</p>
+/// see [ApiGatewayV2::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3040,6 +3525,7 @@ pub struct TagResourceRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3064,6 +3550,7 @@ pub struct TlsConfigInput {
     pub server_name_to_verify: Option<String>,
 }
 
+/// see [ApiGatewayV2::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3076,6 +3563,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Updates an ApiMapping.</p>
+/// see [ApiGatewayV2::update_api_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiMappingRequest {
@@ -3098,6 +3586,7 @@ pub struct UpdateApiMappingRequest {
     pub stage: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_api_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiMappingResponse {
@@ -3120,6 +3609,7 @@ pub struct UpdateApiMappingResponse {
 }
 
 /// <p>Updates an Api.</p>
+/// see [ApiGatewayV2::update_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiRequest {
@@ -3172,6 +3662,7 @@ pub struct UpdateApiRequest {
     pub version: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiResponse {
@@ -3242,6 +3733,7 @@ pub struct UpdateApiResponse {
 }
 
 /// <p>Updates an Authorizer.</p>
+/// see [ApiGatewayV2::update_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
@@ -3294,6 +3786,7 @@ pub struct UpdateAuthorizerRequest {
     pub name: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
@@ -3345,6 +3838,7 @@ pub struct UpdateAuthorizerResponse {
 }
 
 /// <p>Updates a Deployment.</p>
+/// see [ApiGatewayV2::update_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
@@ -3360,6 +3854,7 @@ pub struct UpdateDeploymentRequest {
     pub description: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentResponse {
@@ -3390,6 +3885,7 @@ pub struct UpdateDeploymentResponse {
 }
 
 /// <p>Updates a DomainName.</p>
+/// see [ApiGatewayV2::update_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
@@ -3406,6 +3902,7 @@ pub struct UpdateDomainNameRequest {
     pub mutual_tls_authentication: Option<MutualTlsAuthenticationInput>,
 }
 
+/// see [ApiGatewayV2::update_domain_name]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainNameResponse {
@@ -3432,6 +3929,7 @@ pub struct UpdateDomainNameResponse {
 }
 
 /// <p>Updates an Integration.</p>
+/// see [ApiGatewayV2::update_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
@@ -3509,6 +4007,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 /// <p>Updates an IntegrationResponses.</p>
+/// see [ApiGatewayV2::update_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
@@ -3550,6 +4049,7 @@ pub struct UpdateIntegrationResponseRequest {
     pub template_selection_expression: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_integration_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResponseResponse {
@@ -3579,6 +4079,7 @@ pub struct UpdateIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_integration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResult {
@@ -3662,6 +4163,7 @@ pub struct UpdateIntegrationResult {
 }
 
 /// <p>Updates a Model.</p>
+/// see [ApiGatewayV2::update_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
@@ -3689,6 +4191,7 @@ pub struct UpdateModelRequest {
     pub schema: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelResponse {
@@ -3715,6 +4218,7 @@ pub struct UpdateModelResponse {
 }
 
 /// <p>Updates a Route.</p>
+/// see [ApiGatewayV2::update_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteRequest {
@@ -3771,6 +4275,7 @@ pub struct UpdateRouteRequest {
 }
 
 /// <p>Updates a RouteResponse.</p>
+/// see [ApiGatewayV2::update_route_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteResponseRequest {
@@ -3801,6 +4306,7 @@ pub struct UpdateRouteResponseRequest {
     pub route_response_key: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_route_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResponseResponse {
@@ -3826,6 +4332,7 @@ pub struct UpdateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
+/// see [ApiGatewayV2::update_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResult {
@@ -3884,6 +4391,7 @@ pub struct UpdateRouteResult {
 }
 
 /// <p>Updates a Stage.</p>
+/// see [ApiGatewayV2::update_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
@@ -3927,6 +4435,7 @@ pub struct UpdateStageRequest {
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ApiGatewayV2::update_stage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStageResponse {
@@ -3989,6 +4498,7 @@ pub struct UpdateStageResponse {
 }
 
 /// <p>Updates a VPC link.</p>
+/// see [ApiGatewayV2::update_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVpcLinkRequest {
@@ -4001,6 +4511,7 @@ pub struct UpdateVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
+/// see [ApiGatewayV2::update_vpc_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVpcLinkResponse {
@@ -7117,7 +7628,7 @@ impl fmt::Display for UpdateVpcLinkError {
 impl Error for UpdateVpcLinkError {}
 /// Trait representing the capabilities of the AmazonApiGatewayV2 API. AmazonApiGatewayV2 clients implement this trait.
 #[async_trait]
-pub trait ApiGatewayV2 {
+pub trait ApiGatewayV2: Clone + Sync + Send + 'static {
     /// <p>Creates an Api resource.</p>
     async fn create_api(
         &self,
@@ -7312,6 +7823,17 @@ pub trait ApiGatewayV2 {
         input: GetApisRequest,
     ) -> Result<GetApisResponse, RusotoError<GetApisError>>;
 
+    /// Auto-paginating version of `get_apis`
+    fn get_apis_pages<'a>(
+        &'a self,
+        mut input: GetApisRequest,
+    ) -> RusotoStream<'a, Api, GetApisError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_apis(input.clone())
+        }))
+    }
+
     /// <p>Gets an Authorizer.</p>
     async fn get_authorizer(
         &self,
@@ -7323,6 +7845,17 @@ pub trait ApiGatewayV2 {
         &self,
         input: GetAuthorizersRequest,
     ) -> Result<GetAuthorizersResponse, RusotoError<GetAuthorizersError>>;
+
+    /// Auto-paginating version of `get_authorizers`
+    fn get_authorizers_pages<'a>(
+        &'a self,
+        mut input: GetAuthorizersRequest,
+    ) -> RusotoStream<'a, Authorizer, GetAuthorizersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_authorizers(input.clone())
+        }))
+    }
 
     /// <p>Gets a Deployment.</p>
     async fn get_deployment(
@@ -7336,6 +7869,17 @@ pub trait ApiGatewayV2 {
         input: GetDeploymentsRequest,
     ) -> Result<GetDeploymentsResponse, RusotoError<GetDeploymentsError>>;
 
+    /// Auto-paginating version of `get_deployments`
+    fn get_deployments_pages<'a>(
+        &'a self,
+        mut input: GetDeploymentsRequest,
+    ) -> RusotoStream<'a, Deployment, GetDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_deployments(input.clone())
+        }))
+    }
+
     /// <p>Gets a domain name.</p>
     async fn get_domain_name(
         &self,
@@ -7347,6 +7891,17 @@ pub trait ApiGatewayV2 {
         &self,
         input: GetDomainNamesRequest,
     ) -> Result<GetDomainNamesResponse, RusotoError<GetDomainNamesError>>;
+
+    /// Auto-paginating version of `get_domain_names`
+    fn get_domain_names_pages<'a>(
+        &'a self,
+        mut input: GetDomainNamesRequest,
+    ) -> RusotoStream<'a, DomainName, GetDomainNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_domain_names(input.clone())
+        }))
+    }
 
     /// <p>Gets an Integration.</p>
     async fn get_integration(
@@ -7366,11 +7921,33 @@ pub trait ApiGatewayV2 {
         input: GetIntegrationResponsesRequest,
     ) -> Result<GetIntegrationResponsesResponse, RusotoError<GetIntegrationResponsesError>>;
 
+    /// Auto-paginating version of `get_integration_responses`
+    fn get_integration_responses_pages<'a>(
+        &'a self,
+        mut input: GetIntegrationResponsesRequest,
+    ) -> RusotoStream<'a, IntegrationResponse, GetIntegrationResponsesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_integration_responses(input.clone())
+        }))
+    }
+
     /// <p>Gets the Integrations for an API.</p>
     async fn get_integrations(
         &self,
         input: GetIntegrationsRequest,
     ) -> Result<GetIntegrationsResponse, RusotoError<GetIntegrationsError>>;
+
+    /// Auto-paginating version of `get_integrations`
+    fn get_integrations_pages<'a>(
+        &'a self,
+        mut input: GetIntegrationsRequest,
+    ) -> RusotoStream<'a, Integration, GetIntegrationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_integrations(input.clone())
+        }))
+    }
 
     /// <p>Gets a Model.</p>
     async fn get_model(
@@ -7390,6 +7967,17 @@ pub trait ApiGatewayV2 {
         input: GetModelsRequest,
     ) -> Result<GetModelsResponse, RusotoError<GetModelsError>>;
 
+    /// Auto-paginating version of `get_models`
+    fn get_models_pages<'a>(
+        &'a self,
+        mut input: GetModelsRequest,
+    ) -> RusotoStream<'a, Model, GetModelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_models(input.clone())
+        }))
+    }
+
     /// <p>Gets a Route.</p>
     async fn get_route(
         &self,
@@ -7408,11 +7996,33 @@ pub trait ApiGatewayV2 {
         input: GetRouteResponsesRequest,
     ) -> Result<GetRouteResponsesResponse, RusotoError<GetRouteResponsesError>>;
 
+    /// Auto-paginating version of `get_route_responses`
+    fn get_route_responses_pages<'a>(
+        &'a self,
+        mut input: GetRouteResponsesRequest,
+    ) -> RusotoStream<'a, RouteResponse, GetRouteResponsesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_route_responses(input.clone())
+        }))
+    }
+
     /// <p>Gets the Routes for an API.</p>
     async fn get_routes(
         &self,
         input: GetRoutesRequest,
     ) -> Result<GetRoutesResponse, RusotoError<GetRoutesError>>;
+
+    /// Auto-paginating version of `get_routes`
+    fn get_routes_pages<'a>(
+        &'a self,
+        mut input: GetRoutesRequest,
+    ) -> RusotoStream<'a, Route, GetRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_routes(input.clone())
+        }))
+    }
 
     /// <p>Gets a Stage.</p>
     async fn get_stage(
@@ -7425,6 +8035,17 @@ pub trait ApiGatewayV2 {
         &self,
         input: GetStagesRequest,
     ) -> Result<GetStagesResponse, RusotoError<GetStagesError>>;
+
+    /// Auto-paginating version of `get_stages`
+    fn get_stages_pages<'a>(
+        &'a self,
+        mut input: GetStagesRequest,
+    ) -> RusotoStream<'a, Stage, GetStagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_stages(input.clone())
+        }))
+    }
 
     /// <p>Gets a collection of Tag resources.</p>
     async fn get_tags(

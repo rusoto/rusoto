@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -40,6 +44,8 @@ pub struct AccessLogSettings {
 }
 
 /// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="https://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
+/// see [ApiGateway::get_account]
+/// see [ApiGateway::update_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Account {
@@ -62,6 +68,9 @@ pub struct Account {
 }
 
 /// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+/// see [ApiGateway::create_api_key]
+/// see [ApiGateway::get_api_key]
+/// see [ApiGateway::update_api_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKey {
@@ -108,6 +117,7 @@ pub struct ApiKey {
 }
 
 /// <p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>
+/// see [ApiGateway::import_api_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKeyIds {
@@ -122,6 +132,7 @@ pub struct ApiKeyIds {
 }
 
 /// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
+/// see [ApiGateway::get_api_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKeys {
@@ -136,6 +147,28 @@ pub struct ApiKeys {
     #[serde(rename = "warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
+}
+
+impl Paged for ApiKeys {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for ApiKeys {
+    type Item = ApiKey;
+
+    fn into_pagination_page(self) -> Vec<ApiKey> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>API stage name of the associated API stage in a usage plan.</p>
@@ -156,6 +189,9 @@ pub struct ApiStage {
 }
 
 /// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
+/// see [ApiGateway::create_authorizer]
+/// see [ApiGateway::get_authorizer]
+/// see [ApiGateway::update_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizer {
@@ -202,6 +238,7 @@ pub struct Authorizer {
 }
 
 /// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
+/// see [ApiGateway::get_authorizers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizers {
@@ -214,7 +251,32 @@ pub struct Authorizers {
     pub position: Option<String>,
 }
 
+impl Paged for Authorizers {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for Authorizers {
+    type Item = Authorizer;
+
+    fn into_pagination_page(self) -> Vec<Authorizer> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+/// see [ApiGateway::create_base_path_mapping]
+/// see [ApiGateway::get_base_path_mapping]
+/// see [ApiGateway::update_base_path_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BasePathMapping {
@@ -233,6 +295,7 @@ pub struct BasePathMapping {
 }
 
 /// <p><p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
+/// see [ApiGateway::get_base_path_mappings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BasePathMappings {
@@ -243,6 +306,28 @@ pub struct BasePathMappings {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+impl Paged for BasePathMappings {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for BasePathMappings {
+    type Item = BasePathMapping;
+
+    fn into_pagination_page(self) -> Vec<BasePathMapping> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Configuration settings of a canary deployment.</p>
@@ -267,6 +352,9 @@ pub struct CanarySettings {
 }
 
 /// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+/// see [ApiGateway::generate_client_certificate]
+/// see [ApiGateway::get_client_certificate]
+/// see [ApiGateway::update_client_certificate]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientCertificate {
@@ -297,6 +385,7 @@ pub struct ClientCertificate {
 }
 
 /// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+/// see [ApiGateway::get_client_certificates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientCertificates {
@@ -309,7 +398,30 @@ pub struct ClientCertificates {
     pub position: Option<String>,
 }
 
+impl Paged for ClientCertificates {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for ClientCertificates {
+    type Item = ClientCertificate;
+
+    fn into_pagination_page(self) -> Vec<ClientCertificate> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Request to create an <a>ApiKey</a> resource.</p>
+/// see [ApiGateway::create_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiKeyRequest {
@@ -348,6 +460,7 @@ pub struct CreateApiKeyRequest {
 }
 
 /// <p>Request to add a new <a>Authorizer</a> to an existing <a>RestApi</a> resource.</p>
+/// see [ApiGateway::create_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
@@ -391,6 +504,7 @@ pub struct CreateAuthorizerRequest {
 }
 
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
+/// see [ApiGateway::create_base_path_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBasePathMappingRequest {
@@ -411,6 +525,7 @@ pub struct CreateBasePathMappingRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Deployment</a> resource.</p>
+/// see [ApiGateway::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
@@ -452,6 +567,7 @@ pub struct CreateDeploymentRequest {
 }
 
 /// <p>Creates a new documentation part of a given API.</p>
+/// see [ApiGateway::create_documentation_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationPartRequest {
@@ -467,6 +583,7 @@ pub struct CreateDocumentationPartRequest {
 }
 
 /// <p>Creates a new documentation version of a given API.</p>
+/// see [ApiGateway::create_documentation_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationVersionRequest {
@@ -487,6 +604,7 @@ pub struct CreateDocumentationVersionRequest {
 }
 
 /// <p>A request to create a new domain name.</p>
+/// see [ApiGateway::create_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
@@ -539,6 +657,7 @@ pub struct CreateDomainNameRequest {
 }
 
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
+/// see [ApiGateway::create_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
@@ -562,6 +681,7 @@ pub struct CreateModelRequest {
 }
 
 /// <p>Creates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+/// see [ApiGateway::create_request_validator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRequestValidatorRequest {
@@ -583,6 +703,7 @@ pub struct CreateRequestValidatorRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
+/// see [ApiGateway::create_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
@@ -598,6 +719,7 @@ pub struct CreateResourceRequest {
 }
 
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
+/// see [ApiGateway::create_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRestApiRequest {
@@ -647,6 +769,7 @@ pub struct CreateRestApiRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Stage</a> resource.</p>
+/// see [ApiGateway::create_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
@@ -694,6 +817,7 @@ pub struct CreateStageRequest {
 }
 
 /// <p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>
+/// see [ApiGateway::create_usage_plan_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanKeyRequest {
@@ -709,6 +833,7 @@ pub struct CreateUsagePlanKeyRequest {
 }
 
 /// <p>The POST request to create a usage plan with the name, description, throttle limits and quota limits, as well as the associated API stages, specified in the payload.</p>
+/// see [ApiGateway::create_usage_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanRequest {
@@ -738,6 +863,7 @@ pub struct CreateUsagePlanRequest {
 }
 
 /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+/// see [ApiGateway::create_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcLinkRequest {
@@ -758,6 +884,7 @@ pub struct CreateVpcLinkRequest {
 }
 
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
+/// see [ApiGateway::delete_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiKeyRequest {
@@ -767,6 +894,7 @@ pub struct DeleteApiKeyRequest {
 }
 
 /// <p>Request to delete an existing <a>Authorizer</a> resource.</p>
+/// see [ApiGateway::delete_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
@@ -779,6 +907,7 @@ pub struct DeleteAuthorizerRequest {
 }
 
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
+/// see [ApiGateway::delete_base_path_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBasePathMappingRequest {
@@ -791,6 +920,7 @@ pub struct DeleteBasePathMappingRequest {
 }
 
 /// <p>A request to delete the <a>ClientCertificate</a> resource.</p>
+/// see [ApiGateway::delete_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClientCertificateRequest {
@@ -800,6 +930,7 @@ pub struct DeleteClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
+/// see [ApiGateway::delete_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
@@ -812,6 +943,7 @@ pub struct DeleteDeploymentRequest {
 }
 
 /// <p>Deletes an existing documentation part of an API.</p>
+/// see [ApiGateway::delete_documentation_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationPartRequest {
@@ -824,6 +956,7 @@ pub struct DeleteDocumentationPartRequest {
 }
 
 /// <p>Deletes an existing documentation version of an API.</p>
+/// see [ApiGateway::delete_documentation_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationVersionRequest {
@@ -836,6 +969,7 @@ pub struct DeleteDocumentationVersionRequest {
 }
 
 /// <p>A request to delete the <a>DomainName</a> resource.</p>
+/// see [ApiGateway::delete_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
@@ -845,6 +979,7 @@ pub struct DeleteDomainNameRequest {
 }
 
 /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
+/// see [ApiGateway::delete_gateway_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayResponseRequest {
@@ -857,6 +992,7 @@ pub struct DeleteGatewayResponseRequest {
 }
 
 /// <p>Represents a delete integration request.</p>
+/// see [ApiGateway::delete_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
@@ -872,6 +1008,7 @@ pub struct DeleteIntegrationRequest {
 }
 
 /// <p>Represents a delete integration response request.</p>
+/// see [ApiGateway::delete_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
@@ -890,6 +1027,7 @@ pub struct DeleteIntegrationResponseRequest {
 }
 
 /// <p>Request to delete an existing <a>Method</a> resource.</p>
+/// see [ApiGateway::delete_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodRequest {
@@ -905,6 +1043,7 @@ pub struct DeleteMethodRequest {
 }
 
 /// <p>A request to delete an existing <a>MethodResponse</a> resource.</p>
+/// see [ApiGateway::delete_method_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodResponseRequest {
@@ -923,6 +1062,7 @@ pub struct DeleteMethodResponseRequest {
 }
 
 /// <p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>
+/// see [ApiGateway::delete_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
@@ -935,6 +1075,7 @@ pub struct DeleteModelRequest {
 }
 
 /// <p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+/// see [ApiGateway::delete_request_validator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRequestValidatorRequest {
@@ -947,6 +1088,7 @@ pub struct DeleteRequestValidatorRequest {
 }
 
 /// <p>Request to delete a <a>Resource</a>.</p>
+/// see [ApiGateway::delete_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
@@ -959,6 +1101,7 @@ pub struct DeleteResourceRequest {
 }
 
 /// <p>Request to delete the specified API from your collection.</p>
+/// see [ApiGateway::delete_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRestApiRequest {
@@ -968,6 +1111,7 @@ pub struct DeleteRestApiRequest {
 }
 
 /// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
+/// see [ApiGateway::delete_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
@@ -980,6 +1124,7 @@ pub struct DeleteStageRequest {
 }
 
 /// <p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>
+/// see [ApiGateway::delete_usage_plan_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanKeyRequest {
@@ -992,6 +1137,7 @@ pub struct DeleteUsagePlanKeyRequest {
 }
 
 /// <p>The DELETE request to delete a usage plan of a given plan Id.</p>
+/// see [ApiGateway::delete_usage_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanRequest {
@@ -1001,6 +1147,7 @@ pub struct DeleteUsagePlanRequest {
 }
 
 /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+/// see [ApiGateway::delete_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcLinkRequest {
@@ -1010,6 +1157,9 @@ pub struct DeleteVpcLinkRequest {
 }
 
 /// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+/// see [ApiGateway::create_deployment]
+/// see [ApiGateway::get_deployment]
+/// see [ApiGateway::update_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
@@ -1052,6 +1202,7 @@ pub struct DeploymentCanarySettings {
 }
 
 /// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
+/// see [ApiGateway::get_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployments {
@@ -1064,7 +1215,32 @@ pub struct Deployments {
     pub position: Option<String>,
 }
 
+impl Paged for Deployments {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for Deployments {
+    type Item = Deployment;
+
+    fn into_pagination_page(self) -> Vec<Deployment> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
+/// see [ApiGateway::create_documentation_part]
+/// see [ApiGateway::get_documentation_part]
+/// see [ApiGateway::update_documentation_part]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationPart {
@@ -1083,6 +1259,7 @@ pub struct DocumentationPart {
 }
 
 /// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., OpenAPI) file are imported into API Gateway</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="https://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
+/// see [ApiGateway::import_documentation_parts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationPartIds {
@@ -1121,6 +1298,7 @@ pub struct DocumentationPartLocation {
 }
 
 /// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
+/// see [ApiGateway::get_documentation_parts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationParts {
@@ -1133,7 +1311,32 @@ pub struct DocumentationParts {
     pub position: Option<String>,
 }
 
+impl Paged for DocumentationParts {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for DocumentationParts {
+    type Item = DocumentationPart;
+
+    fn into_pagination_page(self) -> Vec<DocumentationPart> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
+/// see [ApiGateway::create_documentation_version]
+/// see [ApiGateway::get_documentation_version]
+/// see [ApiGateway::update_documentation_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationVersion {
@@ -1152,6 +1355,7 @@ pub struct DocumentationVersion {
 }
 
 /// <p><p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div></p>
+/// see [ApiGateway::get_documentation_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationVersions {
@@ -1164,7 +1368,32 @@ pub struct DocumentationVersions {
     pub position: Option<String>,
 }
 
+impl Paged for DocumentationVersions {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for DocumentationVersions {
+    type Item = DocumentationVersion;
+
+    fn into_pagination_page(self) -> Vec<DocumentationVersion> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
+/// see [ApiGateway::create_domain_name]
+/// see [ApiGateway::get_domain_name]
+/// see [ApiGateway::update_domain_name]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainName {
@@ -1235,6 +1464,7 @@ pub struct DomainName {
 }
 
 /// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
+/// see [ApiGateway::get_domain_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainNames {
@@ -1245,6 +1475,28 @@ pub struct DomainNames {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+impl Paged for DomainNames {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for DomainNames {
+    type Item = DomainName;
+
+    fn into_pagination_page(self) -> Vec<DomainName> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The endpoint configuration to indicate the types of endpoints an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>) has. </p>
@@ -1261,6 +1513,7 @@ pub struct EndpointConfiguration {
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
+/// see [ApiGateway::get_export]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExportResponse {
     /// <p>The binary blob response to <a>GetExport</a>, which contains the export.</p>
@@ -1272,6 +1525,7 @@ pub struct ExportResponse {
 }
 
 /// <p>Request to flush authorizer cache entries on a specified stage.</p>
+/// see [ApiGateway::flush_stage_authorizers_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageAuthorizersCacheRequest {
@@ -1284,6 +1538,7 @@ pub struct FlushStageAuthorizersCacheRequest {
 }
 
 /// <p>Requests API Gateway to flush a stage's cache.</p>
+/// see [ApiGateway::flush_stage_cache]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageCacheRequest {
@@ -1296,6 +1551,9 @@ pub struct FlushStageCacheRequest {
 }
 
 /// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p/> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+/// see [ApiGateway::get_gateway_response]
+/// see [ApiGateway::put_gateway_response]
+/// see [ApiGateway::update_gateway_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GatewayResponse {
@@ -1322,6 +1580,7 @@ pub struct GatewayResponse {
 }
 
 /// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p/> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p/> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+/// see [ApiGateway::get_gateway_responses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GatewayResponses {
@@ -1334,7 +1593,30 @@ pub struct GatewayResponses {
     pub position: Option<String>,
 }
 
+impl Paged for GatewayResponses {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for GatewayResponses {
+    type Item = GatewayResponse;
+
+    fn into_pagination_page(self) -> Vec<GatewayResponse> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>A request to generate a <a>ClientCertificate</a> resource.</p>
+/// see [ApiGateway::generate_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateClientCertificateRequest {
@@ -1349,11 +1631,13 @@ pub struct GenerateClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
+/// see [ApiGateway::get_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {}
 
 /// <p>A request to get information about the current <a>ApiKey</a> resource.</p>
+/// see [ApiGateway::get_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeyRequest {
@@ -1367,6 +1651,7 @@ pub struct GetApiKeyRequest {
 }
 
 /// <p>A request to get information about the current <a>ApiKeys</a> resource.</p>
+/// see [ApiGateway::get_api_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeysRequest {
@@ -1392,7 +1677,24 @@ pub struct GetApiKeysRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetApiKeysRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetApiKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request to describe an existing <a>Authorizer</a> resource.</p>
+/// see [ApiGateway::get_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
@@ -1405,6 +1707,7 @@ pub struct GetAuthorizerRequest {
 }
 
 /// <p>Request to describe an existing <a>Authorizers</a> resource.</p>
+/// see [ApiGateway::get_authorizers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
@@ -1421,7 +1724,24 @@ pub struct GetAuthorizersRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetAuthorizersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetAuthorizersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
+/// see [ApiGateway::get_base_path_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingRequest {
@@ -1434,6 +1754,7 @@ pub struct GetBasePathMappingRequest {
 }
 
 /// <p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>
+/// see [ApiGateway::get_base_path_mappings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingsRequest {
@@ -1450,7 +1771,24 @@ pub struct GetBasePathMappingsRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetBasePathMappingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetBasePathMappingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>A request to get information about the current <a>ClientCertificate</a> resource.</p>
+/// see [ApiGateway::get_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificateRequest {
@@ -1460,6 +1798,7 @@ pub struct GetClientCertificateRequest {
 }
 
 /// <p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>
+/// see [ApiGateway::get_client_certificates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificatesRequest {
@@ -1473,7 +1812,24 @@ pub struct GetClientCertificatesRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetClientCertificatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetClientCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Requests API Gateway to get information about a <a>Deployment</a> resource.</p>
+/// see [ApiGateway::get_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
@@ -1490,6 +1846,7 @@ pub struct GetDeploymentRequest {
 }
 
 /// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
+/// see [ApiGateway::get_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
@@ -1506,7 +1863,24 @@ pub struct GetDeploymentsRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetDeploymentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDeploymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Gets a specified documentation part of a given API.</p>
+/// see [ApiGateway::get_documentation_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartRequest {
@@ -1519,6 +1893,7 @@ pub struct GetDocumentationPartRequest {
 }
 
 /// <p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>
+/// see [ApiGateway::get_documentation_parts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartsRequest {
@@ -1551,7 +1926,24 @@ pub struct GetDocumentationPartsRequest {
     pub type_: Option<String>,
 }
 
+impl Paged for GetDocumentationPartsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDocumentationPartsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Gets a documentation snapshot of an API.</p>
+/// see [ApiGateway::get_documentation_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionRequest {
@@ -1564,6 +1956,7 @@ pub struct GetDocumentationVersionRequest {
 }
 
 /// <p>Gets the documentation versions of an API.</p>
+/// see [ApiGateway::get_documentation_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionsRequest {
@@ -1580,7 +1973,24 @@ pub struct GetDocumentationVersionsRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetDocumentationVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDocumentationVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request to get the name of a <a>DomainName</a> resource.</p>
+/// see [ApiGateway::get_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
@@ -1590,6 +2000,7 @@ pub struct GetDomainNameRequest {
 }
 
 /// <p>Request to describe a collection of <a>DomainName</a> resources.</p>
+/// see [ApiGateway::get_domain_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
@@ -1603,7 +2014,24 @@ pub struct GetDomainNamesRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetDomainNamesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDomainNamesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request a new export of a <a>RestApi</a> for a particular <a>Stage</a>.</p>
+/// see [ApiGateway::get_export]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportRequest {
@@ -1627,6 +2055,7 @@ pub struct GetExportRequest {
 }
 
 /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+/// see [ApiGateway::get_gateway_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponseRequest {
@@ -1639,6 +2068,7 @@ pub struct GetGatewayResponseRequest {
 }
 
 /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+/// see [ApiGateway::get_gateway_responses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponsesRequest {
@@ -1655,7 +2085,24 @@ pub struct GetGatewayResponsesRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetGatewayResponsesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetGatewayResponsesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Represents a request to get the integration configuration.</p>
+/// see [ApiGateway::get_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
@@ -1671,6 +2118,7 @@ pub struct GetIntegrationRequest {
 }
 
 /// <p>Represents a get integration response request.</p>
+/// see [ApiGateway::get_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
@@ -1689,6 +2137,7 @@ pub struct GetIntegrationResponseRequest {
 }
 
 /// <p>Request to describe an existing <a>Method</a> resource.</p>
+/// see [ApiGateway::get_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodRequest {
@@ -1704,6 +2153,7 @@ pub struct GetMethodRequest {
 }
 
 /// <p>Request to describe a <a>MethodResponse</a> resource.</p>
+/// see [ApiGateway::get_method_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodResponseRequest {
@@ -1722,6 +2172,7 @@ pub struct GetMethodResponseRequest {
 }
 
 /// <p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>
+/// see [ApiGateway::get_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
@@ -1738,6 +2189,7 @@ pub struct GetModelRequest {
 }
 
 /// <p>Request to generate a sample mapping template used to transform the payload.</p>
+/// see [ApiGateway::get_model_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
@@ -1750,6 +2202,7 @@ pub struct GetModelTemplateRequest {
 }
 
 /// <p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
+/// see [ApiGateway::get_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
@@ -1766,7 +2219,24 @@ pub struct GetModelsRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetModelsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetModelsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+/// see [ApiGateway::get_request_validator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorRequest {
@@ -1779,6 +2249,7 @@ pub struct GetRequestValidatorRequest {
 }
 
 /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
+/// see [ApiGateway::get_request_validators]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorsRequest {
@@ -1795,7 +2266,24 @@ pub struct GetRequestValidatorsRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetRequestValidatorsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetRequestValidatorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request to list information about a resource.</p>
+/// see [ApiGateway::get_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceRequest {
@@ -1812,6 +2300,7 @@ pub struct GetResourceRequest {
 }
 
 /// <p>Request to list information about a collection of resources.</p>
+/// see [ApiGateway::get_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
@@ -1832,7 +2321,24 @@ pub struct GetResourcesRequest {
     pub rest_api_id: String,
 }
 
+impl Paged for GetResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>
+/// see [ApiGateway::get_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApiRequest {
@@ -1842,6 +2348,7 @@ pub struct GetRestApiRequest {
 }
 
 /// <p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>
+/// see [ApiGateway::get_rest_apis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApisRequest {
@@ -1855,7 +2362,24 @@ pub struct GetRestApisRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetRestApisRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetRestApisRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Request a new generated client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
+/// see [ApiGateway::get_sdk]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkRequest {
@@ -1875,6 +2399,7 @@ pub struct GetSdkRequest {
 }
 
 /// <p>Get an <a>SdkType</a> instance.</p>
+/// see [ApiGateway::get_sdk_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypeRequest {
@@ -1884,6 +2409,7 @@ pub struct GetSdkTypeRequest {
 }
 
 /// <p>Get the <a>SdkTypes</a> collection.</p>
+/// see [ApiGateway::get_sdk_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypesRequest {
@@ -1897,7 +2423,24 @@ pub struct GetSdkTypesRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetSdkTypesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetSdkTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Requests API Gateway to get information about a <a>Stage</a> resource.</p>
+/// see [ApiGateway::get_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
@@ -1910,6 +2453,7 @@ pub struct GetStageRequest {
 }
 
 /// <p>Requests API Gateway to get information about one or more <a>Stage</a> resources.</p>
+/// see [ApiGateway::get_stages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
@@ -1923,6 +2467,7 @@ pub struct GetStagesRequest {
 }
 
 /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
+/// see [ApiGateway::get_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
@@ -1940,6 +2485,7 @@ pub struct GetTagsRequest {
 }
 
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
+/// see [ApiGateway::get_usage_plan_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeyRequest {
@@ -1952,6 +2498,7 @@ pub struct GetUsagePlanKeyRequest {
 }
 
 /// <p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>
+/// see [ApiGateway::get_usage_plan_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeysRequest {
@@ -1972,7 +2519,24 @@ pub struct GetUsagePlanKeysRequest {
     pub usage_plan_id: String,
 }
 
+impl Paged for GetUsagePlanKeysRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsagePlanKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>The GET request to get a usage plan of a given plan identifier.</p>
+/// see [ApiGateway::get_usage_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanRequest {
@@ -1982,6 +2546,7 @@ pub struct GetUsagePlanRequest {
 }
 
 /// <p>The GET request to get all the usage plans of the caller's account.</p>
+/// see [ApiGateway::get_usage_plans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlansRequest {
@@ -1999,7 +2564,24 @@ pub struct GetUsagePlansRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetUsagePlansRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsagePlansRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>The GET request to get the usage data of a usage plan in a specified time interval.</p>
+/// see [ApiGateway::get_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageRequest {
@@ -2026,7 +2608,24 @@ pub struct GetUsageRequest {
     pub usage_plan_id: String,
 }
 
+impl Paged for GetUsageRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsageRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+/// see [ApiGateway::get_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinkRequest {
@@ -2036,6 +2635,7 @@ pub struct GetVpcLinkRequest {
 }
 
 /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+/// see [ApiGateway::get_vpc_links]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinksRequest {
@@ -2049,7 +2649,24 @@ pub struct GetVpcLinksRequest {
     pub position: Option<String>,
 }
 
+impl Paged for GetVpcLinksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetVpcLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.position = key;
+    }
+}
+
 /// <p>The POST request to import API keys from an external source, such as a CSV-formatted file.</p>
+/// see [ApiGateway::import_api_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiKeysRequest {
@@ -2071,6 +2688,7 @@ pub struct ImportApiKeysRequest {
 }
 
 /// <p>Import documentation parts from an external (e.g., OpenAPI) definition file. </p>
+/// see [ApiGateway::import_documentation_parts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportDocumentationPartsRequest {
@@ -2096,6 +2714,7 @@ pub struct ImportDocumentationPartsRequest {
 }
 
 /// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
+/// see [ApiGateway::import_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportRestApiRequest {
@@ -2118,6 +2737,9 @@ pub struct ImportRestApiRequest {
 }
 
 /// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+/// see [ApiGateway::get_integration]
+/// see [ApiGateway::put_integration]
+/// see [ApiGateway::update_integration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Integration {
@@ -2184,6 +2806,9 @@ pub struct Integration {
 }
 
 /// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+/// see [ApiGateway::get_integration_response]
+/// see [ApiGateway::put_integration_response]
+/// see [ApiGateway::update_integration_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntegrationResponse {
@@ -2210,6 +2835,9 @@ pub struct IntegrationResponse {
 }
 
 /// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
+/// see [ApiGateway::get_method]
+/// see [ApiGateway::put_method]
+/// see [ApiGateway::update_method]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Method {
@@ -2260,6 +2888,9 @@ pub struct Method {
 }
 
 /// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
+/// see [ApiGateway::get_method_response]
+/// see [ApiGateway::put_method_response]
+/// see [ApiGateway::update_method_response]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MethodResponse {
@@ -2338,6 +2969,9 @@ pub struct MethodSnapshot {
 }
 
 /// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+/// see [ApiGateway::create_model]
+/// see [ApiGateway::get_model]
+/// see [ApiGateway::update_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
@@ -2364,6 +2998,7 @@ pub struct Model {
 }
 
 /// <p><p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
+/// see [ApiGateway::get_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Models {
@@ -2374,6 +3009,28 @@ pub struct Models {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+impl Paged for Models {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for Models {
+    type Item = Model;
+
+    fn into_pagination_page(self) -> Vec<Model> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your custom domain name.</p>
@@ -2431,6 +3088,7 @@ pub struct PatchOperation {
 }
 
 /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
+/// see [ApiGateway::put_gateway_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutGatewayResponseRequest {
@@ -2455,6 +3113,7 @@ pub struct PutGatewayResponseRequest {
 }
 
 /// <p>Sets up a method's integration.</p>
+/// see [ApiGateway::put_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationRequest {
@@ -2524,6 +3183,7 @@ pub struct PutIntegrationRequest {
 }
 
 /// <p>Represents a put integration response request.</p>
+/// see [ApiGateway::put_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationResponseRequest {
@@ -2558,6 +3218,7 @@ pub struct PutIntegrationResponseRequest {
 }
 
 /// <p>Request to add a method to an existing <a>Resource</a> resource.</p>
+/// see [ApiGateway::put_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodRequest {
@@ -2604,6 +3265,7 @@ pub struct PutMethodRequest {
 }
 
 /// <p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
+/// see [ApiGateway::put_method_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodResponseRequest {
@@ -2630,6 +3292,7 @@ pub struct PutMethodResponseRequest {
 }
 
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
+/// see [ApiGateway::put_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRestApiRequest {
@@ -2676,6 +3339,9 @@ pub struct QuotaSettings {
 }
 
 /// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+/// see [ApiGateway::create_request_validator]
+/// see [ApiGateway::get_request_validator]
+/// see [ApiGateway::update_request_validator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestValidator {
@@ -2698,6 +3364,7 @@ pub struct RequestValidator {
 }
 
 /// <p><p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In OpenAPI, the <a>RequestValidators</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
+/// see [ApiGateway::get_request_validators]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestValidators {
@@ -2710,7 +3377,32 @@ pub struct RequestValidators {
     pub position: Option<String>,
 }
 
+impl Paged for RequestValidators {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for RequestValidators {
+    type Item = RequestValidator;
+
+    fn into_pagination_page(self) -> Vec<RequestValidator> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+/// see [ApiGateway::create_resource]
+/// see [ApiGateway::get_resource]
+/// see [ApiGateway::update_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
@@ -2737,6 +3429,7 @@ pub struct Resource {
 }
 
 /// <p><p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+/// see [ApiGateway::get_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resources {
@@ -2749,7 +3442,34 @@ pub struct Resources {
     pub position: Option<String>,
 }
 
+impl Paged for Resources {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for Resources {
+    type Item = Resource;
+
+    fn into_pagination_page(self) -> Vec<Resource> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+/// see [ApiGateway::create_rest_api]
+/// see [ApiGateway::get_rest_api]
+/// see [ApiGateway::import_rest_api]
+/// see [ApiGateway::put_rest_api]
+/// see [ApiGateway::update_rest_api]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestApi {
@@ -2808,6 +3528,7 @@ pub struct RestApi {
 }
 
 /// <p><p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
+/// see [ApiGateway::get_rest_apis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestApis {
@@ -2818,6 +3539,28 @@ pub struct RestApis {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+impl Paged for RestApis {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for RestApis {
+    type Item = RestApi;
+
+    fn into_pagination_page(self) -> Vec<RestApi> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>A configuration property of an SDK type.</p>
@@ -2847,6 +3590,7 @@ pub struct SdkConfigurationProperty {
 }
 
 /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
+/// see [ApiGateway::get_sdk]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct SdkResponse {
     /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
@@ -2858,6 +3602,7 @@ pub struct SdkResponse {
 }
 
 /// <p>A type of SDK that API Gateway can generate.</p>
+/// see [ApiGateway::get_sdk_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SdkType {
@@ -2880,6 +3625,7 @@ pub struct SdkType {
 }
 
 /// <p>The collection of <a>SdkType</a> instances.</p>
+/// see [ApiGateway::get_sdk_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SdkTypes {
@@ -2892,7 +3638,32 @@ pub struct SdkTypes {
     pub position: Option<String>,
 }
 
+impl Paged for SdkTypes {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for SdkTypes {
+    type Item = SdkType;
+
+    fn into_pagination_page(self) -> Vec<SdkType> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
+/// see [ApiGateway::create_stage]
+/// see [ApiGateway::get_stage]
+/// see [ApiGateway::update_stage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stage {
@@ -2981,6 +3752,7 @@ pub struct StageKey {
 }
 
 /// <p><p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div></p>
+/// see [ApiGateway::get_stages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stages {
@@ -2991,6 +3763,7 @@ pub struct Stages {
 }
 
 /// <p>Adds or updates a tag on a given resource.</p>
+/// see [ApiGateway::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -3003,6 +3776,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+/// see [ApiGateway::get_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tags {
@@ -3013,6 +3787,7 @@ pub struct Tags {
 }
 
 /// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
+/// see [ApiGateway::get_model_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Template {
@@ -3023,6 +3798,7 @@ pub struct Template {
 }
 
 /// <p>Make a request to simulate the execution of an <a>Authorizer</a>.</p>
+/// see [ApiGateway::test_invoke_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
@@ -3059,6 +3835,7 @@ pub struct TestInvokeAuthorizerRequest {
 }
 
 /// <p>Represents the response of the test invoke request for a custom <a>Authorizer</a></p>
+/// see [ApiGateway::test_invoke_authorizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeAuthorizerResponse {
@@ -3092,6 +3869,7 @@ pub struct TestInvokeAuthorizerResponse {
 }
 
 /// <p>Make a request to simulate the execution of a <a>Method</a>.</p>
+/// see [ApiGateway::test_invoke_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeMethodRequest {
@@ -3131,6 +3909,7 @@ pub struct TestInvokeMethodRequest {
 }
 
 /// <p><p>Represents the response of the test invoke request in the HTTP method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console">Test API using the API Gateway console</a> </div></p>
+/// see [ApiGateway::test_invoke_method]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeMethodResponse {
@@ -3182,6 +3961,7 @@ pub struct TlsConfig {
 }
 
 /// <p>Removes a tag from a given resource.</p>
+/// see [ApiGateway::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3194,6 +3974,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Requests API Gateway to change information about the current <a>Account</a> resource.</p>
+/// see [ApiGateway::update_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
@@ -3204,6 +3985,7 @@ pub struct UpdateAccountRequest {
 }
 
 /// <p>A request to change information about an <a>ApiKey</a> resource.</p>
+/// see [ApiGateway::update_api_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiKeyRequest {
@@ -3217,6 +3999,7 @@ pub struct UpdateApiKeyRequest {
 }
 
 /// <p>Request to update an existing <a>Authorizer</a> resource.</p>
+/// see [ApiGateway::update_authorizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
@@ -3233,6 +4016,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
+/// see [ApiGateway::update_base_path_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBasePathMappingRequest {
@@ -3249,6 +4033,7 @@ pub struct UpdateBasePathMappingRequest {
 }
 
 /// <p>A request to change information about an <a>ClientCertificate</a> resource.</p>
+/// see [ApiGateway::update_client_certificate]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClientCertificateRequest {
@@ -3262,6 +4047,7 @@ pub struct UpdateClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to change information about a <a>Deployment</a> resource.</p>
+/// see [ApiGateway::update_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
@@ -3278,6 +4064,7 @@ pub struct UpdateDeploymentRequest {
 }
 
 /// <p>Updates an existing documentation part of a given API.</p>
+/// see [ApiGateway::update_documentation_part]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationPartRequest {
@@ -3294,6 +4081,7 @@ pub struct UpdateDocumentationPartRequest {
 }
 
 /// <p>Updates an existing documentation version of an API.</p>
+/// see [ApiGateway::update_documentation_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationVersionRequest {
@@ -3310,6 +4098,7 @@ pub struct UpdateDocumentationVersionRequest {
 }
 
 /// <p>A request to change information about the <a>DomainName</a> resource.</p>
+/// see [ApiGateway::update_domain_name]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
@@ -3323,6 +4112,7 @@ pub struct UpdateDomainNameRequest {
 }
 
 /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+/// see [ApiGateway::update_gateway_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayResponseRequest {
@@ -3339,6 +4129,7 @@ pub struct UpdateGatewayResponseRequest {
 }
 
 /// <p>Represents an update integration request.</p>
+/// see [ApiGateway::update_integration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
@@ -3358,6 +4149,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 /// <p>Represents an update integration response request.</p>
+/// see [ApiGateway::update_integration_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
@@ -3380,6 +4172,7 @@ pub struct UpdateIntegrationResponseRequest {
 }
 
 /// <p>Request to update an existing <a>Method</a> resource.</p>
+/// see [ApiGateway::update_method]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodRequest {
@@ -3399,6 +4192,7 @@ pub struct UpdateMethodRequest {
 }
 
 /// <p>A request to update an existing <a>MethodResponse</a> resource.</p>
+/// see [ApiGateway::update_method_response]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodResponseRequest {
@@ -3421,6 +4215,7 @@ pub struct UpdateMethodResponseRequest {
 }
 
 /// <p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>
+/// see [ApiGateway::update_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
@@ -3437,6 +4232,7 @@ pub struct UpdateModelRequest {
 }
 
 /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+/// see [ApiGateway::update_request_validator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRequestValidatorRequest {
@@ -3453,6 +4249,7 @@ pub struct UpdateRequestValidatorRequest {
 }
 
 /// <p>Request to change information about a <a>Resource</a> resource.</p>
+/// see [ApiGateway::update_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
@@ -3469,6 +4266,7 @@ pub struct UpdateResourceRequest {
 }
 
 /// <p>Request to update an existing <a>RestApi</a> resource in your collection.</p>
+/// see [ApiGateway::update_rest_api]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRestApiRequest {
@@ -3482,6 +4280,7 @@ pub struct UpdateRestApiRequest {
 }
 
 /// <p>Requests API Gateway to change information about a <a>Stage</a> resource.</p>
+/// see [ApiGateway::update_stage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
@@ -3498,6 +4297,7 @@ pub struct UpdateStageRequest {
 }
 
 /// <p>The PATCH request to update a usage plan of a given plan Id.</p>
+/// see [ApiGateway::update_usage_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsagePlanRequest {
@@ -3511,6 +4311,7 @@ pub struct UpdateUsagePlanRequest {
 }
 
 /// <p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
+/// see [ApiGateway::update_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsageRequest {
@@ -3527,6 +4328,7 @@ pub struct UpdateUsageRequest {
 }
 
 /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+/// see [ApiGateway::update_vpc_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVpcLinkRequest {
@@ -3540,6 +4342,8 @@ pub struct UpdateVpcLinkRequest {
 }
 
 /// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
+/// see [ApiGateway::get_usage]
+/// see [ApiGateway::update_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Usage {
@@ -3564,7 +4368,32 @@ pub struct Usage {
     pub usage_plan_id: Option<String>,
 }
 
+impl Paged for Usage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for Usage {
+    type Item = ::std::collections::HashMap<String, Vec<Vec<i64>>>;
+
+    fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, Vec<Vec<i64>>>> {
+        self.items.into_iter().collect()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+/// see [ApiGateway::create_usage_plan]
+/// see [ApiGateway::get_usage_plan]
+/// see [ApiGateway::update_usage_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlan {
@@ -3603,6 +4432,8 @@ pub struct UsagePlan {
 }
 
 /// <p><p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>&quot; <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+/// see [ApiGateway::create_usage_plan_key]
+/// see [ApiGateway::get_usage_plan_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlanKey {
@@ -3625,6 +4456,7 @@ pub struct UsagePlanKey {
 }
 
 /// <p><p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+/// see [ApiGateway::get_usage_plan_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlanKeys {
@@ -3637,7 +4469,30 @@ pub struct UsagePlanKeys {
     pub position: Option<String>,
 }
 
+impl Paged for UsagePlanKeys {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for UsagePlanKeys {
+    type Item = UsagePlanKey;
+
+    fn into_pagination_page(self) -> Vec<UsagePlanKey> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
+/// see [ApiGateway::get_usage_plans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlans {
@@ -3650,7 +4505,32 @@ pub struct UsagePlans {
     pub position: Option<String>,
 }
 
+impl Paged for UsagePlans {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for UsagePlans {
+    type Item = UsagePlan;
+
+    fn into_pagination_page(self) -> Vec<UsagePlan> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p>An API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p></p> </div></p>
+/// see [ApiGateway::create_vpc_link]
+/// see [ApiGateway::get_vpc_link]
+/// see [ApiGateway::update_vpc_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLink {
@@ -3685,6 +4565,7 @@ pub struct VpcLink {
 }
 
 /// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>
+/// see [ApiGateway::get_vpc_links]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLinks {
@@ -3695,6 +4576,28 @@ pub struct VpcLinks {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+impl Paged for VpcLinks {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedOutput for VpcLinks {
+    type Item = VpcLink;
+
+    fn into_pagination_page(self) -> Vec<VpcLink> {
+        self.items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// Errors returned by CreateApiKey
@@ -9831,7 +10734,7 @@ impl fmt::Display for UpdateVpcLinkError {
 impl Error for UpdateVpcLinkError {}
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 #[async_trait]
-pub trait ApiGateway {
+pub trait ApiGateway: Clone + Sync + Send + 'static {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     async fn create_api_key(
         &self,
@@ -10077,6 +10980,17 @@ pub trait ApiGateway {
         input: GetApiKeysRequest,
     ) -> Result<ApiKeys, RusotoError<GetApiKeysError>>;
 
+    /// Auto-paginating version of `get_api_keys`
+    fn get_api_keys_pages<'a>(
+        &'a self,
+        mut input: GetApiKeysRequest,
+    ) -> RusotoStream<'a, ApiKey, GetApiKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_api_keys(input.clone())
+        }))
+    }
+
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     async fn get_authorizer(
         &self,
@@ -10088,6 +11002,17 @@ pub trait ApiGateway {
         &self,
         input: GetAuthorizersRequest,
     ) -> Result<Authorizers, RusotoError<GetAuthorizersError>>;
+
+    /// Auto-paginating version of `get_authorizers`
+    fn get_authorizers_pages<'a>(
+        &'a self,
+        mut input: GetAuthorizersRequest,
+    ) -> RusotoStream<'a, Authorizer, GetAuthorizersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_authorizers(input.clone())
+        }))
+    }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     async fn get_base_path_mapping(
@@ -10101,6 +11026,17 @@ pub trait ApiGateway {
         input: GetBasePathMappingsRequest,
     ) -> Result<BasePathMappings, RusotoError<GetBasePathMappingsError>>;
 
+    /// Auto-paginating version of `get_base_path_mappings`
+    fn get_base_path_mappings_pages<'a>(
+        &'a self,
+        mut input: GetBasePathMappingsRequest,
+    ) -> RusotoStream<'a, BasePathMapping, GetBasePathMappingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_base_path_mappings(input.clone())
+        }))
+    }
+
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     async fn get_client_certificate(
         &self,
@@ -10112,6 +11048,17 @@ pub trait ApiGateway {
         &self,
         input: GetClientCertificatesRequest,
     ) -> Result<ClientCertificates, RusotoError<GetClientCertificatesError>>;
+
+    /// Auto-paginating version of `get_client_certificates`
+    fn get_client_certificates_pages<'a>(
+        &'a self,
+        mut input: GetClientCertificatesRequest,
+    ) -> RusotoStream<'a, ClientCertificate, GetClientCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_client_certificates(input.clone())
+        }))
+    }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
     async fn get_deployment(
@@ -10125,6 +11072,17 @@ pub trait ApiGateway {
         input: GetDeploymentsRequest,
     ) -> Result<Deployments, RusotoError<GetDeploymentsError>>;
 
+    /// Auto-paginating version of `get_deployments`
+    fn get_deployments_pages<'a>(
+        &'a self,
+        mut input: GetDeploymentsRequest,
+    ) -> RusotoStream<'a, Deployment, GetDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_deployments(input.clone())
+        }))
+    }
+
     async fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
@@ -10135,6 +11093,17 @@ pub trait ApiGateway {
         input: GetDocumentationPartsRequest,
     ) -> Result<DocumentationParts, RusotoError<GetDocumentationPartsError>>;
 
+    /// Auto-paginating version of `get_documentation_parts`
+    fn get_documentation_parts_pages<'a>(
+        &'a self,
+        mut input: GetDocumentationPartsRequest,
+    ) -> RusotoStream<'a, DocumentationPart, GetDocumentationPartsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_documentation_parts(input.clone())
+        }))
+    }
+
     async fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
@@ -10144,6 +11113,17 @@ pub trait ApiGateway {
         &self,
         input: GetDocumentationVersionsRequest,
     ) -> Result<DocumentationVersions, RusotoError<GetDocumentationVersionsError>>;
+
+    /// Auto-paginating version of `get_documentation_versions`
+    fn get_documentation_versions_pages<'a>(
+        &'a self,
+        mut input: GetDocumentationVersionsRequest,
+    ) -> RusotoStream<'a, DocumentationVersion, GetDocumentationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_documentation_versions(input.clone())
+        }))
+    }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     async fn get_domain_name(
@@ -10156,6 +11136,17 @@ pub trait ApiGateway {
         &self,
         input: GetDomainNamesRequest,
     ) -> Result<DomainNames, RusotoError<GetDomainNamesError>>;
+
+    /// Auto-paginating version of `get_domain_names`
+    fn get_domain_names_pages<'a>(
+        &'a self,
+        mut input: GetDomainNamesRequest,
+    ) -> RusotoStream<'a, DomainName, GetDomainNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_domain_names(input.clone())
+        }))
+    }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
     async fn get_export(
@@ -10174,6 +11165,17 @@ pub trait ApiGateway {
         &self,
         input: GetGatewayResponsesRequest,
     ) -> Result<GatewayResponses, RusotoError<GetGatewayResponsesError>>;
+
+    /// Auto-paginating version of `get_gateway_responses`
+    fn get_gateway_responses_pages<'a>(
+        &'a self,
+        mut input: GetGatewayResponsesRequest,
+    ) -> RusotoStream<'a, GatewayResponse, GetGatewayResponsesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_gateway_responses(input.clone())
+        }))
+    }
 
     /// <p>Get the integration settings.</p>
     async fn get_integration(
@@ -10214,6 +11216,17 @@ pub trait ApiGateway {
         input: GetModelsRequest,
     ) -> Result<Models, RusotoError<GetModelsError>>;
 
+    /// Auto-paginating version of `get_models`
+    fn get_models_pages<'a>(
+        &'a self,
+        mut input: GetModelsRequest,
+    ) -> RusotoStream<'a, Model, GetModelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_models(input.clone())
+        }))
+    }
+
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     async fn get_request_validator(
         &self,
@@ -10225,6 +11238,17 @@ pub trait ApiGateway {
         &self,
         input: GetRequestValidatorsRequest,
     ) -> Result<RequestValidators, RusotoError<GetRequestValidatorsError>>;
+
+    /// Auto-paginating version of `get_request_validators`
+    fn get_request_validators_pages<'a>(
+        &'a self,
+        mut input: GetRequestValidatorsRequest,
+    ) -> RusotoStream<'a, RequestValidator, GetRequestValidatorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_request_validators(input.clone())
+        }))
+    }
 
     /// <p>Lists information about a resource.</p>
     async fn get_resource(
@@ -10238,6 +11262,17 @@ pub trait ApiGateway {
         input: GetResourcesRequest,
     ) -> Result<Resources, RusotoError<GetResourcesError>>;
 
+    /// Auto-paginating version of `get_resources`
+    fn get_resources_pages<'a>(
+        &'a self,
+        mut input: GetResourcesRequest,
+    ) -> RusotoStream<'a, Resource, GetResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resources(input.clone())
+        }))
+    }
+
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
     async fn get_rest_api(
         &self,
@@ -10249,6 +11284,17 @@ pub trait ApiGateway {
         &self,
         input: GetRestApisRequest,
     ) -> Result<RestApis, RusotoError<GetRestApisError>>;
+
+    /// Auto-paginating version of `get_rest_apis`
+    fn get_rest_apis_pages<'a>(
+        &'a self,
+        mut input: GetRestApisRequest,
+    ) -> RusotoStream<'a, RestApi, GetRestApisError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_rest_apis(input.clone())
+        }))
+    }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
     async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>>;
@@ -10262,6 +11308,17 @@ pub trait ApiGateway {
         &self,
         input: GetSdkTypesRequest,
     ) -> Result<SdkTypes, RusotoError<GetSdkTypesError>>;
+
+    /// Auto-paginating version of `get_sdk_types`
+    fn get_sdk_types_pages<'a>(
+        &'a self,
+        mut input: GetSdkTypesRequest,
+    ) -> RusotoStream<'a, SdkType, GetSdkTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sdk_types(input.clone())
+        }))
+    }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
     async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>>;
@@ -10277,6 +11334,17 @@ pub trait ApiGateway {
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>>;
+
+    /// Auto-paginating version of `get_usage`
+    fn get_usage_pages<'a>(
+        &'a self,
+        mut input: GetUsageRequest,
+    ) -> RusotoStream<'a, ::std::collections::HashMap<String, Vec<Vec<i64>>>, GetUsageError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage(input.clone())
+        }))
+    }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
     async fn get_usage_plan(
@@ -10296,11 +11364,33 @@ pub trait ApiGateway {
         input: GetUsagePlanKeysRequest,
     ) -> Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>>;
 
+    /// Auto-paginating version of `get_usage_plan_keys`
+    fn get_usage_plan_keys_pages<'a>(
+        &'a self,
+        mut input: GetUsagePlanKeysRequest,
+    ) -> RusotoStream<'a, UsagePlanKey, GetUsagePlanKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage_plan_keys(input.clone())
+        }))
+    }
+
     /// <p>Gets all the usage plans of the caller's account.</p>
     async fn get_usage_plans(
         &self,
         input: GetUsagePlansRequest,
     ) -> Result<UsagePlans, RusotoError<GetUsagePlansError>>;
+
+    /// Auto-paginating version of `get_usage_plans`
+    fn get_usage_plans_pages<'a>(
+        &'a self,
+        mut input: GetUsagePlansRequest,
+    ) -> RusotoStream<'a, UsagePlan, GetUsagePlansError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage_plans(input.clone())
+        }))
+    }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
     async fn get_vpc_link(
@@ -10313,6 +11403,17 @@ pub trait ApiGateway {
         &self,
         input: GetVpcLinksRequest,
     ) -> Result<VpcLinks, RusotoError<GetVpcLinksError>>;
+
+    /// Auto-paginating version of `get_vpc_links`
+    fn get_vpc_links_pages<'a>(
+        &'a self,
+        mut input: GetVpcLinksRequest,
+    ) -> RusotoStream<'a, VpcLink, GetVpcLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_vpc_links(input.clone())
+        }))
+    }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     async fn import_api_keys(

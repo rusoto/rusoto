@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -101,6 +105,7 @@ pub struct ActionSummary {
     pub status: Option<String>,
 }
 
+/// see [SageMaker::add_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAssociationRequest {
@@ -116,6 +121,7 @@ pub struct AddAssociationRequest {
     pub source_arn: String,
 }
 
+/// see [SageMaker::add_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddAssociationResponse {
@@ -129,6 +135,7 @@ pub struct AddAssociationResponse {
     pub source_arn: Option<String>,
 }
 
+/// see [SageMaker::add_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -140,6 +147,7 @@ pub struct AddTagsInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [SageMaker::add_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {
@@ -405,6 +413,7 @@ pub struct ArtifactSummary {
     pub source: Option<ArtifactSource>,
 }
 
+/// see [SageMaker::associate_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTrialComponentRequest {
@@ -416,6 +425,7 @@ pub struct AssociateTrialComponentRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::associate_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTrialComponentResponse {
@@ -1101,6 +1111,7 @@ pub struct ContinuousParameterRangeSpecification {
     pub min_value: String,
 }
 
+/// see [SageMaker::create_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActionRequest {
@@ -1134,6 +1145,7 @@ pub struct CreateActionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActionResponse {
@@ -1143,6 +1155,7 @@ pub struct CreateActionResponse {
     pub action_arn: Option<String>,
 }
 
+/// see [SageMaker::create_algorithm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAlgorithmInput {
@@ -1174,6 +1187,7 @@ pub struct CreateAlgorithmInput {
     pub validation_specification: Option<AlgorithmValidationSpecification>,
 }
 
+/// see [SageMaker::create_algorithm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAlgorithmOutput {
@@ -1182,6 +1196,7 @@ pub struct CreateAlgorithmOutput {
     pub algorithm_arn: String,
 }
 
+/// see [SageMaker::create_app_image_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppImageConfigRequest {
@@ -1198,6 +1213,7 @@ pub struct CreateAppImageConfigRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_app_image_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppImageConfigResponse {
@@ -1207,6 +1223,7 @@ pub struct CreateAppImageConfigResponse {
     pub app_image_config_arn: Option<String>,
 }
 
+/// see [SageMaker::create_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
@@ -1232,6 +1249,7 @@ pub struct CreateAppRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::create_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResponse {
@@ -1241,6 +1259,7 @@ pub struct CreateAppResponse {
     pub app_arn: Option<String>,
 }
 
+/// see [SageMaker::create_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateArtifactRequest {
@@ -1267,6 +1286,7 @@ pub struct CreateArtifactRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateArtifactResponse {
@@ -1276,6 +1296,7 @@ pub struct CreateArtifactResponse {
     pub artifact_arn: Option<String>,
 }
 
+/// see [SageMaker::create_auto_ml_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAutoMLJobRequest {
@@ -1313,6 +1334,7 @@ pub struct CreateAutoMLJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_auto_ml_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAutoMLJobResponse {
@@ -1321,6 +1343,7 @@ pub struct CreateAutoMLJobResponse {
     pub auto_ml_job_arn: String,
 }
 
+/// see [SageMaker::create_code_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCodeRepositoryInput {
@@ -1336,6 +1359,7 @@ pub struct CreateCodeRepositoryInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_code_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCodeRepositoryOutput {
@@ -1344,6 +1368,7 @@ pub struct CreateCodeRepositoryOutput {
     pub code_repository_arn: String,
 }
 
+/// see [SageMaker::create_compilation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCompilationJobRequest {
@@ -1368,6 +1393,7 @@ pub struct CreateCompilationJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_compilation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCompilationJobResponse {
@@ -1376,6 +1402,7 @@ pub struct CreateCompilationJobResponse {
     pub compilation_job_arn: String,
 }
 
+/// see [SageMaker::create_context]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateContextRequest {
@@ -1402,6 +1429,7 @@ pub struct CreateContextRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_context]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateContextResponse {
@@ -1411,6 +1439,7 @@ pub struct CreateContextResponse {
     pub context_arn: Option<String>,
 }
 
+/// see [SageMaker::create_data_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataQualityJobDefinitionRequest {
@@ -1447,6 +1476,7 @@ pub struct CreateDataQualityJobDefinitionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_data_quality_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataQualityJobDefinitionResponse {
@@ -1455,6 +1485,7 @@ pub struct CreateDataQualityJobDefinitionResponse {
     pub job_definition_arn: String,
 }
 
+/// see [SageMaker::create_device_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceFleetRequest {
@@ -1478,6 +1509,7 @@ pub struct CreateDeviceFleetRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
@@ -1510,6 +1542,7 @@ pub struct CreateDomainRequest {
     pub vpc_id: String,
 }
 
+/// see [SageMaker::create_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainResponse {
@@ -1523,6 +1556,7 @@ pub struct CreateDomainResponse {
     pub url: Option<String>,
 }
 
+/// see [SageMaker::create_edge_packaging_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEdgePackagingJobRequest {
@@ -1554,6 +1588,7 @@ pub struct CreateEdgePackagingJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_endpoint_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointConfigInput {
@@ -1576,6 +1611,7 @@ pub struct CreateEndpointConfigInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_endpoint_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointConfigOutput {
@@ -1584,6 +1620,7 @@ pub struct CreateEndpointConfigOutput {
     pub endpoint_config_arn: String,
 }
 
+/// see [SageMaker::create_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointInput {
@@ -1599,6 +1636,7 @@ pub struct CreateEndpointInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointOutput {
@@ -1607,6 +1645,7 @@ pub struct CreateEndpointOutput {
     pub endpoint_arn: String,
 }
 
+/// see [SageMaker::create_experiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExperimentRequest {
@@ -1627,6 +1666,7 @@ pub struct CreateExperimentRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_experiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExperimentResponse {
@@ -1636,6 +1676,7 @@ pub struct CreateExperimentResponse {
     pub experiment_arn: Option<String>,
 }
 
+/// see [SageMaker::create_feature_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFeatureGroupRequest {
@@ -1673,6 +1714,7 @@ pub struct CreateFeatureGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_feature_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFeatureGroupResponse {
@@ -1681,6 +1723,7 @@ pub struct CreateFeatureGroupResponse {
     pub feature_group_arn: String,
 }
 
+/// see [SageMaker::create_flow_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowDefinitionRequest {
@@ -1710,6 +1753,7 @@ pub struct CreateFlowDefinitionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_flow_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowDefinitionResponse {
@@ -1718,6 +1762,7 @@ pub struct CreateFlowDefinitionResponse {
     pub flow_definition_arn: String,
 }
 
+/// see [SageMaker::create_human_task_ui]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHumanTaskUiRequest {
@@ -1732,6 +1777,7 @@ pub struct CreateHumanTaskUiRequest {
     pub ui_template: UiTemplate,
 }
 
+/// see [SageMaker::create_human_task_ui]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHumanTaskUiResponse {
@@ -1740,6 +1786,7 @@ pub struct CreateHumanTaskUiResponse {
     pub human_task_ui_arn: String,
 }
 
+/// see [SageMaker::create_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHyperParameterTuningJobRequest {
@@ -1767,6 +1814,7 @@ pub struct CreateHyperParameterTuningJobRequest {
     pub warm_start_config: Option<HyperParameterTuningJobWarmStartConfig>,
 }
 
+/// see [SageMaker::create_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHyperParameterTuningJobResponse {
@@ -1775,6 +1823,7 @@ pub struct CreateHyperParameterTuningJobResponse {
     pub hyper_parameter_tuning_job_arn: String,
 }
 
+/// see [SageMaker::create_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
@@ -1798,6 +1847,7 @@ pub struct CreateImageRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageResponse {
@@ -1807,6 +1857,7 @@ pub struct CreateImageResponse {
     pub image_arn: Option<String>,
 }
 
+/// see [SageMaker::create_image_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageVersionRequest {
@@ -1821,6 +1872,7 @@ pub struct CreateImageVersionRequest {
     pub image_name: String,
 }
 
+/// see [SageMaker::create_image_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageVersionResponse {
@@ -1830,6 +1882,7 @@ pub struct CreateImageVersionResponse {
     pub image_version_arn: Option<String>,
 }
 
+/// see [SageMaker::create_labeling_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelingJobRequest {
@@ -1869,6 +1922,7 @@ pub struct CreateLabelingJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_labeling_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLabelingJobResponse {
@@ -1877,6 +1931,7 @@ pub struct CreateLabelingJobResponse {
     pub labeling_job_arn: String,
 }
 
+/// see [SageMaker::create_model_bias_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelBiasJobDefinitionRequest {
@@ -1913,6 +1968,7 @@ pub struct CreateModelBiasJobDefinitionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_model_bias_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelBiasJobDefinitionResponse {
@@ -1921,6 +1977,7 @@ pub struct CreateModelBiasJobDefinitionResponse {
     pub job_definition_arn: String,
 }
 
+/// see [SageMaker::create_model_explainability_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelExplainabilityJobDefinitionRequest {
@@ -1957,6 +2014,7 @@ pub struct CreateModelExplainabilityJobDefinitionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_model_explainability_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelExplainabilityJobDefinitionResponse {
@@ -1965,6 +2023,7 @@ pub struct CreateModelExplainabilityJobDefinitionResponse {
     pub job_definition_arn: String,
 }
 
+/// see [SageMaker::create_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelInput {
@@ -1996,6 +2055,7 @@ pub struct CreateModelInput {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [SageMaker::create_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelOutput {
@@ -2004,6 +2064,7 @@ pub struct CreateModelOutput {
     pub model_arn: String,
 }
 
+/// see [SageMaker::create_model_package_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelPackageGroupInput {
@@ -2020,6 +2081,7 @@ pub struct CreateModelPackageGroupInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_model_package_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelPackageGroupOutput {
@@ -2028,6 +2090,7 @@ pub struct CreateModelPackageGroupOutput {
     pub model_package_group_arn: String,
 }
 
+/// see [SageMaker::create_model_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelPackageInput {
@@ -2080,6 +2143,7 @@ pub struct CreateModelPackageInput {
     pub validation_specification: Option<ModelPackageValidationSpecification>,
 }
 
+/// see [SageMaker::create_model_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelPackageOutput {
@@ -2088,6 +2152,7 @@ pub struct CreateModelPackageOutput {
     pub model_package_arn: String,
 }
 
+/// see [SageMaker::create_model_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelQualityJobDefinitionRequest {
@@ -2124,6 +2189,7 @@ pub struct CreateModelQualityJobDefinitionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_model_quality_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelQualityJobDefinitionResponse {
@@ -2132,6 +2198,7 @@ pub struct CreateModelQualityJobDefinitionResponse {
     pub job_definition_arn: String,
 }
 
+/// see [SageMaker::create_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMonitoringScheduleRequest {
@@ -2147,6 +2214,7 @@ pub struct CreateMonitoringScheduleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_monitoring_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMonitoringScheduleResponse {
@@ -2155,6 +2223,7 @@ pub struct CreateMonitoringScheduleResponse {
     pub monitoring_schedule_arn: String,
 }
 
+/// see [SageMaker::create_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceInput {
@@ -2213,6 +2282,7 @@ pub struct CreateNotebookInstanceInput {
     pub volume_size_in_gb: Option<i64>,
 }
 
+/// see [SageMaker::create_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotebookInstanceLifecycleConfigInput {
@@ -2229,6 +2299,7 @@ pub struct CreateNotebookInstanceLifecycleConfigInput {
     pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
 }
 
+/// see [SageMaker::create_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotebookInstanceLifecycleConfigOutput {
@@ -2238,6 +2309,7 @@ pub struct CreateNotebookInstanceLifecycleConfigOutput {
     pub notebook_instance_lifecycle_config_arn: Option<String>,
 }
 
+/// see [SageMaker::create_notebook_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotebookInstanceOutput {
@@ -2247,6 +2319,7 @@ pub struct CreateNotebookInstanceOutput {
     pub notebook_instance_arn: Option<String>,
 }
 
+/// see [SageMaker::create_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
@@ -2276,6 +2349,7 @@ pub struct CreatePipelineRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineResponse {
@@ -2285,6 +2359,7 @@ pub struct CreatePipelineResponse {
     pub pipeline_arn: Option<String>,
 }
 
+/// see [SageMaker::create_presigned_domain_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedDomainUrlRequest {
@@ -2300,6 +2375,7 @@ pub struct CreatePresignedDomainUrlRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::create_presigned_domain_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresignedDomainUrlResponse {
@@ -2309,6 +2385,7 @@ pub struct CreatePresignedDomainUrlResponse {
     pub authorized_url: Option<String>,
 }
 
+/// see [SageMaker::create_presigned_notebook_instance_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePresignedNotebookInstanceUrlInput {
@@ -2321,6 +2398,7 @@ pub struct CreatePresignedNotebookInstanceUrlInput {
     pub session_expiration_duration_in_seconds: Option<i64>,
 }
 
+/// see [SageMaker::create_presigned_notebook_instance_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresignedNotebookInstanceUrlOutput {
@@ -2330,6 +2408,7 @@ pub struct CreatePresignedNotebookInstanceUrlOutput {
     pub authorized_url: Option<String>,
 }
 
+/// see [SageMaker::create_processing_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProcessingJobRequest {
@@ -2374,6 +2453,7 @@ pub struct CreateProcessingJobRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_processing_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProcessingJobResponse {
@@ -2382,6 +2462,7 @@ pub struct CreateProcessingJobResponse {
     pub processing_job_arn: String,
 }
 
+/// see [SageMaker::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectInput {
@@ -2401,6 +2482,7 @@ pub struct CreateProjectInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectOutput {
@@ -2412,6 +2494,7 @@ pub struct CreateProjectOutput {
     pub project_id: String,
 }
 
+/// see [SageMaker::create_training_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrainingJobRequest {
@@ -2487,6 +2570,7 @@ pub struct CreateTrainingJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [SageMaker::create_training_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTrainingJobResponse {
@@ -2495,6 +2579,7 @@ pub struct CreateTrainingJobResponse {
     pub training_job_arn: String,
 }
 
+/// see [SageMaker::create_transform_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransformJobRequest {
@@ -2546,6 +2631,7 @@ pub struct CreateTransformJobRequest {
     pub transform_resources: TransformResources,
 }
 
+/// see [SageMaker::create_transform_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTransformJobResponse {
@@ -2554,6 +2640,7 @@ pub struct CreateTransformJobResponse {
     pub transform_job_arn: String,
 }
 
+/// see [SageMaker::create_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialComponentRequest {
@@ -2597,6 +2684,7 @@ pub struct CreateTrialComponentRequest {
     pub trial_component_name: String,
 }
 
+/// see [SageMaker::create_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTrialComponentResponse {
@@ -2606,6 +2694,7 @@ pub struct CreateTrialComponentResponse {
     pub trial_component_arn: Option<String>,
 }
 
+/// see [SageMaker::create_trial]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTrialRequest {
@@ -2628,6 +2717,7 @@ pub struct CreateTrialRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::create_trial]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTrialResponse {
@@ -2637,6 +2727,7 @@ pub struct CreateTrialResponse {
     pub trial_arn: Option<String>,
 }
 
+/// see [SageMaker::create_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
@@ -2664,6 +2755,7 @@ pub struct CreateUserProfileRequest {
     pub user_settings: Option<UserSettings>,
 }
 
+/// see [SageMaker::create_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserProfileResponse {
@@ -2673,6 +2765,7 @@ pub struct CreateUserProfileResponse {
     pub user_profile_arn: Option<String>,
 }
 
+/// see [SageMaker::create_workforce]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkforceRequest {
@@ -2696,6 +2789,7 @@ pub struct CreateWorkforceRequest {
     pub workforce_name: String,
 }
 
+/// see [SageMaker::create_workforce]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkforceResponse {
@@ -2704,6 +2798,7 @@ pub struct CreateWorkforceResponse {
     pub workforce_arn: String,
 }
 
+/// see [SageMaker::create_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkteamRequest {
@@ -2730,6 +2825,7 @@ pub struct CreateWorkteamRequest {
     pub workteam_name: String,
 }
 
+/// see [SageMaker::create_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkteamResponse {
@@ -2995,6 +3091,7 @@ pub struct DebugRuleEvaluationStatus {
     pub status_details: Option<String>,
 }
 
+/// see [SageMaker::delete_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActionRequest {
@@ -3003,6 +3100,7 @@ pub struct DeleteActionRequest {
     pub action_name: String,
 }
 
+/// see [SageMaker::delete_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActionResponse {
@@ -3012,6 +3110,7 @@ pub struct DeleteActionResponse {
     pub action_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_algorithm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAlgorithmInput {
@@ -3020,6 +3119,7 @@ pub struct DeleteAlgorithmInput {
     pub algorithm_name: String,
 }
 
+/// see [SageMaker::delete_app_image_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppImageConfigRequest {
@@ -3028,6 +3128,7 @@ pub struct DeleteAppImageConfigRequest {
     pub app_image_config_name: String,
 }
 
+/// see [SageMaker::delete_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
@@ -3045,6 +3146,7 @@ pub struct DeleteAppRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::delete_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArtifactRequest {
@@ -3058,6 +3160,7 @@ pub struct DeleteArtifactRequest {
     pub source: Option<ArtifactSource>,
 }
 
+/// see [SageMaker::delete_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteArtifactResponse {
@@ -3067,6 +3170,7 @@ pub struct DeleteArtifactResponse {
     pub artifact_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssociationRequest {
@@ -3078,6 +3182,7 @@ pub struct DeleteAssociationRequest {
     pub source_arn: String,
 }
 
+/// see [SageMaker::delete_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssociationResponse {
@@ -3091,6 +3196,7 @@ pub struct DeleteAssociationResponse {
     pub source_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_code_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCodeRepositoryInput {
@@ -3099,6 +3205,7 @@ pub struct DeleteCodeRepositoryInput {
     pub code_repository_name: String,
 }
 
+/// see [SageMaker::delete_context]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteContextRequest {
@@ -3107,6 +3214,7 @@ pub struct DeleteContextRequest {
     pub context_name: String,
 }
 
+/// see [SageMaker::delete_context]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteContextResponse {
@@ -3116,6 +3224,7 @@ pub struct DeleteContextResponse {
     pub context_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_data_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataQualityJobDefinitionRequest {
@@ -3124,6 +3233,7 @@ pub struct DeleteDataQualityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::delete_device_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceFleetRequest {
@@ -3132,6 +3242,7 @@ pub struct DeleteDeviceFleetRequest {
     pub device_fleet_name: String,
 }
 
+/// see [SageMaker::delete_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
@@ -3144,6 +3255,7 @@ pub struct DeleteDomainRequest {
     pub retention_policy: Option<RetentionPolicy>,
 }
 
+/// see [SageMaker::delete_endpoint_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointConfigInput {
@@ -3152,6 +3264,7 @@ pub struct DeleteEndpointConfigInput {
     pub endpoint_config_name: String,
 }
 
+/// see [SageMaker::delete_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointInput {
@@ -3160,6 +3273,7 @@ pub struct DeleteEndpointInput {
     pub endpoint_name: String,
 }
 
+/// see [SageMaker::delete_experiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExperimentRequest {
@@ -3168,6 +3282,7 @@ pub struct DeleteExperimentRequest {
     pub experiment_name: String,
 }
 
+/// see [SageMaker::delete_experiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteExperimentResponse {
@@ -3177,6 +3292,7 @@ pub struct DeleteExperimentResponse {
     pub experiment_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_feature_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFeatureGroupRequest {
@@ -3185,6 +3301,7 @@ pub struct DeleteFeatureGroupRequest {
     pub feature_group_name: String,
 }
 
+/// see [SageMaker::delete_flow_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowDefinitionRequest {
@@ -3193,10 +3310,12 @@ pub struct DeleteFlowDefinitionRequest {
     pub flow_definition_name: String,
 }
 
+/// see [SageMaker::delete_flow_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowDefinitionResponse {}
 
+/// see [SageMaker::delete_human_task_ui]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanTaskUiRequest {
@@ -3205,10 +3324,12 @@ pub struct DeleteHumanTaskUiRequest {
     pub human_task_ui_name: String,
 }
 
+/// see [SageMaker::delete_human_task_ui]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHumanTaskUiResponse {}
 
+/// see [SageMaker::delete_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
@@ -3217,10 +3338,12 @@ pub struct DeleteImageRequest {
     pub image_name: String,
 }
 
+/// see [SageMaker::delete_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResponse {}
 
+/// see [SageMaker::delete_image_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageVersionRequest {
@@ -3232,10 +3355,12 @@ pub struct DeleteImageVersionRequest {
     pub version: i64,
 }
 
+/// see [SageMaker::delete_image_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageVersionResponse {}
 
+/// see [SageMaker::delete_model_bias_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelBiasJobDefinitionRequest {
@@ -3244,6 +3369,7 @@ pub struct DeleteModelBiasJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::delete_model_explainability_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelExplainabilityJobDefinitionRequest {
@@ -3252,6 +3378,7 @@ pub struct DeleteModelExplainabilityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::delete_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelInput {
@@ -3260,6 +3387,7 @@ pub struct DeleteModelInput {
     pub model_name: String,
 }
 
+/// see [SageMaker::delete_model_package_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageGroupInput {
@@ -3268,6 +3396,7 @@ pub struct DeleteModelPackageGroupInput {
     pub model_package_group_name: String,
 }
 
+/// see [SageMaker::delete_model_package_group_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageGroupPolicyInput {
@@ -3276,6 +3405,7 @@ pub struct DeleteModelPackageGroupPolicyInput {
     pub model_package_group_name: String,
 }
 
+/// see [SageMaker::delete_model_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelPackageInput {
@@ -3284,6 +3414,7 @@ pub struct DeleteModelPackageInput {
     pub model_package_name: String,
 }
 
+/// see [SageMaker::delete_model_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelQualityJobDefinitionRequest {
@@ -3292,6 +3423,7 @@ pub struct DeleteModelQualityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::delete_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMonitoringScheduleRequest {
@@ -3300,6 +3432,7 @@ pub struct DeleteMonitoringScheduleRequest {
     pub monitoring_schedule_name: String,
 }
 
+/// see [SageMaker::delete_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceInput {
@@ -3308,6 +3441,7 @@ pub struct DeleteNotebookInstanceInput {
     pub notebook_instance_name: String,
 }
 
+/// see [SageMaker::delete_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotebookInstanceLifecycleConfigInput {
@@ -3316,6 +3450,7 @@ pub struct DeleteNotebookInstanceLifecycleConfigInput {
     pub notebook_instance_lifecycle_config_name: String,
 }
 
+/// see [SageMaker::delete_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineRequest {
@@ -3327,6 +3462,7 @@ pub struct DeletePipelineRequest {
     pub pipeline_name: String,
 }
 
+/// see [SageMaker::delete_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePipelineResponse {
@@ -3336,6 +3472,7 @@ pub struct DeletePipelineResponse {
     pub pipeline_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectInput {
@@ -3344,6 +3481,7 @@ pub struct DeleteProjectInput {
     pub project_name: String,
 }
 
+/// see [SageMaker::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsInput {
@@ -3355,10 +3493,12 @@ pub struct DeleteTagsInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [SageMaker::delete_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsOutput {}
 
+/// see [SageMaker::delete_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialComponentRequest {
@@ -3367,6 +3507,7 @@ pub struct DeleteTrialComponentRequest {
     pub trial_component_name: String,
 }
 
+/// see [SageMaker::delete_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTrialComponentResponse {
@@ -3376,6 +3517,7 @@ pub struct DeleteTrialComponentResponse {
     pub trial_component_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_trial]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTrialRequest {
@@ -3384,6 +3526,7 @@ pub struct DeleteTrialRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::delete_trial]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTrialResponse {
@@ -3393,6 +3536,7 @@ pub struct DeleteTrialResponse {
     pub trial_arn: Option<String>,
 }
 
+/// see [SageMaker::delete_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
@@ -3404,6 +3548,7 @@ pub struct DeleteUserProfileRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::delete_workforce]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkforceRequest {
@@ -3412,10 +3557,12 @@ pub struct DeleteWorkforceRequest {
     pub workforce_name: String,
 }
 
+/// see [SageMaker::delete_workforce]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkforceResponse {}
 
+/// see [SageMaker::delete_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkteamRequest {
@@ -3424,6 +3571,7 @@ pub struct DeleteWorkteamRequest {
     pub workteam_name: String,
 }
 
+/// see [SageMaker::delete_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkteamResponse {
@@ -3462,6 +3610,7 @@ pub struct DeploymentConfig {
     pub blue_green_update_policy: BlueGreenUpdatePolicy,
 }
 
+/// see [SageMaker::deregister_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterDevicesRequest {
@@ -3473,6 +3622,7 @@ pub struct DeregisterDevicesRequest {
     pub device_names: Vec<String>,
 }
 
+/// see [SageMaker::describe_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActionRequest {
@@ -3481,6 +3631,7 @@ pub struct DescribeActionRequest {
     pub action_name: String,
 }
 
+/// see [SageMaker::describe_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActionResponse {
@@ -3531,6 +3682,7 @@ pub struct DescribeActionResponse {
     pub status: Option<String>,
 }
 
+/// see [SageMaker::describe_algorithm]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmInput {
@@ -3539,6 +3691,7 @@ pub struct DescribeAlgorithmInput {
     pub algorithm_name: String,
 }
 
+/// see [SageMaker::describe_algorithm]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAlgorithmOutput {
@@ -3582,6 +3735,7 @@ pub struct DescribeAlgorithmOutput {
     pub validation_specification: Option<AlgorithmValidationSpecification>,
 }
 
+/// see [SageMaker::describe_app_image_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppImageConfigRequest {
@@ -3590,6 +3744,7 @@ pub struct DescribeAppImageConfigRequest {
     pub app_image_config_name: String,
 }
 
+/// see [SageMaker::describe_app_image_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppImageConfigResponse {
@@ -3615,6 +3770,7 @@ pub struct DescribeAppImageConfigResponse {
     pub last_modified_time: Option<f64>,
 }
 
+/// see [SageMaker::describe_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppRequest {
@@ -3632,6 +3788,7 @@ pub struct DescribeAppRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::describe_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppResponse {
@@ -3681,6 +3838,7 @@ pub struct DescribeAppResponse {
     pub user_profile_name: Option<String>,
 }
 
+/// see [SageMaker::describe_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeArtifactRequest {
@@ -3689,6 +3847,7 @@ pub struct DescribeArtifactRequest {
     pub artifact_arn: String,
 }
 
+/// see [SageMaker::describe_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeArtifactResponse {
@@ -3731,6 +3890,7 @@ pub struct DescribeArtifactResponse {
     pub source: Option<ArtifactSource>,
 }
 
+/// see [SageMaker::describe_auto_ml_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutoMLJobRequest {
@@ -3739,6 +3899,7 @@ pub struct DescribeAutoMLJobRequest {
     pub auto_ml_job_name: String,
 }
 
+/// see [SageMaker::describe_auto_ml_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAutoMLJobResponse {
@@ -3807,6 +3968,7 @@ pub struct DescribeAutoMLJobResponse {
     pub role_arn: String,
 }
 
+/// see [SageMaker::describe_code_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeRepositoryInput {
@@ -3815,6 +3977,7 @@ pub struct DescribeCodeRepositoryInput {
     pub code_repository_name: String,
 }
 
+/// see [SageMaker::describe_code_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCodeRepositoryOutput {
@@ -3836,6 +3999,7 @@ pub struct DescribeCodeRepositoryOutput {
     pub last_modified_time: f64,
 }
 
+/// see [SageMaker::describe_compilation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompilationJobRequest {
@@ -3844,6 +4008,7 @@ pub struct DescribeCompilationJobRequest {
     pub compilation_job_name: String,
 }
 
+/// see [SageMaker::describe_compilation_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCompilationJobResponse {
@@ -3894,6 +4059,7 @@ pub struct DescribeCompilationJobResponse {
     pub stopping_condition: StoppingCondition,
 }
 
+/// see [SageMaker::describe_context]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContextRequest {
@@ -3902,6 +4068,7 @@ pub struct DescribeContextRequest {
     pub context_name: String,
 }
 
+/// see [SageMaker::describe_context]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContextResponse {
@@ -3945,6 +4112,7 @@ pub struct DescribeContextResponse {
     pub source: Option<ContextSource>,
 }
 
+/// see [SageMaker::describe_data_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataQualityJobDefinitionRequest {
@@ -3953,6 +4121,7 @@ pub struct DescribeDataQualityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::describe_data_quality_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataQualityJobDefinitionResponse {
@@ -3991,6 +4160,7 @@ pub struct DescribeDataQualityJobDefinitionResponse {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+/// see [SageMaker::describe_device_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceFleetRequest {
@@ -3999,6 +4169,7 @@ pub struct DescribeDeviceFleetRequest {
     pub device_fleet_name: String,
 }
 
+/// see [SageMaker::describe_device_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceFleetResponse {
@@ -4031,6 +4202,7 @@ pub struct DescribeDeviceFleetResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
@@ -4046,6 +4218,7 @@ pub struct DescribeDeviceRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SageMaker::describe_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
@@ -4088,6 +4261,7 @@ pub struct DescribeDeviceResponse {
     pub registration_time: f64,
 }
 
+/// see [SageMaker::describe_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
@@ -4096,6 +4270,7 @@ pub struct DescribeDomainRequest {
     pub domain_id: String,
 }
 
+/// see [SageMaker::describe_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainResponse {
@@ -4165,6 +4340,7 @@ pub struct DescribeDomainResponse {
     pub vpc_id: Option<String>,
 }
 
+/// see [SageMaker::describe_edge_packaging_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEdgePackagingJobRequest {
@@ -4173,6 +4349,7 @@ pub struct DescribeEdgePackagingJobRequest {
     pub edge_packaging_job_name: String,
 }
 
+/// see [SageMaker::describe_edge_packaging_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEdgePackagingJobResponse {
@@ -4231,6 +4408,7 @@ pub struct DescribeEdgePackagingJobResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_endpoint_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointConfigInput {
@@ -4239,6 +4417,7 @@ pub struct DescribeEndpointConfigInput {
     pub endpoint_config_name: String,
 }
 
+/// see [SageMaker::describe_endpoint_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointConfigOutput {
@@ -4263,6 +4442,7 @@ pub struct DescribeEndpointConfigOutput {
     pub production_variants: Vec<ProductionVariant>,
 }
 
+/// see [SageMaker::describe_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointInput {
@@ -4271,6 +4451,7 @@ pub struct DescribeEndpointInput {
     pub endpoint_name: String,
 }
 
+/// see [SageMaker::describe_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointOutput {
@@ -4309,6 +4490,7 @@ pub struct DescribeEndpointOutput {
     pub production_variants: Option<Vec<ProductionVariantSummary>>,
 }
 
+/// see [SageMaker::describe_experiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExperimentRequest {
@@ -4317,6 +4499,7 @@ pub struct DescribeExperimentRequest {
     pub experiment_name: String,
 }
 
+/// see [SageMaker::describe_experiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExperimentResponse {
@@ -4358,6 +4541,7 @@ pub struct DescribeExperimentResponse {
     pub source: Option<ExperimentSource>,
 }
 
+/// see [SageMaker::describe_feature_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFeatureGroupRequest {
@@ -4370,6 +4554,7 @@ pub struct DescribeFeatureGroupRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SageMaker::describe_feature_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFeatureGroupResponse {
@@ -4424,6 +4609,7 @@ pub struct DescribeFeatureGroupResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_flow_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowDefinitionRequest {
@@ -4432,6 +4618,7 @@ pub struct DescribeFlowDefinitionRequest {
     pub flow_definition_name: String,
 }
 
+/// see [SageMaker::describe_flow_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFlowDefinitionResponse {
@@ -4470,6 +4657,7 @@ pub struct DescribeFlowDefinitionResponse {
     pub role_arn: String,
 }
 
+/// see [SageMaker::describe_human_task_ui]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanTaskUiRequest {
@@ -4478,6 +4666,7 @@ pub struct DescribeHumanTaskUiRequest {
     pub human_task_ui_name: String,
 }
 
+/// see [SageMaker::describe_human_task_ui]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHumanTaskUiResponse {
@@ -4498,6 +4687,7 @@ pub struct DescribeHumanTaskUiResponse {
     pub ui_template: UiTemplateInfo,
 }
 
+/// see [SageMaker::describe_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHyperParameterTuningJobRequest {
@@ -4506,6 +4696,7 @@ pub struct DescribeHyperParameterTuningJobRequest {
     pub hyper_parameter_tuning_job_name: String,
 }
 
+/// see [SageMaker::describe_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHyperParameterTuningJobResponse {
@@ -4564,6 +4755,7 @@ pub struct DescribeHyperParameterTuningJobResponse {
     pub warm_start_config: Option<HyperParameterTuningJobWarmStartConfig>,
 }
 
+/// see [SageMaker::describe_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageRequest {
@@ -4572,6 +4764,7 @@ pub struct DescribeImageRequest {
     pub image_name: String,
 }
 
+/// see [SageMaker::describe_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImageResponse {
@@ -4613,6 +4806,7 @@ pub struct DescribeImageResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_image_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageVersionRequest {
@@ -4625,6 +4819,7 @@ pub struct DescribeImageVersionRequest {
     pub version: Option<i64>,
 }
 
+/// see [SageMaker::describe_image_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImageVersionResponse {
@@ -4666,6 +4861,7 @@ pub struct DescribeImageVersionResponse {
     pub version: Option<i64>,
 }
 
+/// see [SageMaker::describe_labeling_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLabelingJobRequest {
@@ -4674,6 +4870,7 @@ pub struct DescribeLabelingJobRequest {
     pub labeling_job_name: String,
 }
 
+/// see [SageMaker::describe_labeling_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLabelingJobResponse {
@@ -4740,6 +4937,7 @@ pub struct DescribeLabelingJobResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [SageMaker::describe_model_bias_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelBiasJobDefinitionRequest {
@@ -4748,6 +4946,7 @@ pub struct DescribeModelBiasJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::describe_model_bias_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelBiasJobDefinitionResponse {
@@ -4786,6 +4985,7 @@ pub struct DescribeModelBiasJobDefinitionResponse {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+/// see [SageMaker::describe_model_explainability_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelExplainabilityJobDefinitionRequest {
@@ -4794,6 +4994,7 @@ pub struct DescribeModelExplainabilityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::describe_model_explainability_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelExplainabilityJobDefinitionResponse {
@@ -4832,6 +5033,7 @@ pub struct DescribeModelExplainabilityJobDefinitionResponse {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+/// see [SageMaker::describe_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelInput {
@@ -4840,6 +5042,7 @@ pub struct DescribeModelInput {
     pub model_name: String,
 }
 
+/// see [SageMaker::describe_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelOutput {
@@ -4873,6 +5076,7 @@ pub struct DescribeModelOutput {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [SageMaker::describe_model_package_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelPackageGroupInput {
@@ -4881,6 +5085,7 @@ pub struct DescribeModelPackageGroupInput {
     pub model_package_group_name: String,
 }
 
+/// see [SageMaker::describe_model_package_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelPackageGroupOutput {
@@ -4904,6 +5109,7 @@ pub struct DescribeModelPackageGroupOutput {
     pub model_package_group_status: String,
 }
 
+/// see [SageMaker::describe_model_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelPackageInput {
@@ -4912,6 +5118,7 @@ pub struct DescribeModelPackageInput {
     pub model_package_name: String,
 }
 
+/// see [SageMaker::describe_model_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelPackageOutput {
@@ -4985,6 +5192,7 @@ pub struct DescribeModelPackageOutput {
     pub validation_specification: Option<ModelPackageValidationSpecification>,
 }
 
+/// see [SageMaker::describe_model_quality_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelQualityJobDefinitionRequest {
@@ -4993,6 +5201,7 @@ pub struct DescribeModelQualityJobDefinitionRequest {
     pub job_definition_name: String,
 }
 
+/// see [SageMaker::describe_model_quality_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelQualityJobDefinitionResponse {
@@ -5031,6 +5240,7 @@ pub struct DescribeModelQualityJobDefinitionResponse {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+/// see [SageMaker::describe_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMonitoringScheduleRequest {
@@ -5039,6 +5249,7 @@ pub struct DescribeMonitoringScheduleRequest {
     pub monitoring_schedule_name: String,
 }
 
+/// see [SageMaker::describe_monitoring_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMonitoringScheduleResponse {
@@ -5078,6 +5289,7 @@ pub struct DescribeMonitoringScheduleResponse {
     pub monitoring_type: Option<String>,
 }
 
+/// see [SageMaker::describe_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceInput {
@@ -5086,6 +5298,7 @@ pub struct DescribeNotebookInstanceInput {
     pub notebook_instance_name: String,
 }
 
+/// see [SageMaker::describe_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigInput {
@@ -5094,6 +5307,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigInput {
     pub notebook_instance_lifecycle_config_name: String,
 }
 
+/// see [SageMaker::describe_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigOutput {
@@ -5123,6 +5337,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigOutput {
     pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
 }
 
+/// see [SageMaker::describe_notebook_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotebookInstanceOutput {
@@ -5208,6 +5423,7 @@ pub struct DescribeNotebookInstanceOutput {
     pub volume_size_in_gb: Option<i64>,
 }
 
+/// see [SageMaker::describe_pipeline_definition_for_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineDefinitionForExecutionRequest {
@@ -5216,6 +5432,7 @@ pub struct DescribePipelineDefinitionForExecutionRequest {
     pub pipeline_execution_arn: String,
 }
 
+/// see [SageMaker::describe_pipeline_definition_for_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineDefinitionForExecutionResponse {
@@ -5229,6 +5446,7 @@ pub struct DescribePipelineDefinitionForExecutionResponse {
     pub pipeline_definition: Option<String>,
 }
 
+/// see [SageMaker::describe_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineExecutionRequest {
@@ -5237,6 +5455,7 @@ pub struct DescribePipelineExecutionRequest {
     pub pipeline_execution_arn: String,
 }
 
+/// see [SageMaker::describe_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineExecutionResponse {
@@ -5276,6 +5495,7 @@ pub struct DescribePipelineExecutionResponse {
     pub pipeline_execution_status: Option<String>,
 }
 
+/// see [SageMaker::describe_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelineRequest {
@@ -5284,6 +5504,7 @@ pub struct DescribePipelineRequest {
     pub pipeline_name: String,
 }
 
+/// see [SageMaker::describe_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineResponse {
@@ -5335,6 +5556,7 @@ pub struct DescribePipelineResponse {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_processing_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProcessingJobRequest {
@@ -5343,6 +5565,7 @@ pub struct DescribeProcessingJobRequest {
     pub processing_job_name: String,
 }
 
+/// see [SageMaker::describe_processing_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProcessingJobResponse {
@@ -5426,6 +5649,7 @@ pub struct DescribeProcessingJobResponse {
     pub training_job_arn: Option<String>,
 }
 
+/// see [SageMaker::describe_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectInput {
@@ -5434,6 +5658,7 @@ pub struct DescribeProjectInput {
     pub project_name: String,
 }
 
+/// see [SageMaker::describe_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectOutput {
@@ -5469,6 +5694,7 @@ pub struct DescribeProjectOutput {
     pub service_catalog_provisioning_details: ServiceCatalogProvisioningDetails,
 }
 
+/// see [SageMaker::describe_subscribed_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribedWorkteamRequest {
@@ -5477,6 +5703,7 @@ pub struct DescribeSubscribedWorkteamRequest {
     pub workteam_arn: String,
 }
 
+/// see [SageMaker::describe_subscribed_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscribedWorkteamResponse {
@@ -5485,6 +5712,7 @@ pub struct DescribeSubscribedWorkteamResponse {
     pub subscribed_workteam: SubscribedWorkteam,
 }
 
+/// see [SageMaker::describe_training_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrainingJobRequest {
@@ -5493,6 +5721,7 @@ pub struct DescribeTrainingJobRequest {
     pub training_job_name: String,
 }
 
+/// see [SageMaker::describe_training_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrainingJobResponse {
@@ -5636,6 +5865,7 @@ pub struct DescribeTrainingJobResponse {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [SageMaker::describe_transform_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTransformJobRequest {
@@ -5644,6 +5874,7 @@ pub struct DescribeTransformJobRequest {
     pub transform_job_name: String,
 }
 
+/// see [SageMaker::describe_transform_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTransformJobResponse {
@@ -5720,6 +5951,7 @@ pub struct DescribeTransformJobResponse {
     pub transform_start_time: Option<f64>,
 }
 
+/// see [SageMaker::describe_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialComponentRequest {
@@ -5728,6 +5960,7 @@ pub struct DescribeTrialComponentRequest {
     pub trial_component_name: String,
 }
 
+/// see [SageMaker::describe_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrialComponentResponse {
@@ -5796,6 +6029,7 @@ pub struct DescribeTrialComponentResponse {
     pub trial_component_name: Option<String>,
 }
 
+/// see [SageMaker::describe_trial]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrialRequest {
@@ -5804,6 +6038,7 @@ pub struct DescribeTrialRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::describe_trial]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrialResponse {
@@ -5848,6 +6083,7 @@ pub struct DescribeTrialResponse {
     pub trial_name: Option<String>,
 }
 
+/// see [SageMaker::describe_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfileRequest {
@@ -5859,6 +6095,7 @@ pub struct DescribeUserProfileRequest {
     pub user_profile_name: String,
 }
 
+/// see [SageMaker::describe_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserProfileResponse {
@@ -5908,6 +6145,7 @@ pub struct DescribeUserProfileResponse {
     pub user_settings: Option<UserSettings>,
 }
 
+/// see [SageMaker::describe_workforce]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkforceRequest {
@@ -5916,6 +6154,7 @@ pub struct DescribeWorkforceRequest {
     pub workforce_name: String,
 }
 
+/// see [SageMaker::describe_workforce]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkforceResponse {
@@ -5924,6 +6163,7 @@ pub struct DescribeWorkforceResponse {
     pub workforce: Workforce,
 }
 
+/// see [SageMaker::describe_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkteamRequest {
@@ -5932,6 +6172,7 @@ pub struct DescribeWorkteamRequest {
     pub workteam_name: String,
 }
 
+/// see [SageMaker::describe_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkteamResponse {
@@ -6042,14 +6283,17 @@ pub struct DeviceSummary {
     pub registration_time: Option<f64>,
 }
 
+/// see [SageMaker::disable_sagemaker_servicecatalog_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSagemakerServicecatalogPortfolioInput {}
 
+/// see [SageMaker::disable_sagemaker_servicecatalog_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableSagemakerServicecatalogPortfolioOutput {}
 
+/// see [SageMaker::disassociate_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTrialComponentRequest {
@@ -6061,6 +6305,7 @@ pub struct DisassociateTrialComponentRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::disassociate_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTrialComponentResponse {
@@ -6211,10 +6456,12 @@ pub struct EdgePackagingJobSummary {
     pub model_version: Option<String>,
 }
 
+/// see [SageMaker::enable_sagemaker_servicecatalog_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSagemakerServicecatalogPortfolioInput {}
 
+/// see [SageMaker::enable_sagemaker_servicecatalog_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableSagemakerServicecatalogPortfolioOutput {}
@@ -6664,6 +6911,7 @@ pub struct FlowDefinitionSummary {
     pub flow_definition_status: String,
 }
 
+/// see [SageMaker::get_device_fleet_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceFleetReportRequest {
@@ -6672,6 +6920,7 @@ pub struct GetDeviceFleetReportRequest {
     pub device_fleet_name: String,
 }
 
+/// see [SageMaker::get_device_fleet_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceFleetReportResponse {
@@ -6707,6 +6956,7 @@ pub struct GetDeviceFleetReportResponse {
     pub report_generated: Option<f64>,
 }
 
+/// see [SageMaker::get_model_package_group_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelPackageGroupPolicyInput {
@@ -6715,6 +6965,7 @@ pub struct GetModelPackageGroupPolicyInput {
     pub model_package_group_name: String,
 }
 
+/// see [SageMaker::get_model_package_group_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelPackageGroupPolicyOutput {
@@ -6723,10 +6974,12 @@ pub struct GetModelPackageGroupPolicyOutput {
     pub resource_policy: String,
 }
 
+/// see [SageMaker::get_sagemaker_servicecatalog_portfolio_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSagemakerServicecatalogPortfolioStatusInput {}
 
+/// see [SageMaker::get_sagemaker_servicecatalog_portfolio_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSagemakerServicecatalogPortfolioStatusOutput {
@@ -6736,6 +6989,7 @@ pub struct GetSagemakerServicecatalogPortfolioStatusOutput {
     pub status: Option<String>,
 }
 
+/// see [SageMaker::get_search_suggestions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSearchSuggestionsRequest {
@@ -6748,6 +7002,7 @@ pub struct GetSearchSuggestionsRequest {
     pub suggestion_query: Option<SuggestionQuery>,
 }
 
+/// see [SageMaker::get_search_suggestions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSearchSuggestionsResponse {
@@ -7562,6 +7817,7 @@ pub struct LabelingJobSummary {
     pub workteam_arn: String,
 }
 
+/// see [SageMaker::list_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionsRequest {
@@ -7599,6 +7855,23 @@ pub struct ListActionsRequest {
     pub source_uri: Option<String>,
 }
 
+impl Paged for ListActionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListActionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActionsResponse {
@@ -7612,6 +7885,29 @@ pub struct ListActionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListActionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListActionsResponse {
+    type Item = ActionSummary;
+
+    fn into_pagination_page(self) -> Vec<ActionSummary> {
+        self.action_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_algorithms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAlgorithmsInput {
@@ -7645,6 +7941,23 @@ pub struct ListAlgorithmsInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListAlgorithmsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAlgorithmsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_algorithms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAlgorithmsOutput {
@@ -7657,6 +7970,29 @@ pub struct ListAlgorithmsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAlgorithmsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAlgorithmsOutput {
+    type Item = AlgorithmSummary;
+
+    fn into_pagination_page(self) -> Vec<AlgorithmSummary> {
+        self.algorithm_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_app_image_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppImageConfigsRequest {
@@ -7698,6 +8034,23 @@ pub struct ListAppImageConfigsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListAppImageConfigsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppImageConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_app_image_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppImageConfigsResponse {
@@ -7711,6 +8064,29 @@ pub struct ListAppImageConfigsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAppImageConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAppImageConfigsResponse {
+    type Item = AppImageConfigDetails;
+
+    fn into_pagination_page(self) -> Vec<AppImageConfigDetails> {
+        self.app_image_configs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_apps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
@@ -7740,6 +8116,23 @@ pub struct ListAppsRequest {
     pub user_profile_name_equals: Option<String>,
 }
 
+impl Paged for ListAppsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_apps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResponse {
@@ -7753,6 +8146,29 @@ pub struct ListAppsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAppsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAppsResponse {
+    type Item = AppDetails;
+
+    fn into_pagination_page(self) -> Vec<AppDetails> {
+        self.apps.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
@@ -7790,6 +8206,23 @@ pub struct ListArtifactsRequest {
     pub source_uri: Option<String>,
 }
 
+impl Paged for ListArtifactsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListArtifactsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResponse {
@@ -7803,6 +8236,29 @@ pub struct ListArtifactsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListArtifactsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListArtifactsResponse {
+    type Item = ArtifactSummary;
+
+    fn into_pagination_page(self) -> Vec<ArtifactSummary> {
+        self.artifact_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsRequest {
@@ -7852,6 +8308,23 @@ pub struct ListAssociationsRequest {
     pub source_type: Option<String>,
 }
 
+impl Paged for ListAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationsResponse {
@@ -7865,6 +8338,29 @@ pub struct ListAssociationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssociationsResponse {
+    type Item = AssociationSummary;
+
+    fn into_pagination_page(self) -> Vec<AssociationSummary> {
+        self.association_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_auto_ml_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAutoMLJobsRequest {
@@ -7910,6 +8406,23 @@ pub struct ListAutoMLJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListAutoMLJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAutoMLJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_auto_ml_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAutoMLJobsResponse {
@@ -7922,6 +8435,29 @@ pub struct ListAutoMLJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAutoMLJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAutoMLJobsResponse {
+    type Item = AutoMLJobSummary;
+
+    fn into_pagination_page(self) -> Vec<AutoMLJobSummary> {
+        self.auto_ml_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_candidates_for_auto_ml_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCandidatesForAutoMLJobRequest {
@@ -7954,6 +8490,23 @@ pub struct ListCandidatesForAutoMLJobRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListCandidatesForAutoMLJobRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCandidatesForAutoMLJobRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_candidates_for_auto_ml_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCandidatesForAutoMLJobResponse {
@@ -7966,6 +8519,29 @@ pub struct ListCandidatesForAutoMLJobResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCandidatesForAutoMLJobResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCandidatesForAutoMLJobResponse {
+    type Item = AutoMLCandidate;
+
+    fn into_pagination_page(self) -> Vec<AutoMLCandidate> {
+        self.candidates
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_code_repositories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCodeRepositoriesInput {
@@ -8007,6 +8583,23 @@ pub struct ListCodeRepositoriesInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListCodeRepositoriesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCodeRepositoriesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_code_repositories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCodeRepositoriesOutput {
@@ -8019,6 +8612,29 @@ pub struct ListCodeRepositoriesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCodeRepositoriesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCodeRepositoriesOutput {
+    type Item = CodeRepositorySummary;
+
+    fn into_pagination_page(self) -> Vec<CodeRepositorySummary> {
+        self.code_repository_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_compilation_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCompilationJobsRequest {
@@ -8064,6 +8680,23 @@ pub struct ListCompilationJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListCompilationJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCompilationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_compilation_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCompilationJobsResponse {
@@ -8076,6 +8709,29 @@ pub struct ListCompilationJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCompilationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCompilationJobsResponse {
+    type Item = CompilationJobSummary;
+
+    fn into_pagination_page(self) -> Vec<CompilationJobSummary> {
+        self.compilation_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_contexts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContextsRequest {
@@ -8113,6 +8769,23 @@ pub struct ListContextsRequest {
     pub source_uri: Option<String>,
 }
 
+impl Paged for ListContextsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListContextsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_contexts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContextsResponse {
@@ -8126,6 +8799,29 @@ pub struct ListContextsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListContextsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListContextsResponse {
+    type Item = ContextSummary;
+
+    fn into_pagination_page(self) -> Vec<ContextSummary> {
+        self.context_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_data_quality_job_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataQualityJobDefinitionsRequest {
@@ -8163,6 +8859,23 @@ pub struct ListDataQualityJobDefinitionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListDataQualityJobDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataQualityJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_data_quality_job_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataQualityJobDefinitionsResponse {
@@ -8175,6 +8888,29 @@ pub struct ListDataQualityJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDataQualityJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDataQualityJobDefinitionsResponse {
+    type Item = MonitoringJobDefinitionSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringJobDefinitionSummary> {
+        self.job_definition_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_device_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceFleetsRequest {
@@ -8216,6 +8952,23 @@ pub struct ListDeviceFleetsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListDeviceFleetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeviceFleetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_device_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceFleetsResponse {
@@ -8228,6 +8981,29 @@ pub struct ListDeviceFleetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDeviceFleetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDeviceFleetsResponse {
+    type Item = DeviceFleetSummary;
+
+    fn into_pagination_page(self) -> Vec<DeviceFleetSummary> {
+        self.device_fleet_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
@@ -8253,6 +9029,23 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDevicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
@@ -8265,6 +9058,29 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDevicesResponse {
+    type Item = DeviceSummary;
+
+    fn into_pagination_page(self) -> Vec<DeviceSummary> {
+        self.device_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
@@ -8278,6 +9094,23 @@ pub struct ListDomainsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDomainsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDomainsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
@@ -8291,6 +9124,29 @@ pub struct ListDomainsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDomainsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDomainsResponse {
+    type Item = DomainDetails;
+
+    fn into_pagination_page(self) -> Vec<DomainDetails> {
+        self.domains.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_edge_packaging_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEdgePackagingJobsRequest {
@@ -8340,6 +9196,23 @@ pub struct ListEdgePackagingJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListEdgePackagingJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEdgePackagingJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_edge_packaging_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEdgePackagingJobsResponse {
@@ -8352,6 +9225,29 @@ pub struct ListEdgePackagingJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEdgePackagingJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEdgePackagingJobsResponse {
+    type Item = EdgePackagingJobSummary;
+
+    fn into_pagination_page(self) -> Vec<EdgePackagingJobSummary> {
+        self.edge_packaging_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_endpoint_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointConfigsInput {
@@ -8385,6 +9281,23 @@ pub struct ListEndpointConfigsInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListEndpointConfigsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEndpointConfigsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_endpoint_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointConfigsOutput {
@@ -8397,6 +9310,29 @@ pub struct ListEndpointConfigsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEndpointConfigsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEndpointConfigsOutput {
+    type Item = EndpointConfigSummary;
+
+    fn into_pagination_page(self) -> Vec<EndpointConfigSummary> {
+        self.endpoint_configs
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsInput {
@@ -8442,6 +9378,23 @@ pub struct ListEndpointsInput {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListEndpointsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEndpointsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointsOutput {
@@ -8454,6 +9407,29 @@ pub struct ListEndpointsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEndpointsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEndpointsOutput {
+    type Item = EndpointSummary;
+
+    fn into_pagination_page(self) -> Vec<EndpointSummary> {
+        self.endpoints
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_experiments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExperimentsRequest {
@@ -8483,6 +9459,23 @@ pub struct ListExperimentsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListExperimentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListExperimentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_experiments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExperimentsResponse {
@@ -8496,6 +9489,29 @@ pub struct ListExperimentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListExperimentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListExperimentsResponse {
+    type Item = ExperimentSummary;
+
+    fn into_pagination_page(self) -> Vec<ExperimentSummary> {
+        self.experiment_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_feature_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFeatureGroupsRequest {
@@ -8537,6 +9553,23 @@ pub struct ListFeatureGroupsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListFeatureGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFeatureGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_feature_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFeatureGroupsResponse {
@@ -8548,6 +9581,29 @@ pub struct ListFeatureGroupsResponse {
     pub next_token: String,
 }
 
+impl Paged for ListFeatureGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        Some(std::mem::replace(&mut self.next_token, Default::default()))
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned(Some(self.next_token.clone()))
+    }
+}
+
+impl PagedOutput for ListFeatureGroupsResponse {
+    type Item = FeatureGroupSummary;
+
+    fn into_pagination_page(self) -> Vec<FeatureGroupSummary> {
+        self.feature_group_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_flow_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowDefinitionsRequest {
@@ -8573,6 +9629,23 @@ pub struct ListFlowDefinitionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListFlowDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFlowDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_flow_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowDefinitionsResponse {
@@ -8585,6 +9658,29 @@ pub struct ListFlowDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFlowDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFlowDefinitionsResponse {
+    type Item = FlowDefinitionSummary;
+
+    fn into_pagination_page(self) -> Vec<FlowDefinitionSummary> {
+        self.flow_definition_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_human_task_uis]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanTaskUisRequest {
@@ -8610,6 +9706,23 @@ pub struct ListHumanTaskUisRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListHumanTaskUisRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHumanTaskUisRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_human_task_uis]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHumanTaskUisResponse {
@@ -8622,6 +9735,29 @@ pub struct ListHumanTaskUisResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListHumanTaskUisResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListHumanTaskUisResponse {
+    type Item = HumanTaskUiSummary;
+
+    fn into_pagination_page(self) -> Vec<HumanTaskUiSummary> {
+        self.human_task_ui_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_hyper_parameter_tuning_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHyperParameterTuningJobsRequest {
@@ -8667,6 +9803,23 @@ pub struct ListHyperParameterTuningJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListHyperParameterTuningJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHyperParameterTuningJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_hyper_parameter_tuning_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHyperParameterTuningJobsResponse {
@@ -8679,6 +9832,29 @@ pub struct ListHyperParameterTuningJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListHyperParameterTuningJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListHyperParameterTuningJobsResponse {
+    type Item = HyperParameterTuningJobSummary;
+
+    fn into_pagination_page(self) -> Vec<HyperParameterTuningJobSummary> {
+        self.hyper_parameter_tuning_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_image_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageVersionsRequest {
@@ -8719,6 +9895,23 @@ pub struct ListImageVersionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListImageVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListImageVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_image_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageVersionsResponse {
@@ -8732,6 +9925,29 @@ pub struct ListImageVersionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListImageVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListImageVersionsResponse {
+    type Item = ImageVersion;
+
+    fn into_pagination_page(self) -> Vec<ImageVersion> {
+        self.image_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_images]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
@@ -8773,6 +9989,23 @@ pub struct ListImagesRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListImagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_images]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
@@ -8786,6 +10019,29 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListImagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListImagesResponse {
+    type Item = Image;
+
+    fn into_pagination_page(self) -> Vec<Image> {
+        self.images.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_labeling_jobs_for_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsForWorkteamRequest {
@@ -8822,6 +10078,23 @@ pub struct ListLabelingJobsForWorkteamRequest {
     pub workteam_arn: String,
 }
 
+impl Paged for ListLabelingJobsForWorkteamRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLabelingJobsForWorkteamRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_labeling_jobs_for_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLabelingJobsForWorkteamResponse {
@@ -8834,6 +10107,29 @@ pub struct ListLabelingJobsForWorkteamResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListLabelingJobsForWorkteamResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListLabelingJobsForWorkteamResponse {
+    type Item = LabelingJobForWorkteamSummary;
+
+    fn into_pagination_page(self) -> Vec<LabelingJobForWorkteamSummary> {
+        self.labeling_job_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_labeling_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLabelingJobsRequest {
@@ -8879,6 +10175,23 @@ pub struct ListLabelingJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListLabelingJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLabelingJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_labeling_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLabelingJobsResponse {
@@ -8892,6 +10205,29 @@ pub struct ListLabelingJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListLabelingJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListLabelingJobsResponse {
+    type Item = LabelingJobSummary;
+
+    fn into_pagination_page(self) -> Vec<LabelingJobSummary> {
+        self.labeling_job_summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_model_bias_job_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelBiasJobDefinitionsRequest {
@@ -8929,6 +10265,23 @@ pub struct ListModelBiasJobDefinitionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelBiasJobDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelBiasJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_model_bias_job_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelBiasJobDefinitionsResponse {
@@ -8941,6 +10294,29 @@ pub struct ListModelBiasJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelBiasJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelBiasJobDefinitionsResponse {
+    type Item = MonitoringJobDefinitionSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringJobDefinitionSummary> {
+        self.job_definition_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_model_explainability_job_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelExplainabilityJobDefinitionsRequest {
@@ -8978,6 +10354,23 @@ pub struct ListModelExplainabilityJobDefinitionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelExplainabilityJobDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelExplainabilityJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_model_explainability_job_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelExplainabilityJobDefinitionsResponse {
@@ -8990,6 +10383,29 @@ pub struct ListModelExplainabilityJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelExplainabilityJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelExplainabilityJobDefinitionsResponse {
+    type Item = MonitoringJobDefinitionSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringJobDefinitionSummary> {
+        self.job_definition_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_model_package_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelPackageGroupsInput {
@@ -9023,6 +10439,23 @@ pub struct ListModelPackageGroupsInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelPackageGroupsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelPackageGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_model_package_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelPackageGroupsOutput {
@@ -9035,6 +10468,29 @@ pub struct ListModelPackageGroupsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelPackageGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelPackageGroupsOutput {
+    type Item = ModelPackageGroupSummary;
+
+    fn into_pagination_page(self) -> Vec<ModelPackageGroupSummary> {
+        self.model_package_group_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_model_packages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelPackagesInput {
@@ -9080,6 +10536,23 @@ pub struct ListModelPackagesInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelPackagesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelPackagesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_model_packages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelPackagesOutput {
@@ -9092,6 +10565,29 @@ pub struct ListModelPackagesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelPackagesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelPackagesOutput {
+    type Item = ModelPackageSummary;
+
+    fn into_pagination_page(self) -> Vec<ModelPackageSummary> {
+        self.model_package_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_model_quality_job_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelQualityJobDefinitionsRequest {
@@ -9129,6 +10625,23 @@ pub struct ListModelQualityJobDefinitionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelQualityJobDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelQualityJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_model_quality_job_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelQualityJobDefinitionsResponse {
@@ -9141,6 +10654,29 @@ pub struct ListModelQualityJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelQualityJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelQualityJobDefinitionsResponse {
+    type Item = MonitoringJobDefinitionSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringJobDefinitionSummary> {
+        self.job_definition_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListModelsInput {
@@ -9174,6 +10710,23 @@ pub struct ListModelsInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListModelsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListModelsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelsOutput {
@@ -9186,6 +10739,29 @@ pub struct ListModelsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListModelsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListModelsOutput {
+    type Item = ModelSummary;
+
+    fn into_pagination_page(self) -> Vec<ModelSummary> {
+        self.models
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_monitoring_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringExecutionsRequest {
@@ -9251,6 +10827,23 @@ pub struct ListMonitoringExecutionsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListMonitoringExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMonitoringExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_monitoring_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMonitoringExecutionsResponse {
@@ -9263,6 +10856,29 @@ pub struct ListMonitoringExecutionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMonitoringExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMonitoringExecutionsResponse {
+    type Item = MonitoringExecutionSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringExecutionSummary> {
+        self.monitoring_execution_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_monitoring_schedules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMonitoringSchedulesRequest {
@@ -9320,6 +10936,23 @@ pub struct ListMonitoringSchedulesRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListMonitoringSchedulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMonitoringSchedulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_monitoring_schedules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMonitoringSchedulesResponse {
@@ -9332,6 +10965,29 @@ pub struct ListMonitoringSchedulesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMonitoringSchedulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMonitoringSchedulesResponse {
+    type Item = MonitoringScheduleSummary;
+
+    fn into_pagination_page(self) -> Vec<MonitoringScheduleSummary> {
+        self.monitoring_schedule_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_notebook_instance_lifecycle_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstanceLifecycleConfigsInput {
@@ -9373,6 +11029,23 @@ pub struct ListNotebookInstanceLifecycleConfigsInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListNotebookInstanceLifecycleConfigsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNotebookInstanceLifecycleConfigsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_notebook_instance_lifecycle_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotebookInstanceLifecycleConfigsOutput {
@@ -9386,6 +11059,29 @@ pub struct ListNotebookInstanceLifecycleConfigsOutput {
     pub notebook_instance_lifecycle_configs: Option<Vec<NotebookInstanceLifecycleConfigSummary>>,
 }
 
+impl Paged for ListNotebookInstanceLifecycleConfigsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListNotebookInstanceLifecycleConfigsOutput {
+    type Item = NotebookInstanceLifecycleConfigSummary;
+
+    fn into_pagination_page(self) -> Vec<NotebookInstanceLifecycleConfigSummary> {
+        self.notebook_instance_lifecycle_configs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_notebook_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookInstancesInput {
@@ -9443,6 +11139,23 @@ pub struct ListNotebookInstancesInput {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListNotebookInstancesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNotebookInstancesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_notebook_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotebookInstancesOutput {
@@ -9456,6 +11169,29 @@ pub struct ListNotebookInstancesOutput {
     pub notebook_instances: Option<Vec<NotebookInstanceSummary>>,
 }
 
+impl Paged for ListNotebookInstancesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListNotebookInstancesOutput {
+    type Item = NotebookInstanceSummary;
+
+    fn into_pagination_page(self) -> Vec<NotebookInstanceSummary> {
+        self.notebook_instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_pipeline_execution_steps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineExecutionStepsRequest {
@@ -9477,6 +11213,23 @@ pub struct ListPipelineExecutionStepsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListPipelineExecutionStepsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelineExecutionStepsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_pipeline_execution_steps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelineExecutionStepsResponse {
@@ -9490,6 +11243,29 @@ pub struct ListPipelineExecutionStepsResponse {
     pub pipeline_execution_steps: Option<Vec<PipelineExecutionStep>>,
 }
 
+impl Paged for ListPipelineExecutionStepsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPipelineExecutionStepsResponse {
+    type Item = PipelineExecutionStep;
+
+    fn into_pagination_page(self) -> Vec<PipelineExecutionStep> {
+        self.pipeline_execution_steps.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_pipeline_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineExecutionsRequest {
@@ -9522,6 +11298,23 @@ pub struct ListPipelineExecutionsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListPipelineExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelineExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_pipeline_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelineExecutionsResponse {
@@ -9535,6 +11328,29 @@ pub struct ListPipelineExecutionsResponse {
     pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
 }
 
+impl Paged for ListPipelineExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPipelineExecutionsResponse {
+    type Item = PipelineExecutionSummary;
+
+    fn into_pagination_page(self) -> Vec<PipelineExecutionSummary> {
+        self.pipeline_execution_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_pipeline_parameters_for_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineParametersForExecutionRequest {
@@ -9551,6 +11367,23 @@ pub struct ListPipelineParametersForExecutionRequest {
     pub pipeline_execution_arn: String,
 }
 
+impl Paged for ListPipelineParametersForExecutionRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelineParametersForExecutionRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_pipeline_parameters_for_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelineParametersForExecutionResponse {
@@ -9564,6 +11397,29 @@ pub struct ListPipelineParametersForExecutionResponse {
     pub pipeline_parameters: Option<Vec<Parameter>>,
 }
 
+impl Paged for ListPipelineParametersForExecutionResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPipelineParametersForExecutionResponse {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.pipeline_parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesRequest {
@@ -9597,6 +11453,23 @@ pub struct ListPipelinesRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListPipelinesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelinesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesResponse {
@@ -9610,6 +11483,29 @@ pub struct ListPipelinesResponse {
     pub pipeline_summaries: Option<Vec<PipelineSummary>>,
 }
 
+impl Paged for ListPipelinesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPipelinesResponse {
+    type Item = PipelineSummary;
+
+    fn into_pagination_page(self) -> Vec<PipelineSummary> {
+        self.pipeline_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_processing_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProcessingJobsRequest {
@@ -9655,6 +11551,23 @@ pub struct ListProcessingJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListProcessingJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProcessingJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_processing_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProcessingJobsResponse {
@@ -9667,6 +11580,29 @@ pub struct ListProcessingJobsResponse {
     pub processing_job_summaries: Vec<ProcessingJobSummary>,
 }
 
+impl Paged for ListProcessingJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListProcessingJobsResponse {
+    type Item = ProcessingJobSummary;
+
+    fn into_pagination_page(self) -> Vec<ProcessingJobSummary> {
+        self.processing_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsInput {
@@ -9700,6 +11636,7 @@ pub struct ListProjectsInput {
     pub sort_order: Option<String>,
 }
 
+/// see [SageMaker::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsOutput {
@@ -9712,6 +11649,7 @@ pub struct ListProjectsOutput {
     pub project_summary_list: Vec<ProjectSummary>,
 }
 
+/// see [SageMaker::list_subscribed_workteams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedWorkteamsRequest {
@@ -9729,6 +11667,23 @@ pub struct ListSubscribedWorkteamsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListSubscribedWorkteamsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscribedWorkteamsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_subscribed_workteams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscribedWorkteamsResponse {
@@ -9741,6 +11696,29 @@ pub struct ListSubscribedWorkteamsResponse {
     pub subscribed_workteams: Vec<SubscribedWorkteam>,
 }
 
+impl Paged for ListSubscribedWorkteamsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSubscribedWorkteamsResponse {
+    type Item = SubscribedWorkteam;
+
+    fn into_pagination_page(self) -> Vec<SubscribedWorkteam> {
+        self.subscribed_workteams
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsInput {
@@ -9757,6 +11735,23 @@ pub struct ListTagsInput {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsOutput {
@@ -9770,6 +11765,29 @@ pub struct ListTagsOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl Paged for ListTagsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsOutput {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_training_jobs_for_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
@@ -9798,6 +11816,23 @@ pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListTrainingJobsForHyperParameterTuningJobRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTrainingJobsForHyperParameterTuningJobRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_training_jobs_for_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
@@ -9810,6 +11845,29 @@ pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
     pub training_job_summaries: Vec<HyperParameterTrainingJobSummary>,
 }
 
+impl Paged for ListTrainingJobsForHyperParameterTuningJobResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTrainingJobsForHyperParameterTuningJobResponse {
+    type Item = HyperParameterTrainingJobSummary;
+
+    fn into_pagination_page(self) -> Vec<HyperParameterTrainingJobSummary> {
+        self.training_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_training_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrainingJobsRequest {
@@ -9855,6 +11913,23 @@ pub struct ListTrainingJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListTrainingJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTrainingJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_training_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrainingJobsResponse {
@@ -9867,6 +11942,29 @@ pub struct ListTrainingJobsResponse {
     pub training_job_summaries: Vec<TrainingJobSummary>,
 }
 
+impl Paged for ListTrainingJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTrainingJobsResponse {
+    type Item = TrainingJobSummary;
+
+    fn into_pagination_page(self) -> Vec<TrainingJobSummary> {
+        self.training_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_transform_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTransformJobsRequest {
@@ -9912,6 +12010,23 @@ pub struct ListTransformJobsRequest {
     pub status_equals: Option<String>,
 }
 
+impl Paged for ListTransformJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTransformJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_transform_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTransformJobsResponse {
@@ -9924,6 +12039,29 @@ pub struct ListTransformJobsResponse {
     pub transform_job_summaries: Vec<TransformJobSummary>,
 }
 
+impl Paged for ListTransformJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTransformJobsResponse {
+    type Item = TransformJobSummary;
+
+    fn into_pagination_page(self) -> Vec<TransformJobSummary> {
+        self.transform_job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_trial_components]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialComponentsRequest {
@@ -9965,6 +12103,23 @@ pub struct ListTrialComponentsRequest {
     pub trial_name: Option<String>,
 }
 
+impl Paged for ListTrialComponentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTrialComponentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_trial_components]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrialComponentsResponse {
@@ -9978,6 +12133,29 @@ pub struct ListTrialComponentsResponse {
     pub trial_component_summaries: Option<Vec<TrialComponentSummary>>,
 }
 
+impl Paged for ListTrialComponentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTrialComponentsResponse {
+    type Item = TrialComponentSummary;
+
+    fn into_pagination_page(self) -> Vec<TrialComponentSummary> {
+        self.trial_component_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_trials]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTrialsRequest {
@@ -10015,6 +12193,23 @@ pub struct ListTrialsRequest {
     pub trial_component_name: Option<String>,
 }
 
+impl Paged for ListTrialsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTrialsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_trials]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrialsResponse {
@@ -10028,6 +12223,29 @@ pub struct ListTrialsResponse {
     pub trial_summaries: Option<Vec<TrialSummary>>,
 }
 
+impl Paged for ListTrialsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTrialsResponse {
+    type Item = TrialSummary;
+
+    fn into_pagination_page(self) -> Vec<TrialSummary> {
+        self.trial_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_user_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserProfilesRequest {
@@ -10057,6 +12275,23 @@ pub struct ListUserProfilesRequest {
     pub user_profile_name_contains: Option<String>,
 }
 
+impl Paged for ListUserProfilesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUserProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_user_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserProfilesResponse {
@@ -10070,6 +12305,29 @@ pub struct ListUserProfilesResponse {
     pub user_profiles: Option<Vec<UserProfileDetails>>,
 }
 
+impl Paged for ListUserProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListUserProfilesResponse {
+    type Item = UserProfileDetails;
+
+    fn into_pagination_page(self) -> Vec<UserProfileDetails> {
+        self.user_profiles.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_workforces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkforcesRequest {
@@ -10095,6 +12353,23 @@ pub struct ListWorkforcesRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListWorkforcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorkforcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_workforces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkforcesResponse {
@@ -10107,6 +12382,29 @@ pub struct ListWorkforcesResponse {
     pub workforces: Vec<Workforce>,
 }
 
+impl Paged for ListWorkforcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListWorkforcesResponse {
+    type Item = Workforce;
+
+    fn into_pagination_page(self) -> Vec<Workforce> {
+        self.workforces
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SageMaker::list_workteams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkteamsRequest {
@@ -10132,6 +12430,23 @@ pub struct ListWorkteamsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListWorkteamsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorkteamsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::list_workteams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkteamsResponse {
@@ -10142,6 +12457,28 @@ pub struct ListWorkteamsResponse {
     /// <p>An array of <code>Workteam</code> objects, each describing a work team.</p>
     #[serde(rename = "Workteams")]
     pub workteams: Vec<Workteam>,
+}
+
+impl Paged for ListWorkteamsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListWorkteamsResponse {
+    type Item = Workteam;
+
+    fn into_pagination_page(self) -> Vec<Workteam> {
+        self.workteams
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Defines an Amazon Cognito or your own OIDC IdP user group that is part of a work team.</p>
@@ -12113,6 +14450,7 @@ pub struct PublicWorkforceTaskPrice {
     pub amount_in_usd: Option<USD>,
 }
 
+/// see [SageMaker::put_model_package_group_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutModelPackageGroupPolicyInput {
@@ -12124,6 +14462,7 @@ pub struct PutModelPackageGroupPolicyInput {
     pub resource_policy: String,
 }
 
+/// see [SageMaker::put_model_package_group_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutModelPackageGroupPolicyOutput {
@@ -12160,6 +14499,7 @@ pub struct RedshiftDatasetDefinition {
     pub query_string: String,
 }
 
+/// see [SageMaker::register_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDevicesRequest {
@@ -12185,6 +14525,7 @@ pub struct RegisterModelStepMetadata {
     pub arn: Option<String>,
 }
 
+/// see [SageMaker::render_ui_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenderUiTemplateRequest {
@@ -12204,6 +14545,7 @@ pub struct RenderUiTemplateRequest {
     pub ui_template: Option<UiTemplate>,
 }
 
+/// see [SageMaker::render_ui_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenderUiTemplateResponse {
@@ -12409,6 +14751,7 @@ pub struct SearchRecord {
     pub trial_component: Option<TrialComponent>,
 }
 
+/// see [SageMaker::search]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchRequest {
@@ -12437,6 +14780,23 @@ pub struct SearchRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for SearchRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SageMaker::search]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResponse {
@@ -12448,6 +14808,28 @@ pub struct SearchResponse {
     #[serde(rename = "Results")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub results: Option<Vec<SearchRecord>>,
+}
+
+impl Paged for SearchResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchResponse {
+    type Item = SearchRecord;
+
+    fn into_pagination_page(self) -> Vec<SearchRecord> {
+        self.results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p><p>An array element of <a>DescribeTrainingJobResponse$SecondaryStatusTransitions</a>. It provides additional details about a status that the training job has transitioned through. A training job can be in one of several states, for example, starting, downloading, training, or uploading. Within each state, there are a number of intermediate states. For example, within the starting state, Amazon SageMaker could be starting the training job or launching the ML instances. These transitional states are referred to as the job&#39;s secondary status. </p> <p/></p>
@@ -12556,6 +14938,7 @@ pub struct SourceIpConfig {
     pub cidrs: Vec<String>,
 }
 
+/// see [SageMaker::start_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringScheduleRequest {
@@ -12564,6 +14947,7 @@ pub struct StartMonitoringScheduleRequest {
     pub monitoring_schedule_name: String,
 }
 
+/// see [SageMaker::start_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNotebookInstanceInput {
@@ -12572,6 +14956,7 @@ pub struct StartNotebookInstanceInput {
     pub notebook_instance_name: String,
 }
 
+/// see [SageMaker::start_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineExecutionRequest {
@@ -12595,6 +14980,7 @@ pub struct StartPipelineExecutionRequest {
     pub pipeline_parameters: Option<Vec<Parameter>>,
 }
 
+/// see [SageMaker::start_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPipelineExecutionResponse {
@@ -12604,6 +14990,7 @@ pub struct StartPipelineExecutionResponse {
     pub pipeline_execution_arn: Option<String>,
 }
 
+/// see [SageMaker::stop_auto_ml_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAutoMLJobRequest {
@@ -12612,6 +14999,7 @@ pub struct StopAutoMLJobRequest {
     pub auto_ml_job_name: String,
 }
 
+/// see [SageMaker::stop_compilation_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCompilationJobRequest {
@@ -12620,6 +15008,7 @@ pub struct StopCompilationJobRequest {
     pub compilation_job_name: String,
 }
 
+/// see [SageMaker::stop_edge_packaging_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEdgePackagingJobRequest {
@@ -12628,6 +15017,7 @@ pub struct StopEdgePackagingJobRequest {
     pub edge_packaging_job_name: String,
 }
 
+/// see [SageMaker::stop_hyper_parameter_tuning_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHyperParameterTuningJobRequest {
@@ -12636,6 +15026,7 @@ pub struct StopHyperParameterTuningJobRequest {
     pub hyper_parameter_tuning_job_name: String,
 }
 
+/// see [SageMaker::stop_labeling_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopLabelingJobRequest {
@@ -12644,6 +15035,7 @@ pub struct StopLabelingJobRequest {
     pub labeling_job_name: String,
 }
 
+/// see [SageMaker::stop_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringScheduleRequest {
@@ -12652,6 +15044,7 @@ pub struct StopMonitoringScheduleRequest {
     pub monitoring_schedule_name: String,
 }
 
+/// see [SageMaker::stop_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopNotebookInstanceInput {
@@ -12660,6 +15053,7 @@ pub struct StopNotebookInstanceInput {
     pub notebook_instance_name: String,
 }
 
+/// see [SageMaker::stop_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPipelineExecutionRequest {
@@ -12671,6 +15065,7 @@ pub struct StopPipelineExecutionRequest {
     pub pipeline_execution_arn: String,
 }
 
+/// see [SageMaker::stop_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPipelineExecutionResponse {
@@ -12680,6 +15075,7 @@ pub struct StopPipelineExecutionResponse {
     pub pipeline_execution_arn: Option<String>,
 }
 
+/// see [SageMaker::stop_processing_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopProcessingJobRequest {
@@ -12688,6 +15084,7 @@ pub struct StopProcessingJobRequest {
     pub processing_job_name: String,
 }
 
+/// see [SageMaker::stop_training_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingJobRequest {
@@ -12696,6 +15093,7 @@ pub struct StopTrainingJobRequest {
     pub training_job_name: String,
 }
 
+/// see [SageMaker::stop_transform_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTransformJobRequest {
@@ -13723,6 +16121,7 @@ pub struct UiTemplateInfo {
     pub url: Option<String>,
 }
 
+/// see [SageMaker::update_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateActionRequest {
@@ -13747,6 +16146,7 @@ pub struct UpdateActionRequest {
     pub status: Option<String>,
 }
 
+/// see [SageMaker::update_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateActionResponse {
@@ -13756,6 +16156,7 @@ pub struct UpdateActionResponse {
     pub action_arn: Option<String>,
 }
 
+/// see [SageMaker::update_app_image_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppImageConfigRequest {
@@ -13768,6 +16169,7 @@ pub struct UpdateAppImageConfigRequest {
     pub kernel_gateway_image_config: Option<KernelGatewayImageConfig>,
 }
 
+/// see [SageMaker::update_app_image_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppImageConfigResponse {
@@ -13777,6 +16179,7 @@ pub struct UpdateAppImageConfigResponse {
     pub app_image_config_arn: Option<String>,
 }
 
+/// see [SageMaker::update_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateArtifactRequest {
@@ -13797,6 +16200,7 @@ pub struct UpdateArtifactRequest {
     pub properties_to_remove: Option<Vec<String>>,
 }
 
+/// see [SageMaker::update_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateArtifactResponse {
@@ -13806,6 +16210,7 @@ pub struct UpdateArtifactResponse {
     pub artifact_arn: Option<String>,
 }
 
+/// see [SageMaker::update_code_repository]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCodeRepositoryInput {
@@ -13818,6 +16223,7 @@ pub struct UpdateCodeRepositoryInput {
     pub git_config: Option<GitConfigForUpdate>,
 }
 
+/// see [SageMaker::update_code_repository]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCodeRepositoryOutput {
@@ -13826,6 +16232,7 @@ pub struct UpdateCodeRepositoryOutput {
     pub code_repository_arn: String,
 }
 
+/// see [SageMaker::update_context]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContextRequest {
@@ -13846,6 +16253,7 @@ pub struct UpdateContextRequest {
     pub properties_to_remove: Option<Vec<String>>,
 }
 
+/// see [SageMaker::update_context]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContextResponse {
@@ -13855,6 +16263,7 @@ pub struct UpdateContextResponse {
     pub context_arn: Option<String>,
 }
 
+/// see [SageMaker::update_device_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceFleetRequest {
@@ -13874,6 +16283,7 @@ pub struct UpdateDeviceFleetRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::update_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicesRequest {
@@ -13885,6 +16295,7 @@ pub struct UpdateDevicesRequest {
     pub devices: Vec<Device>,
 }
 
+/// see [SageMaker::update_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainRequest {
@@ -13897,6 +16308,7 @@ pub struct UpdateDomainRequest {
     pub domain_id: String,
 }
 
+/// see [SageMaker::update_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainResponse {
@@ -13906,6 +16318,7 @@ pub struct UpdateDomainResponse {
     pub domain_arn: Option<String>,
 }
 
+/// see [SageMaker::update_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointInput {
@@ -13929,6 +16342,7 @@ pub struct UpdateEndpointInput {
     pub retain_all_variant_properties: Option<bool>,
 }
 
+/// see [SageMaker::update_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointOutput {
@@ -13937,6 +16351,7 @@ pub struct UpdateEndpointOutput {
     pub endpoint_arn: String,
 }
 
+/// see [SageMaker::update_endpoint_weights_and_capacities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesInput {
@@ -13948,6 +16363,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesInput {
     pub endpoint_name: String,
 }
 
+/// see [SageMaker::update_endpoint_weights_and_capacities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesOutput {
@@ -13956,6 +16372,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesOutput {
     pub endpoint_arn: String,
 }
 
+/// see [SageMaker::update_experiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExperimentRequest {
@@ -13972,6 +16389,7 @@ pub struct UpdateExperimentRequest {
     pub experiment_name: String,
 }
 
+/// see [SageMaker::update_experiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateExperimentResponse {
@@ -13981,6 +16399,7 @@ pub struct UpdateExperimentResponse {
     pub experiment_arn: Option<String>,
 }
 
+/// see [SageMaker::update_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImageRequest {
@@ -14005,6 +16424,7 @@ pub struct UpdateImageRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::update_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImageResponse {
@@ -14014,6 +16434,7 @@ pub struct UpdateImageResponse {
     pub image_arn: Option<String>,
 }
 
+/// see [SageMaker::update_model_package]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelPackageInput {
@@ -14029,6 +16450,7 @@ pub struct UpdateModelPackageInput {
     pub model_package_arn: String,
 }
 
+/// see [SageMaker::update_model_package]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelPackageOutput {
@@ -14037,6 +16459,7 @@ pub struct UpdateModelPackageOutput {
     pub model_package_arn: String,
 }
 
+/// see [SageMaker::update_monitoring_schedule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMonitoringScheduleRequest {
@@ -14048,6 +16471,7 @@ pub struct UpdateMonitoringScheduleRequest {
     pub monitoring_schedule_name: String,
 }
 
+/// see [SageMaker::update_monitoring_schedule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMonitoringScheduleResponse {
@@ -14056,6 +16480,7 @@ pub struct UpdateMonitoringScheduleResponse {
     pub monitoring_schedule_arn: String,
 }
 
+/// see [SageMaker::update_notebook_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceInput {
@@ -14112,6 +16537,7 @@ pub struct UpdateNotebookInstanceInput {
     pub volume_size_in_gb: Option<i64>,
 }
 
+/// see [SageMaker::update_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigInput {
@@ -14128,14 +16554,17 @@ pub struct UpdateNotebookInstanceLifecycleConfigInput {
     pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
 }
 
+/// see [SageMaker::update_notebook_instance_lifecycle_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 
+/// see [SageMaker::update_notebook_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotebookInstanceOutput {}
 
+/// see [SageMaker::update_pipeline_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineExecutionRequest {
@@ -14152,6 +16581,7 @@ pub struct UpdatePipelineExecutionRequest {
     pub pipeline_execution_display_name: Option<String>,
 }
 
+/// see [SageMaker::update_pipeline_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineExecutionResponse {
@@ -14161,6 +16591,7 @@ pub struct UpdatePipelineExecutionResponse {
     pub pipeline_execution_arn: Option<String>,
 }
 
+/// see [SageMaker::update_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
@@ -14185,6 +16616,7 @@ pub struct UpdatePipelineRequest {
     pub role_arn: Option<String>,
 }
 
+/// see [SageMaker::update_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineResponse {
@@ -14194,6 +16626,7 @@ pub struct UpdatePipelineResponse {
     pub pipeline_arn: Option<String>,
 }
 
+/// see [SageMaker::update_training_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrainingJobRequest {
@@ -14210,6 +16643,7 @@ pub struct UpdateTrainingJobRequest {
     pub training_job_name: String,
 }
 
+/// see [SageMaker::update_training_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTrainingJobResponse {
@@ -14218,6 +16652,7 @@ pub struct UpdateTrainingJobResponse {
     pub training_job_arn: String,
 }
 
+/// see [SageMaker::update_trial_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialComponentRequest {
@@ -14266,6 +16701,7 @@ pub struct UpdateTrialComponentRequest {
     pub trial_component_name: String,
 }
 
+/// see [SageMaker::update_trial_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTrialComponentResponse {
@@ -14275,6 +16711,7 @@ pub struct UpdateTrialComponentResponse {
     pub trial_component_arn: Option<String>,
 }
 
+/// see [SageMaker::update_trial]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTrialRequest {
@@ -14287,6 +16724,7 @@ pub struct UpdateTrialRequest {
     pub trial_name: String,
 }
 
+/// see [SageMaker::update_trial]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTrialResponse {
@@ -14296,6 +16734,7 @@ pub struct UpdateTrialResponse {
     pub trial_arn: Option<String>,
 }
 
+/// see [SageMaker::update_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
@@ -14311,6 +16750,7 @@ pub struct UpdateUserProfileRequest {
     pub user_settings: Option<UserSettings>,
 }
 
+/// see [SageMaker::update_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserProfileResponse {
@@ -14320,6 +16760,7 @@ pub struct UpdateUserProfileResponse {
     pub user_profile_arn: Option<String>,
 }
 
+/// see [SageMaker::update_workforce]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkforceRequest {
@@ -14336,6 +16777,7 @@ pub struct UpdateWorkforceRequest {
     pub workforce_name: String,
 }
 
+/// see [SageMaker::update_workforce]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkforceResponse {
@@ -14344,6 +16786,7 @@ pub struct UpdateWorkforceResponse {
     pub workforce: Workforce,
 }
 
+/// see [SageMaker::update_workteam]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkteamRequest {
@@ -14364,6 +16807,7 @@ pub struct UpdateWorkteamRequest {
     pub workteam_name: String,
 }
 
+/// see [SageMaker::update_workteam]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkteamResponse {
@@ -21489,7 +23933,7 @@ impl fmt::Display for UpdateWorkteamError {
 impl Error for UpdateWorkteamError {}
 /// Trait representing the capabilities of the SageMaker API. SageMaker clients implement this trait.
 #[async_trait]
-pub trait SageMaker {
+pub trait SageMaker: Clone + Sync + Send + 'static {
     /// <p>Creates an <i>association</i> between the source and the destination. A source can be associated with multiple destinations, and a destination can be associated with multiple sources. An association is a lineage tracking entity. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html">Amazon SageMaker ML Lineage Tracking</a>.</p>
     async fn add_association(
         &self,
@@ -22366,11 +24810,33 @@ pub trait SageMaker {
         input: ListActionsRequest,
     ) -> Result<ListActionsResponse, RusotoError<ListActionsError>>;
 
+    /// Auto-paginating version of `list_actions`
+    fn list_actions_pages<'a>(
+        &'a self,
+        mut input: ListActionsRequest,
+    ) -> RusotoStream<'a, ActionSummary, ListActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_actions(input.clone())
+        }))
+    }
+
     /// <p>Lists the machine learning algorithms that have been created.</p>
     async fn list_algorithms(
         &self,
         input: ListAlgorithmsInput,
     ) -> Result<ListAlgorithmsOutput, RusotoError<ListAlgorithmsError>>;
+
+    /// Auto-paginating version of `list_algorithms`
+    fn list_algorithms_pages<'a>(
+        &'a self,
+        mut input: ListAlgorithmsInput,
+    ) -> RusotoStream<'a, AlgorithmSummary, ListAlgorithmsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_algorithms(input.clone())
+        }))
+    }
 
     /// <p>Lists the AppImageConfigs in your account and their properties. The list can be filtered by creation time or modified time, and whether the AppImageConfig name contains a specified string.</p>
     async fn list_app_image_configs(
@@ -22378,11 +24844,33 @@ pub trait SageMaker {
         input: ListAppImageConfigsRequest,
     ) -> Result<ListAppImageConfigsResponse, RusotoError<ListAppImageConfigsError>>;
 
+    /// Auto-paginating version of `list_app_image_configs`
+    fn list_app_image_configs_pages<'a>(
+        &'a self,
+        mut input: ListAppImageConfigsRequest,
+    ) -> RusotoStream<'a, AppImageConfigDetails, ListAppImageConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_app_image_configs(input.clone())
+        }))
+    }
+
     /// <p>Lists apps.</p>
     async fn list_apps(
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
+
+    /// Auto-paginating version of `list_apps`
+    fn list_apps_pages<'a>(
+        &'a self,
+        mut input: ListAppsRequest,
+    ) -> RusotoStream<'a, AppDetails, ListAppsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_apps(input.clone())
+        }))
+    }
 
     /// <p>Lists the artifacts in your account and their properties.</p>
     async fn list_artifacts(
@@ -22390,11 +24878,33 @@ pub trait SageMaker {
         input: ListArtifactsRequest,
     ) -> Result<ListArtifactsResponse, RusotoError<ListArtifactsError>>;
 
+    /// Auto-paginating version of `list_artifacts`
+    fn list_artifacts_pages<'a>(
+        &'a self,
+        mut input: ListArtifactsRequest,
+    ) -> RusotoStream<'a, ArtifactSummary, ListArtifactsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_artifacts(input.clone())
+        }))
+    }
+
     /// <p>Lists the associations in your account and their properties.</p>
     async fn list_associations(
         &self,
         input: ListAssociationsRequest,
     ) -> Result<ListAssociationsResponse, RusotoError<ListAssociationsError>>;
+
+    /// Auto-paginating version of `list_associations`
+    fn list_associations_pages<'a>(
+        &'a self,
+        mut input: ListAssociationsRequest,
+    ) -> RusotoStream<'a, AssociationSummary, ListAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_associations(input.clone())
+        }))
+    }
 
     /// <p>Request a list of jobs.</p>
     async fn list_auto_ml_jobs(
@@ -22402,11 +24912,33 @@ pub trait SageMaker {
         input: ListAutoMLJobsRequest,
     ) -> Result<ListAutoMLJobsResponse, RusotoError<ListAutoMLJobsError>>;
 
+    /// Auto-paginating version of `list_auto_ml_jobs`
+    fn list_auto_ml_jobs_pages<'a>(
+        &'a self,
+        mut input: ListAutoMLJobsRequest,
+    ) -> RusotoStream<'a, AutoMLJobSummary, ListAutoMLJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_auto_ml_jobs(input.clone())
+        }))
+    }
+
     /// <p>List the Candidates created for the job.</p>
     async fn list_candidates_for_auto_ml_job(
         &self,
         input: ListCandidatesForAutoMLJobRequest,
     ) -> Result<ListCandidatesForAutoMLJobResponse, RusotoError<ListCandidatesForAutoMLJobError>>;
+
+    /// Auto-paginating version of `list_candidates_for_auto_ml_job`
+    fn list_candidates_for_auto_ml_job_pages<'a>(
+        &'a self,
+        mut input: ListCandidatesForAutoMLJobRequest,
+    ) -> RusotoStream<'a, AutoMLCandidate, ListCandidatesForAutoMLJobError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_candidates_for_auto_ml_job(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of the Git repositories in your account.</p>
     async fn list_code_repositories(
@@ -22414,17 +24946,50 @@ pub trait SageMaker {
         input: ListCodeRepositoriesInput,
     ) -> Result<ListCodeRepositoriesOutput, RusotoError<ListCodeRepositoriesError>>;
 
+    /// Auto-paginating version of `list_code_repositories`
+    fn list_code_repositories_pages<'a>(
+        &'a self,
+        mut input: ListCodeRepositoriesInput,
+    ) -> RusotoStream<'a, CodeRepositorySummary, ListCodeRepositoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_code_repositories(input.clone())
+        }))
+    }
+
     /// <p>Lists model compilation jobs that satisfy various filters.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about a particular model compilation job you have created, use <a>DescribeCompilationJob</a>.</p>
     async fn list_compilation_jobs(
         &self,
         input: ListCompilationJobsRequest,
     ) -> Result<ListCompilationJobsResponse, RusotoError<ListCompilationJobsError>>;
 
+    /// Auto-paginating version of `list_compilation_jobs`
+    fn list_compilation_jobs_pages<'a>(
+        &'a self,
+        mut input: ListCompilationJobsRequest,
+    ) -> RusotoStream<'a, CompilationJobSummary, ListCompilationJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compilation_jobs(input.clone())
+        }))
+    }
+
     /// <p>Lists the contexts in your account and their properties.</p>
     async fn list_contexts(
         &self,
         input: ListContextsRequest,
     ) -> Result<ListContextsResponse, RusotoError<ListContextsError>>;
+
+    /// Auto-paginating version of `list_contexts`
+    fn list_contexts_pages<'a>(
+        &'a self,
+        mut input: ListContextsRequest,
+    ) -> RusotoStream<'a, ContextSummary, ListContextsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_contexts(input.clone())
+        }))
+    }
 
     /// <p>Lists the data quality job definitions in your account.</p>
     async fn list_data_quality_job_definitions(
@@ -22435,11 +25000,33 @@ pub trait SageMaker {
         RusotoError<ListDataQualityJobDefinitionsError>,
     >;
 
+    /// Auto-paginating version of `list_data_quality_job_definitions`
+    fn list_data_quality_job_definitions_pages<'a>(
+        &'a self,
+        mut input: ListDataQualityJobDefinitionsRequest,
+    ) -> RusotoStream<'a, MonitoringJobDefinitionSummary, ListDataQualityJobDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_quality_job_definitions(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of devices in the fleet.</p>
     async fn list_device_fleets(
         &self,
         input: ListDeviceFleetsRequest,
     ) -> Result<ListDeviceFleetsResponse, RusotoError<ListDeviceFleetsError>>;
+
+    /// Auto-paginating version of `list_device_fleets`
+    fn list_device_fleets_pages<'a>(
+        &'a self,
+        mut input: ListDeviceFleetsRequest,
+    ) -> RusotoStream<'a, DeviceFleetSummary, ListDeviceFleetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_device_fleets(input.clone())
+        }))
+    }
 
     /// <p>A list of devices.</p>
     async fn list_devices(
@@ -22447,11 +25034,33 @@ pub trait SageMaker {
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>>;
 
+    /// Auto-paginating version of `list_devices`
+    fn list_devices_pages<'a>(
+        &'a self,
+        mut input: ListDevicesRequest,
+    ) -> RusotoStream<'a, DeviceSummary, ListDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_devices(input.clone())
+        }))
+    }
+
     /// <p>Lists the domains.</p>
     async fn list_domains(
         &self,
         input: ListDomainsRequest,
     ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
+
+    /// Auto-paginating version of `list_domains`
+    fn list_domains_pages<'a>(
+        &'a self,
+        mut input: ListDomainsRequest,
+    ) -> RusotoStream<'a, DomainDetails, ListDomainsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domains(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of edge packaging jobs.</p>
     async fn list_edge_packaging_jobs(
@@ -22459,11 +25068,33 @@ pub trait SageMaker {
         input: ListEdgePackagingJobsRequest,
     ) -> Result<ListEdgePackagingJobsResponse, RusotoError<ListEdgePackagingJobsError>>;
 
+    /// Auto-paginating version of `list_edge_packaging_jobs`
+    fn list_edge_packaging_jobs_pages<'a>(
+        &'a self,
+        mut input: ListEdgePackagingJobsRequest,
+    ) -> RusotoStream<'a, EdgePackagingJobSummary, ListEdgePackagingJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_edge_packaging_jobs(input.clone())
+        }))
+    }
+
     /// <p>Lists endpoint configurations.</p>
     async fn list_endpoint_configs(
         &self,
         input: ListEndpointConfigsInput,
     ) -> Result<ListEndpointConfigsOutput, RusotoError<ListEndpointConfigsError>>;
+
+    /// Auto-paginating version of `list_endpoint_configs`
+    fn list_endpoint_configs_pages<'a>(
+        &'a self,
+        mut input: ListEndpointConfigsInput,
+    ) -> RusotoStream<'a, EndpointConfigSummary, ListEndpointConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_endpoint_configs(input.clone())
+        }))
+    }
 
     /// <p>Lists endpoints.</p>
     async fn list_endpoints(
@@ -22471,11 +25102,33 @@ pub trait SageMaker {
         input: ListEndpointsInput,
     ) -> Result<ListEndpointsOutput, RusotoError<ListEndpointsError>>;
 
+    /// Auto-paginating version of `list_endpoints`
+    fn list_endpoints_pages<'a>(
+        &'a self,
+        mut input: ListEndpointsInput,
+    ) -> RusotoStream<'a, EndpointSummary, ListEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_endpoints(input.clone())
+        }))
+    }
+
     /// <p>Lists all the experiments in your account. The list can be filtered to show only experiments that were created in a specific time range. The list can be sorted by experiment name or creation time.</p>
     async fn list_experiments(
         &self,
         input: ListExperimentsRequest,
     ) -> Result<ListExperimentsResponse, RusotoError<ListExperimentsError>>;
+
+    /// Auto-paginating version of `list_experiments`
+    fn list_experiments_pages<'a>(
+        &'a self,
+        mut input: ListExperimentsRequest,
+    ) -> RusotoStream<'a, ExperimentSummary, ListExperimentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_experiments(input.clone())
+        }))
+    }
 
     /// <p>List <code>FeatureGroup</code>s based on given filter and order.</p>
     async fn list_feature_groups(
@@ -22483,11 +25136,33 @@ pub trait SageMaker {
         input: ListFeatureGroupsRequest,
     ) -> Result<ListFeatureGroupsResponse, RusotoError<ListFeatureGroupsError>>;
 
+    /// Auto-paginating version of `list_feature_groups`
+    fn list_feature_groups_pages<'a>(
+        &'a self,
+        mut input: ListFeatureGroupsRequest,
+    ) -> RusotoStream<'a, FeatureGroupSummary, ListFeatureGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_feature_groups(input.clone())
+        }))
+    }
+
     /// <p>Returns information about the flow definitions in your account.</p>
     async fn list_flow_definitions(
         &self,
         input: ListFlowDefinitionsRequest,
     ) -> Result<ListFlowDefinitionsResponse, RusotoError<ListFlowDefinitionsError>>;
+
+    /// Auto-paginating version of `list_flow_definitions`
+    fn list_flow_definitions_pages<'a>(
+        &'a self,
+        mut input: ListFlowDefinitionsRequest,
+    ) -> RusotoStream<'a, FlowDefinitionSummary, ListFlowDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_flow_definitions(input.clone())
+        }))
+    }
 
     /// <p>Returns information about the human task user interfaces in your account.</p>
     async fn list_human_task_uis(
@@ -22495,11 +25170,33 @@ pub trait SageMaker {
         input: ListHumanTaskUisRequest,
     ) -> Result<ListHumanTaskUisResponse, RusotoError<ListHumanTaskUisError>>;
 
+    /// Auto-paginating version of `list_human_task_uis`
+    fn list_human_task_uis_pages<'a>(
+        &'a self,
+        mut input: ListHumanTaskUisRequest,
+    ) -> RusotoStream<'a, HumanTaskUiSummary, ListHumanTaskUisError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_human_task_uis(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
     async fn list_hyper_parameter_tuning_jobs(
         &self,
         input: ListHyperParameterTuningJobsRequest,
     ) -> Result<ListHyperParameterTuningJobsResponse, RusotoError<ListHyperParameterTuningJobsError>>;
+
+    /// Auto-paginating version of `list_hyper_parameter_tuning_jobs`
+    fn list_hyper_parameter_tuning_jobs_pages<'a>(
+        &'a self,
+        mut input: ListHyperParameterTuningJobsRequest,
+    ) -> RusotoStream<'a, HyperParameterTuningJobSummary, ListHyperParameterTuningJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hyper_parameter_tuning_jobs(input.clone())
+        }))
+    }
 
     /// <p>Lists the versions of a specified image and their properties. The list can be filtered by creation time or modified time.</p>
     async fn list_image_versions(
@@ -22507,11 +25204,33 @@ pub trait SageMaker {
         input: ListImageVersionsRequest,
     ) -> Result<ListImageVersionsResponse, RusotoError<ListImageVersionsError>>;
 
+    /// Auto-paginating version of `list_image_versions`
+    fn list_image_versions_pages<'a>(
+        &'a self,
+        mut input: ListImageVersionsRequest,
+    ) -> RusotoStream<'a, ImageVersion, ListImageVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_image_versions(input.clone())
+        }))
+    }
+
     /// <p>Lists the images in your account and their properties. The list can be filtered by creation time or modified time, and whether the image name contains a specified string.</p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
+
+    /// Auto-paginating version of `list_images`
+    fn list_images_pages<'a>(
+        &'a self,
+        mut input: ListImagesRequest,
+    ) -> RusotoStream<'a, Image, ListImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_images(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of labeling jobs.</p>
     async fn list_labeling_jobs(
@@ -22519,17 +25238,50 @@ pub trait SageMaker {
         input: ListLabelingJobsRequest,
     ) -> Result<ListLabelingJobsResponse, RusotoError<ListLabelingJobsError>>;
 
+    /// Auto-paginating version of `list_labeling_jobs`
+    fn list_labeling_jobs_pages<'a>(
+        &'a self,
+        mut input: ListLabelingJobsRequest,
+    ) -> RusotoStream<'a, LabelingJobSummary, ListLabelingJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_labeling_jobs(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of labeling jobs assigned to a specified work team.</p>
     async fn list_labeling_jobs_for_workteam(
         &self,
         input: ListLabelingJobsForWorkteamRequest,
     ) -> Result<ListLabelingJobsForWorkteamResponse, RusotoError<ListLabelingJobsForWorkteamError>>;
 
+    /// Auto-paginating version of `list_labeling_jobs_for_workteam`
+    fn list_labeling_jobs_for_workteam_pages<'a>(
+        &'a self,
+        mut input: ListLabelingJobsForWorkteamRequest,
+    ) -> RusotoStream<'a, LabelingJobForWorkteamSummary, ListLabelingJobsForWorkteamError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_labeling_jobs_for_workteam(input.clone())
+        }))
+    }
+
     /// <p>Lists model bias jobs definitions that satisfy various filters.</p>
     async fn list_model_bias_job_definitions(
         &self,
         input: ListModelBiasJobDefinitionsRequest,
     ) -> Result<ListModelBiasJobDefinitionsResponse, RusotoError<ListModelBiasJobDefinitionsError>>;
+
+    /// Auto-paginating version of `list_model_bias_job_definitions`
+    fn list_model_bias_job_definitions_pages<'a>(
+        &'a self,
+        mut input: ListModelBiasJobDefinitionsRequest,
+    ) -> RusotoStream<'a, MonitoringJobDefinitionSummary, ListModelBiasJobDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_model_bias_job_definitions(input.clone())
+        }))
+    }
 
     /// <p>Lists model explainability job definitions that satisfy various filters.</p>
     async fn list_model_explainability_job_definitions(
@@ -22540,17 +25292,51 @@ pub trait SageMaker {
         RusotoError<ListModelExplainabilityJobDefinitionsError>,
     >;
 
+    /// Auto-paginating version of `list_model_explainability_job_definitions`
+    fn list_model_explainability_job_definitions_pages<'a>(
+        &'a self,
+        mut input: ListModelExplainabilityJobDefinitionsRequest,
+    ) -> RusotoStream<'a, MonitoringJobDefinitionSummary, ListModelExplainabilityJobDefinitionsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_model_explainability_job_definitions(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of the model groups in your AWS account.</p>
     async fn list_model_package_groups(
         &self,
         input: ListModelPackageGroupsInput,
     ) -> Result<ListModelPackageGroupsOutput, RusotoError<ListModelPackageGroupsError>>;
 
+    /// Auto-paginating version of `list_model_package_groups`
+    fn list_model_package_groups_pages<'a>(
+        &'a self,
+        mut input: ListModelPackageGroupsInput,
+    ) -> RusotoStream<'a, ModelPackageGroupSummary, ListModelPackageGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_model_package_groups(input.clone())
+        }))
+    }
+
     /// <p>Lists the model packages that have been created.</p>
     async fn list_model_packages(
         &self,
         input: ListModelPackagesInput,
     ) -> Result<ListModelPackagesOutput, RusotoError<ListModelPackagesError>>;
+
+    /// Auto-paginating version of `list_model_packages`
+    fn list_model_packages_pages<'a>(
+        &'a self,
+        mut input: ListModelPackagesInput,
+    ) -> RusotoStream<'a, ModelPackageSummary, ListModelPackagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_model_packages(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of model quality monitoring job definitions in your account.</p>
     async fn list_model_quality_job_definitions(
@@ -22561,11 +25347,33 @@ pub trait SageMaker {
         RusotoError<ListModelQualityJobDefinitionsError>,
     >;
 
+    /// Auto-paginating version of `list_model_quality_job_definitions`
+    fn list_model_quality_job_definitions_pages<'a>(
+        &'a self,
+        mut input: ListModelQualityJobDefinitionsRequest,
+    ) -> RusotoStream<'a, MonitoringJobDefinitionSummary, ListModelQualityJobDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_model_quality_job_definitions(input.clone())
+        }))
+    }
+
     /// <p>Lists models created with the <a>CreateModel</a> API.</p>
     async fn list_models(
         &self,
         input: ListModelsInput,
     ) -> Result<ListModelsOutput, RusotoError<ListModelsError>>;
+
+    /// Auto-paginating version of `list_models`
+    fn list_models_pages<'a>(
+        &'a self,
+        mut input: ListModelsInput,
+    ) -> RusotoStream<'a, ModelSummary, ListModelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_models(input.clone())
+        }))
+    }
 
     /// <p>Returns list of all monitoring job executions.</p>
     async fn list_monitoring_executions(
@@ -22573,11 +25381,33 @@ pub trait SageMaker {
         input: ListMonitoringExecutionsRequest,
     ) -> Result<ListMonitoringExecutionsResponse, RusotoError<ListMonitoringExecutionsError>>;
 
+    /// Auto-paginating version of `list_monitoring_executions`
+    fn list_monitoring_executions_pages<'a>(
+        &'a self,
+        mut input: ListMonitoringExecutionsRequest,
+    ) -> RusotoStream<'a, MonitoringExecutionSummary, ListMonitoringExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_monitoring_executions(input.clone())
+        }))
+    }
+
     /// <p>Returns list of all monitoring schedules.</p>
     async fn list_monitoring_schedules(
         &self,
         input: ListMonitoringSchedulesRequest,
     ) -> Result<ListMonitoringSchedulesResponse, RusotoError<ListMonitoringSchedulesError>>;
+
+    /// Auto-paginating version of `list_monitoring_schedules`
+    fn list_monitoring_schedules_pages<'a>(
+        &'a self,
+        mut input: ListMonitoringSchedulesRequest,
+    ) -> RusotoStream<'a, MonitoringScheduleSummary, ListMonitoringSchedulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_monitoring_schedules(input.clone())
+        }))
+    }
 
     /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
     async fn list_notebook_instance_lifecycle_configs(
@@ -22588,11 +25418,37 @@ pub trait SageMaker {
         RusotoError<ListNotebookInstanceLifecycleConfigsError>,
     >;
 
+    /// Auto-paginating version of `list_notebook_instance_lifecycle_configs`
+    fn list_notebook_instance_lifecycle_configs_pages<'a>(
+        &'a self,
+        mut input: ListNotebookInstanceLifecycleConfigsInput,
+    ) -> RusotoStream<
+        'a,
+        NotebookInstanceLifecycleConfigSummary,
+        ListNotebookInstanceLifecycleConfigsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_notebook_instance_lifecycle_configs(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the Amazon SageMaker notebook instances in the requester's account in an AWS Region. </p>
     async fn list_notebook_instances(
         &self,
         input: ListNotebookInstancesInput,
     ) -> Result<ListNotebookInstancesOutput, RusotoError<ListNotebookInstancesError>>;
+
+    /// Auto-paginating version of `list_notebook_instances`
+    fn list_notebook_instances_pages<'a>(
+        &'a self,
+        mut input: ListNotebookInstancesInput,
+    ) -> RusotoStream<'a, NotebookInstanceSummary, ListNotebookInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_notebook_instances(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of <code>PipeLineExecutionStep</code> objects.</p>
     async fn list_pipeline_execution_steps(
@@ -22600,11 +25456,33 @@ pub trait SageMaker {
         input: ListPipelineExecutionStepsRequest,
     ) -> Result<ListPipelineExecutionStepsResponse, RusotoError<ListPipelineExecutionStepsError>>;
 
+    /// Auto-paginating version of `list_pipeline_execution_steps`
+    fn list_pipeline_execution_steps_pages<'a>(
+        &'a self,
+        mut input: ListPipelineExecutionStepsRequest,
+    ) -> RusotoStream<'a, PipelineExecutionStep, ListPipelineExecutionStepsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipeline_execution_steps(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of the pipeline executions.</p>
     async fn list_pipeline_executions(
         &self,
         input: ListPipelineExecutionsRequest,
     ) -> Result<ListPipelineExecutionsResponse, RusotoError<ListPipelineExecutionsError>>;
+
+    /// Auto-paginating version of `list_pipeline_executions`
+    fn list_pipeline_executions_pages<'a>(
+        &'a self,
+        mut input: ListPipelineExecutionsRequest,
+    ) -> RusotoStream<'a, PipelineExecutionSummary, ListPipelineExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipeline_executions(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of parameters for a pipeline execution.</p>
     async fn list_pipeline_parameters_for_execution(
@@ -22615,17 +25493,50 @@ pub trait SageMaker {
         RusotoError<ListPipelineParametersForExecutionError>,
     >;
 
+    /// Auto-paginating version of `list_pipeline_parameters_for_execution`
+    fn list_pipeline_parameters_for_execution_pages<'a>(
+        &'a self,
+        mut input: ListPipelineParametersForExecutionRequest,
+    ) -> RusotoStream<'a, Parameter, ListPipelineParametersForExecutionError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipeline_parameters_for_execution(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of pipelines.</p>
     async fn list_pipelines(
         &self,
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
 
+    /// Auto-paginating version of `list_pipelines`
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesRequest,
+    ) -> RusotoStream<'a, PipelineSummary, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
+    }
+
     /// <p>Lists processing jobs that satisfy various filters.</p>
     async fn list_processing_jobs(
         &self,
         input: ListProcessingJobsRequest,
     ) -> Result<ListProcessingJobsResponse, RusotoError<ListProcessingJobsError>>;
+
+    /// Auto-paginating version of `list_processing_jobs`
+    fn list_processing_jobs_pages<'a>(
+        &'a self,
+        mut input: ListProcessingJobsRequest,
+    ) -> RusotoStream<'a, ProcessingJobSummary, ListProcessingJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_processing_jobs(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of the projects in an AWS account.</p>
     async fn list_projects(
@@ -22639,17 +25550,50 @@ pub trait SageMaker {
         input: ListSubscribedWorkteamsRequest,
     ) -> Result<ListSubscribedWorkteamsResponse, RusotoError<ListSubscribedWorkteamsError>>;
 
+    /// Auto-paginating version of `list_subscribed_workteams`
+    fn list_subscribed_workteams_pages<'a>(
+        &'a self,
+        mut input: ListSubscribedWorkteamsRequest,
+    ) -> RusotoStream<'a, SubscribedWorkteam, ListSubscribedWorkteamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscribed_workteams(input.clone())
+        }))
+    }
+
     /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
     async fn list_tags(
         &self,
         input: ListTagsInput,
     ) -> Result<ListTagsOutput, RusotoError<ListTagsError>>;
 
+    /// Auto-paginating version of `list_tags`
+    fn list_tags_pages<'a>(
+        &'a self,
+        mut input: ListTagsInput,
+    ) -> RusotoStream<'a, Tag, ListTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags(input.clone())
+        }))
+    }
+
     /// <p>Lists training jobs.</p>
     async fn list_training_jobs(
         &self,
         input: ListTrainingJobsRequest,
     ) -> Result<ListTrainingJobsResponse, RusotoError<ListTrainingJobsError>>;
+
+    /// Auto-paginating version of `list_training_jobs`
+    fn list_training_jobs_pages<'a>(
+        &'a self,
+        mut input: ListTrainingJobsRequest,
+    ) -> RusotoStream<'a, TrainingJobSummary, ListTrainingJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_training_jobs(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of <a>TrainingJobSummary</a> objects that describe the training jobs that a hyperparameter tuning job launched.</p>
     async fn list_training_jobs_for_hyper_parameter_tuning_job(
@@ -22660,11 +25604,37 @@ pub trait SageMaker {
         RusotoError<ListTrainingJobsForHyperParameterTuningJobError>,
     >;
 
+    /// Auto-paginating version of `list_training_jobs_for_hyper_parameter_tuning_job`
+    fn list_training_jobs_for_hyper_parameter_tuning_job_pages<'a>(
+        &'a self,
+        mut input: ListTrainingJobsForHyperParameterTuningJobRequest,
+    ) -> RusotoStream<
+        'a,
+        HyperParameterTrainingJobSummary,
+        ListTrainingJobsForHyperParameterTuningJobError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_training_jobs_for_hyper_parameter_tuning_job(input.clone())
+        }))
+    }
+
     /// <p>Lists transform jobs.</p>
     async fn list_transform_jobs(
         &self,
         input: ListTransformJobsRequest,
     ) -> Result<ListTransformJobsResponse, RusotoError<ListTransformJobsError>>;
+
+    /// Auto-paginating version of `list_transform_jobs`
+    fn list_transform_jobs_pages<'a>(
+        &'a self,
+        mut input: ListTransformJobsRequest,
+    ) -> RusotoStream<'a, TransformJobSummary, ListTransformJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_transform_jobs(input.clone())
+        }))
+    }
 
     /// <p><p>Lists the trial components in your account. You can sort the list by trial component name or creation time. You can filter the list to show only components that were created in a specific time range. You can also filter on one of the following:</p> <ul> <li> <p> <code>ExperimentName</code> </p> </li> <li> <p> <code>SourceArn</code> </p> </li> <li> <p> <code>TrialName</code> </p> </li> </ul></p>
     async fn list_trial_components(
@@ -22672,11 +25642,33 @@ pub trait SageMaker {
         input: ListTrialComponentsRequest,
     ) -> Result<ListTrialComponentsResponse, RusotoError<ListTrialComponentsError>>;
 
+    /// Auto-paginating version of `list_trial_components`
+    fn list_trial_components_pages<'a>(
+        &'a self,
+        mut input: ListTrialComponentsRequest,
+    ) -> RusotoStream<'a, TrialComponentSummary, ListTrialComponentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_trial_components(input.clone())
+        }))
+    }
+
     /// <p>Lists the trials in your account. Specify an experiment name to limit the list to the trials that are part of that experiment. Specify a trial component name to limit the list to the trials that associated with that trial component. The list can be filtered to show only trials that were created in a specific time range. The list can be sorted by trial name or creation time.</p>
     async fn list_trials(
         &self,
         input: ListTrialsRequest,
     ) -> Result<ListTrialsResponse, RusotoError<ListTrialsError>>;
+
+    /// Auto-paginating version of `list_trials`
+    fn list_trials_pages<'a>(
+        &'a self,
+        mut input: ListTrialsRequest,
+    ) -> RusotoStream<'a, TrialSummary, ListTrialsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_trials(input.clone())
+        }))
+    }
 
     /// <p>Lists user profiles.</p>
     async fn list_user_profiles(
@@ -22684,17 +25676,50 @@ pub trait SageMaker {
         input: ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResponse, RusotoError<ListUserProfilesError>>;
 
+    /// Auto-paginating version of `list_user_profiles`
+    fn list_user_profiles_pages<'a>(
+        &'a self,
+        mut input: ListUserProfilesRequest,
+    ) -> RusotoStream<'a, UserProfileDetails, ListUserProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_profiles(input.clone())
+        }))
+    }
+
     /// <p>Use this operation to list all private and vendor workforces in an AWS Region. Note that you can only have one private workforce per AWS Region.</p>
     async fn list_workforces(
         &self,
         input: ListWorkforcesRequest,
     ) -> Result<ListWorkforcesResponse, RusotoError<ListWorkforcesError>>;
 
+    /// Auto-paginating version of `list_workforces`
+    fn list_workforces_pages<'a>(
+        &'a self,
+        mut input: ListWorkforcesRequest,
+    ) -> RusotoStream<'a, Workforce, ListWorkforcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_workforces(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of private work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_workteams(
         &self,
         input: ListWorkteamsRequest,
     ) -> Result<ListWorkteamsResponse, RusotoError<ListWorkteamsError>>;
+
+    /// Auto-paginating version of `list_workteams`
+    fn list_workteams_pages<'a>(
+        &'a self,
+        mut input: ListWorkteamsRequest,
+    ) -> RusotoStream<'a, Workteam, ListWorkteamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_workteams(input.clone())
+        }))
+    }
 
     /// <p>Adds a resouce policy to control access to a model group. For information about resoure policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html">Identity-based policies and resource-based policies</a> in the <i>AWS Identity and Access Management User Guide.</i>.</p>
     async fn put_model_package_group_policy(
@@ -22719,6 +25744,17 @@ pub trait SageMaker {
         &self,
         input: SearchRequest,
     ) -> Result<SearchResponse, RusotoError<SearchError>>;
+
+    /// Auto-paginating version of `search`
+    fn search_pages<'a>(
+        &'a self,
+        mut input: SearchRequest,
+    ) -> RusotoStream<'a, SearchRecord, SearchError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search(input.clone())
+        }))
+    }
 
     /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>By default, when you successfully create a new schedule, the status of a monitoring schedule is <code>scheduled</code>.</p> </note></p>
     async fn start_monitoring_schedule(

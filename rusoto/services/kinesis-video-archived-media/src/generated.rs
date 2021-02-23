@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -114,6 +118,7 @@ pub struct FragmentSelector {
     pub timestamp_range: TimestampRange,
 }
 
+/// see [KinesisVideoArchivedMedia::get_clip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClipInput {
@@ -130,6 +135,7 @@ pub struct GetClipInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_clip]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetClipOutput {
     /// <p>The content type of the media in the requested clip.</p>
@@ -138,6 +144,7 @@ pub struct GetClipOutput {
     pub payload: Option<bytes::Bytes>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_dash_streaming_session_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDASHStreamingSessionURLInput {
@@ -175,6 +182,7 @@ pub struct GetDASHStreamingSessionURLInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_dash_streaming_session_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDASHStreamingSessionURLOutput {
@@ -184,6 +192,7 @@ pub struct GetDASHStreamingSessionURLOutput {
     pub dash_streaming_session_url: Option<String>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_hls_streaming_session_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHLSStreamingSessionURLInput {
@@ -225,6 +234,7 @@ pub struct GetHLSStreamingSessionURLInput {
     pub stream_name: Option<String>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_hls_streaming_session_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHLSStreamingSessionURLOutput {
@@ -234,6 +244,7 @@ pub struct GetHLSStreamingSessionURLOutput {
     pub hls_streaming_session_url: Option<String>,
 }
 
+/// see [KinesisVideoArchivedMedia::get_media_for_fragment_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMediaForFragmentListInput {
@@ -245,6 +256,7 @@ pub struct GetMediaForFragmentListInput {
     pub stream_name: String,
 }
 
+/// see [KinesisVideoArchivedMedia::get_media_for_fragment_list]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetMediaForFragmentListOutput {
     /// <p>The content type of the requested media.</p>
@@ -281,6 +293,7 @@ pub struct HLSTimestampRange {
     pub start_timestamp: Option<f64>,
 }
 
+/// see [KinesisVideoArchivedMedia::list_fragments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFragmentsInput {
@@ -301,6 +314,23 @@ pub struct ListFragmentsInput {
     pub stream_name: String,
 }
 
+impl Paged for ListFragmentsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFragmentsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [KinesisVideoArchivedMedia::list_fragments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFragmentsOutput {
@@ -312,6 +342,28 @@ pub struct ListFragmentsOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for ListFragmentsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFragmentsOutput {
+    type Item = Fragment;
+
+    fn into_pagination_page(self) -> Vec<Fragment> {
+        self.fragments.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The range of timestamps for which to return fragments.</p>
@@ -704,7 +756,7 @@ impl fmt::Display for ListFragmentsError {
 impl Error for ListFragmentsError {}
 /// Trait representing the capabilities of the Kinesis Video Archived Media API. Kinesis Video Archived Media clients implement this trait.
 #[async_trait]
-pub trait KinesisVideoArchivedMedia {
+pub trait KinesisVideoArchivedMedia: Clone + Sync + Send + 'static {
     /// <p>Downloads an MP4 file (clip) containing the archived, on-demand media from the specified video stream over the specified time range. </p> <p>Both the StreamName and the StreamARN parameters are optional, but you must specify either the StreamName or the StreamARN when invoking this API operation. </p> <p>As a prerequsite to using GetCLip API, you must obtain an endpoint using <code>GetDataEndpoint</code>, specifying GET_CLIP for<code/> the <code>APIName</code> parameter. </p> <p>An Amazon Kinesis video stream has the following requirements for providing data through MP4:</p> <ul> <li> <p>The media must contain h.264 or h.265 encoded video and, optionally, AAC or G.711 encoded audio. Specifically, the codec ID of track 1 should be <code>V_MPEG/ISO/AVC</code> (for h.264) or V_MPEGH/ISO/HEVC (for H.265). Optionally, the codec ID of track 2 should be <code>A_AAC</code> (for AAC) or A_MS/ACM (for G.711).</p> </li> <li> <p>Data retention must be greater than 0.</p> </li> <li> <p>The video track of each fragment must contain codec private data in the Advanced Video Coding (AVC) for H.264 format and HEVC for H.265 format. For more information, see <a href="https://www.iso.org/standard/55980.html">MPEG-4 specification ISO/IEC 14496-15</a>. For information about adapting stream data to a given format, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/producer-reference-nal.html">NAL Adaptation Flags</a>.</p> </li> <li> <p>The audio track (if present) of each fragment must contain codec private data in the AAC format (<a href="https://www.iso.org/standard/43345.html">AAC specification ISO/IEC 13818-7</a>) or the <a href="http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html">MS Wave format</a>.</p> </li> </ul> <p>You can monitor the amount of outgoing data by monitoring the <code>GetClip.OutgoingBytes</code> Amazon CloudWatch metric. For information about using CloudWatch to monitor Kinesis Video Streams, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/monitoring.html">Monitoring Kinesis Video Streams</a>. For pricing information, see <a href="https://aws.amazon.com/kinesis/video-streams/pricing/">Amazon Kinesis Video Streams Pricing</a> and <a href="https://aws.amazon.com/pricing/">AWS Pricing</a>. Charges for outgoing AWS data apply.</p>
     async fn get_clip(
         &self,
@@ -734,6 +786,17 @@ pub trait KinesisVideoArchivedMedia {
         &self,
         input: ListFragmentsInput,
     ) -> Result<ListFragmentsOutput, RusotoError<ListFragmentsError>>;
+
+    /// Auto-paginating version of `list_fragments`
+    fn list_fragments_pages<'a>(
+        &'a self,
+        mut input: ListFragmentsInput,
+    ) -> RusotoStream<'a, Fragment, ListFragmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_fragments(input.clone())
+        }))
+    }
 }
 /// A client for the Kinesis Video Archived Media API.
 #[derive(Clone)]

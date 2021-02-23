@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -100,6 +104,7 @@ pub struct AccessControlRule {
     pub user_ids: Option<Vec<String>>,
 }
 
+/// see [Workmail::associate_delegate_to_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDelegateToResourceRequest {
@@ -114,10 +119,12 @@ pub struct AssociateDelegateToResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Workmail::associate_delegate_to_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDelegateToResourceResponse {}
 
+/// see [Workmail::associate_member_to_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberToGroupRequest {
@@ -132,6 +139,7 @@ pub struct AssociateMemberToGroupRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::associate_member_to_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateMemberToGroupResponse {}
@@ -153,6 +161,7 @@ pub struct BookingOptions {
     pub auto_decline_recurring_requests: Option<bool>,
 }
 
+/// see [Workmail::cancel_mailbox_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMailboxExportJobRequest {
@@ -167,10 +176,12 @@ pub struct CancelMailboxExportJobRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::cancel_mailbox_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelMailboxExportJobResponse {}
 
+/// see [Workmail::create_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAliasRequest {
@@ -185,10 +196,12 @@ pub struct CreateAliasRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::create_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAliasResponse {}
 
+/// see [Workmail::create_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -200,6 +213,7 @@ pub struct CreateGroupRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::create_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
@@ -209,6 +223,7 @@ pub struct CreateGroupResponse {
     pub group_id: Option<String>,
 }
 
+/// see [Workmail::create_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOrganizationRequest {
@@ -237,6 +252,7 @@ pub struct CreateOrganizationRequest {
     pub kms_key_arn: Option<String>,
 }
 
+/// see [Workmail::create_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOrganizationResponse {
@@ -246,6 +262,7 @@ pub struct CreateOrganizationResponse {
     pub organization_id: Option<String>,
 }
 
+/// see [Workmail::create_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
@@ -260,6 +277,7 @@ pub struct CreateResourceRequest {
     pub type_: String,
 }
 
+/// see [Workmail::create_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceResponse {
@@ -269,6 +287,7 @@ pub struct CreateResourceResponse {
     pub resource_id: Option<String>,
 }
 
+/// see [Workmail::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -286,6 +305,7 @@ pub struct CreateUserRequest {
     pub password: String,
 }
 
+/// see [Workmail::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
@@ -307,6 +327,7 @@ pub struct Delegate {
     pub type_: String,
 }
 
+/// see [Workmail::delete_access_control_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessControlRuleRequest {
@@ -318,10 +339,12 @@ pub struct DeleteAccessControlRuleRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_access_control_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccessControlRuleResponse {}
 
+/// see [Workmail::delete_alias]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
@@ -336,10 +359,12 @@ pub struct DeleteAliasRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_alias]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAliasResponse {}
 
+/// see [Workmail::delete_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -351,10 +376,12 @@ pub struct DeleteGroupRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
+/// see [Workmail::delete_mailbox_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMailboxPermissionsRequest {
@@ -369,10 +396,12 @@ pub struct DeleteMailboxPermissionsRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_mailbox_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMailboxPermissionsResponse {}
 
+/// see [Workmail::delete_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationRequest {
@@ -388,6 +417,7 @@ pub struct DeleteOrganizationRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOrganizationResponse {
@@ -401,6 +431,7 @@ pub struct DeleteOrganizationResponse {
     pub state: Option<String>,
 }
 
+/// see [Workmail::delete_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
@@ -412,10 +443,12 @@ pub struct DeleteResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Workmail::delete_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceResponse {}
 
+/// see [Workmail::delete_retention_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionPolicyRequest {
@@ -427,10 +460,12 @@ pub struct DeleteRetentionPolicyRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::delete_retention_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRetentionPolicyResponse {}
 
+/// see [Workmail::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -442,10 +477,12 @@ pub struct DeleteUserRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::delete_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {}
 
+/// see [Workmail::deregister_from_work_mail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterFromWorkMailRequest {
@@ -457,10 +494,12 @@ pub struct DeregisterFromWorkMailRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::deregister_from_work_mail]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterFromWorkMailResponse {}
 
+/// see [Workmail::describe_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
@@ -472,6 +511,7 @@ pub struct DescribeGroupRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::describe_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupResponse {
@@ -501,6 +541,7 @@ pub struct DescribeGroupResponse {
     pub state: Option<String>,
 }
 
+/// see [Workmail::describe_mailbox_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMailboxExportJobRequest {
@@ -512,6 +553,7 @@ pub struct DescribeMailboxExportJobRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::describe_mailbox_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMailboxExportJobResponse {
@@ -565,6 +607,7 @@ pub struct DescribeMailboxExportJobResponse {
     pub state: Option<String>,
 }
 
+/// see [Workmail::describe_organization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationRequest {
@@ -573,6 +616,7 @@ pub struct DescribeOrganizationRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::describe_organization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationResponse {
@@ -614,6 +658,7 @@ pub struct DescribeOrganizationResponse {
     pub state: Option<String>,
 }
 
+/// see [Workmail::describe_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
@@ -625,6 +670,7 @@ pub struct DescribeResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Workmail::describe_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceResponse {
@@ -662,6 +708,7 @@ pub struct DescribeResourceResponse {
     pub type_: Option<String>,
 }
 
+/// see [Workmail::describe_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
@@ -673,6 +720,7 @@ pub struct DescribeUserRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::describe_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
@@ -710,6 +758,7 @@ pub struct DescribeUserResponse {
     pub user_role: Option<String>,
 }
 
+/// see [Workmail::disassociate_delegate_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDelegateFromResourceRequest {
@@ -724,10 +773,12 @@ pub struct DisassociateDelegateFromResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Workmail::disassociate_delegate_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDelegateFromResourceResponse {}
 
+/// see [Workmail::disassociate_member_from_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMemberFromGroupRequest {
@@ -742,6 +793,7 @@ pub struct DisassociateMemberFromGroupRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::disassociate_member_from_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMemberFromGroupResponse {}
@@ -775,6 +827,7 @@ pub struct FolderConfiguration {
     pub period: Option<i64>,
 }
 
+/// see [Workmail::get_access_control_effect]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccessControlEffectRequest {
@@ -792,6 +845,7 @@ pub struct GetAccessControlEffectRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::get_access_control_effect]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccessControlEffectResponse {
@@ -805,6 +859,7 @@ pub struct GetAccessControlEffectResponse {
     pub matched_rules: Option<Vec<String>>,
 }
 
+/// see [Workmail::get_default_retention_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDefaultRetentionPolicyRequest {
@@ -813,6 +868,7 @@ pub struct GetDefaultRetentionPolicyRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::get_default_retention_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDefaultRetentionPolicyResponse {
@@ -834,6 +890,7 @@ pub struct GetDefaultRetentionPolicyResponse {
     pub name: Option<String>,
 }
 
+/// see [Workmail::get_mailbox_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMailboxDetailsRequest {
@@ -845,6 +902,7 @@ pub struct GetMailboxDetailsRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::get_mailbox_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMailboxDetailsResponse {
@@ -888,6 +946,7 @@ pub struct Group {
     pub state: Option<String>,
 }
 
+/// see [Workmail::list_access_control_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccessControlRulesRequest {
@@ -896,6 +955,7 @@ pub struct ListAccessControlRulesRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::list_access_control_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccessControlRulesResponse {
@@ -905,6 +965,7 @@ pub struct ListAccessControlRulesResponse {
     pub rules: Option<Vec<AccessControlRule>>,
 }
 
+/// see [Workmail::list_aliases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAliasesRequest {
@@ -924,6 +985,23 @@ pub struct ListAliasesRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListAliasesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_aliases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
@@ -937,6 +1015,29 @@ pub struct ListAliasesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAliasesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.aliases.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_group_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupMembersRequest {
@@ -956,6 +1057,23 @@ pub struct ListGroupMembersRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListGroupMembersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_group_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupMembersResponse {
@@ -969,6 +1087,29 @@ pub struct ListGroupMembersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListGroupMembersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListGroupMembersResponse {
+    type Item = Member;
+
+    fn into_pagination_page(self) -> Vec<Member> {
+        self.members.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
@@ -985,6 +1126,23 @@ pub struct ListGroupsRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
@@ -998,6 +1156,29 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListGroupsResponse {
+    type Item = Group;
+
+    fn into_pagination_page(self) -> Vec<Group> {
+        self.groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_mailbox_export_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMailboxExportJobsRequest {
@@ -1014,6 +1195,7 @@ pub struct ListMailboxExportJobsRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::list_mailbox_export_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMailboxExportJobsResponse {
@@ -1027,6 +1209,7 @@ pub struct ListMailboxExportJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Workmail::list_mailbox_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMailboxPermissionsRequest {
@@ -1046,6 +1229,23 @@ pub struct ListMailboxPermissionsRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListMailboxPermissionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMailboxPermissionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_mailbox_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMailboxPermissionsResponse {
@@ -1059,6 +1259,29 @@ pub struct ListMailboxPermissionsResponse {
     pub permissions: Option<Vec<Permission>>,
 }
 
+impl Paged for ListMailboxPermissionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMailboxPermissionsResponse {
+    type Item = Permission;
+
+    fn into_pagination_page(self) -> Vec<Permission> {
+        self.permissions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_organizations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationsRequest {
@@ -1072,6 +1295,23 @@ pub struct ListOrganizationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOrganizationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOrganizationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_organizations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationsResponse {
@@ -1085,6 +1325,29 @@ pub struct ListOrganizationsResponse {
     pub organization_summaries: Option<Vec<OrganizationSummary>>,
 }
 
+impl Paged for ListOrganizationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOrganizationsResponse {
+    type Item = OrganizationSummary;
+
+    fn into_pagination_page(self) -> Vec<OrganizationSummary> {
+        self.organization_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_resource_delegates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDelegatesRequest {
@@ -1104,6 +1367,23 @@ pub struct ListResourceDelegatesRequest {
     pub resource_id: String,
 }
 
+impl Paged for ListResourceDelegatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceDelegatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_resource_delegates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDelegatesResponse {
@@ -1117,6 +1397,29 @@ pub struct ListResourceDelegatesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResourceDelegatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResourceDelegatesResponse {
+    type Item = Delegate;
+
+    fn into_pagination_page(self) -> Vec<Delegate> {
+        self.delegates.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
@@ -1133,6 +1436,23 @@ pub struct ListResourcesRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
@@ -1146,6 +1466,29 @@ pub struct ListResourcesResponse {
     pub resources: Option<Vec<Resource>>,
 }
 
+impl Paged for ListResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResourcesResponse {
+    type Item = Resource;
+
+    fn into_pagination_page(self) -> Vec<Resource> {
+        self.resources.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Workmail::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1154,6 +1497,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Workmail::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1163,6 +1507,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Workmail::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -1179,6 +1524,23 @@ pub struct ListUsersRequest {
     pub organization_id: String,
 }
 
+impl Paged for ListUsersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Workmail::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -1190,6 +1552,28 @@ pub struct ListUsersResponse {
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<User>>,
+}
+
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListUsersResponse {
+    type Item = User;
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.users.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The details of a mailbox export job, including the user or resource ID associated with the mailbox and the S3 bucket that the mailbox contents are exported to.</p>
@@ -1305,6 +1689,7 @@ pub struct Permission {
     pub permission_values: Vec<String>,
 }
 
+/// see [Workmail::put_access_control_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAccessControlRuleRequest {
@@ -1346,10 +1731,12 @@ pub struct PutAccessControlRuleRequest {
     pub user_ids: Option<Vec<String>>,
 }
 
+/// see [Workmail::put_access_control_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccessControlRuleResponse {}
 
+/// see [Workmail::put_mailbox_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMailboxPermissionsRequest {
@@ -1367,10 +1754,12 @@ pub struct PutMailboxPermissionsRequest {
     pub permission_values: Vec<String>,
 }
 
+/// see [Workmail::put_mailbox_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutMailboxPermissionsResponse {}
 
+/// see [Workmail::put_retention_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionPolicyRequest {
@@ -1393,10 +1782,12 @@ pub struct PutRetentionPolicyRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::put_retention_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionPolicyResponse {}
 
+/// see [Workmail::register_to_work_mail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterToWorkMailRequest {
@@ -1411,10 +1802,12 @@ pub struct RegisterToWorkMailRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::register_to_work_mail]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterToWorkMailResponse {}
 
+/// see [Workmail::reset_password]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPasswordRequest {
@@ -1429,6 +1822,7 @@ pub struct ResetPasswordRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::reset_password]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetPasswordResponse {}
@@ -1467,6 +1861,7 @@ pub struct Resource {
     pub type_: Option<String>,
 }
 
+/// see [Workmail::start_mailbox_export_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMailboxExportJobRequest {
@@ -1497,6 +1892,7 @@ pub struct StartMailboxExportJobRequest {
     pub s3_prefix: String,
 }
 
+/// see [Workmail::start_mailbox_export_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMailboxExportJobResponse {
@@ -1517,6 +1913,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Workmail::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1528,10 +1925,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Workmail::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Workmail::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1543,10 +1942,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Workmail::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Workmail::update_mailbox_quota]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMailboxQuotaRequest {
@@ -1561,10 +1962,12 @@ pub struct UpdateMailboxQuotaRequest {
     pub user_id: String,
 }
 
+/// see [Workmail::update_mailbox_quota]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMailboxQuotaResponse {}
 
+/// see [Workmail::update_primary_email_address]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePrimaryEmailAddressRequest {
@@ -1579,10 +1982,12 @@ pub struct UpdatePrimaryEmailAddressRequest {
     pub organization_id: String,
 }
 
+/// see [Workmail::update_primary_email_address]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePrimaryEmailAddressResponse {}
 
+/// see [Workmail::update_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
@@ -1602,6 +2007,7 @@ pub struct UpdateResourceRequest {
     pub resource_id: String,
 }
 
+/// see [Workmail::update_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceResponse {}
@@ -4574,7 +4980,7 @@ impl fmt::Display for UpdateResourceError {
 impl Error for UpdateResourceError {}
 /// Trait representing the capabilities of the Amazon WorkMail API. Amazon WorkMail clients implement this trait.
 #[async_trait]
-pub trait Workmail {
+pub trait Workmail: Clone + Sync + Send + 'static {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
     async fn associate_delegate_to_resource(
         &self,
@@ -4752,17 +5158,50 @@ pub trait Workmail {
         input: ListAliasesRequest,
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
+    /// Auto-paginating version of `list_aliases`
+    fn list_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAliasesRequest,
+    ) -> RusotoStream<'a, String, ListAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aliases(input.clone())
+        }))
+    }
+
     /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
     async fn list_group_members(
         &self,
         input: ListGroupMembersRequest,
     ) -> Result<ListGroupMembersResponse, RusotoError<ListGroupMembersError>>;
 
+    /// Auto-paginating version of `list_group_members`
+    fn list_group_members_pages<'a>(
+        &'a self,
+        mut input: ListGroupMembersRequest,
+    ) -> RusotoStream<'a, Member, ListGroupMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_members(input.clone())
+        }))
+    }
+
     /// <p>Returns summaries of the organization's groups.</p>
     async fn list_groups(
         &self,
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
+
+    /// Auto-paginating version of `list_groups`
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
+    }
 
     /// <p>Lists the mailbox export jobs started for the specified organization within the last seven days.</p>
     async fn list_mailbox_export_jobs(
@@ -4776,11 +5215,33 @@ pub trait Workmail {
         input: ListMailboxPermissionsRequest,
     ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>>;
 
+    /// Auto-paginating version of `list_mailbox_permissions`
+    fn list_mailbox_permissions_pages<'a>(
+        &'a self,
+        mut input: ListMailboxPermissionsRequest,
+    ) -> RusotoStream<'a, Permission, ListMailboxPermissionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_mailbox_permissions(input.clone())
+        }))
+    }
+
     /// <p>Returns summaries of the customer's organizations.</p>
     async fn list_organizations(
         &self,
         input: ListOrganizationsRequest,
     ) -> Result<ListOrganizationsResponse, RusotoError<ListOrganizationsError>>;
+
+    /// Auto-paginating version of `list_organizations`
+    fn list_organizations_pages<'a>(
+        &'a self,
+        mut input: ListOrganizationsRequest,
+    ) -> RusotoStream<'a, OrganizationSummary, ListOrganizationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_organizations(input.clone())
+        }))
+    }
 
     /// <p>Lists the delegates associated with a resource. Users and groups can be resource delegates and answer requests on behalf of the resource.</p>
     async fn list_resource_delegates(
@@ -4788,11 +5249,33 @@ pub trait Workmail {
         input: ListResourceDelegatesRequest,
     ) -> Result<ListResourceDelegatesResponse, RusotoError<ListResourceDelegatesError>>;
 
+    /// Auto-paginating version of `list_resource_delegates`
+    fn list_resource_delegates_pages<'a>(
+        &'a self,
+        mut input: ListResourceDelegatesRequest,
+    ) -> RusotoStream<'a, Delegate, ListResourceDelegatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_delegates(input.clone())
+        }))
+    }
+
     /// <p>Returns summaries of the organization's resources.</p>
     async fn list_resources(
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
+
+    /// Auto-paginating version of `list_resources`
+    fn list_resources_pages<'a>(
+        &'a self,
+        mut input: ListResourcesRequest,
+    ) -> RusotoStream<'a, Resource, ListResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resources(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags applied to an Amazon WorkMail organization resource.</p>
     async fn list_tags_for_resource(
@@ -4805,6 +5288,17 @@ pub trait Workmail {
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
+
+    /// Auto-paginating version of `list_users`
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, User, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
+    }
 
     /// <p>Adds a new access control rule for the specified organization. The rule allows or denies access to the organization for the specified IPv4 addresses, access protocol actions, and user IDs. Adding a new rule with the same name as an existing rule replaces the older rule.</p>
     async fn put_access_control_rule(

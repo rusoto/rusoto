@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -126,6 +130,7 @@ pub struct App {
     pub type_: Option<String>,
 }
 
+/// see [OpsWorks::assign_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignInstanceRequest {
@@ -137,6 +142,7 @@ pub struct AssignInstanceRequest {
     pub layer_ids: Vec<String>,
 }
 
+/// see [OpsWorks::assign_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignVolumeRequest {
@@ -149,6 +155,7 @@ pub struct AssignVolumeRequest {
     pub volume_id: String,
 }
 
+/// see [OpsWorks::associate_elastic_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateElasticIpRequest {
@@ -161,6 +168,7 @@ pub struct AssociateElasticIpRequest {
     pub instance_id: Option<String>,
 }
 
+/// see [OpsWorks::attach_elastic_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachElasticLoadBalancerRequest {
@@ -239,6 +247,7 @@ pub struct ChefConfiguration {
     pub manage_berkshelf: Option<bool>,
 }
 
+/// see [OpsWorks::clone_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloneStackRequest {
@@ -331,6 +340,7 @@ pub struct CloneStackRequest {
 }
 
 /// <p>Contains the response to a <code>CloneStack</code> request.</p>
+/// see [OpsWorks::clone_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloneStackResult {
@@ -448,6 +458,7 @@ pub struct Command {
     pub type_: Option<String>,
 }
 
+/// see [OpsWorks::create_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
@@ -499,6 +510,7 @@ pub struct CreateAppRequest {
 }
 
 /// <p>Contains the response to a <code>CreateApp</code> request.</p>
+/// see [OpsWorks::create_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResult {
@@ -508,6 +520,7 @@ pub struct CreateAppResult {
     pub app_id: Option<String>,
 }
 
+/// see [OpsWorks::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
@@ -540,6 +553,7 @@ pub struct CreateDeploymentRequest {
 }
 
 /// <p>Contains the response to a <code>CreateDeployment</code> request.</p>
+/// see [OpsWorks::create_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResult {
@@ -549,6 +563,7 @@ pub struct CreateDeploymentResult {
     pub deployment_id: Option<String>,
 }
 
+/// see [OpsWorks::create_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceRequest {
@@ -624,6 +639,7 @@ pub struct CreateInstanceRequest {
 }
 
 /// <p>Contains the response to a <code>CreateInstance</code> request.</p>
+/// see [OpsWorks::create_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceResult {
@@ -633,6 +649,7 @@ pub struct CreateInstanceResult {
     pub instance_id: Option<String>,
 }
 
+/// see [OpsWorks::create_layer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLayerRequest {
@@ -707,6 +724,7 @@ pub struct CreateLayerRequest {
 }
 
 /// <p>Contains the response to a <code>CreateLayer</code> request.</p>
+/// see [OpsWorks::create_layer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLayerResult {
@@ -716,6 +734,7 @@ pub struct CreateLayerResult {
     pub layer_id: Option<String>,
 }
 
+/// see [OpsWorks::create_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackRequest {
@@ -794,6 +813,7 @@ pub struct CreateStackRequest {
 }
 
 /// <p>Contains the response to a <code>CreateStack</code> request.</p>
+/// see [OpsWorks::create_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStackResult {
@@ -803,6 +823,7 @@ pub struct CreateStackResult {
     pub stack_id: Option<String>,
 }
 
+/// see [OpsWorks::create_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
@@ -824,6 +845,7 @@ pub struct CreateUserProfileRequest {
 }
 
 /// <p>Contains the response to a <code>CreateUserProfile</code> request.</p>
+/// see [OpsWorks::create_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserProfileResult {
@@ -850,6 +872,7 @@ pub struct DataSource {
     pub type_: Option<String>,
 }
 
+/// see [OpsWorks::delete_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
@@ -858,6 +881,7 @@ pub struct DeleteAppRequest {
     pub app_id: String,
 }
 
+/// see [OpsWorks::delete_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
@@ -874,6 +898,7 @@ pub struct DeleteInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [OpsWorks::delete_layer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLayerRequest {
@@ -882,6 +907,7 @@ pub struct DeleteLayerRequest {
     pub layer_id: String,
 }
 
+/// see [OpsWorks::delete_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackRequest {
@@ -890,6 +916,7 @@ pub struct DeleteStackRequest {
     pub stack_id: String,
 }
 
+/// see [OpsWorks::delete_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
@@ -964,6 +991,7 @@ pub struct DeploymentCommand {
     pub name: String,
 }
 
+/// see [OpsWorks::deregister_ecs_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEcsClusterRequest {
@@ -972,6 +1000,7 @@ pub struct DeregisterEcsClusterRequest {
     pub ecs_cluster_arn: String,
 }
 
+/// see [OpsWorks::deregister_elastic_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterElasticIpRequest {
@@ -980,6 +1009,7 @@ pub struct DeregisterElasticIpRequest {
     pub elastic_ip: String,
 }
 
+/// see [OpsWorks::deregister_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterInstanceRequest {
@@ -988,6 +1018,7 @@ pub struct DeregisterInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [OpsWorks::deregister_rds_db_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterRdsDbInstanceRequest {
@@ -996,6 +1027,7 @@ pub struct DeregisterRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
+/// see [OpsWorks::deregister_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterVolumeRequest {
@@ -1004,6 +1036,7 @@ pub struct DeregisterVolumeRequest {
     pub volume_id: String,
 }
 
+/// see [OpsWorks::describe_agent_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentVersionsRequest {
@@ -1018,6 +1051,7 @@ pub struct DescribeAgentVersionsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeAgentVersions</code> request.</p>
+/// see [OpsWorks::describe_agent_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentVersionsResult {
@@ -1027,6 +1061,7 @@ pub struct DescribeAgentVersionsResult {
     pub agent_versions: Option<Vec<AgentVersion>>,
 }
 
+/// see [OpsWorks::describe_apps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppsRequest {
@@ -1041,6 +1076,7 @@ pub struct DescribeAppsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeApps</code> request.</p>
+/// see [OpsWorks::describe_apps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppsResult {
@@ -1050,6 +1086,7 @@ pub struct DescribeAppsResult {
     pub apps: Option<Vec<App>>,
 }
 
+/// see [OpsWorks::describe_commands]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommandsRequest {
@@ -1068,6 +1105,7 @@ pub struct DescribeCommandsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeCommands</code> request.</p>
+/// see [OpsWorks::describe_commands]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCommandsResult {
@@ -1077,6 +1115,7 @@ pub struct DescribeCommandsResult {
     pub commands: Option<Vec<Command>>,
 }
 
+/// see [OpsWorks::describe_deployments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeploymentsRequest {
@@ -1095,6 +1134,7 @@ pub struct DescribeDeploymentsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeDeployments</code> request.</p>
+/// see [OpsWorks::describe_deployments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeploymentsResult {
@@ -1104,6 +1144,7 @@ pub struct DescribeDeploymentsResult {
     pub deployments: Option<Vec<Deployment>>,
 }
 
+/// see [OpsWorks::describe_ecs_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEcsClustersRequest {
@@ -1125,7 +1166,24 @@ pub struct DescribeEcsClustersRequest {
     pub stack_id: Option<String>,
 }
 
+impl Paged for DescribeEcsClustersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEcsClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Contains the response to a <code>DescribeEcsClusters</code> request.</p>
+/// see [OpsWorks::describe_ecs_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEcsClustersResult {
@@ -1139,6 +1197,29 @@ pub struct DescribeEcsClustersResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeEcsClustersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeEcsClustersResult {
+    type Item = EcsCluster;
+
+    fn into_pagination_page(self) -> Vec<EcsCluster> {
+        self.ecs_clusters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [OpsWorks::describe_elastic_ips]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticIpsRequest {
@@ -1157,6 +1238,7 @@ pub struct DescribeElasticIpsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeElasticIps</code> request.</p>
+/// see [OpsWorks::describe_elastic_ips]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticIpsResult {
@@ -1166,6 +1248,7 @@ pub struct DescribeElasticIpsResult {
     pub elastic_ips: Option<Vec<ElasticIp>>,
 }
 
+/// see [OpsWorks::describe_elastic_load_balancers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticLoadBalancersRequest {
@@ -1180,6 +1263,7 @@ pub struct DescribeElasticLoadBalancersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeElasticLoadBalancers</code> request.</p>
+/// see [OpsWorks::describe_elastic_load_balancers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticLoadBalancersResult {
@@ -1189,6 +1273,7 @@ pub struct DescribeElasticLoadBalancersResult {
     pub elastic_load_balancers: Option<Vec<ElasticLoadBalancer>>,
 }
 
+/// see [OpsWorks::describe_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesRequest {
@@ -1207,6 +1292,7 @@ pub struct DescribeInstancesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeInstances</code> request.</p>
+/// see [OpsWorks::describe_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancesResult {
@@ -1216,6 +1302,7 @@ pub struct DescribeInstancesResult {
     pub instances: Option<Vec<Instance>>,
 }
 
+/// see [OpsWorks::describe_layers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLayersRequest {
@@ -1230,6 +1317,7 @@ pub struct DescribeLayersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeLayers</code> request.</p>
+/// see [OpsWorks::describe_layers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLayersResult {
@@ -1239,6 +1327,7 @@ pub struct DescribeLayersResult {
     pub layers: Option<Vec<Layer>>,
 }
 
+/// see [OpsWorks::describe_load_based_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBasedAutoScalingRequest {
@@ -1248,6 +1337,7 @@ pub struct DescribeLoadBasedAutoScalingRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeLoadBasedAutoScaling</code> request.</p>
+/// see [OpsWorks::describe_load_based_auto_scaling]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoadBasedAutoScalingResult {
@@ -1258,6 +1348,7 @@ pub struct DescribeLoadBasedAutoScalingResult {
 }
 
 /// <p>Contains the response to a <code>DescribeMyUserProfile</code> request.</p>
+/// see [OpsWorks::describe_my_user_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMyUserProfileResult {
@@ -1268,6 +1359,7 @@ pub struct DescribeMyUserProfileResult {
 }
 
 /// <p>The response to a <code>DescribeOperatingSystems</code> request.</p>
+/// see [OpsWorks::describe_operating_systems]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOperatingSystemsResponse {
@@ -1277,6 +1369,7 @@ pub struct DescribeOperatingSystemsResponse {
     pub operating_systems: Option<Vec<OperatingSystem>>,
 }
 
+/// see [OpsWorks::describe_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePermissionsRequest {
@@ -1291,6 +1384,7 @@ pub struct DescribePermissionsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribePermissions</code> request.</p>
+/// see [OpsWorks::describe_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePermissionsResult {
@@ -1300,6 +1394,7 @@ pub struct DescribePermissionsResult {
     pub permissions: Option<Vec<Permission>>,
 }
 
+/// see [OpsWorks::describe_raid_arrays]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRaidArraysRequest {
@@ -1318,6 +1413,7 @@ pub struct DescribeRaidArraysRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeRaidArrays</code> request.</p>
+/// see [OpsWorks::describe_raid_arrays]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRaidArraysResult {
@@ -1327,6 +1423,7 @@ pub struct DescribeRaidArraysResult {
     pub raid_arrays: Option<Vec<RaidArray>>,
 }
 
+/// see [OpsWorks::describe_rds_db_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRdsDbInstancesRequest {
@@ -1340,6 +1437,7 @@ pub struct DescribeRdsDbInstancesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeRdsDbInstances</code> request.</p>
+/// see [OpsWorks::describe_rds_db_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRdsDbInstancesResult {
@@ -1349,6 +1447,7 @@ pub struct DescribeRdsDbInstancesResult {
     pub rds_db_instances: Option<Vec<RdsDbInstance>>,
 }
 
+/// see [OpsWorks::describe_service_errors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceErrorsRequest {
@@ -1367,6 +1466,7 @@ pub struct DescribeServiceErrorsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeServiceErrors</code> request.</p>
+/// see [OpsWorks::describe_service_errors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceErrorsResult {
@@ -1376,6 +1476,7 @@ pub struct DescribeServiceErrorsResult {
     pub service_errors: Option<Vec<ServiceError>>,
 }
 
+/// see [OpsWorks::describe_stack_provisioning_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackProvisioningParametersRequest {
@@ -1385,6 +1486,7 @@ pub struct DescribeStackProvisioningParametersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStackProvisioningParameters</code> request.</p>
+/// see [OpsWorks::describe_stack_provisioning_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStackProvisioningParametersResult {
@@ -1398,6 +1500,7 @@ pub struct DescribeStackProvisioningParametersResult {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [OpsWorks::describe_stack_summary]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSummaryRequest {
@@ -1407,6 +1510,7 @@ pub struct DescribeStackSummaryRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStackSummary</code> request.</p>
+/// see [OpsWorks::describe_stack_summary]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStackSummaryResult {
@@ -1416,6 +1520,7 @@ pub struct DescribeStackSummaryResult {
     pub stack_summary: Option<StackSummary>,
 }
 
+/// see [OpsWorks::describe_stacks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksRequest {
@@ -1426,6 +1531,7 @@ pub struct DescribeStacksRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStacks</code> request.</p>
+/// see [OpsWorks::describe_stacks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStacksResult {
@@ -1435,6 +1541,7 @@ pub struct DescribeStacksResult {
     pub stacks: Option<Vec<Stack>>,
 }
 
+/// see [OpsWorks::describe_time_based_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTimeBasedAutoScalingRequest {
@@ -1444,6 +1551,7 @@ pub struct DescribeTimeBasedAutoScalingRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeTimeBasedAutoScaling</code> request.</p>
+/// see [OpsWorks::describe_time_based_auto_scaling]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTimeBasedAutoScalingResult {
@@ -1453,6 +1561,7 @@ pub struct DescribeTimeBasedAutoScalingResult {
     pub time_based_auto_scaling_configurations: Option<Vec<TimeBasedAutoScalingConfiguration>>,
 }
 
+/// see [OpsWorks::describe_user_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfilesRequest {
@@ -1463,6 +1572,7 @@ pub struct DescribeUserProfilesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeUserProfiles</code> request.</p>
+/// see [OpsWorks::describe_user_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserProfilesResult {
@@ -1472,6 +1582,7 @@ pub struct DescribeUserProfilesResult {
     pub user_profiles: Option<Vec<UserProfile>>,
 }
 
+/// see [OpsWorks::describe_volumes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumesRequest {
@@ -1494,6 +1605,7 @@ pub struct DescribeVolumesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeVolumes</code> request.</p>
+/// see [OpsWorks::describe_volumes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVolumesResult {
@@ -1503,6 +1615,7 @@ pub struct DescribeVolumesResult {
     pub volumes: Option<Vec<Volume>>,
 }
 
+/// see [OpsWorks::detach_elastic_load_balancer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachElasticLoadBalancerRequest {
@@ -1514,6 +1627,7 @@ pub struct DetachElasticLoadBalancerRequest {
     pub layer_id: String,
 }
 
+/// see [OpsWorks::disassociate_elastic_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateElasticIpRequest {
@@ -1652,6 +1766,7 @@ pub struct EnvironmentVariable {
     pub value: String,
 }
 
+/// see [OpsWorks::get_hostname_suggestion]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostnameSuggestionRequest {
@@ -1661,6 +1776,7 @@ pub struct GetHostnameSuggestionRequest {
 }
 
 /// <p>Contains the response to a <code>GetHostnameSuggestion</code> request.</p>
+/// see [OpsWorks::get_hostname_suggestion]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHostnameSuggestionResult {
@@ -1674,6 +1790,7 @@ pub struct GetHostnameSuggestionResult {
     pub layer_id: Option<String>,
 }
 
+/// see [OpsWorks::grant_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantAccessRequest {
@@ -1687,6 +1804,7 @@ pub struct GrantAccessRequest {
 }
 
 /// <p>Contains the response to a <code>GrantAccess</code> request.</p>
+/// see [OpsWorks::grant_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantAccessResult {
@@ -2073,6 +2191,7 @@ pub struct LifecycleEventConfiguration {
     pub shutdown: Option<ShutdownEventConfiguration>,
 }
 
+/// see [OpsWorks::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -2090,6 +2209,7 @@ pub struct ListTagsRequest {
 }
 
 /// <p>Contains the response to a <code>ListTags</code> request.</p>
+/// see [OpsWorks::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResult {
@@ -2299,6 +2419,7 @@ pub struct RdsDbInstance {
     pub stack_id: Option<String>,
 }
 
+/// see [OpsWorks::reboot_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
@@ -2332,6 +2453,7 @@ pub struct Recipes {
     pub undeploy: Option<Vec<String>>,
 }
 
+/// see [OpsWorks::register_ecs_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEcsClusterRequest {
@@ -2344,6 +2466,7 @@ pub struct RegisterEcsClusterRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterEcsCluster</code> request.</p>
+/// see [OpsWorks::register_ecs_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterEcsClusterResult {
@@ -2353,6 +2476,7 @@ pub struct RegisterEcsClusterResult {
     pub ecs_cluster_arn: Option<String>,
 }
 
+/// see [OpsWorks::register_elastic_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterElasticIpRequest {
@@ -2365,6 +2489,7 @@ pub struct RegisterElasticIpRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterElasticIp</code> request.</p>
+/// see [OpsWorks::register_elastic_ip]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterElasticIpResult {
@@ -2374,6 +2499,7 @@ pub struct RegisterElasticIpResult {
     pub elastic_ip: Option<String>,
 }
 
+/// see [OpsWorks::register_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
@@ -2407,6 +2533,7 @@ pub struct RegisterInstanceRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterInstanceResult</code> request.</p>
+/// see [OpsWorks::register_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterInstanceResult {
@@ -2416,6 +2543,7 @@ pub struct RegisterInstanceResult {
     pub instance_id: Option<String>,
 }
 
+/// see [OpsWorks::register_rds_db_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterRdsDbInstanceRequest {
@@ -2433,6 +2561,7 @@ pub struct RegisterRdsDbInstanceRequest {
     pub stack_id: String,
 }
 
+/// see [OpsWorks::register_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterVolumeRequest {
@@ -2446,6 +2575,7 @@ pub struct RegisterVolumeRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterVolume</code> request.</p>
+/// see [OpsWorks::register_volume]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterVolumeResult {
@@ -2525,6 +2655,7 @@ pub struct ServiceError {
     pub type_: Option<String>,
 }
 
+/// see [OpsWorks::set_load_based_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBasedAutoScalingRequest {
@@ -2545,6 +2676,7 @@ pub struct SetLoadBasedAutoScalingRequest {
     pub up_scaling: Option<AutoScalingThresholds>,
 }
 
+/// see [OpsWorks::set_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPermissionRequest {
@@ -2568,6 +2700,7 @@ pub struct SetPermissionRequest {
     pub stack_id: String,
 }
 
+/// see [OpsWorks::set_time_based_auto_scaling]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTimeBasedAutoScalingRequest {
@@ -2774,6 +2907,7 @@ pub struct StackSummary {
     pub stack_id: Option<String>,
 }
 
+/// see [OpsWorks::start_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
@@ -2782,6 +2916,7 @@ pub struct StartInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [OpsWorks::start_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStackRequest {
@@ -2790,6 +2925,7 @@ pub struct StartStackRequest {
     pub stack_id: String,
 }
 
+/// see [OpsWorks::stop_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
@@ -2802,6 +2938,7 @@ pub struct StopInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [OpsWorks::stop_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStackRequest {
@@ -2810,6 +2947,7 @@ pub struct StopStackRequest {
     pub stack_id: String,
 }
 
+/// see [OpsWorks::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2857,6 +2995,7 @@ pub struct TimeBasedAutoScalingConfiguration {
     pub instance_id: Option<String>,
 }
 
+/// see [OpsWorks::unassign_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignInstanceRequest {
@@ -2865,6 +3004,7 @@ pub struct UnassignInstanceRequest {
     pub instance_id: String,
 }
 
+/// see [OpsWorks::unassign_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignVolumeRequest {
@@ -2873,6 +3013,7 @@ pub struct UnassignVolumeRequest {
     pub volume_id: String,
 }
 
+/// see [OpsWorks::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2884,6 +3025,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [OpsWorks::update_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
@@ -2932,6 +3074,7 @@ pub struct UpdateAppRequest {
     pub type_: Option<String>,
 }
 
+/// see [OpsWorks::update_elastic_ip]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateElasticIpRequest {
@@ -2944,6 +3087,7 @@ pub struct UpdateElasticIpRequest {
     pub name: Option<String>,
 }
 
+/// see [OpsWorks::update_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceRequest {
@@ -2996,6 +3140,7 @@ pub struct UpdateInstanceRequest {
     pub ssh_key_name: Option<String>,
 }
 
+/// see [OpsWorks::update_layer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLayerRequest {
@@ -3068,6 +3213,7 @@ pub struct UpdateLayerRequest {
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
 }
 
+/// see [OpsWorks::update_my_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMyUserProfileRequest {
@@ -3077,6 +3223,7 @@ pub struct UpdateMyUserProfileRequest {
     pub ssh_public_key: Option<String>,
 }
 
+/// see [OpsWorks::update_rds_db_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRdsDbInstanceRequest {
@@ -3093,6 +3240,7 @@ pub struct UpdateRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
+/// see [OpsWorks::update_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackRequest {
@@ -3169,6 +3317,7 @@ pub struct UpdateStackRequest {
     pub use_opsworks_security_groups: Option<bool>,
 }
 
+/// see [OpsWorks::update_user_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
@@ -3189,6 +3338,7 @@ pub struct UpdateUserProfileRequest {
     pub ssh_username: Option<String>,
 }
 
+/// see [OpsWorks::update_volume]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVolumeRequest {
@@ -5600,7 +5750,7 @@ impl fmt::Display for UpdateVolumeError {
 impl Error for UpdateVolumeError {}
 /// Trait representing the capabilities of the AWS OpsWorks API. AWS OpsWorks clients implement this trait.
 #[async_trait]
-pub trait OpsWorks {
+pub trait OpsWorks: Clone + Sync + Send + 'static {
     /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     async fn assign_instance(
         &self,
@@ -5753,6 +5903,17 @@ pub trait OpsWorks {
         &self,
         input: DescribeEcsClustersRequest,
     ) -> Result<DescribeEcsClustersResult, RusotoError<DescribeEcsClustersError>>;
+
+    /// Auto-paginating version of `describe_ecs_clusters`
+    fn describe_ecs_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeEcsClustersRequest,
+    ) -> RusotoStream<'a, EcsCluster, DescribeEcsClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ecs_clusters(input.clone())
+        }))
+    }
 
     /// <p>Describes <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     async fn describe_elastic_ips(

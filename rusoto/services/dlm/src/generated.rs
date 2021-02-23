@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -36,6 +40,7 @@ pub struct Action {
     pub name: String,
 }
 
+/// see [Dlm::create_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLifecyclePolicyRequest {
@@ -57,6 +62,7 @@ pub struct CreateLifecyclePolicyRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Dlm::create_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLifecyclePolicyResponse {
@@ -137,6 +143,7 @@ pub struct CrossRegionCopyRule {
     pub target_region: String,
 }
 
+/// see [Dlm::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyRequest {
@@ -145,6 +152,7 @@ pub struct DeleteLifecyclePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Dlm::delete_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {}
@@ -207,6 +215,7 @@ pub struct FastRestoreRule {
     pub interval_unit: Option<String>,
 }
 
+/// see [Dlm::get_lifecycle_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePoliciesRequest {
@@ -232,6 +241,7 @@ pub struct GetLifecyclePoliciesRequest {
     pub target_tags: Option<Vec<String>>,
 }
 
+/// see [Dlm::get_lifecycle_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePoliciesResponse {
@@ -241,6 +251,7 @@ pub struct GetLifecyclePoliciesResponse {
     pub policies: Option<Vec<LifecyclePolicySummary>>,
 }
 
+/// see [Dlm::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyRequest {
@@ -249,6 +260,7 @@ pub struct GetLifecyclePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Dlm::get_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyResponse {
@@ -330,6 +342,7 @@ pub struct LifecyclePolicySummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Dlm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -338,6 +351,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Dlm::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -478,6 +492,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Dlm::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -489,10 +504,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Dlm::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Dlm::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -504,10 +521,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Dlm::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Dlm::update_lifecycle_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLifecyclePolicyRequest {
@@ -532,6 +551,7 @@ pub struct UpdateLifecyclePolicyRequest {
     pub state: Option<String>,
 }
 
+/// see [Dlm::update_lifecycle_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLifecyclePolicyResponse {}
@@ -904,7 +924,7 @@ impl fmt::Display for UpdateLifecyclePolicyError {
 impl Error for UpdateLifecyclePolicyError {}
 /// Trait representing the capabilities of the Amazon DLM API. Amazon DLM clients implement this trait.
 #[async_trait]
-pub trait Dlm {
+pub trait Dlm: Clone + Sync + Send + 'static {
     /// <p>Creates a policy to manage the lifecycle of the specified AWS resources. You can create up to 100 lifecycle policies.</p>
     async fn create_lifecycle_policy(
         &self,

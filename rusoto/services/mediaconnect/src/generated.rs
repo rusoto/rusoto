@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -26,6 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A request to add outputs to the specified flow.</p>
+/// see [MediaConnect::add_flow_outputs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowOutputsRequest {
@@ -37,6 +42,7 @@ pub struct AddFlowOutputsRequest {
     pub outputs: Vec<AddOutputRequest>,
 }
 
+/// see [MediaConnect::add_flow_outputs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowOutputsResponse {
@@ -51,6 +57,7 @@ pub struct AddFlowOutputsResponse {
 }
 
 /// <p>A request to add sources to the flow.</p>
+/// see [MediaConnect::add_flow_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowSourcesRequest {
@@ -62,6 +69,7 @@ pub struct AddFlowSourcesRequest {
     pub sources: Vec<SetSourceRequest>,
 }
 
+/// see [MediaConnect::add_flow_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowSourcesResponse {
@@ -76,6 +84,7 @@ pub struct AddFlowSourcesResponse {
 }
 
 /// <p>A request to add VPC interfaces to the flow.</p>
+/// see [MediaConnect::add_flow_vpc_interfaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowVpcInterfacesRequest {
@@ -87,6 +96,7 @@ pub struct AddFlowVpcInterfacesRequest {
     pub vpc_interfaces: Vec<VpcInterfaceRequest>,
 }
 
+/// see [MediaConnect::add_flow_vpc_interfaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowVpcInterfacesResponse {
@@ -154,6 +164,7 @@ pub struct AddOutputRequest {
 }
 
 /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
+/// see [MediaConnect::create_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowRequest {
@@ -187,6 +198,7 @@ pub struct CreateFlowRequest {
     pub vpc_interfaces: Option<Vec<VpcInterfaceRequest>>,
 }
 
+/// see [MediaConnect::create_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowResponse {
@@ -195,6 +207,7 @@ pub struct CreateFlowResponse {
     pub flow: Option<Flow>,
 }
 
+/// see [MediaConnect::delete_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowRequest {
@@ -203,6 +216,7 @@ pub struct DeleteFlowRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::delete_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowResponse {
@@ -216,6 +230,7 @@ pub struct DeleteFlowResponse {
     pub status: Option<String>,
 }
 
+/// see [MediaConnect::describe_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowRequest {
@@ -224,6 +239,7 @@ pub struct DescribeFlowRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::describe_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFlowResponse {
@@ -235,6 +251,7 @@ pub struct DescribeFlowResponse {
     pub messages: Option<Messages>,
 }
 
+/// see [MediaConnect::describe_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOfferingRequest {
@@ -243,6 +260,7 @@ pub struct DescribeOfferingRequest {
     pub offering_arn: String,
 }
 
+/// see [MediaConnect::describe_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOfferingResponse {
@@ -251,6 +269,7 @@ pub struct DescribeOfferingResponse {
     pub offering: Option<Offering>,
 }
 
+/// see [MediaConnect::describe_reservation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservationRequest {
@@ -259,6 +278,7 @@ pub struct DescribeReservationRequest {
     pub reservation_arn: String,
 }
 
+/// see [MediaConnect::describe_reservation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservationResponse {
@@ -423,6 +443,7 @@ pub struct GrantEntitlementRequest {
 }
 
 /// <p>A request to grant entitlements on a flow.</p>
+/// see [MediaConnect::grant_flow_entitlements]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantFlowEntitlementsRequest {
@@ -434,6 +455,7 @@ pub struct GrantFlowEntitlementsRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::grant_flow_entitlements]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantFlowEntitlementsResponse {
@@ -447,6 +469,7 @@ pub struct GrantFlowEntitlementsResponse {
     pub flow_arn: Option<String>,
 }
 
+/// see [MediaConnect::list_entitlements]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitlementsRequest {
@@ -460,6 +483,23 @@ pub struct ListEntitlementsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntitlementsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntitlementsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MediaConnect::list_entitlements]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitlementsResponse {
@@ -473,6 +513,29 @@ pub struct ListEntitlementsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntitlementsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEntitlementsResponse {
+    type Item = ListedEntitlement;
+
+    fn into_pagination_page(self) -> Vec<ListedEntitlement> {
+        self.entitlements.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MediaConnect::list_flows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowsRequest {
@@ -486,6 +549,23 @@ pub struct ListFlowsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFlowsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFlowsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MediaConnect::list_flows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowsResponse {
@@ -499,6 +579,29 @@ pub struct ListFlowsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFlowsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFlowsResponse {
+    type Item = ListedFlow;
+
+    fn into_pagination_page(self) -> Vec<ListedFlow> {
+        self.flows.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MediaConnect::list_offerings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
@@ -512,6 +615,23 @@ pub struct ListOfferingsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOfferingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOfferingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MediaConnect::list_offerings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResponse {
@@ -525,6 +645,29 @@ pub struct ListOfferingsResponse {
     pub offerings: Option<Vec<Offering>>,
 }
 
+impl Paged for ListOfferingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOfferingsResponse {
+    type Item = Offering;
+
+    fn into_pagination_page(self) -> Vec<Offering> {
+        self.offerings.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MediaConnect::list_reservations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReservationsRequest {
@@ -538,6 +681,23 @@ pub struct ListReservationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListReservationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReservationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MediaConnect::list_reservations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReservationsResponse {
@@ -551,6 +711,29 @@ pub struct ListReservationsResponse {
     pub reservations: Option<Vec<Reservation>>,
 }
 
+impl Paged for ListReservationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListReservationsResponse {
+    type Item = Reservation;
+
+    fn into_pagination_page(self) -> Vec<Reservation> {
+        self.reservations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MediaConnect::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -559,6 +742,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [MediaConnect::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -696,6 +880,7 @@ pub struct Output {
 }
 
 /// <p>A request to purchase a offering.</p>
+/// see [MediaConnect::purchase_offering]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
@@ -710,6 +895,7 @@ pub struct PurchaseOfferingRequest {
     pub start: String,
 }
 
+/// see [MediaConnect::purchase_offering]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResponse {
@@ -718,6 +904,7 @@ pub struct PurchaseOfferingResponse {
     pub reservation: Option<Reservation>,
 }
 
+/// see [MediaConnect::remove_flow_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowOutputRequest {
@@ -729,6 +916,7 @@ pub struct RemoveFlowOutputRequest {
     pub output_arn: String,
 }
 
+/// see [MediaConnect::remove_flow_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowOutputResponse {
@@ -742,6 +930,7 @@ pub struct RemoveFlowOutputResponse {
     pub output_arn: Option<String>,
 }
 
+/// see [MediaConnect::remove_flow_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowSourceRequest {
@@ -753,6 +942,7 @@ pub struct RemoveFlowSourceRequest {
     pub source_arn: String,
 }
 
+/// see [MediaConnect::remove_flow_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowSourceResponse {
@@ -766,6 +956,7 @@ pub struct RemoveFlowSourceResponse {
     pub source_arn: Option<String>,
 }
 
+/// see [MediaConnect::remove_flow_vpc_interface]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowVpcInterfaceRequest {
@@ -777,6 +968,7 @@ pub struct RemoveFlowVpcInterfaceRequest {
     pub vpc_interface_name: String,
 }
 
+/// see [MediaConnect::remove_flow_vpc_interface]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowVpcInterfaceResponse {
@@ -852,6 +1044,7 @@ pub struct ResourceSpecification {
     pub resource_type: String,
 }
 
+/// see [MediaConnect::revoke_flow_entitlement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeFlowEntitlementRequest {
@@ -863,6 +1056,7 @@ pub struct RevokeFlowEntitlementRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::revoke_flow_entitlement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeFlowEntitlementResponse {
@@ -974,6 +1168,7 @@ pub struct Source {
     pub whitelist_cidr: Option<String>,
 }
 
+/// see [MediaConnect::start_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFlowRequest {
@@ -982,6 +1177,7 @@ pub struct StartFlowRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::start_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFlowResponse {
@@ -995,6 +1191,7 @@ pub struct StartFlowResponse {
     pub status: Option<String>,
 }
 
+/// see [MediaConnect::stop_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopFlowRequest {
@@ -1003,6 +1200,7 @@ pub struct StopFlowRequest {
     pub flow_arn: String,
 }
 
+/// see [MediaConnect::stop_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopFlowResponse {
@@ -1017,6 +1215,7 @@ pub struct StopFlowResponse {
 }
 
 /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+/// see [MediaConnect::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1061,6 +1260,7 @@ pub struct Transport {
     pub stream_id: Option<String>,
 }
 
+/// see [MediaConnect::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1128,6 +1328,7 @@ pub struct UpdateFailoverConfig {
 }
 
 /// <p>The entitlement fields that you want to update.</p>
+/// see [MediaConnect::update_flow_entitlement]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowEntitlementRequest {
@@ -1155,6 +1356,7 @@ pub struct UpdateFlowEntitlementRequest {
     pub subscribers: Option<Vec<String>>,
 }
 
+/// see [MediaConnect::update_flow_entitlement]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowEntitlementResponse {
@@ -1169,6 +1371,7 @@ pub struct UpdateFlowEntitlementResponse {
 }
 
 /// <p>The fields that you want to update in the output.</p>
+/// see [MediaConnect::update_flow_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowOutputRequest {
@@ -1224,6 +1427,7 @@ pub struct UpdateFlowOutputRequest {
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
+/// see [MediaConnect::update_flow_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowOutputResponse {
@@ -1238,6 +1442,7 @@ pub struct UpdateFlowOutputResponse {
 }
 
 /// <p>A request to update flow.</p>
+/// see [MediaConnect::update_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowRequest {
@@ -1249,6 +1454,7 @@ pub struct UpdateFlowRequest {
     pub source_failover_config: Option<UpdateFailoverConfig>,
 }
 
+/// see [MediaConnect::update_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowResponse {
@@ -1258,6 +1464,7 @@ pub struct UpdateFlowResponse {
 }
 
 /// <p>A request to update the source of a flow.</p>
+/// see [MediaConnect::update_flow_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowSourceRequest {
@@ -1309,6 +1516,7 @@ pub struct UpdateFlowSourceRequest {
     pub whitelist_cidr: Option<String>,
 }
 
+/// see [MediaConnect::update_flow_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowSourceResponse {
@@ -2946,7 +3154,7 @@ impl fmt::Display for UpdateFlowSourceError {
 impl Error for UpdateFlowSourceError {}
 /// Trait representing the capabilities of the AWS MediaConnect API. AWS MediaConnect clients implement this trait.
 #[async_trait]
-pub trait MediaConnect {
+pub trait MediaConnect: Clone + Sync + Send + 'static {
     /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
     async fn add_flow_outputs(
         &self,
@@ -3007,11 +3215,33 @@ pub trait MediaConnect {
         input: ListEntitlementsRequest,
     ) -> Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>>;
 
+    /// Auto-paginating version of `list_entitlements`
+    fn list_entitlements_pages<'a>(
+        &'a self,
+        mut input: ListEntitlementsRequest,
+    ) -> RusotoStream<'a, ListedEntitlement, ListEntitlementsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entitlements(input.clone())
+        }))
+    }
+
     /// <p>Displays a list of flows that are associated with this account. This request returns a paginated result.</p>
     async fn list_flows(
         &self,
         input: ListFlowsRequest,
     ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>>;
+
+    /// Auto-paginating version of `list_flows`
+    fn list_flows_pages<'a>(
+        &'a self,
+        mut input: ListFlowsRequest,
+    ) -> RusotoStream<'a, ListedFlow, ListFlowsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_flows(input.clone())
+        }))
+    }
 
     /// <p>Displays a list of all offerings that are available to this account in the current AWS Region. If you have an active reservation (which means you&#39;ve purchased an offering that has already started and hasn&#39;t expired yet), your account isn&#39;t eligible for other offerings.</p>
     async fn list_offerings(
@@ -3019,11 +3249,33 @@ pub trait MediaConnect {
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>;
 
+    /// Auto-paginating version of `list_offerings`
+    fn list_offerings_pages<'a>(
+        &'a self,
+        mut input: ListOfferingsRequest,
+    ) -> RusotoStream<'a, Offering, ListOfferingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_offerings(input.clone())
+        }))
+    }
+
     /// <p>Displays a list of all reservations that have been purchased by this account in the current AWS Region. This list includes all reservations in all states (such as active and expired).</p>
     async fn list_reservations(
         &self,
         input: ListReservationsRequest,
     ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>>;
+
+    /// Auto-paginating version of `list_reservations`
+    fn list_reservations_pages<'a>(
+        &'a self,
+        mut input: ListReservationsRequest,
+    ) -> RusotoStream<'a, Reservation, ListReservationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_reservations(input.clone())
+        }))
+    }
 
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
     async fn list_tags_for_resource(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [MarketplaceCatalog::cancel_change_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelChangeSetRequest {
@@ -36,6 +41,7 @@ pub struct CancelChangeSetRequest {
     pub change_set_id: String,
 }
 
+/// see [MarketplaceCatalog::cancel_change_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelChangeSetResponse {
@@ -124,6 +130,7 @@ pub struct ChangeSummary {
     pub error_detail_list: Option<Vec<ErrorDetail>>,
 }
 
+/// see [MarketplaceCatalog::describe_change_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChangeSetRequest {
@@ -135,6 +142,7 @@ pub struct DescribeChangeSetRequest {
     pub change_set_id: String,
 }
 
+/// see [MarketplaceCatalog::describe_change_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChangeSetResponse {
@@ -176,6 +184,7 @@ pub struct DescribeChangeSetResponse {
     pub status: Option<String>,
 }
 
+/// see [MarketplaceCatalog::describe_entity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRequest {
@@ -187,6 +196,7 @@ pub struct DescribeEntityRequest {
     pub entity_id: String,
 }
 
+/// see [MarketplaceCatalog::describe_entity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityResponse {
@@ -282,6 +292,7 @@ pub struct Filter {
     pub value_list: Option<Vec<String>>,
 }
 
+/// see [MarketplaceCatalog::list_change_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangeSetsRequest {
@@ -306,6 +317,7 @@ pub struct ListChangeSetsRequest {
     pub sort: Option<Sort>,
 }
 
+/// see [MarketplaceCatalog::list_change_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChangeSetsResponse {
@@ -319,6 +331,7 @@ pub struct ListChangeSetsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [MarketplaceCatalog::list_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesRequest {
@@ -346,6 +359,7 @@ pub struct ListEntitiesRequest {
     pub sort: Option<Sort>,
 }
 
+/// see [MarketplaceCatalog::list_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesResponse {
@@ -373,6 +387,7 @@ pub struct Sort {
     pub sort_order: Option<String>,
 }
 
+/// see [MarketplaceCatalog::start_change_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChangeSetRequest {
@@ -392,6 +407,7 @@ pub struct StartChangeSetRequest {
     pub client_request_token: Option<String>,
 }
 
+/// see [MarketplaceCatalog::start_change_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChangeSetResponse {
@@ -713,7 +729,7 @@ impl fmt::Display for StartChangeSetError {
 impl Error for StartChangeSetError {}
 /// Trait representing the capabilities of the AWS Marketplace Catalog API. AWS Marketplace Catalog clients implement this trait.
 #[async_trait]
-pub trait MarketplaceCatalog {
+pub trait MarketplaceCatalog: Clone + Sync + Send + 'static {
     /// <p>Used to cancel an open change request. Must be sent before the status of the request changes to <code>APPLYING</code>, the final stage of completing your change request. You can describe a change during the 60-day request history retention period for API calls.</p>
     async fn cancel_change_set(
         &self,

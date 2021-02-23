@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -64,6 +68,7 @@ pub struct Button {
     pub value: String,
 }
 
+/// see [LexRuntime::delete_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSessionRequest {
@@ -78,6 +83,7 @@ pub struct DeleteSessionRequest {
     pub user_id: String,
 }
 
+/// see [LexRuntime::delete_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSessionResponse {
@@ -157,6 +163,7 @@ pub struct GenericAttachment {
     pub title: Option<String>,
 }
 
+/// see [LexRuntime::get_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSessionRequest {
@@ -175,6 +182,7 @@ pub struct GetSessionRequest {
     pub user_id: String,
 }
 
+/// see [LexRuntime::get_session]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSessionResponse {
@@ -242,6 +250,7 @@ pub struct IntentSummary {
     pub slots: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [LexRuntime::post_content]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostContentRequest {
@@ -283,6 +292,7 @@ pub struct PostContentRequest {
     pub user_id: String,
 }
 
+/// see [LexRuntime::post_content]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct PostContentResponse {
     /// <p>A list of active contexts for the session. A context can be set when an intent is fulfilled or by calling the <code>PostContent</code>, <code>PostText</code>, or <code>PutSession</code> operation.</p> <p>You can use a context to control the intents that can follow up an intent, or to modify the operation of your application.</p>
@@ -319,6 +329,7 @@ pub struct PostContentResponse {
     pub slots: Option<String>,
 }
 
+/// see [LexRuntime::post_text]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostTextRequest {
@@ -348,6 +359,7 @@ pub struct PostTextRequest {
     pub user_id: String,
 }
 
+/// see [LexRuntime::post_text]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostTextResponse {
@@ -427,6 +439,7 @@ pub struct PredictedIntent {
     pub slots: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [LexRuntime::put_session]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSessionRequest {
@@ -461,6 +474,7 @@ pub struct PutSessionRequest {
     pub user_id: String,
 }
 
+/// see [LexRuntime::put_session]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct PutSessionResponse {
     /// <p>A list of active contexts for the session.</p>
@@ -857,7 +871,7 @@ impl fmt::Display for PutSessionError {
 impl Error for PutSessionError {}
 /// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.
 #[async_trait]
-pub trait LexRuntime {
+pub trait LexRuntime: Clone + Sync + Send + 'static {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>
     async fn delete_session(
         &self,

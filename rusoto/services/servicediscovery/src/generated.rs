@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl ServiceDiscoveryClient {
 }
 
 use serde_json;
+/// see [ServiceDiscovery::create_http_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHttpNamespaceRequest {
@@ -71,6 +76,7 @@ pub struct CreateHttpNamespaceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceDiscovery::create_http_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHttpNamespaceResponse {
@@ -80,6 +86,7 @@ pub struct CreateHttpNamespaceResponse {
     pub operation_id: Option<String>,
 }
 
+/// see [ServiceDiscovery::create_private_dns_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePrivateDnsNamespaceRequest {
@@ -103,6 +110,7 @@ pub struct CreatePrivateDnsNamespaceRequest {
     pub vpc: String,
 }
 
+/// see [ServiceDiscovery::create_private_dns_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePrivateDnsNamespaceResponse {
@@ -112,6 +120,7 @@ pub struct CreatePrivateDnsNamespaceResponse {
     pub operation_id: Option<String>,
 }
 
+/// see [ServiceDiscovery::create_public_dns_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicDnsNamespaceRequest {
@@ -132,6 +141,7 @@ pub struct CreatePublicDnsNamespaceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceDiscovery::create_public_dns_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePublicDnsNamespaceResponse {
@@ -141,6 +151,7 @@ pub struct CreatePublicDnsNamespaceResponse {
     pub operation_id: Option<String>,
 }
 
+/// see [ServiceDiscovery::create_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceRequest {
@@ -177,6 +188,7 @@ pub struct CreateServiceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceDiscovery::create_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServiceResponse {
@@ -186,6 +198,7 @@ pub struct CreateServiceResponse {
     pub service: Option<Service>,
 }
 
+/// see [ServiceDiscovery::delete_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {
@@ -194,6 +207,7 @@ pub struct DeleteNamespaceRequest {
     pub id: String,
 }
 
+/// see [ServiceDiscovery::delete_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamespaceResponse {
@@ -203,6 +217,7 @@ pub struct DeleteNamespaceResponse {
     pub operation_id: Option<String>,
 }
 
+/// see [ServiceDiscovery::delete_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceRequest {
@@ -211,10 +226,12 @@ pub struct DeleteServiceRequest {
     pub id: String,
 }
 
+/// see [ServiceDiscovery::delete_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceResponse {}
 
+/// see [ServiceDiscovery::deregister_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterInstanceRequest {
@@ -226,6 +243,7 @@ pub struct DeregisterInstanceRequest {
     pub service_id: String,
 }
 
+/// see [ServiceDiscovery::deregister_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterInstanceResponse {
@@ -235,6 +253,7 @@ pub struct DeregisterInstanceResponse {
     pub operation_id: Option<String>,
 }
 
+/// see [ServiceDiscovery::discover_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInstancesRequest {
@@ -262,6 +281,7 @@ pub struct DiscoverInstancesRequest {
     pub service_name: String,
 }
 
+/// see [ServiceDiscovery::discover_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscoverInstancesResponse {
@@ -313,6 +333,7 @@ pub struct DnsRecord {
     pub type_: String,
 }
 
+/// see [ServiceDiscovery::get_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceRequest {
@@ -324,6 +345,7 @@ pub struct GetInstanceRequest {
     pub service_id: String,
 }
 
+/// see [ServiceDiscovery::get_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceResponse {
@@ -333,6 +355,7 @@ pub struct GetInstanceResponse {
     pub instance: Option<Instance>,
 }
 
+/// see [ServiceDiscovery::get_instances_health_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesHealthStatusRequest {
@@ -353,6 +376,7 @@ pub struct GetInstancesHealthStatusRequest {
     pub service_id: String,
 }
 
+/// see [ServiceDiscovery::get_instances_health_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstancesHealthStatusResponse {
@@ -366,6 +390,7 @@ pub struct GetInstancesHealthStatusResponse {
     pub status: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [ServiceDiscovery::get_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamespaceRequest {
@@ -374,6 +399,7 @@ pub struct GetNamespaceRequest {
     pub id: String,
 }
 
+/// see [ServiceDiscovery::get_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNamespaceResponse {
@@ -383,6 +409,7 @@ pub struct GetNamespaceResponse {
     pub namespace: Option<Namespace>,
 }
 
+/// see [ServiceDiscovery::get_operation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationRequest {
@@ -391,6 +418,7 @@ pub struct GetOperationRequest {
     pub operation_id: String,
 }
 
+/// see [ServiceDiscovery::get_operation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationResponse {
@@ -400,6 +428,7 @@ pub struct GetOperationResponse {
     pub operation: Option<Operation>,
 }
 
+/// see [ServiceDiscovery::get_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceRequest {
@@ -408,6 +437,7 @@ pub struct GetServiceRequest {
     pub id: String,
 }
 
+/// see [ServiceDiscovery::get_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceResponse {
@@ -509,6 +539,7 @@ pub struct InstanceSummary {
     pub id: Option<String>,
 }
 
+/// see [ServiceDiscovery::list_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesRequest {
@@ -525,6 +556,23 @@ pub struct ListInstancesRequest {
     pub service_id: String,
 }
 
+impl Paged for ListInstancesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServiceDiscovery::list_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstancesResponse {
@@ -538,6 +586,29 @@ pub struct ListInstancesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListInstancesResponse {
+    type Item = InstanceSummary;
+
+    fn into_pagination_page(self) -> Vec<InstanceSummary> {
+        self.instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceDiscovery::list_namespaces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamespacesRequest {
@@ -555,6 +626,23 @@ pub struct ListNamespacesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListNamespacesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNamespacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServiceDiscovery::list_namespaces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNamespacesResponse {
@@ -568,6 +656,29 @@ pub struct ListNamespacesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListNamespacesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListNamespacesResponse {
+    type Item = NamespaceSummary;
+
+    fn into_pagination_page(self) -> Vec<NamespaceSummary> {
+        self.namespaces.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceDiscovery::list_operations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOperationsRequest {
@@ -585,6 +696,23 @@ pub struct ListOperationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOperationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOperationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServiceDiscovery::list_operations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOperationsResponse {
@@ -598,6 +726,29 @@ pub struct ListOperationsResponse {
     pub operations: Option<Vec<OperationSummary>>,
 }
 
+impl Paged for ListOperationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOperationsResponse {
+    type Item = OperationSummary;
+
+    fn into_pagination_page(self) -> Vec<OperationSummary> {
+        self.operations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceDiscovery::list_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
@@ -615,6 +766,23 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListServicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServiceDiscovery::list_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServicesResponse {
@@ -628,6 +796,29 @@ pub struct ListServicesResponse {
     pub services: Option<Vec<ServiceSummary>>,
 }
 
+impl Paged for ListServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListServicesResponse {
+    type Item = ServiceSummary;
+
+    fn into_pagination_page(self) -> Vec<ServiceSummary> {
+        self.services.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceDiscovery::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -636,6 +827,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ServiceDiscovery::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -822,6 +1014,7 @@ pub struct OperationSummary {
     pub status: Option<String>,
 }
 
+/// see [ServiceDiscovery::register_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
@@ -840,6 +1033,7 @@ pub struct RegisterInstanceRequest {
     pub service_id: String,
 }
 
+/// see [ServiceDiscovery::register_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterInstanceResponse {
@@ -982,6 +1176,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [ServiceDiscovery::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -993,10 +1188,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [ServiceDiscovery::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [ServiceDiscovery::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1008,10 +1205,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ServiceDiscovery::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [ServiceDiscovery::update_instance_custom_health_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceCustomHealthStatusRequest {
@@ -1026,6 +1225,7 @@ pub struct UpdateInstanceCustomHealthStatusRequest {
     pub status: String,
 }
 
+/// see [ServiceDiscovery::update_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceRequest {
@@ -1037,6 +1237,7 @@ pub struct UpdateServiceRequest {
     pub service: ServiceChange,
 }
 
+/// see [ServiceDiscovery::update_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceResponse {
@@ -2096,7 +2297,7 @@ impl fmt::Display for UpdateServiceError {
 impl Error for UpdateServiceError {}
 /// Trait representing the capabilities of the ServiceDiscovery API. ServiceDiscovery clients implement this trait.
 #[async_trait]
-pub trait ServiceDiscovery {
+pub trait ServiceDiscovery: Clone + Sync + Send + 'static {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current quota on the number of namespaces that you can create using the same AWS account, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map quotas</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     async fn create_http_namespace(
         &self,
@@ -2181,11 +2382,33 @@ pub trait ServiceDiscovery {
         input: ListInstancesRequest,
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>>;
 
+    /// Auto-paginating version of `list_instances`
+    fn list_instances_pages<'a>(
+        &'a self,
+        mut input: ListInstancesRequest,
+    ) -> RusotoStream<'a, InstanceSummary, ListInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instances(input.clone())
+        }))
+    }
+
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
     async fn list_namespaces(
         &self,
         input: ListNamespacesRequest,
     ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>;
+
+    /// Auto-paginating version of `list_namespaces`
+    fn list_namespaces_pages<'a>(
+        &'a self,
+        mut input: ListNamespacesRequest,
+    ) -> RusotoStream<'a, NamespaceSummary, ListNamespacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_namespaces(input.clone())
+        }))
+    }
 
     /// <p>Lists operations that match the criteria that you specify.</p>
     async fn list_operations(
@@ -2193,11 +2416,33 @@ pub trait ServiceDiscovery {
         input: ListOperationsRequest,
     ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
 
+    /// Auto-paginating version of `list_operations`
+    fn list_operations_pages<'a>(
+        &'a self,
+        mut input: ListOperationsRequest,
+    ) -> RusotoStream<'a, OperationSummary, ListOperationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_operations(input.clone())
+        }))
+    }
+
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
+
+    /// Auto-paginating version of `list_services`
+    fn list_services_pages<'a>(
+        &'a self,
+        mut input: ListServicesRequest,
+    ) -> RusotoStream<'a, ServiceSummary, ListServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_services(input.clone())
+        }))
+    }
 
     /// <p>Lists tags for the specified resource.</p>
     async fn list_tags_for_resource(

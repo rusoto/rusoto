@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -103,6 +107,7 @@ pub struct ClientPolicyTls {
     pub validation: TlsValidationContext,
 }
 
+/// see [AppMesh::create_gateway_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGatewayRouteInput {
@@ -132,6 +137,7 @@ pub struct CreateGatewayRouteInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::create_gateway_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGatewayRouteOutput {
@@ -141,6 +147,7 @@ pub struct CreateGatewayRouteOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_mesh]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
@@ -162,6 +169,7 @@ pub struct CreateMeshInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_mesh]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeshOutput {
@@ -171,6 +179,7 @@ pub struct CreateMeshOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteInput {
@@ -201,6 +210,7 @@ pub struct CreateRouteInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteOutput {
@@ -209,6 +219,7 @@ pub struct CreateRouteOutput {
     pub route: RouteData,
 }
 
+/// see [AppMesh::create_virtual_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualGatewayInput {
@@ -235,6 +246,7 @@ pub struct CreateVirtualGatewayInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::create_virtual_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualGatewayOutput {
@@ -244,6 +256,7 @@ pub struct CreateVirtualGatewayOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
@@ -271,6 +284,7 @@ pub struct CreateVirtualNodeInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualNodeOutput {
@@ -280,6 +294,7 @@ pub struct CreateVirtualNodeOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_router]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualRouterInput {
@@ -307,6 +322,7 @@ pub struct CreateVirtualRouterInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_router]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualRouterOutput {
@@ -316,6 +332,7 @@ pub struct CreateVirtualRouterOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualServiceInput {
@@ -343,6 +360,7 @@ pub struct CreateVirtualServiceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::create_virtual_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualServiceOutput {
@@ -351,6 +369,7 @@ pub struct CreateVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
+/// see [AppMesh::delete_gateway_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayRouteInput {
@@ -369,6 +388,7 @@ pub struct DeleteGatewayRouteInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::delete_gateway_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGatewayRouteOutput {
@@ -378,6 +398,7 @@ pub struct DeleteGatewayRouteOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_mesh]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
@@ -387,6 +408,7 @@ pub struct DeleteMeshInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_mesh]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMeshOutput {
@@ -396,6 +418,7 @@ pub struct DeleteMeshOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteInput {
@@ -415,6 +438,7 @@ pub struct DeleteRouteInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRouteOutput {
@@ -423,6 +447,7 @@ pub struct DeleteRouteOutput {
     pub route: RouteData,
 }
 
+/// see [AppMesh::delete_virtual_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualGatewayInput {
@@ -438,6 +463,7 @@ pub struct DeleteVirtualGatewayInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::delete_virtual_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualGatewayOutput {
@@ -447,6 +473,7 @@ pub struct DeleteVirtualGatewayOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
@@ -463,6 +490,7 @@ pub struct DeleteVirtualNodeInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualNodeOutput {
@@ -472,6 +500,7 @@ pub struct DeleteVirtualNodeOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_router]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualRouterInput {
@@ -488,6 +517,7 @@ pub struct DeleteVirtualRouterInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_router]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualRouterOutput {
@@ -497,6 +527,7 @@ pub struct DeleteVirtualRouterOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualServiceInput {
@@ -513,6 +544,7 @@ pub struct DeleteVirtualServiceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::delete_virtual_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualServiceOutput {
@@ -521,6 +553,7 @@ pub struct DeleteVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
+/// see [AppMesh::describe_gateway_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGatewayRouteInput {
@@ -539,6 +572,7 @@ pub struct DescribeGatewayRouteInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::describe_gateway_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGatewayRouteOutput {
@@ -548,6 +582,7 @@ pub struct DescribeGatewayRouteOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_mesh]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
@@ -561,6 +596,7 @@ pub struct DescribeMeshInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_mesh]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMeshOutput {
@@ -570,6 +606,7 @@ pub struct DescribeMeshOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteInput {
@@ -589,6 +626,7 @@ pub struct DescribeRouteInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRouteOutput {
@@ -597,6 +635,7 @@ pub struct DescribeRouteOutput {
     pub route: RouteData,
 }
 
+/// see [AppMesh::describe_virtual_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualGatewayInput {
@@ -612,6 +651,7 @@ pub struct DescribeVirtualGatewayInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::describe_virtual_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualGatewayOutput {
@@ -621,6 +661,7 @@ pub struct DescribeVirtualGatewayOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
@@ -637,6 +678,7 @@ pub struct DescribeVirtualNodeInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualNodeOutput {
@@ -646,6 +688,7 @@ pub struct DescribeVirtualNodeOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_router]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualRouterInput {
@@ -662,6 +705,7 @@ pub struct DescribeVirtualRouterInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_router]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualRouterOutput {
@@ -671,6 +715,7 @@ pub struct DescribeVirtualRouterOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualServiceInput {
@@ -687,6 +732,7 @@ pub struct DescribeVirtualServiceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::describe_virtual_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualServiceOutput {
@@ -1154,6 +1200,7 @@ pub struct HttpTimeout {
     pub per_request: Option<Duration>,
 }
 
+/// see [AppMesh::list_gateway_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGatewayRoutesInput {
@@ -1177,6 +1224,23 @@ pub struct ListGatewayRoutesInput {
     pub virtual_gateway_name: String,
 }
 
+impl Paged for ListGatewayRoutesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGatewayRoutesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AppMesh::list_gateway_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGatewayRoutesOutput {
@@ -1189,7 +1253,30 @@ pub struct ListGatewayRoutesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListGatewayRoutesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListGatewayRoutesOutput {
+    type Item = GatewayRouteRef;
+
+    fn into_pagination_page(self) -> Vec<GatewayRouteRef> {
+        self.gateway_routes
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_meshes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeshesInput {
@@ -1203,7 +1290,24 @@ pub struct ListMeshesInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMeshesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMeshesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_meshes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeshesOutput {
@@ -1216,7 +1320,30 @@ pub struct ListMeshesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMeshesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMeshesOutput {
+    type Item = MeshRef;
+
+    fn into_pagination_page(self) -> Vec<MeshRef> {
+        self.meshes
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_routes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutesInput {
@@ -1240,7 +1367,24 @@ pub struct ListRoutesInput {
     pub virtual_router_name: String,
 }
 
+impl Paged for ListRoutesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRoutesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_routes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutesOutput {
@@ -1253,7 +1397,30 @@ pub struct ListRoutesOutput {
     pub routes: Vec<RouteRef>,
 }
 
+impl Paged for ListRoutesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRoutesOutput {
+    type Item = RouteRef;
+
+    fn into_pagination_page(self) -> Vec<RouteRef> {
+        self.routes
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -1270,7 +1437,24 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -1283,6 +1467,29 @@ pub struct ListTagsForResourceOutput {
     pub tags: Vec<TagRef>,
 }
 
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceOutput {
+    type Item = TagRef;
+
+    fn into_pagination_page(self) -> Vec<TagRef> {
+        self.tags
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AppMesh::list_virtual_gateways]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualGatewaysInput {
@@ -1303,6 +1510,23 @@ pub struct ListVirtualGatewaysInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListVirtualGatewaysInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualGatewaysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AppMesh::list_virtual_gateways]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualGatewaysOutput {
@@ -1315,7 +1539,30 @@ pub struct ListVirtualGatewaysOutput {
     pub virtual_gateways: Vec<VirtualGatewayRef>,
 }
 
+impl Paged for ListVirtualGatewaysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListVirtualGatewaysOutput {
+    type Item = VirtualGatewayRef;
+
+    fn into_pagination_page(self) -> Vec<VirtualGatewayRef> {
+        self.virtual_gateways
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_nodes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
@@ -1336,7 +1583,24 @@ pub struct ListVirtualNodesInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListVirtualNodesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualNodesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_nodes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualNodesOutput {
@@ -1349,7 +1613,30 @@ pub struct ListVirtualNodesOutput {
     pub virtual_nodes: Vec<VirtualNodeRef>,
 }
 
+impl Paged for ListVirtualNodesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListVirtualNodesOutput {
+    type Item = VirtualNodeRef;
+
+    fn into_pagination_page(self) -> Vec<VirtualNodeRef> {
+        self.virtual_nodes
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_routers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualRoutersInput {
@@ -1370,7 +1657,24 @@ pub struct ListVirtualRoutersInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListVirtualRoutersInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualRoutersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_routers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualRoutersOutput {
@@ -1383,7 +1687,30 @@ pub struct ListVirtualRoutersOutput {
     pub virtual_routers: Vec<VirtualRouterRef>,
 }
 
+impl Paged for ListVirtualRoutersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListVirtualRoutersOutput {
+    type Item = VirtualRouterRef;
+
+    fn into_pagination_page(self) -> Vec<VirtualRouterRef> {
+        self.virtual_routers
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualServicesInput {
@@ -1404,7 +1731,24 @@ pub struct ListVirtualServicesInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListVirtualServicesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualServicesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::list_virtual_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualServicesOutput {
@@ -1415,6 +1759,28 @@ pub struct ListVirtualServicesOutput {
     /// <p>The list of existing virtual services for the specified service mesh.</p>
     #[serde(rename = "virtualServices")]
     pub virtual_services: Vec<VirtualServiceRef>,
+}
+
+impl Paged for ListVirtualServicesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListVirtualServicesOutput {
+    type Item = VirtualServiceRef;
+
+    fn into_pagination_page(self) -> Vec<VirtualServiceRef> {
+        self.virtual_services
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>An object that represents a listener for a virtual node.</p>
@@ -1763,6 +2129,7 @@ pub struct TagRef {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -1775,6 +2142,7 @@ pub struct TagResourceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -1846,6 +2214,7 @@ pub struct TlsValidationContextTrust {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -1858,10 +2227,12 @@ pub struct UntagResourceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// see [AppMesh::update_gateway_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayRouteInput {
@@ -1887,6 +2258,7 @@ pub struct UpdateGatewayRouteInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::update_gateway_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGatewayRouteOutput {
@@ -1896,6 +2268,7 @@ pub struct UpdateGatewayRouteOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_mesh]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
@@ -1913,6 +2286,7 @@ pub struct UpdateMeshInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_mesh]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMeshOutput {
@@ -1921,6 +2295,7 @@ pub struct UpdateMeshOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_route]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteInput {
@@ -1947,6 +2322,7 @@ pub struct UpdateRouteInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_route]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteOutput {
@@ -1955,6 +2331,7 @@ pub struct UpdateRouteOutput {
     pub route: RouteData,
 }
 
+/// see [AppMesh::update_virtual_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualGatewayInput {
@@ -1977,6 +2354,7 @@ pub struct UpdateVirtualGatewayInput {
     pub virtual_gateway_name: String,
 }
 
+/// see [AppMesh::update_virtual_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualGatewayOutput {
@@ -1986,6 +2364,7 @@ pub struct UpdateVirtualGatewayOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
@@ -2009,6 +2388,7 @@ pub struct UpdateVirtualNodeInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualNodeOutput {
@@ -2018,6 +2398,7 @@ pub struct UpdateVirtualNodeOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_router]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualRouterInput {
@@ -2041,6 +2422,7 @@ pub struct UpdateVirtualRouterInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_router]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualRouterOutput {
@@ -2050,6 +2432,7 @@ pub struct UpdateVirtualRouterOutput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_service]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualServiceInput {
@@ -2073,6 +2456,7 @@ pub struct UpdateVirtualServiceInput {
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// see [AppMesh::update_virtual_service]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualServiceOutput {
@@ -5351,7 +5735,7 @@ impl fmt::Display for UpdateVirtualServiceError {
 impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 #[async_trait]
-pub trait AppMesh {
+pub trait AppMesh: Clone + Sync + Send + 'static {
     /// <p>Creates a gateway route.</p> <p>A gateway route is attached to a virtual gateway and routes traffic to an existing virtual service. If a route matches a request, it can distribute traffic to a target virtual service.</p> <p>For more information about gateway routes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html">Gateway routes</a>.</p>
     async fn create_gateway_route(
         &self,
@@ -5484,11 +5868,33 @@ pub trait AppMesh {
         input: ListGatewayRoutesInput,
     ) -> Result<ListGatewayRoutesOutput, RusotoError<ListGatewayRoutesError>>;
 
+    /// Auto-paginating version of `list_gateway_routes`
+    fn list_gateway_routes_pages<'a>(
+        &'a self,
+        mut input: ListGatewayRoutesInput,
+    ) -> RusotoStream<'a, GatewayRouteRef, ListGatewayRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_gateway_routes(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of existing service meshes.</p>
     async fn list_meshes(
         &self,
         input: ListMeshesInput,
     ) -> Result<ListMeshesOutput, RusotoError<ListMeshesError>>;
+
+    /// Auto-paginating version of `list_meshes`
+    fn list_meshes_pages<'a>(
+        &'a self,
+        mut input: ListMeshesInput,
+    ) -> RusotoStream<'a, MeshRef, ListMeshesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_meshes(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of existing routes in a service mesh.</p>
     async fn list_routes(
@@ -5496,11 +5902,33 @@ pub trait AppMesh {
         input: ListRoutesInput,
     ) -> Result<ListRoutesOutput, RusotoError<ListRoutesError>>;
 
+    /// Auto-paginating version of `list_routes`
+    fn list_routes_pages<'a>(
+        &'a self,
+        mut input: ListRoutesInput,
+    ) -> RusotoStream<'a, RouteRef, ListRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_routes(input.clone())
+        }))
+    }
+
     /// <p>List the tags for an App Mesh resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, TagRef, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of existing virtual gateways in a service mesh.</p>
     async fn list_virtual_gateways(
@@ -5508,11 +5936,33 @@ pub trait AppMesh {
         input: ListVirtualGatewaysInput,
     ) -> Result<ListVirtualGatewaysOutput, RusotoError<ListVirtualGatewaysError>>;
 
+    /// Auto-paginating version of `list_virtual_gateways`
+    fn list_virtual_gateways_pages<'a>(
+        &'a self,
+        mut input: ListVirtualGatewaysInput,
+    ) -> RusotoStream<'a, VirtualGatewayRef, ListVirtualGatewaysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_gateways(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of existing virtual nodes.</p>
     async fn list_virtual_nodes(
         &self,
         input: ListVirtualNodesInput,
     ) -> Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>>;
+
+    /// Auto-paginating version of `list_virtual_nodes`
+    fn list_virtual_nodes_pages<'a>(
+        &'a self,
+        mut input: ListVirtualNodesInput,
+    ) -> RusotoStream<'a, VirtualNodeRef, ListVirtualNodesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_nodes(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of existing virtual routers in a service mesh.</p>
     async fn list_virtual_routers(
@@ -5520,11 +5970,33 @@ pub trait AppMesh {
         input: ListVirtualRoutersInput,
     ) -> Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>>;
 
+    /// Auto-paginating version of `list_virtual_routers`
+    fn list_virtual_routers_pages<'a>(
+        &'a self,
+        mut input: ListVirtualRoutersInput,
+    ) -> RusotoStream<'a, VirtualRouterRef, ListVirtualRoutersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_routers(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of existing virtual services in a service mesh.</p>
     async fn list_virtual_services(
         &self,
         input: ListVirtualServicesInput,
     ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>>;
+
+    /// Auto-paginating version of `list_virtual_services`
+    fn list_virtual_services_pages<'a>(
+        &'a self,
+        mut input: ListVirtualServicesInput,
+    ) -> RusotoStream<'a, VirtualServiceRef, ListVirtualServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_services(input.clone())
+        }))
+    }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource aren't specified in the request parameters, they aren't changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
     async fn tag_resource(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl EmrClient {
 }
 
 use serde_json;
+/// see [Emr::add_instance_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceFleetInput {
@@ -62,6 +67,7 @@ pub struct AddInstanceFleetInput {
     pub instance_fleet: InstanceFleetConfig,
 }
 
+/// see [Emr::add_instance_fleet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceFleetOutput {
@@ -80,6 +86,7 @@ pub struct AddInstanceFleetOutput {
 }
 
 /// <p>Input to an AddInstanceGroups call.</p>
+/// see [Emr::add_instance_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceGroupsInput {
@@ -92,6 +99,7 @@ pub struct AddInstanceGroupsInput {
 }
 
 /// <p>Output from an AddInstanceGroups call.</p>
+/// see [Emr::add_instance_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceGroupsOutput {
@@ -110,6 +118,7 @@ pub struct AddInstanceGroupsOutput {
 }
 
 /// <p> The input argument to the <a>AddJobFlowSteps</a> operation. </p>
+/// see [Emr::add_job_flow_steps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddJobFlowStepsInput {
@@ -122,6 +131,7 @@ pub struct AddJobFlowStepsInput {
 }
 
 /// <p> The output for the <a>AddJobFlowSteps</a> operation. </p>
+/// see [Emr::add_job_flow_steps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddJobFlowStepsOutput {
@@ -132,6 +142,7 @@ pub struct AddJobFlowStepsOutput {
 }
 
 /// <p>This input identifies a cluster and a list of tags to attach.</p>
+/// see [Emr::add_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -144,6 +155,7 @@ pub struct AddTagsInput {
 }
 
 /// <p>This output indicates the result of adding tags to a resource.</p>
+/// see [Emr::add_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {}
@@ -291,6 +303,7 @@ pub struct CancelStepsInfo {
 }
 
 /// <p>The input argument to the <a>CancelSteps</a> operation.</p>
+/// see [Emr::cancel_steps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelStepsInput {
@@ -307,6 +320,7 @@ pub struct CancelStepsInput {
 }
 
 /// <p> The output for the <a>CancelSteps</a> operation. </p>
+/// see [Emr::cancel_steps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelStepsOutput {
@@ -616,6 +630,7 @@ pub struct Configuration {
     pub properties: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Emr::create_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityConfigurationInput {
@@ -627,6 +642,7 @@ pub struct CreateSecurityConfigurationInput {
     pub security_configuration: String,
 }
 
+/// see [Emr::create_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityConfigurationOutput {
@@ -638,6 +654,7 @@ pub struct CreateSecurityConfigurationOutput {
     pub name: String,
 }
 
+/// see [Emr::create_studio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStudioInput {
@@ -679,6 +696,7 @@ pub struct CreateStudioInput {
     pub workspace_security_group_id: String,
 }
 
+/// see [Emr::create_studio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStudioOutput {
@@ -692,6 +710,7 @@ pub struct CreateStudioOutput {
     pub url: Option<String>,
 }
 
+/// see [Emr::create_studio_session_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStudioSessionMappingInput {
@@ -714,6 +733,7 @@ pub struct CreateStudioSessionMappingInput {
     pub studio_id: String,
 }
 
+/// see [Emr::delete_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationInput {
@@ -722,10 +742,12 @@ pub struct DeleteSecurityConfigurationInput {
     pub name: String,
 }
 
+/// see [Emr::delete_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityConfigurationOutput {}
 
+/// see [Emr::delete_studio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStudioInput {
@@ -734,6 +756,7 @@ pub struct DeleteStudioInput {
     pub studio_id: String,
 }
 
+/// see [Emr::delete_studio_session_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStudioSessionMappingInput {
@@ -754,6 +777,7 @@ pub struct DeleteStudioSessionMappingInput {
 }
 
 /// <p>This input determines which cluster to describe.</p>
+/// see [Emr::describe_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterInput {
@@ -763,6 +787,7 @@ pub struct DescribeClusterInput {
 }
 
 /// <p>This output contains the description of the cluster.</p>
+/// see [Emr::describe_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterOutput {
@@ -773,6 +798,7 @@ pub struct DescribeClusterOutput {
 }
 
 /// <p> The input for the <a>DescribeJobFlows</a> operation. </p>
+/// see [Emr::describe_job_flows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobFlowsInput {
@@ -795,6 +821,7 @@ pub struct DescribeJobFlowsInput {
 }
 
 /// <p> The output for the <a>DescribeJobFlows</a> operation. </p>
+/// see [Emr::describe_job_flows]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobFlowsOutput {
@@ -804,6 +831,7 @@ pub struct DescribeJobFlowsOutput {
     pub job_flows: Option<Vec<JobFlowDetail>>,
 }
 
+/// see [Emr::describe_notebook_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotebookExecutionInput {
@@ -812,6 +840,7 @@ pub struct DescribeNotebookExecutionInput {
     pub notebook_execution_id: String,
 }
 
+/// see [Emr::describe_notebook_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotebookExecutionOutput {
@@ -821,6 +850,7 @@ pub struct DescribeNotebookExecutionOutput {
     pub notebook_execution: Option<NotebookExecution>,
 }
 
+/// see [Emr::describe_security_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityConfigurationInput {
@@ -829,6 +859,7 @@ pub struct DescribeSecurityConfigurationInput {
     pub name: String,
 }
 
+/// see [Emr::describe_security_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityConfigurationOutput {
@@ -847,6 +878,7 @@ pub struct DescribeSecurityConfigurationOutput {
 }
 
 /// <p>This input determines which step to describe.</p>
+/// see [Emr::describe_step]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStepInput {
@@ -859,6 +891,7 @@ pub struct DescribeStepInput {
 }
 
 /// <p>This output contains the description of the cluster step.</p>
+/// see [Emr::describe_step]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStepOutput {
@@ -868,6 +901,7 @@ pub struct DescribeStepOutput {
     pub step: Option<Step>,
 }
 
+/// see [Emr::describe_studio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStudioInput {
@@ -876,6 +910,7 @@ pub struct DescribeStudioInput {
     pub studio_id: String,
 }
 
+/// see [Emr::describe_studio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStudioOutput {
@@ -1024,10 +1059,12 @@ pub struct FailureDetails {
     pub reason: Option<String>,
 }
 
+/// see [Emr::get_block_public_access_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlockPublicAccessConfigurationInput {}
 
+/// see [Emr::get_block_public_access_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlockPublicAccessConfigurationOutput {
@@ -1039,6 +1076,7 @@ pub struct GetBlockPublicAccessConfigurationOutput {
     pub block_public_access_configuration_metadata: BlockPublicAccessConfigurationMetadata,
 }
 
+/// see [Emr::get_managed_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetManagedScalingPolicyInput {
@@ -1047,6 +1085,7 @@ pub struct GetManagedScalingPolicyInput {
     pub cluster_id: String,
 }
 
+/// see [Emr::get_managed_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetManagedScalingPolicyOutput {
@@ -1056,6 +1095,7 @@ pub struct GetManagedScalingPolicyOutput {
     pub managed_scaling_policy: Option<ManagedScalingPolicy>,
 }
 
+/// see [Emr::get_studio_session_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStudioSessionMappingInput {
@@ -1075,6 +1115,7 @@ pub struct GetStudioSessionMappingInput {
     pub studio_id: String,
 }
 
+/// see [Emr::get_studio_session_mapping]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStudioSessionMappingOutput {
@@ -1964,6 +2005,7 @@ pub struct KeyValue {
 }
 
 /// <p>This input determines which bootstrap actions to retrieve.</p>
+/// see [Emr::list_bootstrap_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBootstrapActionsInput {
@@ -1976,7 +2018,24 @@ pub struct ListBootstrapActionsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListBootstrapActionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListBootstrapActionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>This output contains the bootstrap actions detail.</p>
+/// see [Emr::list_bootstrap_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBootstrapActionsOutput {
@@ -1990,7 +2049,30 @@ pub struct ListBootstrapActionsOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListBootstrapActionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListBootstrapActionsOutput {
+    type Item = Command;
+
+    fn into_pagination_page(self) -> Vec<Command> {
+        self.bootstrap_actions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>This input determines how the ListClusters action filters the list of clusters that it returns.</p>
+/// see [Emr::list_clusters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersInput {
@@ -2012,7 +2094,24 @@ pub struct ListClustersInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListClustersInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListClustersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>This contains a ClusterSummaryList with the cluster details; for example, the cluster IDs, names, and status.</p>
+/// see [Emr::list_clusters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersOutput {
@@ -2026,6 +2125,29 @@ pub struct ListClustersOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListClustersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListClustersOutput {
+    type Item = ClusterSummary;
+
+    fn into_pagination_page(self) -> Vec<ClusterSummary> {
+        self.clusters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Emr::list_instance_fleets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceFleetsInput {
@@ -2038,6 +2160,23 @@ pub struct ListInstanceFleetsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstanceFleetsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceFleetsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [Emr::list_instance_fleets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceFleetsOutput {
@@ -2051,7 +2190,30 @@ pub struct ListInstanceFleetsOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstanceFleetsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListInstanceFleetsOutput {
+    type Item = InstanceFleet;
+
+    fn into_pagination_page(self) -> Vec<InstanceFleet> {
+        self.instance_fleets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>This input determines which instance groups to retrieve.</p>
+/// see [Emr::list_instance_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceGroupsInput {
@@ -2064,7 +2226,24 @@ pub struct ListInstanceGroupsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstanceGroupsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>This input determines which instance groups to retrieve.</p>
+/// see [Emr::list_instance_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceGroupsOutput {
@@ -2078,7 +2257,30 @@ pub struct ListInstanceGroupsOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstanceGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListInstanceGroupsOutput {
+    type Item = InstanceGroup;
+
+    fn into_pagination_page(self) -> Vec<InstanceGroup> {
+        self.instance_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>This input determines which instances to list.</p>
+/// see [Emr::list_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesInput {
@@ -2111,7 +2313,24 @@ pub struct ListInstancesInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstancesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstancesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>This output contains the list of instances.</p>
+/// see [Emr::list_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstancesOutput {
@@ -2125,6 +2344,29 @@ pub struct ListInstancesOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListInstancesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListInstancesOutput {
+    type Item = Instance;
+
+    fn into_pagination_page(self) -> Vec<Instance> {
+        self.instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Emr::list_notebook_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotebookExecutionsInput {
@@ -2150,6 +2392,23 @@ pub struct ListNotebookExecutionsInput {
     pub to: Option<f64>,
 }
 
+impl Paged for ListNotebookExecutionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListNotebookExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [Emr::list_notebook_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotebookExecutionsOutput {
@@ -2163,6 +2422,29 @@ pub struct ListNotebookExecutionsOutput {
     pub notebook_executions: Option<Vec<NotebookExecutionSummary>>,
 }
 
+impl Paged for ListNotebookExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListNotebookExecutionsOutput {
+    type Item = NotebookExecutionSummary;
+
+    fn into_pagination_page(self) -> Vec<NotebookExecutionSummary> {
+        self.notebook_executions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Emr::list_security_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityConfigurationsInput {
@@ -2172,6 +2454,23 @@ pub struct ListSecurityConfigurationsInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListSecurityConfigurationsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListSecurityConfigurationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [Emr::list_security_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityConfigurationsOutput {
@@ -2185,7 +2484,30 @@ pub struct ListSecurityConfigurationsOutput {
     pub security_configurations: Option<Vec<SecurityConfigurationSummary>>,
 }
 
+impl Paged for ListSecurityConfigurationsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListSecurityConfigurationsOutput {
+    type Item = SecurityConfigurationSummary;
+
+    fn into_pagination_page(self) -> Vec<SecurityConfigurationSummary> {
+        self.security_configurations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>This input determines which steps to list.</p>
+/// see [Emr::list_steps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStepsInput {
@@ -2206,7 +2528,24 @@ pub struct ListStepsInput {
     pub step_states: Option<Vec<String>>,
 }
 
+impl Paged for ListStepsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListStepsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>This output contains the list of steps returned in reverse order. This means that the last step is the first element in the list.</p>
+/// see [Emr::list_steps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStepsOutput {
@@ -2220,6 +2559,29 @@ pub struct ListStepsOutput {
     pub steps: Option<Vec<StepSummary>>,
 }
 
+impl Paged for ListStepsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListStepsOutput {
+    type Item = StepSummary;
+
+    fn into_pagination_page(self) -> Vec<StepSummary> {
+        self.steps.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Emr::list_studio_session_mappings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStudioSessionMappingsInput {
@@ -2237,6 +2599,23 @@ pub struct ListStudioSessionMappingsInput {
     pub studio_id: Option<String>,
 }
 
+impl Paged for ListStudioSessionMappingsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListStudioSessionMappingsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [Emr::list_studio_session_mappings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStudioSessionMappingsOutput {
@@ -2250,6 +2629,29 @@ pub struct ListStudioSessionMappingsOutput {
     pub session_mappings: Option<Vec<SessionMappingSummary>>,
 }
 
+impl Paged for ListStudioSessionMappingsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListStudioSessionMappingsOutput {
+    type Item = SessionMappingSummary;
+
+    fn into_pagination_page(self) -> Vec<SessionMappingSummary> {
+        self.session_mappings.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Emr::list_studios]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStudiosInput {
@@ -2259,6 +2661,23 @@ pub struct ListStudiosInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListStudiosInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListStudiosInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
+/// see [Emr::list_studios]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStudiosOutput {
@@ -2270,6 +2689,28 @@ pub struct ListStudiosOutput {
     #[serde(rename = "Studios")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub studios: Option<Vec<StudioSummary>>,
+}
+
+impl Paged for ListStudiosOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListStudiosOutput {
+    type Item = StudioSummary;
+
+    fn into_pagination_page(self) -> Vec<StudioSummary> {
+        self.studios.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p> Managed scaling policy for an Amazon EMR cluster. The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
@@ -2294,6 +2735,7 @@ pub struct MetricDimension {
     pub value: Option<String>,
 }
 
+/// see [Emr::modify_cluster]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterInput {
@@ -2306,6 +2748,7 @@ pub struct ModifyClusterInput {
     pub step_concurrency_level: Option<i64>,
 }
 
+/// see [Emr::modify_cluster]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClusterOutput {
@@ -2315,6 +2758,7 @@ pub struct ModifyClusterOutput {
     pub step_concurrency_level: Option<i64>,
 }
 
+/// see [Emr::modify_instance_fleet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceFleetInput {
@@ -2327,6 +2771,7 @@ pub struct ModifyInstanceFleetInput {
 }
 
 /// <p>Change the size of some instance groups.</p>
+/// see [Emr::modify_instance_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceGroupsInput {
@@ -2473,6 +2918,7 @@ pub struct PortRange {
     pub min_range: i64,
 }
 
+/// see [Emr::put_auto_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAutoScalingPolicyInput {
@@ -2487,6 +2933,7 @@ pub struct PutAutoScalingPolicyInput {
     pub instance_group_id: String,
 }
 
+/// see [Emr::put_auto_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAutoScalingPolicyOutput {
@@ -2508,6 +2955,7 @@ pub struct PutAutoScalingPolicyOutput {
     pub instance_group_id: Option<String>,
 }
 
+/// see [Emr::put_block_public_access_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBlockPublicAccessConfigurationInput {
@@ -2516,10 +2964,12 @@ pub struct PutBlockPublicAccessConfigurationInput {
     pub block_public_access_configuration: BlockPublicAccessConfiguration,
 }
 
+/// see [Emr::put_block_public_access_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBlockPublicAccessConfigurationOutput {}
 
+/// see [Emr::put_managed_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutManagedScalingPolicyInput {
@@ -2531,10 +2981,12 @@ pub struct PutManagedScalingPolicyInput {
     pub managed_scaling_policy: ManagedScalingPolicy,
 }
 
+/// see [Emr::put_managed_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutManagedScalingPolicyOutput {}
 
+/// see [Emr::remove_auto_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAutoScalingPolicyInput {
@@ -2546,10 +2998,12 @@ pub struct RemoveAutoScalingPolicyInput {
     pub instance_group_id: String,
 }
 
+/// see [Emr::remove_auto_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAutoScalingPolicyOutput {}
 
+/// see [Emr::remove_managed_scaling_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveManagedScalingPolicyInput {
@@ -2558,11 +3012,13 @@ pub struct RemoveManagedScalingPolicyInput {
     pub cluster_id: String,
 }
 
+/// see [Emr::remove_managed_scaling_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveManagedScalingPolicyOutput {}
 
 /// <p>This input identifies a cluster and a list of tags to remove.</p>
+/// see [Emr::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
@@ -2575,11 +3031,13 @@ pub struct RemoveTagsInput {
 }
 
 /// <p>This output indicates the result of removing tags from a resource.</p>
+/// see [Emr::remove_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 /// <p> Input to the <a>RunJobFlow</a> operation. </p>
+/// see [Emr::run_job_flow]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunJobFlowInput {
@@ -2692,6 +3150,7 @@ pub struct RunJobFlowInput {
 }
 
 /// <p> The result of the <a>RunJobFlow</a> operation. </p>
+/// see [Emr::run_job_flow]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunJobFlowOutput {
@@ -2845,6 +3304,7 @@ pub struct SessionMappingSummary {
 }
 
 /// <p> The input argument to the <a>TerminationProtection</a> operation. </p>
+/// see [Emr::set_termination_protection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTerminationProtectionInput {
@@ -2857,6 +3317,7 @@ pub struct SetTerminationProtectionInput {
 }
 
 /// <p>The input to the SetVisibleToAllUsers action.</p>
+/// see [Emr::set_visible_to_all_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetVisibleToAllUsersInput {
@@ -2916,6 +3377,7 @@ pub struct SpotProvisioningSpecification {
     pub timeout_duration_minutes: i64,
 }
 
+/// see [Emr::start_notebook_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNotebookExecutionInput {
@@ -2949,6 +3411,7 @@ pub struct StartNotebookExecutionInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Emr::start_notebook_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartNotebookExecutionOutput {
@@ -3115,6 +3578,7 @@ pub struct StepTimeline {
     pub start_date_time: Option<f64>,
 }
 
+/// see [Emr::stop_notebook_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopNotebookExecutionInput {
@@ -3247,6 +3711,7 @@ pub struct Tag {
 }
 
 /// <p> Input to the <a>TerminateJobFlows</a> operation. </p>
+/// see [Emr::terminate_job_flows]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateJobFlowsInput {
@@ -3255,6 +3720,7 @@ pub struct TerminateJobFlowsInput {
     pub job_flow_ids: Vec<String>,
 }
 
+/// see [Emr::update_studio_session_mapping]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStudioSessionMappingInput {
@@ -4942,7 +5408,7 @@ impl fmt::Display for UpdateStudioSessionMappingError {
 impl Error for UpdateStudioSessionMappingError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
 #[async_trait]
-pub trait Emr {
+pub trait Emr: Clone + Sync + Send + 'static {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
     async fn add_instance_fleet(
         &self,
@@ -5071,11 +5537,33 @@ pub trait Emr {
         input: ListBootstrapActionsInput,
     ) -> Result<ListBootstrapActionsOutput, RusotoError<ListBootstrapActionsError>>;
 
+    /// Auto-paginating version of `list_bootstrap_actions`
+    fn list_bootstrap_actions_pages<'a>(
+        &'a self,
+        mut input: ListBootstrapActionsInput,
+    ) -> RusotoStream<'a, Command, ListBootstrapActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bootstrap_actions(input.clone())
+        }))
+    }
+
     /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
     async fn list_clusters(
         &self,
         input: ListClustersInput,
     ) -> Result<ListClustersOutput, RusotoError<ListClustersError>>;
+
+    /// Auto-paginating version of `list_clusters`
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersInput,
+    ) -> RusotoStream<'a, ClusterSummary, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
+    }
 
     /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     async fn list_instance_fleets(
@@ -5083,11 +5571,33 @@ pub trait Emr {
         input: ListInstanceFleetsInput,
     ) -> Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>>;
 
+    /// Auto-paginating version of `list_instance_fleets`
+    fn list_instance_fleets_pages<'a>(
+        &'a self,
+        mut input: ListInstanceFleetsInput,
+    ) -> RusotoStream<'a, InstanceFleet, ListInstanceFleetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_fleets(input.clone())
+        }))
+    }
+
     /// <p>Provides all available details about the instance groups in a cluster.</p>
     async fn list_instance_groups(
         &self,
         input: ListInstanceGroupsInput,
     ) -> Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>>;
+
+    /// Auto-paginating version of `list_instance_groups`
+    fn list_instance_groups_pages<'a>(
+        &'a self,
+        mut input: ListInstanceGroupsInput,
+    ) -> RusotoStream<'a, InstanceGroup, ListInstanceGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_groups(input.clone())
+        }))
+    }
 
     /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
     async fn list_instances(
@@ -5095,11 +5605,33 @@ pub trait Emr {
         input: ListInstancesInput,
     ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>>;
 
+    /// Auto-paginating version of `list_instances`
+    fn list_instances_pages<'a>(
+        &'a self,
+        mut input: ListInstancesInput,
+    ) -> RusotoStream<'a, Instance, ListInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instances(input.clone())
+        }))
+    }
+
     /// <p>Provides summaries of all notebook executions. You can filter the list based on multiple criteria such as status, time range, and editor id. Returns a maximum of 50 notebook executions and a marker to track the paging of a longer notebook execution list across multiple <code>ListNotebookExecution</code> calls.</p>
     async fn list_notebook_executions(
         &self,
         input: ListNotebookExecutionsInput,
     ) -> Result<ListNotebookExecutionsOutput, RusotoError<ListNotebookExecutionsError>>;
+
+    /// Auto-paginating version of `list_notebook_executions`
+    fn list_notebook_executions_pages<'a>(
+        &'a self,
+        mut input: ListNotebookExecutionsInput,
+    ) -> RusotoStream<'a, NotebookExecutionSummary, ListNotebookExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_notebook_executions(input.clone())
+        }))
+    }
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     async fn list_security_configurations(
@@ -5107,11 +5639,33 @@ pub trait Emr {
         input: ListSecurityConfigurationsInput,
     ) -> Result<ListSecurityConfigurationsOutput, RusotoError<ListSecurityConfigurationsError>>;
 
+    /// Auto-paginating version of `list_security_configurations`
+    fn list_security_configurations_pages<'a>(
+        &'a self,
+        mut input: ListSecurityConfigurationsInput,
+    ) -> RusotoStream<'a, SecurityConfigurationSummary, ListSecurityConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_security_configurations(input.clone())
+        }))
+    }
+
     /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
     async fn list_steps(
         &self,
         input: ListStepsInput,
     ) -> Result<ListStepsOutput, RusotoError<ListStepsError>>;
+
+    /// Auto-paginating version of `list_steps`
+    fn list_steps_pages<'a>(
+        &'a self,
+        mut input: ListStepsInput,
+    ) -> RusotoStream<'a, StepSummary, ListStepsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_steps(input.clone())
+        }))
+    }
 
     /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all user or group session mappings for the EMR Studio specified by <code>StudioId</code>.</p></p>
     async fn list_studio_session_mappings(
@@ -5119,11 +5673,33 @@ pub trait Emr {
         input: ListStudioSessionMappingsInput,
     ) -> Result<ListStudioSessionMappingsOutput, RusotoError<ListStudioSessionMappingsError>>;
 
+    /// Auto-paginating version of `list_studio_session_mappings`
+    fn list_studio_session_mappings_pages<'a>(
+        &'a self,
+        mut input: ListStudioSessionMappingsInput,
+    ) -> RusotoStream<'a, SessionMappingSummary, ListStudioSessionMappingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_studio_session_mappings(input.clone())
+        }))
+    }
+
     /// <p><note> <p>The Amazon EMR Studio APIs are in preview release for Amazon EMR and are subject to change.</p> </note> <p>Returns a list of all Amazon EMR Studios associated with the AWS account. The list includes details such as ID, Studio Access URL, and creation time for each Studio.</p></p>
     async fn list_studios(
         &self,
         input: ListStudiosInput,
     ) -> Result<ListStudiosOutput, RusotoError<ListStudiosError>>;
+
+    /// Auto-paginating version of `list_studios`
+    fn list_studios_pages<'a>(
+        &'a self,
+        mut input: ListStudiosInput,
+    ) -> RusotoStream<'a, StudioSummary, ListStudiosError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_studios(input.clone())
+        }))
+    }
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
     async fn modify_cluster(

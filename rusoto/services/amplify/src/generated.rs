@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -292,6 +296,7 @@ pub struct Branch {
 }
 
 /// <p> The request structure used to create apps in Amplify. </p>
+/// see [Amplify::create_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
@@ -372,6 +377,7 @@ pub struct CreateAppRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Amplify::create_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResult {
@@ -380,6 +386,7 @@ pub struct CreateAppResult {
 }
 
 /// <p> The request structure for the backend environment create request. </p>
+/// see [Amplify::create_backend_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackendEnvironmentRequest {
@@ -400,6 +407,7 @@ pub struct CreateBackendEnvironmentRequest {
 }
 
 /// <p> The result structure for the create backend environment request. </p>
+/// see [Amplify::create_backend_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackendEnvironmentResult {
@@ -409,6 +417,7 @@ pub struct CreateBackendEnvironmentResult {
 }
 
 /// <p> The request structure for the create branch request. </p>
+/// see [Amplify::create_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchRequest {
@@ -485,6 +494,7 @@ pub struct CreateBranchRequest {
 }
 
 /// <p> The result structure for create branch request. </p>
+/// see [Amplify::create_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBranchResult {
@@ -494,6 +504,7 @@ pub struct CreateBranchResult {
 }
 
 /// <p> The request structure for the create a new deployment request. </p>
+/// see [Amplify::create_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
@@ -510,6 +521,7 @@ pub struct CreateDeploymentRequest {
 }
 
 /// <p> The result structure for the create a new deployment request. </p>
+/// see [Amplify::create_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResult {
@@ -526,6 +538,7 @@ pub struct CreateDeploymentResult {
 }
 
 /// <p> The request structure for the create domain association request. </p>
+/// see [Amplify::create_domain_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainAssociationRequest {
@@ -553,6 +566,7 @@ pub struct CreateDomainAssociationRequest {
 }
 
 /// <p> The result structure for the create domain association request. </p>
+/// see [Amplify::create_domain_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainAssociationResult {
@@ -562,6 +576,7 @@ pub struct CreateDomainAssociationResult {
 }
 
 /// <p> The request structure for the create webhook request. </p>
+/// see [Amplify::create_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookRequest {
@@ -578,6 +593,7 @@ pub struct CreateWebhookRequest {
 }
 
 /// <p> The result structure for the create webhook request. </p>
+/// see [Amplify::create_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookResult {
@@ -606,6 +622,7 @@ pub struct CustomRule {
 }
 
 /// <p> Describes the request structure for the delete app request. </p>
+/// see [Amplify::delete_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
@@ -615,6 +632,7 @@ pub struct DeleteAppRequest {
 }
 
 /// <p> The result structure for the delete app request. </p>
+/// see [Amplify::delete_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResult {
@@ -623,6 +641,7 @@ pub struct DeleteAppResult {
 }
 
 /// <p> The request structure for the delete backend environment request. </p>
+/// see [Amplify::delete_backend_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackendEnvironmentRequest {
@@ -635,6 +654,7 @@ pub struct DeleteBackendEnvironmentRequest {
 }
 
 /// <p> The result structure of the delete backend environment result. </p>
+/// see [Amplify::delete_backend_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackendEnvironmentResult {
@@ -644,6 +664,7 @@ pub struct DeleteBackendEnvironmentResult {
 }
 
 /// <p> The request structure for the delete branch request. </p>
+/// see [Amplify::delete_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchRequest {
@@ -656,6 +677,7 @@ pub struct DeleteBranchRequest {
 }
 
 /// <p> The result structure for the delete branch request. </p>
+/// see [Amplify::delete_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchResult {
@@ -665,6 +687,7 @@ pub struct DeleteBranchResult {
 }
 
 /// <p> The request structure for the delete domain association request. </p>
+/// see [Amplify::delete_domain_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainAssociationRequest {
@@ -676,6 +699,7 @@ pub struct DeleteDomainAssociationRequest {
     pub domain_name: String,
 }
 
+/// see [Amplify::delete_domain_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainAssociationResult {
@@ -684,6 +708,7 @@ pub struct DeleteDomainAssociationResult {
 }
 
 /// <p> The request structure for the delete job request. </p>
+/// see [Amplify::delete_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
@@ -699,6 +724,7 @@ pub struct DeleteJobRequest {
 }
 
 /// <p> The result structure for the delete job request. </p>
+/// see [Amplify::delete_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResult {
@@ -707,6 +733,7 @@ pub struct DeleteJobResult {
 }
 
 /// <p> The request structure for the delete webhook request. </p>
+/// see [Amplify::delete_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookRequest {
@@ -716,6 +743,7 @@ pub struct DeleteWebhookRequest {
 }
 
 /// <p> The result structure for the delete webhook request. </p>
+/// see [Amplify::delete_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookResult {
@@ -761,6 +789,7 @@ pub struct DomainAssociation {
 }
 
 /// <p> The request structure for the generate access logs request. </p>
+/// see [Amplify::generate_access_logs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateAccessLogsRequest {
@@ -781,6 +810,7 @@ pub struct GenerateAccessLogsRequest {
 }
 
 /// <p> The result structure for the generate access logs request. </p>
+/// see [Amplify::generate_access_logs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateAccessLogsResult {
@@ -791,6 +821,7 @@ pub struct GenerateAccessLogsResult {
 }
 
 /// <p> The request structure for the get app request. </p>
+/// see [Amplify::get_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
@@ -799,6 +830,7 @@ pub struct GetAppRequest {
     pub app_id: String,
 }
 
+/// see [Amplify::get_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppResult {
@@ -807,6 +839,7 @@ pub struct GetAppResult {
 }
 
 /// <p> Returns the request structure for the get artifact request. </p>
+/// see [Amplify::get_artifact_url]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArtifactUrlRequest {
@@ -816,6 +849,7 @@ pub struct GetArtifactUrlRequest {
 }
 
 /// <p> Returns the result structure for the get artifact request. </p>
+/// see [Amplify::get_artifact_url]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetArtifactUrlResult {
@@ -828,6 +862,7 @@ pub struct GetArtifactUrlResult {
 }
 
 /// <p> The request structure for the get backend environment request. </p>
+/// see [Amplify::get_backend_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackendEnvironmentRequest {
@@ -840,6 +875,7 @@ pub struct GetBackendEnvironmentRequest {
 }
 
 /// <p> The result structure for the get backend environment result. </p>
+/// see [Amplify::get_backend_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackendEnvironmentResult {
@@ -849,6 +885,7 @@ pub struct GetBackendEnvironmentResult {
 }
 
 /// <p> The request structure for the get branch request. </p>
+/// see [Amplify::get_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchRequest {
@@ -860,6 +897,7 @@ pub struct GetBranchRequest {
     pub branch_name: String,
 }
 
+/// see [Amplify::get_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchResult {
@@ -868,6 +906,7 @@ pub struct GetBranchResult {
 }
 
 /// <p> The request structure for the get domain association request. </p>
+/// see [Amplify::get_domain_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainAssociationRequest {
@@ -880,6 +919,7 @@ pub struct GetDomainAssociationRequest {
 }
 
 /// <p> The result structure for the get domain association request. </p>
+/// see [Amplify::get_domain_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainAssociationResult {
@@ -889,6 +929,7 @@ pub struct GetDomainAssociationResult {
 }
 
 /// <p> The request structure for the get job request. </p>
+/// see [Amplify::get_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
@@ -903,6 +944,7 @@ pub struct GetJobRequest {
     pub job_id: String,
 }
 
+/// see [Amplify::get_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
@@ -911,6 +953,7 @@ pub struct GetJobResult {
 }
 
 /// <p> The request structure for the get webhook request. </p>
+/// see [Amplify::get_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebhookRequest {
@@ -920,6 +963,7 @@ pub struct GetWebhookRequest {
 }
 
 /// <p> The result structure for the get webhook request. </p>
+/// see [Amplify::get_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebhookResult {
@@ -975,6 +1019,7 @@ pub struct JobSummary {
 }
 
 /// <p> The request structure for the list apps request. </p>
+/// see [Amplify::list_apps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
@@ -988,7 +1033,24 @@ pub struct ListAppsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAppsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> The result structure for an Amplify app list request. </p>
+/// see [Amplify::list_apps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResult {
@@ -1001,7 +1063,30 @@ pub struct ListAppsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAppsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAppsResult {
+    type Item = App;
+
+    fn into_pagination_page(self) -> Vec<App> {
+        self.apps
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Describes the request structure for the list artifacts request. </p>
+/// see [Amplify::list_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
@@ -1025,6 +1110,7 @@ pub struct ListArtifactsRequest {
 }
 
 /// <p> The result structure for the list artifacts request. </p>
+/// see [Amplify::list_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResult {
@@ -1038,6 +1124,7 @@ pub struct ListArtifactsResult {
 }
 
 /// <p> The request structure for the list backend environments request. </p>
+/// see [Amplify::list_backend_environments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackendEnvironmentsRequest {
@@ -1059,6 +1146,7 @@ pub struct ListBackendEnvironmentsRequest {
 }
 
 /// <p> The result structure for the list backend environments result. </p>
+/// see [Amplify::list_backend_environments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackendEnvironmentsResult {
@@ -1072,6 +1160,7 @@ pub struct ListBackendEnvironmentsResult {
 }
 
 /// <p> The request structure for the list branches request. </p>
+/// see [Amplify::list_branches]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesRequest {
@@ -1088,7 +1177,24 @@ pub struct ListBranchesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBranchesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBranchesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> The result structure for the list branches request. </p>
+/// see [Amplify::list_branches]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesResult {
@@ -1101,7 +1207,30 @@ pub struct ListBranchesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBranchesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListBranchesResult {
+    type Item = Branch;
+
+    fn into_pagination_page(self) -> Vec<Branch> {
+        self.branches
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> The request structure for the list domain associations request. </p>
+/// see [Amplify::list_domain_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainAssociationsRequest {
@@ -1118,7 +1247,24 @@ pub struct ListDomainAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDomainAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDomainAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> The result structure for the list domain association request. </p>
+/// see [Amplify::list_domain_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainAssociationsResult {
@@ -1131,7 +1277,30 @@ pub struct ListDomainAssociationsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDomainAssociationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDomainAssociationsResult {
+    type Item = DomainAssociation;
+
+    fn into_pagination_page(self) -> Vec<DomainAssociation> {
+        self.domain_associations
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> The request structure for the list jobs request. </p>
+/// see [Amplify::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -1151,7 +1320,24 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> The maximum number of records to list in a single response. </p>
+/// see [Amplify::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
@@ -1164,7 +1350,30 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListJobsResult {
+    type Item = JobSummary;
+
+    fn into_pagination_page(self) -> Vec<JobSummary> {
+        self.job_summaries
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> The request structure to use to list tags for a resource. </p>
+/// see [Amplify::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1174,6 +1383,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p> The response for the list tags for resource request. </p>
+/// see [Amplify::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1184,6 +1394,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p> The request structure for the list webhooks request. </p>
+/// see [Amplify::list_webhooks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksRequest {
@@ -1201,6 +1412,7 @@ pub struct ListWebhooksRequest {
 }
 
 /// <p> The result structure for the list webhooks request. </p>
+/// see [Amplify::list_webhooks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhooksResult {
@@ -1236,6 +1448,7 @@ pub struct ProductionBranch {
 }
 
 /// <p> The request structure for the start a deployment request. </p>
+/// see [Amplify::start_deployment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
@@ -1256,6 +1469,7 @@ pub struct StartDeploymentRequest {
 }
 
 /// <p> The result structure for the start a deployment request. </p>
+/// see [Amplify::start_deployment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeploymentResult {
@@ -1265,6 +1479,7 @@ pub struct StartDeploymentResult {
 }
 
 /// <p> The request structure for the start job request. </p>
+/// see [Amplify::start_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
@@ -1300,6 +1515,7 @@ pub struct StartJobRequest {
 }
 
 /// <p> The result structure for the run job request. </p>
+/// see [Amplify::start_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResult {
@@ -1355,6 +1571,7 @@ pub struct Step {
 }
 
 /// <p> The request structure for the stop job request. </p>
+/// see [Amplify::stop_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
@@ -1370,6 +1587,7 @@ pub struct StopJobRequest {
 }
 
 /// <p> The result structure for the stop job request. </p>
+/// see [Amplify::stop_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
@@ -1405,6 +1623,7 @@ pub struct SubDomainSetting {
 }
 
 /// <p> The request structure to tag a resource with a tag key and value. </p>
+/// see [Amplify::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1417,11 +1636,13 @@ pub struct TagResourceRequest {
 }
 
 /// <p> The response for the tag resource request. </p>
+/// see [Amplify::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p> The request structure for the untag resource request. </p>
+/// see [Amplify::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1434,11 +1655,13 @@ pub struct UntagResourceRequest {
 }
 
 /// <p> The response for the untag resource request. </p>
+/// see [Amplify::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p> The request structure for the update app request. </p>
+/// see [Amplify::update_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
@@ -1520,6 +1743,7 @@ pub struct UpdateAppRequest {
 }
 
 /// <p> The result structure for an Amplify app update request. </p>
+/// see [Amplify::update_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResult {
@@ -1529,6 +1753,7 @@ pub struct UpdateAppResult {
 }
 
 /// <p> The request structure for the update branch request. </p>
+/// see [Amplify::update_branch]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBranchRequest {
@@ -1601,6 +1826,7 @@ pub struct UpdateBranchRequest {
 }
 
 /// <p> The result structure for the update branch request. </p>
+/// see [Amplify::update_branch]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBranchResult {
@@ -1610,6 +1836,7 @@ pub struct UpdateBranchResult {
 }
 
 /// <p> The request structure for the update domain association request. </p>
+/// see [Amplify::update_domain_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainAssociationRequest {
@@ -1637,6 +1864,7 @@ pub struct UpdateDomainAssociationRequest {
 }
 
 /// <p> The result structure for the update domain association request. </p>
+/// see [Amplify::update_domain_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainAssociationResult {
@@ -1646,6 +1874,7 @@ pub struct UpdateDomainAssociationResult {
 }
 
 /// <p> The request structure for the update webhook request. </p>
+/// see [Amplify::update_webhook]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookRequest {
@@ -1663,6 +1892,7 @@ pub struct UpdateWebhookRequest {
 }
 
 /// <p> The result structure for the update webhook request. </p>
+/// see [Amplify::update_webhook]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookResult {
@@ -3630,7 +3860,7 @@ impl fmt::Display for UpdateWebhookError {
 impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 #[async_trait]
-pub trait Amplify {
+pub trait Amplify: Clone + Sync + Send + 'static {
     /// <p> Creates a new Amplify app. </p>
     async fn create_app(
         &self,
@@ -3753,6 +3983,17 @@ pub trait Amplify {
         input: ListAppsRequest,
     ) -> Result<ListAppsResult, RusotoError<ListAppsError>>;
 
+    /// Auto-paginating version of `list_apps`
+    fn list_apps_pages<'a>(
+        &'a self,
+        mut input: ListAppsRequest,
+    ) -> RusotoStream<'a, App, ListAppsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_apps(input.clone())
+        }))
+    }
+
     /// <p> Returns a list of artifacts for a specified app, branch, and job. </p>
     async fn list_artifacts(
         &self,
@@ -3771,17 +4012,50 @@ pub trait Amplify {
         input: ListBranchesRequest,
     ) -> Result<ListBranchesResult, RusotoError<ListBranchesError>>;
 
+    /// Auto-paginating version of `list_branches`
+    fn list_branches_pages<'a>(
+        &'a self,
+        mut input: ListBranchesRequest,
+    ) -> RusotoStream<'a, Branch, ListBranchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_branches(input.clone())
+        }))
+    }
+
     /// <p> Returns the domain associations for an Amplify app. </p>
     async fn list_domain_associations(
         &self,
         input: ListDomainAssociationsRequest,
     ) -> Result<ListDomainAssociationsResult, RusotoError<ListDomainAssociationsError>>;
 
+    /// Auto-paginating version of `list_domain_associations`
+    fn list_domain_associations_pages<'a>(
+        &'a self,
+        mut input: ListDomainAssociationsRequest,
+    ) -> RusotoStream<'a, DomainAssociation, ListDomainAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domain_associations(input.clone())
+        }))
+    }
+
     /// <p> Lists the jobs for a branch of an Amplify app. </p>
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobSummary, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
+    }
 
     /// <p> Returns a list of tags for a specified Amazon Resource Name (ARN). </p>
     async fn list_tags_for_resource(

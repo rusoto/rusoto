@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -209,6 +213,7 @@ pub struct Connector {
     pub vm_manager_type: Option<String>,
 }
 
+/// see [ServerMigrationService::create_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
@@ -238,6 +243,7 @@ pub struct CreateAppRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServerMigrationService::create_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResponse {
@@ -255,6 +261,7 @@ pub struct CreateAppResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServerMigrationService::create_replication_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationJobRequest {
@@ -298,6 +305,7 @@ pub struct CreateReplicationJobRequest {
     pub server_id: String,
 }
 
+/// see [ServerMigrationService::create_replication_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationJobResponse {
@@ -307,6 +315,7 @@ pub struct CreateReplicationJobResponse {
     pub replication_job_id: Option<String>,
 }
 
+/// see [ServerMigrationService::delete_app_launch_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppLaunchConfigurationRequest {
@@ -316,10 +325,12 @@ pub struct DeleteAppLaunchConfigurationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::delete_app_launch_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppLaunchConfigurationResponse {}
 
+/// see [ServerMigrationService::delete_app_replication_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppReplicationConfigurationRequest {
@@ -329,10 +340,12 @@ pub struct DeleteAppReplicationConfigurationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::delete_app_replication_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppReplicationConfigurationResponse {}
 
+/// see [ServerMigrationService::delete_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
@@ -350,10 +363,12 @@ pub struct DeleteAppRequest {
     pub force_terminate_app: Option<bool>,
 }
 
+/// see [ServerMigrationService::delete_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResponse {}
 
+/// see [ServerMigrationService::delete_app_validation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppValidationConfigurationRequest {
@@ -362,10 +377,12 @@ pub struct DeleteAppValidationConfigurationRequest {
     pub app_id: String,
 }
 
+/// see [ServerMigrationService::delete_app_validation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppValidationConfigurationResponse {}
 
+/// see [ServerMigrationService::delete_replication_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationJobRequest {
@@ -374,18 +391,22 @@ pub struct DeleteReplicationJobRequest {
     pub replication_job_id: String,
 }
 
+/// see [ServerMigrationService::delete_replication_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationJobResponse {}
 
+/// see [ServerMigrationService::delete_server_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerCatalogRequest {}
 
+/// see [ServerMigrationService::delete_server_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServerCatalogResponse {}
 
+/// see [ServerMigrationService::disassociate_connector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectorRequest {
@@ -394,10 +415,12 @@ pub struct DisassociateConnectorRequest {
     pub connector_id: String,
 }
 
+/// see [ServerMigrationService::disassociate_connector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateConnectorResponse {}
 
+/// see [ServerMigrationService::generate_change_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateChangeSetRequest {
@@ -411,6 +434,7 @@ pub struct GenerateChangeSetRequest {
     pub changeset_format: Option<String>,
 }
 
+/// see [ServerMigrationService::generate_change_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateChangeSetResponse {
@@ -420,6 +444,7 @@ pub struct GenerateChangeSetResponse {
     pub s_3_location: Option<S3Location>,
 }
 
+/// see [ServerMigrationService::generate_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateTemplateRequest {
@@ -433,6 +458,7 @@ pub struct GenerateTemplateRequest {
     pub template_format: Option<String>,
 }
 
+/// see [ServerMigrationService::generate_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateTemplateResponse {
@@ -442,6 +468,7 @@ pub struct GenerateTemplateResponse {
     pub s_3_location: Option<S3Location>,
 }
 
+/// see [ServerMigrationService::get_app_launch_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppLaunchConfigurationRequest {
@@ -451,6 +478,7 @@ pub struct GetAppLaunchConfigurationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::get_app_launch_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppLaunchConfigurationResponse {
@@ -472,6 +500,7 @@ pub struct GetAppLaunchConfigurationResponse {
     pub server_group_launch_configurations: Option<Vec<ServerGroupLaunchConfiguration>>,
 }
 
+/// see [ServerMigrationService::get_app_replication_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppReplicationConfigurationRequest {
@@ -481,6 +510,7 @@ pub struct GetAppReplicationConfigurationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::get_app_replication_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppReplicationConfigurationResponse {
@@ -490,6 +520,7 @@ pub struct GetAppReplicationConfigurationResponse {
     pub server_group_replication_configurations: Option<Vec<ServerGroupReplicationConfiguration>>,
 }
 
+/// see [ServerMigrationService::get_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
@@ -499,6 +530,7 @@ pub struct GetAppRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::get_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppResponse {
@@ -516,6 +548,7 @@ pub struct GetAppResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServerMigrationService::get_app_validation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppValidationConfigurationRequest {
@@ -524,6 +557,7 @@ pub struct GetAppValidationConfigurationRequest {
     pub app_id: String,
 }
 
+/// see [ServerMigrationService::get_app_validation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppValidationConfigurationResponse {
@@ -537,6 +571,7 @@ pub struct GetAppValidationConfigurationResponse {
     pub server_group_validation_configurations: Option<Vec<ServerGroupValidationConfiguration>>,
 }
 
+/// see [ServerMigrationService::get_app_validation_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppValidationOutputRequest {
@@ -545,6 +580,7 @@ pub struct GetAppValidationOutputRequest {
     pub app_id: String,
 }
 
+/// see [ServerMigrationService::get_app_validation_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppValidationOutputResponse {
@@ -554,6 +590,7 @@ pub struct GetAppValidationOutputResponse {
     pub validation_output_list: Option<Vec<ValidationOutput>>,
 }
 
+/// see [ServerMigrationService::get_connectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorsRequest {
@@ -567,6 +604,23 @@ pub struct GetConnectorsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetConnectorsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetConnectorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerMigrationService::get_connectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorsResponse {
@@ -580,6 +634,29 @@ pub struct GetConnectorsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetConnectorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetConnectorsResponse {
+    type Item = Connector;
+
+    fn into_pagination_page(self) -> Vec<Connector> {
+        self.connector_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerMigrationService::get_replication_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReplicationJobsRequest {
@@ -597,6 +674,23 @@ pub struct GetReplicationJobsRequest {
     pub replication_job_id: Option<String>,
 }
 
+impl Paged for GetReplicationJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetReplicationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerMigrationService::get_replication_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReplicationJobsResponse {
@@ -610,6 +704,29 @@ pub struct GetReplicationJobsResponse {
     pub replication_job_list: Option<Vec<ReplicationJob>>,
 }
 
+impl Paged for GetReplicationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetReplicationJobsResponse {
+    type Item = ReplicationJob;
+
+    fn into_pagination_page(self) -> Vec<ReplicationJob> {
+        self.replication_job_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerMigrationService::get_replication_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReplicationRunsRequest {
@@ -626,6 +743,23 @@ pub struct GetReplicationRunsRequest {
     pub replication_job_id: String,
 }
 
+impl Paged for GetReplicationRunsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetReplicationRunsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerMigrationService::get_replication_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReplicationRunsResponse {
@@ -643,6 +777,29 @@ pub struct GetReplicationRunsResponse {
     pub replication_run_list: Option<Vec<ReplicationRun>>,
 }
 
+impl Paged for GetReplicationRunsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetReplicationRunsResponse {
+    type Item = ReplicationRun;
+
+    fn into_pagination_page(self) -> Vec<ReplicationRun> {
+        self.replication_run_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerMigrationService::get_servers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServersRequest {
@@ -660,6 +817,23 @@ pub struct GetServersRequest {
     pub vm_server_address_list: Option<Vec<VmServerAddress>>,
 }
 
+impl Paged for GetServersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetServersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerMigrationService::get_servers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServersResponse {
@@ -681,6 +855,29 @@ pub struct GetServersResponse {
     pub server_list: Option<Vec<Server>>,
 }
 
+impl Paged for GetServersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetServersResponse {
+    type Item = Server;
+
+    fn into_pagination_page(self) -> Vec<Server> {
+        self.server_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServerMigrationService::import_app_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportAppCatalogRequest {
@@ -690,18 +887,22 @@ pub struct ImportAppCatalogRequest {
     pub role_name: Option<String>,
 }
 
+/// see [ServerMigrationService::import_app_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportAppCatalogResponse {}
 
+/// see [ServerMigrationService::import_server_catalog]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportServerCatalogRequest {}
 
+/// see [ServerMigrationService::import_server_catalog]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportServerCatalogResponse {}
 
+/// see [ServerMigrationService::launch_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchAppRequest {
@@ -711,6 +912,7 @@ pub struct LaunchAppRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::launch_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LaunchAppResponse {}
@@ -733,6 +935,7 @@ pub struct LaunchDetails {
     pub stack_name: Option<String>,
 }
 
+/// see [ServerMigrationService::list_apps]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
@@ -750,6 +953,23 @@ pub struct ListAppsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAppsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [ServerMigrationService::list_apps]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResponse {
@@ -761,6 +981,28 @@ pub struct ListAppsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for ListAppsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAppsResponse {
+    type Item = AppSummary;
+
+    fn into_pagination_page(self) -> Vec<AppSummary> {
+        self.apps.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains the status of validating an application.</p>
@@ -781,6 +1023,7 @@ pub struct NotificationContext {
     pub validation_id: Option<String>,
 }
 
+/// see [ServerMigrationService::notify_app_validation_output]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyAppValidationOutputRequest {
@@ -793,10 +1036,12 @@ pub struct NotifyAppValidationOutputRequest {
     pub notification_context: Option<NotificationContext>,
 }
 
+/// see [ServerMigrationService::notify_app_validation_output]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyAppValidationOutputResponse {}
 
+/// see [ServerMigrationService::put_app_launch_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppLaunchConfigurationRequest {
@@ -818,10 +1063,12 @@ pub struct PutAppLaunchConfigurationRequest {
     pub server_group_launch_configurations: Option<Vec<ServerGroupLaunchConfiguration>>,
 }
 
+/// see [ServerMigrationService::put_app_launch_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppLaunchConfigurationResponse {}
 
+/// see [ServerMigrationService::put_app_replication_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppReplicationConfigurationRequest {
@@ -835,10 +1082,12 @@ pub struct PutAppReplicationConfigurationRequest {
     pub server_group_replication_configurations: Option<Vec<ServerGroupReplicationConfiguration>>,
 }
 
+/// see [ServerMigrationService::put_app_replication_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppReplicationConfigurationResponse {}
 
+/// see [ServerMigrationService::put_app_validation_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppValidationConfigurationRequest {
@@ -855,6 +1104,7 @@ pub struct PutAppValidationConfigurationRequest {
     pub server_group_validation_configurations: Option<Vec<ServerGroupValidationConfiguration>>,
 }
 
+/// see [ServerMigrationService::put_app_validation_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppValidationConfigurationResponse {}
@@ -1276,6 +1526,7 @@ pub struct Source {
     pub s_3_location: Option<S3Location>,
 }
 
+/// see [ServerMigrationService::start_app_replication]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAppReplicationRequest {
@@ -1285,10 +1536,12 @@ pub struct StartAppReplicationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::start_app_replication]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAppReplicationResponse {}
 
+/// see [ServerMigrationService::start_on_demand_app_replication]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandAppReplicationRequest {
@@ -1301,10 +1554,12 @@ pub struct StartOnDemandAppReplicationRequest {
     pub description: Option<String>,
 }
 
+/// see [ServerMigrationService::start_on_demand_app_replication]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandAppReplicationResponse {}
 
+/// see [ServerMigrationService::start_on_demand_replication_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandReplicationRunRequest {
@@ -1317,6 +1572,7 @@ pub struct StartOnDemandReplicationRunRequest {
     pub replication_job_id: String,
 }
 
+/// see [ServerMigrationService::start_on_demand_replication_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandReplicationRunResponse {
@@ -1326,6 +1582,7 @@ pub struct StartOnDemandReplicationRunResponse {
     pub replication_run_id: Option<String>,
 }
 
+/// see [ServerMigrationService::stop_app_replication]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAppReplicationRequest {
@@ -1335,6 +1592,7 @@ pub struct StopAppReplicationRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::stop_app_replication]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAppReplicationResponse {}
@@ -1352,6 +1610,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [ServerMigrationService::terminate_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateAppRequest {
@@ -1361,10 +1620,12 @@ pub struct TerminateAppRequest {
     pub app_id: Option<String>,
 }
 
+/// see [ServerMigrationService::terminate_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateAppResponse {}
 
+/// see [ServerMigrationService::update_app]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
@@ -1394,6 +1655,7 @@ pub struct UpdateAppRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServerMigrationService::update_app]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResponse {
@@ -1411,6 +1673,7 @@ pub struct UpdateAppResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServerMigrationService::update_replication_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReplicationJobRequest {
@@ -1451,6 +1714,7 @@ pub struct UpdateReplicationJobRequest {
     pub role_name: Option<String>,
 }
 
+/// see [ServerMigrationService::update_replication_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReplicationJobResponse {}
@@ -3789,7 +4053,7 @@ impl fmt::Display for UpdateReplicationJobError {
 impl Error for UpdateReplicationJobError {}
 /// Trait representing the capabilities of the SMS API. SMS clients implement this trait.
 #[async_trait]
-pub trait ServerMigrationService {
+pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     /// <p>Creates an application. An application consists of one or more server groups. Each server group contain one or more servers.</p>
     async fn create_app(
         &self,
@@ -3903,11 +4167,33 @@ pub trait ServerMigrationService {
         input: GetConnectorsRequest,
     ) -> Result<GetConnectorsResponse, RusotoError<GetConnectorsError>>;
 
+    /// Auto-paginating version of `get_connectors`
+    fn get_connectors_pages<'a>(
+        &'a self,
+        mut input: GetConnectorsRequest,
+    ) -> RusotoStream<'a, Connector, GetConnectorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_connectors(input.clone())
+        }))
+    }
+
     /// <p>Describes the specified replication job or all of your replication jobs.</p>
     async fn get_replication_jobs(
         &self,
         input: GetReplicationJobsRequest,
     ) -> Result<GetReplicationJobsResponse, RusotoError<GetReplicationJobsError>>;
+
+    /// Auto-paginating version of `get_replication_jobs`
+    fn get_replication_jobs_pages<'a>(
+        &'a self,
+        mut input: GetReplicationJobsRequest,
+    ) -> RusotoStream<'a, ReplicationJob, GetReplicationJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_replication_jobs(input.clone())
+        }))
+    }
 
     /// <p>Describes the replication runs for the specified replication job.</p>
     async fn get_replication_runs(
@@ -3915,11 +4201,33 @@ pub trait ServerMigrationService {
         input: GetReplicationRunsRequest,
     ) -> Result<GetReplicationRunsResponse, RusotoError<GetReplicationRunsError>>;
 
+    /// Auto-paginating version of `get_replication_runs`
+    fn get_replication_runs_pages<'a>(
+        &'a self,
+        mut input: GetReplicationRunsRequest,
+    ) -> RusotoStream<'a, ReplicationRun, GetReplicationRunsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_replication_runs(input.clone())
+        }))
+    }
+
     /// <p>Describes the servers in your server catalog.</p> <p>Before you can describe your servers, you must import them using <a>ImportServerCatalog</a>.</p>
     async fn get_servers(
         &self,
         input: GetServersRequest,
     ) -> Result<GetServersResponse, RusotoError<GetServersError>>;
+
+    /// Auto-paginating version of `get_servers`
+    fn get_servers_pages<'a>(
+        &'a self,
+        mut input: GetServersRequest,
+    ) -> RusotoStream<'a, Server, GetServersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_servers(input.clone())
+        }))
+    }
 
     /// <p>Allows application import from AWS Migration Hub.</p>
     async fn import_app_catalog(
@@ -3943,6 +4251,17 @@ pub trait ServerMigrationService {
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
+
+    /// Auto-paginating version of `list_apps`
+    fn list_apps_pages<'a>(
+        &'a self,
+        mut input: ListAppsRequest,
+    ) -> RusotoStream<'a, AppSummary, ListAppsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_apps(input.clone())
+        }))
+    }
 
     /// <p>Provides information to AWS SMS about whether application validation is successful.</p>
     async fn notify_app_validation_output(

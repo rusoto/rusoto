@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -64,6 +68,7 @@ pub struct ApplicationSource {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
+/// see [AutoscalingPlans::create_scaling_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScalingPlanRequest {
@@ -78,6 +83,7 @@ pub struct CreateScalingPlanRequest {
     pub scaling_plan_name: String,
 }
 
+/// see [AutoscalingPlans::create_scaling_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScalingPlanResponse {
@@ -144,6 +150,7 @@ pub struct Datapoint {
     pub value: Option<f64>,
 }
 
+/// see [AutoscalingPlans::delete_scaling_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScalingPlanRequest {
@@ -155,10 +162,12 @@ pub struct DeleteScalingPlanRequest {
     pub scaling_plan_version: i64,
 }
 
+/// see [AutoscalingPlans::delete_scaling_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScalingPlanResponse {}
 
+/// see [AutoscalingPlans::describe_scaling_plan_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlanResourcesRequest {
@@ -178,6 +187,23 @@ pub struct DescribeScalingPlanResourcesRequest {
     pub scaling_plan_version: i64,
 }
 
+impl Paged for DescribeScalingPlanResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingPlanResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AutoscalingPlans::describe_scaling_plan_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScalingPlanResourcesResponse {
@@ -191,6 +217,29 @@ pub struct DescribeScalingPlanResourcesResponse {
     pub scaling_plan_resources: Option<Vec<ScalingPlanResource>>,
 }
 
+impl Paged for DescribeScalingPlanResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeScalingPlanResourcesResponse {
+    type Item = ScalingPlanResource;
+
+    fn into_pagination_page(self) -> Vec<ScalingPlanResource> {
+        self.scaling_plan_resources.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AutoscalingPlans::describe_scaling_plans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingPlansRequest {
@@ -216,6 +265,23 @@ pub struct DescribeScalingPlansRequest {
     pub scaling_plan_version: Option<i64>,
 }
 
+impl Paged for DescribeScalingPlansRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingPlansRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [AutoscalingPlans::describe_scaling_plans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScalingPlansResponse {
@@ -229,6 +295,29 @@ pub struct DescribeScalingPlansResponse {
     pub scaling_plans: Option<Vec<ScalingPlan>>,
 }
 
+impl Paged for DescribeScalingPlansResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeScalingPlansResponse {
+    type Item = ScalingPlan;
+
+    fn into_pagination_page(self) -> Vec<ScalingPlan> {
+        self.scaling_plans.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AutoscalingPlans::get_scaling_plan_resource_forecast_data]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetScalingPlanResourceForecastDataRequest {
@@ -258,6 +347,7 @@ pub struct GetScalingPlanResourceForecastDataRequest {
     pub start_time: f64,
 }
 
+/// see [AutoscalingPlans::get_scaling_plan_resource_forecast_data]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetScalingPlanResourceForecastDataResponse {
@@ -482,6 +572,7 @@ pub struct TargetTrackingConfiguration {
     pub target_value: f64,
 }
 
+/// see [AutoscalingPlans::update_scaling_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScalingPlanRequest {
@@ -501,6 +592,7 @@ pub struct UpdateScalingPlanRequest {
     pub scaling_plan_version: i64,
 }
 
+/// see [AutoscalingPlans::update_scaling_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateScalingPlanResponse {}
@@ -771,7 +863,7 @@ impl fmt::Display for UpdateScalingPlanError {
 impl Error for UpdateScalingPlanError {}
 /// Trait representing the capabilities of the AWS Auto Scaling Plans API. AWS Auto Scaling Plans clients implement this trait.
 #[async_trait]
-pub trait AutoscalingPlans {
+pub trait AutoscalingPlans: Clone + Sync + Send + 'static {
     /// <p>Creates a scaling plan.</p>
     async fn create_scaling_plan(
         &self,
@@ -790,11 +882,33 @@ pub trait AutoscalingPlans {
         input: DescribeScalingPlanResourcesRequest,
     ) -> Result<DescribeScalingPlanResourcesResponse, RusotoError<DescribeScalingPlanResourcesError>>;
 
+    /// Auto-paginating version of `describe_scaling_plan_resources`
+    fn describe_scaling_plan_resources_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingPlanResourcesRequest,
+    ) -> RusotoStream<'a, ScalingPlanResource, DescribeScalingPlanResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_plan_resources(input.clone())
+        }))
+    }
+
     /// <p>Describes one or more of your scaling plans.</p>
     async fn describe_scaling_plans(
         &self,
         input: DescribeScalingPlansRequest,
     ) -> Result<DescribeScalingPlansResponse, RusotoError<DescribeScalingPlansError>>;
+
+    /// Auto-paginating version of `describe_scaling_plans`
+    fn describe_scaling_plans_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingPlansRequest,
+    ) -> RusotoStream<'a, ScalingPlan, DescribeScalingPlansError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_plans(input.clone())
+        }))
+    }
 
     /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>
     async fn get_scaling_plan_resource_forecast_data(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Signer::add_profile_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddProfilePermissionRequest {
@@ -50,6 +55,7 @@ pub struct AddProfilePermissionRequest {
     pub statement_id: String,
 }
 
+/// see [Signer::add_profile_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddProfilePermissionResponse {
@@ -59,6 +65,7 @@ pub struct AddProfilePermissionResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Signer::cancel_signing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSigningProfileRequest {
@@ -67,6 +74,7 @@ pub struct CancelSigningProfileRequest {
     pub profile_name: String,
 }
 
+/// see [Signer::describe_signing_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSigningJobRequest {
@@ -75,6 +83,7 @@ pub struct DescribeSigningJobRequest {
     pub job_id: String,
 }
 
+/// see [Signer::describe_signing_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSigningJobResponse {
@@ -178,6 +187,7 @@ pub struct EncryptionAlgorithmOptions {
     pub default_value: String,
 }
 
+/// see [Signer::get_signing_platform]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningPlatformRequest {
@@ -186,6 +196,7 @@ pub struct GetSigningPlatformRequest {
     pub platform_id: String,
 }
 
+/// see [Signer::get_signing_platform]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningPlatformResponse {
@@ -227,6 +238,7 @@ pub struct GetSigningPlatformResponse {
     pub target: Option<String>,
 }
 
+/// see [Signer::get_signing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningProfileRequest {
@@ -239,6 +251,7 @@ pub struct GetSigningProfileRequest {
     pub profile_owner: Option<String>,
 }
 
+/// see [Signer::get_signing_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningProfileResponse {
@@ -310,6 +323,7 @@ pub struct HashAlgorithmOptions {
     pub default_value: String,
 }
 
+/// see [Signer::list_profile_permissions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfilePermissionsRequest {
@@ -322,6 +336,7 @@ pub struct ListProfilePermissionsRequest {
     pub profile_name: String,
 }
 
+/// see [Signer::list_profile_permissions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfilePermissionsResponse {
@@ -343,6 +358,7 @@ pub struct ListProfilePermissionsResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Signer::list_signing_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningJobsRequest {
@@ -384,6 +400,23 @@ pub struct ListSigningJobsRequest {
     pub status: Option<String>,
 }
 
+impl Paged for ListSigningJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Signer::list_signing_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningJobsResponse {
@@ -397,6 +430,29 @@ pub struct ListSigningJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListSigningJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSigningJobsResponse {
+    type Item = SigningJob;
+
+    fn into_pagination_page(self) -> Vec<SigningJob> {
+        self.jobs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Signer::list_signing_platforms]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningPlatformsRequest {
@@ -422,6 +478,23 @@ pub struct ListSigningPlatformsRequest {
     pub target: Option<String>,
 }
 
+impl Paged for ListSigningPlatformsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningPlatformsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Signer::list_signing_platforms]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningPlatformsResponse {
@@ -435,6 +508,29 @@ pub struct ListSigningPlatformsResponse {
     pub platforms: Option<Vec<SigningPlatform>>,
 }
 
+impl Paged for ListSigningPlatformsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSigningPlatformsResponse {
+    type Item = SigningPlatform;
+
+    fn into_pagination_page(self) -> Vec<SigningPlatform> {
+        self.platforms.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Signer::list_signing_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningProfilesRequest {
@@ -460,6 +556,23 @@ pub struct ListSigningProfilesRequest {
     pub statuses: Option<Vec<String>>,
 }
 
+impl Paged for ListSigningProfilesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Signer::list_signing_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningProfilesResponse {
@@ -473,6 +586,29 @@ pub struct ListSigningProfilesResponse {
     pub profiles: Option<Vec<SigningProfile>>,
 }
 
+impl Paged for ListSigningProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSigningProfilesResponse {
+    type Item = SigningProfile;
+
+    fn into_pagination_page(self) -> Vec<SigningProfile> {
+        self.profiles.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Signer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -481,6 +617,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Signer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -512,6 +649,7 @@ pub struct Permission {
     pub statement_id: Option<String>,
 }
 
+/// see [Signer::put_signing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSigningProfileRequest {
@@ -543,6 +681,7 @@ pub struct PutSigningProfileRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Signer::put_signing_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSigningProfileResponse {
@@ -560,6 +699,7 @@ pub struct PutSigningProfileResponse {
     pub profile_version_arn: Option<String>,
 }
 
+/// see [Signer::remove_profile_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveProfilePermissionRequest {
@@ -574,6 +714,7 @@ pub struct RemoveProfilePermissionRequest {
     pub statement_id: String,
 }
 
+/// see [Signer::remove_profile_permission]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveProfilePermissionResponse {
@@ -583,6 +724,7 @@ pub struct RemoveProfilePermissionResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Signer::revoke_signature]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSignatureRequest {
@@ -598,6 +740,7 @@ pub struct RevokeSignatureRequest {
     pub reason: String,
 }
 
+/// see [Signer::revoke_signing_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSigningProfileRequest {
@@ -936,6 +1079,7 @@ pub struct Source {
     pub s_3: Option<S3Source>,
 }
 
+/// see [Signer::start_signing_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSigningJobRequest {
@@ -957,6 +1101,7 @@ pub struct StartSigningJobRequest {
     pub source: Source,
 }
 
+/// see [Signer::start_signing_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSigningJobResponse {
@@ -970,6 +1115,7 @@ pub struct StartSigningJobResponse {
     pub job_owner: Option<String>,
 }
 
+/// see [Signer::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -981,10 +1127,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Signer::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Signer::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -996,6 +1144,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Signer::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -1880,7 +2029,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the signer API. signer clients implement this trait.
 #[async_trait]
-pub trait Signer {
+pub trait Signer: Clone + Sync + Send + 'static {
     /// <p>Adds cross-account permissions to a signing profile.</p>
     async fn add_profile_permission(
         &self,
@@ -1923,17 +2072,50 @@ pub trait Signer {
         input: ListSigningJobsRequest,
     ) -> Result<ListSigningJobsResponse, RusotoError<ListSigningJobsError>>;
 
+    /// Auto-paginating version of `list_signing_jobs`
+    fn list_signing_jobs_pages<'a>(
+        &'a self,
+        mut input: ListSigningJobsRequest,
+    ) -> RusotoStream<'a, SigningJob, ListSigningJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_jobs(input.clone())
+        }))
+    }
+
     /// <p>Lists all signing platforms available in code signing that match the request parameters. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
     async fn list_signing_platforms(
         &self,
         input: ListSigningPlatformsRequest,
     ) -> Result<ListSigningPlatformsResponse, RusotoError<ListSigningPlatformsError>>;
 
+    /// Auto-paginating version of `list_signing_platforms`
+    fn list_signing_platforms_pages<'a>(
+        &'a self,
+        mut input: ListSigningPlatformsRequest,
+    ) -> RusotoStream<'a, SigningPlatform, ListSigningPlatformsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_platforms(input.clone())
+        }))
+    }
+
     /// <p>Lists all available signing profiles in your AWS account. Returns only profiles with an <code>ACTIVE</code> status unless the <code>includeCanceled</code> request field is set to <code>true</code>. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
     async fn list_signing_profiles(
         &self,
         input: ListSigningProfilesRequest,
     ) -> Result<ListSigningProfilesResponse, RusotoError<ListSigningProfilesError>>;
+
+    /// Auto-paginating version of `list_signing_profiles`
+    fn list_signing_profiles_pages<'a>(
+        &'a self,
+        mut input: ListSigningProfilesRequest,
+    ) -> RusotoStream<'a, SigningProfile, ListSigningProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_profiles(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of the tags associated with a signing profile resource.</p>
     async fn list_tags_for_resource(

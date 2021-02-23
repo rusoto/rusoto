@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -38,6 +42,7 @@ pub struct AWSLocation {
     pub zone: Option<String>,
 }
 
+/// see [NetworkManager::associate_customer_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCustomerGatewayRequest {
@@ -56,6 +61,7 @@ pub struct AssociateCustomerGatewayRequest {
     pub link_id: Option<String>,
 }
 
+/// see [NetworkManager::associate_customer_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCustomerGatewayResponse {
@@ -65,6 +71,7 @@ pub struct AssociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
+/// see [NetworkManager::associate_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLinkRequest {
@@ -79,6 +86,7 @@ pub struct AssociateLinkRequest {
     pub link_id: String,
 }
 
+/// see [NetworkManager::associate_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateLinkResponse {
@@ -88,6 +96,7 @@ pub struct AssociateLinkResponse {
     pub link_association: Option<LinkAssociation>,
 }
 
+/// see [NetworkManager::associate_transit_gateway_connect_peer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTransitGatewayConnectPeerRequest {
@@ -106,6 +115,7 @@ pub struct AssociateTransitGatewayConnectPeerRequest {
     pub transit_gateway_connect_peer_arn: String,
 }
 
+/// see [NetworkManager::associate_transit_gateway_connect_peer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTransitGatewayConnectPeerResponse {
@@ -178,6 +188,7 @@ pub struct Connection {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [NetworkManager::create_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
@@ -208,6 +219,7 @@ pub struct CreateConnectionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [NetworkManager::create_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectionResponse {
@@ -217,6 +229,7 @@ pub struct CreateConnectionResponse {
     pub connection: Option<Connection>,
 }
 
+/// see [NetworkManager::create_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceRequest {
@@ -261,6 +274,7 @@ pub struct CreateDeviceRequest {
     pub vendor: Option<String>,
 }
 
+/// see [NetworkManager::create_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceResponse {
@@ -270,6 +284,7 @@ pub struct CreateDeviceResponse {
     pub device: Option<Device>,
 }
 
+/// see [NetworkManager::create_global_network]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalNetworkRequest {
@@ -283,6 +298,7 @@ pub struct CreateGlobalNetworkRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [NetworkManager::create_global_network]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGlobalNetworkResponse {
@@ -292,6 +308,7 @@ pub struct CreateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
+/// see [NetworkManager::create_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLinkRequest {
@@ -322,6 +339,7 @@ pub struct CreateLinkRequest {
     pub type_: Option<String>,
 }
 
+/// see [NetworkManager::create_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLinkResponse {
@@ -331,6 +349,7 @@ pub struct CreateLinkResponse {
     pub link: Option<Link>,
 }
 
+/// see [NetworkManager::create_site]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSiteRequest {
@@ -351,6 +370,7 @@ pub struct CreateSiteRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [NetworkManager::create_site]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSiteResponse {
@@ -386,6 +406,7 @@ pub struct CustomerGatewayAssociation {
     pub state: Option<String>,
 }
 
+/// see [NetworkManager::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
@@ -397,6 +418,7 @@ pub struct DeleteConnectionRequest {
     pub global_network_id: String,
 }
 
+/// see [NetworkManager::delete_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionResponse {
@@ -406,6 +428,7 @@ pub struct DeleteConnectionResponse {
     pub connection: Option<Connection>,
 }
 
+/// see [NetworkManager::delete_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
@@ -417,6 +440,7 @@ pub struct DeleteDeviceRequest {
     pub global_network_id: String,
 }
 
+/// see [NetworkManager::delete_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceResponse {
@@ -426,6 +450,7 @@ pub struct DeleteDeviceResponse {
     pub device: Option<Device>,
 }
 
+/// see [NetworkManager::delete_global_network]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGlobalNetworkRequest {
@@ -434,6 +459,7 @@ pub struct DeleteGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
+/// see [NetworkManager::delete_global_network]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGlobalNetworkResponse {
@@ -443,6 +469,7 @@ pub struct DeleteGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
+/// see [NetworkManager::delete_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLinkRequest {
@@ -454,6 +481,7 @@ pub struct DeleteLinkRequest {
     pub link_id: String,
 }
 
+/// see [NetworkManager::delete_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLinkResponse {
@@ -463,6 +491,7 @@ pub struct DeleteLinkResponse {
     pub link: Option<Link>,
 }
 
+/// see [NetworkManager::delete_site]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSiteRequest {
@@ -474,6 +503,7 @@ pub struct DeleteSiteRequest {
     pub site_id: String,
 }
 
+/// see [NetworkManager::delete_site]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSiteResponse {
@@ -483,6 +513,7 @@ pub struct DeleteSiteResponse {
     pub site: Option<Site>,
 }
 
+/// see [NetworkManager::deregister_transit_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTransitGatewayRequest {
@@ -494,6 +525,7 @@ pub struct DeregisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
+/// see [NetworkManager::deregister_transit_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTransitGatewayResponse {
@@ -503,6 +535,7 @@ pub struct DeregisterTransitGatewayResponse {
     pub transit_gateway_registration: Option<TransitGatewayRegistration>,
 }
 
+/// see [NetworkManager::describe_global_networks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalNetworksRequest {
@@ -520,6 +553,23 @@ pub struct DescribeGlobalNetworksRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeGlobalNetworksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeGlobalNetworksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::describe_global_networks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalNetworksResponse {
@@ -531,6 +581,28 @@ pub struct DescribeGlobalNetworksResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeGlobalNetworksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeGlobalNetworksResponse {
+    type Item = GlobalNetwork;
+
+    fn into_pagination_page(self) -> Vec<GlobalNetwork> {
+        self.global_networks.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Describes a device.</p>
@@ -595,6 +667,7 @@ pub struct Device {
     pub vendor: Option<String>,
 }
 
+/// see [NetworkManager::disassociate_customer_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCustomerGatewayRequest {
@@ -606,6 +679,7 @@ pub struct DisassociateCustomerGatewayRequest {
     pub global_network_id: String,
 }
 
+/// see [NetworkManager::disassociate_customer_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCustomerGatewayResponse {
@@ -615,6 +689,7 @@ pub struct DisassociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
+/// see [NetworkManager::disassociate_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateLinkRequest {
@@ -629,6 +704,7 @@ pub struct DisassociateLinkRequest {
     pub link_id: String,
 }
 
+/// see [NetworkManager::disassociate_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateLinkResponse {
@@ -638,6 +714,7 @@ pub struct DisassociateLinkResponse {
     pub link_association: Option<LinkAssociation>,
 }
 
+/// see [NetworkManager::disassociate_transit_gateway_connect_peer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTransitGatewayConnectPeerRequest {
@@ -649,6 +726,7 @@ pub struct DisassociateTransitGatewayConnectPeerRequest {
     pub transit_gateway_connect_peer_arn: String,
 }
 
+/// see [NetworkManager::disassociate_transit_gateway_connect_peer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTransitGatewayConnectPeerResponse {
@@ -658,6 +736,7 @@ pub struct DisassociateTransitGatewayConnectPeerResponse {
     pub transit_gateway_connect_peer_association: Option<TransitGatewayConnectPeerAssociation>,
 }
 
+/// see [NetworkManager::get_connections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsRequest {
@@ -682,6 +761,23 @@ pub struct GetConnectionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetConnectionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetConnectionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_connections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionsResponse {
@@ -695,6 +791,29 @@ pub struct GetConnectionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetConnectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetConnectionsResponse {
+    type Item = Connection;
+
+    fn into_pagination_page(self) -> Vec<Connection> {
+        self.connections.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_customer_gateway_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCustomerGatewayAssociationsRequest {
@@ -715,6 +834,23 @@ pub struct GetCustomerGatewayAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetCustomerGatewayAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCustomerGatewayAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_customer_gateway_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCustomerGatewayAssociationsResponse {
@@ -728,6 +864,29 @@ pub struct GetCustomerGatewayAssociationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetCustomerGatewayAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetCustomerGatewayAssociationsResponse {
+    type Item = CustomerGatewayAssociation;
+
+    fn into_pagination_page(self) -> Vec<CustomerGatewayAssociation> {
+        self.customer_gateway_associations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_devices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicesRequest {
@@ -752,6 +911,23 @@ pub struct GetDevicesRequest {
     pub site_id: Option<String>,
 }
 
+impl Paged for GetDevicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_devices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicesResponse {
@@ -765,6 +941,29 @@ pub struct GetDevicesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetDevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetDevicesResponse {
+    type Item = Device;
+
+    fn into_pagination_page(self) -> Vec<Device> {
+        self.devices.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_link_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinkAssociationsRequest {
@@ -789,6 +988,23 @@ pub struct GetLinkAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetLinkAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLinkAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_link_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAssociationsResponse {
@@ -802,6 +1018,29 @@ pub struct GetLinkAssociationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetLinkAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetLinkAssociationsResponse {
+    type Item = LinkAssociation;
+
+    fn into_pagination_page(self) -> Vec<LinkAssociation> {
+        self.link_associations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_links]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinksRequest {
@@ -834,6 +1073,23 @@ pub struct GetLinksRequest {
     pub type_: Option<String>,
 }
 
+impl Paged for GetLinksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_links]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinksResponse {
@@ -847,6 +1103,29 @@ pub struct GetLinksResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetLinksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetLinksResponse {
+    type Item = Link;
+
+    fn into_pagination_page(self) -> Vec<Link> {
+        self.links.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_sites]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSitesRequest {
@@ -867,6 +1146,23 @@ pub struct GetSitesRequest {
     pub site_ids: Option<Vec<String>>,
 }
 
+impl Paged for GetSitesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSitesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_sites]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSitesResponse {
@@ -880,6 +1176,29 @@ pub struct GetSitesResponse {
     pub sites: Option<Vec<Site>>,
 }
 
+impl Paged for GetSitesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetSitesResponse {
+    type Item = Site;
+
+    fn into_pagination_page(self) -> Vec<Site> {
+        self.sites.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_transit_gateway_connect_peer_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayConnectPeerAssociationsRequest {
@@ -900,6 +1219,23 @@ pub struct GetTransitGatewayConnectPeerAssociationsRequest {
     pub transit_gateway_connect_peer_arns: Option<Vec<String>>,
 }
 
+impl Paged for GetTransitGatewayConnectPeerAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTransitGatewayConnectPeerAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_transit_gateway_connect_peer_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTransitGatewayConnectPeerAssociationsResponse {
@@ -914,6 +1250,30 @@ pub struct GetTransitGatewayConnectPeerAssociationsResponse {
         Option<Vec<TransitGatewayConnectPeerAssociation>>,
 }
 
+impl Paged for GetTransitGatewayConnectPeerAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetTransitGatewayConnectPeerAssociationsResponse {
+    type Item = TransitGatewayConnectPeerAssociation;
+
+    fn into_pagination_page(self) -> Vec<TransitGatewayConnectPeerAssociation> {
+        self.transit_gateway_connect_peer_associations
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [NetworkManager::get_transit_gateway_registrations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayRegistrationsRequest {
@@ -934,6 +1294,23 @@ pub struct GetTransitGatewayRegistrationsRequest {
     pub transit_gateway_arns: Option<Vec<String>>,
 }
 
+impl Paged for GetTransitGatewayRegistrationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTransitGatewayRegistrationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [NetworkManager::get_transit_gateway_registrations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTransitGatewayRegistrationsResponse {
@@ -945,6 +1322,28 @@ pub struct GetTransitGatewayRegistrationsResponse {
     #[serde(rename = "TransitGatewayRegistrations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transit_gateway_registrations: Option<Vec<TransitGatewayRegistration>>,
+}
+
+impl Paged for GetTransitGatewayRegistrationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetTransitGatewayRegistrationsResponse {
+    type Item = TransitGatewayRegistration;
+
+    fn into_pagination_page(self) -> Vec<TransitGatewayRegistration> {
+        self.transit_gateway_registrations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Describes a global network.</p>
@@ -1049,6 +1448,7 @@ pub struct LinkAssociation {
     pub link_id: Option<String>,
 }
 
+/// see [NetworkManager::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1057,6 +1457,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [NetworkManager::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1083,6 +1484,7 @@ pub struct Location {
     pub longitude: Option<String>,
 }
 
+/// see [NetworkManager::register_transit_gateway]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTransitGatewayRequest {
@@ -1094,6 +1496,7 @@ pub struct RegisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
+/// see [NetworkManager::register_transit_gateway]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTransitGatewayResponse {
@@ -1154,6 +1557,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [NetworkManager::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1165,6 +1569,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [NetworkManager::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1227,6 +1632,7 @@ pub struct TransitGatewayRegistrationStateReason {
     pub message: Option<String>,
 }
 
+/// see [NetworkManager::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1238,10 +1644,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [NetworkManager::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [NetworkManager::update_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionRequest {
@@ -1265,6 +1673,7 @@ pub struct UpdateConnectionRequest {
     pub link_id: Option<String>,
 }
 
+/// see [NetworkManager::update_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectionResponse {
@@ -1274,6 +1683,7 @@ pub struct UpdateConnectionResponse {
     pub connection: Option<Connection>,
 }
 
+/// see [NetworkManager::update_device]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
@@ -1316,6 +1726,7 @@ pub struct UpdateDeviceRequest {
     pub vendor: Option<String>,
 }
 
+/// see [NetworkManager::update_device]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceResponse {
@@ -1325,6 +1736,7 @@ pub struct UpdateDeviceResponse {
     pub device: Option<Device>,
 }
 
+/// see [NetworkManager::update_global_network]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalNetworkRequest {
@@ -1337,6 +1749,7 @@ pub struct UpdateGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
+/// see [NetworkManager::update_global_network]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGlobalNetworkResponse {
@@ -1346,6 +1759,7 @@ pub struct UpdateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
+/// see [NetworkManager::update_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLinkRequest {
@@ -1373,6 +1787,7 @@ pub struct UpdateLinkRequest {
     pub type_: Option<String>,
 }
 
+/// see [NetworkManager::update_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkResponse {
@@ -1382,6 +1797,7 @@ pub struct UpdateLinkResponse {
     pub link: Option<Link>,
 }
 
+/// see [NetworkManager::update_site]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSiteRequest {
@@ -1401,6 +1817,7 @@ pub struct UpdateSiteRequest {
     pub site_id: String,
 }
 
+/// see [NetworkManager::update_site]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSiteResponse {
@@ -3457,7 +3874,7 @@ impl fmt::Display for UpdateSiteError {
 impl Error for UpdateSiteError {}
 /// Trait representing the capabilities of the NetworkManager API. NetworkManager clients implement this trait.
 #[async_trait]
-pub trait NetworkManager {
+pub trait NetworkManager: Clone + Sync + Send + 'static {
     /// <p>Associates a customer gateway with a device and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate customer gateways that are connected to a VPN attachment on a transit gateway. The transit gateway must be registered in your global network. When you register a transit gateway, customer gateways that are connected to the transit gateway are automatically included in the global network. To list customer gateways that are connected to a transit gateway, use the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnConnections.html">DescribeVpnConnections</a> EC2 API and filter by <code>transit-gateway-id</code>.</p> <p>You cannot associate a customer gateway with more than one device and link. </p>
     async fn associate_customer_gateway(
         &self,
@@ -3551,6 +3968,17 @@ pub trait NetworkManager {
         input: DescribeGlobalNetworksRequest,
     ) -> Result<DescribeGlobalNetworksResponse, RusotoError<DescribeGlobalNetworksError>>;
 
+    /// Auto-paginating version of `describe_global_networks`
+    fn describe_global_networks_pages<'a>(
+        &'a self,
+        mut input: DescribeGlobalNetworksRequest,
+    ) -> RusotoStream<'a, GlobalNetwork, DescribeGlobalNetworksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_global_networks(input.clone())
+        }))
+    }
+
     /// <p>Disassociates a customer gateway from a device and a link.</p>
     async fn disassociate_customer_gateway(
         &self,
@@ -3578,6 +4006,17 @@ pub trait NetworkManager {
         input: GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>>;
 
+    /// Auto-paginating version of `get_connections`
+    fn get_connections_pages<'a>(
+        &'a self,
+        mut input: GetConnectionsRequest,
+    ) -> RusotoStream<'a, Connection, GetConnectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_connections(input.clone())
+        }))
+    }
+
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
     async fn get_customer_gateway_associations(
         &self,
@@ -3587,11 +4026,33 @@ pub trait NetworkManager {
         RusotoError<GetCustomerGatewayAssociationsError>,
     >;
 
+    /// Auto-paginating version of `get_customer_gateway_associations`
+    fn get_customer_gateway_associations_pages<'a>(
+        &'a self,
+        mut input: GetCustomerGatewayAssociationsRequest,
+    ) -> RusotoStream<'a, CustomerGatewayAssociation, GetCustomerGatewayAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_customer_gateway_associations(input.clone())
+        }))
+    }
+
     /// <p>Gets information about one or more of your devices in a global network.</p>
     async fn get_devices(
         &self,
         input: GetDevicesRequest,
     ) -> Result<GetDevicesResponse, RusotoError<GetDevicesError>>;
+
+    /// Auto-paginating version of `get_devices`
+    fn get_devices_pages<'a>(
+        &'a self,
+        mut input: GetDevicesRequest,
+    ) -> RusotoStream<'a, Device, GetDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_devices(input.clone())
+        }))
+    }
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
     async fn get_link_associations(
@@ -3599,17 +4060,50 @@ pub trait NetworkManager {
         input: GetLinkAssociationsRequest,
     ) -> Result<GetLinkAssociationsResponse, RusotoError<GetLinkAssociationsError>>;
 
+    /// Auto-paginating version of `get_link_associations`
+    fn get_link_associations_pages<'a>(
+        &'a self,
+        mut input: GetLinkAssociationsRequest,
+    ) -> RusotoStream<'a, LinkAssociation, GetLinkAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_link_associations(input.clone())
+        }))
+    }
+
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
     async fn get_links(
         &self,
         input: GetLinksRequest,
     ) -> Result<GetLinksResponse, RusotoError<GetLinksError>>;
 
+    /// Auto-paginating version of `get_links`
+    fn get_links_pages<'a>(
+        &'a self,
+        mut input: GetLinksRequest,
+    ) -> RusotoStream<'a, Link, GetLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_links(input.clone())
+        }))
+    }
+
     /// <p>Gets information about one or more of your sites in a global network.</p>
     async fn get_sites(
         &self,
         input: GetSitesRequest,
     ) -> Result<GetSitesResponse, RusotoError<GetSitesError>>;
+
+    /// Auto-paginating version of `get_sites`
+    fn get_sites_pages<'a>(
+        &'a self,
+        mut input: GetSitesRequest,
+    ) -> RusotoStream<'a, Site, GetSitesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sites(input.clone())
+        }))
+    }
 
     /// <p>Gets information about one or more of your transit gateway Connect peer associations in a global network.</p>
     async fn get_transit_gateway_connect_peer_associations(
@@ -3620,6 +4114,21 @@ pub trait NetworkManager {
         RusotoError<GetTransitGatewayConnectPeerAssociationsError>,
     >;
 
+    /// Auto-paginating version of `get_transit_gateway_connect_peer_associations`
+    fn get_transit_gateway_connect_peer_associations_pages<'a>(
+        &'a self,
+        mut input: GetTransitGatewayConnectPeerAssociationsRequest,
+    ) -> RusotoStream<
+        'a,
+        TransitGatewayConnectPeerAssociation,
+        GetTransitGatewayConnectPeerAssociationsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_transit_gateway_connect_peer_associations(input.clone())
+        }))
+    }
+
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
     async fn get_transit_gateway_registrations(
         &self,
@@ -3628,6 +4137,17 @@ pub trait NetworkManager {
         GetTransitGatewayRegistrationsResponse,
         RusotoError<GetTransitGatewayRegistrationsError>,
     >;
+
+    /// Auto-paginating version of `get_transit_gateway_registrations`
+    fn get_transit_gateway_registrations_pages<'a>(
+        &'a self,
+        mut input: GetTransitGatewayRegistrationsRequest,
+    ) -> RusotoStream<'a, TransitGatewayRegistration, GetTransitGatewayRegistrationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_transit_gateway_registrations(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags for a specified resource.</p>
     async fn list_tags_for_resource(

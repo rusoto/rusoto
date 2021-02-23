@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -121,6 +125,7 @@ pub struct AnalyzerSummary {
 }
 
 /// <p>Retroactively applies an archive rule.</p>
+/// see [AccessAnalyzer::apply_archive_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyArchiveRuleRequest {
@@ -155,6 +160,7 @@ pub struct ArchiveRuleSummary {
 }
 
 /// <p>Creates an analyzer.</p>
+/// see [AccessAnalyzer::create_analyzer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAnalyzerRequest {
@@ -179,6 +185,7 @@ pub struct CreateAnalyzerRequest {
 }
 
 /// <p>The response to the request to create an analyzer.</p>
+/// see [AccessAnalyzer::create_analyzer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAnalyzerResponse {
@@ -189,6 +196,7 @@ pub struct CreateAnalyzerResponse {
 }
 
 /// <p>Creates an archive rule.</p>
+/// see [AccessAnalyzer::create_archive_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateArchiveRuleRequest {
@@ -229,6 +237,7 @@ pub struct Criterion {
 }
 
 /// <p>Deletes an analyzer.</p>
+/// see [AccessAnalyzer::delete_analyzer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnalyzerRequest {
@@ -242,6 +251,7 @@ pub struct DeleteAnalyzerRequest {
 }
 
 /// <p>Deletes an archive rule.</p>
+/// see [AccessAnalyzer::delete_archive_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArchiveRuleRequest {
@@ -389,6 +399,7 @@ pub struct FindingSummary {
 }
 
 /// <p>Retrieves an analyzed resource.</p>
+/// see [AccessAnalyzer::get_analyzed_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnalyzedResourceRequest {
@@ -401,6 +412,7 @@ pub struct GetAnalyzedResourceRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::get_analyzed_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnalyzedResourceResponse {
@@ -411,6 +423,7 @@ pub struct GetAnalyzedResourceResponse {
 }
 
 /// <p>Retrieves an analyzer.</p>
+/// see [AccessAnalyzer::get_analyzer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnalyzerRequest {
@@ -420,6 +433,7 @@ pub struct GetAnalyzerRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::get_analyzer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnalyzerResponse {
@@ -429,6 +443,7 @@ pub struct GetAnalyzerResponse {
 }
 
 /// <p>Retrieves an archive rule.</p>
+/// see [AccessAnalyzer::get_archive_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArchiveRuleRequest {
@@ -441,6 +456,7 @@ pub struct GetArchiveRuleRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::get_archive_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetArchiveRuleResponse {
@@ -449,6 +465,7 @@ pub struct GetArchiveRuleResponse {
 }
 
 /// <p>Retrieves a finding.</p>
+/// see [AccessAnalyzer::get_finding]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingRequest {
@@ -461,6 +478,7 @@ pub struct GetFindingRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::get_finding]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingResponse {
@@ -483,6 +501,7 @@ pub struct InlineArchiveRule {
 }
 
 /// <p>Retrieves a list of resources that have been analyzed.</p>
+/// see [AccessAnalyzer::list_analyzed_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAnalyzedResourcesRequest {
@@ -503,7 +522,24 @@ pub struct ListAnalyzedResourcesRequest {
     pub resource_type: Option<String>,
 }
 
+impl Paged for ListAnalyzedResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAnalyzedResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::list_analyzed_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAnalyzedResourcesResponse {
@@ -516,7 +552,30 @@ pub struct ListAnalyzedResourcesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAnalyzedResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAnalyzedResourcesResponse {
+    type Item = AnalyzedResourceSummary;
+
+    fn into_pagination_page(self) -> Vec<AnalyzedResourceSummary> {
+        self.analyzed_resources
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Retrieves a list of analyzers.</p>
+/// see [AccessAnalyzer::list_analyzers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAnalyzersRequest {
@@ -534,7 +593,24 @@ pub struct ListAnalyzersRequest {
     pub type_: Option<String>,
 }
 
+impl Paged for ListAnalyzersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAnalyzersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::list_analyzers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAnalyzersResponse {
@@ -547,7 +623,30 @@ pub struct ListAnalyzersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAnalyzersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAnalyzersResponse {
+    type Item = AnalyzerSummary;
+
+    fn into_pagination_page(self) -> Vec<AnalyzerSummary> {
+        self.analyzers
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Retrieves a list of archive rules created for the specified analyzer.</p>
+/// see [AccessAnalyzer::list_archive_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArchiveRulesRequest {
@@ -564,7 +663,24 @@ pub struct ListArchiveRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListArchiveRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListArchiveRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::list_archive_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArchiveRulesResponse {
@@ -577,7 +693,30 @@ pub struct ListArchiveRulesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListArchiveRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListArchiveRulesResponse {
+    type Item = ArchiveRuleSummary;
+
+    fn into_pagination_page(self) -> Vec<ArchiveRuleSummary> {
+        self.archive_rules
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Retrieves a list of findings generated by the specified analyzer.</p>
+/// see [AccessAnalyzer::list_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
@@ -602,7 +741,24 @@ pub struct ListFindingsRequest {
     pub sort: Option<SortCriteria>,
 }
 
+impl Paged for ListFindingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::list_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
@@ -615,7 +771,30 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFindingsResponse {
+    type Item = FindingSummary;
+
+    fn into_pagination_page(self) -> Vec<FindingSummary> {
+        self.findings
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Retrieves a list of tags applied to the specified resource.</p>
+/// see [AccessAnalyzer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -625,6 +804,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -649,6 +829,7 @@ pub struct SortCriteria {
 }
 
 /// <p>Starts a scan of the policies applied to the specified resource.</p>
+/// see [AccessAnalyzer::start_resource_scan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartResourceScanRequest {
@@ -670,6 +851,7 @@ pub struct StatusReason {
 }
 
 /// <p>Adds a tag to the specified resource.</p>
+/// see [AccessAnalyzer::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -682,11 +864,13 @@ pub struct TagResourceRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Removes a tag from the specified resource.</p>
+/// see [AccessAnalyzer::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -699,11 +883,13 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The response to the request.</p>
+/// see [AccessAnalyzer::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Updates the specified archive rule.</p>
+/// see [AccessAnalyzer::update_archive_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateArchiveRuleRequest {
@@ -723,6 +909,7 @@ pub struct UpdateArchiveRuleRequest {
 }
 
 /// <p>Updates findings with the new values provided in the request.</p>
+/// see [AccessAnalyzer::update_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsRequest {
@@ -1685,7 +1872,7 @@ impl fmt::Display for UpdateFindingsError {
 impl Error for UpdateFindingsError {}
 /// Trait representing the capabilities of the Access Analyzer API. Access Analyzer clients implement this trait.
 #[async_trait]
-pub trait AccessAnalyzer {
+pub trait AccessAnalyzer: Clone + Sync + Send + 'static {
     /// <p>Retroactively applies the archive rule to existing findings that meet the archive rule criteria.</p>
     async fn apply_archive_rule(
         &self,
@@ -1746,11 +1933,33 @@ pub trait AccessAnalyzer {
         input: ListAnalyzedResourcesRequest,
     ) -> Result<ListAnalyzedResourcesResponse, RusotoError<ListAnalyzedResourcesError>>;
 
+    /// Auto-paginating version of `list_analyzed_resources`
+    fn list_analyzed_resources_pages<'a>(
+        &'a self,
+        mut input: ListAnalyzedResourcesRequest,
+    ) -> RusotoStream<'a, AnalyzedResourceSummary, ListAnalyzedResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_analyzed_resources(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list of analyzers.</p>
     async fn list_analyzers(
         &self,
         input: ListAnalyzersRequest,
     ) -> Result<ListAnalyzersResponse, RusotoError<ListAnalyzersError>>;
+
+    /// Auto-paginating version of `list_analyzers`
+    fn list_analyzers_pages<'a>(
+        &'a self,
+        mut input: ListAnalyzersRequest,
+    ) -> RusotoStream<'a, AnalyzerSummary, ListAnalyzersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_analyzers(input.clone())
+        }))
+    }
 
     /// <p>Retrieves a list of archive rules created for the specified analyzer.</p>
     async fn list_archive_rules(
@@ -1758,11 +1967,33 @@ pub trait AccessAnalyzer {
         input: ListArchiveRulesRequest,
     ) -> Result<ListArchiveRulesResponse, RusotoError<ListArchiveRulesError>>;
 
+    /// Auto-paginating version of `list_archive_rules`
+    fn list_archive_rules_pages<'a>(
+        &'a self,
+        mut input: ListArchiveRulesRequest,
+    ) -> RusotoStream<'a, ArchiveRuleSummary, ListArchiveRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_archive_rules(input.clone())
+        }))
+    }
+
     /// <p>Retrieves a list of findings generated by the specified analyzer.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
     async fn list_findings(
         &self,
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>>;
+
+    /// Auto-paginating version of `list_findings`
+    fn list_findings_pages<'a>(
+        &'a self,
+        mut input: ListFindingsRequest,
+    ) -> RusotoStream<'a, FindingSummary, ListFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_findings(input.clone())
+        }))
+    }
 
     /// <p>Retrieves a list of tags applied to the specified resource.</p>
     async fn list_tags_for_resource(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [Outposts::create_outpost]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOutpostInput {
@@ -47,6 +52,7 @@ pub struct CreateOutpostInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Outposts::create_outpost]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOutpostOutput {
@@ -55,6 +61,7 @@ pub struct CreateOutpostOutput {
     pub outpost: Option<Outpost>,
 }
 
+/// see [Outposts::delete_outpost]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOutpostInput {
@@ -62,10 +69,12 @@ pub struct DeleteOutpostInput {
     pub outpost_id: String,
 }
 
+/// see [Outposts::delete_outpost]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOutpostOutput {}
 
+/// see [Outposts::delete_site]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSiteInput {
@@ -73,10 +82,12 @@ pub struct DeleteSiteInput {
     pub site_id: String,
 }
 
+/// see [Outposts::delete_site]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSiteOutput {}
 
+/// see [Outposts::get_outpost]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutpostInput {
@@ -84,6 +95,7 @@ pub struct GetOutpostInput {
     pub outpost_id: String,
 }
 
+/// see [Outposts::get_outpost_instance_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutpostInstanceTypesInput {
@@ -97,6 +109,7 @@ pub struct GetOutpostInstanceTypesInput {
     pub outpost_id: String,
 }
 
+/// see [Outposts::get_outpost_instance_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOutpostInstanceTypesOutput {
@@ -114,6 +127,7 @@ pub struct GetOutpostInstanceTypesOutput {
     pub outpost_id: Option<String>,
 }
 
+/// see [Outposts::get_outpost]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOutpostOutput {
@@ -131,6 +145,7 @@ pub struct InstanceTypeItem {
     pub instance_type: Option<String>,
 }
 
+/// see [Outposts::list_outposts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutpostsInput {
@@ -142,6 +157,7 @@ pub struct ListOutpostsInput {
     pub next_token: Option<String>,
 }
 
+/// see [Outposts::list_outposts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutpostsOutput {
@@ -153,6 +169,7 @@ pub struct ListOutpostsOutput {
     pub outposts: Option<Vec<Outpost>>,
 }
 
+/// see [Outposts::list_sites]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSitesInput {
@@ -164,6 +181,7 @@ pub struct ListSitesInput {
     pub next_token: Option<String>,
 }
 
+/// see [Outposts::list_sites]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSitesOutput {
@@ -175,6 +193,7 @@ pub struct ListSitesOutput {
     pub sites: Option<Vec<Site>>,
 }
 
+/// see [Outposts::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -183,6 +202,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Outposts::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -251,6 +271,7 @@ pub struct Site {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Outposts::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -262,10 +283,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Outposts::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Outposts::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -277,6 +300,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Outposts::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -683,7 +707,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Outposts API. Outposts clients implement this trait.
 #[async_trait]
-pub trait Outposts {
+pub trait Outposts: Clone + Sync + Send + 'static {
     /// <p>Creates an Outpost.</p>
     async fn create_outpost(
         &self,

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -360,6 +364,7 @@ impl ActionNameTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::add_client_id_to_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddClientIDToOpenIDConnectProviderRequest {
@@ -386,6 +391,7 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
     }
 }
 
+/// see [Iam::add_role_to_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToInstanceProfileRequest {
@@ -412,6 +418,7 @@ impl AddRoleToInstanceProfileRequestSerializer {
     }
 }
 
+/// see [Iam::add_user_to_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddUserToGroupRequest {
@@ -461,6 +468,7 @@ impl ArnTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::attach_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachGroupPolicyRequest {
@@ -484,6 +492,7 @@ impl AttachGroupPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::attach_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachRolePolicyRequest {
@@ -507,6 +516,7 @@ impl AttachRolePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::attach_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachUserPolicyRequest {
@@ -704,6 +714,7 @@ impl CertificateListTypeDeserializer {
         })
     }
 }
+/// see [Iam::change_password]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangePasswordRequest {
@@ -861,6 +872,7 @@ impl ContextKeyValueListTypeSerializer {
     }
 }
 
+/// see [Iam::create_access_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessKeyRequest {
@@ -884,6 +896,7 @@ impl CreateAccessKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateAccessKey</a> request. </p>
+/// see [Iam::create_access_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateAccessKeyResponse {
@@ -914,6 +927,7 @@ impl CreateAccessKeyResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_account_alias]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountAliasRequest {
@@ -934,6 +948,7 @@ impl CreateAccountAliasRequestSerializer {
     }
 }
 
+/// see [Iam::create_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
@@ -960,6 +975,7 @@ impl CreateGroupRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateGroup</a> request. </p>
+/// see [Iam::create_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateGroupResponse {
@@ -986,6 +1002,7 @@ impl CreateGroupResponseDeserializer {
         })
     }
 }
+/// see [Iam::create_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
@@ -1015,6 +1032,7 @@ impl CreateInstanceProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateInstanceProfile</a> request. </p>
+/// see [Iam::create_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInstanceProfileResponse {
@@ -1046,6 +1064,7 @@ impl CreateInstanceProfileResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoginProfileRequest {
@@ -1078,6 +1097,7 @@ impl CreateLoginProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateLoginProfile</a> request. </p>
+/// see [Iam::create_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateLoginProfileResponse {
@@ -1109,6 +1129,7 @@ impl CreateLoginProfileResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpenIDConnectProviderRequest {
@@ -1146,6 +1167,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateOpenIDConnectProvider</a> request. </p>
+/// see [Iam::create_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateOpenIDConnectProviderResponse {
@@ -1179,6 +1201,7 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
@@ -1216,6 +1239,7 @@ impl CreatePolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreatePolicy</a> request. </p>
+/// see [Iam::create_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePolicyResponse {
@@ -1242,6 +1266,7 @@ impl CreatePolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::create_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyVersionRequest {
@@ -1274,6 +1299,7 @@ impl CreatePolicyVersionRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreatePolicyVersion</a> request. </p>
+/// see [Iam::create_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePolicyVersionResponse {
@@ -1307,6 +1333,7 @@ impl CreatePolicyVersionResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleRequest {
@@ -1362,6 +1389,7 @@ impl CreateRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateRole</a> request. </p>
+/// see [Iam::create_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRoleResponse {
@@ -1388,6 +1416,7 @@ impl CreateRoleResponseDeserializer {
         })
     }
 }
+/// see [Iam::create_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSAMLProviderRequest {
@@ -1415,6 +1444,7 @@ impl CreateSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateSAMLProvider</a> request. </p>
+/// see [Iam::create_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSAMLProviderResponse {
@@ -1446,6 +1476,7 @@ impl CreateSAMLProviderResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_service_linked_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceLinkedRoleRequest {
@@ -1479,6 +1510,7 @@ impl CreateServiceLinkedRoleRequestSerializer {
     }
 }
 
+/// see [Iam::create_service_linked_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateServiceLinkedRoleResponse {
@@ -1509,6 +1541,7 @@ impl CreateServiceLinkedRoleResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceSpecificCredentialRequest {
@@ -1532,6 +1565,7 @@ impl CreateServiceSpecificCredentialRequestSerializer {
     }
 }
 
+/// see [Iam::create_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateServiceSpecificCredentialResponse {
@@ -1566,6 +1600,7 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
         )
     }
 }
+/// see [Iam::create_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -1605,6 +1640,7 @@ impl CreateUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateUser</a> request. </p>
+/// see [Iam::create_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateUserResponse {
@@ -1631,6 +1667,7 @@ impl CreateUserResponseDeserializer {
         })
     }
 }
+/// see [Iam::create_virtual_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualMFADeviceRequest {
@@ -1660,6 +1697,7 @@ impl CreateVirtualMFADeviceRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>CreateVirtualMFADevice</a> request. </p>
+/// see [Iam::create_virtual_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateVirtualMFADeviceResponse {
@@ -1699,6 +1737,7 @@ impl DateTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::deactivate_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateMFADeviceRequest {
@@ -1722,6 +1761,7 @@ impl DeactivateMFADeviceRequestSerializer {
     }
 }
 
+/// see [Iam::delete_access_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessKeyRequest {
@@ -1747,6 +1787,7 @@ impl DeleteAccessKeyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_account_alias]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountAliasRequest {
@@ -1767,6 +1808,7 @@ impl DeleteAccountAliasRequestSerializer {
     }
 }
 
+/// see [Iam::delete_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupPolicyRequest {
@@ -1790,6 +1832,7 @@ impl DeleteGroupPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
@@ -1810,6 +1853,7 @@ impl DeleteGroupRequestSerializer {
     }
 }
 
+/// see [Iam::delete_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
@@ -1833,6 +1877,7 @@ impl DeleteInstanceProfileRequestSerializer {
     }
 }
 
+/// see [Iam::delete_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoginProfileRequest {
@@ -1853,6 +1898,7 @@ impl DeleteLoginProfileRequestSerializer {
     }
 }
 
+/// see [Iam::delete_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOpenIDConnectProviderRequest {
@@ -1876,6 +1922,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
     }
 }
 
+/// see [Iam::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
@@ -1896,6 +1943,7 @@ impl DeletePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyVersionRequest {
@@ -1919,6 +1967,7 @@ impl DeletePolicyVersionRequestSerializer {
     }
 }
 
+/// see [Iam::delete_role_permissions_boundary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRolePermissionsBoundaryRequest {
@@ -1939,6 +1988,7 @@ impl DeleteRolePermissionsBoundaryRequestSerializer {
     }
 }
 
+/// see [Iam::delete_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRolePolicyRequest {
@@ -1962,6 +2012,7 @@ impl DeleteRolePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoleRequest {
@@ -1982,6 +2033,7 @@ impl DeleteRoleRequestSerializer {
     }
 }
 
+/// see [Iam::delete_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSAMLProviderRequest {
@@ -2005,6 +2057,7 @@ impl DeleteSAMLProviderRequestSerializer {
     }
 }
 
+/// see [Iam::delete_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSSHPublicKeyRequest {
@@ -2031,6 +2084,7 @@ impl DeleteSSHPublicKeyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServerCertificateRequest {
@@ -2054,6 +2108,7 @@ impl DeleteServerCertificateRequestSerializer {
     }
 }
 
+/// see [Iam::delete_service_linked_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceLinkedRoleRequest {
@@ -2074,6 +2129,7 @@ impl DeleteServiceLinkedRoleRequestSerializer {
     }
 }
 
+/// see [Iam::delete_service_linked_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteServiceLinkedRoleResponse {
@@ -2105,6 +2161,7 @@ impl DeleteServiceLinkedRoleResponseDeserializer {
         )
     }
 }
+/// see [Iam::delete_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceSpecificCredentialRequest {
@@ -2133,6 +2190,7 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
     }
 }
 
+/// see [Iam::delete_signing_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSigningCertificateRequest {
@@ -2161,6 +2219,7 @@ impl DeleteSigningCertificateRequestSerializer {
     }
 }
 
+/// see [Iam::delete_user_permissions_boundary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPermissionsBoundaryRequest {
@@ -2181,6 +2240,7 @@ impl DeleteUserPermissionsBoundaryRequestSerializer {
     }
 }
 
+/// see [Iam::delete_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPolicyRequest {
@@ -2204,6 +2264,7 @@ impl DeleteUserPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::delete_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -2224,6 +2285,7 @@ impl DeleteUserRequestSerializer {
     }
 }
 
+/// see [Iam::delete_virtual_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualMFADeviceRequest {
@@ -2298,6 +2360,7 @@ impl DeletionTaskStatusTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::detach_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachGroupPolicyRequest {
@@ -2321,6 +2384,7 @@ impl DetachGroupPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::detach_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachRolePolicyRequest {
@@ -2344,6 +2408,7 @@ impl DetachRolePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::detach_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachUserPolicyRequest {
@@ -2367,6 +2432,7 @@ impl DetachUserPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::enable_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableMFADeviceRequest {
@@ -2710,6 +2776,7 @@ impl ExistingUserNameTypeDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>
+/// see [Iam::generate_credential_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateCredentialReportResponse {
@@ -2749,6 +2816,7 @@ impl GenerateCredentialReportResponseDeserializer {
         )
     }
 }
+/// see [Iam::generate_organizations_access_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateOrganizationsAccessReportRequest {
@@ -2777,6 +2845,7 @@ impl GenerateOrganizationsAccessReportRequestSerializer {
     }
 }
 
+/// see [Iam::generate_organizations_access_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateOrganizationsAccessReportResponse {
@@ -2807,6 +2876,7 @@ impl GenerateOrganizationsAccessReportResponseDeserializer {
         )
     }
 }
+/// see [Iam::generate_service_last_accessed_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateServiceLastAccessedDetailsRequest {
@@ -2832,6 +2902,7 @@ impl GenerateServiceLastAccessedDetailsRequestSerializer {
     }
 }
 
+/// see [Iam::generate_service_last_accessed_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GenerateServiceLastAccessedDetailsResponse {
@@ -2862,6 +2933,7 @@ impl GenerateServiceLastAccessedDetailsResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_access_key_last_used]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccessKeyLastUsedRequest {
@@ -2883,6 +2955,7 @@ impl GetAccessKeyLastUsedRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetAccessKeyLastUsed</a> request. It is also returned as a member of the <a>AccessKeyMetaData</a> structure returned by the <a>ListAccessKeys</a> action.</p>
+/// see [Iam::get_access_key_last_used]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccessKeyLastUsedResponse {
@@ -2922,6 +2995,7 @@ impl GetAccessKeyLastUsedResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_account_authorization_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountAuthorizationDetailsRequest {
@@ -2931,6 +3005,22 @@ pub struct GetAccountAuthorizationDetailsRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
+}
+
+impl Paged for GetAccountAuthorizationDetailsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for GetAccountAuthorizationDetailsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `GetAccountAuthorizationDetailsRequest` contents to a `SignedRequest`.
@@ -2959,6 +3049,7 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetAccountAuthorizationDetails</a> request. </p>
+/// see [Iam::get_account_authorization_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountAuthorizationDetailsResponse {
@@ -2974,6 +3065,28 @@ pub struct GetAccountAuthorizationDetailsResponse {
     pub role_detail_list: Option<Vec<RoleDetail>>,
     /// <p>A list containing information about IAM users.</p>
     pub user_detail_list: Option<Vec<UserDetail>>,
+}
+
+impl Paged for GetAccountAuthorizationDetailsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for GetAccountAuthorizationDetailsResponse {
+    type Item = GetAccountAuthorizationDetailsResponse;
+
+    fn into_pagination_page(self) -> Vec<GetAccountAuthorizationDetailsResponse> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -3028,6 +3141,7 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>
+/// see [Iam::get_account_password_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountPasswordPolicyResponse {
@@ -3060,6 +3174,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
+/// see [Iam::get_account_summary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountSummaryResponse {
@@ -3093,6 +3208,7 @@ impl GetAccountSummaryResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_context_keys_for_custom_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContextKeysForCustomPolicyRequest {
@@ -3118,6 +3234,8 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>
+/// see [Iam::get_context_keys_for_custom_policy]
+/// see [Iam::get_context_keys_for_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetContextKeysForPolicyResponse {
@@ -3153,6 +3271,7 @@ impl GetContextKeysForPolicyResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_context_keys_for_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContextKeysForPrincipalPolicyRequest {
@@ -3186,6 +3305,7 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetCredentialReport</a> request. </p>
+/// see [Iam::get_credential_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCredentialReportResponse {
@@ -3232,6 +3352,7 @@ impl GetCredentialReportResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupPolicyRequest {
@@ -3256,6 +3377,7 @@ impl GetGroupPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetGroupPolicy</a> request. </p>
+/// see [Iam::get_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetGroupPolicyResponse {
@@ -3293,6 +3415,7 @@ impl GetGroupPolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
@@ -3302,6 +3425,22 @@ pub struct GetGroupRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
+}
+
+impl Paged for GetGroupRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for GetGroupRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `GetGroupRequest` contents to a `SignedRequest`.
@@ -3324,6 +3463,7 @@ impl GetGroupRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetGroup</a> request. </p>
+/// see [Iam::get_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetGroupResponse {
@@ -3335,6 +3475,28 @@ pub struct GetGroupResponse {
     pub marker: Option<String>,
     /// <p>A list of users in the group.</p>
     pub users: Vec<User>,
+}
+
+impl Paged for GetGroupResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for GetGroupResponse {
+    type Item = User;
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.users
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -3369,6 +3531,7 @@ impl GetGroupResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
@@ -3393,6 +3556,7 @@ impl GetInstanceProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetInstanceProfile</a> request. </p>
+/// see [Iam::get_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInstanceProfileResponse {
@@ -3424,6 +3588,7 @@ impl GetInstanceProfileResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoginProfileRequest {
@@ -3445,6 +3610,7 @@ impl GetLoginProfileRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetLoginProfile</a> request. </p>
+/// see [Iam::get_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetLoginProfileResponse {
@@ -3476,6 +3642,7 @@ impl GetLoginProfileResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIDConnectProviderRequest {
@@ -3500,6 +3667,7 @@ impl GetOpenIDConnectProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetOpenIDConnectProvider</a> request. </p>
+/// see [Iam::get_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOpenIDConnectProviderResponse {
@@ -3552,6 +3720,7 @@ impl GetOpenIDConnectProviderResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_organizations_access_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationsAccessReportRequest {
@@ -3587,6 +3756,7 @@ impl GetOrganizationsAccessReportRequestSerializer {
     }
 }
 
+/// see [Iam::get_organizations_access_report]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOrganizationsAccessReportResponse {
@@ -3675,6 +3845,7 @@ impl GetOrganizationsAccessReportResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -3696,6 +3867,7 @@ impl GetPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetPolicy</a> request. </p>
+/// see [Iam::get_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -3722,6 +3894,7 @@ impl GetPolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyVersionRequest {
@@ -3746,6 +3919,7 @@ impl GetPolicyVersionRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetPolicyVersion</a> request. </p>
+/// see [Iam::get_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPolicyVersionResponse {
@@ -3779,6 +3953,7 @@ impl GetPolicyVersionResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRolePolicyRequest {
@@ -3803,6 +3978,7 @@ impl GetRolePolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetRolePolicy</a> request. </p>
+/// see [Iam::get_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetRolePolicyResponse {
@@ -3840,6 +4016,7 @@ impl GetRolePolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoleRequest {
@@ -3861,6 +4038,7 @@ impl GetRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetRole</a> request. </p>
+/// see [Iam::get_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetRoleResponse {
@@ -3887,6 +4065,7 @@ impl GetRoleResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSAMLProviderRequest {
@@ -3911,6 +4090,7 @@ impl GetSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetSAMLProvider</a> request. </p>
+/// see [Iam::get_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSAMLProviderResponse {
@@ -3957,6 +4137,7 @@ impl GetSAMLProviderResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSSHPublicKeyRequest {
@@ -3987,6 +4168,7 @@ impl GetSSHPublicKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetSSHPublicKey</a> request.</p>
+/// see [Iam::get_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSSHPublicKeyResponse {
@@ -4020,6 +4202,7 @@ impl GetSSHPublicKeyResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServerCertificateRequest {
@@ -4044,6 +4227,7 @@ impl GetServerCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetServerCertificate</a> request. </p>
+/// see [Iam::get_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServerCertificateResponse {
@@ -4075,6 +4259,7 @@ impl GetServerCertificateResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_service_last_accessed_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLastAccessedDetailsRequest {
@@ -4105,6 +4290,7 @@ impl GetServiceLastAccessedDetailsRequestSerializer {
     }
 }
 
+/// see [Iam::get_service_last_accessed_details]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLastAccessedDetailsResponse {
@@ -4184,6 +4370,7 @@ impl GetServiceLastAccessedDetailsResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_service_last_accessed_details_with_entities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLastAccessedDetailsWithEntitiesRequest {
@@ -4224,6 +4411,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
     }
 }
 
+/// see [Iam::get_service_last_accessed_details_with_entities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLastAccessedDetailsWithEntitiesResponse {
@@ -4295,6 +4483,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_service_linked_role_deletion_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceLinkedRoleDeletionStatusRequest {
@@ -4318,6 +4507,7 @@ impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
     }
 }
 
+/// see [Iam::get_service_linked_role_deletion_status]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetServiceLinkedRoleDeletionStatusResponse {
@@ -4356,6 +4546,7 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
         )
     }
 }
+/// see [Iam::get_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserPolicyRequest {
@@ -4380,6 +4571,7 @@ impl GetUserPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetUserPolicy</a> request. </p>
+/// see [Iam::get_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetUserPolicyResponse {
@@ -4418,6 +4610,7 @@ impl GetUserPolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::get_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
@@ -4441,6 +4634,7 @@ impl GetUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>GetUser</a> request. </p>
+/// see [Iam::get_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetUserResponse {
@@ -4760,6 +4954,7 @@ impl LineNumberDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// see [Iam::list_access_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccessKeysRequest {
@@ -4769,6 +4964,22 @@ pub struct ListAccessKeysRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the user.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
+}
+
+impl Paged for ListAccessKeysRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAccessKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListAccessKeysRequest` contents to a `SignedRequest`.
@@ -4793,6 +5004,7 @@ impl ListAccessKeysRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAccessKeys</a> request. </p>
+/// see [Iam::list_access_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAccessKeysResponse {
@@ -4802,6 +5014,28 @@ pub struct ListAccessKeysResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListAccessKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListAccessKeysResponse {
+    type Item = AccessKeyMetadata;
+
+    fn into_pagination_page(self) -> Vec<AccessKeyMetadata> {
+        self.access_key_metadata
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -4837,6 +5071,7 @@ impl ListAccessKeysResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_account_aliases]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountAliasesRequest {
@@ -4844,6 +5079,22 @@ pub struct ListAccountAliasesRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
+}
+
+impl Paged for ListAccountAliasesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAccountAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListAccountAliasesRequest` contents to a `SignedRequest`.
@@ -4865,6 +5116,7 @@ impl ListAccountAliasesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAccountAliases</a> request. </p>
+/// see [Iam::list_account_aliases]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAccountAliasesResponse {
@@ -4874,6 +5126,28 @@ pub struct ListAccountAliasesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListAccountAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListAccountAliasesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.account_aliases
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -4912,6 +5186,7 @@ impl ListAccountAliasesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_attached_group_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedGroupPoliciesRequest {
@@ -4923,6 +5198,22 @@ pub struct ListAttachedGroupPoliciesRequest {
     pub max_items: Option<i64>,
     /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListAttachedGroupPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedGroupPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListAttachedGroupPoliciesRequest` contents to a `SignedRequest`.
@@ -4948,6 +5239,7 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedGroupPolicies</a> request. </p>
+/// see [Iam::list_attached_group_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedGroupPoliciesResponse {
@@ -4957,6 +5249,28 @@ pub struct ListAttachedGroupPoliciesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListAttachedGroupPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListAttachedGroupPoliciesResponse {
+    type Item = AttachedPolicy;
+
+    fn into_pagination_page(self) -> Vec<AttachedPolicy> {
+        self.attached_policies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -4996,6 +5310,7 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_attached_role_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedRolePoliciesRequest {
@@ -5007,6 +5322,22 @@ pub struct ListAttachedRolePoliciesRequest {
     pub path_prefix: Option<String>,
     /// <p>The name (friendly name, not ARN) of the role to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
+}
+
+impl Paged for ListAttachedRolePoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedRolePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListAttachedRolePoliciesRequest` contents to a `SignedRequest`.
@@ -5032,6 +5363,7 @@ impl ListAttachedRolePoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedRolePolicies</a> request. </p>
+/// see [Iam::list_attached_role_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedRolePoliciesResponse {
@@ -5041,6 +5373,28 @@ pub struct ListAttachedRolePoliciesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListAttachedRolePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListAttachedRolePoliciesResponse {
+    type Item = AttachedPolicy;
+
+    fn into_pagination_page(self) -> Vec<AttachedPolicy> {
+        self.attached_policies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5080,6 +5434,7 @@ impl ListAttachedRolePoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_attached_user_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedUserPoliciesRequest {
@@ -5091,6 +5446,22 @@ pub struct ListAttachedUserPoliciesRequest {
     pub path_prefix: Option<String>,
     /// <p>The name (friendly name, not ARN) of the user to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
+}
+
+impl Paged for ListAttachedUserPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedUserPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListAttachedUserPoliciesRequest` contents to a `SignedRequest`.
@@ -5116,6 +5487,7 @@ impl ListAttachedUserPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListAttachedUserPolicies</a> request. </p>
+/// see [Iam::list_attached_user_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAttachedUserPoliciesResponse {
@@ -5125,6 +5497,28 @@ pub struct ListAttachedUserPoliciesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListAttachedUserPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListAttachedUserPoliciesResponse {
+    type Item = AttachedPolicy;
+
+    fn into_pagination_page(self) -> Vec<AttachedPolicy> {
+        self.attached_policies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5164,6 +5558,7 @@ impl ListAttachedUserPoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_entities_for_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesForPolicyRequest {
@@ -5179,6 +5574,22 @@ pub struct ListEntitiesForPolicyRequest {
     pub policy_arn: String,
     /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
     pub policy_usage_filter: Option<String>,
+}
+
+impl Paged for ListEntitiesForPolicyRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListEntitiesForPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListEntitiesForPolicyRequest` contents to a `SignedRequest`.
@@ -5210,6 +5621,7 @@ impl ListEntitiesForPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListEntitiesForPolicy</a> request. </p>
+/// see [Iam::list_entities_for_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListEntitiesForPolicyResponse {
@@ -5223,6 +5635,28 @@ pub struct ListEntitiesForPolicyResponse {
     pub policy_roles: Option<Vec<PolicyRole>>,
     /// <p>A list of IAM users that the policy is attached to.</p>
     pub policy_users: Option<Vec<PolicyUser>>,
+}
+
+impl Paged for ListEntitiesForPolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListEntitiesForPolicyResponse {
+    type Item = ListEntitiesForPolicyResponse;
+
+    fn into_pagination_page(self) -> Vec<ListEntitiesForPolicyResponse> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5269,6 +5703,7 @@ impl ListEntitiesForPolicyResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_group_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupPoliciesRequest {
@@ -5278,6 +5713,22 @@ pub struct ListGroupPoliciesRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
+}
+
+impl Paged for ListGroupPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListGroupPoliciesRequest` contents to a `SignedRequest`.
@@ -5300,6 +5751,7 @@ impl ListGroupPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroupPolicies</a> request. </p>
+/// see [Iam::list_group_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupPoliciesResponse {
@@ -5309,6 +5761,28 @@ pub struct ListGroupPoliciesResponse {
     pub marker: Option<String>,
     /// <p>A list of policy names.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_names: Vec<String>,
+}
+
+impl Paged for ListGroupPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListGroupPoliciesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.policy_names
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5347,6 +5821,7 @@ impl ListGroupPoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_groups_for_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsForUserRequest {
@@ -5356,6 +5831,22 @@ pub struct ListGroupsForUserRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the user to list groups for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
+}
+
+impl Paged for ListGroupsForUserRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupsForUserRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListGroupsForUserRequest` contents to a `SignedRequest`.
@@ -5378,6 +5869,7 @@ impl ListGroupsForUserRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroupsForUser</a> request. </p>
+/// see [Iam::list_groups_for_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupsForUserResponse {
@@ -5387,6 +5879,28 @@ pub struct ListGroupsForUserResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListGroupsForUserResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListGroupsForUserResponse {
+    type Item = Group;
+
+    fn into_pagination_page(self) -> Vec<Group> {
+        self.groups
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5422,6 +5936,7 @@ impl ListGroupsForUserResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
@@ -5431,6 +5946,22 @@ pub struct ListGroupsRequest {
     pub max_items: Option<i64>,
     /// <p> The path prefix for filtering the results. For example, the prefix <code>/division_abc/subdivision_xyz/</code> gets all groups whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all groups. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListGroupsRequest` contents to a `SignedRequest`.
@@ -5455,6 +5986,7 @@ impl ListGroupsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListGroups</a> request. </p>
+/// see [Iam::list_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListGroupsResponse {
@@ -5464,6 +5996,28 @@ pub struct ListGroupsResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListGroupsResponse {
+    type Item = Group;
+
+    fn into_pagination_page(self) -> Vec<Group> {
+        self.groups
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5495,6 +6049,7 @@ impl ListGroupsResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_instance_profiles_for_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesForRoleRequest {
@@ -5504,6 +6059,22 @@ pub struct ListInstanceProfilesForRoleRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the role to list instance profiles for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
+}
+
+impl Paged for ListInstanceProfilesForRoleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceProfilesForRoleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListInstanceProfilesForRoleRequest` contents to a `SignedRequest`.
@@ -5526,6 +6097,7 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListInstanceProfilesForRole</a> request. </p>
+/// see [Iam::list_instance_profiles_for_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInstanceProfilesForRoleResponse {
@@ -5535,6 +6107,28 @@ pub struct ListInstanceProfilesForRoleResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListInstanceProfilesForRoleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListInstanceProfilesForRoleResponse {
+    type Item = InstanceProfile;
+
+    fn into_pagination_page(self) -> Vec<InstanceProfile> {
+        self.instance_profiles
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5574,6 +6168,7 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_instance_profiles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
@@ -5583,6 +6178,22 @@ pub struct ListInstanceProfilesRequest {
     pub max_items: Option<i64>,
     /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all instance profiles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all instance profiles. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListInstanceProfilesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListInstanceProfilesRequest` contents to a `SignedRequest`.
@@ -5607,6 +6218,7 @@ impl ListInstanceProfilesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListInstanceProfiles</a> request. </p>
+/// see [Iam::list_instance_profiles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInstanceProfilesResponse {
@@ -5616,6 +6228,28 @@ pub struct ListInstanceProfilesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListInstanceProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListInstanceProfilesResponse {
+    type Item = InstanceProfile;
+
+    fn into_pagination_page(self) -> Vec<InstanceProfile> {
+        self.instance_profiles
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5655,6 +6289,7 @@ impl ListInstanceProfilesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_mfa_devices]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMFADevicesRequest {
@@ -5664,6 +6299,22 @@ pub struct ListMFADevicesRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the user whose MFA devices you want to list.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
+}
+
+impl Paged for ListMFADevicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListMFADevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListMFADevicesRequest` contents to a `SignedRequest`.
@@ -5688,6 +6339,7 @@ impl ListMFADevicesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListMFADevices</a> request. </p>
+/// see [Iam::list_mfa_devices]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMFADevicesResponse {
@@ -5697,6 +6349,28 @@ pub struct ListMFADevicesResponse {
     pub mfa_devices: Vec<MFADevice>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListMFADevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListMFADevicesResponse {
+    type Item = MFADevice;
+
+    fn into_pagination_page(self) -> Vec<MFADevice> {
+        self.mfa_devices
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -5731,6 +6405,7 @@ impl ListMFADevicesResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_open_id_connect_providers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpenIDConnectProvidersRequest {}
@@ -5747,6 +6422,7 @@ impl ListOpenIDConnectProvidersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListOpenIDConnectProviders</a> request. </p>
+/// see [Iam::list_open_id_connect_providers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListOpenIDConnectProvidersResponse {
@@ -5826,6 +6502,7 @@ impl ListPoliciesGrantingServiceAccessEntryDeserializer {
         )
     }
 }
+/// see [Iam::list_policies_granting_service_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesGrantingServiceAccessRequest {
@@ -5858,6 +6535,7 @@ impl ListPoliciesGrantingServiceAccessRequestSerializer {
     }
 }
 
+/// see [Iam::list_policies_granting_service_access]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPoliciesGrantingServiceAccessResponse {
@@ -5901,6 +6579,7 @@ impl ListPoliciesGrantingServiceAccessResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
@@ -5916,6 +6595,22 @@ pub struct ListPoliciesRequest {
     pub policy_usage_filter: Option<String>,
     /// <p>The scope to use for filtering the results.</p> <p>To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>. To list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>.</p> <p>This parameter is optional. If it is not included, or if it is set to <code>All</code>, all policies are returned.</p>
     pub scope: Option<String>,
+}
+
+impl Paged for ListPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListPoliciesRequest` contents to a `SignedRequest`.
@@ -5949,6 +6644,7 @@ impl ListPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListPolicies</a> request. </p>
+/// see [Iam::list_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPoliciesResponse {
@@ -5958,6 +6654,28 @@ pub struct ListPoliciesResponse {
     pub marker: Option<String>,
     /// <p>A list of policies.</p>
     pub policies: Option<Vec<Policy>>,
+}
+
+impl Paged for ListPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListPoliciesResponse {
+    type Item = Policy;
+
+    fn into_pagination_page(self) -> Vec<Policy> {
+        self.policies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6012,6 +6730,7 @@ impl ListPolicyGrantingServiceAccessResponseListTypeDeserializer {
         })
     }
 }
+/// see [Iam::list_policy_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyVersionsRequest {
@@ -6021,6 +6740,22 @@ pub struct ListPolicyVersionsRequest {
     pub max_items: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
+}
+
+impl Paged for ListPolicyVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPolicyVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListPolicyVersionsRequest` contents to a `SignedRequest`.
@@ -6043,6 +6778,7 @@ impl ListPolicyVersionsRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListPolicyVersions</a> request. </p>
+/// see [Iam::list_policy_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPolicyVersionsResponse {
@@ -6052,6 +6788,28 @@ pub struct ListPolicyVersionsResponse {
     pub marker: Option<String>,
     /// <p>A list of policy versions.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     pub versions: Option<Vec<PolicyVersion>>,
+}
+
+impl Paged for ListPolicyVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListPolicyVersionsResponse {
+    type Item = PolicyVersion;
+
+    fn into_pagination_page(self) -> Vec<PolicyVersion> {
+        self.versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6090,6 +6848,7 @@ impl ListPolicyVersionsResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_role_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRolePoliciesRequest {
@@ -6099,6 +6858,22 @@ pub struct ListRolePoliciesRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the role to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
+}
+
+impl Paged for ListRolePoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListRolePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListRolePoliciesRequest` contents to a `SignedRequest`.
@@ -6121,6 +6896,7 @@ impl ListRolePoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListRolePolicies</a> request. </p>
+/// see [Iam::list_role_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRolePoliciesResponse {
@@ -6130,6 +6906,28 @@ pub struct ListRolePoliciesResponse {
     pub marker: Option<String>,
     /// <p>A list of policy names.</p>
     pub policy_names: Vec<String>,
+}
+
+impl Paged for ListRolePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListRolePoliciesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.policy_names
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6168,6 +6966,7 @@ impl ListRolePoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_role_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoleTagsRequest {
@@ -6198,6 +6997,7 @@ impl ListRoleTagsRequestSerializer {
     }
 }
 
+/// see [Iam::list_role_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRoleTagsResponse {
@@ -6238,6 +7038,7 @@ impl ListRoleTagsResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_roles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRolesRequest {
@@ -6247,6 +7048,22 @@ pub struct ListRolesRequest {
     pub max_items: Option<i64>,
     /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all roles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all roles. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListRolesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListRolesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListRolesRequest` contents to a `SignedRequest`.
@@ -6271,6 +7088,7 @@ impl ListRolesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListRoles</a> request. </p>
+/// see [Iam::list_roles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRolesResponse {
@@ -6280,6 +7098,28 @@ pub struct ListRolesResponse {
     pub marker: Option<String>,
     /// <p>A list of roles.</p>
     pub roles: Vec<Role>,
+}
+
+impl Paged for ListRolesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListRolesResponse {
+    type Item = Role;
+
+    fn into_pagination_page(self) -> Vec<Role> {
+        self.roles
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6311,6 +7151,7 @@ impl ListRolesResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_saml_providers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSAMLProvidersRequest {}
@@ -6327,6 +7168,7 @@ impl ListSAMLProvidersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSAMLProviders</a> request. </p>
+/// see [Iam::list_saml_providers]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSAMLProvidersResponse {
@@ -6362,6 +7204,7 @@ impl ListSAMLProvidersResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_ssh_public_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSSHPublicKeysRequest {
@@ -6371,6 +7214,22 @@ pub struct ListSSHPublicKeysRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the IAM user to list SSH public keys for. If none is specified, the <code>UserName</code> field is determined implicitly based on the AWS access key used to sign the request.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
+}
+
+impl Paged for ListSSHPublicKeysRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListSSHPublicKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListSSHPublicKeysRequest` contents to a `SignedRequest`.
@@ -6395,6 +7254,7 @@ impl ListSSHPublicKeysRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSSHPublicKeys</a> request.</p>
+/// see [Iam::list_ssh_public_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSSHPublicKeysResponse {
@@ -6404,6 +7264,28 @@ pub struct ListSSHPublicKeysResponse {
     pub marker: Option<String>,
     /// <p>A list of the SSH public keys assigned to IAM user.</p>
     pub ssh_public_keys: Option<Vec<SSHPublicKeyMetadata>>,
+}
+
+impl Paged for ListSSHPublicKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListSSHPublicKeysResponse {
+    type Item = SSHPublicKeyMetadata;
+
+    fn into_pagination_page(self) -> Vec<SSHPublicKeyMetadata> {
+        self.ssh_public_keys.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6440,6 +7322,7 @@ impl ListSSHPublicKeysResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_server_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServerCertificatesRequest {
@@ -6449,6 +7332,22 @@ pub struct ListServerCertificatesRequest {
     pub max_items: Option<i64>,
     /// <p> The path prefix for filtering the results. For example: <code>/company/servercerts</code> would get all server certificates for which the path starts with <code>/company/servercerts</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all server certificates. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListServerCertificatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListServerCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListServerCertificatesRequest` contents to a `SignedRequest`.
@@ -6473,6 +7372,7 @@ impl ListServerCertificatesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListServerCertificates</a> request. </p>
+/// see [Iam::list_server_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListServerCertificatesResponse {
@@ -6482,6 +7382,28 @@ pub struct ListServerCertificatesResponse {
     pub marker: Option<String>,
     /// <p>A list of server certificates.</p>
     pub server_certificate_metadata_list: Vec<ServerCertificateMetadata>,
+}
+
+impl Paged for ListServerCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListServerCertificatesResponse {
+    type Item = ServerCertificateMetadata;
+
+    fn into_pagination_page(self) -> Vec<ServerCertificateMetadata> {
+        self.server_certificate_metadata_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6521,6 +7443,7 @@ impl ListServerCertificatesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_service_specific_credentials]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceSpecificCredentialsRequest {
@@ -6548,6 +7471,7 @@ impl ListServiceSpecificCredentialsRequestSerializer {
     }
 }
 
+/// see [Iam::list_service_specific_credentials]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListServiceSpecificCredentialsResponse {
@@ -6583,6 +7507,7 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_signing_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningCertificatesRequest {
@@ -6592,6 +7517,22 @@ pub struct ListSigningCertificatesRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the IAM user whose signing certificates you want to examine.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
+}
+
+impl Paged for ListSigningCertificatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListSigningCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListSigningCertificatesRequest` contents to a `SignedRequest`.
@@ -6616,6 +7557,7 @@ impl ListSigningCertificatesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListSigningCertificates</a> request. </p>
+/// see [Iam::list_signing_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListSigningCertificatesResponse {
@@ -6625,6 +7567,28 @@ pub struct ListSigningCertificatesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ListSigningCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListSigningCertificatesResponse {
+    type Item = SigningCertificate;
+
+    fn into_pagination_page(self) -> Vec<SigningCertificate> {
+        self.certificates
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6663,6 +7627,7 @@ impl ListSigningCertificatesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_user_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoliciesRequest {
@@ -6672,6 +7637,22 @@ pub struct ListUserPoliciesRequest {
     pub max_items: Option<i64>,
     /// <p>The name of the user to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
+}
+
+impl Paged for ListUserPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListUserPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListUserPoliciesRequest` contents to a `SignedRequest`.
@@ -6694,6 +7675,7 @@ impl ListUserPoliciesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListUserPolicies</a> request. </p>
+/// see [Iam::list_user_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUserPoliciesResponse {
@@ -6703,6 +7685,28 @@ pub struct ListUserPoliciesResponse {
     pub marker: Option<String>,
     /// <p>A list of policy names.</p>
     pub policy_names: Vec<String>,
+}
+
+impl Paged for ListUserPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListUserPoliciesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.policy_names
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6741,6 +7745,7 @@ impl ListUserPoliciesResponseDeserializer {
         )
     }
 }
+/// see [Iam::list_user_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserTagsRequest {
@@ -6771,6 +7776,7 @@ impl ListUserTagsRequestSerializer {
     }
 }
 
+/// see [Iam::list_user_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUserTagsResponse {
@@ -6811,6 +7817,7 @@ impl ListUserTagsResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_users]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -6820,6 +7827,22 @@ pub struct ListUsersRequest {
     pub max_items: Option<i64>,
     /// <p> The path prefix for filtering the results. For example: <code>/division_abc/subdivision_xyz/</code>, which would get all user names whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all user names. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (<code>\u0021</code>) through the DEL character (<code>\u007F</code>), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
+}
+
+impl Paged for ListUsersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListUsersRequest` contents to a `SignedRequest`.
@@ -6844,6 +7867,7 @@ impl ListUsersRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListUsers</a> request. </p>
+/// see [Iam::list_users]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListUsersResponse {
@@ -6853,6 +7877,28 @@ pub struct ListUsersResponse {
     pub marker: Option<String>,
     /// <p>A list of users.</p>
     pub users: Vec<User>,
+}
+
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListUsersResponse {
+    type Item = User;
+
+    fn into_pagination_page(self) -> Vec<User> {
+        self.users
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6884,6 +7930,7 @@ impl ListUsersResponseDeserializer {
         })
     }
 }
+/// see [Iam::list_virtual_mfa_devices]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualMFADevicesRequest {
@@ -6893,6 +7940,22 @@ pub struct ListVirtualMFADevicesRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
+}
+
+impl Paged for ListVirtualMFADevicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVirtualMFADevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `ListVirtualMFADevicesRequest` contents to a `SignedRequest`.
@@ -6917,6 +7980,7 @@ impl ListVirtualMFADevicesRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>ListVirtualMFADevices</a> request. </p>
+/// see [Iam::list_virtual_mfa_devices]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListVirtualMFADevicesResponse {
@@ -6926,6 +7990,28 @@ pub struct ListVirtualMFADevicesResponse {
     pub marker: Option<String>,
     /// <p> The list of virtual MFA devices in the current account that match the <code>AssignmentStatus</code> value that was passed in the request.</p>
     pub virtual_mfa_devices: Vec<VirtualMFADevice>,
+}
+
+impl Paged for ListVirtualMFADevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListVirtualMFADevicesResponse {
+    type Item = VirtualMFADevice;
+
+    fn into_pagination_page(self) -> Vec<VirtualMFADevice> {
+        self.virtual_mfa_devices
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -8087,6 +9173,7 @@ impl PublicKeyMaterialTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::put_group_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutGroupPolicyRequest {
@@ -8116,6 +9203,7 @@ impl PutGroupPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::put_role_permissions_boundary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRolePermissionsBoundaryRequest {
@@ -8142,6 +9230,7 @@ impl PutRolePermissionsBoundaryRequestSerializer {
     }
 }
 
+/// see [Iam::put_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRolePolicyRequest {
@@ -8171,6 +9260,7 @@ impl PutRolePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::put_user_permissions_boundary]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutUserPermissionsBoundaryRequest {
@@ -8197,6 +9287,7 @@ impl PutUserPermissionsBoundaryRequestSerializer {
     }
 }
 
+/// see [Iam::put_user_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutUserPolicyRequest {
@@ -8242,6 +9333,7 @@ impl RegionNameTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::remove_client_id_from_open_id_connect_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
@@ -8272,6 +9364,7 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
     }
 }
 
+/// see [Iam::remove_role_from_instance_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromInstanceProfileRequest {
@@ -8298,6 +9391,7 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
     }
 }
 
+/// see [Iam::remove_user_from_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveUserFromGroupRequest {
@@ -8356,6 +9450,7 @@ impl ReportStateTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::reset_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetServiceSpecificCredentialRequest {
@@ -8384,6 +9479,7 @@ impl ResetServiceSpecificCredentialRequestSerializer {
     }
 }
 
+/// see [Iam::reset_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResetServiceSpecificCredentialResponse {
@@ -8538,6 +9634,7 @@ impl ResponseMarkerTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Iam::resync_mfa_device]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResyncMFADeviceRequest {
@@ -9551,6 +10648,7 @@ impl ServicesLastAccessedDeserializer {
         })
     }
 }
+/// see [Iam::set_default_policy_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultPolicyVersionRequest {
@@ -9574,6 +10672,7 @@ impl SetDefaultPolicyVersionRequestSerializer {
     }
 }
 
+/// see [Iam::set_security_token_service_preferences]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSecurityTokenServicePreferencesRequest {
@@ -9646,6 +10745,7 @@ impl SigningCertificateDeserializer {
         })
     }
 }
+/// see [Iam::simulate_custom_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SimulateCustomPolicyRequest {
@@ -9671,6 +10771,22 @@ pub struct SimulateCustomPolicyRequest {
     pub resource_owner: Option<String>,
     /// <p><p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (<code>\u0020</code>) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through <code>\u00FF</code>)</p> </li> <li> <p>The special characters tab (<code>\u0009</code>), line feed (<code>\u000A</code>), and carriage return (<code>\u000D</code>)</p> </li> </ul></p>
     pub resource_policy: Option<String>,
+}
+
+impl Paged for SimulateCustomPolicyRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for SimulateCustomPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `SimulateCustomPolicyRequest` contents to a `SignedRequest`.
@@ -9738,6 +10854,8 @@ impl SimulateCustomPolicyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>
+/// see [Iam::simulate_custom_policy]
+/// see [Iam::simulate_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SimulatePolicyResponse {
@@ -9747,6 +10865,28 @@ pub struct SimulatePolicyResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for SimulatePolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for SimulatePolicyResponse {
+    type Item = EvaluationResult;
+
+    fn into_pagination_page(self) -> Vec<EvaluationResult> {
+        self.evaluation_results.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.is_truncated.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -9782,6 +10922,7 @@ impl SimulatePolicyResponseDeserializer {
         })
     }
 }
+/// see [Iam::simulate_principal_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SimulatePrincipalPolicyRequest {
@@ -9809,6 +10950,22 @@ pub struct SimulatePrincipalPolicyRequest {
     pub resource_owner: Option<String>,
     /// <p><p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (<code>\u0020</code>) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through <code>\u00FF</code>)</p> </li> <li> <p>The special characters tab (<code>\u0009</code>), line feed (<code>\u000A</code>), and carriage return (<code>\u000D</code>)</p> </li> </ul></p>
     pub resource_policy: Option<String>,
+}
+
+impl Paged for SimulatePrincipalPolicyRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for SimulatePrincipalPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `SimulatePrincipalPolicyRequest` contents to a `SignedRequest`.
@@ -10110,6 +11267,7 @@ impl TagListTypeSerializer {
     }
 }
 
+/// see [Iam::tag_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagRoleRequest {
@@ -10133,6 +11291,7 @@ impl TagRoleRequestSerializer {
     }
 }
 
+/// see [Iam::tag_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagUserRequest {
@@ -10277,6 +11436,7 @@ impl TrackedActionsLastAccessedDeserializer {
         })
     }
 }
+/// see [Iam::untag_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagRoleRequest {
@@ -10304,6 +11464,7 @@ impl UntagRoleRequestSerializer {
     }
 }
 
+/// see [Iam::untag_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagUserRequest {
@@ -10331,6 +11492,7 @@ impl UntagUserRequestSerializer {
     }
 }
 
+/// see [Iam::update_access_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccessKeyRequest {
@@ -10359,6 +11521,7 @@ impl UpdateAccessKeyRequestSerializer {
     }
 }
 
+/// see [Iam::update_account_password_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountPasswordPolicyRequest {
@@ -10436,6 +11599,7 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
     }
 }
 
+/// see [Iam::update_assume_role_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssumeRolePolicyRequest {
@@ -10462,6 +11626,7 @@ impl UpdateAssumeRolePolicyRequestSerializer {
     }
 }
 
+/// see [Iam::update_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
@@ -10492,6 +11657,7 @@ impl UpdateGroupRequestSerializer {
     }
 }
 
+/// see [Iam::update_login_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoginProfileRequest {
@@ -10525,6 +11691,7 @@ impl UpdateLoginProfileRequestSerializer {
     }
 }
 
+/// see [Iam::update_open_id_connect_provider_thumbprint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
@@ -10559,6 +11726,7 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
     }
 }
 
+/// see [Iam::update_role_description]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleDescriptionRequest {
@@ -10582,6 +11750,7 @@ impl UpdateRoleDescriptionRequestSerializer {
     }
 }
 
+/// see [Iam::update_role_description]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateRoleDescriptionResponse {
@@ -10612,6 +11781,7 @@ impl UpdateRoleDescriptionResponseDeserializer {
         )
     }
 }
+/// see [Iam::update_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleRequest {
@@ -10642,6 +11812,7 @@ impl UpdateRoleRequestSerializer {
     }
 }
 
+/// see [Iam::update_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateRoleResponse {}
@@ -10663,6 +11834,7 @@ impl UpdateRoleResponseDeserializer {
         Ok(obj)
     }
 }
+/// see [Iam::update_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSAMLProviderRequest {
@@ -10693,6 +11865,7 @@ impl UpdateSAMLProviderRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UpdateSAMLProvider</a> request. </p>
+/// see [Iam::update_saml_provider]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateSAMLProviderResponse {
@@ -10724,6 +11897,7 @@ impl UpdateSAMLProviderResponseDeserializer {
         )
     }
 }
+/// see [Iam::update_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSSHPublicKeyRequest {
@@ -10753,6 +11927,7 @@ impl UpdateSSHPublicKeyRequestSerializer {
     }
 }
 
+/// see [Iam::update_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerCertificateRequest {
@@ -10789,6 +11964,7 @@ impl UpdateServerCertificateRequestSerializer {
     }
 }
 
+/// see [Iam::update_service_specific_credential]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSpecificCredentialRequest {
@@ -10820,6 +11996,7 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
     }
 }
 
+/// see [Iam::update_signing_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSigningCertificateRequest {
@@ -10851,6 +12028,7 @@ impl UpdateSigningCertificateRequestSerializer {
     }
 }
 
+/// see [Iam::update_user]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -10881,6 +12059,7 @@ impl UpdateUserRequestSerializer {
     }
 }
 
+/// see [Iam::upload_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadSSHPublicKeyRequest {
@@ -10908,6 +12087,7 @@ impl UploadSSHPublicKeyRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadSSHPublicKey</a> request.</p>
+/// see [Iam::upload_ssh_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadSSHPublicKeyResponse {
@@ -10941,6 +12121,7 @@ impl UploadSSHPublicKeyResponseDeserializer {
         )
     }
 }
+/// see [Iam::upload_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadServerCertificateRequest {
@@ -10984,6 +12165,7 @@ impl UploadServerCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadServerCertificate</a> request. </p>
+/// see [Iam::upload_server_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadServerCertificateResponse {
@@ -11018,6 +12200,7 @@ impl UploadServerCertificateResponseDeserializer {
         )
     }
 }
+/// see [Iam::upload_signing_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadSigningCertificateRequest {
@@ -11047,6 +12230,7 @@ impl UploadSigningCertificateRequestSerializer {
 }
 
 /// <p>Contains the response to a successful <a>UploadSigningCertificate</a> request. </p>
+/// see [Iam::upload_signing_certificate]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadSigningCertificateResponse {
@@ -20074,7 +21258,7 @@ impl fmt::Display for UploadSigningCertificateError {
 impl Error for UploadSigningCertificateError {}
 /// Trait representing the capabilities of the IAM API. IAM clients implement this trait.
 #[async_trait]
-pub trait Iam {
+pub trait Iam: Clone + Sync + Send + 'static {
     /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This operation is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>
     async fn add_client_id_to_open_id_connect_provider(
         &self,
@@ -20409,6 +21593,18 @@ pub trait Iam {
         RusotoError<GetAccountAuthorizationDetailsError>,
     >;
 
+    /// Auto-paginating version of `get_account_authorization_details`
+    fn get_account_authorization_details_pages<'a>(
+        &'a self,
+        mut input: GetAccountAuthorizationDetailsRequest,
+    ) -> RusotoStream<'a, GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_account_authorization_details(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
     async fn get_account_password_policy(
         &self,
@@ -20441,6 +21637,17 @@ pub trait Iam {
         &self,
         input: GetGroupRequest,
     ) -> Result<GetGroupResponse, RusotoError<GetGroupError>>;
+
+    /// Auto-paginating version of `get_group`
+    fn get_group_pages<'a>(
+        &'a self,
+        mut input: GetGroupRequest,
+    ) -> RusotoStream<'a, User, GetGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_group(input.clone())
+        }))
+    }
 
     /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     async fn get_group_policy(
@@ -20559,11 +21766,33 @@ pub trait Iam {
         input: ListAccessKeysRequest,
     ) -> Result<ListAccessKeysResponse, RusotoError<ListAccessKeysError>>;
 
+    /// Auto-paginating version of `list_access_keys`
+    fn list_access_keys_pages<'a>(
+        &'a self,
+        mut input: ListAccessKeysRequest,
+    ) -> RusotoStream<'a, AccessKeyMetadata, ListAccessKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_access_keys(input.clone())
+        }))
+    }
+
     /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     async fn list_account_aliases(
         &self,
         input: ListAccountAliasesRequest,
     ) -> Result<ListAccountAliasesResponse, RusotoError<ListAccountAliasesError>>;
+
+    /// Auto-paginating version of `list_account_aliases`
+    fn list_account_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAccountAliasesRequest,
+    ) -> RusotoStream<'a, String, ListAccountAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_account_aliases(input.clone())
+        }))
+    }
 
     /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
     async fn list_attached_group_policies(
@@ -20571,11 +21800,33 @@ pub trait Iam {
         input: ListAttachedGroupPoliciesRequest,
     ) -> Result<ListAttachedGroupPoliciesResponse, RusotoError<ListAttachedGroupPoliciesError>>;
 
+    /// Auto-paginating version of `list_attached_group_policies`
+    fn list_attached_group_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedGroupPoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedGroupPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_group_policies(input.clone())
+        }))
+    }
+
     /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the operation returns an empty list.</p>
     async fn list_attached_role_policies(
         &self,
         input: ListAttachedRolePoliciesRequest,
     ) -> Result<ListAttachedRolePoliciesResponse, RusotoError<ListAttachedRolePoliciesError>>;
+
+    /// Auto-paginating version of `list_attached_role_policies`
+    fn list_attached_role_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedRolePoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedRolePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_role_policies(input.clone())
+        }))
+    }
 
     /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
     async fn list_attached_user_policies(
@@ -20583,11 +21834,33 @@ pub trait Iam {
         input: ListAttachedUserPoliciesRequest,
     ) -> Result<ListAttachedUserPoliciesResponse, RusotoError<ListAttachedUserPoliciesError>>;
 
+    /// Auto-paginating version of `list_attached_user_policies`
+    fn list_attached_user_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedUserPoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedUserPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_user_policies(input.clone())
+        }))
+    }
+
     /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_entities_for_policy(
         &self,
         input: ListEntitiesForPolicyRequest,
     ) -> Result<ListEntitiesForPolicyResponse, RusotoError<ListEntitiesForPolicyError>>;
+
+    /// Auto-paginating version of `list_entities_for_policy`
+    fn list_entities_for_policy_pages<'a>(
+        &'a self,
+        mut input: ListEntitiesForPolicyRequest,
+    ) -> RusotoStream<'a, ListEntitiesForPolicyResponse, ListEntitiesForPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entities_for_policy(input.clone())
+        }))
+    }
 
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the operation returns an empty list.</p>
     async fn list_group_policies(
@@ -20595,11 +21868,33 @@ pub trait Iam {
         input: ListGroupPoliciesRequest,
     ) -> Result<ListGroupPoliciesResponse, RusotoError<ListGroupPoliciesError>>;
 
+    /// Auto-paginating version of `list_group_policies`
+    fn list_group_policies_pages<'a>(
+        &'a self,
+        mut input: ListGroupPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListGroupPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_policies(input.clone())
+        }))
+    }
+
     /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_groups(
         &self,
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
+
+    /// Auto-paginating version of `list_groups`
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
+    }
 
     /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_groups_for_user(
@@ -20607,11 +21902,33 @@ pub trait Iam {
         input: ListGroupsForUserRequest,
     ) -> Result<ListGroupsForUserResponse, RusotoError<ListGroupsForUserError>>;
 
+    /// Auto-paginating version of `list_groups_for_user`
+    fn list_groups_for_user_pages<'a>(
+        &'a self,
+        mut input: ListGroupsForUserRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsForUserError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups_for_user(input.clone())
+        }))
+    }
+
     /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_instance_profiles(
         &self,
         input: ListInstanceProfilesRequest,
     ) -> Result<ListInstanceProfilesResponse, RusotoError<ListInstanceProfilesError>>;
+
+    /// Auto-paginating version of `list_instance_profiles`
+    fn list_instance_profiles_pages<'a>(
+        &'a self,
+        mut input: ListInstanceProfilesRequest,
+    ) -> RusotoStream<'a, InstanceProfile, ListInstanceProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_profiles(input.clone())
+        }))
+    }
 
     /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_instance_profiles_for_role(
@@ -20619,11 +21936,33 @@ pub trait Iam {
         input: ListInstanceProfilesForRoleRequest,
     ) -> Result<ListInstanceProfilesForRoleResponse, RusotoError<ListInstanceProfilesForRoleError>>;
 
+    /// Auto-paginating version of `list_instance_profiles_for_role`
+    fn list_instance_profiles_for_role_pages<'a>(
+        &'a self,
+        mut input: ListInstanceProfilesForRoleRequest,
+    ) -> RusotoStream<'a, InstanceProfile, ListInstanceProfilesForRoleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_profiles_for_role(input.clone())
+        }))
+    }
+
     /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this operation lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_mfa_devices(
         &self,
         input: ListMFADevicesRequest,
     ) -> Result<ListMFADevicesResponse, RusotoError<ListMFADevicesError>>;
+
+    /// Auto-paginating version of `list_mfa_devices`
+    fn list_mfa_devices_pages<'a>(
+        &'a self,
+        mut input: ListMFADevicesRequest,
+    ) -> RusotoStream<'a, MFADevice, ListMFADevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_mfa_devices(input.clone())
+        }))
+    }
 
     /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
     async fn list_open_id_connect_providers(
@@ -20636,6 +21975,17 @@ pub trait Iam {
         &self,
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
+
+    /// Auto-paginating version of `list_policies`
+    fn list_policies_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesRequest,
+    ) -> RusotoStream<'a, Policy, ListPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies(input.clone())
+        }))
+    }
 
     /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
     async fn list_policies_granting_service_access(
@@ -20652,11 +22002,33 @@ pub trait Iam {
         input: ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>>;
 
+    /// Auto-paginating version of `list_policy_versions`
+    fn list_policy_versions_pages<'a>(
+        &'a self,
+        mut input: ListPolicyVersionsRequest,
+    ) -> RusotoStream<'a, PolicyVersion, ListPolicyVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policy_versions(input.clone())
+        }))
+    }
+
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the operation returns an empty list.</p>
     async fn list_role_policies(
         &self,
         input: ListRolePoliciesRequest,
     ) -> Result<ListRolePoliciesResponse, RusotoError<ListRolePoliciesError>>;
+
+    /// Auto-paginating version of `list_role_policies`
+    fn list_role_policies_pages<'a>(
+        &'a self,
+        mut input: ListRolePoliciesRequest,
+    ) -> RusotoStream<'a, String, ListRolePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_role_policies(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn list_role_tags(
@@ -20670,6 +22042,17 @@ pub trait Iam {
         input: ListRolesRequest,
     ) -> Result<ListRolesResponse, RusotoError<ListRolesError>>;
 
+    /// Auto-paginating version of `list_roles`
+    fn list_roles_pages<'a>(
+        &'a self,
+        mut input: ListRolesRequest,
+    ) -> RusotoStream<'a, Role, ListRolesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_roles(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     async fn list_saml_providers(
         &self,
@@ -20682,11 +22065,33 @@ pub trait Iam {
         input: ListSSHPublicKeysRequest,
     ) -> Result<ListSSHPublicKeysResponse, RusotoError<ListSSHPublicKeysError>>;
 
+    /// Auto-paginating version of `list_ssh_public_keys`
+    fn list_ssh_public_keys_pages<'a>(
+        &'a self,
+        mut input: ListSSHPublicKeysRequest,
+    ) -> RusotoStream<'a, SSHPublicKeyMetadata, ListSSHPublicKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ssh_public_keys(input.clone())
+        }))
+    }
+
     /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the operation returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
     async fn list_server_certificates(
         &self,
         input: ListServerCertificatesRequest,
     ) -> Result<ListServerCertificatesResponse, RusotoError<ListServerCertificatesError>>;
+
+    /// Auto-paginating version of `list_server_certificates`
+    fn list_server_certificates_pages<'a>(
+        &'a self,
+        mut input: ListServerCertificatesRequest,
+    ) -> RusotoStream<'a, ServerCertificateMetadata, ListServerCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_server_certificates(input.clone())
+        }))
+    }
 
     /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     async fn list_service_specific_credentials(
@@ -20703,11 +22108,33 @@ pub trait Iam {
         input: ListSigningCertificatesRequest,
     ) -> Result<ListSigningCertificatesResponse, RusotoError<ListSigningCertificatesError>>;
 
+    /// Auto-paginating version of `list_signing_certificates`
+    fn list_signing_certificates_pages<'a>(
+        &'a self,
+        mut input: ListSigningCertificatesRequest,
+    ) -> RusotoStream<'a, SigningCertificate, ListSigningCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_certificates(input.clone())
+        }))
+    }
+
     /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the operation returns an empty list.</p>
     async fn list_user_policies(
         &self,
         input: ListUserPoliciesRequest,
     ) -> Result<ListUserPoliciesResponse, RusotoError<ListUserPoliciesError>>;
+
+    /// Auto-paginating version of `list_user_policies`
+    fn list_user_policies_pages<'a>(
+        &'a self,
+        mut input: ListUserPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListUserPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_policies(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn list_user_tags(
@@ -20721,11 +22148,33 @@ pub trait Iam {
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
+    /// Auto-paginating version of `list_users`
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, User, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
+    }
+
     /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the operation returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     async fn list_virtual_mfa_devices(
         &self,
         input: ListVirtualMFADevicesRequest,
     ) -> Result<ListVirtualMFADevicesResponse, RusotoError<ListVirtualMFADevicesError>>;
+
+    /// Auto-paginating version of `list_virtual_mfa_devices`
+    fn list_virtual_mfa_devices_pages<'a>(
+        &'a self,
+        mut input: ListVirtualMFADevicesRequest,
+    ) -> RusotoStream<'a, VirtualMFADevice, ListVirtualMFADevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_mfa_devices(input.clone())
+        }))
+    }
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     async fn put_group_policy(
@@ -20808,11 +22257,33 @@ pub trait Iam {
         input: SimulateCustomPolicyRequest,
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulateCustomPolicyError>>;
 
+    /// Auto-paginating version of `simulate_custom_policy`
+    fn simulate_custom_policy_pages<'a>(
+        &'a self,
+        mut input: SimulateCustomPolicyRequest,
+    ) -> RusotoStream<'a, EvaluationResult, SimulateCustomPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.simulate_custom_policy(input.clone())
+        }))
+    }
+
     /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API operations and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to.</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     async fn simulate_principal_policy(
         &self,
         input: SimulatePrincipalPolicyRequest,
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulatePrincipalPolicyError>>;
+
+    /// Auto-paginating version of `simulate_principal_policy`
+    fn simulate_principal_policy_pages<'a>(
+        &'a self,
+        mut input: SimulatePrincipalPolicyRequest,
+    ) -> RusotoStream<'a, EvaluationResult, SimulatePrincipalPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.simulate_principal_policy(input.clone())
+        }))
+    }
 
     /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn tag_role(&self, input: TagRoleRequest) -> Result<(), RusotoError<TagRoleError>>;

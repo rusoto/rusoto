@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl SwfClient {
 
 use serde_json;
 /// <p>Unit of work sent to an activity worker.</p>
+/// see [Swf::poll_for_activity_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityTask {
@@ -203,6 +208,7 @@ pub struct ActivityTaskStartedEventAttributes {
 }
 
 /// <p>Status information about an activity task.</p>
+/// see [Swf::record_activity_task_heartbeat]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityTaskStatus {
@@ -272,6 +278,7 @@ pub struct ActivityTypeConfiguration {
 }
 
 /// <p>Detailed information about an activity type.</p>
+/// see [Swf::describe_activity_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityTypeDetail {
@@ -307,6 +314,7 @@ pub struct ActivityTypeInfo {
 }
 
 /// <p>Contains a paginated list of activity type information structures.</p>
+/// see [Swf::list_activity_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivityTypeInfos {
@@ -317,6 +325,28 @@ pub struct ActivityTypeInfos {
     /// <p>List of activity type information.</p>
     #[serde(rename = "typeInfos")]
     pub type_infos: Vec<ActivityTypeInfo>,
+}
+
+impl Paged for ActivityTypeInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ActivityTypeInfos {
+    type Item = ActivityTypeInfo;
+
+    fn into_pagination_page(self) -> Vec<ActivityTypeInfo> {
+        self.type_infos
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Provides the details of the <code>CancelTimer</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -574,6 +604,7 @@ pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
     pub decision_task_completed_event_id: i64,
 }
 
+/// see [Swf::count_closed_workflow_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountClosedWorkflowExecutionsInput {
@@ -606,6 +637,7 @@ pub struct CountClosedWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
+/// see [Swf::count_open_workflow_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountOpenWorkflowExecutionsInput {
@@ -629,6 +661,7 @@ pub struct CountOpenWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
+/// see [Swf::count_pending_activity_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountPendingActivityTasksInput {
@@ -640,6 +673,7 @@ pub struct CountPendingActivityTasksInput {
     pub task_list: TaskList,
 }
 
+/// see [Swf::count_pending_decision_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CountPendingDecisionTasksInput {
@@ -722,6 +756,7 @@ pub struct Decision {
 }
 
 /// <p>A structure that represents a decision task. Decision tasks are sent to deciders in order for them to make decisions.</p>
+/// see [Swf::poll_for_decision_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DecisionTask {
@@ -748,6 +783,28 @@ pub struct DecisionTask {
     /// <p>The type of the workflow execution for which this decision task was created.</p>
     #[serde(rename = "workflowType")]
     pub workflow_type: WorkflowType,
+}
+
+impl Paged for DecisionTask {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for DecisionTask {
+    type Item = HistoryEvent;
+
+    fn into_pagination_page(self) -> Vec<HistoryEvent> {
+        self.events
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Provides the details of the <code>DecisionTaskCompleted</code> event.</p>
@@ -811,6 +868,7 @@ pub struct DecisionTaskTimedOutEventAttributes {
     pub timeout_type: String,
 }
 
+/// see [Swf::deprecate_activity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateActivityTypeInput {
@@ -822,6 +880,7 @@ pub struct DeprecateActivityTypeInput {
     pub domain: String,
 }
 
+/// see [Swf::deprecate_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateDomainInput {
@@ -830,6 +889,7 @@ pub struct DeprecateDomainInput {
     pub name: String,
 }
 
+/// see [Swf::deprecate_workflow_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateWorkflowTypeInput {
@@ -841,6 +901,7 @@ pub struct DeprecateWorkflowTypeInput {
     pub workflow_type: WorkflowType,
 }
 
+/// see [Swf::describe_activity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivityTypeInput {
@@ -852,6 +913,7 @@ pub struct DescribeActivityTypeInput {
     pub domain: String,
 }
 
+/// see [Swf::describe_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainInput {
@@ -860,6 +922,7 @@ pub struct DescribeDomainInput {
     pub name: String,
 }
 
+/// see [Swf::describe_workflow_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkflowExecutionInput {
@@ -871,6 +934,7 @@ pub struct DescribeWorkflowExecutionInput {
     pub execution: WorkflowExecution,
 }
 
+/// see [Swf::describe_workflow_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkflowTypeInput {
@@ -892,6 +956,7 @@ pub struct DomainConfiguration {
 }
 
 /// <p>Contains details of a domain.</p>
+/// see [Swf::describe_domain]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDetail {
@@ -924,6 +989,7 @@ pub struct DomainInfo {
 }
 
 /// <p>Contains a paginated collection of DomainInfo structures.</p>
+/// see [Swf::list_domains]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainInfos {
@@ -934,6 +1000,28 @@ pub struct DomainInfos {
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+impl Paged for DomainInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for DomainInfos {
+    type Item = DomainInfo;
+
+    fn into_pagination_page(self) -> Vec<DomainInfo> {
+        self.domain_infos
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Used to filter the workflow executions in visibility APIs by various time-based rules. Each parameter, if specified, defines a rule that must be satisfied by each returned query result. The parameter values are in the <a href="https://en.wikipedia.org/wiki/Unix_time">Unix Time format</a>. For example: <code>"oldestDate": 1325376070.</code> </p>
@@ -999,6 +1087,7 @@ pub struct FailWorkflowExecutionFailedEventAttributes {
     pub decision_task_completed_event_id: i64,
 }
 
+/// see [Swf::get_workflow_execution_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowExecutionHistoryInput {
@@ -1022,7 +1111,24 @@ pub struct GetWorkflowExecutionHistoryInput {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for GetWorkflowExecutionHistoryInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for GetWorkflowExecutionHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
 /// <p>Paginated representation of a workflow history for a workflow execution. This is the up to date, complete and authoritative record of the events related to all tasks and events in the life of the workflow execution.</p>
+/// see [Swf::get_workflow_execution_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct History {
@@ -1033,6 +1139,28 @@ pub struct History {
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+impl Paged for History {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for History {
+    type Item = HistoryEvent;
+
+    fn into_pagination_page(self) -> Vec<HistoryEvent> {
+        self.events
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p><p>Event within a workflow execution. A history event can be one of these types:</p> <ul> <li> <p> <code>ActivityTaskCancelRequested</code> – A <code>RequestCancelActivityTask</code> decision was received by the system.</p> </li> <li> <p> <code>ActivityTaskCanceled</code> – The activity task was successfully canceled.</p> </li> <li> <p> <code>ActivityTaskCompleted</code> – An activity worker successfully completed an activity task by calling <a>RespondActivityTaskCompleted</a>.</p> </li> <li> <p> <code>ActivityTaskFailed</code> – An activity worker failed an activity task by calling <a>RespondActivityTaskFailed</a>.</p> </li> <li> <p> <code>ActivityTaskScheduled</code> – An activity task was scheduled for execution.</p> </li> <li> <p> <code>ActivityTaskStarted</code> – The scheduled activity task was dispatched to a worker.</p> </li> <li> <p> <code>ActivityTaskTimedOut</code> – The activity task timed out.</p> </li> <li> <p> <code>CancelTimerFailed</code> – Failed to process CancelTimer decision. This happens when the decision isn&#39;t configured properly, for example no timer exists with the specified timer Id.</p> </li> <li> <p> <code>CancelWorkflowExecutionFailed</code> – A request to cancel a workflow execution failed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCanceled</code> – A child workflow execution, started by this workflow execution, was canceled and closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCompleted</code> – A child workflow execution, started by this workflow execution, completed successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionFailed</code> – A child workflow execution, started by this workflow execution, failed to complete successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionStarted</code> – A child workflow execution was successfully started.</p> </li> <li> <p> <code>ChildWorkflowExecutionTerminated</code> – A child workflow execution, started by this workflow execution, was terminated.</p> </li> <li> <p> <code>ChildWorkflowExecutionTimedOut</code> – A child workflow execution, started by this workflow execution, timed out and was closed.</p> </li> <li> <p> <code>CompleteWorkflowExecutionFailed</code> – The workflow execution failed to complete.</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecutionFailed</code> – The workflow execution failed to complete after being continued as a new workflow execution.</p> </li> <li> <p> <code>DecisionTaskCompleted</code> – The decider successfully completed a decision task by calling <a>RespondDecisionTaskCompleted</a>.</p> </li> <li> <p> <code>DecisionTaskScheduled</code> – A decision task was scheduled for the workflow execution.</p> </li> <li> <p> <code>DecisionTaskStarted</code> – The decision task was dispatched to a decider.</p> </li> <li> <p> <code>DecisionTaskTimedOut</code> – The decision task timed out.</p> </li> <li> <p> <code>ExternalWorkflowExecutionCancelRequested</code> – Request to cancel an external workflow execution was successfully delivered to the target execution.</p> </li> <li> <p> <code>ExternalWorkflowExecutionSignaled</code> – A signal, requested by this workflow execution, was successfully delivered to the target external workflow execution.</p> </li> <li> <p> <code>FailWorkflowExecutionFailed</code> – A request to mark a workflow execution as failed, itself failed.</p> </li> <li> <p> <code>MarkerRecorded</code> – A marker was recorded in the workflow history as the result of a <code>RecordMarker</code> decision.</p> </li> <li> <p> <code>RecordMarkerFailed</code> – A <code>RecordMarker</code> decision was returned as failed.</p> </li> <li> <p> <code>RequestCancelActivityTaskFailed</code> – Failed to process RequestCancelActivityTask decision. This happens when the decision isn&#39;t configured properly.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionFailed</code> – Request to cancel an external workflow execution failed.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionInitiated</code> – A request was made to request the cancellation of an external workflow execution.</p> </li> <li> <p> <code>ScheduleActivityTaskFailed</code> – Failed to process ScheduleActivityTask decision. This happens when the decision isn&#39;t configured properly, for example the activity type specified isn&#39;t registered.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionFailed</code> – The request to signal an external workflow execution failed.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionInitiated</code> – A request to signal an external workflow was made.</p> </li> <li> <p> <code>StartActivityTaskFailed</code> – A scheduled activity task failed to start.</p> </li> <li> <p> <code>StartChildWorkflowExecutionFailed</code> – Failed to process StartChildWorkflowExecution decision. This happens when the decision isn&#39;t configured properly, for example the workflow type specified isn&#39;t registered.</p> </li> <li> <p> <code>StartChildWorkflowExecutionInitiated</code> – A request was made to start a child workflow execution.</p> </li> <li> <p> <code>StartTimerFailed</code> – Failed to process StartTimer decision. This happens when the decision isn&#39;t configured properly, for example a timer already exists with the specified timer Id.</p> </li> <li> <p> <code>TimerCanceled</code> – A timer, previously started for this workflow execution, was successfully canceled.</p> </li> <li> <p> <code>TimerFired</code> – A timer, previously started for this workflow execution, fired.</p> </li> <li> <p> <code>TimerStarted</code> – A timer was started for the workflow execution due to a <code>StartTimer</code> decision.</p> </li> <li> <p> <code>WorkflowExecutionCancelRequested</code> – A request to cancel this workflow execution was made.</p> </li> <li> <p> <code>WorkflowExecutionCanceled</code> – The workflow execution was successfully canceled and closed.</p> </li> <li> <p> <code>WorkflowExecutionCompleted</code> – The workflow execution was closed due to successful completion.</p> </li> <li> <p> <code>WorkflowExecutionContinuedAsNew</code> – The workflow execution was closed and a new execution of the same type was created with the same workflowId.</p> </li> <li> <p> <code>WorkflowExecutionFailed</code> – The workflow execution closed due to a failure.</p> </li> <li> <p> <code>WorkflowExecutionSignaled</code> – An external signal was received for the workflow execution.</p> </li> <li> <p> <code>WorkflowExecutionStarted</code> – The workflow execution was started.</p> </li> <li> <p> <code>WorkflowExecutionTerminated</code> – The workflow execution was terminated.</p> </li> <li> <p> <code>WorkflowExecutionTimedOut</code> – The workflow execution was closed because a time out was exceeded.</p> </li> </ul></p>
@@ -1385,6 +1513,7 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     pub timeout_type: Option<String>,
 }
 
+/// see [Swf::list_activity_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivityTypesInput {
@@ -1412,6 +1541,23 @@ pub struct ListActivityTypesInput {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for ListActivityTypesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListActivityTypesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
+/// see [Swf::list_closed_workflow_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClosedWorkflowExecutionsInput {
@@ -1456,6 +1602,23 @@ pub struct ListClosedWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
+impl Paged for ListClosedWorkflowExecutionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListClosedWorkflowExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
+/// see [Swf::list_domains]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsInput {
@@ -1476,6 +1639,23 @@ pub struct ListDomainsInput {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for ListDomainsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListDomainsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
+/// see [Swf::list_open_workflow_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOpenWorkflowExecutionsInput {
@@ -1511,6 +1691,23 @@ pub struct ListOpenWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
+impl Paged for ListOpenWorkflowExecutionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListOpenWorkflowExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
+/// see [Swf::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -1519,6 +1716,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [Swf::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -1528,6 +1726,7 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<ResourceTag>>,
 }
 
+/// see [Swf::list_workflow_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkflowTypesInput {
@@ -1555,6 +1754,22 @@ pub struct ListWorkflowTypesInput {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for ListWorkflowTypesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListWorkflowTypesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
 /// <p>Provides the details of the <code>MarkerRecorded</code> event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1572,6 +1787,8 @@ pub struct MarkerRecordedEventAttributes {
 }
 
 /// <p>Contains the count of tasks in a task list.</p>
+/// see [Swf::count_pending_activity_tasks]
+/// see [Swf::count_pending_decision_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingTaskCount {
@@ -1584,6 +1801,7 @@ pub struct PendingTaskCount {
     pub truncated: Option<bool>,
 }
 
+/// see [Swf::poll_for_activity_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForActivityTaskInput {
@@ -1599,6 +1817,7 @@ pub struct PollForActivityTaskInput {
     pub task_list: TaskList,
 }
 
+/// see [Swf::poll_for_decision_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForDecisionTaskInput {
@@ -1626,6 +1845,23 @@ pub struct PollForDecisionTaskInput {
     pub task_list: TaskList,
 }
 
+impl Paged for PollForDecisionTaskInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for PollForDecisionTaskInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_page_token = key;
+    }
+}
+
+/// see [Swf::record_activity_task_heartbeat]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecordActivityTaskHeartbeatInput {
@@ -1666,6 +1902,7 @@ pub struct RecordMarkerFailedEventAttributes {
     pub marker_name: String,
 }
 
+/// see [Swf::register_activity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterActivityTypeInput {
@@ -1708,6 +1945,7 @@ pub struct RegisterActivityTypeInput {
     pub version: String,
 }
 
+/// see [Swf::register_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDomainInput {
@@ -1727,6 +1965,7 @@ pub struct RegisterDomainInput {
     pub workflow_execution_retention_period_in_days: String,
 }
 
+/// see [Swf::register_workflow_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkflowTypeInput {
@@ -1856,6 +2095,7 @@ pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
     pub workflow_id: String,
 }
 
+/// see [Swf::request_cancel_workflow_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestCancelWorkflowExecutionInput {
@@ -1883,6 +2123,7 @@ pub struct ResourceTag {
     pub value: Option<String>,
 }
 
+/// see [Swf::respond_activity_task_canceled]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskCanceledInput {
@@ -1895,6 +2136,7 @@ pub struct RespondActivityTaskCanceledInput {
     pub task_token: String,
 }
 
+/// see [Swf::respond_activity_task_completed]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskCompletedInput {
@@ -1907,6 +2149,7 @@ pub struct RespondActivityTaskCompletedInput {
     pub task_token: String,
 }
 
+/// see [Swf::respond_activity_task_failed]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondActivityTaskFailedInput {
@@ -1924,6 +2167,7 @@ pub struct RespondActivityTaskFailedInput {
 }
 
 /// <p>Input data for a TaskCompleted response to a decision task.</p>
+/// see [Swf::respond_decision_task_completed]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondDecisionTaskCompletedInput {
@@ -1941,6 +2185,7 @@ pub struct RespondDecisionTaskCompletedInput {
 }
 
 /// <p>Specifies the <code>runId</code> of a workflow execution.</p>
+/// see [Swf::start_workflow_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Run {
@@ -2131,6 +2376,7 @@ pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
     pub workflow_id: String,
 }
 
+/// see [Swf::signal_workflow_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignalWorkflowExecutionInput {
@@ -2324,6 +2570,7 @@ pub struct StartTimerFailedEventAttributes {
     pub timer_id: String,
 }
 
+/// see [Swf::start_workflow_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkflowExecutionInput {
@@ -2379,6 +2626,7 @@ pub struct TagFilter {
     pub tag: String,
 }
 
+/// see [Swf::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -2398,6 +2646,7 @@ pub struct TaskList {
     pub name: String,
 }
 
+/// see [Swf::terminate_workflow_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkflowExecutionInput {
@@ -2471,6 +2720,7 @@ pub struct TimerStartedEventAttributes {
     pub timer_id: String,
 }
 
+/// see [Swf::undeprecate_activity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateActivityTypeInput {
@@ -2482,6 +2732,7 @@ pub struct UndeprecateActivityTypeInput {
     pub domain: String,
 }
 
+/// see [Swf::undeprecate_domain]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateDomainInput {
@@ -2490,6 +2741,7 @@ pub struct UndeprecateDomainInput {
     pub name: String,
 }
 
+/// see [Swf::undeprecate_workflow_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeprecateWorkflowTypeInput {
@@ -2501,6 +2753,7 @@ pub struct UndeprecateWorkflowTypeInput {
     pub workflow_type: WorkflowType,
 }
 
+/// see [Swf::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -2639,6 +2892,8 @@ pub struct WorkflowExecutionContinuedAsNewEventAttributes {
 }
 
 /// <p>Contains the count of workflow executions returned from <a>CountOpenWorkflowExecutions</a> or <a>CountClosedWorkflowExecutions</a> </p>
+/// see [Swf::count_closed_workflow_executions]
+/// see [Swf::count_open_workflow_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowExecutionCount {
@@ -2652,6 +2907,7 @@ pub struct WorkflowExecutionCount {
 }
 
 /// <p>Contains details about a workflow execution.</p>
+/// see [Swf::describe_workflow_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowExecutionDetail {
@@ -2739,6 +2995,8 @@ pub struct WorkflowExecutionInfo {
 }
 
 /// <p>Contains a paginated list of information about workflow executions.</p>
+/// see [Swf::list_closed_workflow_executions]
+/// see [Swf::list_open_workflow_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowExecutionInfos {
@@ -2749,6 +3007,28 @@ pub struct WorkflowExecutionInfos {
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+impl Paged for WorkflowExecutionInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for WorkflowExecutionInfos {
+    type Item = WorkflowExecutionInfo;
+
+    fn into_pagination_page(self) -> Vec<WorkflowExecutionInfo> {
+        self.execution_infos
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains the counts of open tasks, child workflow executions and timers for a workflow execution.</p>
@@ -2920,6 +3200,7 @@ pub struct WorkflowTypeConfiguration {
 }
 
 /// <p>Contains details about a workflow type.</p>
+/// see [Swf::describe_workflow_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowTypeDetail {
@@ -2968,6 +3249,7 @@ pub struct WorkflowTypeInfo {
 }
 
 /// <p>Contains a paginated list of information structures about workflow types.</p>
+/// see [Swf::list_workflow_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowTypeInfos {
@@ -2978,6 +3260,28 @@ pub struct WorkflowTypeInfos {
     /// <p>The list of workflow type information.</p>
     #[serde(rename = "typeInfos")]
     pub type_infos: Vec<WorkflowTypeInfo>,
+}
+
+impl Paged for WorkflowTypeInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for WorkflowTypeInfos {
+    type Item = WorkflowTypeInfo;
+
+    fn into_pagination_page(self) -> Vec<WorkflowTypeInfo> {
+        self.type_infos
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// Errors returned by CountClosedWorkflowExecutions
@@ -4728,7 +5032,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon SWF API. Amazon SWF clients implement this trait.
 #[async_trait]
-pub trait Swf {
+pub trait Swf: Clone + Sync + Send + 'static {
     /// <p>Returns the number of closed workflow executions within the given domain that meet the specified filtering criteria.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn count_closed_workflow_executions(
         &self,
@@ -4801,11 +5105,33 @@ pub trait Swf {
         input: GetWorkflowExecutionHistoryInput,
     ) -> Result<History, RusotoError<GetWorkflowExecutionHistoryError>>;
 
+    /// Auto-paginating version of `get_workflow_execution_history`
+    fn get_workflow_execution_history_pages<'a>(
+        &'a self,
+        mut input: GetWorkflowExecutionHistoryInput,
+    ) -> RusotoStream<'a, HistoryEvent, GetWorkflowExecutionHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_workflow_execution_history(input.clone())
+        }))
+    }
+
     /// <p>Returns information about all activities registered in the specified domain that match the specified name and registration status. The result includes information like creation date, current status of the activity, etc. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextPageToken</code> returned by the initial call.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn list_activity_types(
         &self,
         input: ListActivityTypesInput,
     ) -> Result<ActivityTypeInfos, RusotoError<ListActivityTypesError>>;
+
+    /// Auto-paginating version of `list_activity_types`
+    fn list_activity_types_pages<'a>(
+        &'a self,
+        mut input: ListActivityTypesInput,
+    ) -> RusotoStream<'a, ActivityTypeInfo, ListActivityTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_activity_types(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of closed workflow executions in the specified domain that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn list_closed_workflow_executions(
@@ -4813,17 +5139,50 @@ pub trait Swf {
         input: ListClosedWorkflowExecutionsInput,
     ) -> Result<WorkflowExecutionInfos, RusotoError<ListClosedWorkflowExecutionsError>>;
 
+    /// Auto-paginating version of `list_closed_workflow_executions`
+    fn list_closed_workflow_executions_pages<'a>(
+        &'a self,
+        mut input: ListClosedWorkflowExecutionsInput,
+    ) -> RusotoStream<'a, WorkflowExecutionInfo, ListClosedWorkflowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_closed_workflow_executions(input.clone())
+        }))
+    }
+
     /// <p>Returns the list of domains registered in the account. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains. The element must be set to <code>arn:aws:swf::AccountID:domain/*</code>, where <i>AccountID</i> is the account ID, with no dashes.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn list_domains(
         &self,
         input: ListDomainsInput,
     ) -> Result<DomainInfos, RusotoError<ListDomainsError>>;
 
+    /// Auto-paginating version of `list_domains`
+    fn list_domains_pages<'a>(
+        &'a self,
+        mut input: ListDomainsInput,
+    ) -> RusotoStream<'a, DomainInfo, ListDomainsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domains(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of open workflow executions in the specified domain that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn list_open_workflow_executions(
         &self,
         input: ListOpenWorkflowExecutionsInput,
     ) -> Result<WorkflowExecutionInfos, RusotoError<ListOpenWorkflowExecutionsError>>;
+
+    /// Auto-paginating version of `list_open_workflow_executions`
+    fn list_open_workflow_executions_pages<'a>(
+        &'a self,
+        mut input: ListOpenWorkflowExecutionsInput,
+    ) -> RusotoStream<'a, WorkflowExecutionInfo, ListOpenWorkflowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_open_workflow_executions(input.clone())
+        }))
+    }
 
     /// <p>List tags for a given domain.</p>
     async fn list_tags_for_resource(
@@ -4837,6 +5196,17 @@ pub trait Swf {
         input: ListWorkflowTypesInput,
     ) -> Result<WorkflowTypeInfos, RusotoError<ListWorkflowTypesError>>;
 
+    /// Auto-paginating version of `list_workflow_types`
+    fn list_workflow_types_pages<'a>(
+        &'a self,
+        mut input: ListWorkflowTypesInput,
+    ) -> RusotoStream<'a, WorkflowTypeInfo, ListWorkflowTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_workflow_types(input.clone())
+        }))
+    }
+
     /// <p>Used by workers to get an <a>ActivityTask</a> from the specified activity <code>taskList</code>. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available. The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns an empty result. An empty result, in this context, means that an ActivityTask is returned, but that the value of taskToken is an empty string. If a task is returned, the worker should use its type to identify and process it correctly.</p> <important> <p>Workers should set their client side socket timeout to at least 70 seconds (10 seconds higher than the maximum time service may hold the poll request).</p> </important> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the <code>taskList.name</code> parameter by using a <code>Condition</code> element with the <code>swf:taskList.name</code> key to allow the action to access only certain task lists.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn poll_for_activity_task(
         &self,
@@ -4848,6 +5218,17 @@ pub trait Swf {
         &self,
         input: PollForDecisionTaskInput,
     ) -> Result<DecisionTask, RusotoError<PollForDecisionTaskError>>;
+
+    /// Auto-paginating version of `poll_for_decision_task`
+    fn poll_for_decision_task_pages<'a>(
+        &'a self,
+        mut input: PollForDecisionTaskInput,
+    ) -> RusotoStream<'a, HistoryEvent, PollForDecisionTaskError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.poll_for_decision_task(input.clone())
+        }))
+    }
 
     /// <p>Used by activity workers to report to the service that the <a>ActivityTask</a> represented by the specified <code>taskToken</code> is still making progress. The worker can also specify details of the progress, for example percent complete, using the <code>details</code> parameter. This action can also be used by the worker as a mechanism to check if cancellation is being requested for the activity task. If a cancellation is being attempted for the specified task, then the boolean <code>cancelRequested</code> flag returned by the service is set to <code>true</code>.</p> <p>This action resets the <code>taskHeartbeatTimeout</code> clock. The <code>taskHeartbeatTimeout</code> is specified in <a>RegisterActivityType</a>.</p> <p>This action doesn't in itself create an event in the workflow execution history. However, if the task times out, the workflow execution history contains a <code>ActivityTaskTimedOut</code> event that contains the information from the last heartbeat generated by the activity worker.</p> <note> <p>The <code>taskStartToCloseTimeout</code> of an activity type is the maximum duration of an activity task, regardless of the number of <a>RecordActivityTaskHeartbeat</a> requests received. The <code>taskStartToCloseTimeout</code> is also specified in <a>RegisterActivityType</a>.</p> </note> <note> <p>This operation is only useful for long-lived activities to report liveliness of the task and to determine if a cancellation is being attempted.</p> </note> <important> <p>If the <code>cancelRequested</code> flag returns <code>true</code>, a cancellation is being attempted. If the worker can cancel the activity, it should respond with <a>RespondActivityTaskCanceled</a>. Otherwise, it should ignore the cancellation request.</p> </important> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     async fn record_activity_task_heartbeat(

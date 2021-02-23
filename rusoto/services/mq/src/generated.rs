@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -231,6 +235,7 @@ pub struct Configurations {
 }
 
 /// <p>Creates a broker using the specified properties.</p>
+/// see [MQ::create_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBrokerRequest {
@@ -312,6 +317,7 @@ pub struct CreateBrokerRequest {
     pub users: Option<Vec<User>>,
 }
 
+/// see [MQ::create_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBrokerResponse {
@@ -326,6 +332,7 @@ pub struct CreateBrokerResponse {
 }
 
 /// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
+/// see [MQ::create_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationRequest {
@@ -351,6 +358,7 @@ pub struct CreateConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MQ::create_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationResponse {
@@ -381,6 +389,7 @@ pub struct CreateConfigurationResponse {
 }
 
 /// <p>A map of the key-value pairs for the resource tag.</p>
+/// see [MQ::create_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
@@ -394,6 +403,7 @@ pub struct CreateTagsRequest {
 }
 
 /// <p>Creates a new ActiveMQ user.</p>
+/// see [MQ::create_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
@@ -417,10 +427,12 @@ pub struct CreateUserRequest {
     pub username: String,
 }
 
+/// see [MQ::create_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {}
 
+/// see [MQ::delete_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBrokerRequest {
@@ -429,6 +441,7 @@ pub struct DeleteBrokerRequest {
     pub broker_id: String,
 }
 
+/// see [MQ::delete_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBrokerResponse {
@@ -438,6 +451,7 @@ pub struct DeleteBrokerResponse {
     pub broker_id: Option<String>,
 }
 
+/// see [MQ::delete_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
@@ -449,6 +463,7 @@ pub struct DeleteTagsRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [MQ::delete_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
@@ -460,10 +475,12 @@ pub struct DeleteUserRequest {
     pub username: String,
 }
 
+/// see [MQ::delete_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {}
 
+/// see [MQ::describe_broker_engine_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBrokerEngineTypesRequest {
@@ -481,6 +498,7 @@ pub struct DescribeBrokerEngineTypesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::describe_broker_engine_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBrokerEngineTypesResponse {
@@ -498,6 +516,7 @@ pub struct DescribeBrokerEngineTypesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::describe_broker_instance_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBrokerInstanceOptionsRequest {
@@ -523,6 +542,7 @@ pub struct DescribeBrokerInstanceOptionsRequest {
     pub storage_type: Option<String>,
 }
 
+/// see [MQ::describe_broker_instance_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBrokerInstanceOptionsResponse {
@@ -540,6 +560,7 @@ pub struct DescribeBrokerInstanceOptionsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::describe_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBrokerRequest {
@@ -548,6 +569,7 @@ pub struct DescribeBrokerRequest {
     pub broker_id: String,
 }
 
+/// see [MQ::describe_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBrokerResponse {
@@ -665,6 +687,7 @@ pub struct DescribeBrokerResponse {
     pub users: Option<Vec<UserSummary>>,
 }
 
+/// see [MQ::describe_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRequest {
@@ -673,6 +696,7 @@ pub struct DescribeConfigurationRequest {
     pub configuration_id: String,
 }
 
+/// see [MQ::describe_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationResponse {
@@ -718,6 +742,7 @@ pub struct DescribeConfigurationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MQ::describe_configuration_revision]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRevisionRequest {
@@ -729,6 +754,7 @@ pub struct DescribeConfigurationRevisionRequest {
     pub configuration_revision: String,
 }
 
+/// see [MQ::describe_configuration_revision]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRevisionResponse {
@@ -750,6 +776,7 @@ pub struct DescribeConfigurationRevisionResponse {
     pub description: Option<String>,
 }
 
+/// see [MQ::describe_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
@@ -761,6 +788,7 @@ pub struct DescribeUserRequest {
     pub username: String,
 }
 
+/// see [MQ::describe_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
@@ -904,6 +932,7 @@ pub struct LdapServerMetadataOutput {
     pub user_search_subtree: Option<bool>,
 }
 
+/// see [MQ::list_brokers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBrokersRequest {
@@ -917,6 +946,23 @@ pub struct ListBrokersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBrokersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBrokersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MQ::list_brokers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBrokersResponse {
@@ -930,6 +976,29 @@ pub struct ListBrokersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBrokersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListBrokersResponse {
+    type Item = BrokerSummary;
+
+    fn into_pagination_page(self) -> Vec<BrokerSummary> {
+        self.broker_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MQ::list_configuration_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationRevisionsRequest {
@@ -946,6 +1015,7 @@ pub struct ListConfigurationRevisionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::list_configuration_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationRevisionsResponse {
@@ -967,6 +1037,7 @@ pub struct ListConfigurationRevisionsResponse {
     pub revisions: Option<Vec<ConfigurationRevision>>,
 }
 
+/// see [MQ::list_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
@@ -980,6 +1051,7 @@ pub struct ListConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::list_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationsResponse {
@@ -997,6 +1069,7 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::list_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
@@ -1005,6 +1078,7 @@ pub struct ListTagsRequest {
     pub resource_arn: String,
 }
 
+/// see [MQ::list_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
@@ -1014,6 +1088,7 @@ pub struct ListTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [MQ::list_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
@@ -1030,6 +1105,7 @@ pub struct ListUsersRequest {
     pub next_token: Option<String>,
 }
 
+/// see [MQ::list_users]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
@@ -1104,6 +1180,7 @@ pub struct PendingLogs {
     pub general: Option<bool>,
 }
 
+/// see [MQ::reboot_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootBrokerRequest {
@@ -1112,6 +1189,7 @@ pub struct RebootBrokerRequest {
     pub broker_id: String,
 }
 
+/// see [MQ::reboot_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootBrokerResponse {}
@@ -1135,6 +1213,7 @@ pub struct SanitizationWarning {
 }
 
 /// <p>Updates the broker using the specified properties.</p>
+/// see [MQ::update_broker]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerRequest {
@@ -1175,6 +1254,7 @@ pub struct UpdateBrokerRequest {
     pub security_groups: Option<Vec<String>>,
 }
 
+/// see [MQ::update_broker]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerResponse {
@@ -1217,6 +1297,7 @@ pub struct UpdateBrokerResponse {
 }
 
 /// <p>Updates the specified configuration.</p>
+/// see [MQ::update_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationRequest {
@@ -1233,6 +1314,7 @@ pub struct UpdateConfigurationRequest {
     pub description: Option<String>,
 }
 
+/// see [MQ::update_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationResponse {
@@ -1263,6 +1345,7 @@ pub struct UpdateConfigurationResponse {
 }
 
 /// <p>Updates the information for an ActiveMQ user.</p>
+/// see [MQ::update_user]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
@@ -1286,6 +1369,7 @@ pub struct UpdateUserRequest {
     pub username: String,
 }
 
+/// see [MQ::update_user]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {}
@@ -2471,7 +2555,7 @@ impl fmt::Display for UpdateUserError {
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the AmazonMQ API. AmazonMQ clients implement this trait.
 #[async_trait]
-pub trait MQ {
+pub trait MQ: Clone + Sync + Send + 'static {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>
     async fn create_broker(
         &self,
@@ -2561,6 +2645,17 @@ pub trait MQ {
         &self,
         input: ListBrokersRequest,
     ) -> Result<ListBrokersResponse, RusotoError<ListBrokersError>>;
+
+    /// Auto-paginating version of `list_brokers`
+    fn list_brokers_pages<'a>(
+        &'a self,
+        mut input: ListBrokersRequest,
+    ) -> RusotoStream<'a, BrokerSummary, ListBrokersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_brokers(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of all revisions for the specified configuration.</p>
     async fn list_configuration_revisions(

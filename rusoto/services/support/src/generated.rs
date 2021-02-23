@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -50,6 +54,7 @@ impl AWSSupportClient {
 }
 
 use serde_json;
+/// see [AWSSupport::add_attachments_to_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttachmentsToSetRequest {
@@ -63,6 +68,7 @@ pub struct AddAttachmentsToSetRequest {
 }
 
 /// <p>The ID and expiry time of the attachment set returned by the <a>AddAttachmentsToSet</a> operation.</p>
+/// see [AWSSupport::add_attachments_to_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddAttachmentsToSetResponse {
@@ -76,6 +82,7 @@ pub struct AddAttachmentsToSetResponse {
     pub expiry_time: Option<String>,
 }
 
+/// see [AWSSupport::add_communication_to_case]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCommunicationToCaseRequest {
@@ -97,6 +104,7 @@ pub struct AddCommunicationToCaseRequest {
 }
 
 /// <p>The result of the <a>AddCommunicationToCase</a> operation.</p>
+/// see [AWSSupport::add_communication_to_case]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddCommunicationToCaseResponse {
@@ -232,6 +240,7 @@ pub struct Communication {
     pub time_created: Option<String>,
 }
 
+/// see [AWSSupport::create_case]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCaseRequest {
@@ -272,6 +281,7 @@ pub struct CreateCaseRequest {
 }
 
 /// <p>The AWS Support case ID returned by a successful completion of the <a>CreateCase</a> operation.</p>
+/// see [AWSSupport::create_case]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCaseResponse {
@@ -281,6 +291,7 @@ pub struct CreateCaseResponse {
     pub case_id: Option<String>,
 }
 
+/// see [AWSSupport::describe_attachment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAttachmentRequest {
@@ -290,6 +301,7 @@ pub struct DescribeAttachmentRequest {
 }
 
 /// <p>The content and file name of the attachment returned by the <a>DescribeAttachment</a> operation.</p>
+/// see [AWSSupport::describe_attachment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAttachmentResponse {
@@ -299,6 +311,7 @@ pub struct DescribeAttachmentResponse {
     pub attachment: Option<Attachment>,
 }
 
+/// see [AWSSupport::describe_cases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCasesRequest {
@@ -340,7 +353,24 @@ pub struct DescribeCasesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeCasesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeCasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>Returns an array of <a href="https://docs.aws.amazon.com/awssupport/latest/APIReference/API_CaseDetails.html">CaseDetails</a> objects and a <code>nextToken</code> that defines a point for pagination in the result set.</p>
+/// see [AWSSupport::describe_cases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCasesResponse {
@@ -354,6 +384,29 @@ pub struct DescribeCasesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeCasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeCasesResponse {
+    type Item = CaseDetails;
+
+    fn into_pagination_page(self) -> Vec<CaseDetails> {
+        self.cases.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AWSSupport::describe_communications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommunicationsRequest {
@@ -378,7 +431,24 @@ pub struct DescribeCommunicationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeCommunicationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeCommunicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p>The communications returned by the <a>DescribeCommunications</a> operation.</p>
+/// see [AWSSupport::describe_communications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCommunicationsResponse {
@@ -392,6 +462,29 @@ pub struct DescribeCommunicationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeCommunicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeCommunicationsResponse {
+    type Item = Communication;
+
+    fn into_pagination_page(self) -> Vec<Communication> {
+        self.communications.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [AWSSupport::describe_services]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServicesRequest {
@@ -406,6 +499,7 @@ pub struct DescribeServicesRequest {
 }
 
 /// <p>The list of AWS services returned by the <a>DescribeServices</a> operation.</p>
+/// see [AWSSupport::describe_services]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServicesResponse {
@@ -415,6 +509,7 @@ pub struct DescribeServicesResponse {
     pub services: Option<Vec<Service>>,
 }
 
+/// see [AWSSupport::describe_severity_levels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSeverityLevelsRequest {
@@ -425,6 +520,7 @@ pub struct DescribeSeverityLevelsRequest {
 }
 
 /// <p>The list of severity levels returned by the <a>DescribeSeverityLevels</a> operation.</p>
+/// see [AWSSupport::describe_severity_levels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSeverityLevelsResponse {
@@ -434,6 +530,7 @@ pub struct DescribeSeverityLevelsResponse {
     pub severity_levels: Option<Vec<SeverityLevel>>,
 }
 
+/// see [AWSSupport::describe_trusted_advisor_check_refresh_statuses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
@@ -443,6 +540,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
 }
 
 /// <p>The statuses of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckRefreshStatuses</a> operation.</p>
+/// see [AWSSupport::describe_trusted_advisor_check_refresh_statuses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
@@ -452,6 +550,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
 }
 
 /// <p><p/></p>
+/// see [AWSSupport::describe_trusted_advisor_check_result]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckResultRequest {
@@ -465,6 +564,7 @@ pub struct DescribeTrustedAdvisorCheckResultRequest {
 }
 
 /// <p>The result of the Trusted Advisor check returned by the <a>DescribeTrustedAdvisorCheckResult</a> operation.</p>
+/// see [AWSSupport::describe_trusted_advisor_check_result]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrustedAdvisorCheckResultResponse {
@@ -474,6 +574,7 @@ pub struct DescribeTrustedAdvisorCheckResultResponse {
     pub result: Option<TrustedAdvisorCheckResult>,
 }
 
+/// see [AWSSupport::describe_trusted_advisor_check_summaries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorCheckSummariesRequest {
@@ -483,6 +584,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesRequest {
 }
 
 /// <p>The summaries of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckSummaries</a> operation.</p>
+/// see [AWSSupport::describe_trusted_advisor_check_summaries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrustedAdvisorCheckSummariesResponse {
@@ -491,6 +593,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesResponse {
     pub summaries: Vec<TrustedAdvisorCheckSummary>,
 }
 
+/// see [AWSSupport::describe_trusted_advisor_checks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTrustedAdvisorChecksRequest {
@@ -500,6 +603,7 @@ pub struct DescribeTrustedAdvisorChecksRequest {
 }
 
 /// <p>Information about the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorChecks</a> operation.</p>
+/// see [AWSSupport::describe_trusted_advisor_checks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrustedAdvisorChecksResponse {
@@ -523,6 +627,7 @@ pub struct RecentCaseCommunications {
 }
 
 /// <p><p/></p>
+/// see [AWSSupport::refresh_trusted_advisor_check]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshTrustedAdvisorCheckRequest {
@@ -532,6 +637,7 @@ pub struct RefreshTrustedAdvisorCheckRequest {
 }
 
 /// <p>The current refresh status of a Trusted Advisor check.</p>
+/// see [AWSSupport::refresh_trusted_advisor_check]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshTrustedAdvisorCheckResponse {
@@ -540,6 +646,7 @@ pub struct RefreshTrustedAdvisorCheckResponse {
     pub status: TrustedAdvisorCheckRefreshStatus,
 }
 
+/// see [AWSSupport::resolve_case]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveCaseRequest {
@@ -550,6 +657,7 @@ pub struct ResolveCaseRequest {
 }
 
 /// <p>The status of the case returned by the <a>ResolveCase</a> operation.</p>
+/// see [AWSSupport::resolve_case]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolveCaseResponse {
@@ -1325,7 +1433,7 @@ impl fmt::Display for ResolveCaseError {
 impl Error for ResolveCaseError {}
 /// Trait representing the capabilities of the AWS Support API. AWS Support clients implement this trait.
 #[async_trait]
-pub trait AWSSupport {
+pub trait AWSSupport: Clone + Sync + Send + 'static {
     /// <p><p>Adds one or more attachments to an attachment set. </p> <p>An attachment set is a temporary container for attachments that you add to a case or case communication. The set is available for 1 hour after it&#39;s created. The <code>expiryTime</code> returned in the response is when the set expires. </p> <note> <ul> <li> <p>You must have a Business or Enterprise support plan to use the AWS Support API. </p> </li> <li> <p>If you call the AWS Support API from an account that does not have a Business or Enterprise support plan, the <code>SubscriptionRequiredException</code> error message appears. For information about changing your support plan, see <a href="http://aws.amazon.com/premiumsupport/">AWS Support</a>.</p> </li> </ul> </note></p>
     async fn add_attachments_to_set(
         &self,
@@ -1356,11 +1464,33 @@ pub trait AWSSupport {
         input: DescribeCasesRequest,
     ) -> Result<DescribeCasesResponse, RusotoError<DescribeCasesError>>;
 
+    /// Auto-paginating version of `describe_cases`
+    fn describe_cases_pages<'a>(
+        &'a self,
+        mut input: DescribeCasesRequest,
+    ) -> RusotoStream<'a, CaseDetails, DescribeCasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cases(input.clone())
+        }))
+    }
+
     /// <p><p>Returns communications and attachments for one or more support cases. Use the <code>afterTime</code> and <code>beforeTime</code> parameters to filter by date. You can use the <code>caseId</code> parameter to restrict the results to a specific case.</p> <p>Case data is available for 12 months after creation. If a case was created more than 12 months ago, a request for data might cause an error.</p> <p>You can use the <code>maxResults</code> and <code>nextToken</code> parameters to control the pagination of the results. Set <code>maxResults</code> to the number of cases that you want to display on each page, and use <code>nextToken</code> to specify the resumption of pagination.</p> <note> <ul> <li> <p>You must have a Business or Enterprise support plan to use the AWS Support API. </p> </li> <li> <p>If you call the AWS Support API from an account that does not have a Business or Enterprise support plan, the <code>SubscriptionRequiredException</code> error message appears. For information about changing your support plan, see <a href="http://aws.amazon.com/premiumsupport/">AWS Support</a>.</p> </li> </ul> </note></p>
     async fn describe_communications(
         &self,
         input: DescribeCommunicationsRequest,
     ) -> Result<DescribeCommunicationsResponse, RusotoError<DescribeCommunicationsError>>;
+
+    /// Auto-paginating version of `describe_communications`
+    fn describe_communications_pages<'a>(
+        &'a self,
+        mut input: DescribeCommunicationsRequest,
+    ) -> RusotoStream<'a, Communication, DescribeCommunicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_communications(input.clone())
+        }))
+    }
 
     /// <p><p>Returns the current list of AWS services and a list of service categories for each service. You then use service names and categories in your <a>CreateCase</a> requests. Each AWS service has its own set of categories.</p> <p>The service codes and category codes correspond to the values that appear in the <b>Service</b> and <b>Category</b> lists on the AWS Support Center <a href="https://console.aws.amazon.com/support/home#/case/create">Create Case</a> page. The values in those fields don&#39;t necessarily match the service codes and categories returned by the <code>DescribeServices</code> operation. Always use the service codes and categories that the <code>DescribeServices</code> operation returns, so that you have the most recent set of service and category codes.</p> <note> <ul> <li> <p>You must have a Business or Enterprise support plan to use the AWS Support API. </p> </li> <li> <p>If you call the AWS Support API from an account that does not have a Business or Enterprise support plan, the <code>SubscriptionRequiredException</code> error message appears. For information about changing your support plan, see <a href="http://aws.amazon.com/premiumsupport/">AWS Support</a>.</p> </li> </ul> </note></p>
     async fn describe_services(

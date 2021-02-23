@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [IotJobsData::describe_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
@@ -44,6 +49,7 @@ pub struct DescribeJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [IotJobsData::describe_job_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
@@ -53,6 +59,7 @@ pub struct DescribeJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
+/// see [IotJobsData::get_pending_job_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPendingJobExecutionsRequest {
@@ -61,6 +68,7 @@ pub struct GetPendingJobExecutionsRequest {
     pub thing_name: String,
 }
 
+/// see [IotJobsData::get_pending_job_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPendingJobExecutionsResponse {
@@ -172,6 +180,7 @@ pub struct JobExecutionSummary {
     pub version_number: Option<i64>,
 }
 
+/// see [IotJobsData::start_next_pending_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNextPendingJobExecutionRequest {
@@ -188,6 +197,7 @@ pub struct StartNextPendingJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [IotJobsData::start_next_pending_job_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartNextPendingJobExecutionResponse {
@@ -197,6 +207,7 @@ pub struct StartNextPendingJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
+/// see [IotJobsData::update_job_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobExecutionRequest {
@@ -235,6 +246,7 @@ pub struct UpdateJobExecutionRequest {
     pub thing_name: String,
 }
 
+/// see [IotJobsData::update_job_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobExecutionResponse {
@@ -518,7 +530,7 @@ impl fmt::Display for UpdateJobExecutionError {
 impl Error for UpdateJobExecutionError {}
 /// Trait representing the capabilities of the AWS IoT Jobs Data Plane API. AWS IoT Jobs Data Plane clients implement this trait.
 #[async_trait]
-pub trait IotJobsData {
+pub trait IotJobsData: Clone + Sync + Send + 'static {
     /// <p>Gets details of a job execution.</p>
     async fn describe_job_execution(
         &self,

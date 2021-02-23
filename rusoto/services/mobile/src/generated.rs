@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -49,6 +53,7 @@ pub struct BundleDetails {
 }
 
 /// <p> Request structure used to request a project be created. </p>
+/// see [Mobile::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
@@ -76,6 +81,7 @@ pub struct CreateProjectRequest {
 }
 
 /// <p> Result structure used in response to a request to create a project. </p>
+/// see [Mobile::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
@@ -86,6 +92,7 @@ pub struct CreateProjectResult {
 }
 
 /// <p> Request structure used to request a project be deleted. </p>
+/// see [Mobile::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
@@ -95,6 +102,7 @@ pub struct DeleteProjectRequest {
 }
 
 /// <p> Result structure used in response to request to delete a project. </p>
+/// see [Mobile::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {
@@ -109,6 +117,7 @@ pub struct DeleteProjectResult {
 }
 
 /// <p> Request structure to request the details of a specific bundle. </p>
+/// see [Mobile::describe_bundle]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBundleRequest {
@@ -118,6 +127,7 @@ pub struct DescribeBundleRequest {
 }
 
 /// <p> Result structure contains the details of the bundle. </p>
+/// see [Mobile::describe_bundle]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBundleResult {
@@ -128,6 +138,7 @@ pub struct DescribeBundleResult {
 }
 
 /// <p> Request structure used to request details about a project. </p>
+/// see [Mobile::describe_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectRequest {
@@ -141,6 +152,7 @@ pub struct DescribeProjectRequest {
 }
 
 /// <p> Result structure used for requests of project details. </p>
+/// see [Mobile::describe_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectResult {
@@ -150,6 +162,7 @@ pub struct DescribeProjectResult {
 }
 
 /// <p> Request structure used to request generation of custom SDK and tool packages required to integrate mobile web or app clients with backed AWS resources. </p>
+/// see [Mobile::export_bundle]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportBundleRequest {
@@ -167,6 +180,7 @@ pub struct ExportBundleRequest {
 }
 
 /// <p> Result structure which contains link to download custom-generated SDK and tool packages used to integrate mobile web or app clients with backed AWS resources. </p>
+/// see [Mobile::export_bundle]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportBundleResult {
@@ -177,6 +191,7 @@ pub struct ExportBundleResult {
 }
 
 /// <p> Request structure used in requests to export project configuration details. </p>
+/// see [Mobile::export_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportProjectRequest {
@@ -186,6 +201,7 @@ pub struct ExportProjectRequest {
 }
 
 /// <p> Result structure used for requests to export project configuration details. </p>
+/// see [Mobile::export_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportProjectResult {
@@ -204,6 +220,7 @@ pub struct ExportProjectResult {
 }
 
 /// <p> Request structure to request all available bundles. </p>
+/// see [Mobile::list_bundles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBundlesRequest {
@@ -217,7 +234,24 @@ pub struct ListBundlesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBundlesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBundlesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> Result structure contains a list of all available bundles with details. </p>
+/// see [Mobile::list_bundles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBundlesResult {
@@ -231,7 +265,30 @@ pub struct ListBundlesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListBundlesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListBundlesResult {
+    type Item = BundleDetails;
+
+    fn into_pagination_page(self) -> Vec<BundleDetails> {
+        self.bundle_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p> Request structure used to request projects list in AWS Mobile Hub. </p>
+/// see [Mobile::list_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
@@ -245,7 +302,24 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListProjectsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p> Result structure used for requests to list projects in AWS Mobile Hub. </p>
+/// see [Mobile::list_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
@@ -255,6 +329,28 @@ pub struct ListProjectsResult {
     #[serde(rename = "projects")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projects: Option<Vec<ProjectSummary>>,
+}
+
+impl Paged for ListProjectsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListProjectsResult {
+    type Item = ProjectSummary;
+
+    fn into_pagination_page(self) -> Vec<ProjectSummary> {
+        self.projects.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p> Detailed information about an AWS Mobile Hub project. </p>
@@ -326,6 +422,7 @@ pub struct Resource {
 }
 
 /// <p> Request structure used for requests to update project configuration. </p>
+/// see [Mobile::update_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
@@ -344,6 +441,7 @@ pub struct UpdateProjectRequest {
 }
 
 /// <p> Result structure used for requests to updated project configuration. </p>
+/// see [Mobile::update_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {
@@ -895,7 +993,7 @@ impl fmt::Display for UpdateProjectError {
 impl Error for UpdateProjectError {}
 /// Trait representing the capabilities of the AWS Mobile API. AWS Mobile clients implement this trait.
 #[async_trait]
-pub trait Mobile {
+pub trait Mobile: Clone + Sync + Send + 'static {
     /// <p> Creates an AWS Mobile Hub project. </p>
     async fn create_project(
         &self,
@@ -938,11 +1036,33 @@ pub trait Mobile {
         input: ListBundlesRequest,
     ) -> Result<ListBundlesResult, RusotoError<ListBundlesError>>;
 
+    /// Auto-paginating version of `list_bundles`
+    fn list_bundles_pages<'a>(
+        &'a self,
+        mut input: ListBundlesRequest,
+    ) -> RusotoStream<'a, BundleDetails, ListBundlesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bundles(input.clone())
+        }))
+    }
+
     /// <p> Lists projects in AWS Mobile Hub. </p>
     async fn list_projects(
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
+
+    /// Auto-paginating version of `list_projects`
+    fn list_projects_pages<'a>(
+        &'a self,
+        mut input: ListProjectsRequest,
+    ) -> RusotoStream<'a, ProjectSummary, ListProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_projects(input.clone())
+        }))
+    }
 
     /// <p> Update an existing project. </p>
     async fn update_project(

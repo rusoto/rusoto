@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -57,6 +61,7 @@ pub struct ChangedBlock {
     pub second_block_token: Option<String>,
 }
 
+/// see [Ebs::complete_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteSnapshotRequest {
@@ -80,6 +85,7 @@ pub struct CompleteSnapshotRequest {
     pub snapshot_id: String,
 }
 
+/// see [Ebs::complete_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompleteSnapshotResponse {
@@ -89,6 +95,7 @@ pub struct CompleteSnapshotResponse {
     pub status: Option<String>,
 }
 
+/// see [Ebs::get_snapshot_block]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnapshotBlockRequest {
@@ -103,6 +110,7 @@ pub struct GetSnapshotBlockRequest {
     pub snapshot_id: String,
 }
 
+/// see [Ebs::get_snapshot_block]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetSnapshotBlockResponse {
     /// <p>The data content of the block.</p>
@@ -115,6 +123,7 @@ pub struct GetSnapshotBlockResponse {
     pub data_length: Option<i64>,
 }
 
+/// see [Ebs::list_changed_blocks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangedBlocksRequest {
@@ -139,6 +148,7 @@ pub struct ListChangedBlocksRequest {
     pub starting_block_index: Option<i64>,
 }
 
+/// see [Ebs::list_changed_blocks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChangedBlocksResponse {
@@ -164,6 +174,7 @@ pub struct ListChangedBlocksResponse {
     pub volume_size: Option<i64>,
 }
 
+/// see [Ebs::list_snapshot_blocks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSnapshotBlocksRequest {
@@ -184,6 +195,7 @@ pub struct ListSnapshotBlocksRequest {
     pub starting_block_index: Option<i64>,
 }
 
+/// see [Ebs::list_snapshot_blocks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSnapshotBlocksResponse {
@@ -209,6 +221,7 @@ pub struct ListSnapshotBlocksResponse {
     pub volume_size: Option<i64>,
 }
 
+/// see [Ebs::put_snapshot_block]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSnapshotBlockRequest {
@@ -241,6 +254,7 @@ pub struct PutSnapshotBlockRequest {
     pub snapshot_id: String,
 }
 
+/// see [Ebs::put_snapshot_block]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSnapshotBlockResponse {
@@ -254,6 +268,7 @@ pub struct PutSnapshotBlockResponse {
     pub checksum_algorithm: Option<String>,
 }
 
+/// see [Ebs::start_snapshot]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSnapshotRequest {
@@ -290,6 +305,7 @@ pub struct StartSnapshotRequest {
     pub volume_size: i64,
 }
 
+/// see [Ebs::start_snapshot]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSnapshotResponse {
@@ -698,7 +714,7 @@ impl fmt::Display for StartSnapshotError {
 impl Error for StartSnapshotError {}
 /// Trait representing the capabilities of the Amazon EBS API. Amazon EBS clients implement this trait.
 #[async_trait]
-pub trait Ebs {
+pub trait Ebs: Clone + Sync + Send + 'static {
     /// <p>Seals and completes the snapshot after all of the required blocks of data have been written to it. Completing the snapshot changes the status to <code>completed</code>. You cannot write new blocks to a snapshot after it has been completed.</p>
     async fn complete_snapshot(
         &self,

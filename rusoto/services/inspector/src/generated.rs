@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -50,6 +54,7 @@ impl InspectorClient {
 }
 
 use serde_json;
+/// see [Inspector::add_attributes_to_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttributesToFindingsRequest {
@@ -61,6 +66,7 @@ pub struct AddAttributesToFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
+/// see [Inspector::add_attributes_to_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddAttributesToFindingsResponse {
@@ -415,6 +421,7 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
+/// see [Inspector::create_assessment_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTargetRequest {
@@ -427,6 +434,7 @@ pub struct CreateAssessmentTargetRequest {
     pub resource_group_arn: Option<String>,
 }
 
+/// see [Inspector::create_assessment_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTargetResponse {
@@ -435,6 +443,7 @@ pub struct CreateAssessmentTargetResponse {
     pub assessment_target_arn: String,
 }
 
+/// see [Inspector::create_assessment_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTemplateRequest {
@@ -456,6 +465,7 @@ pub struct CreateAssessmentTemplateRequest {
     pub user_attributes_for_findings: Option<Vec<Attribute>>,
 }
 
+/// see [Inspector::create_assessment_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTemplateResponse {
@@ -464,6 +474,7 @@ pub struct CreateAssessmentTemplateResponse {
     pub assessment_template_arn: String,
 }
 
+/// see [Inspector::create_exclusions_preview]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExclusionsPreviewRequest {
@@ -472,6 +483,7 @@ pub struct CreateExclusionsPreviewRequest {
     pub assessment_template_arn: String,
 }
 
+/// see [Inspector::create_exclusions_preview]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExclusionsPreviewResponse {
@@ -480,6 +492,7 @@ pub struct CreateExclusionsPreviewResponse {
     pub preview_token: String,
 }
 
+/// see [Inspector::create_resource_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceGroupRequest {
@@ -488,6 +501,7 @@ pub struct CreateResourceGroupRequest {
     pub resource_group_tags: Vec<ResourceGroupTag>,
 }
 
+/// see [Inspector::create_resource_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceGroupResponse {
@@ -496,6 +510,7 @@ pub struct CreateResourceGroupResponse {
     pub resource_group_arn: String,
 }
 
+/// see [Inspector::delete_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentRunRequest {
@@ -504,6 +519,7 @@ pub struct DeleteAssessmentRunRequest {
     pub assessment_run_arn: String,
 }
 
+/// see [Inspector::delete_assessment_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTargetRequest {
@@ -512,6 +528,7 @@ pub struct DeleteAssessmentTargetRequest {
     pub assessment_target_arn: String,
 }
 
+/// see [Inspector::delete_assessment_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTemplateRequest {
@@ -520,6 +537,7 @@ pub struct DeleteAssessmentTemplateRequest {
     pub assessment_template_arn: String,
 }
 
+/// see [Inspector::describe_assessment_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentRunsRequest {
@@ -528,6 +546,7 @@ pub struct DescribeAssessmentRunsRequest {
     pub assessment_run_arns: Vec<String>,
 }
 
+/// see [Inspector::describe_assessment_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentRunsResponse {
@@ -539,6 +558,7 @@ pub struct DescribeAssessmentRunsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
+/// see [Inspector::describe_assessment_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTargetsRequest {
@@ -547,6 +567,7 @@ pub struct DescribeAssessmentTargetsRequest {
     pub assessment_target_arns: Vec<String>,
 }
 
+/// see [Inspector::describe_assessment_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTargetsResponse {
@@ -558,6 +579,7 @@ pub struct DescribeAssessmentTargetsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
+/// see [Inspector::describe_assessment_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTemplatesRequest {
@@ -565,6 +587,7 @@ pub struct DescribeAssessmentTemplatesRequest {
     pub assessment_template_arns: Vec<String>,
 }
 
+/// see [Inspector::describe_assessment_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTemplatesResponse {
@@ -576,6 +599,7 @@ pub struct DescribeAssessmentTemplatesResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
+/// see [Inspector::describe_cross_account_access_role]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCrossAccountAccessRoleResponse {
@@ -590,6 +614,7 @@ pub struct DescribeCrossAccountAccessRoleResponse {
     pub valid: bool,
 }
 
+/// see [Inspector::describe_exclusions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExclusionsRequest {
@@ -602,6 +627,7 @@ pub struct DescribeExclusionsRequest {
     pub locale: Option<String>,
 }
 
+/// see [Inspector::describe_exclusions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExclusionsResponse {
@@ -613,6 +639,7 @@ pub struct DescribeExclusionsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
+/// see [Inspector::describe_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFindingsRequest {
@@ -625,6 +652,7 @@ pub struct DescribeFindingsRequest {
     pub locale: Option<String>,
 }
 
+/// see [Inspector::describe_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFindingsResponse {
@@ -636,6 +664,7 @@ pub struct DescribeFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
+/// see [Inspector::describe_resource_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceGroupsRequest {
@@ -644,6 +673,7 @@ pub struct DescribeResourceGroupsRequest {
     pub resource_group_arns: Vec<String>,
 }
 
+/// see [Inspector::describe_resource_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceGroupsResponse {
@@ -655,6 +685,7 @@ pub struct DescribeResourceGroupsResponse {
     pub resource_groups: Vec<ResourceGroup>,
 }
 
+/// see [Inspector::describe_rules_packages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesPackagesRequest {
@@ -667,6 +698,7 @@ pub struct DescribeRulesPackagesRequest {
     pub rules_package_arns: Vec<String>,
 }
 
+/// see [Inspector::describe_rules_packages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRulesPackagesResponse {
@@ -874,6 +906,7 @@ pub struct FindingFilter {
     pub user_attributes: Option<Vec<Attribute>>,
 }
 
+/// see [Inspector::get_assessment_report]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssessmentReportRequest {
@@ -888,6 +921,7 @@ pub struct GetAssessmentReportRequest {
     pub report_type: String,
 }
 
+/// see [Inspector::get_assessment_report]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssessmentReportResponse {
@@ -900,6 +934,7 @@ pub struct GetAssessmentReportResponse {
     pub url: Option<String>,
 }
 
+/// see [Inspector::get_exclusions_preview]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExclusionsPreviewRequest {
@@ -923,6 +958,7 @@ pub struct GetExclusionsPreviewRequest {
     pub preview_token: String,
 }
 
+/// see [Inspector::get_exclusions_preview]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExclusionsPreviewResponse {
@@ -939,6 +975,7 @@ pub struct GetExclusionsPreviewResponse {
     pub preview_status: String,
 }
 
+/// see [Inspector::get_telemetry_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTelemetryMetadataRequest {
@@ -947,6 +984,7 @@ pub struct GetTelemetryMetadataRequest {
     pub assessment_run_arn: String,
 }
 
+/// see [Inspector::get_telemetry_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTelemetryMetadataResponse {
@@ -972,6 +1010,7 @@ pub struct InspectorServiceAttributes {
     pub schema_version: i64,
 }
 
+/// see [Inspector::list_assessment_run_agents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunAgentsRequest {
@@ -992,6 +1031,23 @@ pub struct ListAssessmentRunAgentsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentRunAgentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssessmentRunAgentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_assessment_run_agents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunAgentsResponse {
@@ -1004,6 +1060,29 @@ pub struct ListAssessmentRunAgentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentRunAgentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssessmentRunAgentsResponse {
+    type Item = AssessmentRunAgent;
+
+    fn into_pagination_page(self) -> Vec<AssessmentRunAgent> {
+        self.assessment_run_agents
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_assessment_runs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunsRequest {
@@ -1025,6 +1104,23 @@ pub struct ListAssessmentRunsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentRunsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssessmentRunsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_assessment_runs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunsResponse {
@@ -1037,6 +1133,29 @@ pub struct ListAssessmentRunsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentRunsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssessmentRunsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.assessment_run_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_assessment_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTargetsRequest {
@@ -1054,6 +1173,23 @@ pub struct ListAssessmentTargetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentTargetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssessmentTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_assessment_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTargetsResponse {
@@ -1066,6 +1202,29 @@ pub struct ListAssessmentTargetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentTargetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssessmentTargetsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.assessment_target_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_assessment_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTemplatesRequest {
@@ -1087,6 +1246,23 @@ pub struct ListAssessmentTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentTemplatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssessmentTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_assessment_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTemplatesResponse {
@@ -1099,6 +1275,29 @@ pub struct ListAssessmentTemplatesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAssessmentTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAssessmentTemplatesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.assessment_template_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSubscriptionsRequest {
@@ -1116,6 +1315,23 @@ pub struct ListEventSubscriptionsRequest {
     pub resource_arn: Option<String>,
 }
 
+impl Paged for ListEventSubscriptionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEventSubscriptionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_event_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSubscriptionsResponse {
@@ -1128,6 +1344,29 @@ pub struct ListEventSubscriptionsResponse {
     pub subscriptions: Vec<Subscription>,
 }
 
+impl Paged for ListEventSubscriptionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEventSubscriptionsResponse {
+    type Item = Subscription;
+
+    fn into_pagination_page(self) -> Vec<Subscription> {
+        self.subscriptions
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_exclusions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExclusionsRequest {
@@ -1144,6 +1383,23 @@ pub struct ListExclusionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListExclusionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListExclusionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_exclusions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExclusionsResponse {
@@ -1156,6 +1412,29 @@ pub struct ListExclusionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListExclusionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListExclusionsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.exclusion_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
@@ -1177,6 +1456,23 @@ pub struct ListFindingsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFindingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
@@ -1189,6 +1485,29 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFindingsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.finding_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_rules_packages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesPackagesRequest {
@@ -1202,6 +1521,23 @@ pub struct ListRulesPackagesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListRulesPackagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRulesPackagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::list_rules_packages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesPackagesResponse {
@@ -1214,6 +1550,29 @@ pub struct ListRulesPackagesResponse {
     pub rules_package_arns: Vec<String>,
 }
 
+impl Paged for ListRulesPackagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRulesPackagesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.rules_package_arns
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Inspector::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1222,6 +1581,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Inspector::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1276,6 +1636,7 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
+/// see [Inspector::preview_agents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PreviewAgentsRequest {
@@ -1292,6 +1653,23 @@ pub struct PreviewAgentsRequest {
     pub preview_agents_arn: String,
 }
 
+impl Paged for PreviewAgentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for PreviewAgentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Inspector::preview_agents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PreviewAgentsResponse {
@@ -1302,6 +1680,28 @@ pub struct PreviewAgentsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for PreviewAgentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for PreviewAgentsResponse {
+    type Item = AgentPreview;
+
+    fn into_pagination_page(self) -> Vec<AgentPreview> {
+        self.agent_previews
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>
@@ -1318,6 +1718,7 @@ pub struct PrivateIp {
     pub private_ip_address: Option<String>,
 }
 
+/// see [Inspector::register_cross_account_access_role]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCrossAccountAccessRoleRequest {
@@ -1326,6 +1727,7 @@ pub struct RegisterCrossAccountAccessRoleRequest {
     pub role_arn: String,
 }
 
+/// see [Inspector::remove_attributes_from_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAttributesFromFindingsRequest {
@@ -1337,6 +1739,7 @@ pub struct RemoveAttributesFromFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
+/// see [Inspector::remove_attributes_from_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAttributesFromFindingsResponse {
@@ -1422,6 +1825,7 @@ pub struct SecurityGroup {
     pub group_name: Option<String>,
 }
 
+/// see [Inspector::set_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTagsForResourceRequest {
@@ -1434,6 +1838,7 @@ pub struct SetTagsForResourceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Inspector::start_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssessmentRunRequest {
@@ -1446,6 +1851,7 @@ pub struct StartAssessmentRunRequest {
     pub assessment_template_arn: String,
 }
 
+/// see [Inspector::start_assessment_run]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAssessmentRunResponse {
@@ -1454,6 +1860,7 @@ pub struct StartAssessmentRunResponse {
     pub assessment_run_arn: String,
 }
 
+/// see [Inspector::stop_assessment_run]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAssessmentRunRequest {
@@ -1466,6 +1873,7 @@ pub struct StopAssessmentRunRequest {
     pub stop_action: Option<String>,
 }
 
+/// see [Inspector::subscribe_to_event]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToEventRequest {
@@ -1537,6 +1945,7 @@ pub struct TimestampRange {
     pub end_date: Option<f64>,
 }
 
+/// see [Inspector::unsubscribe_from_event]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeFromEventRequest {
@@ -1551,6 +1960,7 @@ pub struct UnsubscribeFromEventRequest {
     pub topic_arn: String,
 }
 
+/// see [Inspector::update_assessment_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssessmentTargetRequest {
@@ -3588,7 +3998,7 @@ impl fmt::Display for UpdateAssessmentTargetError {
 impl Error for UpdateAssessmentTargetError {}
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
 #[async_trait]
-pub trait Inspector {
+pub trait Inspector: Clone + Sync + Send + 'static {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
     async fn add_attributes_to_findings(
         &self,
@@ -3711,11 +4121,33 @@ pub trait Inspector {
         input: ListAssessmentRunAgentsRequest,
     ) -> Result<ListAssessmentRunAgentsResponse, RusotoError<ListAssessmentRunAgentsError>>;
 
+    /// Auto-paginating version of `list_assessment_run_agents`
+    fn list_assessment_run_agents_pages<'a>(
+        &'a self,
+        mut input: ListAssessmentRunAgentsRequest,
+    ) -> RusotoStream<'a, AssessmentRunAgent, ListAssessmentRunAgentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assessment_run_agents(input.clone())
+        }))
+    }
+
     /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
     async fn list_assessment_runs(
         &self,
         input: ListAssessmentRunsRequest,
     ) -> Result<ListAssessmentRunsResponse, RusotoError<ListAssessmentRunsError>>;
+
+    /// Auto-paginating version of `list_assessment_runs`
+    fn list_assessment_runs_pages<'a>(
+        &'a self,
+        mut input: ListAssessmentRunsRequest,
+    ) -> RusotoStream<'a, String, ListAssessmentRunsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assessment_runs(input.clone())
+        }))
+    }
 
     /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
     async fn list_assessment_targets(
@@ -3723,11 +4155,33 @@ pub trait Inspector {
         input: ListAssessmentTargetsRequest,
     ) -> Result<ListAssessmentTargetsResponse, RusotoError<ListAssessmentTargetsError>>;
 
+    /// Auto-paginating version of `list_assessment_targets`
+    fn list_assessment_targets_pages<'a>(
+        &'a self,
+        mut input: ListAssessmentTargetsRequest,
+    ) -> RusotoStream<'a, String, ListAssessmentTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assessment_targets(input.clone())
+        }))
+    }
+
     /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
     async fn list_assessment_templates(
         &self,
         input: ListAssessmentTemplatesRequest,
     ) -> Result<ListAssessmentTemplatesResponse, RusotoError<ListAssessmentTemplatesError>>;
+
+    /// Auto-paginating version of `list_assessment_templates`
+    fn list_assessment_templates_pages<'a>(
+        &'a self,
+        mut input: ListAssessmentTemplatesRequest,
+    ) -> RusotoStream<'a, String, ListAssessmentTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assessment_templates(input.clone())
+        }))
+    }
 
     /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
     async fn list_event_subscriptions(
@@ -3735,11 +4189,33 @@ pub trait Inspector {
         input: ListEventSubscriptionsRequest,
     ) -> Result<ListEventSubscriptionsResponse, RusotoError<ListEventSubscriptionsError>>;
 
+    /// Auto-paginating version of `list_event_subscriptions`
+    fn list_event_subscriptions_pages<'a>(
+        &'a self,
+        mut input: ListEventSubscriptionsRequest,
+    ) -> RusotoStream<'a, Subscription, ListEventSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_event_subscriptions(input.clone())
+        }))
+    }
+
     /// <p>List exclusions that are generated by the assessment run.</p>
     async fn list_exclusions(
         &self,
         input: ListExclusionsRequest,
     ) -> Result<ListExclusionsResponse, RusotoError<ListExclusionsError>>;
+
+    /// Auto-paginating version of `list_exclusions`
+    fn list_exclusions_pages<'a>(
+        &'a self,
+        mut input: ListExclusionsRequest,
+    ) -> RusotoStream<'a, String, ListExclusionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_exclusions(input.clone())
+        }))
+    }
 
     /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
     async fn list_findings(
@@ -3747,11 +4223,33 @@ pub trait Inspector {
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>>;
 
+    /// Auto-paginating version of `list_findings`
+    fn list_findings_pages<'a>(
+        &'a self,
+        mut input: ListFindingsRequest,
+    ) -> RusotoStream<'a, String, ListFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_findings(input.clone())
+        }))
+    }
+
     /// <p>Lists all available Amazon Inspector rules packages.</p>
     async fn list_rules_packages(
         &self,
         input: ListRulesPackagesRequest,
     ) -> Result<ListRulesPackagesResponse, RusotoError<ListRulesPackagesError>>;
+
+    /// Auto-paginating version of `list_rules_packages`
+    fn list_rules_packages_pages<'a>(
+        &'a self,
+        mut input: ListRulesPackagesRequest,
+    ) -> RusotoStream<'a, String, ListRulesPackagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rules_packages(input.clone())
+        }))
+    }
 
     /// <p>Lists all tags associated with an assessment template.</p>
     async fn list_tags_for_resource(
@@ -3764,6 +4262,17 @@ pub trait Inspector {
         &self,
         input: PreviewAgentsRequest,
     ) -> Result<PreviewAgentsResponse, RusotoError<PreviewAgentsError>>;
+
+    /// Auto-paginating version of `preview_agents`
+    fn preview_agents_pages<'a>(
+        &'a self,
+        mut input: PreviewAgentsRequest,
+    ) -> RusotoStream<'a, AgentPreview, PreviewAgentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.preview_agents(input.clone())
+        }))
+    }
 
     /// <p>Registers the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments.</p>
     async fn register_cross_account_access_role(

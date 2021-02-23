@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -150,6 +154,7 @@ pub struct ConfigurationEvent {
     pub monitored_resource_arn: Option<String>,
 }
 
+/// see [ApplicationInsights::create_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -174,6 +179,7 @@ pub struct CreateApplicationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ApplicationInsights::create_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
@@ -183,6 +189,7 @@ pub struct CreateApplicationResponse {
     pub application_info: Option<ApplicationInfo>,
 }
 
+/// see [ApplicationInsights::create_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComponentRequest {
@@ -197,10 +204,12 @@ pub struct CreateComponentRequest {
     pub resource_list: Vec<String>,
 }
 
+/// see [ApplicationInsights::create_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComponentResponse {}
 
+/// see [ApplicationInsights::create_log_pattern]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogPatternRequest {
@@ -221,6 +230,7 @@ pub struct CreateLogPatternRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::create_log_pattern]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLogPatternResponse {
@@ -234,6 +244,7 @@ pub struct CreateLogPatternResponse {
     pub resource_group_name: Option<String>,
 }
 
+/// see [ApplicationInsights::delete_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
@@ -242,10 +253,12 @@ pub struct DeleteApplicationRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::delete_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationResponse {}
 
+/// see [ApplicationInsights::delete_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComponentRequest {
@@ -257,10 +270,12 @@ pub struct DeleteComponentRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::delete_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComponentResponse {}
 
+/// see [ApplicationInsights::delete_log_pattern]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogPatternRequest {
@@ -275,10 +290,12 @@ pub struct DeleteLogPatternRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::delete_log_pattern]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLogPatternResponse {}
 
+/// see [ApplicationInsights::describe_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationRequest {
@@ -287,6 +304,7 @@ pub struct DescribeApplicationRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::describe_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationResponse {
@@ -296,6 +314,7 @@ pub struct DescribeApplicationResponse {
     pub application_info: Option<ApplicationInfo>,
 }
 
+/// see [ApplicationInsights::describe_component_configuration_recommendation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComponentConfigurationRecommendationRequest {
@@ -310,6 +329,7 @@ pub struct DescribeComponentConfigurationRecommendationRequest {
     pub tier: String,
 }
 
+/// see [ApplicationInsights::describe_component_configuration_recommendation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComponentConfigurationRecommendationResponse {
@@ -319,6 +339,7 @@ pub struct DescribeComponentConfigurationRecommendationResponse {
     pub component_configuration: Option<String>,
 }
 
+/// see [ApplicationInsights::describe_component_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComponentConfigurationRequest {
@@ -330,6 +351,7 @@ pub struct DescribeComponentConfigurationRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::describe_component_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComponentConfigurationResponse {
@@ -347,6 +369,7 @@ pub struct DescribeComponentConfigurationResponse {
     pub tier: Option<String>,
 }
 
+/// see [ApplicationInsights::describe_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComponentRequest {
@@ -358,6 +381,7 @@ pub struct DescribeComponentRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::describe_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComponentResponse {
@@ -370,6 +394,7 @@ pub struct DescribeComponentResponse {
     pub resource_list: Option<Vec<String>>,
 }
 
+/// see [ApplicationInsights::describe_log_pattern]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogPatternRequest {
@@ -384,6 +409,7 @@ pub struct DescribeLogPatternRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::describe_log_pattern]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLogPatternResponse {
@@ -397,6 +423,7 @@ pub struct DescribeLogPatternResponse {
     pub resource_group_name: Option<String>,
 }
 
+/// see [ApplicationInsights::describe_observation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeObservationRequest {
@@ -405,6 +432,7 @@ pub struct DescribeObservationRequest {
     pub observation_id: String,
 }
 
+/// see [ApplicationInsights::describe_observation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeObservationResponse {
@@ -414,6 +442,7 @@ pub struct DescribeObservationResponse {
     pub observation: Option<Observation>,
 }
 
+/// see [ApplicationInsights::describe_problem_observations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProblemObservationsRequest {
@@ -422,6 +451,7 @@ pub struct DescribeProblemObservationsRequest {
     pub problem_id: String,
 }
 
+/// see [ApplicationInsights::describe_problem_observations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProblemObservationsResponse {
@@ -431,6 +461,7 @@ pub struct DescribeProblemObservationsResponse {
     pub related_observations: Option<RelatedObservations>,
 }
 
+/// see [ApplicationInsights::describe_problem]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProblemRequest {
@@ -439,6 +470,7 @@ pub struct DescribeProblemRequest {
     pub problem_id: String,
 }
 
+/// see [ApplicationInsights::describe_problem]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProblemResponse {
@@ -448,6 +480,7 @@ pub struct DescribeProblemResponse {
     pub problem: Option<Problem>,
 }
 
+/// see [ApplicationInsights::list_applications]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
@@ -461,6 +494,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [ApplicationInsights::list_applications]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
@@ -474,6 +508,7 @@ pub struct ListApplicationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ApplicationInsights::list_components]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentsRequest {
@@ -490,6 +525,7 @@ pub struct ListComponentsRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::list_components]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentsResponse {
@@ -503,6 +539,7 @@ pub struct ListComponentsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ApplicationInsights::list_configuration_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationHistoryRequest {
@@ -532,6 +569,7 @@ pub struct ListConfigurationHistoryRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [ApplicationInsights::list_configuration_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationHistoryResponse {
@@ -545,6 +583,7 @@ pub struct ListConfigurationHistoryResponse {
     pub next_token: Option<String>,
 }
 
+/// see [ApplicationInsights::list_log_pattern_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLogPatternSetsRequest {
@@ -561,6 +600,7 @@ pub struct ListLogPatternSetsRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::list_log_pattern_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLogPatternSetsResponse {
@@ -578,6 +618,7 @@ pub struct ListLogPatternSetsResponse {
     pub resource_group_name: Option<String>,
 }
 
+/// see [ApplicationInsights::list_log_patterns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLogPatternsRequest {
@@ -598,6 +639,7 @@ pub struct ListLogPatternsRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::list_log_patterns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLogPatternsResponse {
@@ -615,6 +657,7 @@ pub struct ListLogPatternsResponse {
     pub resource_group_name: Option<String>,
 }
 
+/// see [ApplicationInsights::list_problems]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProblemsRequest {
@@ -640,6 +683,7 @@ pub struct ListProblemsRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [ApplicationInsights::list_problems]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProblemsResponse {
@@ -653,6 +697,7 @@ pub struct ListProblemsResponse {
     pub problem_list: Option<Vec<Problem>>,
 }
 
+/// see [ApplicationInsights::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -661,6 +706,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [ApplicationInsights::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -945,6 +991,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [ApplicationInsights::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -956,10 +1003,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [ApplicationInsights::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [ApplicationInsights::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -971,10 +1020,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [ApplicationInsights::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [ApplicationInsights::update_application]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
@@ -999,6 +1050,7 @@ pub struct UpdateApplicationRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::update_application]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
@@ -1008,6 +1060,7 @@ pub struct UpdateApplicationResponse {
     pub application_info: Option<ApplicationInfo>,
 }
 
+/// see [ApplicationInsights::update_component_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateComponentConfigurationRequest {
@@ -1031,10 +1084,12 @@ pub struct UpdateComponentConfigurationRequest {
     pub tier: Option<String>,
 }
 
+/// see [ApplicationInsights::update_component_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateComponentConfigurationResponse {}
 
+/// see [ApplicationInsights::update_component]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateComponentRequest {
@@ -1054,10 +1109,12 @@ pub struct UpdateComponentRequest {
     pub resource_list: Option<Vec<String>>,
 }
 
+/// see [ApplicationInsights::update_component]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateComponentResponse {}
 
+/// see [ApplicationInsights::update_log_pattern]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLogPatternRequest {
@@ -1080,6 +1137,7 @@ pub struct UpdateLogPatternRequest {
     pub resource_group_name: String,
 }
 
+/// see [ApplicationInsights::update_log_pattern]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLogPatternResponse {
@@ -2149,7 +2207,7 @@ impl fmt::Display for UpdateLogPatternError {
 impl Error for UpdateLogPatternError {}
 /// Trait representing the capabilities of the Application Insights API. Application Insights clients implement this trait.
 #[async_trait]
-pub trait ApplicationInsights {
+pub trait ApplicationInsights: Clone + Sync + Send + 'static {
     /// <p>Adds an application that is created from a resource group.</p>
     async fn create_application(
         &self,

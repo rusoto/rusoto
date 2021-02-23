@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1832,6 +1836,7 @@ pub struct CookiePreference {
     pub whitelisted_names: Option<CookieNames>,
 }
 
+/// see [CloudFront::create_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCachePolicyRequest {
@@ -1839,6 +1844,7 @@ pub struct CreateCachePolicyRequest {
     pub cache_policy_config: CachePolicyConfig,
 }
 
+/// see [CloudFront::create_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCachePolicyResult {
@@ -1865,6 +1871,7 @@ impl CreateCachePolicyResultDeserializer {
     }
 }
 /// <p>The request to create a new origin access identity (OAI). An origin access identity is a special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all or just some of your Amazon S3 content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
+/// see [CloudFront::create_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
@@ -1873,6 +1880,7 @@ pub struct CreateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::create_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
@@ -1904,6 +1912,7 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution.</p>
+/// see [CloudFront::create_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionRequest {
@@ -1912,6 +1921,7 @@ pub struct CreateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::create_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionResult {
@@ -1941,6 +1951,7 @@ impl CreateDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution with tags. </p>
+/// see [CloudFront::create_distribution_with_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionWithTagsRequest {
@@ -1949,6 +1960,7 @@ pub struct CreateDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::create_distribution_with_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionWithTagsResult {
@@ -1977,6 +1989,7 @@ impl CreateDistributionWithTagsResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionConfigRequest {
@@ -1984,6 +1997,7 @@ pub struct CreateFieldLevelEncryptionConfigRequest {
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
 }
 
+/// see [CloudFront::create_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionConfigResult {
@@ -2012,6 +2026,7 @@ impl CreateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionProfileRequest {
@@ -2019,6 +2034,7 @@ pub struct CreateFieldLevelEncryptionProfileRequest {
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
 }
 
+/// see [CloudFront::create_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionProfileResult {
@@ -2050,6 +2066,7 @@ impl CreateFieldLevelEncryptionProfileResultDeserializer {
     }
 }
 /// <p>The request to create an invalidation.</p>
+/// see [CloudFront::create_invalidation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInvalidationRequest {
@@ -2060,6 +2077,7 @@ pub struct CreateInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::create_invalidation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInvalidationResult {
@@ -2086,6 +2104,7 @@ impl CreateInvalidationResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeyGroupRequest {
@@ -2093,6 +2112,7 @@ pub struct CreateKeyGroupRequest {
     pub key_group_config: KeyGroupConfig,
 }
 
+/// see [CloudFront::create_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateKeyGroupResult {
@@ -2118,6 +2138,7 @@ impl CreateKeyGroupResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMonitoringSubscriptionRequest {
@@ -2127,6 +2148,7 @@ pub struct CreateMonitoringSubscriptionRequest {
     pub monitoring_subscription: MonitoringSubscription,
 }
 
+/// see [CloudFront::create_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateMonitoringSubscriptionResult {
@@ -2151,6 +2173,7 @@ impl CreateMonitoringSubscriptionResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOriginRequestPolicyRequest {
@@ -2158,6 +2181,7 @@ pub struct CreateOriginRequestPolicyRequest {
     pub origin_request_policy_config: OriginRequestPolicyConfig,
 }
 
+/// see [CloudFront::create_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateOriginRequestPolicyResult {
@@ -2186,6 +2210,7 @@ impl CreateOriginRequestPolicyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicKeyRequest {
@@ -2193,6 +2218,7 @@ pub struct CreatePublicKeyRequest {
     pub public_key_config: PublicKeyConfig,
 }
 
+/// see [CloudFront::create_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePublicKeyResult {
@@ -2218,6 +2244,7 @@ impl CreatePublicKeyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::create_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRealtimeLogConfigRequest {
@@ -2251,6 +2278,7 @@ impl CreateRealtimeLogConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [CloudFront::create_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateRealtimeLogConfigResult {
@@ -2285,6 +2313,7 @@ impl CreateRealtimeLogConfigResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
+/// see [CloudFront::create_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionRequest {
@@ -2293,6 +2322,7 @@ pub struct CreateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::create_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionResult {
@@ -2322,6 +2352,7 @@ impl CreateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
+/// see [CloudFront::create_streaming_distribution_with_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionWithTagsRequest {
@@ -2330,6 +2361,7 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::create_streaming_distribution_with_tags]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionWithTagsResult {
@@ -2850,6 +2882,7 @@ impl DefaultCacheBehaviorSerializer {
     }
 }
 
+/// see [CloudFront::delete_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCachePolicyRequest {
@@ -2860,6 +2893,7 @@ pub struct DeleteCachePolicyRequest {
 }
 
 /// <p>Deletes a origin access identity.</p>
+/// see [CloudFront::delete_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
@@ -2870,6 +2904,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// see [CloudFront::delete_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionRequest {
@@ -2879,6 +2914,7 @@ pub struct DeleteDistributionRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionConfigRequest {
@@ -2888,6 +2924,7 @@ pub struct DeleteFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionProfileRequest {
@@ -2897,6 +2934,7 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteKeyGroupRequest {
@@ -2906,6 +2944,7 @@ pub struct DeleteKeyGroupRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMonitoringSubscriptionRequest {
@@ -2913,6 +2952,7 @@ pub struct DeleteMonitoringSubscriptionRequest {
     pub distribution_id: String,
 }
 
+/// see [CloudFront::delete_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMonitoringSubscriptionResult {}
@@ -2934,6 +2974,7 @@ impl DeleteMonitoringSubscriptionResultDeserializer {
         Ok(obj)
     }
 }
+/// see [CloudFront::delete_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOriginRequestPolicyRequest {
@@ -2943,6 +2984,7 @@ pub struct DeleteOriginRequestPolicyRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicKeyRequest {
@@ -2952,6 +2994,7 @@ pub struct DeletePublicKeyRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::delete_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRealtimeLogConfigRequest {
@@ -2984,6 +3027,7 @@ impl DeleteRealtimeLogConfigRequestSerializer {
     }
 }
 /// <p>The request to delete a streaming distribution.</p>
+/// see [CloudFront::delete_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamingDistributionRequest {
@@ -4639,6 +4683,7 @@ impl GeoRestrictionTypeSerializer {
     }
 }
 
+/// see [CloudFront::get_cache_policy_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCachePolicyConfigRequest {
@@ -4646,6 +4691,7 @@ pub struct GetCachePolicyConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_cache_policy_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCachePolicyConfigResult {
@@ -4672,6 +4718,7 @@ impl GetCachePolicyConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCachePolicyRequest {
@@ -4679,6 +4726,7 @@ pub struct GetCachePolicyRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCachePolicyResult {
@@ -4703,6 +4751,7 @@ impl GetCachePolicyResultDeserializer {
     }
 }
 /// <p>The origin access identity's configuration information. For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html">CloudFrontOriginAccessIdentityConfig</a>.</p>
+/// see [CloudFront::get_cloud_front_origin_access_identity_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
@@ -4711,6 +4760,7 @@ pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_cloud_front_origin_access_identity_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
@@ -4740,6 +4790,7 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     }
 }
 /// <p>The request to get an origin access identity's information.</p>
+/// see [CloudFront::get_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
@@ -4748,6 +4799,7 @@ pub struct GetCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityResult {
@@ -4777,6 +4829,7 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to get a distribution configuration.</p>
+/// see [CloudFront::get_distribution_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigRequest {
@@ -4785,6 +4838,7 @@ pub struct GetDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_distribution_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionConfigResult {
@@ -4812,6 +4866,7 @@ impl GetDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a distribution's information.</p>
+/// see [CloudFront::get_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionRequest {
@@ -4820,6 +4875,7 @@ pub struct GetDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionResult {
@@ -4846,6 +4902,7 @@ impl GetDistributionResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionConfigRequest {
@@ -4853,6 +4910,7 @@ pub struct GetFieldLevelEncryptionConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionConfigResult {
@@ -4881,6 +4939,7 @@ impl GetFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_field_level_encryption_profile_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileConfigRequest {
@@ -4888,6 +4947,7 @@ pub struct GetFieldLevelEncryptionProfileConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_field_level_encryption_profile_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileConfigResult {
@@ -4916,6 +4976,7 @@ impl GetFieldLevelEncryptionProfileConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileRequest {
@@ -4923,6 +4984,7 @@ pub struct GetFieldLevelEncryptionProfileRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileResult {
@@ -4951,6 +5013,7 @@ impl GetFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_field_level_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionRequest {
@@ -4958,6 +5021,7 @@ pub struct GetFieldLevelEncryptionRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_field_level_encryption]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionResult {
@@ -4985,6 +5049,7 @@ impl GetFieldLevelEncryptionResultDeserializer {
     }
 }
 /// <p>The request to get an invalidation's information. </p>
+/// see [CloudFront::get_invalidation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvalidationRequest {
@@ -4995,6 +5060,7 @@ pub struct GetInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_invalidation]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInvalidationResult {
@@ -5019,6 +5085,7 @@ impl GetInvalidationResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_key_group_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyGroupConfigRequest {
@@ -5026,6 +5093,7 @@ pub struct GetKeyGroupConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_key_group_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetKeyGroupConfigResult {
@@ -5052,6 +5120,7 @@ impl GetKeyGroupConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyGroupRequest {
@@ -5059,6 +5128,7 @@ pub struct GetKeyGroupRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetKeyGroupResult {
@@ -5082,6 +5152,7 @@ impl GetKeyGroupResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMonitoringSubscriptionRequest {
@@ -5089,6 +5160,7 @@ pub struct GetMonitoringSubscriptionRequest {
     pub distribution_id: String,
 }
 
+/// see [CloudFront::get_monitoring_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetMonitoringSubscriptionResult {
@@ -5113,6 +5185,7 @@ impl GetMonitoringSubscriptionResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_origin_request_policy_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOriginRequestPolicyConfigRequest {
@@ -5120,6 +5193,7 @@ pub struct GetOriginRequestPolicyConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_origin_request_policy_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOriginRequestPolicyConfigResult {
@@ -5146,6 +5220,7 @@ impl GetOriginRequestPolicyConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOriginRequestPolicyRequest {
@@ -5153,6 +5228,7 @@ pub struct GetOriginRequestPolicyRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetOriginRequestPolicyResult {
@@ -5179,6 +5255,7 @@ impl GetOriginRequestPolicyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_public_key_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyConfigRequest {
@@ -5186,6 +5263,7 @@ pub struct GetPublicKeyConfigRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_public_key_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyConfigResult {
@@ -5212,6 +5290,7 @@ impl GetPublicKeyConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
@@ -5219,6 +5298,7 @@ pub struct GetPublicKeyRequest {
     pub id: String,
 }
 
+/// see [CloudFront::get_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyResult {
@@ -5242,6 +5322,7 @@ impl GetPublicKeyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::get_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRealtimeLogConfigRequest {
@@ -5273,6 +5354,7 @@ impl GetRealtimeLogConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [CloudFront::get_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetRealtimeLogConfigResult {
@@ -5307,6 +5389,7 @@ impl GetRealtimeLogConfigResultDeserializer {
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
+/// see [CloudFront::get_streaming_distribution_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionConfigRequest {
@@ -5315,6 +5398,7 @@ pub struct GetStreamingDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_streaming_distribution_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionConfigResult {
@@ -5344,6 +5428,7 @@ impl GetStreamingDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a streaming distribution's information.</p>
+/// see [CloudFront::get_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionRequest {
@@ -5352,6 +5437,7 @@ pub struct GetStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::get_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionResult {
@@ -6283,6 +6369,7 @@ impl LambdaFunctionAssociationsSerializer {
     }
 }
 
+/// see [CloudFront::list_cache_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCachePoliciesRequest {
@@ -6294,6 +6381,7 @@ pub struct ListCachePoliciesRequest {
     pub type_: Option<String>,
 }
 
+/// see [CloudFront::list_cache_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCachePoliciesResult {
@@ -6319,6 +6407,7 @@ impl ListCachePoliciesResultDeserializer {
     }
 }
 /// <p>The request to list origin access identities. </p>
+/// see [CloudFront::list_cloud_front_origin_access_identities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
@@ -6328,12 +6417,66 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     pub max_items: Option<String>,
 }
 
+impl Paged for ListCloudFrontOriginAccessIdentitiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListCloudFrontOriginAccessIdentitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::list_cloud_front_origin_access_identities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
+}
+
+impl Paged for ListCloudFrontOriginAccessIdentitiesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.cloud_front_origin_access_identity_list
+            .as_ref()?
+            .next_marker
+            .clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
+            self.cloud_front_origin_access_identity_list
+                .as_ref()?
+                .next_marker
+                .clone()
+        })())
+    }
+}
+
+impl PagedOutput for ListCloudFrontOriginAccessIdentitiesResult {
+    type Item = CloudFrontOriginAccessIdentitySummary;
+
+    fn into_pagination_page(self) -> Vec<CloudFrontOriginAccessIdentitySummary> {
+        (move || self.cloud_front_origin_access_identity_list?.items)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        (|| {
+            Some(
+                self.cloud_front_origin_access_identity_list
+                    .as_ref()?
+                    .is_truncated,
+            )
+        })()
+        .unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6355,6 +6498,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_distributions_by_cache_policy_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByCachePolicyIdRequest {
@@ -6366,6 +6510,7 @@ pub struct ListDistributionsByCachePolicyIdRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_distributions_by_cache_policy_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByCachePolicyIdResult {
@@ -6390,6 +6535,7 @@ impl ListDistributionsByCachePolicyIdResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_distributions_by_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByKeyGroupRequest {
@@ -6401,6 +6547,7 @@ pub struct ListDistributionsByKeyGroupRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_distributions_by_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByKeyGroupResult {
@@ -6424,6 +6571,7 @@ impl ListDistributionsByKeyGroupResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_distributions_by_origin_request_policy_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByOriginRequestPolicyIdRequest {
@@ -6435,6 +6583,7 @@ pub struct ListDistributionsByOriginRequestPolicyIdRequest {
     pub origin_request_policy_id: String,
 }
 
+/// see [CloudFront::list_distributions_by_origin_request_policy_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByOriginRequestPolicyIdResult {
@@ -6459,6 +6608,7 @@ impl ListDistributionsByOriginRequestPolicyIdResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_distributions_by_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByRealtimeLogConfigRequest {
@@ -6500,6 +6650,7 @@ impl ListDistributionsByRealtimeLogConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [CloudFront::list_distributions_by_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByRealtimeLogConfigResult {
@@ -6524,6 +6675,7 @@ impl ListDistributionsByRealtimeLogConfigResultDeserializer {
     }
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
+/// see [CloudFront::list_distributions_by_web_acl_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByWebACLIdRequest {
@@ -6536,6 +6688,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 }
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
+/// see [CloudFront::list_distributions_by_web_acl_id]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByWebACLIdResult {
@@ -6561,6 +6714,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
     }
 }
 /// <p>The request to list your distributions. </p>
+/// see [CloudFront::list_distributions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsRequest {
@@ -6570,12 +6724,51 @@ pub struct ListDistributionsRequest {
     pub max_items: Option<String>,
 }
 
+impl Paged for ListDistributionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListDistributionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::list_distributions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsResult {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
+}
+
+impl Paged for ListDistributionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.distribution_list.as_ref()?.next_marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.distribution_list.as_ref()?.next_marker.clone())())
+    }
+}
+
+impl PagedOutput for ListDistributionsResult {
+    type Item = DistributionSummary;
+
+    fn into_pagination_page(self) -> Vec<DistributionSummary> {
+        (move || self.distribution_list?.items)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        (|| Some(self.distribution_list.as_ref()?.is_truncated))().unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6595,6 +6788,7 @@ impl ListDistributionsResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_field_level_encryption_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionConfigsRequest {
@@ -6604,6 +6798,7 @@ pub struct ListFieldLevelEncryptionConfigsRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_field_level_encryption_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionConfigsResult {
@@ -6628,6 +6823,7 @@ impl ListFieldLevelEncryptionConfigsResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_field_level_encryption_profiles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionProfilesRequest {
@@ -6637,6 +6833,7 @@ pub struct ListFieldLevelEncryptionProfilesRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_field_level_encryption_profiles]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionProfilesResult {
@@ -6664,6 +6861,7 @@ impl ListFieldLevelEncryptionProfilesResultDeserializer {
     }
 }
 /// <p>The request to list invalidations. </p>
+/// see [CloudFront::list_invalidations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvalidationsRequest {
@@ -6675,12 +6873,51 @@ pub struct ListInvalidationsRequest {
     pub max_items: Option<String>,
 }
 
+impl Paged for ListInvalidationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInvalidationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::list_invalidations]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInvalidationsResult {
     /// <p>Information about invalidation batches. </p>
     pub invalidation_list: Option<InvalidationList>,
+}
+
+impl Paged for ListInvalidationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.invalidation_list.as_ref()?.next_marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.invalidation_list.as_ref()?.next_marker.clone())())
+    }
+}
+
+impl PagedOutput for ListInvalidationsResult {
+    type Item = InvalidationSummary;
+
+    fn into_pagination_page(self) -> Vec<InvalidationSummary> {
+        (move || self.invalidation_list?.items)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        (|| Some(self.invalidation_list.as_ref()?.is_truncated))().unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6700,6 +6937,7 @@ impl ListInvalidationsResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_key_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyGroupsRequest {
@@ -6709,6 +6947,7 @@ pub struct ListKeyGroupsRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_key_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListKeyGroupsResult {
@@ -6733,6 +6972,7 @@ impl ListKeyGroupsResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_origin_request_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOriginRequestPoliciesRequest {
@@ -6744,6 +6984,7 @@ pub struct ListOriginRequestPoliciesRequest {
     pub type_: Option<String>,
 }
 
+/// see [CloudFront::list_origin_request_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListOriginRequestPoliciesResult {
@@ -6768,6 +7009,7 @@ impl ListOriginRequestPoliciesResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_public_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
@@ -6777,6 +7019,7 @@ pub struct ListPublicKeysRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_public_keys]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPublicKeysResult {
@@ -6801,6 +7044,7 @@ impl ListPublicKeysResultDeserializer {
         })
     }
 }
+/// see [CloudFront::list_realtime_log_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRealtimeLogConfigsRequest {
@@ -6810,6 +7054,7 @@ pub struct ListRealtimeLogConfigsRequest {
     pub max_items: Option<String>,
 }
 
+/// see [CloudFront::list_realtime_log_configs]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListRealtimeLogConfigsResult {
@@ -6835,6 +7080,7 @@ impl ListRealtimeLogConfigsResultDeserializer {
     }
 }
 /// <p>The request to list your streaming distributions. </p>
+/// see [CloudFront::list_streaming_distributions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamingDistributionsRequest {
@@ -6844,12 +7090,59 @@ pub struct ListStreamingDistributionsRequest {
     pub max_items: Option<String>,
 }
 
+impl Paged for ListStreamingDistributionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListStreamingDistributionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>The returned result of the corresponding request. </p>
+/// see [CloudFront::list_streaming_distributions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStreamingDistributionsResult {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
     pub streaming_distribution_list: Option<StreamingDistributionList>,
+}
+
+impl Paged for ListStreamingDistributionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.streaming_distribution_list
+            .as_ref()?
+            .next_marker
+            .clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
+            self.streaming_distribution_list
+                .as_ref()?
+                .next_marker
+                .clone()
+        })())
+    }
+}
+
+impl PagedOutput for ListStreamingDistributionsResult {
+    type Item = StreamingDistributionSummary;
+
+    fn into_pagination_page(self) -> Vec<StreamingDistributionSummary> {
+        (move || self.streaming_distribution_list?.items)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        (|| Some(self.streaming_distribution_list.as_ref()?.is_truncated))().unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -6870,6 +7163,7 @@ impl ListStreamingDistributionsResultDeserializer {
     }
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
+/// see [CloudFront::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -6878,6 +7172,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p> The returned result of the corresponding request.</p>
+/// see [CloudFront::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -10536,6 +10831,7 @@ impl TagListSerializer {
 }
 
 /// <p> The request to add tags to a CloudFront resource.</p>
+/// see [CloudFront::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -10788,6 +11084,7 @@ impl TrustedSignersSerializer {
 }
 
 /// <p> The request to remove tags from a CloudFront resource.</p>
+/// see [CloudFront::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -10797,6 +11094,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: TagKeys,
 }
 
+/// see [CloudFront::update_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCachePolicyRequest {
@@ -10808,6 +11106,7 @@ pub struct UpdateCachePolicyRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::update_cache_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateCachePolicyResult {
@@ -10832,6 +11131,7 @@ impl UpdateCachePolicyResultDeserializer {
     }
 }
 /// <p>The request to update an origin access identity.</p>
+/// see [CloudFront::update_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
@@ -10844,6 +11144,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::update_cloud_front_origin_access_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
@@ -10873,6 +11174,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to update a distribution.</p>
+/// see [CloudFront::update_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionRequest {
@@ -10885,6 +11187,7 @@ pub struct UpdateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::update_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDistributionResult {
@@ -10911,6 +11214,7 @@ impl UpdateDistributionResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionConfigRequest {
@@ -10922,6 +11226,7 @@ pub struct UpdateFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::update_field_level_encryption_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionConfigResult {
@@ -10948,6 +11253,7 @@ impl UpdateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionProfileRequest {
@@ -10959,6 +11265,7 @@ pub struct UpdateFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
+/// see [CloudFront::update_field_level_encryption_profile]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionProfileResult {
@@ -10987,6 +11294,7 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateKeyGroupRequest {
@@ -10998,6 +11306,7 @@ pub struct UpdateKeyGroupRequest {
     pub key_group_config: KeyGroupConfig,
 }
 
+/// see [CloudFront::update_key_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateKeyGroupResult {
@@ -11021,6 +11330,7 @@ impl UpdateKeyGroupResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOriginRequestPolicyRequest {
@@ -11032,6 +11342,7 @@ pub struct UpdateOriginRequestPolicyRequest {
     pub origin_request_policy_config: OriginRequestPolicyConfig,
 }
 
+/// see [CloudFront::update_origin_request_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateOriginRequestPolicyResult {
@@ -11058,6 +11369,7 @@ impl UpdateOriginRequestPolicyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublicKeyRequest {
@@ -11069,6 +11381,7 @@ pub struct UpdatePublicKeyRequest {
     pub public_key_config: PublicKeyConfig,
 }
 
+/// see [CloudFront::update_public_key]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdatePublicKeyResult {
@@ -11092,6 +11405,7 @@ impl UpdatePublicKeyResultDeserializer {
         })
     }
 }
+/// see [CloudFront::update_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRealtimeLogConfigRequest {
@@ -11138,6 +11452,7 @@ impl UpdateRealtimeLogConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
+/// see [CloudFront::update_realtime_log_config]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateRealtimeLogConfigResult {
@@ -11172,6 +11487,7 @@ impl UpdateRealtimeLogConfigResultDeserializer {
     }
 }
 /// <p>The request to update a streaming distribution.</p>
+/// see [CloudFront::update_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamingDistributionRequest {
@@ -11184,6 +11500,7 @@ pub struct UpdateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
+/// see [CloudFront::update_streaming_distribution]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStreamingDistributionResult {
@@ -16969,7 +17286,7 @@ impl fmt::Display for UpdateStreamingDistributionError {
 impl Error for UpdateStreamingDistributionError {}
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 #[async_trait]
-pub trait CloudFront {
+pub trait CloudFront: Clone + Sync + Send + 'static {
     /// <p>Creates a cache policy.</p> <p>After you create a cache policy, you can attach it to one or more cache behaviors. When it’s attached to a cache behavior, the cache policy determines the following:</p> <ul> <li> <p>The values that CloudFront includes in the <i>cache key</i>. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> </li> <li> <p>The default, minimum, and maximum time to live (TTL) values that you want objects to stay in the CloudFront cache.</p> </li> </ul> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find an object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p> <p>For more information about cache policies, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html">Controlling the cache key</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     async fn create_cache_policy(
         &self,
@@ -17288,11 +17605,37 @@ pub trait CloudFront {
         RusotoError<ListCloudFrontOriginAccessIdentitiesError>,
     >;
 
+    /// Auto-paginating version of `list_cloud_front_origin_access_identities`
+    fn list_cloud_front_origin_access_identities_pages<'a>(
+        &'a self,
+        mut input: ListCloudFrontOriginAccessIdentitiesRequest,
+    ) -> RusotoStream<
+        'a,
+        CloudFrontOriginAccessIdentitySummary,
+        ListCloudFrontOriginAccessIdentitiesError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_cloud_front_origin_access_identities(input.clone())
+        }))
+    }
+
     /// <p>List CloudFront distributions.</p>
     async fn list_distributions(
         &self,
         input: ListDistributionsRequest,
     ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>>;
+
+    /// Auto-paginating version of `list_distributions`
+    fn list_distributions_pages<'a>(
+        &'a self,
+        mut input: ListDistributionsRequest,
+    ) -> RusotoStream<'a, DistributionSummary, ListDistributionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_distributions(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified cache policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
     async fn list_distributions_by_cache_policy_id(
@@ -17357,6 +17700,17 @@ pub trait CloudFront {
         input: ListInvalidationsRequest,
     ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>>;
 
+    /// Auto-paginating version of `list_invalidations`
+    fn list_invalidations_pages<'a>(
+        &'a self,
+        mut input: ListInvalidationsRequest,
+    ) -> RusotoStream<'a, InvalidationSummary, ListInvalidationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_invalidations(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of key groups.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
     async fn list_key_groups(
         &self,
@@ -17386,6 +17740,17 @@ pub trait CloudFront {
         &self,
         input: ListStreamingDistributionsRequest,
     ) -> Result<ListStreamingDistributionsResult, RusotoError<ListStreamingDistributionsError>>;
+
+    /// Auto-paginating version of `list_streaming_distributions`
+    fn list_streaming_distributions_pages<'a>(
+        &'a self,
+        mut input: ListStreamingDistributionsRequest,
+    ) -> RusotoStream<'a, StreamingDistributionSummary, ListStreamingDistributionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_streaming_distributions(input.clone())
+        }))
+    }
 
     /// <p>List tags for a CloudFront resource.</p>
     async fn list_tags_for_resource(

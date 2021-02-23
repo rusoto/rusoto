@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [GuardDuty::accept_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -39,6 +44,7 @@ pub struct AcceptInvitationRequest {
     pub master_id: String,
 }
 
+/// see [GuardDuty::accept_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
@@ -141,6 +147,7 @@ pub struct AdminAccount {
     pub admin_status: Option<String>,
 }
 
+/// see [GuardDuty::archive_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArchiveFindingsRequest {
@@ -152,6 +159,7 @@ pub struct ArchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
+/// see [GuardDuty::archive_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
@@ -302,6 +310,7 @@ pub struct Country {
     pub country_name: Option<String>,
 }
 
+/// see [GuardDuty::create_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorRequest {
@@ -326,6 +335,7 @@ pub struct CreateDetectorRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::create_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorResponse {
@@ -335,6 +345,7 @@ pub struct CreateDetectorResponse {
     pub detector_id: Option<String>,
 }
 
+/// see [GuardDuty::create_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFilterRequest {
@@ -369,6 +380,7 @@ pub struct CreateFilterRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::create_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFilterResponse {
@@ -377,6 +389,7 @@ pub struct CreateFilterResponse {
     pub name: String,
 }
 
+/// see [GuardDuty::create_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
@@ -405,6 +418,7 @@ pub struct CreateIPSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::create_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
@@ -413,6 +427,7 @@ pub struct CreateIPSetResponse {
     pub ip_set_id: String,
 }
 
+/// see [GuardDuty::create_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
@@ -424,6 +439,7 @@ pub struct CreateMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::create_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
@@ -432,6 +448,7 @@ pub struct CreateMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::create_publishing_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublishingDestinationRequest {
@@ -450,6 +467,7 @@ pub struct CreatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::create_publishing_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePublishingDestinationResponse {
@@ -458,6 +476,7 @@ pub struct CreatePublishingDestinationResponse {
     pub destination_id: String,
 }
 
+/// see [GuardDuty::create_sample_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSampleFindingsRequest {
@@ -470,10 +489,12 @@ pub struct CreateSampleFindingsRequest {
     pub finding_types: Option<Vec<String>>,
 }
 
+/// see [GuardDuty::create_sample_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
+/// see [GuardDuty::create_threat_intel_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThreatIntelSetRequest {
@@ -502,6 +523,7 @@ pub struct CreateThreatIntelSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::create_threat_intel_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
@@ -547,6 +569,7 @@ pub struct DataSourceConfigurationsResult {
     pub s3_logs: S3LogsConfigurationResult,
 }
 
+/// see [GuardDuty::decline_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
@@ -555,6 +578,7 @@ pub struct DeclineInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [GuardDuty::decline_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
@@ -577,6 +601,7 @@ pub struct DefaultServerSideEncryption {
     pub kms_master_key_arn: Option<String>,
 }
 
+/// see [GuardDuty::delete_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
@@ -585,10 +610,12 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::delete_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResponse {}
 
+/// see [GuardDuty::delete_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
@@ -600,10 +627,12 @@ pub struct DeleteFilterRequest {
     pub filter_name: String,
 }
 
+/// see [GuardDuty::delete_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFilterResponse {}
 
+/// see [GuardDuty::delete_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
@@ -615,10 +644,12 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [GuardDuty::delete_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
+/// see [GuardDuty::delete_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
@@ -627,6 +658,7 @@ pub struct DeleteInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [GuardDuty::delete_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
@@ -635,6 +667,7 @@ pub struct DeleteInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::delete_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
@@ -646,6 +679,7 @@ pub struct DeleteMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::delete_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
@@ -654,6 +688,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::delete_publishing_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublishingDestinationRequest {
@@ -665,10 +700,12 @@ pub struct DeletePublishingDestinationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::delete_publishing_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePublishingDestinationResponse {}
 
+/// see [GuardDuty::delete_threat_intel_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThreatIntelSetRequest {
@@ -680,10 +717,12 @@ pub struct DeleteThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
+/// see [GuardDuty::delete_threat_intel_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
 
+/// see [GuardDuty::describe_organization_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigurationRequest {
@@ -692,6 +731,7 @@ pub struct DescribeOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::describe_organization_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigurationResponse {
@@ -707,6 +747,7 @@ pub struct DescribeOrganizationConfigurationResponse {
     pub member_account_limit_reached: bool,
 }
 
+/// see [GuardDuty::describe_publishing_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePublishingDestinationRequest {
@@ -718,6 +759,7 @@ pub struct DescribePublishingDestinationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::describe_publishing_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePublishingDestinationResponse {
@@ -766,6 +808,7 @@ pub struct DestinationProperties {
     pub kms_key_arn: Option<String>,
 }
 
+/// see [GuardDuty::disable_organization_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableOrganizationAdminAccountRequest {
@@ -774,10 +817,12 @@ pub struct DisableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
+/// see [GuardDuty::disable_organization_admin_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableOrganizationAdminAccountResponse {}
 
+/// see [GuardDuty::disassociate_from_master_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {
@@ -786,10 +831,12 @@ pub struct DisassociateFromMasterAccountRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::disassociate_from_master_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
+/// see [GuardDuty::disassociate_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
@@ -801,6 +848,7 @@ pub struct DisassociateMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::disassociate_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {
@@ -829,6 +877,7 @@ pub struct DomainDetails {
     pub domain: Option<String>,
 }
 
+/// see [GuardDuty::enable_organization_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableOrganizationAdminAccountRequest {
@@ -837,6 +886,7 @@ pub struct EnableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
+/// see [GuardDuty::enable_organization_admin_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableOrganizationAdminAccountResponse {}
@@ -947,6 +997,7 @@ pub struct GeoLocation {
     pub lon: Option<f64>,
 }
 
+/// see [GuardDuty::get_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorRequest {
@@ -955,6 +1006,7 @@ pub struct GetDetectorRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::get_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorResponse {
@@ -986,6 +1038,7 @@ pub struct GetDetectorResponse {
     pub updated_at: Option<String>,
 }
 
+/// see [GuardDuty::get_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFilterRequest {
@@ -997,6 +1050,7 @@ pub struct GetFilterRequest {
     pub filter_name: String,
 }
 
+/// see [GuardDuty::get_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFilterResponse {
@@ -1023,6 +1077,7 @@ pub struct GetFilterResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::get_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
@@ -1038,6 +1093,7 @@ pub struct GetFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
+/// see [GuardDuty::get_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsResponse {
@@ -1046,6 +1102,7 @@ pub struct GetFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
+/// see [GuardDuty::get_findings_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsStatisticsRequest {
@@ -1061,6 +1118,7 @@ pub struct GetFindingsStatisticsRequest {
     pub finding_statistic_types: Vec<String>,
 }
 
+/// see [GuardDuty::get_findings_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
@@ -1069,6 +1127,7 @@ pub struct GetFindingsStatisticsResponse {
     pub finding_statistics: FindingStatistics,
 }
 
+/// see [GuardDuty::get_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
@@ -1080,6 +1139,7 @@ pub struct GetIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [GuardDuty::get_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
@@ -1101,10 +1161,12 @@ pub struct GetIPSetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::get_invitations_count]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
+/// see [GuardDuty::get_invitations_count]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
@@ -1114,6 +1176,7 @@ pub struct GetInvitationsCountResponse {
     pub invitations_count: Option<i64>,
 }
 
+/// see [GuardDuty::get_master_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {
@@ -1122,6 +1185,7 @@ pub struct GetMasterAccountRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::get_master_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
@@ -1130,6 +1194,7 @@ pub struct GetMasterAccountResponse {
     pub master: Master,
 }
 
+/// see [GuardDuty::get_member_detectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMemberDetectorsRequest {
@@ -1141,6 +1206,7 @@ pub struct GetMemberDetectorsRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::get_member_detectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMemberDetectorsResponse {
@@ -1152,6 +1218,7 @@ pub struct GetMemberDetectorsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::get_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
@@ -1163,6 +1230,7 @@ pub struct GetMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::get_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
@@ -1174,6 +1242,7 @@ pub struct GetMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::get_threat_intel_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThreatIntelSetRequest {
@@ -1185,6 +1254,7 @@ pub struct GetThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
+/// see [GuardDuty::get_threat_intel_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThreatIntelSetResponse {
@@ -1206,6 +1276,7 @@ pub struct GetThreatIntelSetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::get_usage_statistics]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageStatisticsRequest {
@@ -1232,6 +1303,7 @@ pub struct GetUsageStatisticsRequest {
     pub usage_statistic_type: String,
 }
 
+/// see [GuardDuty::get_usage_statistics]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUsageStatisticsResponse {
@@ -1339,6 +1411,7 @@ pub struct Invitation {
     pub relationship_status: Option<String>,
 }
 
+/// see [GuardDuty::invite_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
@@ -1358,6 +1431,7 @@ pub struct InviteMembersRequest {
     pub message: Option<String>,
 }
 
+/// see [GuardDuty::invite_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
@@ -1366,6 +1440,7 @@ pub struct InviteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::list_detectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
@@ -1379,6 +1454,23 @@ pub struct ListDetectorsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDetectorsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDetectorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_detectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
@@ -1391,6 +1483,29 @@ pub struct ListDetectorsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDetectorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDetectorsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.detector_ids
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_filters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
@@ -1407,6 +1522,23 @@ pub struct ListFiltersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFiltersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFiltersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_filters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
@@ -1419,6 +1551,29 @@ pub struct ListFiltersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFiltersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFiltersResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.filter_names
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
@@ -1443,6 +1598,23 @@ pub struct ListFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
+impl Paged for ListFindingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
@@ -1455,6 +1627,29 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFindingsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.finding_ids
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_ip_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
@@ -1471,6 +1666,23 @@ pub struct ListIPSetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIPSetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIPSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_ip_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
@@ -1483,6 +1695,29 @@ pub struct ListIPSetsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIPSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListIPSetsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.ip_set_ids
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
@@ -1496,6 +1731,23 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListInvitationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListInvitationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
@@ -1509,6 +1761,29 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListInvitationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListInvitationsResponse {
+    type Item = Invitation;
+
+    fn into_pagination_page(self) -> Vec<Invitation> {
+        self.invitations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
@@ -1529,6 +1804,23 @@ pub struct ListMembersRequest {
     pub only_associated: Option<String>,
 }
 
+impl Paged for ListMembersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
@@ -1542,6 +1834,29 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMembersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMembersResponse {
+    type Item = Member;
+
+    fn into_pagination_page(self) -> Vec<Member> {
+        self.members.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_organization_admin_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationAdminAccountsRequest {
@@ -1555,6 +1870,23 @@ pub struct ListOrganizationAdminAccountsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOrganizationAdminAccountsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOrganizationAdminAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_organization_admin_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationAdminAccountsResponse {
@@ -1568,6 +1900,29 @@ pub struct ListOrganizationAdminAccountsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListOrganizationAdminAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOrganizationAdminAccountsResponse {
+    type Item = AdminAccount;
+
+    fn into_pagination_page(self) -> Vec<AdminAccount> {
+        self.admin_accounts.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [GuardDuty::list_publishing_destinations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublishingDestinationsRequest {
@@ -1584,6 +1939,7 @@ pub struct ListPublishingDestinationsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [GuardDuty::list_publishing_destinations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishingDestinationsResponse {
@@ -1596,6 +1952,7 @@ pub struct ListPublishingDestinationsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [GuardDuty::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1604,6 +1961,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [GuardDuty::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1613,6 +1971,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [GuardDuty::list_threat_intel_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThreatIntelSetsRequest {
@@ -1629,6 +1988,23 @@ pub struct ListThreatIntelSetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListThreatIntelSetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListThreatIntelSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [GuardDuty::list_threat_intel_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
@@ -1639,6 +2015,28 @@ pub struct ListThreatIntelSetsResponse {
     /// <p>The IDs of the ThreatIntelSet resources.</p>
     #[serde(rename = "ThreatIntelSetIds")]
     pub threat_intel_set_ids: Vec<String>,
+}
+
+impl Paged for ListThreatIntelSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListThreatIntelSetsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.threat_intel_set_ids
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains information about the local IP address of the connection.</p>
@@ -2157,6 +2555,7 @@ pub struct SortCriteria {
     pub order_by: Option<String>,
 }
 
+/// see [GuardDuty::start_monitoring_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMembersRequest {
@@ -2168,6 +2567,7 @@ pub struct StartMonitoringMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::start_monitoring_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
@@ -2176,6 +2576,7 @@ pub struct StartMonitoringMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::stop_monitoring_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringMembersRequest {
@@ -2187,6 +2588,7 @@ pub struct StopMonitoringMembersRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::stop_monitoring_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
@@ -2209,6 +2611,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [GuardDuty::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2220,6 +2623,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [GuardDuty::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2252,6 +2656,7 @@ pub struct Total {
     pub unit: Option<String>,
 }
 
+/// see [GuardDuty::unarchive_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnarchiveFindingsRequest {
@@ -2263,6 +2668,7 @@ pub struct UnarchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
+/// see [GuardDuty::unarchive_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
@@ -2279,6 +2685,7 @@ pub struct UnprocessedAccount {
     pub result: String,
 }
 
+/// see [GuardDuty::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2290,10 +2697,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [GuardDuty::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [GuardDuty::update_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
@@ -2314,10 +2723,12 @@ pub struct UpdateDetectorRequest {
     pub finding_publishing_frequency: Option<String>,
 }
 
+/// see [GuardDuty::update_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
+/// see [GuardDuty::update_filter]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFilterRequest {
@@ -2345,6 +2756,7 @@ pub struct UpdateFilterRequest {
     pub rank: Option<i64>,
 }
 
+/// see [GuardDuty::update_filter]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFilterResponse {
@@ -2353,6 +2765,7 @@ pub struct UpdateFilterResponse {
     pub name: String,
 }
 
+/// see [GuardDuty::update_findings_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsFeedbackRequest {
@@ -2371,10 +2784,12 @@ pub struct UpdateFindingsFeedbackRequest {
     pub finding_ids: Vec<String>,
 }
 
+/// see [GuardDuty::update_findings_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
+/// see [GuardDuty::update_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
@@ -2398,10 +2813,12 @@ pub struct UpdateIPSetRequest {
     pub name: Option<String>,
 }
 
+/// see [GuardDuty::update_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
+/// see [GuardDuty::update_member_detectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMemberDetectorsRequest {
@@ -2417,6 +2834,7 @@ pub struct UpdateMemberDetectorsRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::update_member_detectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMemberDetectorsResponse {
@@ -2425,6 +2843,7 @@ pub struct UpdateMemberDetectorsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
+/// see [GuardDuty::update_organization_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationConfigurationRequest {
@@ -2440,10 +2859,12 @@ pub struct UpdateOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::update_organization_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOrganizationConfigurationResponse {}
 
+/// see [GuardDuty::update_publishing_destination]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublishingDestinationRequest {
@@ -2459,10 +2880,12 @@ pub struct UpdatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
+/// see [GuardDuty::update_publishing_destination]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePublishingDestinationResponse {}
 
+/// see [GuardDuty::update_threat_intel_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThreatIntelSetRequest {
@@ -2486,6 +2909,7 @@ pub struct UpdateThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
+/// see [GuardDuty::update_threat_intel_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
@@ -4791,7 +5215,7 @@ impl fmt::Display for UpdateThreatIntelSetError {
 impl Error for UpdateThreatIntelSetError {}
 /// Trait representing the capabilities of the Amazon GuardDuty API. Amazon GuardDuty clients implement this trait.
 #[async_trait]
-pub trait GuardDuty {
+pub trait GuardDuty: Clone + Sync + Send + 'static {
     /// <p>Accepts the invitation to be monitored by a GuardDuty administrator account.</p>
     async fn accept_invitation(
         &self,
@@ -5022,11 +5446,33 @@ pub trait GuardDuty {
         input: ListDetectorsRequest,
     ) -> Result<ListDetectorsResponse, RusotoError<ListDetectorsError>>;
 
+    /// Auto-paginating version of `list_detectors`
+    fn list_detectors_pages<'a>(
+        &'a self,
+        mut input: ListDetectorsRequest,
+    ) -> RusotoStream<'a, String, ListDetectorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_detectors(input.clone())
+        }))
+    }
+
     /// <p>Returns a paginated list of the current filters.</p>
     async fn list_filters(
         &self,
         input: ListFiltersRequest,
     ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>>;
+
+    /// Auto-paginating version of `list_filters`
+    fn list_filters_pages<'a>(
+        &'a self,
+        mut input: ListFiltersRequest,
+    ) -> RusotoStream<'a, String, ListFiltersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_filters(input.clone())
+        }))
+    }
 
     /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
     async fn list_findings(
@@ -5034,11 +5480,33 @@ pub trait GuardDuty {
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>>;
 
+    /// Auto-paginating version of `list_findings`
+    fn list_findings_pages<'a>(
+        &'a self,
+        mut input: ListFindingsRequest,
+    ) -> RusotoStream<'a, String, ListFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_findings(input.clone())
+        }))
+    }
+
     /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID. If you use this operation from a member account, the IPSets returned are the IPSets from the associated administrator account.</p>
     async fn list_ip_sets(
         &self,
         input: ListIPSetsRequest,
     ) -> Result<ListIPSetsResponse, RusotoError<ListIPSetsError>>;
+
+    /// Auto-paginating version of `list_ip_sets`
+    fn list_ip_sets_pages<'a>(
+        &'a self,
+        mut input: ListIPSetsRequest,
+    ) -> RusotoStream<'a, String, ListIPSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ip_sets(input.clone())
+        }))
+    }
 
     /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
     async fn list_invitations(
@@ -5046,11 +5514,33 @@ pub trait GuardDuty {
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
+    /// Auto-paginating version of `list_invitations`
+    fn list_invitations_pages<'a>(
+        &'a self,
+        mut input: ListInvitationsRequest,
+    ) -> RusotoStream<'a, Invitation, ListInvitationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_invitations(input.clone())
+        }))
+    }
+
     /// <p>Lists details about all member accounts for the current GuardDuty administrator account.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
+
+    /// Auto-paginating version of `list_members`
+    fn list_members_pages<'a>(
+        &'a self,
+        mut input: ListMembersRequest,
+    ) -> RusotoStream<'a, Member, ListMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_members(input.clone())
+        }))
+    }
 
     /// <p>Lists the accounts configured as GuardDuty delegated administrators.</p>
     async fn list_organization_admin_accounts(
@@ -5060,6 +5550,17 @@ pub trait GuardDuty {
         ListOrganizationAdminAccountsResponse,
         RusotoError<ListOrganizationAdminAccountsError>,
     >;
+
+    /// Auto-paginating version of `list_organization_admin_accounts`
+    fn list_organization_admin_accounts_pages<'a>(
+        &'a self,
+        mut input: ListOrganizationAdminAccountsRequest,
+    ) -> RusotoStream<'a, AdminAccount, ListOrganizationAdminAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_organization_admin_accounts(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of publishing destinations associated with the specified <code>dectectorId</code>.</p>
     async fn list_publishing_destinations(
@@ -5078,6 +5579,17 @@ pub trait GuardDuty {
         &self,
         input: ListThreatIntelSetsRequest,
     ) -> Result<ListThreatIntelSetsResponse, RusotoError<ListThreatIntelSetsError>>;
+
+    /// Auto-paginating version of `list_threat_intel_sets`
+    fn list_threat_intel_sets_pages<'a>(
+        &'a self,
+        mut input: ListThreatIntelSetsRequest,
+    ) -> RusotoStream<'a, String, ListThreatIntelSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_threat_intel_sets(input.clone())
+        }))
+    }
 
     /// <p>Turns on GuardDuty monitoring of the specified member accounts. Use this operation to restart monitoring of accounts that you stopped monitoring with the <code>StopMonitoringMembers</code> operation.</p>
     async fn start_monitoring_members(

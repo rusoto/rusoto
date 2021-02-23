@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -25,6 +29,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [SecurityHub::accept_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -36,6 +41,7 @@ pub struct AcceptInvitationRequest {
     pub master_id: String,
 }
 
+/// see [SecurityHub::accept_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
@@ -4754,6 +4760,7 @@ pub struct AwsWafWebAclRule {
     pub type_: Option<String>,
 }
 
+/// see [SecurityHub::batch_disable_standards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisableStandardsRequest {
@@ -4762,6 +4769,7 @@ pub struct BatchDisableStandardsRequest {
     pub standards_subscription_arns: Vec<String>,
 }
 
+/// see [SecurityHub::batch_disable_standards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisableStandardsResponse {
@@ -4771,6 +4779,7 @@ pub struct BatchDisableStandardsResponse {
     pub standards_subscriptions: Option<Vec<StandardsSubscription>>,
 }
 
+/// see [SecurityHub::batch_enable_standards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchEnableStandardsRequest {
@@ -4779,6 +4788,7 @@ pub struct BatchEnableStandardsRequest {
     pub standards_subscription_requests: Vec<StandardsSubscriptionRequest>,
 }
 
+/// see [SecurityHub::batch_enable_standards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchEnableStandardsResponse {
@@ -4788,6 +4798,7 @@ pub struct BatchEnableStandardsResponse {
     pub standards_subscriptions: Option<Vec<StandardsSubscription>>,
 }
 
+/// see [SecurityHub::batch_import_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchImportFindingsRequest {
@@ -4796,6 +4807,7 @@ pub struct BatchImportFindingsRequest {
     pub findings: Vec<AwsSecurityFinding>,
 }
 
+/// see [SecurityHub::batch_import_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchImportFindingsResponse {
@@ -4811,6 +4823,7 @@ pub struct BatchImportFindingsResponse {
     pub success_count: i64,
 }
 
+/// see [SecurityHub::batch_update_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateFindingsRequest {
@@ -4854,6 +4867,7 @@ pub struct BatchUpdateFindingsRequest {
     pub workflow: Option<WorkflowUpdate>,
 }
 
+/// see [SecurityHub::batch_update_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateFindingsResponse {
@@ -4935,6 +4949,7 @@ pub struct ContainerDetails {
     pub name: Option<String>,
 }
 
+/// see [SecurityHub::create_action_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActionTargetRequest {
@@ -4949,6 +4964,7 @@ pub struct CreateActionTargetRequest {
     pub name: String,
 }
 
+/// see [SecurityHub::create_action_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActionTargetResponse {
@@ -4957,6 +4973,7 @@ pub struct CreateActionTargetResponse {
     pub action_target_arn: String,
 }
 
+/// see [SecurityHub::create_insight]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInsightRequest {
@@ -4971,6 +4988,7 @@ pub struct CreateInsightRequest {
     pub name: String,
 }
 
+/// see [SecurityHub::create_insight]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInsightResponse {
@@ -4979,6 +4997,7 @@ pub struct CreateInsightResponse {
     pub insight_arn: String,
 }
 
+/// see [SecurityHub::create_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
@@ -4987,6 +5006,7 @@ pub struct CreateMembersRequest {
     pub account_details: Vec<AccountDetails>,
 }
 
+/// see [SecurityHub::create_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
@@ -5043,6 +5063,7 @@ pub struct DateRange {
     pub value: Option<i64>,
 }
 
+/// see [SecurityHub::decline_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
@@ -5051,6 +5072,7 @@ pub struct DeclineInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::decline_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
@@ -5060,6 +5082,7 @@ pub struct DeclineInvitationsResponse {
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
+/// see [SecurityHub::delete_action_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActionTargetRequest {
@@ -5068,6 +5091,7 @@ pub struct DeleteActionTargetRequest {
     pub action_target_arn: String,
 }
 
+/// see [SecurityHub::delete_action_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActionTargetResponse {
@@ -5076,6 +5100,7 @@ pub struct DeleteActionTargetResponse {
     pub action_target_arn: String,
 }
 
+/// see [SecurityHub::delete_insight]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInsightRequest {
@@ -5084,6 +5109,7 @@ pub struct DeleteInsightRequest {
     pub insight_arn: String,
 }
 
+/// see [SecurityHub::delete_insight]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInsightResponse {
@@ -5092,6 +5118,7 @@ pub struct DeleteInsightResponse {
     pub insight_arn: String,
 }
 
+/// see [SecurityHub::delete_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
@@ -5100,6 +5127,7 @@ pub struct DeleteInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::delete_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
@@ -5109,6 +5137,7 @@ pub struct DeleteInvitationsResponse {
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
+/// see [SecurityHub::delete_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
@@ -5117,6 +5146,7 @@ pub struct DeleteMembersRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::delete_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
@@ -5126,6 +5156,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
+/// see [SecurityHub::describe_action_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActionTargetsRequest {
@@ -5143,6 +5174,7 @@ pub struct DescribeActionTargetsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::describe_action_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActionTargetsResponse {
@@ -5155,6 +5187,7 @@ pub struct DescribeActionTargetsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::describe_hub]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHubRequest {
@@ -5164,6 +5197,7 @@ pub struct DescribeHubRequest {
     pub hub_arn: Option<String>,
 }
 
+/// see [SecurityHub::describe_hub]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHubResponse {
@@ -5181,10 +5215,12 @@ pub struct DescribeHubResponse {
     pub subscribed_at: Option<String>,
 }
 
+/// see [SecurityHub::describe_organization_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigurationRequest {}
 
+/// see [SecurityHub::describe_organization_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigurationResponse {
@@ -5198,6 +5234,7 @@ pub struct DescribeOrganizationConfigurationResponse {
     pub member_account_limit_reached: Option<bool>,
 }
 
+/// see [SecurityHub::describe_products]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductsRequest {
@@ -5211,6 +5248,7 @@ pub struct DescribeProductsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::describe_products]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductsResponse {
@@ -5223,6 +5261,7 @@ pub struct DescribeProductsResponse {
     pub products: Vec<Product>,
 }
 
+/// see [SecurityHub::describe_standards_controls]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStandardsControlsRequest {
@@ -5239,6 +5278,7 @@ pub struct DescribeStandardsControlsRequest {
     pub standards_subscription_arn: String,
 }
 
+/// see [SecurityHub::describe_standards_controls]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStandardsControlsResponse {
@@ -5252,6 +5292,7 @@ pub struct DescribeStandardsControlsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::describe_standards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStandardsRequest {
@@ -5265,6 +5306,7 @@ pub struct DescribeStandardsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::describe_standards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStandardsResponse {
@@ -5278,6 +5320,7 @@ pub struct DescribeStandardsResponse {
     pub standards: Option<Vec<Standard>>,
 }
 
+/// see [SecurityHub::disable_import_findings_for_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableImportFindingsForProductRequest {
@@ -5286,10 +5329,12 @@ pub struct DisableImportFindingsForProductRequest {
     pub product_subscription_arn: String,
 }
 
+/// see [SecurityHub::disable_import_findings_for_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableImportFindingsForProductResponse {}
 
+/// see [SecurityHub::disable_organization_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableOrganizationAdminAccountRequest {
@@ -5298,26 +5343,32 @@ pub struct DisableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
+/// see [SecurityHub::disable_organization_admin_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableOrganizationAdminAccountResponse {}
 
+/// see [SecurityHub::disable_security_hub]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSecurityHubRequest {}
 
+/// see [SecurityHub::disable_security_hub]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableSecurityHubResponse {}
 
+/// see [SecurityHub::disassociate_from_master_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {}
 
+/// see [SecurityHub::disassociate_from_master_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
+/// see [SecurityHub::disassociate_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
@@ -5326,10 +5377,12 @@ pub struct DisassociateMembersRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::disassociate_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {}
 
+/// see [SecurityHub::enable_import_findings_for_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableImportFindingsForProductRequest {
@@ -5338,6 +5391,7 @@ pub struct EnableImportFindingsForProductRequest {
     pub product_arn: String,
 }
 
+/// see [SecurityHub::enable_import_findings_for_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableImportFindingsForProductResponse {
@@ -5347,6 +5401,7 @@ pub struct EnableImportFindingsForProductResponse {
     pub product_subscription_arn: Option<String>,
 }
 
+/// see [SecurityHub::enable_organization_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableOrganizationAdminAccountRequest {
@@ -5355,10 +5410,12 @@ pub struct EnableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
+/// see [SecurityHub::enable_organization_admin_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableOrganizationAdminAccountResponse {}
 
+/// see [SecurityHub::enable_security_hub]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSecurityHubRequest {
@@ -5372,10 +5429,12 @@ pub struct EnableSecurityHubRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [SecurityHub::enable_security_hub]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableSecurityHubResponse {}
 
+/// see [SecurityHub::get_enabled_standards]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnabledStandardsRequest {
@@ -5393,6 +5452,23 @@ pub struct GetEnabledStandardsRequest {
     pub standards_subscription_arns: Option<Vec<String>>,
 }
 
+impl Paged for GetEnabledStandardsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetEnabledStandardsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::get_enabled_standards]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEnabledStandardsResponse {
@@ -5406,6 +5482,29 @@ pub struct GetEnabledStandardsResponse {
     pub standards_subscriptions: Option<Vec<StandardsSubscription>>,
 }
 
+impl Paged for GetEnabledStandardsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetEnabledStandardsResponse {
+    type Item = StandardsSubscription;
+
+    fn into_pagination_page(self) -> Vec<StandardsSubscription> {
+        self.standards_subscriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::get_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
@@ -5427,6 +5526,23 @@ pub struct GetFindingsRequest {
     pub sort_criteria: Option<Vec<SortCriterion>>,
 }
 
+impl Paged for GetFindingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::get_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsResponse {
@@ -5439,6 +5555,29 @@ pub struct GetFindingsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetFindingsResponse {
+    type Item = AwsSecurityFinding;
+
+    fn into_pagination_page(self) -> Vec<AwsSecurityFinding> {
+        self.findings
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::get_insight_results]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightResultsRequest {
@@ -5447,6 +5586,7 @@ pub struct GetInsightResultsRequest {
     pub insight_arn: String,
 }
 
+/// see [SecurityHub::get_insight_results]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightResultsResponse {
@@ -5455,6 +5595,7 @@ pub struct GetInsightResultsResponse {
     pub insight_results: InsightResults,
 }
 
+/// see [SecurityHub::get_insights]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightsRequest {
@@ -5472,6 +5613,23 @@ pub struct GetInsightsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetInsightsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetInsightsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::get_insights]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInsightsResponse {
@@ -5484,10 +5642,34 @@ pub struct GetInsightsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetInsightsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetInsightsResponse {
+    type Item = Insight;
+
+    fn into_pagination_page(self) -> Vec<Insight> {
+        self.insights
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::get_invitations_count]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
+/// see [SecurityHub::get_invitations_count]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
@@ -5497,10 +5679,12 @@ pub struct GetInvitationsCountResponse {
     pub invitations_count: Option<i64>,
 }
 
+/// see [SecurityHub::get_master_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {}
 
+/// see [SecurityHub::get_master_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
@@ -5510,6 +5694,7 @@ pub struct GetMasterAccountResponse {
     pub master: Option<Invitation>,
 }
 
+/// see [SecurityHub::get_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
@@ -5518,6 +5703,7 @@ pub struct GetMembersRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::get_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
@@ -5613,6 +5799,7 @@ pub struct Invitation {
     pub member_status: Option<String>,
 }
 
+/// see [SecurityHub::invite_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
@@ -5621,6 +5808,7 @@ pub struct InviteMembersRequest {
     pub account_ids: Vec<String>,
 }
 
+/// see [SecurityHub::invite_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
@@ -5665,6 +5853,7 @@ pub struct KeywordFilter {
     pub value: Option<String>,
 }
 
+/// see [SecurityHub::list_enabled_products_for_import]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnabledProductsForImportRequest {
@@ -5678,6 +5867,23 @@ pub struct ListEnabledProductsForImportRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEnabledProductsForImportRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEnabledProductsForImportRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::list_enabled_products_for_import]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEnabledProductsForImportResponse {
@@ -5691,6 +5897,29 @@ pub struct ListEnabledProductsForImportResponse {
     pub product_subscriptions: Option<Vec<String>>,
 }
 
+impl Paged for ListEnabledProductsForImportResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEnabledProductsForImportResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.product_subscriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::list_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
@@ -5704,6 +5933,23 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListInvitationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListInvitationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::list_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
@@ -5717,6 +5963,29 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListInvitationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListInvitationsResponse {
+    type Item = Invitation;
+
+    fn into_pagination_page(self) -> Vec<Invitation> {
+        self.invitations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::list_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
@@ -5734,6 +6003,23 @@ pub struct ListMembersRequest {
     pub only_associated: Option<bool>,
 }
 
+impl Paged for ListMembersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [SecurityHub::list_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
@@ -5747,6 +6033,29 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMembersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMembersResponse {
+    type Item = Member;
+
+    fn into_pagination_page(self) -> Vec<Member> {
+        self.members.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [SecurityHub::list_organization_admin_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationAdminAccountsRequest {
@@ -5760,6 +6069,7 @@ pub struct ListOrganizationAdminAccountsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::list_organization_admin_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationAdminAccountsResponse {
@@ -5773,6 +6083,7 @@ pub struct ListOrganizationAdminAccountsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [SecurityHub::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -5781,6 +6092,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [SecurityHub::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -6593,6 +6905,7 @@ pub struct StringFilter {
     pub value: Option<String>,
 }
 
+/// see [SecurityHub::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -6604,6 +6917,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [SecurityHub::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -6637,6 +6951,7 @@ pub struct ThreatIntelIndicator {
     pub value: Option<String>,
 }
 
+/// see [SecurityHub::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -6648,10 +6963,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [SecurityHub::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [SecurityHub::update_action_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateActionTargetRequest {
@@ -6668,10 +6985,12 @@ pub struct UpdateActionTargetRequest {
     pub name: Option<String>,
 }
 
+/// see [SecurityHub::update_action_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateActionTargetResponse {}
 
+/// see [SecurityHub::update_findings]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsRequest {
@@ -6688,10 +7007,12 @@ pub struct UpdateFindingsRequest {
     pub record_state: Option<String>,
 }
 
+/// see [SecurityHub::update_findings]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFindingsResponse {}
 
+/// see [SecurityHub::update_insight]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInsightRequest {
@@ -6712,10 +7033,12 @@ pub struct UpdateInsightRequest {
     pub name: Option<String>,
 }
 
+/// see [SecurityHub::update_insight]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInsightResponse {}
 
+/// see [SecurityHub::update_organization_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationConfigurationRequest {
@@ -6724,10 +7047,12 @@ pub struct UpdateOrganizationConfigurationRequest {
     pub auto_enable: bool,
 }
 
+/// see [SecurityHub::update_organization_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOrganizationConfigurationResponse {}
 
+/// see [SecurityHub::update_security_hub_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityHubConfigurationRequest {
@@ -6737,10 +7062,12 @@ pub struct UpdateSecurityHubConfigurationRequest {
     pub auto_enable_controls: Option<bool>,
 }
 
+/// see [SecurityHub::update_security_hub_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecurityHubConfigurationResponse {}
 
+/// see [SecurityHub::update_standards_control]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStandardsControlRequest {
@@ -6757,6 +7084,7 @@ pub struct UpdateStandardsControlRequest {
     pub standards_control_arn: String,
 }
 
+/// see [SecurityHub::update_standards_control]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStandardsControlResponse {}
@@ -9409,7 +9737,7 @@ impl fmt::Display for UpdateStandardsControlError {
 impl Error for UpdateStandardsControlError {}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
 #[async_trait]
-pub trait SecurityHub {
+pub trait SecurityHub: Clone + Sync + Send + 'static {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from.</p> <p>This operation is only used by member accounts that are not added through Organizations.</p> <p>When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
     async fn accept_invitation(
         &self,
@@ -9593,11 +9921,33 @@ pub trait SecurityHub {
         input: GetEnabledStandardsRequest,
     ) -> Result<GetEnabledStandardsResponse, RusotoError<GetEnabledStandardsError>>;
 
+    /// Auto-paginating version of `get_enabled_standards`
+    fn get_enabled_standards_pages<'a>(
+        &'a self,
+        mut input: GetEnabledStandardsRequest,
+    ) -> RusotoStream<'a, StandardsSubscription, GetEnabledStandardsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_enabled_standards(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of findings that match the specified criteria.</p>
     async fn get_findings(
         &self,
         input: GetFindingsRequest,
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>>;
+
+    /// Auto-paginating version of `get_findings`
+    fn get_findings_pages<'a>(
+        &'a self,
+        mut input: GetFindingsRequest,
+    ) -> RusotoStream<'a, AwsSecurityFinding, GetFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_findings(input.clone())
+        }))
+    }
 
     /// <p>Lists the results of the Security Hub insight specified by the insight ARN.</p>
     async fn get_insight_results(
@@ -9610,6 +9960,17 @@ pub trait SecurityHub {
         &self,
         input: GetInsightsRequest,
     ) -> Result<GetInsightsResponse, RusotoError<GetInsightsError>>;
+
+    /// Auto-paginating version of `get_insights`
+    fn get_insights_pages<'a>(
+        &'a self,
+        mut input: GetInsightsRequest,
+    ) -> RusotoStream<'a, Insight, GetInsightsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_insights(input.clone())
+        }))
+    }
 
     /// <p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>
     async fn get_invitations_count(
@@ -9639,17 +10000,50 @@ pub trait SecurityHub {
         input: ListEnabledProductsForImportRequest,
     ) -> Result<ListEnabledProductsForImportResponse, RusotoError<ListEnabledProductsForImportError>>;
 
+    /// Auto-paginating version of `list_enabled_products_for_import`
+    fn list_enabled_products_for_import_pages<'a>(
+        &'a self,
+        mut input: ListEnabledProductsForImportRequest,
+    ) -> RusotoStream<'a, String, ListEnabledProductsForImportError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_enabled_products_for_import(input.clone())
+        }))
+    }
+
     /// <p>Lists all Security Hub membership invitations that were sent to the current AWS account.</p> <p>This operation is only used by accounts that do not belong to an organization. Organization accounts do not receive invitations.</p>
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
+    /// Auto-paginating version of `list_invitations`
+    fn list_invitations_pages<'a>(
+        &'a self,
+        mut input: ListInvitationsRequest,
+    ) -> RusotoStream<'a, Invitation, ListInvitationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_invitations(input.clone())
+        }))
+    }
+
     /// <p>Lists details about all member accounts for the current Security Hub master account.</p> <p>The results include both member accounts that belong to an organization and member accounts that were invited manually.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
+
+    /// Auto-paginating version of `list_members`
+    fn list_members_pages<'a>(
+        &'a self,
+        mut input: ListMembersRequest,
+    ) -> RusotoStream<'a, Member, ListMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_members(input.clone())
+        }))
+    }
 
     /// <p>Lists the Security Hub administrator accounts. Can only be called by the organization management account.</p>
     async fn list_organization_admin_accounts(

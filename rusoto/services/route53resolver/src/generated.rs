@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl Route53ResolverClient {
 }
 
 use serde_json;
+/// see [Route53Resolver::associate_resolver_endpoint_ip_address]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverEndpointIpAddressRequest {
@@ -62,6 +67,7 @@ pub struct AssociateResolverEndpointIpAddressRequest {
     pub resolver_endpoint_id: String,
 }
 
+/// see [Route53Resolver::associate_resolver_endpoint_ip_address]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResolverEndpointIpAddressResponse {
@@ -71,6 +77,7 @@ pub struct AssociateResolverEndpointIpAddressResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::associate_resolver_query_log_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverQueryLogConfigRequest {
@@ -82,6 +89,7 @@ pub struct AssociateResolverQueryLogConfigRequest {
     pub resource_id: String,
 }
 
+/// see [Route53Resolver::associate_resolver_query_log_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResolverQueryLogConfigResponse {
@@ -91,6 +99,7 @@ pub struct AssociateResolverQueryLogConfigResponse {
     pub resolver_query_log_config_association: Option<ResolverQueryLogConfigAssociation>,
 }
 
+/// see [Route53Resolver::associate_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverRuleRequest {
@@ -106,6 +115,7 @@ pub struct AssociateResolverRuleRequest {
     pub vpc_id: String,
 }
 
+/// see [Route53Resolver::associate_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResolverRuleResponse {
@@ -115,6 +125,7 @@ pub struct AssociateResolverRuleResponse {
     pub resolver_rule_association: Option<ResolverRuleAssociation>,
 }
 
+/// see [Route53Resolver::create_resolver_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverEndpointRequest {
@@ -140,6 +151,7 @@ pub struct CreateResolverEndpointRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Route53Resolver::create_resolver_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResolverEndpointResponse {
@@ -149,6 +161,7 @@ pub struct CreateResolverEndpointResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::create_resolver_query_log_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverQueryLogConfigRequest {
@@ -167,6 +180,7 @@ pub struct CreateResolverQueryLogConfigRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Route53Resolver::create_resolver_query_log_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResolverQueryLogConfigResponse {
@@ -176,6 +190,7 @@ pub struct CreateResolverQueryLogConfigResponse {
     pub resolver_query_log_config: Option<ResolverQueryLogConfig>,
 }
 
+/// see [Route53Resolver::create_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverRuleRequest {
@@ -206,6 +221,7 @@ pub struct CreateResolverRuleRequest {
     pub target_ips: Option<Vec<TargetAddress>>,
 }
 
+/// see [Route53Resolver::create_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResolverRuleResponse {
@@ -215,6 +231,7 @@ pub struct CreateResolverRuleResponse {
     pub resolver_rule: Option<ResolverRule>,
 }
 
+/// see [Route53Resolver::delete_resolver_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResolverEndpointRequest {
@@ -223,6 +240,7 @@ pub struct DeleteResolverEndpointRequest {
     pub resolver_endpoint_id: String,
 }
 
+/// see [Route53Resolver::delete_resolver_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResolverEndpointResponse {
@@ -232,6 +250,7 @@ pub struct DeleteResolverEndpointResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::delete_resolver_query_log_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResolverQueryLogConfigRequest {
@@ -240,6 +259,7 @@ pub struct DeleteResolverQueryLogConfigRequest {
     pub resolver_query_log_config_id: String,
 }
 
+/// see [Route53Resolver::delete_resolver_query_log_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResolverQueryLogConfigResponse {
@@ -249,6 +269,7 @@ pub struct DeleteResolverQueryLogConfigResponse {
     pub resolver_query_log_config: Option<ResolverQueryLogConfig>,
 }
 
+/// see [Route53Resolver::delete_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResolverRuleRequest {
@@ -257,6 +278,7 @@ pub struct DeleteResolverRuleRequest {
     pub resolver_rule_id: String,
 }
 
+/// see [Route53Resolver::delete_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResolverRuleResponse {
@@ -266,6 +288,7 @@ pub struct DeleteResolverRuleResponse {
     pub resolver_rule: Option<ResolverRule>,
 }
 
+/// see [Route53Resolver::disassociate_resolver_endpoint_ip_address]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResolverEndpointIpAddressRequest {
@@ -277,6 +300,7 @@ pub struct DisassociateResolverEndpointIpAddressRequest {
     pub resolver_endpoint_id: String,
 }
 
+/// see [Route53Resolver::disassociate_resolver_endpoint_ip_address]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResolverEndpointIpAddressResponse {
@@ -286,6 +310,7 @@ pub struct DisassociateResolverEndpointIpAddressResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::disassociate_resolver_query_log_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResolverQueryLogConfigRequest {
@@ -297,6 +322,7 @@ pub struct DisassociateResolverQueryLogConfigRequest {
     pub resource_id: String,
 }
 
+/// see [Route53Resolver::disassociate_resolver_query_log_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResolverQueryLogConfigResponse {
@@ -306,6 +332,7 @@ pub struct DisassociateResolverQueryLogConfigResponse {
     pub resolver_query_log_config_association: Option<ResolverQueryLogConfigAssociation>,
 }
 
+/// see [Route53Resolver::disassociate_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResolverRuleRequest {
@@ -317,6 +344,7 @@ pub struct DisassociateResolverRuleRequest {
     pub vpc_id: String,
 }
 
+/// see [Route53Resolver::disassociate_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResolverRuleResponse {
@@ -340,6 +368,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
+/// see [Route53Resolver::get_resolver_dnssec_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverDnssecConfigRequest {
@@ -348,6 +377,7 @@ pub struct GetResolverDnssecConfigRequest {
     pub resource_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_dnssec_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverDnssecConfigResponse {
@@ -357,6 +387,7 @@ pub struct GetResolverDnssecConfigResponse {
     pub resolver_dnssec_config: Option<ResolverDnssecConfig>,
 }
 
+/// see [Route53Resolver::get_resolver_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverEndpointRequest {
@@ -365,6 +396,7 @@ pub struct GetResolverEndpointRequest {
     pub resolver_endpoint_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverEndpointResponse {
@@ -374,6 +406,7 @@ pub struct GetResolverEndpointResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverQueryLogConfigAssociationRequest {
@@ -382,6 +415,7 @@ pub struct GetResolverQueryLogConfigAssociationRequest {
     pub resolver_query_log_config_association_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverQueryLogConfigAssociationResponse {
@@ -391,6 +425,7 @@ pub struct GetResolverQueryLogConfigAssociationResponse {
     pub resolver_query_log_config_association: Option<ResolverQueryLogConfigAssociation>,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverQueryLogConfigPolicyRequest {
@@ -399,6 +434,7 @@ pub struct GetResolverQueryLogConfigPolicyRequest {
     pub arn: String,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverQueryLogConfigPolicyResponse {
@@ -408,6 +444,7 @@ pub struct GetResolverQueryLogConfigPolicyResponse {
     pub resolver_query_log_config_policy: Option<String>,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverQueryLogConfigRequest {
@@ -416,6 +453,7 @@ pub struct GetResolverQueryLogConfigRequest {
     pub resolver_query_log_config_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_query_log_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverQueryLogConfigResponse {
@@ -425,6 +463,7 @@ pub struct GetResolverQueryLogConfigResponse {
     pub resolver_query_log_config: Option<ResolverQueryLogConfig>,
 }
 
+/// see [Route53Resolver::get_resolver_rule_association]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverRuleAssociationRequest {
@@ -433,6 +472,7 @@ pub struct GetResolverRuleAssociationRequest {
     pub resolver_rule_association_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_rule_association]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverRuleAssociationResponse {
@@ -442,6 +482,7 @@ pub struct GetResolverRuleAssociationResponse {
     pub resolver_rule_association: Option<ResolverRuleAssociation>,
 }
 
+/// see [Route53Resolver::get_resolver_rule_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverRulePolicyRequest {
@@ -450,6 +491,7 @@ pub struct GetResolverRulePolicyRequest {
     pub arn: String,
 }
 
+/// see [Route53Resolver::get_resolver_rule_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverRulePolicyResponse {
@@ -459,6 +501,7 @@ pub struct GetResolverRulePolicyResponse {
     pub resolver_rule_policy: Option<String>,
 }
 
+/// see [Route53Resolver::get_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResolverRuleRequest {
@@ -467,6 +510,7 @@ pub struct GetResolverRuleRequest {
     pub resolver_rule_id: String,
 }
 
+/// see [Route53Resolver::get_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverRuleResponse {
@@ -541,6 +585,7 @@ pub struct IpAddressUpdate {
     pub subnet_id: Option<String>,
 }
 
+/// see [Route53Resolver::list_resolver_dnssec_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverDnssecConfigsRequest {
@@ -558,6 +603,23 @@ pub struct ListResolverDnssecConfigsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResolverDnssecConfigsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverDnssecConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_dnssec_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverDnssecConfigsResponse {
@@ -571,6 +633,29 @@ pub struct ListResolverDnssecConfigsResponse {
     pub resolver_dnssec_configs: Option<Vec<ResolverDnssecConfig>>,
 }
 
+impl Paged for ListResolverDnssecConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverDnssecConfigsResponse {
+    type Item = ResolverDnssecConfig;
+
+    fn into_pagination_page(self) -> Vec<ResolverDnssecConfig> {
+        self.resolver_dnssec_configs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_endpoint_ip_addresses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverEndpointIpAddressesRequest {
@@ -587,6 +672,23 @@ pub struct ListResolverEndpointIpAddressesRequest {
     pub resolver_endpoint_id: String,
 }
 
+impl Paged for ListResolverEndpointIpAddressesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverEndpointIpAddressesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_endpoint_ip_addresses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverEndpointIpAddressesResponse {
@@ -604,6 +706,29 @@ pub struct ListResolverEndpointIpAddressesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResolverEndpointIpAddressesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverEndpointIpAddressesResponse {
+    type Item = IpAddressResponse;
+
+    fn into_pagination_page(self) -> Vec<IpAddressResponse> {
+        self.ip_addresses.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverEndpointsRequest {
@@ -621,6 +746,23 @@ pub struct ListResolverEndpointsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResolverEndpointsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverEndpointsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverEndpointsResponse {
@@ -638,6 +780,29 @@ pub struct ListResolverEndpointsResponse {
     pub resolver_endpoints: Option<Vec<ResolverEndpoint>>,
 }
 
+impl Paged for ListResolverEndpointsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverEndpointsResponse {
+    type Item = ResolverEndpoint;
+
+    fn into_pagination_page(self) -> Vec<ResolverEndpoint> {
+        self.resolver_endpoints.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_query_log_config_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverQueryLogConfigAssociationsRequest {
@@ -663,6 +828,23 @@ pub struct ListResolverQueryLogConfigAssociationsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListResolverQueryLogConfigAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverQueryLogConfigAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_query_log_config_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverQueryLogConfigAssociationsResponse {
@@ -684,6 +866,30 @@ pub struct ListResolverQueryLogConfigAssociationsResponse {
     pub total_filtered_count: Option<i64>,
 }
 
+impl Paged for ListResolverQueryLogConfigAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverQueryLogConfigAssociationsResponse {
+    type Item = ResolverQueryLogConfigAssociation;
+
+    fn into_pagination_page(self) -> Vec<ResolverQueryLogConfigAssociation> {
+        self.resolver_query_log_config_associations
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_query_log_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverQueryLogConfigsRequest {
@@ -709,6 +915,23 @@ pub struct ListResolverQueryLogConfigsRequest {
     pub sort_order: Option<String>,
 }
 
+impl Paged for ListResolverQueryLogConfigsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverQueryLogConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_query_log_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverQueryLogConfigsResponse {
@@ -730,6 +953,29 @@ pub struct ListResolverQueryLogConfigsResponse {
     pub total_filtered_count: Option<i64>,
 }
 
+impl Paged for ListResolverQueryLogConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverQueryLogConfigsResponse {
+    type Item = ResolverQueryLogConfig;
+
+    fn into_pagination_page(self) -> Vec<ResolverQueryLogConfig> {
+        self.resolver_query_log_configs.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_rule_associations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverRuleAssociationsRequest {
@@ -747,6 +993,23 @@ pub struct ListResolverRuleAssociationsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResolverRuleAssociationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverRuleAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_rule_associations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverRuleAssociationsResponse {
@@ -764,6 +1027,29 @@ pub struct ListResolverRuleAssociationsResponse {
     pub resolver_rule_associations: Option<Vec<ResolverRuleAssociation>>,
 }
 
+impl Paged for ListResolverRuleAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverRuleAssociationsResponse {
+    type Item = ResolverRuleAssociation;
+
+    fn into_pagination_page(self) -> Vec<ResolverRuleAssociation> {
+        self.resolver_rule_associations.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_resolver_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResolverRulesRequest {
@@ -781,6 +1067,23 @@ pub struct ListResolverRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListResolverRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_resolver_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolverRulesResponse {
@@ -798,6 +1101,29 @@ pub struct ListResolverRulesResponse {
     pub resolver_rules: Option<Vec<ResolverRule>>,
 }
 
+impl Paged for ListResolverRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListResolverRulesResponse {
+    type Item = ResolverRule;
+
+    fn into_pagination_page(self) -> Vec<ResolverRule> {
+        self.resolver_rules.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -814,6 +1140,23 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Route53Resolver::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -827,6 +1170,29 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Route53Resolver::put_resolver_query_log_config_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResolverQueryLogConfigPolicyRequest {
@@ -839,6 +1205,7 @@ pub struct PutResolverQueryLogConfigPolicyRequest {
 }
 
 /// <p>The response to a <code>PutResolverQueryLogConfigPolicy</code> request.</p>
+/// see [Route53Resolver::put_resolver_query_log_config_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResolverQueryLogConfigPolicyResponse {
@@ -848,6 +1215,7 @@ pub struct PutResolverQueryLogConfigPolicyResponse {
     pub return_value: Option<bool>,
 }
 
+/// see [Route53Resolver::put_resolver_rule_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResolverRulePolicyRequest {
@@ -860,6 +1228,7 @@ pub struct PutResolverRulePolicyRequest {
 }
 
 /// <p>The response to a <code>PutResolverRulePolicy</code> request.</p>
+/// see [Route53Resolver::put_resolver_rule_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResolverRulePolicyResponse {
@@ -1146,6 +1515,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Route53Resolver::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1157,6 +1527,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Route53Resolver::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1173,6 +1544,7 @@ pub struct TargetAddress {
     pub port: Option<i64>,
 }
 
+/// see [Route53Resolver::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1184,10 +1556,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Route53Resolver::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Route53Resolver::update_resolver_dnssec_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverDnssecConfigRequest {
@@ -1199,6 +1573,7 @@ pub struct UpdateResolverDnssecConfigRequest {
     pub validation: String,
 }
 
+/// see [Route53Resolver::update_resolver_dnssec_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResolverDnssecConfigResponse {
@@ -1208,6 +1583,7 @@ pub struct UpdateResolverDnssecConfigResponse {
     pub resolver_dnssec_config: Option<ResolverDnssecConfig>,
 }
 
+/// see [Route53Resolver::update_resolver_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverEndpointRequest {
@@ -1220,6 +1596,7 @@ pub struct UpdateResolverEndpointRequest {
     pub resolver_endpoint_id: String,
 }
 
+/// see [Route53Resolver::update_resolver_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResolverEndpointResponse {
@@ -1229,6 +1606,7 @@ pub struct UpdateResolverEndpointResponse {
     pub resolver_endpoint: Option<ResolverEndpoint>,
 }
 
+/// see [Route53Resolver::update_resolver_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverRuleRequest {
@@ -1240,6 +1618,7 @@ pub struct UpdateResolverRuleRequest {
     pub resolver_rule_id: String,
 }
 
+/// see [Route53Resolver::update_resolver_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResolverRuleResponse {
@@ -3761,7 +4140,7 @@ impl fmt::Display for UpdateResolverRuleError {
 impl Error for UpdateResolverRuleError {}
 /// Trait representing the capabilities of the Route53Resolver API. Route53Resolver clients implement this trait.
 #[async_trait]
-pub trait Route53Resolver {
+pub trait Route53Resolver: Clone + Sync + Send + 'static {
     /// <p>Adds IP addresses to an inbound or an outbound Resolver endpoint. If you want to add more than one IP address, submit one <code>AssociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To remove an IP address from an endpoint, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DisassociateResolverEndpointIpAddress.html">DisassociateResolverEndpointIpAddress</a>. </p>
     async fn associate_resolver_endpoint_ip_address(
         &self,
@@ -3906,6 +4285,17 @@ pub trait Route53Resolver {
         input: ListResolverDnssecConfigsRequest,
     ) -> Result<ListResolverDnssecConfigsResponse, RusotoError<ListResolverDnssecConfigsError>>;
 
+    /// Auto-paginating version of `list_resolver_dnssec_configs`
+    fn list_resolver_dnssec_configs_pages<'a>(
+        &'a self,
+        mut input: ListResolverDnssecConfigsRequest,
+    ) -> RusotoStream<'a, ResolverDnssecConfig, ListResolverDnssecConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_dnssec_configs(input.clone())
+        }))
+    }
+
     /// <p>Gets the IP addresses for a specified Resolver endpoint.</p>
     async fn list_resolver_endpoint_ip_addresses(
         &self,
@@ -3915,11 +4305,33 @@ pub trait Route53Resolver {
         RusotoError<ListResolverEndpointIpAddressesError>,
     >;
 
+    /// Auto-paginating version of `list_resolver_endpoint_ip_addresses`
+    fn list_resolver_endpoint_ip_addresses_pages<'a>(
+        &'a self,
+        mut input: ListResolverEndpointIpAddressesRequest,
+    ) -> RusotoStream<'a, IpAddressResponse, ListResolverEndpointIpAddressesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_endpoint_ip_addresses(input.clone())
+        }))
+    }
+
     /// <p>Lists all the Resolver endpoints that were created using the current AWS account.</p>
     async fn list_resolver_endpoints(
         &self,
         input: ListResolverEndpointsRequest,
     ) -> Result<ListResolverEndpointsResponse, RusotoError<ListResolverEndpointsError>>;
+
+    /// Auto-paginating version of `list_resolver_endpoints`
+    fn list_resolver_endpoints_pages<'a>(
+        &'a self,
+        mut input: ListResolverEndpointsRequest,
+    ) -> RusotoStream<'a, ResolverEndpoint, ListResolverEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_endpoints(input.clone())
+        }))
+    }
 
     /// <p>Lists information about associations between Amazon VPCs and query logging configurations.</p>
     async fn list_resolver_query_log_config_associations(
@@ -3930,11 +4342,37 @@ pub trait Route53Resolver {
         RusotoError<ListResolverQueryLogConfigAssociationsError>,
     >;
 
+    /// Auto-paginating version of `list_resolver_query_log_config_associations`
+    fn list_resolver_query_log_config_associations_pages<'a>(
+        &'a self,
+        mut input: ListResolverQueryLogConfigAssociationsRequest,
+    ) -> RusotoStream<
+        'a,
+        ResolverQueryLogConfigAssociation,
+        ListResolverQueryLogConfigAssociationsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_query_log_config_associations(input.clone())
+        }))
+    }
+
     /// <p>Lists information about the specified query logging configurations. Each configuration defines where you want Resolver to save DNS query logs and specifies the VPCs that you want to log queries for.</p>
     async fn list_resolver_query_log_configs(
         &self,
         input: ListResolverQueryLogConfigsRequest,
     ) -> Result<ListResolverQueryLogConfigsResponse, RusotoError<ListResolverQueryLogConfigsError>>;
+
+    /// Auto-paginating version of `list_resolver_query_log_configs`
+    fn list_resolver_query_log_configs_pages<'a>(
+        &'a self,
+        mut input: ListResolverQueryLogConfigsRequest,
+    ) -> RusotoStream<'a, ResolverQueryLogConfig, ListResolverQueryLogConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_query_log_configs(input.clone())
+        }))
+    }
 
     /// <p>Lists the associations that were created between Resolver rules and VPCs using the current AWS account.</p>
     async fn list_resolver_rule_associations(
@@ -3942,17 +4380,50 @@ pub trait Route53Resolver {
         input: ListResolverRuleAssociationsRequest,
     ) -> Result<ListResolverRuleAssociationsResponse, RusotoError<ListResolverRuleAssociationsError>>;
 
+    /// Auto-paginating version of `list_resolver_rule_associations`
+    fn list_resolver_rule_associations_pages<'a>(
+        &'a self,
+        mut input: ListResolverRuleAssociationsRequest,
+    ) -> RusotoStream<'a, ResolverRuleAssociation, ListResolverRuleAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_rule_associations(input.clone())
+        }))
+    }
+
     /// <p>Lists the Resolver rules that were created using the current AWS account.</p>
     async fn list_resolver_rules(
         &self,
         input: ListResolverRulesRequest,
     ) -> Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>>;
 
+    /// Auto-paginating version of `list_resolver_rules`
+    fn list_resolver_rules_pages<'a>(
+        &'a self,
+        mut input: ListResolverRulesRequest,
+    ) -> RusotoStream<'a, ResolverRule, ListResolverRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_rules(input.clone())
+        }))
+    }
+
     /// <p>Lists the tags that you associated with the specified resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
 
     /// <p>Specifies an AWS account that you want to share a query logging configuration with, the query logging configuration that you want to share, and the operations that you want the account to be able to perform on the configuration.</p>
     async fn put_resolver_query_log_config_policy(

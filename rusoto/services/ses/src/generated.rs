@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -476,6 +480,7 @@ impl CidrDeserializer {
     }
 }
 /// <p>Represents a request to create a receipt rule set by cloning an existing one. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::clone_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloneReceiptRuleSetRequest {
@@ -503,6 +508,7 @@ impl CloneReceiptRuleSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::clone_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloneReceiptRuleSetResponse {}
@@ -796,6 +802,7 @@ impl CounterDeserializer {
     }
 }
 /// <p>Represents a request to create a configuration set event destination. A configuration set event destination, which can be either Amazon CloudWatch or Amazon Kinesis Firehose, describes an AWS service in which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetEventDestinationRequest {
@@ -831,6 +838,7 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
@@ -853,6 +861,7 @@ impl CreateConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 /// <p>Represents a request to create a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetRequest {
@@ -878,6 +887,7 @@ impl CreateConfigurationSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
@@ -900,6 +910,7 @@ impl CreateConfigurationSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to create an open and click tracking option object in a configuration set. </p>
+/// see [Ses::create_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetTrackingOptionsRequest {
@@ -934,6 +945,7 @@ impl CreateConfigurationSetTrackingOptionsRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetTrackingOptionsResponse {}
@@ -956,6 +968,7 @@ impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
     }
 }
 /// <p>Represents a request to create a custom verification email template.</p>
+/// see [Ses::create_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomVerificationEmailTemplateRequest {
@@ -1011,6 +1024,7 @@ impl CreateCustomVerificationEmailTemplateRequestSerializer {
 }
 
 /// <p>Represents a request to create a new IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_receipt_filter]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReceiptFilterRequest {
@@ -1032,6 +1046,7 @@ impl CreateReceiptFilterRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_receipt_filter]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptFilterResponse {}
@@ -1054,6 +1069,7 @@ impl CreateReceiptFilterResponseDeserializer {
     }
 }
 /// <p>Represents a request to create a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReceiptRuleRequest {
@@ -1083,6 +1099,7 @@ impl CreateReceiptRuleRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptRuleResponse {}
@@ -1105,6 +1122,7 @@ impl CreateReceiptRuleResponseDeserializer {
     }
 }
 /// <p>Represents a request to create an empty receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReceiptRuleSetRequest {
@@ -1126,6 +1144,7 @@ impl CreateReceiptRuleSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::create_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptRuleSetResponse {}
@@ -1148,6 +1167,7 @@ impl CreateReceiptRuleSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to create an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::create_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateRequest {
@@ -1168,6 +1188,7 @@ impl CreateTemplateRequestSerializer {
     }
 }
 
+/// see [Ses::create_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTemplateResponse {}
@@ -1300,6 +1321,7 @@ impl DefaultDimensionValueDeserializer {
     }
 }
 /// <p>Represents a request to delete a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetEventDestinationRequest {
@@ -1334,6 +1356,7 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
@@ -1356,6 +1379,7 @@ impl DeleteConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetRequest {
@@ -1380,6 +1404,7 @@ impl DeleteConfigurationSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
@@ -1402,6 +1427,7 @@ impl DeleteConfigurationSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete open and click tracking options in a configuration set. </p>
+/// see [Ses::delete_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetTrackingOptionsRequest {
@@ -1430,6 +1456,7 @@ impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetTrackingOptionsResponse {}
@@ -1452,6 +1479,7 @@ impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete an existing custom verification email template.</p>
+/// see [Ses::delete_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomVerificationEmailTemplateRequest {
@@ -1477,6 +1505,7 @@ impl DeleteCustomVerificationEmailTemplateRequestSerializer {
 }
 
 /// <p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityPolicyRequest {
@@ -1501,6 +1530,7 @@ impl DeleteIdentityPolicyRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIdentityPolicyResponse {}
@@ -1523,6 +1553,7 @@ impl DeleteIdentityPolicyResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete one of your Amazon SES identities (an email address or domain).</p>
+/// see [Ses::delete_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityRequest {
@@ -1544,6 +1575,7 @@ impl DeleteIdentityRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIdentityResponse {}
@@ -1566,6 +1598,7 @@ impl DeleteIdentityResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete an IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_receipt_filter]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReceiptFilterRequest {
@@ -1587,6 +1620,7 @@ impl DeleteReceiptFilterRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_receipt_filter]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptFilterResponse {}
@@ -1609,6 +1643,7 @@ impl DeleteReceiptFilterResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReceiptRuleRequest {
@@ -1633,6 +1668,7 @@ impl DeleteReceiptRuleRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptRuleResponse {}
@@ -1655,6 +1691,7 @@ impl DeleteReceiptRuleResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete a receipt rule set and all of the receipt rules it contains. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReceiptRuleSetRequest {
@@ -1676,6 +1713,7 @@ impl DeleteReceiptRuleSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::delete_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptRuleSetResponse {}
@@ -1698,6 +1736,7 @@ impl DeleteReceiptRuleSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete an email template. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::delete_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateRequest {
@@ -1718,6 +1757,7 @@ impl DeleteTemplateRequestSerializer {
     }
 }
 
+/// see [Ses::delete_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTemplateResponse {}
@@ -1740,6 +1780,7 @@ impl DeleteTemplateResponseDeserializer {
     }
 }
 /// <p>Represents a request to delete an email address from the list of email addresses you have attempted to verify under your AWS account.</p>
+/// see [Ses::delete_verified_email_address]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVerifiedEmailAddressRequest {
@@ -1805,6 +1846,7 @@ impl DeliveryOptionsSerializer {
 }
 
 /// <p>Represents a request to return the metadata and receipt rules for the receipt rule set that is currently active. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::describe_active_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActiveReceiptRuleSetRequest {}
@@ -1821,6 +1863,7 @@ impl DescribeActiveReceiptRuleSetRequestSerializer {
 }
 
 /// <p>Represents the metadata and receipt rules for the receipt rule set that is currently active.</p>
+/// see [Ses::describe_active_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeActiveReceiptRuleSetResponse {
@@ -1861,6 +1904,7 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the details of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::describe_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationSetRequest {
@@ -1894,6 +1938,7 @@ impl DescribeConfigurationSetRequestSerializer {
 }
 
 /// <p>Represents the details of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::describe_configuration_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeConfigurationSetResponse {
@@ -1958,6 +2003,7 @@ impl DescribeConfigurationSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the details of a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::describe_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReceiptRuleRequest {
@@ -1982,6 +2028,7 @@ impl DescribeReceiptRuleRequestSerializer {
 }
 
 /// <p>Represents the details of a receipt rule.</p>
+/// see [Ses::describe_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReceiptRuleResponse {
@@ -2013,6 +2060,7 @@ impl DescribeReceiptRuleResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the details of a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::describe_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReceiptRuleSetRequest {
@@ -2034,6 +2082,7 @@ impl DescribeReceiptRuleSetRequestSerializer {
 }
 
 /// <p>Represents the details of the specified receipt rule set.</p>
+/// see [Ses::describe_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeReceiptRuleSetResponse {
@@ -2401,6 +2450,7 @@ impl FromAddressDeserializer {
     }
 }
 /// <p>Represents a request to return the email sending status for your Amazon SES account in the current AWS Region.</p>
+/// see [Ses::get_account_sending_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAccountSendingEnabledResponse {
@@ -2432,6 +2482,7 @@ impl GetAccountSendingEnabledResponseDeserializer {
     }
 }
 /// <p>Represents a request to retrieve an existing custom verification email template.</p>
+/// see [Ses::get_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCustomVerificationEmailTemplateRequest {
@@ -2453,6 +2504,7 @@ impl GetCustomVerificationEmailTemplateRequestSerializer {
 }
 
 /// <p>The content of the custom verification email template.</p>
+/// see [Ses::get_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCustomVerificationEmailTemplateResponse {
@@ -2527,6 +2579,7 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
     }
 }
 /// <p>Represents a request for the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this request also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published. For more information about Easy DKIM, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::get_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityDkimAttributesRequest {
@@ -2552,6 +2605,7 @@ impl GetIdentityDkimAttributesRequestSerializer {
 }
 
 /// <p>Represents the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this response also contains the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published.</p>
+/// see [Ses::get_identity_dkim_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetIdentityDkimAttributesResponse {
@@ -2584,6 +2638,7 @@ impl GetIdentityDkimAttributesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the Amazon SES custom MAIL FROM attributes for a list of identities. For information about using a custom MAIL FROM domain, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::get_identity_mail_from_domain_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityMailFromDomainAttributesRequest {
@@ -2613,6 +2668,7 @@ impl GetIdentityMailFromDomainAttributesRequestSerializer {
 }
 
 /// <p>Represents the custom MAIL FROM attributes for a list of identities.</p>
+/// see [Ses::get_identity_mail_from_domain_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetIdentityMailFromDomainAttributesResponse {
@@ -2649,6 +2705,7 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the notification attributes for a list of identities you verified with Amazon SES. For information about Amazon SES notifications, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::get_identity_notification_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityNotificationAttributesRequest {
@@ -2674,6 +2731,7 @@ impl GetIdentityNotificationAttributesRequestSerializer {
 }
 
 /// <p>Represents the notification attributes for a list of identities.</p>
+/// see [Ses::get_identity_notification_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetIdentityNotificationAttributesResponse {
@@ -2710,6 +2768,7 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the requested sending authorization policies for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::get_identity_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityPoliciesRequest {
@@ -2738,6 +2797,7 @@ impl GetIdentityPoliciesRequestSerializer {
 }
 
 /// <p>Represents the requested sending authorization policies.</p>
+/// see [Ses::get_identity_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetIdentityPoliciesResponse {
@@ -2769,6 +2829,7 @@ impl GetIdentityPoliciesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return the Amazon SES verification status of a list of identities. For domain identities, this request also returns the verification token. For information about verifying identities with Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::get_identity_verification_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityVerificationAttributesRequest {
@@ -2794,6 +2855,7 @@ impl GetIdentityVerificationAttributesRequestSerializer {
 }
 
 /// <p>The Amazon SES verification status of a list of identities. For domain identities, this response also contains the verification token.</p>
+/// see [Ses::get_identity_verification_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetIdentityVerificationAttributesResponse {
@@ -2830,6 +2892,7 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
     }
 }
 /// <p>Represents your Amazon SES daily sending quota, maximum send rate, and the number of emails you have sent in the last 24 hours.</p>
+/// see [Ses::get_send_quota]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSendQuotaResponse {
@@ -2874,6 +2937,7 @@ impl GetSendQuotaResponseDeserializer {
     }
 }
 /// <p>Represents a list of data points. This list contains aggregated data from the previous two weeks of your sending activity with Amazon SES.</p>
+/// see [Ses::get_send_statistics]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSendStatisticsResponse {
@@ -2906,6 +2970,7 @@ impl GetSendStatisticsResponseDeserializer {
         )
     }
 }
+/// see [Ses::get_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTemplateRequest {
@@ -2926,6 +2991,7 @@ impl GetTemplateRequestSerializer {
     }
 }
 
+/// see [Ses::get_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTemplateResponse {
@@ -3363,6 +3429,7 @@ impl LastFreshStartDeserializer {
     }
 }
 /// <p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::list_configuration_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationSetsRequest {
@@ -3370,6 +3437,22 @@ pub struct ListConfigurationSetsRequest {
     pub max_items: Option<i64>,
     /// <p>A token returned from a previous call to <code>ListConfigurationSets</code> to indicate the position of the configuration set in the configuration set list.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListConfigurationSetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConfigurationSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListConfigurationSetsRequest` contents to a `SignedRequest`.
@@ -3391,6 +3474,7 @@ impl ListConfigurationSetsRequestSerializer {
 }
 
 /// <p>A list of configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::list_configuration_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListConfigurationSetsResponse {
@@ -3398,6 +3482,28 @@ pub struct ListConfigurationSetsResponse {
     pub configuration_sets: Option<Vec<ConfigurationSet>>,
     /// <p>A token indicating that there are additional configuration sets available to be listed. Pass this token to successive calls of <code>ListConfigurationSets</code>. </p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListConfigurationSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListConfigurationSetsResponse {
+    type Item = ConfigurationSet;
+
+    fn into_pagination_page(self) -> Vec<ConfigurationSet> {
+        self.configuration_sets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3430,6 +3536,7 @@ impl ListConfigurationSetsResponseDeserializer {
     }
 }
 /// <p>Represents a request to list the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p>
+/// see [Ses::list_custom_verification_email_templates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCustomVerificationEmailTemplatesRequest {
@@ -3437,6 +3544,22 @@ pub struct ListCustomVerificationEmailTemplatesRequest {
     pub max_results: Option<i64>,
     /// <p>An array the contains the name and creation time stamp for each template in your Amazon SES account.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListCustomVerificationEmailTemplatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCustomVerificationEmailTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListCustomVerificationEmailTemplatesRequest` contents to a `SignedRequest`.
@@ -3462,6 +3585,7 @@ impl ListCustomVerificationEmailTemplatesRequestSerializer {
 }
 
 /// <p>A paginated list of custom verification email templates.</p>
+/// see [Ses::list_custom_verification_email_templates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCustomVerificationEmailTemplatesResponse {
@@ -3469,6 +3593,28 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
     pub custom_verification_email_templates: Option<Vec<CustomVerificationEmailTemplate>>,
     /// <p>A token indicating that there are additional custom verification email templates available to be listed. Pass this token to a subsequent call to <code>ListTemplates</code> to retrieve the next 50 custom verification email templates.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListCustomVerificationEmailTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCustomVerificationEmailTemplatesResponse {
+    type Item = CustomVerificationEmailTemplate;
+
+    fn into_pagination_page(self) -> Vec<CustomVerificationEmailTemplate> {
+        self.custom_verification_email_templates.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3504,6 +3650,7 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return a list of all identities (email addresses and domains) that you have attempted to verify under your AWS account, regardless of verification status.</p>
+/// see [Ses::list_identities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentitiesRequest {
@@ -3513,6 +3660,22 @@ pub struct ListIdentitiesRequest {
     pub max_items: Option<i64>,
     /// <p>The token to use for pagination.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListIdentitiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIdentitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListIdentitiesRequest` contents to a `SignedRequest`.
@@ -3537,6 +3700,7 @@ impl ListIdentitiesRequestSerializer {
 }
 
 /// <p>A list of all identities that you have attempted to verify under your AWS account, regardless of verification status.</p>
+/// see [Ses::list_identities]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListIdentitiesResponse {
@@ -3544,6 +3708,28 @@ pub struct ListIdentitiesResponse {
     pub identities: Vec<String>,
     /// <p>The token used for pagination.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListIdentitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListIdentitiesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.identities
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3570,6 +3756,7 @@ impl ListIdentitiesResponseDeserializer {
     }
 }
 /// <p>Represents a request to return a list of sending authorization policies that are attached to an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::list_identity_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityPoliciesRequest {
@@ -3591,6 +3778,7 @@ impl ListIdentityPoliciesRequestSerializer {
 }
 
 /// <p>A list of names of sending authorization policies that apply to an identity.</p>
+/// see [Ses::list_identity_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListIdentityPoliciesResponse {
@@ -3626,6 +3814,7 @@ impl ListIdentityPoliciesResponseDeserializer {
     }
 }
 /// <p>Represents a request to list the IP address filters that exist under your AWS account. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::list_receipt_filters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceiptFiltersRequest {}
@@ -3642,6 +3831,7 @@ impl ListReceiptFiltersRequestSerializer {
 }
 
 /// <p>A list of IP address filters that exist under your AWS account.</p>
+/// see [Ses::list_receipt_filters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListReceiptFiltersResponse {
@@ -3675,11 +3865,28 @@ impl ListReceiptFiltersResponseDeserializer {
     }
 }
 /// <p>Represents a request to list the receipt rule sets that exist under your AWS account. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::list_receipt_rule_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceiptRuleSetsRequest {
     /// <p>A token returned from a previous call to <code>ListReceiptRuleSets</code> to indicate the position in the receipt rule set list.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListReceiptRuleSetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReceiptRuleSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListReceiptRuleSetsRequest` contents to a `SignedRequest`.
@@ -3698,6 +3905,7 @@ impl ListReceiptRuleSetsRequestSerializer {
 }
 
 /// <p>A list of receipt rule sets that exist under your AWS account.</p>
+/// see [Ses::list_receipt_rule_sets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListReceiptRuleSetsResponse {
@@ -3705,6 +3913,28 @@ pub struct ListReceiptRuleSetsResponse {
     pub next_token: Option<String>,
     /// <p>The metadata for the currently active receipt rule set. The metadata consists of the rule set name and the timestamp of when the rule set was created.</p>
     pub rule_sets: Option<Vec<ReceiptRuleSetMetadata>>,
+}
+
+impl Paged for ListReceiptRuleSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListReceiptRuleSetsResponse {
+    type Item = ReceiptRuleSetMetadata;
+
+    fn into_pagination_page(self) -> Vec<ReceiptRuleSetMetadata> {
+        self.rule_sets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3736,6 +3966,7 @@ impl ListReceiptRuleSetsResponseDeserializer {
         )
     }
 }
+/// see [Ses::list_templates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplatesRequest {
@@ -3743,6 +3974,22 @@ pub struct ListTemplatesRequest {
     pub max_items: Option<i64>,
     /// <p>A token returned from a previous call to <code>ListTemplates</code> to indicate the position in the list of email templates.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListTemplatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListTemplatesRequest` contents to a `SignedRequest`.
@@ -3763,6 +4010,7 @@ impl ListTemplatesRequestSerializer {
     }
 }
 
+/// see [Ses::list_templates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTemplatesResponse {
@@ -3770,6 +4018,28 @@ pub struct ListTemplatesResponse {
     pub next_token: Option<String>,
     /// <p>An array the contains the name and creation time stamp for each template in your Amazon SES account.</p>
     pub templates_metadata: Option<Vec<TemplateMetadata>>,
+}
+
+impl Paged for ListTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTemplatesResponse {
+    type Item = TemplateMetadata;
+
+    fn into_pagination_page(self) -> Vec<TemplateMetadata> {
+        self.templates_metadata.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3797,6 +4067,7 @@ impl ListTemplatesResponseDeserializer {
     }
 }
 /// <p>A list of email addresses that you have verified with Amazon SES under your AWS account.</p>
+/// see [Ses::list_verified_email_addresses]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListVerifiedEmailAddressesResponse {
@@ -4092,6 +4363,7 @@ impl PolicyNameListSerializer {
 }
 
 /// <p>A request to modify the delivery options for a configuration set.</p>
+/// see [Ses::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationSetDeliveryOptionsRequest {
@@ -4125,6 +4397,7 @@ impl PutConfigurationSetDeliveryOptionsRequestSerializer {
 }
 
 /// <p>An HTTP 200 response if the request succeeds, or an error message if the request fails.</p>
+/// see [Ses::put_configuration_set_delivery_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutConfigurationSetDeliveryOptionsResponse {}
@@ -4147,6 +4420,7 @@ impl PutConfigurationSetDeliveryOptionsResponseDeserializer {
     }
 }
 /// <p>Represents a request to add or update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::put_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIdentityPolicyRequest {
@@ -4174,6 +4448,7 @@ impl PutIdentityPolicyRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::put_identity_policy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutIdentityPolicyResponse {}
@@ -4812,6 +5087,7 @@ impl RenderedTemplateDeserializer {
     }
 }
 /// <p>Represents a request to reorder the receipt rules within a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::reorder_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReorderReceiptRuleSetRequest {
@@ -4840,6 +5116,7 @@ impl ReorderReceiptRuleSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::reorder_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReorderReceiptRuleSetResponse {}
@@ -5098,6 +5375,7 @@ impl SNSDestinationSerializer {
 }
 
 /// <p>Represents a request to send a bounce message to the sender of an email you received through Amazon SES.</p>
+/// see [Ses::send_bounce]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBounceRequest {
@@ -5151,6 +5429,7 @@ impl SendBounceRequestSerializer {
 }
 
 /// <p>Represents a unique message ID.</p>
+/// see [Ses::send_bounce]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendBounceResponse {
@@ -5178,6 +5457,7 @@ impl SendBounceResponseDeserializer {
     }
 }
 /// <p>Represents a request to send a templated email to multiple destinations using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::send_bulk_templated_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBulkTemplatedEmailRequest {
@@ -5262,6 +5542,7 @@ impl SendBulkTemplatedEmailRequestSerializer {
     }
 }
 
+/// see [Ses::send_bulk_templated_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendBulkTemplatedEmailResponse {
@@ -5296,6 +5577,7 @@ impl SendBulkTemplatedEmailResponseDeserializer {
     }
 }
 /// <p>Represents a request to send a custom verification email to a specified recipient.</p>
+/// see [Ses::send_custom_verification_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCustomVerificationEmailRequest {
@@ -5328,6 +5610,7 @@ impl SendCustomVerificationEmailRequestSerializer {
 }
 
 /// <p>The response received when attempting to send the custom verification email.</p>
+/// see [Ses::send_custom_verification_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendCustomVerificationEmailResponse {
@@ -5426,6 +5709,7 @@ impl SendDataPointListDeserializer {
     }
 }
 /// <p>Represents a request to send a single formatted email using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::send_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEmailRequest {
@@ -5498,6 +5782,7 @@ impl SendEmailRequestSerializer {
 }
 
 /// <p>Represents a unique message ID.</p>
+/// see [Ses::send_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendEmailResponse {
@@ -5525,6 +5810,7 @@ impl SendEmailResponseDeserializer {
     }
 }
 /// <p>Represents a request to send a single raw email using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::send_raw_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendRawEmailRequest {
@@ -5596,6 +5882,7 @@ impl SendRawEmailRequestSerializer {
 }
 
 /// <p>Represents a unique message ID.</p>
+/// see [Ses::send_raw_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendRawEmailResponse {
@@ -5623,6 +5910,7 @@ impl SendRawEmailResponseDeserializer {
     }
 }
 /// <p>Represents a request to send a templated email using Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::send_templated_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTemplatedEmailRequest {
@@ -5702,6 +5990,7 @@ impl SendTemplatedEmailRequestSerializer {
     }
 }
 
+/// see [Ses::send_templated_email]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SendTemplatedEmailResponse {
@@ -5741,6 +6030,7 @@ impl SentLast24HoursDeserializer {
     }
 }
 /// <p>Represents a request to set a receipt rule set as the active receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_active_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetActiveReceiptRuleSetRequest {
@@ -5764,6 +6054,7 @@ impl SetActiveReceiptRuleSetRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_active_receipt_rule_set]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetActiveReceiptRuleSetResponse {}
@@ -5786,6 +6077,7 @@ impl SetActiveReceiptRuleSetResponseDeserializer {
     }
 }
 /// <p>Represents a request to enable or disable Amazon SES Easy DKIM signing for an identity. For more information about setting up Easy DKIM, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_identity_dkim_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityDkimEnabledRequest {
@@ -5810,6 +6102,7 @@ impl SetIdentityDkimEnabledRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_identity_dkim_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityDkimEnabledResponse {}
@@ -5832,6 +6125,7 @@ impl SetIdentityDkimEnabledResponseDeserializer {
     }
 }
 /// <p>Represents a request to enable or disable whether Amazon SES forwards you bounce and complaint notifications through email. For information about email feedback forwarding, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-email.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_identity_feedback_forwarding_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityFeedbackForwardingEnabledRequest {
@@ -5863,6 +6157,7 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_identity_feedback_forwarding_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityFeedbackForwardingEnabledResponse {}
@@ -5885,6 +6180,7 @@ impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
     }
 }
 /// <p>Represents a request to set whether Amazon SES includes the original email headers in the Amazon SNS notifications of a specified type. For information about notifications, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_identity_headers_in_notifications_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityHeadersInNotificationsEnabledRequest {
@@ -5919,6 +6215,7 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_identity_headers_in_notifications_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityHeadersInNotificationsEnabledResponse {}
@@ -5941,6 +6238,7 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
     }
 }
 /// <p>Represents a request to enable or disable the Amazon SES custom MAIL FROM domain setup for a verified identity. For information about using a custom MAIL FROM domain, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_identity_mail_from_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityMailFromDomainRequest {
@@ -5975,6 +6273,7 @@ impl SetIdentityMailFromDomainRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_identity_mail_from_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityMailFromDomainResponse {}
@@ -5997,6 +6296,7 @@ impl SetIdentityMailFromDomainResponseDeserializer {
     }
 }
 /// <p>Represents a request to specify the Amazon SNS topic to which Amazon SES will publish bounce, complaint, or delivery notifications for emails sent with that identity as the Source. For information about Amazon SES notifications, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_identity_notification_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityNotificationTopicRequest {
@@ -6029,6 +6329,7 @@ impl SetIdentityNotificationTopicRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_identity_notification_topic]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityNotificationTopicResponse {}
@@ -6051,6 +6352,7 @@ impl SetIdentityNotificationTopicResponseDeserializer {
     }
 }
 /// <p>Represents a request to set the position of a receipt rule in a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::set_receipt_rule_position]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetReceiptRulePositionRequest {
@@ -6080,6 +6382,7 @@ impl SetReceiptRulePositionRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::set_receipt_rule_position]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetReceiptRulePositionResponse {}
@@ -6322,6 +6625,7 @@ impl TemplateNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Ses::test_render_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRenderTemplateRequest {
@@ -6345,6 +6649,7 @@ impl TestRenderTemplateRequestSerializer {
     }
 }
 
+/// see [Ses::test_render_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TestRenderTemplateResponse {
@@ -6454,6 +6759,7 @@ impl TrackingOptionsSerializer {
 }
 
 /// <p>Represents a request to enable or disable the email sending capabilities for your entire Amazon SES account.</p>
+/// see [Ses::update_account_sending_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountSendingEnabledRequest {
@@ -6477,6 +6783,7 @@ impl UpdateAccountSendingEnabledRequestSerializer {
 }
 
 /// <p>Represents a request to update the event destination of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetEventDestinationRequest {
@@ -6512,6 +6819,7 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::update_configuration_set_event_destination]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
@@ -6534,6 +6842,7 @@ impl UpdateConfigurationSetEventDestinationResponseDeserializer {
     }
 }
 /// <p>Represents a request to modify the reputation metric publishing settings for a configuration set.</p>
+/// see [Ses::update_configuration_set_reputation_metrics_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetReputationMetricsEnabledRequest {
@@ -6565,6 +6874,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
 }
 
 /// <p>Represents a request to enable or disable the email sending capabilities for a specific configuration set.</p>
+/// see [Ses::update_configuration_set_sending_enabled]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetSendingEnabledRequest {
@@ -6596,6 +6906,7 @@ impl UpdateConfigurationSetSendingEnabledRequestSerializer {
 }
 
 /// <p>Represents a request to update the tracking options for a configuration set. </p>
+/// see [Ses::update_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetTrackingOptionsRequest {
@@ -6630,6 +6941,7 @@ impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::update_configuration_set_tracking_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateConfigurationSetTrackingOptionsResponse {}
@@ -6652,6 +6964,7 @@ impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
     }
 }
 /// <p>Represents a request to update an existing custom verification email template.</p>
+/// see [Ses::update_custom_verification_email_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCustomVerificationEmailTemplateRequest {
@@ -6708,6 +7021,7 @@ impl UpdateCustomVerificationEmailTemplateRequestSerializer {
 }
 
 /// <p>Represents a request to update a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::update_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReceiptRuleRequest {
@@ -6732,6 +7046,7 @@ impl UpdateReceiptRuleRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::update_receipt_rule]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateReceiptRuleResponse {}
@@ -6753,6 +7068,7 @@ impl UpdateReceiptRuleResponseDeserializer {
         Ok(obj)
     }
 }
+/// see [Ses::update_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplateRequest {
@@ -6772,6 +7088,7 @@ impl UpdateTemplateRequestSerializer {
     }
 }
 
+/// see [Ses::update_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTemplateResponse {}
@@ -6853,6 +7170,7 @@ impl VerificationTokenListDeserializer {
     }
 }
 /// <p>Represents a request to generate the CNAME records needed to set up Easy DKIM with Amazon SES. For more information about setting up Easy DKIM, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::verify_domain_dkim]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyDomainDkimRequest {
@@ -6874,6 +7192,7 @@ impl VerifyDomainDkimRequestSerializer {
 }
 
 /// <p>Returns CNAME records that you must publish to the DNS server of your domain to set up Easy DKIM with Amazon SES.</p>
+/// see [Ses::verify_domain_dkim]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VerifyDomainDkimResponse {
@@ -6909,6 +7228,7 @@ impl VerifyDomainDkimResponseDeserializer {
     }
 }
 /// <p>Represents a request to begin Amazon SES domain verification and to generate the TXT records that you must publish to the DNS server of your domain to complete the verification. For information about domain verification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::verify_domain_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyDomainIdentityRequest {
@@ -6930,6 +7250,7 @@ impl VerifyDomainIdentityRequestSerializer {
 }
 
 /// <p>Returns a TXT record that you must publish to the DNS server of your domain to complete domain verification with Amazon SES.</p>
+/// see [Ses::verify_domain_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VerifyDomainIdentityResponse {
@@ -6962,6 +7283,7 @@ impl VerifyDomainIdentityResponseDeserializer {
     }
 }
 /// <p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::verify_email_address]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyEmailAddressRequest {
@@ -6983,6 +7305,7 @@ impl VerifyEmailAddressRequestSerializer {
 }
 
 /// <p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html">Amazon SES Developer Guide</a>.</p>
+/// see [Ses::verify_email_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyEmailIdentityRequest {
@@ -7004,6 +7327,7 @@ impl VerifyEmailIdentityRequestSerializer {
 }
 
 /// <p>An empty element returned on a successful request.</p>
+/// see [Ses::verify_email_identity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VerifyEmailIdentityResponse {}
@@ -10525,7 +10849,7 @@ impl fmt::Display for VerifyEmailIdentityError {
 impl Error for VerifyEmailIdentityError {}
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
 #[async_trait]
-pub trait Ses {
+pub trait Ses: Clone + Sync + Send + 'static {
     /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     async fn clone_receipt_rule_set(
         &self,
@@ -10755,6 +11079,17 @@ pub trait Ses {
         input: ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
 
+    /// Auto-paginating version of `list_configuration_sets`
+    fn list_configuration_sets_pages<'a>(
+        &'a self,
+        mut input: ListConfigurationSetsRequest,
+    ) -> RusotoStream<'a, ConfigurationSet, ListConfigurationSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_configuration_sets(input.clone())
+        }))
+    }
+
     /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
     async fn list_custom_verification_email_templates(
         &self,
@@ -10764,11 +11099,34 @@ pub trait Ses {
         RusotoError<ListCustomVerificationEmailTemplatesError>,
     >;
 
+    /// Auto-paginating version of `list_custom_verification_email_templates`
+    fn list_custom_verification_email_templates_pages<'a>(
+        &'a self,
+        mut input: ListCustomVerificationEmailTemplatesRequest,
+    ) -> RusotoStream<'a, CustomVerificationEmailTemplate, ListCustomVerificationEmailTemplatesError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_custom_verification_email_templates(input.clone())
+        }))
+    }
+
     /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
     async fn list_identities(
         &self,
         input: ListIdentitiesRequest,
     ) -> Result<ListIdentitiesResponse, RusotoError<ListIdentitiesError>>;
+
+    /// Auto-paginating version of `list_identities`
+    fn list_identities_pages<'a>(
+        &'a self,
+        mut input: ListIdentitiesRequest,
+    ) -> RusotoStream<'a, String, ListIdentitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_identities(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     async fn list_identity_policies(
@@ -10788,11 +11146,33 @@ pub trait Ses {
         input: ListReceiptRuleSetsRequest,
     ) -> Result<ListReceiptRuleSetsResponse, RusotoError<ListReceiptRuleSetsError>>;
 
+    /// Auto-paginating version of `list_receipt_rule_sets`
+    fn list_receipt_rule_sets_pages<'a>(
+        &'a self,
+        mut input: ListReceiptRuleSetsRequest,
+    ) -> RusotoStream<'a, ReceiptRuleSetMetadata, ListReceiptRuleSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_receipt_rule_sets(input.clone())
+        }))
+    }
+
     /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
     async fn list_templates(
         &self,
         input: ListTemplatesRequest,
     ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>;
+
+    /// Auto-paginating version of `list_templates`
+    fn list_templates_pages<'a>(
+        &'a self,
+        mut input: ListTemplatesRequest,
+    ) -> RusotoStream<'a, TemplateMetadata, ListTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_templates(input.clone())
+        }))
+    }
 
     /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
     async fn list_verified_email_addresses(

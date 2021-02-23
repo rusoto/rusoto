@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -61,6 +65,7 @@ impl RdsClient {
 }
 
 /// <p>Data returned by the <b>DescribeAccountAttributes</b> action.</p>
+/// see [Rds::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttributesMessage {
@@ -168,6 +173,7 @@ impl ActivityStreamStatusDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Rds::add_role_to_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToDBClusterMessage {
@@ -199,6 +205,7 @@ impl AddRoleToDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::add_role_to_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddRoleToDBInstanceMessage {
@@ -229,6 +236,7 @@ impl AddRoleToDBInstanceMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::add_source_identifier_to_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddSourceIdentifierToSubscriptionMessage {
@@ -258,6 +266,7 @@ impl AddSourceIdentifierToSubscriptionMessageSerializer {
     }
 }
 
+/// see [Rds::add_source_identifier_to_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddSourceIdentifierToSubscriptionResult {
@@ -291,6 +300,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::add_tags_to_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
@@ -323,6 +333,7 @@ impl ApplyMethodDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
@@ -352,6 +363,7 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
     }
 }
 
+/// see [Rds::apply_pending_maintenance_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResult {
@@ -424,6 +436,7 @@ impl AuthSchemeDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::authorize_db_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeDBSecurityGroupIngressMessage {
@@ -473,6 +486,7 @@ impl AuthorizeDBSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [Rds::authorize_db_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeDBSecurityGroupIngressResult {
@@ -648,6 +662,7 @@ impl AvailableProcessorFeatureListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::backtrack_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BacktrackDBClusterMessage {
@@ -703,6 +718,7 @@ impl BooleanOptionalDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// see [Rds::cancel_export_task]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelExportTaskMessage {
@@ -818,6 +834,7 @@ impl CertificateListDeserializer {
     }
 }
 /// <p>Data returned by the <b>DescribeCertificates</b> action.</p>
+/// see [Rds::describe_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CertificateMessage {
@@ -825,6 +842,28 @@ pub struct CertificateMessage {
     pub certificates: Option<Vec<Certificate>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeCertificates</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
+}
+
+impl Paged for CertificateMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for CertificateMessage {
+    type Item = Certificate;
+
+    fn into_pagination_page(self) -> Vec<Certificate> {
+        self.certificates.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -1106,6 +1145,7 @@ impl ConnectionPoolConfigurationInfoDeserializer {
         )
     }
 }
+/// see [Rds::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
@@ -1145,6 +1185,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::copy_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterParameterGroupResult {
@@ -1179,6 +1220,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterSnapshotMessage {
@@ -1227,6 +1269,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::copy_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBClusterSnapshotResult {
@@ -1260,6 +1303,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::copy_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBParameterGroupMessage {
@@ -1299,6 +1343,7 @@ impl CopyDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::copy_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBParameterGroupResult {
@@ -1332,6 +1377,7 @@ impl CopyDBParameterGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::copy_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBSnapshotMessage {
@@ -1393,6 +1439,7 @@ impl CopyDBSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::copy_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyDBSnapshotResult {
@@ -1420,6 +1467,7 @@ impl CopyDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::copy_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyOptionGroupMessage {
@@ -1459,6 +1507,7 @@ impl CopyOptionGroupMessageSerializer {
     }
 }
 
+/// see [Rds::copy_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyOptionGroupResult {
@@ -1486,6 +1535,7 @@ impl CopyOptionGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_custom_availability_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomAvailabilityZoneMessage {
@@ -1527,6 +1577,7 @@ impl CreateCustomAvailabilityZoneMessageSerializer {
     }
 }
 
+/// see [Rds::create_custom_availability_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCustomAvailabilityZoneResult {
@@ -1560,6 +1611,7 @@ impl CreateCustomAvailabilityZoneResultDeserializer {
         )
     }
 }
+/// see [Rds::create_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterEndpointMessage {
@@ -1616,6 +1668,7 @@ impl CreateDBClusterEndpointMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
@@ -1838,6 +1891,7 @@ impl CreateDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterParameterGroupMessage {
@@ -1875,6 +1929,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterParameterGroupResult {
@@ -1908,6 +1963,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Rds::create_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterResult {
@@ -1934,6 +1990,7 @@ impl CreateDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterSnapshotMessage {
@@ -1968,6 +2025,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBClusterSnapshotResult {
@@ -2001,6 +2059,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
@@ -2316,6 +2375,7 @@ impl CreateDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_instance_read_replica]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceReadReplicaMessage {
@@ -2530,6 +2590,7 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_instance_read_replica]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceReadReplicaResult {
@@ -2560,6 +2621,7 @@ impl CreateDBInstanceReadReplicaResultDeserializer {
         )
     }
 }
+/// see [Rds::create_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBInstanceResult {
@@ -2587,6 +2649,7 @@ impl CreateDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBParameterGroupMessage {
@@ -2624,6 +2687,7 @@ impl CreateDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBParameterGroupResult {
@@ -2656,6 +2720,7 @@ impl CreateDBParameterGroupResultDeserializer {
         )
     }
 }
+/// see [Rds::create_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBProxyRequest {
@@ -2725,6 +2790,7 @@ impl CreateDBProxyRequestSerializer {
     }
 }
 
+/// see [Rds::create_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBProxyResponse {
@@ -2752,6 +2818,7 @@ impl CreateDBProxyResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSecurityGroupMessage {
@@ -2786,6 +2853,7 @@ impl CreateDBSecurityGroupMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSecurityGroupResult {
@@ -2819,6 +2887,7 @@ impl CreateDBSecurityGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSnapshotMessage {
@@ -2852,6 +2921,7 @@ impl CreateDBSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSnapshotResult {
@@ -2879,6 +2949,7 @@ impl CreateDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBSubnetGroupMessage {
@@ -2920,6 +2991,7 @@ impl CreateDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Rds::create_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDBSubnetGroupResult {
@@ -2953,6 +3025,7 @@ impl CreateDBSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
@@ -3011,6 +3084,7 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Rds::create_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEventSubscriptionResult {
@@ -3043,6 +3117,7 @@ impl CreateEventSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Rds::create_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalClusterMessage {
@@ -3101,6 +3176,7 @@ impl CreateGlobalClusterMessageSerializer {
     }
 }
 
+/// see [Rds::create_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateGlobalClusterResult {
@@ -3134,6 +3210,7 @@ impl CreateGlobalClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::create_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOptionGroupMessage {
@@ -3177,6 +3254,7 @@ impl CreateOptionGroupMessageSerializer {
     }
 }
 
+/// see [Rds::create_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateOptionGroupResult {
@@ -3280,6 +3358,7 @@ impl CustomAvailabilityZoneListDeserializer {
         })
     }
 }
+/// see [Rds::describe_custom_availability_zones]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomAvailabilityZoneMessage {
@@ -3287,6 +3366,28 @@ pub struct CustomAvailabilityZoneMessage {
     pub custom_availability_zones: Option<Vec<CustomAvailabilityZone>>,
     /// <p>An optional pagination token provided by a previous <code>DescribeCustomAvailabilityZones</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for CustomAvailabilityZoneMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for CustomAvailabilityZoneMessage {
+    type Item = CustomAvailabilityZone;
+
+    fn into_pagination_page(self) -> Vec<CustomAvailabilityZone> {
+        self.custom_availability_zones.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3751,6 +3852,7 @@ impl DBClusterDeserializer {
     }
 }
 /// <p>This data type is used as a response element in the <code>DescribeDBClusterBacktracks</code> action.</p>
+/// see [Rds::backtrack_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterBacktrack {
@@ -3834,6 +3936,7 @@ impl DBClusterBacktrackListDeserializer {
     }
 }
 /// <p>Contains the result of a successful invocation of the <code>DescribeDBClusterBacktracks</code> action.</p>
+/// see [Rds::describe_db_cluster_backtracks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterBacktrackMessage {
@@ -3841,6 +3944,28 @@ pub struct DBClusterBacktrackMessage {
     pub db_cluster_backtracks: Option<Vec<DBClusterBacktrack>>,
     /// <p>A pagination token that can be used in a later <code>DescribeDBClusterBacktracks</code> request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBClusterBacktrackMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterBacktrackMessage {
+    type Item = DBClusterBacktrack;
+
+    fn into_pagination_page(self) -> Vec<DBClusterBacktrack> {
+        self.db_cluster_backtracks.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3874,6 +3999,7 @@ impl DBClusterBacktrackMessageDeserializer {
         )
     }
 }
+/// see [Rds::modify_current_db_cluster_capacity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterCapacityInfo {
@@ -3934,6 +4060,9 @@ impl DBClusterCapacityInfoDeserializer {
     }
 }
 /// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+/// see [Rds::create_db_cluster_endpoint]
+/// see [Rds::delete_db_cluster_endpoint]
+/// see [Rds::modify_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterEndpoint {
@@ -4047,6 +4176,7 @@ impl DBClusterEndpointListDeserializer {
         })
     }
 }
+/// see [Rds::describe_db_cluster_endpoints]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterEndpointMessage {
@@ -4054,6 +4184,28 @@ pub struct DBClusterEndpointMessage {
     pub db_cluster_endpoints: Option<Vec<DBClusterEndpoint>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBClusterEndpointMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterEndpointMessage {
+    type Item = DBClusterEndpoint;
+
+    fn into_pagination_page(self) -> Vec<DBClusterEndpoint> {
+        self.db_cluster_endpoints.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4179,6 +4331,7 @@ impl DBClusterMemberListDeserializer {
     }
 }
 /// <p>Contains the result of a successful invocation of the <code>DescribeDBClusters</code> action.</p>
+/// see [Rds::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterMessage {
@@ -4186,6 +4339,28 @@ pub struct DBClusterMessage {
     pub db_clusters: Option<Vec<DBCluster>>,
     /// <p>A pagination token that can be used in a later DescribeDBClusters request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBClusterMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterMessage {
+    type Item = DBCluster;
+
+    fn into_pagination_page(self) -> Vec<DBCluster> {
+        self.db_clusters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4328,6 +4503,7 @@ impl DBClusterParameterGroupDeserializer {
     }
 }
 /// <p>Provides details about a DB cluster parameter group including the parameters in the DB cluster parameter group.</p>
+/// see [Rds::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupDetails {
@@ -4335,6 +4511,28 @@ pub struct DBClusterParameterGroupDetails {
     pub marker: Option<String>,
     /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl Paged for DBClusterParameterGroupDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupDetails {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4387,6 +4585,8 @@ impl DBClusterParameterGroupListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_cluster_parameter_group]
+/// see [Rds::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupNameMessage {
@@ -4420,6 +4620,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterParameterGroupsMessage {
@@ -4427,6 +4628,28 @@ pub struct DBClusterParameterGroupsMessage {
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterParameterGroupsMessage {
+    type Item = DBClusterParameterGroup;
+
+    fn into_pagination_page(self) -> Vec<DBClusterParameterGroup> {
+        self.db_cluster_parameter_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4801,6 +5024,7 @@ impl DBClusterSnapshotListDeserializer {
     }
 }
 /// <p> Provides a list of DB cluster snapshots for the user as the result of a call to the <code>DescribeDBClusterSnapshots</code> action. </p>
+/// see [Rds::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotMessage {
@@ -4808,6 +5032,28 @@ pub struct DBClusterSnapshotMessage {
     pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBClusterSnapshotMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBClusterSnapshotMessage {
+    type Item = DBClusterSnapshot;
+
+    fn into_pagination_page(self) -> Vec<DBClusterSnapshot> {
+        self.db_cluster_snapshots.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -5027,6 +5273,7 @@ impl DBEngineVersionListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBEngineVersions</code> action. </p>
+/// see [Rds::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBEngineVersionMessage {
@@ -5034,6 +5281,28 @@ pub struct DBEngineVersionMessage {
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBEngineVersionMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBEngineVersionMessage {
+    type Item = DBEngineVersion;
+
+    fn into_pagination_page(self) -> Vec<DBEngineVersion> {
+        self.db_engine_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -5769,6 +6038,7 @@ impl DBInstanceAutomatedBackupListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBInstanceAutomatedBackups</code> action. </p>
+/// see [Rds::describe_db_instance_automated_backups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceAutomatedBackupMessage {
@@ -5776,6 +6046,28 @@ pub struct DBInstanceAutomatedBackupMessage {
     pub db_instance_automated_backups: Option<Vec<DBInstanceAutomatedBackup>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBInstanceAutomatedBackupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBInstanceAutomatedBackupMessage {
+    type Item = DBInstanceAutomatedBackup;
+
+    fn into_pagination_page(self) -> Vec<DBInstanceAutomatedBackup> {
+        self.db_instance_automated_backups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -5886,6 +6178,7 @@ impl DBInstanceListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBInstances</code> action. </p>
+/// see [Rds::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstanceMessage {
@@ -5893,6 +6186,28 @@ pub struct DBInstanceMessage {
     pub db_instances: Option<Vec<DBInstance>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBInstanceMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBInstanceMessage {
+    type Item = DBInstance;
+
+    fn into_pagination_page(self) -> Vec<DBInstance> {
+        self.db_instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -6092,6 +6407,7 @@ impl DBParameterGroupDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBParameters</code> action. </p>
+/// see [Rds::describe_db_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupDetails {
@@ -6099,6 +6415,28 @@ pub struct DBParameterGroupDetails {
     pub marker: Option<String>,
     /// <p> A list of <code>Parameter</code> values. </p>
     pub parameters: Option<Vec<Parameter>>,
+}
+
+impl Paged for DBParameterGroupDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBParameterGroupDetails {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        self.parameters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -6151,6 +6489,8 @@ impl DBParameterGroupListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>ModifyDBParameterGroup</code> or <code>ResetDBParameterGroup</code> action. </p>
+/// see [Rds::modify_db_parameter_group]
+/// see [Rds::reset_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupNameMessage {
@@ -6244,6 +6584,7 @@ impl DBParameterGroupStatusListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBParameterGroups</code> action. </p>
+/// see [Rds::describe_db_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBParameterGroupsMessage {
@@ -6251,6 +6592,28 @@ pub struct DBParameterGroupsMessage {
     pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBParameterGroupsMessage {
+    type Item = DBParameterGroup;
+
+    fn into_pagination_page(self) -> Vec<DBParameterGroup> {
+        self.db_parameter_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -6676,6 +7039,7 @@ impl DBSecurityGroupMembershipListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBSecurityGroups</code> action. </p>
+/// see [Rds::describe_db_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSecurityGroupMessage {
@@ -6683,6 +7047,28 @@ pub struct DBSecurityGroupMessage {
     pub db_security_groups: Option<Vec<DBSecurityGroup>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBSecurityGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBSecurityGroupMessage {
+    type Item = DBSecurityGroup;
+
+    fn into_pagination_page(self) -> Vec<DBSecurityGroup> {
+        self.db_security_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -7062,6 +7448,7 @@ impl DBSnapshotListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBSnapshots</code> action. </p>
+/// see [Rds::describe_db_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSnapshotMessage {
@@ -7069,6 +7456,28 @@ pub struct DBSnapshotMessage {
     pub db_snapshots: Option<Vec<DBSnapshot>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBSnapshotMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBSnapshotMessage {
+    type Item = DBSnapshot;
+
+    fn into_pagination_page(self) -> Vec<DBSnapshot> {
+        self.db_snapshots.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -7156,6 +7565,7 @@ impl DBSubnetGroupDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeDBSubnetGroups</code> action. </p>
+/// see [Rds::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBSubnetGroupMessage {
@@ -7163,6 +7573,28 @@ pub struct DBSubnetGroupMessage {
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DBSubnetGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DBSubnetGroupMessage {
+    type Item = DBSubnetGroup;
+
+    fn into_pagination_page(self) -> Vec<DBSubnetGroup> {
+        self.db_subnet_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -7210,6 +7642,7 @@ impl DBSubnetGroupsDeserializer {
         })
     }
 }
+/// see [Rds::delete_custom_availability_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomAvailabilityZoneMessage {
@@ -7233,6 +7666,7 @@ impl DeleteCustomAvailabilityZoneMessageSerializer {
     }
 }
 
+/// see [Rds::delete_custom_availability_zone]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteCustomAvailabilityZoneResult {
@@ -7266,6 +7700,7 @@ impl DeleteCustomAvailabilityZoneResultDeserializer {
         )
     }
 }
+/// see [Rds::delete_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterEndpointMessage {
@@ -7290,6 +7725,7 @@ impl DeleteDBClusterEndpointMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
@@ -7327,6 +7763,7 @@ impl DeleteDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::delete_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterParameterGroupMessage {
@@ -7350,6 +7787,7 @@ impl DeleteDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterResult {
@@ -7376,6 +7814,7 @@ impl DeleteDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterSnapshotMessage {
@@ -7399,6 +7838,7 @@ impl DeleteDBClusterSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_cluster_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBClusterSnapshotResult {
@@ -7432,6 +7872,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Parameter input for the <code>DeleteDBInstanceAutomatedBackup</code> operation.</p>
+/// see [Rds::delete_db_instance_automated_backup]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceAutomatedBackupMessage {
@@ -7462,6 +7903,7 @@ impl DeleteDBInstanceAutomatedBackupMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_instance_automated_backup]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceAutomatedBackupResult {
@@ -7496,6 +7938,7 @@ impl DeleteDBInstanceAutomatedBackupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBInstanceMessage {
@@ -7540,6 +7983,7 @@ impl DeleteDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBInstanceResult {
@@ -7567,6 +8011,7 @@ impl DeleteDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::delete_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBParameterGroupMessage {
@@ -7590,6 +8035,7 @@ impl DeleteDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBProxyRequest {
@@ -7610,6 +8056,7 @@ impl DeleteDBProxyRequestSerializer {
     }
 }
 
+/// see [Rds::delete_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBProxyResponse {
@@ -7637,6 +8084,7 @@ impl DeleteDBProxyResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::delete_db_security_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSecurityGroupMessage {
@@ -7661,6 +8109,7 @@ impl DeleteDBSecurityGroupMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::delete_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSnapshotMessage {
@@ -7684,6 +8133,7 @@ impl DeleteDBSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::delete_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDBSnapshotResult {
@@ -7711,6 +8161,7 @@ impl DeleteDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::delete_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBSubnetGroupMessage {
@@ -7735,6 +8186,7 @@ impl DeleteDBSubnetGroupMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
@@ -7758,6 +8210,7 @@ impl DeleteEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Rds::delete_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteEventSubscriptionResult {
@@ -7790,6 +8243,7 @@ impl DeleteEventSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Rds::delete_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGlobalClusterMessage {
@@ -7813,6 +8267,7 @@ impl DeleteGlobalClusterMessageSerializer {
     }
 }
 
+/// see [Rds::delete_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteGlobalClusterResult {
@@ -7845,6 +8300,7 @@ impl DeleteGlobalClusterResultDeserializer {
         )
     }
 }
+/// see [Rds::delete_installation_media]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstallationMediaMessage {
@@ -7869,6 +8325,7 @@ impl DeleteInstallationMediaMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::delete_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOptionGroupMessage {
@@ -7892,6 +8349,7 @@ impl DeleteOptionGroupMessageSerializer {
     }
 }
 
+/// see [Rds::deregister_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterDBProxyTargetsRequest {
@@ -7935,6 +8393,7 @@ impl DeregisterDBProxyTargetsRequestSerializer {
     }
 }
 
+/// see [Rds::deregister_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterDBProxyTargetsResponse {}
@@ -7957,6 +8416,7 @@ impl DeregisterDBProxyTargetsResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {}
@@ -7973,6 +8433,7 @@ impl DescribeAccountAttributesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
@@ -7984,6 +8445,22 @@ pub struct DescribeCertificatesMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeCertificatesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCertificatesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeCertificatesMessage` contents to a `SignedRequest`.
@@ -8017,6 +8494,7 @@ impl DescribeCertificatesMessageSerializer {
     }
 }
 
+/// see [Rds::describe_custom_availability_zones]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCustomAvailabilityZonesMessage {
@@ -8028,6 +8506,22 @@ pub struct DescribeCustomAvailabilityZonesMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeCustomAvailabilityZonesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCustomAvailabilityZonesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeCustomAvailabilityZonesMessage` contents to a `SignedRequest`.
@@ -8062,6 +8556,7 @@ impl DescribeCustomAvailabilityZonesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_backtracks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterBacktracksMessage {
@@ -8075,6 +8570,22 @@ pub struct DescribeDBClusterBacktracksMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBClusterBacktracksMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterBacktracksMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClusterBacktracksMessage` contents to a `SignedRequest`.
@@ -8112,6 +8623,7 @@ impl DescribeDBClusterBacktracksMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_cluster_endpoints]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterEndpointsMessage {
@@ -8125,6 +8637,22 @@ pub struct DescribeDBClusterEndpointsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBClusterEndpointsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterEndpointsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClusterEndpointsMessage` contents to a `SignedRequest`.
@@ -8165,6 +8693,7 @@ impl DescribeDBClusterEndpointsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
@@ -8176,6 +8705,22 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterParameterGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
@@ -8210,6 +8755,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParametersMessage {
@@ -8223,6 +8769,22 @@ pub struct DescribeDBClusterParametersMessage {
     pub max_records: Option<i64>,
     /// <p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>. </p>
     pub source: Option<String>,
+}
+
+impl Paged for DescribeDBClusterParametersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
@@ -8258,6 +8820,7 @@ impl DescribeDBClusterParametersMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
@@ -8285,6 +8848,7 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_cluster_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBClusterSnapshotAttributesResult {
@@ -8319,6 +8883,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_cluster_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterSnapshotsMessage {
@@ -8338,6 +8903,22 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub max_records: Option<i64>,
     /// <p>The type of DB cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB cluster snapshots that have been automatically taken by Amazon RDS for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB cluster snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB cluster snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual DB cluster snapshots are returned. You can include shared DB cluster snapshots with these results by enabling the <code>IncludeShared</code> parameter. You can include public DB cluster snapshots with these results by enabling the <code>IncludePublic</code> parameter.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
+}
+
+impl Paged for DescribeDBClusterSnapshotsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterSnapshotsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
@@ -8387,6 +8968,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClustersMessage {
@@ -8400,6 +8982,22 @@ pub struct DescribeDBClustersMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBClustersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClustersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
@@ -8436,6 +9034,7 @@ impl DescribeDBClustersMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_engine_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBEngineVersionsMessage {
@@ -8459,6 +9058,22 @@ pub struct DescribeDBEngineVersionsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBEngineVersionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBEngineVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
@@ -8517,6 +9132,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 }
 
 /// <p>Parameter input for DescribeDBInstanceAutomatedBackups. </p>
+/// see [Rds::describe_db_instance_automated_backups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstanceAutomatedBackupsMessage {
@@ -8532,6 +9148,22 @@ pub struct DescribeDBInstanceAutomatedBackupsMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBInstanceAutomatedBackupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBInstanceAutomatedBackupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBInstanceAutomatedBackupsMessage` contents to a `SignedRequest`.
@@ -8575,6 +9207,7 @@ impl DescribeDBInstanceAutomatedBackupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBInstancesMessage {
@@ -8586,6 +9219,22 @@ pub struct DescribeDBInstancesMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBInstancesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBInstancesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
@@ -8684,6 +9333,7 @@ impl DescribeDBLogFilesListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_log_files]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBLogFilesMessage {
@@ -8701,6 +9351,22 @@ pub struct DescribeDBLogFilesMessage {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified MaxRecords value, a pagination token called a marker is included in the response so you can retrieve the remaining results.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBLogFilesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBLogFilesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBLogFilesMessage` contents to a `SignedRequest`.
@@ -8742,6 +9408,7 @@ impl DescribeDBLogFilesMessageSerializer {
 }
 
 /// <p> The response from a call to <code>DescribeDBLogFiles</code>. </p>
+/// see [Rds::describe_db_log_files]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBLogFilesResponse {
@@ -8749,6 +9416,28 @@ pub struct DescribeDBLogFilesResponse {
     pub describe_db_log_files: Option<Vec<DescribeDBLogFilesDetails>>,
     /// <p>A pagination token that can be used in a later DescribeDBLogFiles request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for DescribeDBLogFilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeDBLogFilesResponse {
+    type Item = DescribeDBLogFilesDetails;
+
+    fn into_pagination_page(self) -> Vec<DescribeDBLogFilesDetails> {
+        self.describe_db_log_files.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -8783,6 +9472,7 @@ impl DescribeDBLogFilesResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_parameter_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParameterGroupsMessage {
@@ -8794,6 +9484,22 @@ pub struct DescribeDBParameterGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBParameterGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBParameterGroupsMessage` contents to a `SignedRequest`.
@@ -8827,6 +9533,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBParametersMessage {
@@ -8840,6 +9547,22 @@ pub struct DescribeDBParametersMessage {
     pub max_records: Option<i64>,
     /// <p>The parameter types to return.</p> <p>Default: All parameter types returned</p> <p>Valid Values: <code>user | system | engine-default</code> </p>
     pub source: Option<String>,
+}
+
+impl Paged for DescribeDBParametersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBParametersMessage` contents to a `SignedRequest`.
@@ -8874,6 +9597,7 @@ impl DescribeDBParametersMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_proxies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBProxiesRequest {
@@ -8885,6 +9609,22 @@ pub struct DescribeDBProxiesRequest {
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBProxiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBProxiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBProxiesRequest` contents to a `SignedRequest`.
@@ -8915,6 +9655,7 @@ impl DescribeDBProxiesRequestSerializer {
     }
 }
 
+/// see [Rds::describe_db_proxies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBProxiesResponse {
@@ -8922,6 +9663,28 @@ pub struct DescribeDBProxiesResponse {
     pub db_proxies: Option<Vec<DBProxy>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for DescribeDBProxiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeDBProxiesResponse {
+    type Item = DBProxy;
+
+    fn into_pagination_page(self) -> Vec<DBProxy> {
+        self.db_proxies.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -8952,6 +9715,7 @@ impl DescribeDBProxiesResponseDeserializer {
         )
     }
 }
+/// see [Rds::describe_db_proxy_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBProxyTargetGroupsRequest {
@@ -8965,6 +9729,22 @@ pub struct DescribeDBProxyTargetGroupsRequest {
     pub max_records: Option<i64>,
     /// <p>The identifier of the <code>DBProxyTargetGroup</code> to describe.</p>
     pub target_group_name: Option<String>,
+}
+
+impl Paged for DescribeDBProxyTargetGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBProxyTargetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBProxyTargetGroupsRequest` contents to a `SignedRequest`.
@@ -8996,6 +9776,7 @@ impl DescribeDBProxyTargetGroupsRequestSerializer {
     }
 }
 
+/// see [Rds::describe_db_proxy_target_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBProxyTargetGroupsResponse {
@@ -9003,6 +9784,28 @@ pub struct DescribeDBProxyTargetGroupsResponse {
     pub marker: Option<String>,
     /// <p>An arbitrary number of <code>DBProxyTargetGroup</code> objects, containing details of the corresponding target groups.</p>
     pub target_groups: Option<Vec<DBProxyTargetGroup>>,
+}
+
+impl Paged for DescribeDBProxyTargetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeDBProxyTargetGroupsResponse {
+    type Item = DBProxyTargetGroup;
+
+    fn into_pagination_page(self) -> Vec<DBProxyTargetGroup> {
+        self.target_groups.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -9033,6 +9836,7 @@ impl DescribeDBProxyTargetGroupsResponseDeserializer {
         )
     }
 }
+/// see [Rds::describe_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBProxyTargetsRequest {
@@ -9046,6 +9850,22 @@ pub struct DescribeDBProxyTargetsRequest {
     pub max_records: Option<i64>,
     /// <p>The identifier of the <code>DBProxyTargetGroup</code> to describe.</p>
     pub target_group_name: Option<String>,
+}
+
+impl Paged for DescribeDBProxyTargetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBProxyTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBProxyTargetsRequest` contents to a `SignedRequest`.
@@ -9077,6 +9897,7 @@ impl DescribeDBProxyTargetsRequestSerializer {
     }
 }
 
+/// see [Rds::describe_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBProxyTargetsResponse {
@@ -9084,6 +9905,28 @@ pub struct DescribeDBProxyTargetsResponse {
     pub marker: Option<String>,
     /// <p>An arbitrary number of <code>DBProxyTarget</code> objects, containing details of the corresponding targets.</p>
     pub targets: Option<Vec<DBProxyTarget>>,
+}
+
+impl Paged for DescribeDBProxyTargetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeDBProxyTargetsResponse {
+    type Item = DBProxyTarget;
+
+    fn into_pagination_page(self) -> Vec<DBProxyTarget> {
+        self.targets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -9115,6 +9958,7 @@ impl DescribeDBProxyTargetsResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_security_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSecurityGroupsMessage {
@@ -9126,6 +9970,22 @@ pub struct DescribeDBSecurityGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBSecurityGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBSecurityGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBSecurityGroupsMessage` contents to a `SignedRequest`.
@@ -9160,6 +10020,7 @@ impl DescribeDBSecurityGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSnapshotAttributesMessage {
@@ -9183,6 +10044,7 @@ impl DescribeDBSnapshotAttributesMessageSerializer {
     }
 }
 
+/// see [Rds::describe_db_snapshot_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDBSnapshotAttributesResult {
@@ -9217,6 +10079,7 @@ impl DescribeDBSnapshotAttributesResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_db_snapshots]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSnapshotsMessage {
@@ -9238,6 +10101,22 @@ pub struct DescribeDBSnapshotsMessage {
     pub max_records: Option<i64>,
     /// <p>The type of snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB snapshots that have been automatically taken by Amazon RDS for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB snapshots that have been marked as public.</p> </li> <li> <p> <code>awsbackup</code> - Return the DB snapshots managed by the AWS Backup service.</p> <p>For information about AWS Backup, see the <a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html"> <i>AWS Backup Developer Guide.</i> </a> </p> <p>The <code>awsbackup</code> type does not apply to Aurora.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual snapshots are returned. Shared and public DB snapshots are not included in the returned results by default. You can include shared snapshots with these results by enabling the <code>IncludeShared</code> parameter. You can include public snapshots with these results by enabling the <code>IncludePublic</code> parameter.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
+}
+
+impl Paged for DescribeDBSnapshotsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBSnapshotsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBSnapshotsMessage` contents to a `SignedRequest`.
@@ -9290,6 +10169,7 @@ impl DescribeDBSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_db_subnet_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBSubnetGroupsMessage {
@@ -9301,6 +10181,22 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeDBSubnetGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBSubnetGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
@@ -9332,6 +10228,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultClusterParametersMessage {
@@ -9343,6 +10240,22 @@ pub struct DescribeEngineDefaultClusterParametersMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeEngineDefaultClusterParametersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEngineDefaultClusterParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeEngineDefaultClusterParametersMessage` contents to a `SignedRequest`.
@@ -9378,10 +10291,33 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
     }
 }
 
+/// see [Rds::describe_engine_default_cluster_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultClusterParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
+}
+
+impl Paged for DescribeEngineDefaultClusterParametersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.engine_defaults.as_ref()?.marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.engine_defaults.as_ref()?.marker.clone())())
+    }
+}
+
+impl PagedOutput for DescribeEngineDefaultClusterParametersResult {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        (move || self.engine_defaults?.parameters)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -9411,6 +10347,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEngineDefaultParametersMessage {
@@ -9422,6 +10359,22 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeEngineDefaultParametersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEngineDefaultParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
@@ -9453,10 +10406,33 @@ impl DescribeEngineDefaultParametersMessageSerializer {
     }
 }
 
+/// see [Rds::describe_engine_default_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
+}
+
+impl Paged for DescribeEngineDefaultParametersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.engine_defaults.as_ref()?.marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.engine_defaults.as_ref()?.marker.clone())())
+    }
+}
+
+impl PagedOutput for DescribeEngineDefaultParametersResult {
+    type Item = Parameter;
+
+    fn into_pagination_page(self) -> Vec<Parameter> {
+        (move || self.engine_defaults?.parameters)().unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -9486,6 +10462,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
@@ -9518,6 +10495,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
@@ -9529,6 +10507,22 @@ pub struct DescribeEventSubscriptionsMessage {
     pub max_records: Option<i64>,
     /// <p>The name of the RDS event notification subscription you want to describe.</p>
     pub subscription_name: Option<String>,
+}
+
+impl Paged for DescribeEventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
@@ -9560,6 +10554,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -9581,6 +10576,22 @@ pub struct DescribeEventsMessage {
     pub source_type: Option<String>,
     /// <p> The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: 2009-07-08T18:00Z</p>
     pub start_time: Option<String>,
+}
+
+impl Paged for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -9630,6 +10641,7 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// see [Rds::describe_export_tasks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksMessage {
@@ -9643,6 +10655,22 @@ pub struct DescribeExportTasksMessage {
     pub max_records: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the snapshot exported to Amazon S3.</p>
     pub source_arn: Option<String>,
+}
+
+impl Paged for DescribeExportTasksMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeExportTasksMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeExportTasksMessage` contents to a `SignedRequest`.
@@ -9679,6 +10707,7 @@ impl DescribeExportTasksMessageSerializer {
     }
 }
 
+/// see [Rds::describe_global_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalClustersMessage {
@@ -9690,6 +10719,22 @@ pub struct DescribeGlobalClustersMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeGlobalClustersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeGlobalClustersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeGlobalClustersMessage` contents to a `SignedRequest`.
@@ -9723,6 +10768,7 @@ impl DescribeGlobalClustersMessageSerializer {
     }
 }
 
+/// see [Rds::describe_installation_media]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstallationMediaMessage {
@@ -9734,6 +10780,22 @@ pub struct DescribeInstallationMediaMessage {
     pub marker: Option<String>,
     /// <p>An optional pagination token provided by a previous DescribeInstallationMedia request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeInstallationMediaMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeInstallationMediaMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeInstallationMediaMessage` contents to a `SignedRequest`.
@@ -9768,6 +10830,7 @@ impl DescribeInstallationMediaMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_option_group_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOptionGroupOptionsMessage {
@@ -9781,6 +10844,22 @@ pub struct DescribeOptionGroupOptionsMessage {
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
+}
+
+impl Paged for DescribeOptionGroupOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOptionGroupOptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeOptionGroupOptionsMessage` contents to a `SignedRequest`.
@@ -9813,6 +10892,7 @@ impl DescribeOptionGroupOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_option_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOptionGroupsMessage {
@@ -9828,6 +10908,22 @@ pub struct DescribeOptionGroupsMessage {
     pub max_records: Option<i64>,
     /// <p>The name of the option group to describe. Can't be supplied together with EngineName or MajorEngineVersion.</p>
     pub option_group_name: Option<String>,
+}
+
+impl Paged for DescribeOptionGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOptionGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeOptionGroupsMessage` contents to a `SignedRequest`.
@@ -9865,6 +10961,7 @@ impl DescribeOptionGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
@@ -9886,6 +10983,22 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub max_records: Option<i64>,
     /// <p>A value that indicates whether to show only VPC or non-VPC offerings.</p>
     pub vpc: Option<bool>,
+}
+
+impl Paged for DescribeOrderableDBInstanceOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOrderableDBInstanceOptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
@@ -9933,6 +11046,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
@@ -9944,6 +11058,22 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub max_records: Option<i64>,
     /// <p>The ARN of a resource to return pending maintenance actions for.</p>
     pub resource_identifier: Option<String>,
+}
+
+impl Paged for DescribePendingMaintenanceActionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribePendingMaintenanceActionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
@@ -9975,6 +11105,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_reserved_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedDBInstancesMessage {
@@ -10000,6 +11131,22 @@ pub struct DescribeReservedDBInstancesMessage {
     pub reserved_db_instance_id: Option<String>,
     /// <p>The offering identifier filter value. Specify this parameter to show only purchased reservations matching the specified offering identifier.</p>
     pub reserved_db_instances_offering_id: Option<String>,
+}
+
+impl Paged for DescribeReservedDBInstancesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedDBInstancesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeReservedDBInstancesMessage` contents to a `SignedRequest`.
@@ -10058,6 +11205,7 @@ impl DescribeReservedDBInstancesMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_reserved_db_instances_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedDBInstancesOfferingsMessage {
@@ -10079,6 +11227,22 @@ pub struct DescribeReservedDBInstancesOfferingsMessage {
     pub product_description: Option<String>,
     /// <p>The offering identifier filter value. Specify this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
     pub reserved_db_instances_offering_id: Option<String>,
+}
+
+impl Paged for DescribeReservedDBInstancesOfferingsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedDBInstancesOfferingsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeReservedDBInstancesOfferingsMessage` contents to a `SignedRequest`.
@@ -10132,6 +11296,7 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_source_regions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSourceRegionsMessage {
@@ -10143,6 +11308,22 @@ pub struct DescribeSourceRegionsMessage {
     pub max_records: Option<i64>,
     /// <p><p>The source AWS Region name. For example, <code>us-east-1</code>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid AWS Region name.</p> </li> </ul></p>
     pub region_name: Option<String>,
+}
+
+impl Paged for DescribeSourceRegionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSourceRegionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DescribeSourceRegionsMessage` contents to a `SignedRequest`.
@@ -10174,6 +11355,7 @@ impl DescribeSourceRegionsMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::describe_valid_db_instance_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeValidDBInstanceModificationsMessage {
@@ -10201,6 +11383,7 @@ impl DescribeValidDBInstanceModificationsMessageSerializer {
     }
 }
 
+/// see [Rds::describe_valid_db_instance_modifications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeValidDBInstanceModificationsResult {
@@ -10366,6 +11549,7 @@ impl DoubleRangeListDeserializer {
     }
 }
 /// <p>This data type is used as a response element to <code>DownloadDBLogFilePortion</code>.</p>
+/// see [Rds::download_db_log_file_portion]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DownloadDBLogFilePortionDetails {
@@ -10375,6 +11559,28 @@ pub struct DownloadDBLogFilePortionDetails {
     pub log_file_data: Option<String>,
     /// <p>A pagination token that can be used in a later DownloadDBLogFilePortion request.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for DownloadDBLogFilePortionDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DownloadDBLogFilePortionDetails {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.log_file_data.into_iter().collect()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.additional_data_pending.unwrap_or_default()
+    }
 }
 
 #[allow(dead_code)]
@@ -10411,6 +11617,7 @@ impl DownloadDBLogFilePortionDetailsDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::download_db_log_file_portion]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DownloadDBLogFilePortionMessage {
@@ -10422,6 +11629,22 @@ pub struct DownloadDBLogFilePortionMessage {
     pub marker: Option<String>,
     /// <p><p>The number of lines to download. If the number of lines specified results in a file over 1 MB in size, the file is truncated at 1 MB in size.</p> <p>If the NumberOfLines parameter is specified, then the block of lines returned can be from the beginning or the end of the log file, depending on the value of the Marker parameter.</p> <ul> <li> <p>If neither Marker or NumberOfLines are specified, the entire log file is returned up to a maximum of 10000 lines, starting with the most recent log entries first.</p> </li> <li> <p>If NumberOfLines is specified and Marker isn&#39;t specified, then the most recent lines from the end of the log file are returned.</p> </li> <li> <p>If Marker is specified as &quot;0&quot;, then the specified number of lines from the beginning of the log file are returned.</p> </li> <li> <p>You can download the log file in blocks of lines by specifying the size of the block using the NumberOfLines parameter, and by specifying a value of &quot;0&quot; for the Marker parameter in your first request. Include the Marker value returned in the response as the Marker value for the next request, continuing until the AdditionalDataPending response element returns false.</p> </li> </ul></p>
     pub number_of_lines: Option<i64>,
+}
+
+impl Paged for DownloadDBLogFilePortionMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DownloadDBLogFilePortionMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
 }
 
 /// Serialize `DownloadDBLogFilePortionMessage` contents to a `SignedRequest`.
@@ -10768,6 +11991,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 /// <p>Data returned from the <code>DescribeEventCategories</code> operation.</p>
+/// see [Rds::describe_event_categories]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
@@ -10926,6 +12150,7 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 /// <p>Data returned by the <b>DescribeEventSubscriptions</b> action.</p>
+/// see [Rds::describe_event_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscriptionsMessage {
@@ -10933,6 +12158,28 @@ pub struct EventSubscriptionsMessage {
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for EventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for EventSubscriptionsMessage {
+    type Item = EventSubscription;
+
+    fn into_pagination_page(self) -> Vec<EventSubscription> {
+        self.event_subscriptions_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -10967,6 +12214,7 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeEvents</code> action. </p>
+/// see [Rds::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
@@ -10974,6 +12222,28 @@ pub struct EventsMessage {
     pub events: Option<Vec<Event>>,
     /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
     pub marker: Option<String>,
+}
+
+impl Paged for EventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for EventsMessage {
+    type Item = Event;
+
+    fn into_pagination_page(self) -> Vec<Event> {
+        self.events.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -11001,6 +12271,8 @@ impl EventsMessageDeserializer {
     }
 }
 /// <p>Contains the details of a snapshot export to Amazon S3. </p> <p>This data type is used as a response element in the <code>DescribeExportTasks</code> action. </p>
+/// see [Rds::cancel_export_task]
+/// see [Rds::start_export_task]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportTask {
@@ -11129,6 +12401,7 @@ impl ExportTasksListDeserializer {
         })
     }
 }
+/// see [Rds::describe_export_tasks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ExportTasksMessage {
@@ -11136,6 +12409,28 @@ pub struct ExportTasksMessage {
     pub export_tasks: Option<Vec<ExportTask>>,
     /// <p>A pagination token that can be used in a later <code>DescribeExportTasks</code> request. A marker is used for pagination to identify the location to begin output for the next response of <code>DescribeExportTasks</code>.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for ExportTasksMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ExportTasksMessage {
+    type Item = ExportTask;
+
+    fn into_pagination_page(self) -> Vec<ExportTask> {
+        self.export_tasks.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -11163,6 +12458,7 @@ impl ExportTasksMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailoverDBClusterMessage {
@@ -11194,6 +12490,7 @@ impl FailoverDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::failover_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FailoverDBClusterResult {
@@ -11475,6 +12772,7 @@ impl GlobalClusterMemberListDeserializer {
         })
     }
 }
+/// see [Rds::describe_global_clusters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GlobalClustersMessage {
@@ -11482,6 +12780,28 @@ pub struct GlobalClustersMessage {
     pub global_clusters: Option<Vec<GlobalCluster>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeGlobalClusters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
+}
+
+impl Paged for GlobalClustersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for GlobalClustersMessage {
+    type Item = GlobalCluster;
+
+    fn into_pagination_page(self) -> Vec<GlobalCluster> {
+        self.global_clusters.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -11566,6 +12886,7 @@ impl IPRangeListDeserializer {
         })
     }
 }
+/// see [Rds::import_installation_media]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportInstallationMediaMessage {
@@ -11611,6 +12932,8 @@ impl ImportInstallationMediaMessageSerializer {
 }
 
 /// <p>Contains the installation media for a DB engine that requires an on-premises customer provided license, such as Microsoft SQL Server.</p>
+/// see [Rds::delete_installation_media]
+/// see [Rds::import_installation_media]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstallationMedia {
@@ -11741,6 +13064,7 @@ impl InstallationMediaListDeserializer {
         })
     }
 }
+/// see [Rds::describe_installation_media]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstallationMediaMessage {
@@ -11748,6 +13072,28 @@ pub struct InstallationMediaMessage {
     pub installation_media: Option<Vec<InstallationMedia>>,
     /// <p>An optional pagination token provided by a previous <a>DescribeInstallationMedia</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
+}
+
+impl Paged for InstallationMediaMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for InstallationMediaMessage {
+    type Item = InstallationMedia;
+
+    fn into_pagination_page(self) -> Vec<InstallationMedia> {
+        self.installation_media.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -11810,6 +13156,7 @@ impl KeyListSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -11948,6 +13295,7 @@ impl MinimumEngineVersionPerAllowedValueListDeserializer {
         })
     }
 }
+/// see [Rds::modify_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCertificatesMessage {
@@ -11981,6 +13329,7 @@ impl ModifyCertificatesMessageSerializer {
     }
 }
 
+/// see [Rds::modify_certificates]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyCertificatesResult {
@@ -12011,6 +13360,7 @@ impl ModifyCertificatesResultDeserializer {
         )
     }
 }
+/// see [Rds::modify_current_db_cluster_capacity]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyCurrentDBClusterCapacityMessage {
@@ -12052,6 +13402,7 @@ impl ModifyCurrentDBClusterCapacityMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_cluster_endpoint]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterEndpointMessage {
@@ -12099,6 +13450,7 @@ impl ModifyDBClusterEndpointMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
@@ -12277,6 +13629,7 @@ impl ModifyDBClusterMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::modify_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterParameterGroupMessage {
@@ -12307,6 +13660,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterResult {
@@ -12333,6 +13687,7 @@ impl ModifyDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
@@ -12380,6 +13735,7 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_cluster_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBClusterSnapshotAttributeResult {
@@ -12414,6 +13770,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBInstanceMessage {
@@ -12719,6 +14076,7 @@ impl ModifyDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBInstanceResult {
@@ -12746,6 +14104,7 @@ impl ModifyDBInstanceResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBParameterGroupMessage {
@@ -12776,6 +14135,7 @@ impl ModifyDBParameterGroupMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBProxyRequest {
@@ -12839,6 +14199,7 @@ impl ModifyDBProxyRequestSerializer {
     }
 }
 
+/// see [Rds::modify_db_proxy]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBProxyResponse {
@@ -12865,6 +14226,7 @@ impl ModifyDBProxyResponseDeserializer {
         })
     }
 }
+/// see [Rds::modify_db_proxy_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBProxyTargetGroupRequest {
@@ -12905,6 +14267,7 @@ impl ModifyDBProxyTargetGroupRequestSerializer {
     }
 }
 
+/// see [Rds::modify_db_proxy_target_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBProxyTargetGroupResponse {
@@ -12940,6 +14303,7 @@ impl ModifyDBProxyTargetGroupResponseDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSnapshotAttributeMessage {
@@ -12987,6 +14351,7 @@ impl ModifyDBSnapshotAttributeMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_snapshot_attribute]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSnapshotAttributeResult {
@@ -13020,6 +14385,7 @@ impl ModifyDBSnapshotAttributeResultDeserializer {
         )
     }
 }
+/// see [Rds::modify_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSnapshotMessage {
@@ -13053,6 +14419,7 @@ impl ModifyDBSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSnapshotResult {
@@ -13080,6 +14447,7 @@ impl ModifyDBSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSubnetGroupMessage {
@@ -13118,6 +14486,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
     }
 }
 
+/// see [Rds::modify_db_subnet_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyDBSubnetGroupResult {
@@ -13151,6 +14520,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
@@ -13198,6 +14568,7 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
+/// see [Rds::modify_event_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEventSubscriptionResult {
@@ -13230,6 +14601,7 @@ impl ModifyEventSubscriptionResultDeserializer {
         )
     }
 }
+/// see [Rds::modify_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyGlobalClusterMessage {
@@ -13268,6 +14640,7 @@ impl ModifyGlobalClusterMessageSerializer {
     }
 }
 
+/// see [Rds::modify_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyGlobalClusterResult {
@@ -13301,6 +14674,7 @@ impl ModifyGlobalClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::modify_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyOptionGroupMessage {
@@ -13347,6 +14721,7 @@ impl ModifyOptionGroupMessageSerializer {
     }
 }
 
+/// see [Rds::modify_option_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyOptionGroupResult {
@@ -13943,12 +15318,35 @@ impl OptionGroupOptionsListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::describe_option_group_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptionGroupOptionsMessage {
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     pub option_group_options: Option<Vec<OptionGroupOption>>,
+}
+
+impl Paged for OptionGroupOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for OptionGroupOptionsMessage {
+    type Item = OptionGroupOption;
+
+    fn into_pagination_page(self) -> Vec<OptionGroupOption> {
+        self.option_group_options.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -13983,6 +15381,7 @@ impl OptionGroupOptionsMessageDeserializer {
     }
 }
 /// <p>List of option groups.</p>
+/// see [Rds::describe_option_groups]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptionGroups {
@@ -13990,6 +15389,28 @@ pub struct OptionGroups {
     pub marker: Option<String>,
     /// <p>List of option groups.</p>
     pub option_groups_list: Option<Vec<OptionGroup>>,
+}
+
+impl Paged for OptionGroups {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for OptionGroups {
+    type Item = OptionGroup;
+
+    fn into_pagination_page(self) -> Vec<OptionGroup> {
+        self.option_groups_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -14532,6 +15953,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeOrderableDBInstanceOptions</code> action. </p>
+/// see [Rds::describe_orderable_db_instance_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableDBInstanceOptionsMessage {
@@ -14539,6 +15961,28 @@ pub struct OrderableDBInstanceOptionsMessage {
     pub marker: Option<String>,
     /// <p>An <code>OrderableDBInstanceOption</code> structure containing information about orderable options for the DB instance.</p>
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
+}
+
+impl Paged for OrderableDBInstanceOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for OrderableDBInstanceOptionsMessage {
+    type Item = OrderableDBInstanceOption;
+
+    fn into_pagination_page(self) -> Vec<OrderableDBInstanceOption> {
+        self.orderable_db_instance_options.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -14916,6 +16360,7 @@ impl PendingMaintenanceActionsDeserializer {
     }
 }
 /// <p>Data returned from the <b>DescribePendingMaintenanceActions</b> action.</p>
+/// see [Rds::describe_pending_maintenance_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingMaintenanceActionsMessage {
@@ -14923,6 +16368,28 @@ pub struct PendingMaintenanceActionsMessage {
     pub marker: Option<String>,
     /// <p>A list of the pending maintenance actions for the resource.</p>
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+impl Paged for PendingMaintenanceActionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for PendingMaintenanceActionsMessage {
+    type Item = ResourcePendingMaintenanceActions;
+
+    fn into_pagination_page(self) -> Vec<ResourcePendingMaintenanceActions> {
+        self.pending_maintenance_actions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -15173,6 +16640,7 @@ impl ProcessorFeatureListSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::promote_read_replica_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteReadReplicaDBClusterMessage {
@@ -15196,6 +16664,7 @@ impl PromoteReadReplicaDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::promote_read_replica_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PromoteReadReplicaDBClusterResult {
@@ -15227,6 +16696,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::promote_read_replica]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteReadReplicaMessage {
@@ -15266,6 +16736,7 @@ impl PromoteReadReplicaMessageSerializer {
     }
 }
 
+/// see [Rds::promote_read_replica]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PromoteReadReplicaResult {
@@ -15297,6 +16768,7 @@ impl PromoteReadReplicaResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::purchase_reserved_db_instances_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedDBInstancesOfferingMessage {
@@ -15341,6 +16813,7 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
     }
 }
 
+/// see [Rds::purchase_reserved_db_instances_offering]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseReservedDBInstancesOfferingResult {
@@ -15508,6 +16981,7 @@ impl ReadersArnListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootDBInstanceMessage {
@@ -15536,6 +17010,7 @@ impl RebootDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::reboot_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootDBInstanceResult {
@@ -15621,6 +17096,7 @@ impl RecurringChargeListDeserializer {
         })
     }
 }
+/// see [Rds::register_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterDBProxyTargetsRequest {
@@ -15664,6 +17140,7 @@ impl RegisterDBProxyTargetsRequestSerializer {
     }
 }
 
+/// see [Rds::register_db_proxy_targets]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterDBProxyTargetsResponse {
@@ -15696,6 +17173,7 @@ impl RegisterDBProxyTargetsResponseDeserializer {
         )
     }
 }
+/// see [Rds::remove_from_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFromGlobalClusterMessage {
@@ -15729,6 +17207,7 @@ impl RemoveFromGlobalClusterMessageSerializer {
     }
 }
 
+/// see [Rds::remove_from_global_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveFromGlobalClusterResult {
@@ -15761,6 +17240,7 @@ impl RemoveFromGlobalClusterResultDeserializer {
         )
     }
 }
+/// see [Rds::remove_role_from_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromDBClusterMessage {
@@ -15792,6 +17272,7 @@ impl RemoveRoleFromDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::remove_role_from_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveRoleFromDBInstanceMessage {
@@ -15822,6 +17303,7 @@ impl RemoveRoleFromDBInstanceMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::remove_source_identifier_from_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionMessage {
@@ -15855,6 +17337,7 @@ impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
     }
 }
 
+/// see [Rds::remove_source_identifier_from_subscription]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveSourceIdentifierFromSubscriptionResult {
@@ -15888,6 +17371,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::remove_tags_from_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
@@ -16061,6 +17545,7 @@ impl ReservedDBInstanceListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstances</code> action. </p>
+/// see [Rds::describe_reserved_db_instances]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedDBInstanceMessage {
@@ -16068,6 +17553,28 @@ pub struct ReservedDBInstanceMessage {
     pub marker: Option<String>,
     /// <p>A list of reserved DB instances.</p>
     pub reserved_db_instances: Option<Vec<ReservedDBInstance>>,
+}
+
+impl Paged for ReservedDBInstanceMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ReservedDBInstanceMessage {
+    type Item = ReservedDBInstance;
+
+    fn into_pagination_page(self) -> Vec<ReservedDBInstance> {
+        self.reserved_db_instances.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -16216,6 +17723,7 @@ impl ReservedDBInstancesOfferingListDeserializer {
     }
 }
 /// <p> Contains the result of a successful invocation of the <code>DescribeReservedDBInstancesOfferings</code> action. </p>
+/// see [Rds::describe_reserved_db_instances_offerings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedDBInstancesOfferingMessage {
@@ -16223,6 +17731,28 @@ pub struct ReservedDBInstancesOfferingMessage {
     pub marker: Option<String>,
     /// <p>A list of reserved DB instance offerings.</p>
     pub reserved_db_instances_offerings: Option<Vec<ReservedDBInstancesOffering>>,
+}
+
+impl Paged for ReservedDBInstancesOfferingMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ReservedDBInstancesOfferingMessage {
+    type Item = ReservedDBInstancesOffering;
+
+    fn into_pagination_page(self) -> Vec<ReservedDBInstancesOffering> {
+        self.reserved_db_instances_offerings.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -16257,6 +17787,7 @@ impl ReservedDBInstancesOfferingMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::reset_db_cluster_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBClusterParameterGroupMessage {
@@ -16295,6 +17826,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::reset_db_parameter_group]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDBParameterGroupMessage {
@@ -16376,6 +17908,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
         )
     }
 }
+/// see [Rds::restore_db_cluster_from_s3]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromS3Message {
@@ -16576,6 +18109,7 @@ impl RestoreDBClusterFromS3MessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_cluster_from_s3]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromS3Result {
@@ -16607,6 +18141,7 @@ impl RestoreDBClusterFromS3ResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterFromSnapshotMessage {
@@ -16756,6 +18291,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_cluster_from_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterFromSnapshotResult {
@@ -16787,6 +18323,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
@@ -16917,6 +18454,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_cluster_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBClusterToPointInTimeResult {
@@ -16948,6 +18486,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::restore_db_instance_from_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBInstanceFromDBSnapshotMessage {
@@ -17141,6 +18680,7 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_instance_from_db_snapshot]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBInstanceFromDBSnapshotResult {
@@ -17171,6 +18711,7 @@ impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
         )
     }
 }
+/// see [Rds::restore_db_instance_from_s3]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBInstanceFromS3Message {
@@ -17458,6 +18999,7 @@ impl RestoreDBInstanceFromS3MessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_instance_from_s3]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBInstanceFromS3Result {
@@ -17489,6 +19031,7 @@ impl RestoreDBInstanceFromS3ResultDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::restore_db_instance_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBInstanceToPointInTimeMessage {
@@ -17721,6 +19264,7 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
     }
 }
 
+/// see [Rds::restore_db_instance_to_point_in_time]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreDBInstanceToPointInTimeResult {
@@ -17785,6 +19329,7 @@ impl RestoreWindowDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [Rds::revoke_db_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeDBSecurityGroupIngressMessage {
@@ -17834,6 +19379,7 @@ impl RevokeDBSecurityGroupIngressMessageSerializer {
     }
 }
 
+/// see [Rds::revoke_db_security_group_ingress]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeDBSecurityGroupIngressResult {
@@ -18075,6 +19621,7 @@ impl SourceRegionListDeserializer {
     }
 }
 /// <p>Contains the result of a successful invocation of the <code>DescribeSourceRegions</code> action.</p>
+/// see [Rds::describe_source_regions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SourceRegionMessage {
@@ -18082,6 +19629,28 @@ pub struct SourceRegionMessage {
     pub marker: Option<String>,
     /// <p>A list of SourceRegion instances that contains each source AWS Region that the current AWS Region can get a read replica or a DB snapshot from.</p>
     pub source_regions: Option<Vec<SourceRegion>>,
+}
+
+impl Paged for SourceRegionMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for SourceRegionMessage {
+    type Item = SourceRegion;
+
+    fn into_pagination_page(self) -> Vec<SourceRegion> {
+        self.source_regions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -18116,6 +19685,7 @@ impl SourceTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [Rds::start_activity_stream]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartActivityStreamRequest {
@@ -18147,6 +19717,7 @@ impl StartActivityStreamRequestSerializer {
     }
 }
 
+/// see [Rds::start_activity_stream]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartActivityStreamResponse {
@@ -18202,6 +19773,7 @@ impl StartActivityStreamResponseDeserializer {
         )
     }
 }
+/// see [Rds::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBClusterMessage {
@@ -18225,6 +19797,7 @@ impl StartDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::start_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBClusterResult {
@@ -18250,6 +19823,7 @@ impl StartDBClusterResultDeserializer {
         })
     }
 }
+/// see [Rds::start_db_instance_automated_backups_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBInstanceAutomatedBackupsReplicationMessage {
@@ -18295,6 +19869,7 @@ impl StartDBInstanceAutomatedBackupsReplicationMessageSerializer {
     }
 }
 
+/// see [Rds::start_db_instance_automated_backups_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBInstanceAutomatedBackupsReplicationResult {
@@ -18328,6 +19903,7 @@ impl StartDBInstanceAutomatedBackupsReplicationResultDeserializer {
         )
     }
 }
+/// see [Rds::start_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDBInstanceMessage {
@@ -18351,6 +19927,7 @@ impl StartDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::start_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StartDBInstanceResult {
@@ -18377,6 +19954,7 @@ impl StartDBInstanceResultDeserializer {
         })
     }
 }
+/// see [Rds::start_export_task]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportTaskMessage {
@@ -18429,6 +20007,7 @@ impl StartExportTaskMessageSerializer {
     }
 }
 
+/// see [Rds::stop_activity_stream]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopActivityStreamRequest {
@@ -18454,6 +20033,7 @@ impl StopActivityStreamRequestSerializer {
     }
 }
 
+/// see [Rds::stop_activity_stream]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopActivityStreamResponse {
@@ -18497,6 +20077,7 @@ impl StopActivityStreamResponseDeserializer {
         )
     }
 }
+/// see [Rds::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBClusterMessage {
@@ -18520,6 +20101,7 @@ impl StopDBClusterMessageSerializer {
     }
 }
 
+/// see [Rds::stop_db_cluster]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBClusterResult {
@@ -18545,6 +20127,7 @@ impl StopDBClusterResultDeserializer {
         })
     }
 }
+/// see [Rds::stop_db_instance_automated_backups_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBInstanceAutomatedBackupsReplicationMessage {
@@ -18572,6 +20155,7 @@ impl StopDBInstanceAutomatedBackupsReplicationMessageSerializer {
     }
 }
 
+/// see [Rds::stop_db_instance_automated_backups_replication]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBInstanceAutomatedBackupsReplicationResult {
@@ -18605,6 +20189,7 @@ impl StopDBInstanceAutomatedBackupsReplicationResultDeserializer {
         )
     }
 }
+/// see [Rds::stop_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDBInstanceMessage {
@@ -18636,6 +20221,7 @@ impl StopDBInstanceMessageSerializer {
     }
 }
 
+/// see [Rds::stop_db_instance]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StopDBInstanceResult {
@@ -18909,6 +20495,7 @@ impl TagListSerializer {
 }
 
 /// <p><p/></p>
+/// see [Rds::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TagListMessage {
@@ -29786,7 +31373,7 @@ impl fmt::Display for StopDBInstanceAutomatedBackupsReplicationError {
 impl Error for StopDBInstanceAutomatedBackupsReplicationError {}
 /// Trait representing the capabilities of the Amazon RDS API. Amazon RDS clients implement this trait.
 #[async_trait]
-pub trait Rds {
+pub trait Rds: Clone + Sync + Send + 'static {
     /// <p><p>Associates an Identity and Access Management (IAM) role from an Amazon Aurora DB cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html">Authorizing Amazon Aurora MySQL to Access Other AWS Services on Your Behalf</a> in the <i>Amazon Aurora User Guide</i>.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn add_role_to_db_cluster(
         &self,
@@ -30078,11 +31665,33 @@ pub trait Rds {
         input: DescribeCertificatesMessage,
     ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>>;
 
+    /// Auto-paginating version of `describe_certificates`
+    fn describe_certificates_pages<'a>(
+        &'a self,
+        mut input: DescribeCertificatesMessage,
+    ) -> RusotoStream<'a, Certificate, DescribeCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_certificates(input.clone())
+        }))
+    }
+
     /// <p>Returns information about custom Availability Zones (AZs).</p> <p>A custom AZ is an on-premises AZ that is integrated with a VMware vSphere cluster.</p> <p>For more information about RDS on VMware, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/RDSonVMwareUserGuide/rds-on-vmware.html"> RDS on VMware User Guide.</a> </p>
     async fn describe_custom_availability_zones(
         &self,
         input: DescribeCustomAvailabilityZonesMessage,
     ) -> Result<CustomAvailabilityZoneMessage, RusotoError<DescribeCustomAvailabilityZonesError>>;
+
+    /// Auto-paginating version of `describe_custom_availability_zones`
+    fn describe_custom_availability_zones_pages<'a>(
+        &'a self,
+        mut input: DescribeCustomAvailabilityZonesMessage,
+    ) -> RusotoStream<'a, CustomAvailabilityZone, DescribeCustomAvailabilityZonesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_custom_availability_zones(input.clone())
+        }))
+    }
 
     /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora MySQL DB clusters.</p> </note></p>
     async fn describe_db_cluster_backtracks(
@@ -30090,11 +31699,33 @@ pub trait Rds {
         input: DescribeDBClusterBacktracksMessage,
     ) -> Result<DBClusterBacktrackMessage, RusotoError<DescribeDBClusterBacktracksError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_backtracks`
+    fn describe_db_cluster_backtracks_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterBacktracksMessage,
+    ) -> RusotoStream<'a, DBClusterBacktrack, DescribeDBClusterBacktracksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_backtracks(input.clone())
+        }))
+    }
+
     /// <p><p>Returns information about endpoints for an Amazon Aurora DB cluster.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn describe_db_cluster_endpoints(
         &self,
         input: DescribeDBClusterEndpointsMessage,
     ) -> Result<DBClusterEndpointMessage, RusotoError<DescribeDBClusterEndpointsError>>;
+
+    /// Auto-paginating version of `describe_db_cluster_endpoints`
+    fn describe_db_cluster_endpoints_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterEndpointsMessage,
+    ) -> RusotoStream<'a, DBClusterEndpoint, DescribeDBClusterEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_endpoints(input.clone())
+        }))
+    }
 
     /// <p><p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn describe_db_cluster_parameter_groups(
@@ -30102,11 +31733,33 @@ pub trait Rds {
         input: DescribeDBClusterParameterGroupsMessage,
     ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_parameter_groups`
+    fn describe_db_cluster_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterParameterGroupsMessage,
+    ) -> RusotoStream<'a, DBClusterParameterGroup, DescribeDBClusterParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_parameter_groups(input.clone())
+        }))
+    }
+
     /// <p><p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn describe_db_cluster_parameters(
         &self,
         input: DescribeDBClusterParametersMessage,
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
+
+    /// Auto-paginating version of `describe_db_cluster_parameters`
+    fn describe_db_cluster_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeDBClusterParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_parameters(input.clone())
+        }))
+    }
 
     /// <p><p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <code>ModifyDBClusterSnapshotAttribute</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn describe_db_cluster_snapshot_attributes(
@@ -30123,17 +31776,50 @@ pub trait Rds {
         input: DescribeDBClusterSnapshotsMessage,
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_db_cluster_snapshots`
+    fn describe_db_cluster_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterSnapshotsMessage,
+    ) -> RusotoStream<'a, DBClusterSnapshot, DescribeDBClusterSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_snapshots(input.clone())
+        }))
+    }
+
     /// <p><p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This operation can also return information for Amazon Neptune DB instances and Amazon DocumentDB instances.</p> </note></p>
     async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
     ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>>;
 
+    /// Auto-paginating version of `describe_db_clusters`
+    fn describe_db_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClustersMessage,
+    ) -> RusotoStream<'a, DBCluster, DescribeDBClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_clusters(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the available DB engines.</p>
     async fn describe_db_engine_versions(
         &self,
         input: DescribeDBEngineVersionsMessage,
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
+
+    /// Auto-paginating version of `describe_db_engine_versions`
+    fn describe_db_engine_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeDBEngineVersionsMessage,
+    ) -> RusotoStream<'a, DBEngineVersion, DescribeDBEngineVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_engine_versions(input.clone())
+        }))
+    }
 
     /// <p>Displays backups for both current and deleted instances. For example, use this operation to find details about automated backups for previously deleted instances. Current instances with retention periods greater than zero (0) are returned for both the <code>DescribeDBInstanceAutomatedBackups</code> and <code>DescribeDBInstances</code> operations.</p> <p>All parameters are optional.</p>
     async fn describe_db_instance_automated_backups(
@@ -30144,11 +31830,33 @@ pub trait Rds {
         RusotoError<DescribeDBInstanceAutomatedBackupsError>,
     >;
 
+    /// Auto-paginating version of `describe_db_instance_automated_backups`
+    fn describe_db_instance_automated_backups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBInstanceAutomatedBackupsMessage,
+    ) -> RusotoStream<'a, DBInstanceAutomatedBackup, DescribeDBInstanceAutomatedBackupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_instance_automated_backups(input.clone())
+        }))
+    }
+
     /// <p><p>Returns information about provisioned RDS instances. This API supports pagination.</p> <note> <p>This operation can also return information for Amazon Neptune DB instances and Amazon DocumentDB instances.</p> </note></p>
     async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
     ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>>;
+
+    /// Auto-paginating version of `describe_db_instances`
+    fn describe_db_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeDBInstancesMessage,
+    ) -> RusotoStream<'a, DBInstance, DescribeDBInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_instances(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of DB log files for the DB instance.</p>
     async fn describe_db_log_files(
@@ -30156,11 +31864,33 @@ pub trait Rds {
         input: DescribeDBLogFilesMessage,
     ) -> Result<DescribeDBLogFilesResponse, RusotoError<DescribeDBLogFilesError>>;
 
+    /// Auto-paginating version of `describe_db_log_files`
+    fn describe_db_log_files_pages<'a>(
+        &'a self,
+        mut input: DescribeDBLogFilesMessage,
+    ) -> RusotoStream<'a, DescribeDBLogFilesDetails, DescribeDBLogFilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_log_files(input.clone())
+        }))
+    }
+
     /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
     async fn describe_db_parameter_groups(
         &self,
         input: DescribeDBParameterGroupsMessage,
     ) -> Result<DBParameterGroupsMessage, RusotoError<DescribeDBParameterGroupsError>>;
+
+    /// Auto-paginating version of `describe_db_parameter_groups`
+    fn describe_db_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBParameterGroupsMessage,
+    ) -> RusotoStream<'a, DBParameterGroup, DescribeDBParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_parameter_groups(input.clone())
+        }))
+    }
 
     /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
     async fn describe_db_parameters(
@@ -30168,11 +31898,33 @@ pub trait Rds {
         input: DescribeDBParametersMessage,
     ) -> Result<DBParameterGroupDetails, RusotoError<DescribeDBParametersError>>;
 
+    /// Auto-paginating version of `describe_db_parameters`
+    fn describe_db_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeDBParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeDBParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_parameters(input.clone())
+        }))
+    }
+
     /// <p>Returns information about DB proxies.</p>
     async fn describe_db_proxies(
         &self,
         input: DescribeDBProxiesRequest,
     ) -> Result<DescribeDBProxiesResponse, RusotoError<DescribeDBProxiesError>>;
+
+    /// Auto-paginating version of `describe_db_proxies`
+    fn describe_db_proxies_pages<'a>(
+        &'a self,
+        mut input: DescribeDBProxiesRequest,
+    ) -> RusotoStream<'a, DBProxy, DescribeDBProxiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_proxies(input.clone())
+        }))
+    }
 
     /// <p>Returns information about DB proxy target groups, represented by <code>DBProxyTargetGroup</code> data structures.</p>
     async fn describe_db_proxy_target_groups(
@@ -30180,17 +31932,50 @@ pub trait Rds {
         input: DescribeDBProxyTargetGroupsRequest,
     ) -> Result<DescribeDBProxyTargetGroupsResponse, RusotoError<DescribeDBProxyTargetGroupsError>>;
 
+    /// Auto-paginating version of `describe_db_proxy_target_groups`
+    fn describe_db_proxy_target_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBProxyTargetGroupsRequest,
+    ) -> RusotoStream<'a, DBProxyTargetGroup, DescribeDBProxyTargetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_proxy_target_groups(input.clone())
+        }))
+    }
+
     /// <p>Returns information about <code>DBProxyTarget</code> objects. This API supports pagination.</p>
     async fn describe_db_proxy_targets(
         &self,
         input: DescribeDBProxyTargetsRequest,
     ) -> Result<DescribeDBProxyTargetsResponse, RusotoError<DescribeDBProxyTargetsError>>;
 
+    /// Auto-paginating version of `describe_db_proxy_targets`
+    fn describe_db_proxy_targets_pages<'a>(
+        &'a self,
+        mut input: DescribeDBProxyTargetsRequest,
+    ) -> RusotoStream<'a, DBProxyTarget, DescribeDBProxyTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_proxy_targets(input.clone())
+        }))
+    }
+
     /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
     async fn describe_db_security_groups(
         &self,
         input: DescribeDBSecurityGroupsMessage,
     ) -> Result<DBSecurityGroupMessage, RusotoError<DescribeDBSecurityGroupsError>>;
+
+    /// Auto-paginating version of `describe_db_security_groups`
+    fn describe_db_security_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBSecurityGroupsMessage,
+    ) -> RusotoStream<'a, DBSecurityGroup, DescribeDBSecurityGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_security_groups(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <code>ModifyDBSnapshotAttribute</code> API action.</p>
     async fn describe_db_snapshot_attributes(
@@ -30204,11 +31989,33 @@ pub trait Rds {
         input: DescribeDBSnapshotsMessage,
     ) -> Result<DBSnapshotMessage, RusotoError<DescribeDBSnapshotsError>>;
 
+    /// Auto-paginating version of `describe_db_snapshots`
+    fn describe_db_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeDBSnapshotsMessage,
+    ) -> RusotoStream<'a, DBSnapshot, DescribeDBSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_snapshots(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     async fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
     ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>>;
+
+    /// Auto-paginating version of `describe_db_subnet_groups`
+    fn describe_db_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBSubnetGroupsMessage,
+    ) -> RusotoStream<'a, DBSubnetGroup, DescribeDBSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_subnet_groups(input.clone())
+        }))
+    }
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p>
     async fn describe_engine_default_cluster_parameters(
@@ -30219,6 +32026,17 @@ pub trait Rds {
         RusotoError<DescribeEngineDefaultClusterParametersError>,
     >;
 
+    /// Auto-paginating version of `describe_engine_default_cluster_parameters`
+    fn describe_engine_default_cluster_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeEngineDefaultClusterParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeEngineDefaultClusterParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_engine_default_cluster_parameters(input.clone())
+        }))
+    }
+
     /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
     async fn describe_engine_default_parameters(
         &self,
@@ -30227,6 +32045,17 @@ pub trait Rds {
         DescribeEngineDefaultParametersResult,
         RusotoError<DescribeEngineDefaultParametersError>,
     >;
+
+    /// Auto-paginating version of `describe_engine_default_parameters`
+    fn describe_engine_default_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeEngineDefaultParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeEngineDefaultParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_engine_default_parameters(input.clone())
+        }))
+    }
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn describe_event_categories(
@@ -30240,11 +32069,33 @@ pub trait Rds {
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
 
+    /// Auto-paginating version of `describe_event_subscriptions`
+    fn describe_event_subscriptions_pages<'a>(
+        &'a self,
+        mut input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<'a, EventSubscription, DescribeEventSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_event_subscriptions(input.clone())
+        }))
+    }
+
     /// <p><p>Returns events related to DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots for the past 14 days. Events specific to a particular DB instances, DB clusters, DB parameter groups, DB security groups, DB snapshots, and DB cluster snapshots group can be obtained by providing the name as a parameter.</p> <note> <p>By default, the past hour of events are returned.</p> </note></p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
+    }
 
     /// <p>Returns information about a snapshot export to Amazon S3. This API operation supports pagination. </p>
     async fn describe_export_tasks(
@@ -30252,11 +32103,33 @@ pub trait Rds {
         input: DescribeExportTasksMessage,
     ) -> Result<ExportTasksMessage, RusotoError<DescribeExportTasksError>>;
 
+    /// Auto-paginating version of `describe_export_tasks`
+    fn describe_export_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeExportTasksMessage,
+    ) -> RusotoStream<'a, ExportTask, DescribeExportTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_export_tasks(input.clone())
+        }))
+    }
+
     /// <p><p> Returns information about Aurora global database clusters. This API supports pagination. </p> <p> For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn describe_global_clusters(
         &self,
         input: DescribeGlobalClustersMessage,
     ) -> Result<GlobalClustersMessage, RusotoError<DescribeGlobalClustersError>>;
+
+    /// Auto-paginating version of `describe_global_clusters`
+    fn describe_global_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeGlobalClustersMessage,
+    ) -> RusotoStream<'a, GlobalCluster, DescribeGlobalClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_global_clusters(input.clone())
+        }))
+    }
 
     /// <p>Describes the available installation media for a DB engine that requires an on-premises customer provided license, such as Microsoft SQL Server.</p>
     async fn describe_installation_media(
@@ -30264,17 +32137,50 @@ pub trait Rds {
         input: DescribeInstallationMediaMessage,
     ) -> Result<InstallationMediaMessage, RusotoError<DescribeInstallationMediaError>>;
 
+    /// Auto-paginating version of `describe_installation_media`
+    fn describe_installation_media_pages<'a>(
+        &'a self,
+        mut input: DescribeInstallationMediaMessage,
+    ) -> RusotoStream<'a, InstallationMedia, DescribeInstallationMediaError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_installation_media(input.clone())
+        }))
+    }
+
     /// <p>Describes all available options.</p>
     async fn describe_option_group_options(
         &self,
         input: DescribeOptionGroupOptionsMessage,
     ) -> Result<OptionGroupOptionsMessage, RusotoError<DescribeOptionGroupOptionsError>>;
 
+    /// Auto-paginating version of `describe_option_group_options`
+    fn describe_option_group_options_pages<'a>(
+        &'a self,
+        mut input: DescribeOptionGroupOptionsMessage,
+    ) -> RusotoStream<'a, OptionGroupOption, DescribeOptionGroupOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_option_group_options(input.clone())
+        }))
+    }
+
     /// <p>Describes the available option groups.</p>
     async fn describe_option_groups(
         &self,
         input: DescribeOptionGroupsMessage,
     ) -> Result<OptionGroups, RusotoError<DescribeOptionGroupsError>>;
+
+    /// Auto-paginating version of `describe_option_groups`
+    fn describe_option_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeOptionGroupsMessage,
+    ) -> RusotoStream<'a, OptionGroup, DescribeOptionGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_option_groups(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     async fn describe_orderable_db_instance_options(
@@ -30285,17 +32191,51 @@ pub trait Rds {
         RusotoError<DescribeOrderableDBInstanceOptionsError>,
     >;
 
+    /// Auto-paginating version of `describe_orderable_db_instance_options`
+    fn describe_orderable_db_instance_options_pages<'a>(
+        &'a self,
+        mut input: DescribeOrderableDBInstanceOptionsMessage,
+    ) -> RusotoStream<'a, OrderableDBInstanceOption, DescribeOrderableDBInstanceOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_orderable_db_instance_options(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
     ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>;
 
+    /// Auto-paginating version of `describe_pending_maintenance_actions`
+    fn describe_pending_maintenance_actions_pages<'a>(
+        &'a self,
+        mut input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoStream<'a, ResourcePendingMaintenanceActions, DescribePendingMaintenanceActionsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_pending_maintenance_actions(input.clone())
+        }))
+    }
+
     /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
     async fn describe_reserved_db_instances(
         &self,
         input: DescribeReservedDBInstancesMessage,
     ) -> Result<ReservedDBInstanceMessage, RusotoError<DescribeReservedDBInstancesError>>;
+
+    /// Auto-paginating version of `describe_reserved_db_instances`
+    fn describe_reserved_db_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedDBInstancesMessage,
+    ) -> RusotoStream<'a, ReservedDBInstance, DescribeReservedDBInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_db_instances(input.clone())
+        }))
+    }
 
     /// <p>Lists available reserved DB instance offerings.</p>
     async fn describe_reserved_db_instances_offerings(
@@ -30306,11 +32246,34 @@ pub trait Rds {
         RusotoError<DescribeReservedDBInstancesOfferingsError>,
     >;
 
+    /// Auto-paginating version of `describe_reserved_db_instances_offerings`
+    fn describe_reserved_db_instances_offerings_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedDBInstancesOfferingsMessage,
+    ) -> RusotoStream<'a, ReservedDBInstancesOffering, DescribeReservedDBInstancesOfferingsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_db_instances_offerings(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a read replica, copy a DB snapshot from, or replicate automated backups from. This API action supports pagination.</p>
     async fn describe_source_regions(
         &self,
         input: DescribeSourceRegionsMessage,
     ) -> Result<SourceRegionMessage, RusotoError<DescribeSourceRegionsError>>;
+
+    /// Auto-paginating version of `describe_source_regions`
+    fn describe_source_regions_pages<'a>(
+        &'a self,
+        mut input: DescribeSourceRegionsMessage,
+    ) -> RusotoStream<'a, SourceRegion, DescribeSourceRegionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_source_regions(input.clone())
+        }))
+    }
 
     /// <p>You can call <code>DescribeValidDBInstanceModifications</code> to learn what modifications you can make to your DB instance. You can use this information when you call <code>ModifyDBInstance</code>. </p>
     async fn describe_valid_db_instance_modifications(
@@ -30326,6 +32289,17 @@ pub trait Rds {
         &self,
         input: DownloadDBLogFilePortionMessage,
     ) -> Result<DownloadDBLogFilePortionDetails, RusotoError<DownloadDBLogFilePortionError>>;
+
+    /// Auto-paginating version of `download_db_log_file_portion`
+    fn download_db_log_file_portion_pages<'a>(
+        &'a self,
+        mut input: DownloadDBLogFilePortionMessage,
+    ) -> RusotoStream<'a, String, DownloadDBLogFilePortionError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.download_db_log_file_portion(input.clone())
+        }))
+    }
 
     /// <p><p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn failover_db_cluster(

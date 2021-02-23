@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -73,6 +77,7 @@ pub struct Item {
     pub properties: Option<String>,
 }
 
+/// see [PersonalizeEvents::put_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequest {
@@ -91,6 +96,7 @@ pub struct PutEventsRequest {
     pub user_id: Option<String>,
 }
 
+/// see [PersonalizeEvents::put_items]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutItemsRequest {
@@ -102,6 +108,7 @@ pub struct PutItemsRequest {
     pub items: Vec<Item>,
 }
 
+/// see [PersonalizeEvents::put_users]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutUsersRequest {
@@ -230,7 +237,7 @@ impl fmt::Display for PutUsersError {
 impl Error for PutUsersError {}
 /// Trait representing the capabilities of the Amazon Personalize Events API. Amazon Personalize Events clients implement this trait.
 #[async_trait]
-pub trait PersonalizeEvents {
+pub trait PersonalizeEvents: Clone + Sync + Send + 'static {
     /// <p>Records user interaction event data. For more information see <a>event-record-api</a>.</p>
     async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>>;
 

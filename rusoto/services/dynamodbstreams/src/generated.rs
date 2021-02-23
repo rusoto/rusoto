@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -108,6 +112,7 @@ pub struct AttributeValue {
 }
 
 /// <p>Represents the input of a <code>DescribeStream</code> operation.</p>
+/// see [DynamoDbStreams::describe_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
@@ -125,6 +130,7 @@ pub struct DescribeStreamInput {
 }
 
 /// <p>Represents the output of a <code>DescribeStream</code> operation.</p>
+/// see [DynamoDbStreams::describe_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
@@ -135,6 +141,7 @@ pub struct DescribeStreamOutput {
 }
 
 /// <p>Represents the input of a <code>GetRecords</code> operation.</p>
+/// see [DynamoDbStreams::get_records]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecordsInput {
@@ -148,6 +155,7 @@ pub struct GetRecordsInput {
 }
 
 /// <p>Represents the output of a <code>GetRecords</code> operation.</p>
+/// see [DynamoDbStreams::get_records]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecordsOutput {
@@ -162,6 +170,7 @@ pub struct GetRecordsOutput {
 }
 
 /// <p>Represents the input of a <code>GetShardIterator</code> operation.</p>
+/// see [DynamoDbStreams::get_shard_iterator]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShardIteratorInput {
@@ -181,6 +190,7 @@ pub struct GetShardIteratorInput {
 }
 
 /// <p>Represents the output of a <code>GetShardIterator</code> operation.</p>
+/// see [DynamoDbStreams::get_shard_iterator]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetShardIteratorOutput {
@@ -217,6 +227,7 @@ pub struct KeySchemaElement {
 }
 
 /// <p>Represents the input of a <code>ListStreams</code> operation.</p>
+/// see [DynamoDbStreams::list_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
@@ -235,6 +246,7 @@ pub struct ListStreamsInput {
 }
 
 /// <p>Represents the output of a <code>ListStreams</code> operation.</p>
+/// see [DynamoDbStreams::list_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
@@ -580,7 +592,7 @@ impl fmt::Display for ListStreamsError {
 impl Error for ListStreamsError {}
 /// Trait representing the capabilities of the Amazon DynamoDB Streams API. Amazon DynamoDB Streams clients implement this trait.
 #[async_trait]
-pub trait DynamoDbStreams {
+pub trait DynamoDbStreams: Clone + Sync + Send + 'static {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
     async fn describe_stream(
         &self,

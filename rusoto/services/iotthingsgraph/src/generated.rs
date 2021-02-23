@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl IotThingsGraphClient {
 }
 
 use serde_json;
+/// see [IotThingsGraph::associate_entity_to_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEntityToThingRequest {
@@ -66,10 +71,12 @@ pub struct AssociateEntityToThingRequest {
     pub thing_name: String,
 }
 
+/// see [IotThingsGraph::associate_entity_to_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateEntityToThingResponse {}
 
+/// see [IotThingsGraph::create_flow_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowTemplateRequest {
@@ -82,6 +89,7 @@ pub struct CreateFlowTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
+/// see [IotThingsGraph::create_flow_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowTemplateResponse {
@@ -91,6 +99,7 @@ pub struct CreateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
+/// see [IotThingsGraph::create_system_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemInstanceRequest {
@@ -120,6 +129,7 @@ pub struct CreateSystemInstanceRequest {
     pub target: String,
 }
 
+/// see [IotThingsGraph::create_system_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemInstanceResponse {
@@ -129,6 +139,7 @@ pub struct CreateSystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
+/// see [IotThingsGraph::create_system_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemTemplateRequest {
@@ -141,6 +152,7 @@ pub struct CreateSystemTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
+/// see [IotThingsGraph::create_system_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemTemplateResponse {
@@ -161,6 +173,7 @@ pub struct DefinitionDocument {
     pub text: String,
 }
 
+/// see [IotThingsGraph::delete_flow_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowTemplateRequest {
@@ -169,14 +182,17 @@ pub struct DeleteFlowTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::delete_flow_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowTemplateResponse {}
 
+/// see [IotThingsGraph::delete_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {}
 
+/// see [IotThingsGraph::delete_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamespaceResponse {
@@ -190,6 +206,7 @@ pub struct DeleteNamespaceResponse {
     pub namespace_name: Option<String>,
 }
 
+/// see [IotThingsGraph::delete_system_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemInstanceRequest {
@@ -199,10 +216,12 @@ pub struct DeleteSystemInstanceRequest {
     pub id: Option<String>,
 }
 
+/// see [IotThingsGraph::delete_system_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemInstanceResponse {}
 
+/// see [IotThingsGraph::delete_system_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemTemplateRequest {
@@ -211,6 +230,7 @@ pub struct DeleteSystemTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::delete_system_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemTemplateResponse {}
@@ -229,6 +249,7 @@ pub struct DependencyRevision {
     pub revision_number: Option<i64>,
 }
 
+/// see [IotThingsGraph::deploy_system_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeploySystemInstanceRequest {
@@ -238,6 +259,7 @@ pub struct DeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
+/// see [IotThingsGraph::deploy_system_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploySystemInstanceResponse {
@@ -250,6 +272,7 @@ pub struct DeploySystemInstanceResponse {
     pub summary: SystemInstanceSummary,
 }
 
+/// see [IotThingsGraph::deprecate_flow_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateFlowTemplateRequest {
@@ -258,10 +281,12 @@ pub struct DeprecateFlowTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::deprecate_flow_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateFlowTemplateResponse {}
 
+/// see [IotThingsGraph::deprecate_system_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateSystemTemplateRequest {
@@ -270,10 +295,12 @@ pub struct DeprecateSystemTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::deprecate_system_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateSystemTemplateResponse {}
 
+/// see [IotThingsGraph::describe_namespace]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNamespaceRequest {
@@ -283,6 +310,7 @@ pub struct DescribeNamespaceRequest {
     pub namespace_name: Option<String>,
 }
 
+/// see [IotThingsGraph::describe_namespace]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNamespaceResponse {
@@ -308,6 +336,7 @@ pub struct DescribeNamespaceResponse {
     pub tracking_namespace_version: Option<i64>,
 }
 
+/// see [IotThingsGraph::dissociate_entity_from_thing]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DissociateEntityFromThingRequest {
@@ -319,6 +348,7 @@ pub struct DissociateEntityFromThingRequest {
     pub thing_name: String,
 }
 
+/// see [IotThingsGraph::dissociate_entity_from_thing]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DissociateEntityFromThingResponse {}
@@ -467,6 +497,7 @@ pub struct FlowTemplateSummary {
     pub revision_number: Option<i64>,
 }
 
+/// see [IotThingsGraph::get_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitiesRequest {
@@ -479,6 +510,7 @@ pub struct GetEntitiesRequest {
     pub namespace_version: Option<i64>,
 }
 
+/// see [IotThingsGraph::get_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEntitiesResponse {
@@ -488,6 +520,7 @@ pub struct GetEntitiesResponse {
     pub descriptions: Option<Vec<EntityDescription>>,
 }
 
+/// see [IotThingsGraph::get_flow_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRequest {
@@ -500,6 +533,7 @@ pub struct GetFlowTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
+/// see [IotThingsGraph::get_flow_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateResponse {
@@ -509,6 +543,7 @@ pub struct GetFlowTemplateResponse {
     pub description: Option<FlowTemplateDescription>,
 }
 
+/// see [IotThingsGraph::get_flow_template_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRevisionsRequest {
@@ -525,6 +560,23 @@ pub struct GetFlowTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetFlowTemplateRevisionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetFlowTemplateRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::get_flow_template_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateRevisionsResponse {
@@ -538,10 +590,34 @@ pub struct GetFlowTemplateRevisionsResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
+impl Paged for GetFlowTemplateRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetFlowTemplateRevisionsResponse {
+    type Item = FlowTemplateSummary;
+
+    fn into_pagination_page(self) -> Vec<FlowTemplateSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::get_namespace_deletion_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamespaceDeletionStatusRequest {}
 
+/// see [IotThingsGraph::get_namespace_deletion_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNamespaceDeletionStatusResponse {
@@ -567,6 +643,7 @@ pub struct GetNamespaceDeletionStatusResponse {
     pub status: Option<String>,
 }
 
+/// see [IotThingsGraph::get_system_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemInstanceRequest {
@@ -575,6 +652,7 @@ pub struct GetSystemInstanceRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::get_system_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemInstanceResponse {
@@ -584,6 +662,7 @@ pub struct GetSystemInstanceResponse {
     pub description: Option<SystemInstanceDescription>,
 }
 
+/// see [IotThingsGraph::get_system_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRequest {
@@ -596,6 +675,7 @@ pub struct GetSystemTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
+/// see [IotThingsGraph::get_system_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateResponse {
@@ -605,6 +685,7 @@ pub struct GetSystemTemplateResponse {
     pub description: Option<SystemTemplateDescription>,
 }
 
+/// see [IotThingsGraph::get_system_template_revisions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRevisionsRequest {
@@ -621,6 +702,23 @@ pub struct GetSystemTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for GetSystemTemplateRevisionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSystemTemplateRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::get_system_template_revisions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateRevisionsResponse {
@@ -634,6 +732,29 @@ pub struct GetSystemTemplateRevisionsResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
+impl Paged for GetSystemTemplateRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetSystemTemplateRevisionsResponse {
+    type Item = SystemTemplateSummary;
+
+    fn into_pagination_page(self) -> Vec<SystemTemplateSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::get_upload_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadStatusRequest {
@@ -642,6 +763,7 @@ pub struct GetUploadStatusRequest {
     pub upload_id: String,
 }
 
+/// see [IotThingsGraph::get_upload_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadStatusResponse {
@@ -672,6 +794,7 @@ pub struct GetUploadStatusResponse {
     pub upload_status: String,
 }
 
+/// see [IotThingsGraph::list_flow_execution_messages]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowExecutionMessagesRequest {
@@ -688,6 +811,23 @@ pub struct ListFlowExecutionMessagesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFlowExecutionMessagesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFlowExecutionMessagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::list_flow_execution_messages]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowExecutionMessagesResponse {
@@ -701,6 +841,29 @@ pub struct ListFlowExecutionMessagesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFlowExecutionMessagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFlowExecutionMessagesResponse {
+    type Item = FlowExecutionMessage;
+
+    fn into_pagination_page(self) -> Vec<FlowExecutionMessage> {
+        self.messages.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -717,6 +880,23 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -728,6 +908,28 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>An object that specifies whether cloud metrics are collected in a deployment and, if so, what role is used to collect metrics.</p>
@@ -743,6 +945,7 @@ pub struct MetricsConfiguration {
     pub metric_rule_role_arn: Option<String>,
 }
 
+/// see [IotThingsGraph::search_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchEntitiesRequest {
@@ -767,6 +970,23 @@ pub struct SearchEntitiesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchEntitiesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchEntitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchEntitiesResponse {
@@ -780,6 +1000,29 @@ pub struct SearchEntitiesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchEntitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchEntitiesResponse {
+    type Item = EntityDescription;
+
+    fn into_pagination_page(self) -> Vec<EntityDescription> {
+        self.descriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::search_flow_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowExecutionsRequest {
@@ -808,6 +1051,23 @@ pub struct SearchFlowExecutionsRequest {
     pub system_instance_id: String,
 }
 
+impl Paged for SearchFlowExecutionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchFlowExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_flow_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowExecutionsResponse {
@@ -821,6 +1081,29 @@ pub struct SearchFlowExecutionsResponse {
     pub summaries: Option<Vec<FlowExecutionSummary>>,
 }
 
+impl Paged for SearchFlowExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchFlowExecutionsResponse {
+    type Item = FlowExecutionSummary;
+
+    fn into_pagination_page(self) -> Vec<FlowExecutionSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::search_flow_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowTemplatesRequest {
@@ -838,6 +1121,23 @@ pub struct SearchFlowTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchFlowTemplatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchFlowTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_flow_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowTemplatesResponse {
@@ -851,6 +1151,29 @@ pub struct SearchFlowTemplatesResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
+impl Paged for SearchFlowTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchFlowTemplatesResponse {
+    type Item = FlowTemplateSummary;
+
+    fn into_pagination_page(self) -> Vec<FlowTemplateSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::search_system_instances]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemInstancesRequest {
@@ -868,6 +1191,23 @@ pub struct SearchSystemInstancesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchSystemInstancesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSystemInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_system_instances]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemInstancesResponse {
@@ -881,6 +1221,29 @@ pub struct SearchSystemInstancesResponse {
     pub summaries: Option<Vec<SystemInstanceSummary>>,
 }
 
+impl Paged for SearchSystemInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchSystemInstancesResponse {
+    type Item = SystemInstanceSummary;
+
+    fn into_pagination_page(self) -> Vec<SystemInstanceSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::search_system_templates]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemTemplatesRequest {
@@ -898,6 +1261,23 @@ pub struct SearchSystemTemplatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchSystemTemplatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSystemTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_system_templates]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemTemplatesResponse {
@@ -911,6 +1291,29 @@ pub struct SearchSystemTemplatesResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
+impl Paged for SearchSystemTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchSystemTemplatesResponse {
+    type Item = SystemTemplateSummary;
+
+    fn into_pagination_page(self) -> Vec<SystemTemplateSummary> {
+        self.summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [IotThingsGraph::search_things]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchThingsRequest {
@@ -931,6 +1334,23 @@ pub struct SearchThingsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for SearchThingsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchThingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [IotThingsGraph::search_things]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchThingsResponse {
@@ -942,6 +1362,28 @@ pub struct SearchThingsResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<Thing>>,
+}
+
+impl Paged for SearchThingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchThingsResponse {
+    type Item = Thing;
+
+    fn into_pagination_page(self) -> Vec<Thing> {
+        self.things.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>An object that contains a system instance definition and summary information.</p>
@@ -1095,6 +1537,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [IotThingsGraph::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1106,6 +1549,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [IotThingsGraph::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1124,6 +1568,7 @@ pub struct Thing {
     pub thing_name: Option<String>,
 }
 
+/// see [IotThingsGraph::undeploy_system_instance]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeploySystemInstanceRequest {
@@ -1133,6 +1578,7 @@ pub struct UndeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
+/// see [IotThingsGraph::undeploy_system_instance]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UndeploySystemInstanceResponse {
@@ -1142,6 +1588,7 @@ pub struct UndeploySystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
+/// see [IotThingsGraph::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1153,10 +1600,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [IotThingsGraph::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [IotThingsGraph::update_flow_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowTemplateRequest {
@@ -1172,6 +1621,7 @@ pub struct UpdateFlowTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::update_flow_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowTemplateResponse {
@@ -1181,6 +1631,7 @@ pub struct UpdateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
+/// see [IotThingsGraph::update_system_template]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSystemTemplateRequest {
@@ -1196,6 +1647,7 @@ pub struct UpdateSystemTemplateRequest {
     pub id: String,
 }
 
+/// see [IotThingsGraph::update_system_template]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSystemTemplateResponse {
@@ -1205,6 +1657,7 @@ pub struct UpdateSystemTemplateResponse {
     pub summary: Option<SystemTemplateSummary>,
 }
 
+/// see [IotThingsGraph::upload_entity_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadEntityDefinitionsRequest {
@@ -1222,6 +1675,7 @@ pub struct UploadEntityDefinitionsRequest {
     pub sync_with_public_namespace: Option<bool>,
 }
 
+/// see [IotThingsGraph::upload_entity_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadEntityDefinitionsResponse {
@@ -2994,7 +3448,7 @@ impl fmt::Display for UploadEntityDefinitionsError {
 impl Error for UploadEntityDefinitionsError {}
 /// Trait representing the capabilities of the AWS IoT Things Graph API. AWS IoT Things Graph clients implement this trait.
 #[async_trait]
-pub trait IotThingsGraph {
+pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     /// <p>Associates a device with a concrete thing that is in the user's registry.</p> <p>A thing can be associated with only one device at a time. If you associate a thing with a new device id, its previous association will be removed.</p>
     async fn associate_entity_to_thing(
         &self,
@@ -3090,6 +3544,17 @@ pub trait IotThingsGraph {
         input: GetFlowTemplateRevisionsRequest,
     ) -> Result<GetFlowTemplateRevisionsResponse, RusotoError<GetFlowTemplateRevisionsError>>;
 
+    /// Auto-paginating version of `get_flow_template_revisions`
+    fn get_flow_template_revisions_pages<'a>(
+        &'a self,
+        mut input: GetFlowTemplateRevisionsRequest,
+    ) -> RusotoStream<'a, FlowTemplateSummary, GetFlowTemplateRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_flow_template_revisions(input.clone())
+        }))
+    }
+
     /// <p>Gets the status of a namespace deletion task.</p>
     async fn get_namespace_deletion_status(
         &self,
@@ -3113,6 +3578,17 @@ pub trait IotThingsGraph {
         input: GetSystemTemplateRevisionsRequest,
     ) -> Result<GetSystemTemplateRevisionsResponse, RusotoError<GetSystemTemplateRevisionsError>>;
 
+    /// Auto-paginating version of `get_system_template_revisions`
+    fn get_system_template_revisions_pages<'a>(
+        &'a self,
+        mut input: GetSystemTemplateRevisionsRequest,
+    ) -> RusotoStream<'a, SystemTemplateSummary, GetSystemTemplateRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_system_template_revisions(input.clone())
+        }))
+    }
+
     /// <p>Gets the status of the specified upload.</p>
     async fn get_upload_status(
         &self,
@@ -3125,11 +3601,33 @@ pub trait IotThingsGraph {
         input: ListFlowExecutionMessagesRequest,
     ) -> Result<ListFlowExecutionMessagesResponse, RusotoError<ListFlowExecutionMessagesError>>;
 
+    /// Auto-paginating version of `list_flow_execution_messages`
+    fn list_flow_execution_messages_pages<'a>(
+        &'a self,
+        mut input: ListFlowExecutionMessagesRequest,
+    ) -> RusotoStream<'a, FlowExecutionMessage, ListFlowExecutionMessagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_flow_execution_messages(input.clone())
+        }))
+    }
+
     /// <p>Lists all tags on an AWS IoT Things Graph resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
 
     /// <p>Searches for entities of the specified type. You can search for entities in your namespace and the public namespace that you're tracking.</p>
     async fn search_entities(
@@ -3137,11 +3635,33 @@ pub trait IotThingsGraph {
         input: SearchEntitiesRequest,
     ) -> Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>>;
 
+    /// Auto-paginating version of `search_entities`
+    fn search_entities_pages<'a>(
+        &'a self,
+        mut input: SearchEntitiesRequest,
+    ) -> RusotoStream<'a, EntityDescription, SearchEntitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_entities(input.clone())
+        }))
+    }
+
     /// <p>Searches for AWS IoT Things Graph workflow execution instances.</p>
     async fn search_flow_executions(
         &self,
         input: SearchFlowExecutionsRequest,
     ) -> Result<SearchFlowExecutionsResponse, RusotoError<SearchFlowExecutionsError>>;
+
+    /// Auto-paginating version of `search_flow_executions`
+    fn search_flow_executions_pages<'a>(
+        &'a self,
+        mut input: SearchFlowExecutionsRequest,
+    ) -> RusotoStream<'a, FlowExecutionSummary, SearchFlowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_flow_executions(input.clone())
+        }))
+    }
 
     /// <p>Searches for summary information about workflows.</p>
     async fn search_flow_templates(
@@ -3149,11 +3669,33 @@ pub trait IotThingsGraph {
         input: SearchFlowTemplatesRequest,
     ) -> Result<SearchFlowTemplatesResponse, RusotoError<SearchFlowTemplatesError>>;
 
+    /// Auto-paginating version of `search_flow_templates`
+    fn search_flow_templates_pages<'a>(
+        &'a self,
+        mut input: SearchFlowTemplatesRequest,
+    ) -> RusotoStream<'a, FlowTemplateSummary, SearchFlowTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_flow_templates(input.clone())
+        }))
+    }
+
     /// <p>Searches for system instances in the user's account.</p>
     async fn search_system_instances(
         &self,
         input: SearchSystemInstancesRequest,
     ) -> Result<SearchSystemInstancesResponse, RusotoError<SearchSystemInstancesError>>;
+
+    /// Auto-paginating version of `search_system_instances`
+    fn search_system_instances_pages<'a>(
+        &'a self,
+        mut input: SearchSystemInstancesRequest,
+    ) -> RusotoStream<'a, SystemInstanceSummary, SearchSystemInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_system_instances(input.clone())
+        }))
+    }
 
     /// <p>Searches for summary information about systems in the user's account. You can filter by the ID of a workflow to return only systems that use the specified workflow.</p>
     async fn search_system_templates(
@@ -3161,11 +3703,33 @@ pub trait IotThingsGraph {
         input: SearchSystemTemplatesRequest,
     ) -> Result<SearchSystemTemplatesResponse, RusotoError<SearchSystemTemplatesError>>;
 
+    /// Auto-paginating version of `search_system_templates`
+    fn search_system_templates_pages<'a>(
+        &'a self,
+        mut input: SearchSystemTemplatesRequest,
+    ) -> RusotoStream<'a, SystemTemplateSummary, SearchSystemTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_system_templates(input.clone())
+        }))
+    }
+
     /// <p>Searches for things associated with the specified entity. You can search by both device and device model.</p> <p>For example, if two different devices, camera1 and camera2, implement the camera device model, the user can associate thing1 to camera1 and thing2 to camera2. <code>SearchThings(camera2)</code> will return only thing2, but <code>SearchThings(camera)</code> will return both thing1 and thing2.</p> <p>This action searches for exact matches and doesn't perform partial text matching.</p>
     async fn search_things(
         &self,
         input: SearchThingsRequest,
     ) -> Result<SearchThingsResponse, RusotoError<SearchThingsError>>;
+
+    /// Auto-paginating version of `search_things`
+    fn search_things_pages<'a>(
+        &'a self,
+        mut input: SearchThingsRequest,
+    ) -> RusotoStream<'a, Thing, SearchThingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_things(input.clone())
+        }))
+    }
 
     /// <p>Creates a tag for the specified resource.</p>
     async fn tag_resource(

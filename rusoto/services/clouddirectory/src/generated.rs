@@ -15,15 +15,20 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [CloudDirectory::add_facet_to_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFacetToObjectRequest {
@@ -42,10 +47,12 @@ pub struct AddFacetToObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
+/// see [CloudDirectory::add_facet_to_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFacetToObjectResponse {}
 
+/// see [CloudDirectory::apply_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplySchemaRequest {
@@ -57,6 +64,7 @@ pub struct ApplySchemaRequest {
     pub published_schema_arn: String,
 }
 
+/// see [CloudDirectory::apply_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplySchemaResponse {
@@ -70,6 +78,7 @@ pub struct ApplySchemaResponse {
     pub directory_arn: Option<String>,
 }
 
+/// see [CloudDirectory::attach_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachObjectRequest {
@@ -87,6 +96,7 @@ pub struct AttachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::attach_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachObjectResponse {
@@ -96,6 +106,7 @@ pub struct AttachObjectResponse {
     pub attached_object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::attach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
@@ -110,10 +121,12 @@ pub struct AttachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::attach_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachPolicyResponse {}
 
+/// see [CloudDirectory::attach_to_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachToIndexRequest {
@@ -128,6 +141,7 @@ pub struct AttachToIndexRequest {
     pub target_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::attach_to_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachToIndexResponse {
@@ -137,6 +151,7 @@ pub struct AttachToIndexResponse {
     pub attached_object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::attach_typed_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachTypedLinkRequest {
@@ -157,6 +172,7 @@ pub struct AttachTypedLinkRequest {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
+/// see [CloudDirectory::attach_typed_link]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachTypedLinkResponse {
@@ -992,6 +1008,7 @@ pub struct BatchReadOperationResponse {
     pub successful_response: Option<BatchReadSuccessfulResponse>,
 }
 
+/// see [CloudDirectory::batch_read]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchReadRequest {
@@ -1007,6 +1024,7 @@ pub struct BatchReadRequest {
     pub operations: Vec<BatchReadOperation>,
 }
 
+/// see [CloudDirectory::batch_read]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadResponse {
@@ -1265,6 +1283,7 @@ pub struct BatchWriteOperationResponse {
     pub update_object_attributes: Option<BatchUpdateObjectAttributesResponse>,
 }
 
+/// see [CloudDirectory::batch_write]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchWriteRequest {
@@ -1276,6 +1295,7 @@ pub struct BatchWriteRequest {
     pub operations: Vec<BatchWriteOperation>,
 }
 
+/// see [CloudDirectory::batch_write]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteResponse {
@@ -1285,6 +1305,7 @@ pub struct BatchWriteResponse {
     pub responses: Option<Vec<BatchWriteOperationResponse>>,
 }
 
+/// see [CloudDirectory::create_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectoryRequest {
@@ -1296,6 +1317,7 @@ pub struct CreateDirectoryRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::create_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectoryResponse {
@@ -1313,6 +1335,7 @@ pub struct CreateDirectoryResponse {
     pub object_identifier: String,
 }
 
+/// see [CloudDirectory::create_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFacetRequest {
@@ -1336,10 +1359,12 @@ pub struct CreateFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::create_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFacetResponse {}
 
+/// see [CloudDirectory::create_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIndexRequest {
@@ -1362,6 +1387,7 @@ pub struct CreateIndexRequest {
     pub parent_reference: Option<ObjectReference>,
 }
 
+/// see [CloudDirectory::create_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIndexResponse {
@@ -1371,6 +1397,7 @@ pub struct CreateIndexResponse {
     pub object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::create_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateObjectRequest {
@@ -1394,6 +1421,7 @@ pub struct CreateObjectRequest {
     pub schema_facets: Vec<SchemaFacet>,
 }
 
+/// see [CloudDirectory::create_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateObjectResponse {
@@ -1403,6 +1431,7 @@ pub struct CreateObjectResponse {
     pub object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::create_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
@@ -1411,6 +1440,7 @@ pub struct CreateSchemaRequest {
     pub name: String,
 }
 
+/// see [CloudDirectory::create_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
@@ -1420,6 +1450,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::create_typed_link_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTypedLinkFacetRequest {
@@ -1431,10 +1462,12 @@ pub struct CreateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::create_typed_link_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTypedLinkFacetResponse {}
 
+/// see [CloudDirectory::delete_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectoryRequest {
@@ -1443,6 +1476,7 @@ pub struct DeleteDirectoryRequest {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::delete_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectoryResponse {
@@ -1451,6 +1485,7 @@ pub struct DeleteDirectoryResponse {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::delete_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFacetRequest {
@@ -1462,10 +1497,12 @@ pub struct DeleteFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::delete_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFacetResponse {}
 
+/// see [CloudDirectory::delete_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectRequest {
@@ -1477,10 +1514,12 @@ pub struct DeleteObjectRequest {
     pub object_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::delete_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteObjectResponse {}
 
+/// see [CloudDirectory::delete_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
@@ -1489,6 +1528,7 @@ pub struct DeleteSchemaRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::delete_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSchemaResponse {
@@ -1498,6 +1538,7 @@ pub struct DeleteSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::delete_typed_link_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTypedLinkFacetRequest {
@@ -1509,10 +1550,12 @@ pub struct DeleteTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::delete_typed_link_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTypedLinkFacetResponse {}
 
+/// see [CloudDirectory::detach_from_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachFromIndexRequest {
@@ -1527,6 +1570,7 @@ pub struct DetachFromIndexRequest {
     pub target_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::detach_from_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachFromIndexResponse {
@@ -1536,6 +1580,7 @@ pub struct DetachFromIndexResponse {
     pub detached_object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::detach_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachObjectRequest {
@@ -1550,6 +1595,7 @@ pub struct DetachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::detach_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachObjectResponse {
@@ -1559,6 +1605,7 @@ pub struct DetachObjectResponse {
     pub detached_object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::detach_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
@@ -1573,10 +1620,12 @@ pub struct DetachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::detach_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachPolicyResponse {}
 
+/// see [CloudDirectory::detach_typed_link]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachTypedLinkRequest {
@@ -1610,6 +1659,7 @@ pub struct Directory {
     pub state: Option<String>,
 }
 
+/// see [CloudDirectory::disable_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDirectoryRequest {
@@ -1618,6 +1668,7 @@ pub struct DisableDirectoryRequest {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::disable_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDirectoryResponse {
@@ -1626,6 +1677,7 @@ pub struct DisableDirectoryResponse {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::enable_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDirectoryRequest {
@@ -1634,6 +1686,7 @@ pub struct EnableDirectoryRequest {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::enable_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDirectoryResponse {
@@ -1725,6 +1778,7 @@ pub struct FacetAttributeUpdate {
     pub attribute: Option<FacetAttribute>,
 }
 
+/// see [CloudDirectory::get_applied_schema_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppliedSchemaVersionRequest {
@@ -1733,6 +1787,7 @@ pub struct GetAppliedSchemaVersionRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::get_applied_schema_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppliedSchemaVersionResponse {
@@ -1742,6 +1797,7 @@ pub struct GetAppliedSchemaVersionResponse {
     pub applied_schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::get_directory]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDirectoryRequest {
@@ -1750,6 +1806,7 @@ pub struct GetDirectoryRequest {
     pub directory_arn: String,
 }
 
+/// see [CloudDirectory::get_directory]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDirectoryResponse {
@@ -1758,6 +1815,7 @@ pub struct GetDirectoryResponse {
     pub directory: Directory,
 }
 
+/// see [CloudDirectory::get_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFacetRequest {
@@ -1769,6 +1827,7 @@ pub struct GetFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::get_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFacetResponse {
@@ -1778,6 +1837,7 @@ pub struct GetFacetResponse {
     pub facet: Option<Facet>,
 }
 
+/// see [CloudDirectory::get_link_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinkAttributesRequest {
@@ -1796,6 +1856,7 @@ pub struct GetLinkAttributesRequest {
     pub typed_link_specifier: TypedLinkSpecifier,
 }
 
+/// see [CloudDirectory::get_link_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAttributesResponse {
@@ -1805,6 +1866,7 @@ pub struct GetLinkAttributesResponse {
     pub attributes: Option<Vec<AttributeKeyAndValue>>,
 }
 
+/// see [CloudDirectory::get_object_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectAttributesRequest {
@@ -1826,6 +1888,7 @@ pub struct GetObjectAttributesRequest {
     pub schema_facet: SchemaFacet,
 }
 
+/// see [CloudDirectory::get_object_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectAttributesResponse {
@@ -1835,6 +1898,7 @@ pub struct GetObjectAttributesResponse {
     pub attributes: Option<Vec<AttributeKeyAndValue>>,
 }
 
+/// see [CloudDirectory::get_object_information]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectInformationRequest {
@@ -1850,6 +1914,7 @@ pub struct GetObjectInformationRequest {
     pub object_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::get_object_information]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectInformationResponse {
@@ -1863,6 +1928,7 @@ pub struct GetObjectInformationResponse {
     pub schema_facets: Option<Vec<SchemaFacet>>,
 }
 
+/// see [CloudDirectory::get_schema_as_json]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaAsJsonRequest {
@@ -1871,6 +1937,7 @@ pub struct GetSchemaAsJsonRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::get_schema_as_json]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaAsJsonResponse {
@@ -1884,6 +1951,7 @@ pub struct GetSchemaAsJsonResponse {
     pub name: Option<String>,
 }
 
+/// see [CloudDirectory::get_typed_link_facet_information]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTypedLinkFacetInformationRequest {
@@ -1895,6 +1963,7 @@ pub struct GetTypedLinkFacetInformationRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::get_typed_link_facet_information]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTypedLinkFacetInformationResponse {
@@ -1946,6 +2015,7 @@ pub struct LinkAttributeUpdate {
     pub attribute_key: Option<AttributeKey>,
 }
 
+/// see [CloudDirectory::list_applied_schema_arns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppliedSchemaArnsRequest {
@@ -1966,6 +2036,23 @@ pub struct ListAppliedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
+impl Paged for ListAppliedSchemaArnsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppliedSchemaArnsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_applied_schema_arns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppliedSchemaArnsResponse {
@@ -1979,6 +2066,29 @@ pub struct ListAppliedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListAppliedSchemaArnsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAppliedSchemaArnsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.schema_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_attached_indices]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedIndicesRequest {
@@ -2002,6 +2112,23 @@ pub struct ListAttachedIndicesRequest {
     pub target_reference: ObjectReference,
 }
 
+impl Paged for ListAttachedIndicesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAttachedIndicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_attached_indices]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttachedIndicesResponse {
@@ -2015,6 +2142,29 @@ pub struct ListAttachedIndicesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListAttachedIndicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListAttachedIndicesResponse {
+    type Item = IndexAttachment;
+
+    fn into_pagination_page(self) -> Vec<IndexAttachment> {
+        self.index_attachments.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_development_schema_arns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevelopmentSchemaArnsRequest {
@@ -2028,6 +2178,23 @@ pub struct ListDevelopmentSchemaArnsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDevelopmentSchemaArnsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDevelopmentSchemaArnsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_development_schema_arns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevelopmentSchemaArnsResponse {
@@ -2041,6 +2208,29 @@ pub struct ListDevelopmentSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListDevelopmentSchemaArnsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDevelopmentSchemaArnsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.schema_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_directories]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDirectoriesRequest {
@@ -2058,6 +2248,23 @@ pub struct ListDirectoriesRequest {
     pub state: Option<String>,
 }
 
+impl Paged for ListDirectoriesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDirectoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_directories]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDirectoriesResponse {
@@ -2070,6 +2277,29 @@ pub struct ListDirectoriesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDirectoriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDirectoriesResponse {
+    type Item = Directory;
+
+    fn into_pagination_page(self) -> Vec<Directory> {
+        self.directories
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_facet_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFacetAttributesRequest {
@@ -2089,6 +2319,23 @@ pub struct ListFacetAttributesRequest {
     pub schema_arn: String,
 }
 
+impl Paged for ListFacetAttributesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFacetAttributesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_facet_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetAttributesResponse {
@@ -2102,6 +2349,29 @@ pub struct ListFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFacetAttributesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFacetAttributesResponse {
+    type Item = FacetAttribute;
+
+    fn into_pagination_page(self) -> Vec<FacetAttribute> {
+        self.attributes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_facet_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFacetNamesRequest {
@@ -2118,6 +2388,23 @@ pub struct ListFacetNamesRequest {
     pub schema_arn: String,
 }
 
+impl Paged for ListFacetNamesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFacetNamesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_facet_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetNamesResponse {
@@ -2131,6 +2418,29 @@ pub struct ListFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFacetNamesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFacetNamesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.facet_names.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_incoming_typed_links]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIncomingTypedLinksRequest {
@@ -2162,6 +2472,23 @@ pub struct ListIncomingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for ListIncomingTypedLinksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIncomingTypedLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_incoming_typed_links]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIncomingTypedLinksResponse {
@@ -2175,6 +2502,29 @@ pub struct ListIncomingTypedLinksResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIncomingTypedLinksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListIncomingTypedLinksResponse {
+    type Item = TypedLinkSpecifier;
+
+    fn into_pagination_page(self) -> Vec<TypedLinkSpecifier> {
+        self.link_specifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_index]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndexRequest {
@@ -2202,6 +2552,23 @@ pub struct ListIndexRequest {
     pub ranges_on_indexed_values: Option<Vec<ObjectAttributeRange>>,
 }
 
+impl Paged for ListIndexRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIndexRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_index]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndexResponse {
@@ -2215,6 +2582,29 @@ pub struct ListIndexResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListIndexResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListIndexResponse {
+    type Item = IndexAttachment;
+
+    fn into_pagination_page(self) -> Vec<IndexAttachment> {
+        self.index_attachments.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_managed_schema_arns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListManagedSchemaArnsRequest {
@@ -2232,6 +2622,23 @@ pub struct ListManagedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
+impl Paged for ListManagedSchemaArnsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListManagedSchemaArnsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_managed_schema_arns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListManagedSchemaArnsResponse {
@@ -2245,6 +2652,29 @@ pub struct ListManagedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListManagedSchemaArnsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListManagedSchemaArnsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.schema_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_object_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectAttributesRequest {
@@ -2272,6 +2702,23 @@ pub struct ListObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for ListObjectAttributesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListObjectAttributesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_object_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectAttributesResponse {
@@ -2285,6 +2732,29 @@ pub struct ListObjectAttributesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListObjectAttributesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListObjectAttributesResponse {
+    type Item = AttributeKeyAndValue;
+
+    fn into_pagination_page(self) -> Vec<AttributeKeyAndValue> {
+        self.attributes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_object_children]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectChildrenRequest {
@@ -2308,6 +2778,7 @@ pub struct ListObjectChildrenRequest {
     pub object_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::list_object_children]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectChildrenResponse {
@@ -2321,6 +2792,7 @@ pub struct ListObjectChildrenResponse {
     pub next_token: Option<String>,
 }
 
+/// see [CloudDirectory::list_object_parent_paths]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectParentPathsRequest {
@@ -2340,6 +2812,23 @@ pub struct ListObjectParentPathsRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for ListObjectParentPathsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListObjectParentPathsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_object_parent_paths]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentPathsResponse {
@@ -2353,6 +2842,29 @@ pub struct ListObjectParentPathsResponse {
     pub path_to_object_identifiers_list: Option<Vec<PathToObjectIdentifiers>>,
 }
 
+impl Paged for ListObjectParentPathsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListObjectParentPathsResponse {
+    type Item = PathToObjectIdentifiers;
+
+    fn into_pagination_page(self) -> Vec<PathToObjectIdentifiers> {
+        self.path_to_object_identifiers_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_object_parents]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectParentsRequest {
@@ -2380,6 +2892,7 @@ pub struct ListObjectParentsRequest {
     pub object_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::list_object_parents]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentsResponse {
@@ -2397,6 +2910,7 @@ pub struct ListObjectParentsResponse {
     pub parents: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [CloudDirectory::list_object_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectPoliciesRequest {
@@ -2420,6 +2934,23 @@ pub struct ListObjectPoliciesRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for ListObjectPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListObjectPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_object_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectPoliciesResponse {
@@ -2433,6 +2964,29 @@ pub struct ListObjectPoliciesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListObjectPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListObjectPoliciesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.attached_policy_ids.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_outgoing_typed_links]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutgoingTypedLinksRequest {
@@ -2464,6 +3018,23 @@ pub struct ListOutgoingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for ListOutgoingTypedLinksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOutgoingTypedLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_outgoing_typed_links]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutgoingTypedLinksResponse {
@@ -2477,6 +3048,29 @@ pub struct ListOutgoingTypedLinksResponse {
     pub typed_link_specifiers: Option<Vec<TypedLinkSpecifier>>,
 }
 
+impl Paged for ListOutgoingTypedLinksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListOutgoingTypedLinksResponse {
+    type Item = TypedLinkSpecifier;
+
+    fn into_pagination_page(self) -> Vec<TypedLinkSpecifier> {
+        self.typed_link_specifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_policy_attachments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyAttachmentsRequest {
@@ -2500,6 +3094,23 @@ pub struct ListPolicyAttachmentsRequest {
     pub policy_reference: ObjectReference,
 }
 
+impl Paged for ListPolicyAttachmentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPolicyAttachmentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_policy_attachments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyAttachmentsResponse {
@@ -2513,6 +3124,29 @@ pub struct ListPolicyAttachmentsResponse {
     pub object_identifiers: Option<Vec<String>>,
 }
 
+impl Paged for ListPolicyAttachmentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPolicyAttachmentsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.object_identifiers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_published_schema_arns]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublishedSchemaArnsRequest {
@@ -2530,6 +3164,23 @@ pub struct ListPublishedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
+impl Paged for ListPublishedSchemaArnsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPublishedSchemaArnsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_published_schema_arns]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishedSchemaArnsResponse {
@@ -2543,6 +3194,29 @@ pub struct ListPublishedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
+impl Paged for ListPublishedSchemaArnsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPublishedSchemaArnsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.schema_arns.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -2559,6 +3233,23 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+impl Paged for ListTagsForResourceRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2572,6 +3263,29 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTagsForResourceResponse {
+    type Item = Tag;
+
+    fn into_pagination_page(self) -> Vec<Tag> {
+        self.tags.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_typed_link_facet_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypedLinkFacetAttributesRequest {
@@ -2591,6 +3305,23 @@ pub struct ListTypedLinkFacetAttributesRequest {
     pub schema_arn: String,
 }
 
+impl Paged for ListTypedLinkFacetAttributesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTypedLinkFacetAttributesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_typed_link_facet_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetAttributesResponse {
@@ -2604,6 +3335,29 @@ pub struct ListTypedLinkFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTypedLinkFacetAttributesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTypedLinkFacetAttributesResponse {
+    type Item = TypedLinkAttributeDefinition;
+
+    fn into_pagination_page(self) -> Vec<TypedLinkAttributeDefinition> {
+        self.attributes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::list_typed_link_facet_names]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypedLinkFacetNamesRequest {
@@ -2620,6 +3374,23 @@ pub struct ListTypedLinkFacetNamesRequest {
     pub schema_arn: String,
 }
 
+impl Paged for ListTypedLinkFacetNamesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTypedLinkFacetNamesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::list_typed_link_facet_names]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetNamesResponse {
@@ -2633,6 +3404,29 @@ pub struct ListTypedLinkFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTypedLinkFacetNamesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTypedLinkFacetNamesResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.facet_names.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CloudDirectory::lookup_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupPolicyRequest {
@@ -2652,6 +3446,23 @@ pub struct LookupPolicyRequest {
     pub object_reference: ObjectReference,
 }
 
+impl Paged for LookupPolicyRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for LookupPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CloudDirectory::lookup_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupPolicyResponse {
@@ -2663,6 +3474,28 @@ pub struct LookupPolicyResponse {
     #[serde(rename = "PolicyToPathList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_to_path_list: Option<Vec<PolicyToPath>>,
+}
+
+impl Paged for LookupPolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for LookupPolicyResponse {
+    type Item = PolicyToPath;
+
+    fn into_pagination_page(self) -> Vec<PolicyToPath> {
+        self.policy_to_path_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The action to take on the object attribute.</p>
@@ -2776,6 +3609,7 @@ pub struct PolicyToPath {
     pub policies: Option<Vec<PolicyAttachment>>,
 }
 
+/// see [CloudDirectory::publish_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishSchemaRequest {
@@ -2795,6 +3629,7 @@ pub struct PublishSchemaRequest {
     pub version: String,
 }
 
+/// see [CloudDirectory::publish_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PublishSchemaResponse {
@@ -2804,6 +3639,7 @@ pub struct PublishSchemaResponse {
     pub published_schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::put_schema_from_json]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSchemaFromJsonRequest {
@@ -2815,6 +3651,7 @@ pub struct PutSchemaFromJsonRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::put_schema_from_json]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSchemaFromJsonResponse {
@@ -2824,6 +3661,7 @@ pub struct PutSchemaFromJsonResponse {
     pub arn: Option<String>,
 }
 
+/// see [CloudDirectory::remove_facet_from_object]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFacetFromObjectRequest {
@@ -2838,6 +3676,7 @@ pub struct RemoveFacetFromObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
+/// see [CloudDirectory::remove_facet_from_object]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFacetFromObjectResponse {}
@@ -2881,6 +3720,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [CloudDirectory::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2892,6 +3732,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [CloudDirectory::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -3040,6 +3881,7 @@ pub struct TypedLinkSpecifier {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
+/// see [CloudDirectory::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3051,10 +3893,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CloudDirectory::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [CloudDirectory::update_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFacetRequest {
@@ -3074,10 +3918,12 @@ pub struct UpdateFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::update_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFacetResponse {}
 
+/// see [CloudDirectory::update_link_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLinkAttributesRequest {
@@ -3092,10 +3938,12 @@ pub struct UpdateLinkAttributesRequest {
     pub typed_link_specifier: TypedLinkSpecifier,
 }
 
+/// see [CloudDirectory::update_link_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkAttributesResponse {}
 
+/// see [CloudDirectory::update_object_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateObjectAttributesRequest {
@@ -3110,6 +3958,7 @@ pub struct UpdateObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
+/// see [CloudDirectory::update_object_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateObjectAttributesResponse {
@@ -3119,6 +3968,7 @@ pub struct UpdateObjectAttributesResponse {
     pub object_identifier: Option<String>,
 }
 
+/// see [CloudDirectory::update_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSchemaRequest {
@@ -3130,6 +3980,7 @@ pub struct UpdateSchemaRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::update_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSchemaResponse {
@@ -3139,6 +3990,7 @@ pub struct UpdateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::update_typed_link_facet]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTypedLinkFacetRequest {
@@ -3156,10 +4008,12 @@ pub struct UpdateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
+/// see [CloudDirectory::update_typed_link_facet]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTypedLinkFacetResponse {}
 
+/// see [CloudDirectory::upgrade_applied_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradeAppliedSchemaRequest {
@@ -3175,6 +4029,7 @@ pub struct UpgradeAppliedSchemaRequest {
     pub published_schema_arn: String,
 }
 
+/// see [CloudDirectory::upgrade_applied_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeAppliedSchemaResponse {
@@ -3188,6 +4043,7 @@ pub struct UpgradeAppliedSchemaResponse {
     pub upgraded_schema_arn: Option<String>,
 }
 
+/// see [CloudDirectory::upgrade_published_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradePublishedSchemaRequest {
@@ -3206,6 +4062,7 @@ pub struct UpgradePublishedSchemaRequest {
     pub published_schema_arn: String,
 }
 
+/// see [CloudDirectory::upgrade_published_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradePublishedSchemaResponse {
@@ -8215,7 +9072,7 @@ impl fmt::Display for UpgradePublishedSchemaError {
 impl Error for UpgradePublishedSchemaError {}
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
 #[async_trait]
-pub trait CloudDirectory {
+pub trait CloudDirectory: Clone + Sync + Send + 'static {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
     async fn add_facet_to_object(
         &self,
@@ -8420,11 +9277,33 @@ pub trait CloudDirectory {
         input: ListAppliedSchemaArnsRequest,
     ) -> Result<ListAppliedSchemaArnsResponse, RusotoError<ListAppliedSchemaArnsError>>;
 
+    /// Auto-paginating version of `list_applied_schema_arns`
+    fn list_applied_schema_arns_pages<'a>(
+        &'a self,
+        mut input: ListAppliedSchemaArnsRequest,
+    ) -> RusotoStream<'a, String, ListAppliedSchemaArnsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_applied_schema_arns(input.clone())
+        }))
+    }
+
     /// <p>Lists indices attached to the specified object.</p>
     async fn list_attached_indices(
         &self,
         input: ListAttachedIndicesRequest,
     ) -> Result<ListAttachedIndicesResponse, RusotoError<ListAttachedIndicesError>>;
+
+    /// Auto-paginating version of `list_attached_indices`
+    fn list_attached_indices_pages<'a>(
+        &'a self,
+        mut input: ListAttachedIndicesRequest,
+    ) -> RusotoStream<'a, IndexAttachment, ListAttachedIndicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_indices(input.clone())
+        }))
+    }
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
     async fn list_development_schema_arns(
@@ -8432,11 +9311,33 @@ pub trait CloudDirectory {
         input: ListDevelopmentSchemaArnsRequest,
     ) -> Result<ListDevelopmentSchemaArnsResponse, RusotoError<ListDevelopmentSchemaArnsError>>;
 
+    /// Auto-paginating version of `list_development_schema_arns`
+    fn list_development_schema_arns_pages<'a>(
+        &'a self,
+        mut input: ListDevelopmentSchemaArnsRequest,
+    ) -> RusotoStream<'a, String, ListDevelopmentSchemaArnsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_development_schema_arns(input.clone())
+        }))
+    }
+
     /// <p>Lists directories created within an account.</p>
     async fn list_directories(
         &self,
         input: ListDirectoriesRequest,
     ) -> Result<ListDirectoriesResponse, RusotoError<ListDirectoriesError>>;
+
+    /// Auto-paginating version of `list_directories`
+    fn list_directories_pages<'a>(
+        &'a self,
+        mut input: ListDirectoriesRequest,
+    ) -> RusotoStream<'a, Directory, ListDirectoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_directories(input.clone())
+        }))
+    }
 
     /// <p>Retrieves attributes attached to the facet.</p>
     async fn list_facet_attributes(
@@ -8444,11 +9345,33 @@ pub trait CloudDirectory {
         input: ListFacetAttributesRequest,
     ) -> Result<ListFacetAttributesResponse, RusotoError<ListFacetAttributesError>>;
 
+    /// Auto-paginating version of `list_facet_attributes`
+    fn list_facet_attributes_pages<'a>(
+        &'a self,
+        mut input: ListFacetAttributesRequest,
+    ) -> RusotoStream<'a, FacetAttribute, ListFacetAttributesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_facet_attributes(input.clone())
+        }))
+    }
+
     /// <p>Retrieves the names of facets that exist in a schema.</p>
     async fn list_facet_names(
         &self,
         input: ListFacetNamesRequest,
     ) -> Result<ListFacetNamesResponse, RusotoError<ListFacetNamesError>>;
+
+    /// Auto-paginating version of `list_facet_names`
+    fn list_facet_names_pages<'a>(
+        &'a self,
+        mut input: ListFacetNamesRequest,
+    ) -> RusotoStream<'a, String, ListFacetNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_facet_names(input.clone())
+        }))
+    }
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_incoming_typed_links(
@@ -8456,11 +9379,33 @@ pub trait CloudDirectory {
         input: ListIncomingTypedLinksRequest,
     ) -> Result<ListIncomingTypedLinksResponse, RusotoError<ListIncomingTypedLinksError>>;
 
+    /// Auto-paginating version of `list_incoming_typed_links`
+    fn list_incoming_typed_links_pages<'a>(
+        &'a self,
+        mut input: ListIncomingTypedLinksRequest,
+    ) -> RusotoStream<'a, TypedLinkSpecifier, ListIncomingTypedLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_incoming_typed_links(input.clone())
+        }))
+    }
+
     /// <p>Lists objects attached to the specified index.</p>
     async fn list_index(
         &self,
         input: ListIndexRequest,
     ) -> Result<ListIndexResponse, RusotoError<ListIndexError>>;
+
+    /// Auto-paginating version of `list_index`
+    fn list_index_pages<'a>(
+        &'a self,
+        mut input: ListIndexRequest,
+    ) -> RusotoStream<'a, IndexAttachment, ListIndexError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_index(input.clone())
+        }))
+    }
 
     /// <p>Lists the major version families of each managed schema. If a major version ARN is provided as SchemaArn, the minor version revisions in that family are listed instead.</p>
     async fn list_managed_schema_arns(
@@ -8468,11 +9413,33 @@ pub trait CloudDirectory {
         input: ListManagedSchemaArnsRequest,
     ) -> Result<ListManagedSchemaArnsResponse, RusotoError<ListManagedSchemaArnsError>>;
 
+    /// Auto-paginating version of `list_managed_schema_arns`
+    fn list_managed_schema_arns_pages<'a>(
+        &'a self,
+        mut input: ListManagedSchemaArnsRequest,
+    ) -> RusotoStream<'a, String, ListManagedSchemaArnsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_managed_schema_arns(input.clone())
+        }))
+    }
+
     /// <p>Lists all attributes that are associated with an object. </p>
     async fn list_object_attributes(
         &self,
         input: ListObjectAttributesRequest,
     ) -> Result<ListObjectAttributesResponse, RusotoError<ListObjectAttributesError>>;
+
+    /// Auto-paginating version of `list_object_attributes`
+    fn list_object_attributes_pages<'a>(
+        &'a self,
+        mut input: ListObjectAttributesRequest,
+    ) -> RusotoStream<'a, AttributeKeyAndValue, ListObjectAttributesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_object_attributes(input.clone())
+        }))
+    }
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
     async fn list_object_children(
@@ -8486,6 +9453,17 @@ pub trait CloudDirectory {
         input: ListObjectParentPathsRequest,
     ) -> Result<ListObjectParentPathsResponse, RusotoError<ListObjectParentPathsError>>;
 
+    /// Auto-paginating version of `list_object_parent_paths`
+    fn list_object_parent_paths_pages<'a>(
+        &'a self,
+        mut input: ListObjectParentPathsRequest,
+    ) -> RusotoStream<'a, PathToObjectIdentifiers, ListObjectParentPathsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_object_parent_paths(input.clone())
+        }))
+    }
+
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
     async fn list_object_parents(
         &self,
@@ -8498,11 +9476,33 @@ pub trait CloudDirectory {
         input: ListObjectPoliciesRequest,
     ) -> Result<ListObjectPoliciesResponse, RusotoError<ListObjectPoliciesError>>;
 
+    /// Auto-paginating version of `list_object_policies`
+    fn list_object_policies_pages<'a>(
+        &'a self,
+        mut input: ListObjectPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListObjectPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_object_policies(input.clone())
+        }))
+    }
+
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
     ) -> Result<ListOutgoingTypedLinksResponse, RusotoError<ListOutgoingTypedLinksError>>;
+
+    /// Auto-paginating version of `list_outgoing_typed_links`
+    fn list_outgoing_typed_links_pages<'a>(
+        &'a self,
+        mut input: ListOutgoingTypedLinksRequest,
+    ) -> RusotoStream<'a, TypedLinkSpecifier, ListOutgoingTypedLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_outgoing_typed_links(input.clone())
+        }))
+    }
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
     async fn list_policy_attachments(
@@ -8510,11 +9510,33 @@ pub trait CloudDirectory {
         input: ListPolicyAttachmentsRequest,
     ) -> Result<ListPolicyAttachmentsResponse, RusotoError<ListPolicyAttachmentsError>>;
 
+    /// Auto-paginating version of `list_policy_attachments`
+    fn list_policy_attachments_pages<'a>(
+        &'a self,
+        mut input: ListPolicyAttachmentsRequest,
+    ) -> RusotoStream<'a, String, ListPolicyAttachmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policy_attachments(input.clone())
+        }))
+    }
+
     /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
     async fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
     ) -> Result<ListPublishedSchemaArnsResponse, RusotoError<ListPublishedSchemaArnsError>>;
+
+    /// Auto-paginating version of `list_published_schema_arns`
+    fn list_published_schema_arns_pages<'a>(
+        &'a self,
+        mut input: ListPublishedSchemaArnsRequest,
+    ) -> RusotoStream<'a, String, ListPublishedSchemaArnsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_published_schema_arns(input.clone())
+        }))
+    }
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
     async fn list_tags_for_resource(
@@ -8522,11 +9544,33 @@ pub trait CloudDirectory {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// Auto-paginating version of `list_tags_for_resource`
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
+    }
+
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
     ) -> Result<ListTypedLinkFacetAttributesResponse, RusotoError<ListTypedLinkFacetAttributesError>>;
+
+    /// Auto-paginating version of `list_typed_link_facet_attributes`
+    fn list_typed_link_facet_attributes_pages<'a>(
+        &'a self,
+        mut input: ListTypedLinkFacetAttributesRequest,
+    ) -> RusotoStream<'a, TypedLinkAttributeDefinition, ListTypedLinkFacetAttributesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_typed_link_facet_attributes(input.clone())
+        }))
+    }
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     async fn list_typed_link_facet_names(
@@ -8534,11 +9578,33 @@ pub trait CloudDirectory {
         input: ListTypedLinkFacetNamesRequest,
     ) -> Result<ListTypedLinkFacetNamesResponse, RusotoError<ListTypedLinkFacetNamesError>>;
 
+    /// Auto-paginating version of `list_typed_link_facet_names`
+    fn list_typed_link_facet_names_pages<'a>(
+        &'a self,
+        mut input: ListTypedLinkFacetNamesRequest,
+    ) -> RusotoStream<'a, String, ListTypedLinkFacetNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_typed_link_facet_names(input.clone())
+        }))
+    }
+
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
     async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
     ) -> Result<LookupPolicyResponse, RusotoError<LookupPolicyError>>;
+
+    /// Auto-paginating version of `lookup_policy`
+    fn lookup_policy_pages<'a>(
+        &'a self,
+        mut input: LookupPolicyRequest,
+    ) -> RusotoStream<'a, PolicyToPath, LookupPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.lookup_policy(input.clone())
+        }))
+    }
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
     async fn publish_schema(

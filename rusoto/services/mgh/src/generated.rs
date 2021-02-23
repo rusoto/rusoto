@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -68,6 +72,7 @@ pub struct ApplicationState {
     pub last_updated_time: Option<f64>,
 }
 
+/// see [MigrationHub::associate_created_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCreatedArtifactRequest {
@@ -86,10 +91,12 @@ pub struct AssociateCreatedArtifactRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::associate_created_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCreatedArtifactResult {}
 
+/// see [MigrationHub::associate_discovered_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDiscoveredResourceRequest {
@@ -108,10 +115,12 @@ pub struct AssociateDiscoveredResourceRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::associate_discovered_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDiscoveredResourceResult {}
 
+/// see [MigrationHub::create_progress_update_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProgressUpdateStreamRequest {
@@ -124,6 +133,7 @@ pub struct CreateProgressUpdateStreamRequest {
     pub progress_update_stream_name: String,
 }
 
+/// see [MigrationHub::create_progress_update_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProgressUpdateStreamResult {}
@@ -140,6 +150,7 @@ pub struct CreatedArtifact {
     pub name: String,
 }
 
+/// see [MigrationHub::delete_progress_update_stream]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProgressUpdateStreamRequest {
@@ -152,10 +163,12 @@ pub struct DeleteProgressUpdateStreamRequest {
     pub progress_update_stream_name: String,
 }
 
+/// see [MigrationHub::delete_progress_update_stream]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProgressUpdateStreamResult {}
 
+/// see [MigrationHub::describe_application_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationStateRequest {
@@ -164,6 +177,7 @@ pub struct DescribeApplicationStateRequest {
     pub application_id: String,
 }
 
+/// see [MigrationHub::describe_application_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationStateResult {
@@ -177,6 +191,7 @@ pub struct DescribeApplicationStateResult {
     pub last_updated_time: Option<f64>,
 }
 
+/// see [MigrationHub::describe_migration_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMigrationTaskRequest {
@@ -188,6 +203,7 @@ pub struct DescribeMigrationTaskRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::describe_migration_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMigrationTaskResult {
@@ -197,6 +213,7 @@ pub struct DescribeMigrationTaskResult {
     pub migration_task: Option<MigrationTask>,
 }
 
+/// see [MigrationHub::disassociate_created_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCreatedArtifactRequest {
@@ -215,10 +232,12 @@ pub struct DisassociateCreatedArtifactRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::disassociate_created_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCreatedArtifactResult {}
 
+/// see [MigrationHub::disassociate_discovered_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDiscoveredResourceRequest {
@@ -237,6 +256,7 @@ pub struct DisassociateDiscoveredResourceRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::disassociate_discovered_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDiscoveredResourceResult {}
@@ -253,6 +273,7 @@ pub struct DiscoveredResource {
     pub description: Option<String>,
 }
 
+/// see [MigrationHub::import_migration_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportMigrationTaskRequest {
@@ -268,10 +289,12 @@ pub struct ImportMigrationTaskRequest {
     pub progress_update_stream: String,
 }
 
+/// see [MigrationHub::import_migration_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportMigrationTaskResult {}
 
+/// see [MigrationHub::list_application_states]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationStatesRequest {
@@ -289,6 +312,23 @@ pub struct ListApplicationStatesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListApplicationStatesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationStatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MigrationHub::list_application_states]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationStatesResult {
@@ -302,6 +342,29 @@ pub struct ListApplicationStatesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListApplicationStatesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListApplicationStatesResult {
+    type Item = ApplicationState;
+
+    fn into_pagination_page(self) -> Vec<ApplicationState> {
+        self.application_state_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MigrationHub::list_created_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCreatedArtifactsRequest {
@@ -321,6 +384,23 @@ pub struct ListCreatedArtifactsRequest {
     pub progress_update_stream: String,
 }
 
+impl Paged for ListCreatedArtifactsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCreatedArtifactsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MigrationHub::list_created_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCreatedArtifactsResult {
@@ -334,6 +414,29 @@ pub struct ListCreatedArtifactsResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCreatedArtifactsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCreatedArtifactsResult {
+    type Item = CreatedArtifact;
+
+    fn into_pagination_page(self) -> Vec<CreatedArtifact> {
+        self.created_artifact_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MigrationHub::list_discovered_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
@@ -353,6 +456,23 @@ pub struct ListDiscoveredResourcesRequest {
     pub progress_update_stream: String,
 }
 
+impl Paged for ListDiscoveredResourcesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDiscoveredResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MigrationHub::list_discovered_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoveredResourcesResult {
@@ -366,6 +486,29 @@ pub struct ListDiscoveredResourcesResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDiscoveredResourcesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDiscoveredResourcesResult {
+    type Item = DiscoveredResource;
+
+    fn into_pagination_page(self) -> Vec<DiscoveredResource> {
+        self.discovered_resource_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MigrationHub::list_migration_tasks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMigrationTasksRequest {
@@ -383,6 +526,23 @@ pub struct ListMigrationTasksRequest {
     pub resource_name: Option<String>,
 }
 
+impl Paged for ListMigrationTasksRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMigrationTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MigrationHub::list_migration_tasks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMigrationTasksResult {
@@ -396,6 +556,29 @@ pub struct ListMigrationTasksResult {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMigrationTasksResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMigrationTasksResult {
+    type Item = MigrationTaskSummary;
+
+    fn into_pagination_page(self) -> Vec<MigrationTaskSummary> {
+        self.migration_task_summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [MigrationHub::list_progress_update_streams]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProgressUpdateStreamsRequest {
@@ -409,6 +592,23 @@ pub struct ListProgressUpdateStreamsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListProgressUpdateStreamsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProgressUpdateStreamsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [MigrationHub::list_progress_update_streams]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProgressUpdateStreamsResult {
@@ -420,6 +620,28 @@ pub struct ListProgressUpdateStreamsResult {
     #[serde(rename = "ProgressUpdateStreamSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream_summary_list: Option<Vec<ProgressUpdateStreamSummary>>,
+}
+
+impl Paged for ListProgressUpdateStreamsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListProgressUpdateStreamsResult {
+    type Item = ProgressUpdateStreamSummary;
+
+    fn into_pagination_page(self) -> Vec<ProgressUpdateStreamSummary> {
+        self.progress_update_stream_summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Represents a migration task in a migration tool.</p>
@@ -478,6 +700,7 @@ pub struct MigrationTaskSummary {
     pub update_date_time: Option<f64>,
 }
 
+/// see [MigrationHub::notify_application_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyApplicationStateRequest {
@@ -497,10 +720,12 @@ pub struct NotifyApplicationStateRequest {
     pub update_date_time: Option<f64>,
 }
 
+/// see [MigrationHub::notify_application_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyApplicationStateResult {}
 
+/// see [MigrationHub::notify_migration_task_state]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyMigrationTaskStateRequest {
@@ -525,6 +750,7 @@ pub struct NotifyMigrationTaskStateRequest {
     pub update_date_time: f64,
 }
 
+/// see [MigrationHub::notify_migration_task_state]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyMigrationTaskStateResult {}
@@ -539,6 +765,7 @@ pub struct ProgressUpdateStreamSummary {
     pub progress_update_stream_name: Option<String>,
 }
 
+/// see [MigrationHub::put_resource_attributes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceAttributesRequest {
@@ -557,6 +784,7 @@ pub struct PutResourceAttributesRequest {
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
 
+/// see [MigrationHub::put_resource_attributes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourceAttributesResult {}
@@ -2110,7 +2338,7 @@ impl fmt::Display for PutResourceAttributesError {
 impl Error for PutResourceAttributesError {}
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
 #[async_trait]
-pub trait MigrationHub {
+pub trait MigrationHub: Clone + Sync + Send + 'static {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
     async fn associate_created_artifact(
         &self,
@@ -2174,11 +2402,33 @@ pub trait MigrationHub {
         input: ListApplicationStatesRequest,
     ) -> Result<ListApplicationStatesResult, RusotoError<ListApplicationStatesError>>;
 
+    /// Auto-paginating version of `list_application_states`
+    fn list_application_states_pages<'a>(
+        &'a self,
+        mut input: ListApplicationStatesRequest,
+    ) -> RusotoStream<'a, ApplicationState, ListApplicationStatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_states(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
     async fn list_created_artifacts(
         &self,
         input: ListCreatedArtifactsRequest,
     ) -> Result<ListCreatedArtifactsResult, RusotoError<ListCreatedArtifactsError>>;
+
+    /// Auto-paginating version of `list_created_artifacts`
+    fn list_created_artifacts_pages<'a>(
+        &'a self,
+        mut input: ListCreatedArtifactsRequest,
+    ) -> RusotoStream<'a, CreatedArtifact, ListCreatedArtifactsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_created_artifacts(input.clone())
+        }))
+    }
 
     /// <p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>
     async fn list_discovered_resources(
@@ -2186,17 +2436,50 @@ pub trait MigrationHub {
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResult, RusotoError<ListDiscoveredResourcesError>>;
 
+    /// Auto-paginating version of `list_discovered_resources`
+    fn list_discovered_resources_pages<'a>(
+        &'a self,
+        mut input: ListDiscoveredResourcesRequest,
+    ) -> RusotoStream<'a, DiscoveredResource, ListDiscoveredResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_discovered_resources(input.clone())
+        }))
+    }
+
     /// <p><p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul></p>
     async fn list_migration_tasks(
         &self,
         input: ListMigrationTasksRequest,
     ) -> Result<ListMigrationTasksResult, RusotoError<ListMigrationTasksError>>;
 
+    /// Auto-paginating version of `list_migration_tasks`
+    fn list_migration_tasks_pages<'a>(
+        &'a self,
+        mut input: ListMigrationTasksRequest,
+    ) -> RusotoStream<'a, MigrationTaskSummary, ListMigrationTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_migration_tasks(input.clone())
+        }))
+    }
+
     /// <p>Lists progress update streams associated with the user account making this call.</p>
     async fn list_progress_update_streams(
         &self,
         input: ListProgressUpdateStreamsRequest,
     ) -> Result<ListProgressUpdateStreamsResult, RusotoError<ListProgressUpdateStreamsError>>;
+
+    /// Auto-paginating version of `list_progress_update_streams`
+    fn list_progress_update_streams_pages<'a>(
+        &'a self,
+        mut input: ListProgressUpdateStreamsRequest,
+    ) -> RusotoStream<'a, ProgressUpdateStreamSummary, ListProgressUpdateStreamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_progress_update_streams(input.clone())
+        }))
+    }
 
     /// <p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>
     async fn notify_application_state(

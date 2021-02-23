@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -213,6 +217,7 @@ pub struct CompareFacesMatch {
     pub similarity: Option<f32>,
 }
 
+/// see [Rekognition::compare_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompareFacesRequest {
@@ -232,6 +237,7 @@ pub struct CompareFacesRequest {
     pub target_image: Image,
 }
 
+/// see [Rekognition::compare_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompareFacesResponse {
@@ -325,6 +331,7 @@ pub struct CoversBodyPart {
     pub value: Option<bool>,
 }
 
+/// see [Rekognition::create_collection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCollectionRequest {
@@ -333,6 +340,7 @@ pub struct CreateCollectionRequest {
     pub collection_id: String,
 }
 
+/// see [Rekognition::create_collection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCollectionResponse {
@@ -350,6 +358,7 @@ pub struct CreateCollectionResponse {
     pub status_code: Option<i64>,
 }
 
+/// see [Rekognition::create_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
@@ -358,6 +367,7 @@ pub struct CreateProjectRequest {
     pub project_name: String,
 }
 
+/// see [Rekognition::create_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResponse {
@@ -367,6 +377,7 @@ pub struct CreateProjectResponse {
     pub project_arn: Option<String>,
 }
 
+/// see [Rekognition::create_project_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectVersionRequest {
@@ -387,6 +398,7 @@ pub struct CreateProjectVersionRequest {
     pub version_name: String,
 }
 
+/// see [Rekognition::create_project_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectVersionResponse {
@@ -396,6 +408,7 @@ pub struct CreateProjectVersionResponse {
     pub project_version_arn: Option<String>,
 }
 
+/// see [Rekognition::create_stream_processor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamProcessorRequest {
@@ -416,6 +429,7 @@ pub struct CreateStreamProcessorRequest {
     pub settings: StreamProcessorSettings,
 }
 
+/// see [Rekognition::create_stream_processor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamProcessorResponse {
@@ -443,6 +457,7 @@ pub struct CustomLabel {
     pub name: Option<String>,
 }
 
+/// see [Rekognition::delete_collection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCollectionRequest {
@@ -451,6 +466,7 @@ pub struct DeleteCollectionRequest {
     pub collection_id: String,
 }
 
+/// see [Rekognition::delete_collection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCollectionResponse {
@@ -460,6 +476,7 @@ pub struct DeleteCollectionResponse {
     pub status_code: Option<i64>,
 }
 
+/// see [Rekognition::delete_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFacesRequest {
@@ -471,6 +488,7 @@ pub struct DeleteFacesRequest {
     pub face_ids: Vec<String>,
 }
 
+/// see [Rekognition::delete_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFacesResponse {
@@ -480,6 +498,7 @@ pub struct DeleteFacesResponse {
     pub deleted_faces: Option<Vec<String>>,
 }
 
+/// see [Rekognition::delete_project]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
@@ -488,6 +507,7 @@ pub struct DeleteProjectRequest {
     pub project_arn: String,
 }
 
+/// see [Rekognition::delete_project]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResponse {
@@ -497,6 +517,7 @@ pub struct DeleteProjectResponse {
     pub status: Option<String>,
 }
 
+/// see [Rekognition::delete_project_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectVersionRequest {
@@ -505,6 +526,7 @@ pub struct DeleteProjectVersionRequest {
     pub project_version_arn: String,
 }
 
+/// see [Rekognition::delete_project_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectVersionResponse {
@@ -514,6 +536,7 @@ pub struct DeleteProjectVersionResponse {
     pub status: Option<String>,
 }
 
+/// see [Rekognition::delete_stream_processor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamProcessorRequest {
@@ -522,10 +545,12 @@ pub struct DeleteStreamProcessorRequest {
     pub name: String,
 }
 
+/// see [Rekognition::delete_stream_processor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamProcessorResponse {}
 
+/// see [Rekognition::describe_collection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCollectionRequest {
@@ -534,6 +559,7 @@ pub struct DescribeCollectionRequest {
     pub collection_id: String,
 }
 
+/// see [Rekognition::describe_collection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCollectionResponse {
@@ -555,6 +581,7 @@ pub struct DescribeCollectionResponse {
     pub face_model_version: Option<String>,
 }
 
+/// see [Rekognition::describe_project_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectVersionsRequest {
@@ -575,6 +602,23 @@ pub struct DescribeProjectVersionsRequest {
     pub version_names: Option<Vec<String>>,
 }
 
+impl Paged for DescribeProjectVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeProjectVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Rekognition::describe_project_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectVersionsResponse {
@@ -588,6 +632,29 @@ pub struct DescribeProjectVersionsResponse {
     pub project_version_descriptions: Option<Vec<ProjectVersionDescription>>,
 }
 
+impl Paged for DescribeProjectVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeProjectVersionsResponse {
+    type Item = ProjectVersionDescription;
+
+    fn into_pagination_page(self) -> Vec<ProjectVersionDescription> {
+        self.project_version_descriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Rekognition::describe_projects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProjectsRequest {
@@ -601,6 +668,23 @@ pub struct DescribeProjectsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeProjectsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Rekognition::describe_projects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProjectsResponse {
@@ -614,6 +698,29 @@ pub struct DescribeProjectsResponse {
     pub project_descriptions: Option<Vec<ProjectDescription>>,
 }
 
+impl Paged for DescribeProjectsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeProjectsResponse {
+    type Item = ProjectDescription;
+
+    fn into_pagination_page(self) -> Vec<ProjectDescription> {
+        self.project_descriptions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Rekognition::describe_stream_processor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamProcessorRequest {
@@ -622,6 +729,7 @@ pub struct DescribeStreamProcessorRequest {
     pub name: String,
 }
 
+/// see [Rekognition::describe_stream_processor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamProcessorResponse {
@@ -667,6 +775,7 @@ pub struct DescribeStreamProcessorResponse {
     pub stream_processor_arn: Option<String>,
 }
 
+/// see [Rekognition::detect_custom_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectCustomLabelsRequest {
@@ -685,6 +794,7 @@ pub struct DetectCustomLabelsRequest {
     pub project_version_arn: String,
 }
 
+/// see [Rekognition::detect_custom_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectCustomLabelsResponse {
@@ -694,6 +804,7 @@ pub struct DetectCustomLabelsResponse {
     pub custom_labels: Option<Vec<CustomLabel>>,
 }
 
+/// see [Rekognition::detect_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectFacesRequest {
@@ -706,6 +817,7 @@ pub struct DetectFacesRequest {
     pub image: Image,
 }
 
+/// see [Rekognition::detect_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectFacesResponse {
@@ -719,6 +831,7 @@ pub struct DetectFacesResponse {
     pub orientation_correction: Option<String>,
 }
 
+/// see [Rekognition::detect_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectLabelsRequest {
@@ -735,6 +848,7 @@ pub struct DetectLabelsRequest {
     pub min_confidence: Option<f32>,
 }
 
+/// see [Rekognition::detect_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectLabelsResponse {
@@ -752,6 +866,7 @@ pub struct DetectLabelsResponse {
     pub orientation_correction: Option<String>,
 }
 
+/// see [Rekognition::detect_moderation_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectModerationLabelsRequest {
@@ -768,6 +883,7 @@ pub struct DetectModerationLabelsRequest {
     pub min_confidence: Option<f32>,
 }
 
+/// see [Rekognition::detect_moderation_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectModerationLabelsResponse {
@@ -785,6 +901,7 @@ pub struct DetectModerationLabelsResponse {
     pub moderation_model_version: Option<String>,
 }
 
+/// see [Rekognition::detect_protective_equipment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectProtectiveEquipmentRequest {
@@ -797,6 +914,7 @@ pub struct DetectProtectiveEquipmentRequest {
     pub summarization_attributes: Option<ProtectiveEquipmentSummarizationAttributes>,
 }
 
+/// see [Rekognition::detect_protective_equipment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectProtectiveEquipmentResponse {
@@ -827,6 +945,7 @@ pub struct DetectTextFilters {
     pub word_filter: Option<DetectionFilter>,
 }
 
+/// see [Rekognition::detect_text]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectTextRequest {
@@ -839,6 +958,7 @@ pub struct DetectTextRequest {
     pub image: Image,
 }
 
+/// see [Rekognition::detect_text]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectTextResponse {
@@ -1123,6 +1243,7 @@ pub struct Geometry {
     pub polygon: Option<Vec<Point>>,
 }
 
+/// see [Rekognition::get_celebrity_info]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCelebrityInfoRequest {
@@ -1131,6 +1252,7 @@ pub struct GetCelebrityInfoRequest {
     pub id: String,
 }
 
+/// see [Rekognition::get_celebrity_info]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCelebrityInfoResponse {
@@ -1144,6 +1266,7 @@ pub struct GetCelebrityInfoResponse {
     pub urls: Option<Vec<String>>,
 }
 
+/// see [Rekognition::get_celebrity_recognition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCelebrityRecognitionRequest {
@@ -1164,6 +1287,7 @@ pub struct GetCelebrityRecognitionRequest {
     pub sort_by: Option<String>,
 }
 
+/// see [Rekognition::get_celebrity_recognition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCelebrityRecognitionResponse {
@@ -1189,6 +1313,7 @@ pub struct GetCelebrityRecognitionResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_content_moderation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContentModerationRequest {
@@ -1209,6 +1334,7 @@ pub struct GetContentModerationRequest {
     pub sort_by: Option<String>,
 }
 
+/// see [Rekognition::get_content_moderation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContentModerationResponse {
@@ -1238,6 +1364,7 @@ pub struct GetContentModerationResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_face_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFaceDetectionRequest {
@@ -1254,6 +1381,7 @@ pub struct GetFaceDetectionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Rekognition::get_face_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFaceDetectionResponse {
@@ -1279,6 +1407,7 @@ pub struct GetFaceDetectionResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_face_search]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFaceSearchRequest {
@@ -1299,6 +1428,7 @@ pub struct GetFaceSearchRequest {
     pub sort_by: Option<String>,
 }
 
+/// see [Rekognition::get_face_search]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFaceSearchResponse {
@@ -1324,6 +1454,7 @@ pub struct GetFaceSearchResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_label_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLabelDetectionRequest {
@@ -1344,6 +1475,7 @@ pub struct GetLabelDetectionRequest {
     pub sort_by: Option<String>,
 }
 
+/// see [Rekognition::get_label_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLabelDetectionResponse {
@@ -1373,6 +1505,7 @@ pub struct GetLabelDetectionResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_person_tracking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonTrackingRequest {
@@ -1393,6 +1526,7 @@ pub struct GetPersonTrackingRequest {
     pub sort_by: Option<String>,
 }
 
+/// see [Rekognition::get_person_tracking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPersonTrackingResponse {
@@ -1418,6 +1552,7 @@ pub struct GetPersonTrackingResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
+/// see [Rekognition::get_segment_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSegmentDetectionRequest {
@@ -1434,6 +1569,7 @@ pub struct GetSegmentDetectionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Rekognition::get_segment_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSegmentDetectionResponse {
@@ -1467,6 +1603,7 @@ pub struct GetSegmentDetectionResponse {
     pub video_metadata: Option<Vec<VideoMetadata>>,
 }
 
+/// see [Rekognition::get_text_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTextDetectionRequest {
@@ -1483,6 +1620,7 @@ pub struct GetTextDetectionRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Rekognition::get_text_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTextDetectionResponse {
@@ -1596,6 +1734,7 @@ pub struct ImageQuality {
     pub sharpness: Option<f32>,
 }
 
+/// see [Rekognition::index_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexFacesRequest {
@@ -1623,6 +1762,7 @@ pub struct IndexFacesRequest {
     pub quality_filter: Option<String>,
 }
 
+/// see [Rekognition::index_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IndexFacesResponse {
@@ -1730,6 +1870,7 @@ pub struct Landmark {
     pub y: Option<f32>,
 }
 
+/// see [Rekognition::list_collections]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCollectionsRequest {
@@ -1743,6 +1884,23 @@ pub struct ListCollectionsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCollectionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCollectionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Rekognition::list_collections]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCollectionsResponse {
@@ -1760,6 +1918,29 @@ pub struct ListCollectionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListCollectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListCollectionsResponse {
+    type Item = ListCollectionsResponse;
+
+    fn into_pagination_page(self) -> Vec<ListCollectionsResponse> {
+        vec![self]
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Rekognition::list_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFacesRequest {
@@ -1776,6 +1957,23 @@ pub struct ListFacesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFacesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Rekognition::list_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacesResponse {
@@ -1793,6 +1991,29 @@ pub struct ListFacesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListFacesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListFacesResponse {
+    type Item = Face;
+
+    fn into_pagination_page(self) -> Vec<Face> {
+        self.faces.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Rekognition::list_stream_processors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamProcessorsRequest {
@@ -1806,6 +2027,23 @@ pub struct ListStreamProcessorsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListStreamProcessorsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStreamProcessorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Rekognition::list_stream_processors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamProcessorsResponse {
@@ -1817,6 +2055,28 @@ pub struct ListStreamProcessorsResponse {
     #[serde(rename = "StreamProcessors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_processors: Option<Vec<StreamProcessor>>,
+}
+
+impl Paged for ListStreamProcessorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListStreamProcessorsResponse {
+    type Item = StreamProcessor;
+
+    fn into_pagination_page(self) -> Vec<StreamProcessor> {
+        self.stream_processors.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Provides information about a single type of unsafe content found in an image or video. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see Detecting Unsafe Content in the Amazon Rekognition Developer Guide.</p>
@@ -2124,6 +2384,7 @@ pub struct ProtectiveEquipmentSummary {
     pub persons_without_required_equipment: Option<Vec<i64>>,
 }
 
+/// see [Rekognition::recognize_celebrities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecognizeCelebritiesRequest {
@@ -2132,6 +2393,7 @@ pub struct RecognizeCelebritiesRequest {
     pub image: Image,
 }
 
+/// see [Rekognition::recognize_celebrities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecognizeCelebritiesResponse {
@@ -2176,6 +2438,7 @@ pub struct S3Object {
     pub version: Option<String>,
 }
 
+/// see [Rekognition::search_faces_by_image]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFacesByImageRequest {
@@ -2199,6 +2462,7 @@ pub struct SearchFacesByImageRequest {
     pub quality_filter: Option<String>,
 }
 
+/// see [Rekognition::search_faces_by_image]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFacesByImageResponse {
@@ -2220,6 +2484,7 @@ pub struct SearchFacesByImageResponse {
     pub searched_face_confidence: Option<f32>,
 }
 
+/// see [Rekognition::search_faces]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFacesRequest {
@@ -2239,6 +2504,7 @@ pub struct SearchFacesRequest {
     pub max_faces: Option<i64>,
 }
 
+/// see [Rekognition::search_faces]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFacesResponse {
@@ -2340,6 +2606,7 @@ pub struct Smile {
     pub value: Option<bool>,
 }
 
+/// see [Rekognition::start_celebrity_recognition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCelebrityRecognitionRequest {
@@ -2360,6 +2627,7 @@ pub struct StartCelebrityRecognitionRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_celebrity_recognition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCelebrityRecognitionResponse {
@@ -2369,6 +2637,7 @@ pub struct StartCelebrityRecognitionResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_content_moderation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartContentModerationRequest {
@@ -2393,6 +2662,7 @@ pub struct StartContentModerationRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_content_moderation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartContentModerationResponse {
@@ -2402,6 +2672,7 @@ pub struct StartContentModerationResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_face_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFaceDetectionRequest {
@@ -2426,6 +2697,7 @@ pub struct StartFaceDetectionRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_face_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFaceDetectionResponse {
@@ -2435,6 +2707,7 @@ pub struct StartFaceDetectionResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_face_search]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFaceSearchRequest {
@@ -2462,6 +2735,7 @@ pub struct StartFaceSearchRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_face_search]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFaceSearchResponse {
@@ -2471,6 +2745,7 @@ pub struct StartFaceSearchResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_label_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartLabelDetectionRequest {
@@ -2495,6 +2770,7 @@ pub struct StartLabelDetectionRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_label_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartLabelDetectionResponse {
@@ -2504,6 +2780,7 @@ pub struct StartLabelDetectionResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_person_tracking]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPersonTrackingRequest {
@@ -2524,6 +2801,7 @@ pub struct StartPersonTrackingRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_person_tracking]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPersonTrackingResponse {
@@ -2533,6 +2811,7 @@ pub struct StartPersonTrackingResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::start_project_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartProjectVersionRequest {
@@ -2544,6 +2823,7 @@ pub struct StartProjectVersionRequest {
     pub project_version_arn: String,
 }
 
+/// see [Rekognition::start_project_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartProjectVersionResponse {
@@ -2567,6 +2847,7 @@ pub struct StartSegmentDetectionFilters {
     pub technical_cue_filter: Option<StartTechnicalCueDetectionFilter>,
 }
 
+/// see [Rekognition::start_segment_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSegmentDetectionRequest {
@@ -2593,6 +2874,7 @@ pub struct StartSegmentDetectionRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_segment_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSegmentDetectionResponse {
@@ -2612,6 +2894,7 @@ pub struct StartShotDetectionFilter {
     pub min_segment_confidence: Option<f32>,
 }
 
+/// see [Rekognition::start_stream_processor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStreamProcessorRequest {
@@ -2620,6 +2903,7 @@ pub struct StartStreamProcessorRequest {
     pub name: String,
 }
 
+/// see [Rekognition::start_stream_processor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartStreamProcessorResponse {}
@@ -2648,6 +2932,7 @@ pub struct StartTextDetectionFilters {
     pub word_filter: Option<DetectionFilter>,
 }
 
+/// see [Rekognition::start_text_detection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTextDetectionRequest {
@@ -2670,6 +2955,7 @@ pub struct StartTextDetectionRequest {
     pub video: Video,
 }
 
+/// see [Rekognition::start_text_detection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTextDetectionResponse {
@@ -2679,6 +2965,7 @@ pub struct StartTextDetectionResponse {
     pub job_id: Option<String>,
 }
 
+/// see [Rekognition::stop_project_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopProjectVersionRequest {
@@ -2687,6 +2974,7 @@ pub struct StopProjectVersionRequest {
     pub project_version_arn: String,
 }
 
+/// see [Rekognition::stop_project_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopProjectVersionResponse {
@@ -2696,6 +2984,7 @@ pub struct StopProjectVersionResponse {
     pub status: Option<String>,
 }
 
+/// see [Rekognition::stop_stream_processor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStreamProcessorRequest {
@@ -2704,6 +2993,7 @@ pub struct StopStreamProcessorRequest {
     pub name: String,
 }
 
+/// see [Rekognition::stop_stream_processor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopStreamProcessorResponse {}
@@ -6704,7 +6994,7 @@ impl fmt::Display for StopStreamProcessorError {
 impl Error for StopStreamProcessorError {}
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 #[async_trait]
-pub trait Rekognition {
+pub trait Rekognition: Clone + Sync + Send + 'static {
     /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     async fn compare_faces(
         &self,
@@ -6777,11 +7067,33 @@ pub trait Rekognition {
         input: DescribeProjectVersionsRequest,
     ) -> Result<DescribeProjectVersionsResponse, RusotoError<DescribeProjectVersionsError>>;
 
+    /// Auto-paginating version of `describe_project_versions`
+    fn describe_project_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeProjectVersionsRequest,
+    ) -> RusotoStream<'a, ProjectVersionDescription, DescribeProjectVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_project_versions(input.clone())
+        }))
+    }
+
     /// <p>Lists and gets information about your Amazon Rekognition Custom Labels projects.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjects</code> action.</p>
     async fn describe_projects(
         &self,
         input: DescribeProjectsRequest,
     ) -> Result<DescribeProjectsResponse, RusotoError<DescribeProjectsError>>;
+
+    /// Auto-paginating version of `describe_projects`
+    fn describe_projects_pages<'a>(
+        &'a self,
+        mut input: DescribeProjectsRequest,
+    ) -> RusotoStream<'a, ProjectDescription, DescribeProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_projects(input.clone())
+        }))
+    }
 
     /// <p>Provides information about a stream processor created by <a>CreateStreamProcessor</a>. You can get information about the input and output streams, the input parameters for the face recognition being performed, and the current status of the stream processor.</p>
     async fn describe_stream_processor(
@@ -6891,17 +7203,50 @@ pub trait Rekognition {
         input: ListCollectionsRequest,
     ) -> Result<ListCollectionsResponse, RusotoError<ListCollectionsError>>;
 
+    /// Auto-paginating version of `list_collections`
+    fn list_collections_pages<'a>(
+        &'a self,
+        mut input: ListCollectionsRequest,
+    ) -> RusotoStream<'a, ListCollectionsResponse, ListCollectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_collections(input.clone())
+        }))
+    }
+
     /// <p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see Listing Faces in a Collection in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>
     async fn list_faces(
         &self,
         input: ListFacesRequest,
     ) -> Result<ListFacesResponse, RusotoError<ListFacesError>>;
 
+    /// Auto-paginating version of `list_faces`
+    fn list_faces_pages<'a>(
+        &'a self,
+        mut input: ListFacesRequest,
+    ) -> RusotoStream<'a, Face, ListFacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_faces(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of stream processors that you have created with <a>CreateStreamProcessor</a>. </p>
     async fn list_stream_processors(
         &self,
         input: ListStreamProcessorsRequest,
     ) -> Result<ListStreamProcessorsResponse, RusotoError<ListStreamProcessorsError>>;
+
+    /// Auto-paginating version of `list_stream_processors`
+    fn list_stream_processors_pages<'a>(
+        &'a self,
+        mut input: ListStreamProcessorsRequest,
+    ) -> RusotoStream<'a, StreamProcessor, ListStreamProcessorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stream_processors(input.clone())
+        }))
+    }
 
     /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     async fn recognize_celebrities(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -50,6 +54,7 @@ impl EventBridgeClient {
 }
 
 use serde_json;
+/// see [EventBridge::activate_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateEventSourceRequest {
@@ -149,6 +154,7 @@ pub struct BatchRetryStrategy {
     pub attempts: Option<i64>,
 }
 
+/// see [EventBridge::cancel_replay]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelReplayRequest {
@@ -157,6 +163,7 @@ pub struct CancelReplayRequest {
     pub replay_name: String,
 }
 
+/// see [EventBridge::cancel_replay]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelReplayResponse {
@@ -189,6 +196,7 @@ pub struct Condition {
     pub value: String,
 }
 
+/// see [EventBridge::create_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateArchiveRequest {
@@ -212,6 +220,7 @@ pub struct CreateArchiveRequest {
     pub retention_days: Option<i64>,
 }
 
+/// see [EventBridge::create_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateArchiveResponse {
@@ -233,6 +242,7 @@ pub struct CreateArchiveResponse {
     pub state_reason: Option<String>,
 }
 
+/// see [EventBridge::create_event_bus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventBusRequest {
@@ -249,6 +259,7 @@ pub struct CreateEventBusRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [EventBridge::create_event_bus]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventBusResponse {
@@ -258,6 +269,7 @@ pub struct CreateEventBusResponse {
     pub event_bus_arn: Option<String>,
 }
 
+/// see [EventBridge::create_partner_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartnerEventSourceRequest {
@@ -269,6 +281,7 @@ pub struct CreatePartnerEventSourceRequest {
     pub name: String,
 }
 
+/// see [EventBridge::create_partner_event_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePartnerEventSourceResponse {
@@ -278,6 +291,7 @@ pub struct CreatePartnerEventSourceResponse {
     pub event_source_arn: Option<String>,
 }
 
+/// see [EventBridge::deactivate_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateEventSourceRequest {
@@ -295,6 +309,7 @@ pub struct DeadLetterConfig {
     pub arn: Option<String>,
 }
 
+/// see [EventBridge::delete_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArchiveRequest {
@@ -303,10 +318,12 @@ pub struct DeleteArchiveRequest {
     pub archive_name: String,
 }
 
+/// see [EventBridge::delete_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteArchiveResponse {}
 
+/// see [EventBridge::delete_event_bus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventBusRequest {
@@ -315,6 +332,7 @@ pub struct DeleteEventBusRequest {
     pub name: String,
 }
 
+/// see [EventBridge::delete_partner_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartnerEventSourceRequest {
@@ -326,6 +344,7 @@ pub struct DeletePartnerEventSourceRequest {
     pub name: String,
 }
 
+/// see [EventBridge::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
@@ -342,6 +361,7 @@ pub struct DeleteRuleRequest {
     pub name: String,
 }
 
+/// see [EventBridge::describe_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeArchiveRequest {
@@ -350,6 +370,7 @@ pub struct DescribeArchiveRequest {
     pub archive_name: String,
 }
 
+/// see [EventBridge::describe_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeArchiveResponse {
@@ -399,6 +420,7 @@ pub struct DescribeArchiveResponse {
     pub state_reason: Option<String>,
 }
 
+/// see [EventBridge::describe_event_bus]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventBusRequest {
@@ -408,6 +430,7 @@ pub struct DescribeEventBusRequest {
     pub name: Option<String>,
 }
 
+/// see [EventBridge::describe_event_bus]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventBusResponse {
@@ -425,6 +448,7 @@ pub struct DescribeEventBusResponse {
     pub policy: Option<String>,
 }
 
+/// see [EventBridge::describe_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSourceRequest {
@@ -433,6 +457,7 @@ pub struct DescribeEventSourceRequest {
     pub name: String,
 }
 
+/// see [EventBridge::describe_event_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventSourceResponse {
@@ -462,6 +487,7 @@ pub struct DescribeEventSourceResponse {
     pub state: Option<String>,
 }
 
+/// see [EventBridge::describe_partner_event_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePartnerEventSourceRequest {
@@ -470,6 +496,7 @@ pub struct DescribePartnerEventSourceRequest {
     pub name: String,
 }
 
+/// see [EventBridge::describe_partner_event_source]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePartnerEventSourceResponse {
@@ -483,6 +510,7 @@ pub struct DescribePartnerEventSourceResponse {
     pub name: Option<String>,
 }
 
+/// see [EventBridge::describe_replay]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplayRequest {
@@ -491,6 +519,7 @@ pub struct DescribeReplayRequest {
     pub replay_name: String,
 }
 
+/// see [EventBridge::describe_replay]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplayResponse {
@@ -544,6 +573,7 @@ pub struct DescribeReplayResponse {
     pub state_reason: Option<String>,
 }
 
+/// see [EventBridge::describe_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRuleRequest {
@@ -556,6 +586,7 @@ pub struct DescribeRuleRequest {
     pub name: String,
 }
 
+/// see [EventBridge::describe_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRuleResponse {
@@ -601,6 +632,7 @@ pub struct DescribeRuleResponse {
     pub state: Option<String>,
 }
 
+/// see [EventBridge::disable_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableRuleRequest {
@@ -641,6 +673,7 @@ pub struct EcsParameters {
     pub task_definition_arn: String,
 }
 
+/// see [EventBridge::enable_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableRuleRequest {
@@ -738,6 +771,7 @@ pub struct KinesisParameters {
     pub partition_key_path: String,
 }
 
+/// see [EventBridge::list_archives]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArchivesRequest {
@@ -763,6 +797,7 @@ pub struct ListArchivesRequest {
     pub state: Option<String>,
 }
 
+/// see [EventBridge::list_archives]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArchivesResponse {
@@ -776,6 +811,7 @@ pub struct ListArchivesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_event_buses]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventBusesRequest {
@@ -793,6 +829,7 @@ pub struct ListEventBusesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_event_buses]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventBusesResponse {
@@ -806,6 +843,7 @@ pub struct ListEventBusesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_event_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourcesRequest {
@@ -823,6 +861,7 @@ pub struct ListEventSourcesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_event_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSourcesResponse {
@@ -836,6 +875,7 @@ pub struct ListEventSourcesResponse {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_partner_event_source_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartnerEventSourceAccountsRequest {
@@ -852,6 +892,7 @@ pub struct ListPartnerEventSourceAccountsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_partner_event_source_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPartnerEventSourceAccountsResponse {
@@ -865,6 +906,7 @@ pub struct ListPartnerEventSourceAccountsResponse {
     pub partner_event_source_accounts: Option<Vec<PartnerEventSourceAccount>>,
 }
 
+/// see [EventBridge::list_partner_event_sources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartnerEventSourcesRequest {
@@ -881,6 +923,7 @@ pub struct ListPartnerEventSourcesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [EventBridge::list_partner_event_sources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPartnerEventSourcesResponse {
@@ -894,6 +937,7 @@ pub struct ListPartnerEventSourcesResponse {
     pub partner_event_sources: Option<Vec<PartnerEventSource>>,
 }
 
+/// see [EventBridge::list_replays]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReplaysRequest {
@@ -919,6 +963,7 @@ pub struct ListReplaysRequest {
     pub state: Option<String>,
 }
 
+/// see [EventBridge::list_replays]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReplaysResponse {
@@ -932,6 +977,7 @@ pub struct ListReplaysResponse {
     pub replays: Option<Vec<Replay>>,
 }
 
+/// see [EventBridge::list_rule_names_by_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRuleNamesByTargetRequest {
@@ -952,6 +998,23 @@ pub struct ListRuleNamesByTargetRequest {
     pub target_arn: String,
 }
 
+impl Paged for ListRuleNamesByTargetRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRuleNamesByTargetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [EventBridge::list_rule_names_by_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRuleNamesByTargetResponse {
@@ -965,6 +1028,29 @@ pub struct ListRuleNamesByTargetResponse {
     pub rule_names: Option<Vec<String>>,
 }
 
+impl Paged for ListRuleNamesByTargetResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRuleNamesByTargetResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.rule_names.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [EventBridge::list_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesRequest {
@@ -986,6 +1072,23 @@ pub struct ListRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [EventBridge::list_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesResponse {
@@ -999,6 +1102,29 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<Rule>>,
 }
 
+impl Paged for ListRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRulesResponse {
+    type Item = Rule;
+
+    fn into_pagination_page(self) -> Vec<Rule> {
+        self.rules.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [EventBridge::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1007,6 +1133,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [EventBridge::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1016,6 +1143,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [EventBridge::list_targets_by_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsByRuleRequest {
@@ -1036,6 +1164,23 @@ pub struct ListTargetsByRuleRequest {
     pub rule: String,
 }
 
+impl Paged for ListTargetsByRuleRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTargetsByRuleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [EventBridge::list_targets_by_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsByRuleResponse {
@@ -1047,6 +1192,28 @@ pub struct ListTargetsByRuleResponse {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
+}
+
+impl Paged for ListTargetsByRuleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTargetsByRuleResponse {
+    type Item = Target;
+
+    fn into_pagination_page(self) -> Vec<Target> {
+        self.targets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>This structure specifies the network configuration for an ECS task.</p>
@@ -1094,6 +1261,7 @@ pub struct PartnerEventSourceAccount {
     pub state: Option<String>,
 }
 
+/// see [EventBridge::put_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequest {
@@ -1132,6 +1300,7 @@ pub struct PutEventsRequestEntry {
     pub time: Option<f64>,
 }
 
+/// see [EventBridge::put_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEventsResponse {
@@ -1163,6 +1332,7 @@ pub struct PutEventsResultEntry {
     pub event_id: Option<String>,
 }
 
+/// see [EventBridge::put_partner_events]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPartnerEventsRequest {
@@ -1197,6 +1367,7 @@ pub struct PutPartnerEventsRequestEntry {
     pub time: Option<f64>,
 }
 
+/// see [EventBridge::put_partner_events]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPartnerEventsResponse {
@@ -1228,6 +1399,7 @@ pub struct PutPartnerEventsResultEntry {
     pub event_id: Option<String>,
 }
 
+/// see [EventBridge::put_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionRequest {
@@ -1257,6 +1429,7 @@ pub struct PutPermissionRequest {
     pub statement_id: Option<String>,
 }
 
+/// see [EventBridge::put_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRuleRequest {
@@ -1293,6 +1466,7 @@ pub struct PutRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [EventBridge::put_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRuleResponse {
@@ -1302,6 +1476,7 @@ pub struct PutRuleResponse {
     pub rule_arn: Option<String>,
 }
 
+/// see [EventBridge::put_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTargetsRequest {
@@ -1317,6 +1492,7 @@ pub struct PutTargetsRequest {
     pub targets: Vec<Target>,
 }
 
+/// see [EventBridge::put_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutTargetsResponse {
@@ -1375,6 +1551,7 @@ pub struct RedshiftDataParameters {
     pub with_event: Option<bool>,
 }
 
+/// see [EventBridge::remove_permission]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
@@ -1392,6 +1569,7 @@ pub struct RemovePermissionRequest {
     pub statement_id: Option<String>,
 }
 
+/// see [EventBridge::remove_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTargetsRequest {
@@ -1411,6 +1589,7 @@ pub struct RemoveTargetsRequest {
     pub rule: String,
 }
 
+/// see [EventBridge::remove_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTargetsResponse {
@@ -1579,6 +1758,7 @@ pub struct SqsParameters {
     pub message_group_id: Option<String>,
 }
 
+/// see [EventBridge::start_replay]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplayRequest {
@@ -1603,6 +1783,7 @@ pub struct StartReplayRequest {
     pub replay_name: String,
 }
 
+/// see [EventBridge::start_replay]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplayResponse {
@@ -1635,6 +1816,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [EventBridge::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1646,6 +1828,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [EventBridge::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1713,6 +1896,7 @@ pub struct Target {
     pub sqs_parameters: Option<SqsParameters>,
 }
 
+/// see [EventBridge::test_event_pattern]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestEventPatternRequest {
@@ -1724,6 +1908,7 @@ pub struct TestEventPatternRequest {
     pub event_pattern: String,
 }
 
+/// see [EventBridge::test_event_pattern]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestEventPatternResponse {
@@ -1733,6 +1918,7 @@ pub struct TestEventPatternResponse {
     pub result: Option<bool>,
 }
 
+/// see [EventBridge::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1744,10 +1930,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [EventBridge::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [EventBridge::update_archive]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateArchiveRequest {
@@ -1768,6 +1956,7 @@ pub struct UpdateArchiveRequest {
     pub retention_days: Option<i64>,
 }
 
+/// see [EventBridge::update_archive]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateArchiveResponse {
@@ -3631,7 +3820,7 @@ impl fmt::Display for UpdateArchiveError {
 impl Error for UpdateArchiveError {}
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
 #[async_trait]
-pub trait EventBridge {
+pub trait EventBridge: Clone + Sync + Send + 'static {
     /// <p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p>
     async fn activate_event_source(
         &self,
@@ -3785,11 +3974,33 @@ pub trait EventBridge {
         input: ListRuleNamesByTargetRequest,
     ) -> Result<ListRuleNamesByTargetResponse, RusotoError<ListRuleNamesByTargetError>>;
 
+    /// Auto-paginating version of `list_rule_names_by_target`
+    fn list_rule_names_by_target_pages<'a>(
+        &'a self,
+        mut input: ListRuleNamesByTargetRequest,
+    ) -> RusotoStream<'a, String, ListRuleNamesByTargetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rule_names_by_target(input.clone())
+        }))
+    }
+
     /// <p>Lists your Amazon EventBridge rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p> <p>ListRules does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     async fn list_rules(
         &self,
         input: ListRulesRequest,
     ) -> Result<ListRulesResponse, RusotoError<ListRulesError>>;
+
+    /// Auto-paginating version of `list_rules`
+    fn list_rules_pages<'a>(
+        &'a self,
+        mut input: ListRulesRequest,
+    ) -> RusotoStream<'a, Rule, ListRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rules(input.clone())
+        }))
+    }
 
     /// <p>Displays the tags associated with an EventBridge resource. In EventBridge, rules and event buses can be tagged.</p>
     async fn list_tags_for_resource(
@@ -3802,6 +4013,17 @@ pub trait EventBridge {
         &self,
         input: ListTargetsByRuleRequest,
     ) -> Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>>;
+
+    /// Auto-paginating version of `list_targets_by_rule`
+    fn list_targets_by_rule_pages<'a>(
+        &'a self,
+        mut input: ListTargetsByRuleRequest,
+    ) -> RusotoStream<'a, Target, ListTargetsByRuleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_targets_by_rule(input.clone())
+        }))
+    }
 
     /// <p>Sends custom events to Amazon EventBridge so that they can be matched to rules.</p>
     async fn put_events(

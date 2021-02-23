@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -42,6 +46,7 @@ pub struct ApprovalThresholdPolicy {
     pub threshold_percentage: Option<i64>,
 }
 
+/// see [ManagedBlockchain::create_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMemberInput {
@@ -59,6 +64,7 @@ pub struct CreateMemberInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::create_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMemberOutput {
@@ -68,6 +74,7 @@ pub struct CreateMemberOutput {
     pub member_id: Option<String>,
 }
 
+/// see [ManagedBlockchain::create_network]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkInput {
@@ -99,6 +106,7 @@ pub struct CreateNetworkInput {
     pub voting_policy: VotingPolicy,
 }
 
+/// see [ManagedBlockchain::create_network]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkOutput {
@@ -112,6 +120,7 @@ pub struct CreateNetworkOutput {
     pub network_id: Option<String>,
 }
 
+/// see [ManagedBlockchain::create_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNodeInput {
@@ -130,6 +139,7 @@ pub struct CreateNodeInput {
     pub node_configuration: NodeConfiguration,
 }
 
+/// see [ManagedBlockchain::create_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNodeOutput {
@@ -139,6 +149,7 @@ pub struct CreateNodeOutput {
     pub node_id: Option<String>,
 }
 
+/// see [ManagedBlockchain::create_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProposalInput {
@@ -160,6 +171,7 @@ pub struct CreateProposalInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::create_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProposalOutput {
@@ -169,6 +181,7 @@ pub struct CreateProposalOutput {
     pub proposal_id: Option<String>,
 }
 
+/// see [ManagedBlockchain::delete_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMemberInput {
@@ -180,10 +193,12 @@ pub struct DeleteMemberInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::delete_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMemberOutput {}
 
+/// see [ManagedBlockchain::delete_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNodeInput {
@@ -199,10 +214,12 @@ pub struct DeleteNodeInput {
     pub node_id: String,
 }
 
+/// see [ManagedBlockchain::delete_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNodeOutput {}
 
+/// see [ManagedBlockchain::get_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMemberInput {
@@ -214,6 +231,7 @@ pub struct GetMemberInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::get_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMemberOutput {
@@ -223,6 +241,7 @@ pub struct GetMemberOutput {
     pub member: Option<Member>,
 }
 
+/// see [ManagedBlockchain::get_network]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkInput {
@@ -231,6 +250,7 @@ pub struct GetNetworkInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::get_network]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkOutput {
@@ -240,6 +260,7 @@ pub struct GetNetworkOutput {
     pub network: Option<Network>,
 }
 
+/// see [ManagedBlockchain::get_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNodeInput {
@@ -255,6 +276,7 @@ pub struct GetNodeInput {
     pub node_id: String,
 }
 
+/// see [ManagedBlockchain::get_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNodeOutput {
@@ -264,6 +286,7 @@ pub struct GetNodeOutput {
     pub node: Option<Node>,
 }
 
+/// see [ManagedBlockchain::get_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProposalInput {
@@ -275,6 +298,7 @@ pub struct GetProposalInput {
     pub proposal_id: String,
 }
 
+/// see [ManagedBlockchain::get_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProposalOutput {
@@ -317,6 +341,7 @@ pub struct InviteAction {
     pub principal: String,
 }
 
+/// see [ManagedBlockchain::list_invitations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsInput {
@@ -330,6 +355,7 @@ pub struct ListInvitationsInput {
     pub next_token: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_invitations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsOutput {
@@ -343,6 +369,7 @@ pub struct ListInvitationsOutput {
     pub next_token: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_members]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersInput {
@@ -371,6 +398,7 @@ pub struct ListMembersInput {
     pub status: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_members]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersOutput {
@@ -384,6 +412,7 @@ pub struct ListMembersOutput {
     pub next_token: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_networks]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworksInput {
@@ -409,6 +438,7 @@ pub struct ListNetworksInput {
     pub status: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_networks]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNetworksOutput {
@@ -422,6 +452,7 @@ pub struct ListNetworksOutput {
     pub next_token: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_nodes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodesInput {
@@ -446,6 +477,7 @@ pub struct ListNodesInput {
     pub status: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_nodes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNodesOutput {
@@ -459,6 +491,7 @@ pub struct ListNodesOutput {
     pub nodes: Option<Vec<NodeSummary>>,
 }
 
+/// see [ManagedBlockchain::list_proposal_votes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProposalVotesInput {
@@ -478,6 +511,7 @@ pub struct ListProposalVotesInput {
     pub proposal_id: String,
 }
 
+/// see [ManagedBlockchain::list_proposal_votes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProposalVotesOutput {
@@ -491,6 +525,7 @@ pub struct ListProposalVotesOutput {
     pub proposal_votes: Option<Vec<VoteSummary>>,
 }
 
+/// see [ManagedBlockchain::list_proposals]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProposalsInput {
@@ -507,6 +542,7 @@ pub struct ListProposalsInput {
     pub next_token: Option<String>,
 }
 
+/// see [ManagedBlockchain::list_proposals]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProposalsOutput {
@@ -1085,6 +1121,7 @@ pub struct ProposalSummary {
     pub status: Option<String>,
 }
 
+/// see [ManagedBlockchain::reject_invitation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInvitationInput {
@@ -1093,6 +1130,7 @@ pub struct RejectInvitationInput {
     pub invitation_id: String,
 }
 
+/// see [ManagedBlockchain::reject_invitation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectInvitationOutput {}
@@ -1105,6 +1143,7 @@ pub struct RemoveAction {
     pub member_id: String,
 }
 
+/// see [ManagedBlockchain::update_member]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMemberInput {
@@ -1120,10 +1159,12 @@ pub struct UpdateMemberInput {
     pub network_id: String,
 }
 
+/// see [ManagedBlockchain::update_member]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMemberOutput {}
 
+/// see [ManagedBlockchain::update_node]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNodeInput {
@@ -1143,10 +1184,12 @@ pub struct UpdateNodeInput {
     pub node_id: String,
 }
 
+/// see [ManagedBlockchain::update_node]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNodeOutput {}
 
+/// see [ManagedBlockchain::vote_on_proposal]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VoteOnProposalInput {
@@ -1164,6 +1207,7 @@ pub struct VoteOnProposalInput {
     pub voter_member_id: String,
 }
 
+/// see [ManagedBlockchain::vote_on_proposal]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoteOnProposalOutput {}
@@ -2339,7 +2383,7 @@ impl fmt::Display for VoteOnProposalError {
 impl Error for VoteOnProposalError {}
 /// Trait representing the capabilities of the ManagedBlockchain API. ManagedBlockchain clients implement this trait.
 #[async_trait]
-pub trait ManagedBlockchain {
+pub trait ManagedBlockchain: Clone + Sync + Send + 'static {
     /// <p>Creates a member within a Managed Blockchain network.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn create_member(
         &self,

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -52,6 +56,7 @@ impl DataPipelineClient {
 
 use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
+/// see [DataPipeline::activate_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivatePipelineInput {
@@ -69,11 +74,13 @@ pub struct ActivatePipelineInput {
 }
 
 /// <p>Contains the output of ActivatePipeline.</p>
+/// see [DataPipeline::activate_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActivatePipelineOutput {}
 
 /// <p>Contains the parameters for AddTags.</p>
+/// see [DataPipeline::add_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
@@ -86,11 +93,13 @@ pub struct AddTagsInput {
 }
 
 /// <p>Contains the output of AddTags.</p>
+/// see [DataPipeline::add_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {}
 
 /// <p>Contains the parameters for CreatePipeline.</p>
+/// see [DataPipeline::create_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineInput {
@@ -111,6 +120,7 @@ pub struct CreatePipelineInput {
 }
 
 /// <p>Contains the output of CreatePipeline.</p>
+/// see [DataPipeline::create_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineOutput {
@@ -120,6 +130,7 @@ pub struct CreatePipelineOutput {
 }
 
 /// <p>Contains the parameters for DeactivatePipeline.</p>
+/// see [DataPipeline::deactivate_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivatePipelineInput {
@@ -133,11 +144,13 @@ pub struct DeactivatePipelineInput {
 }
 
 /// <p>Contains the output of DeactivatePipeline.</p>
+/// see [DataPipeline::deactivate_pipeline]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeactivatePipelineOutput {}
 
 /// <p>Contains the parameters for DeletePipeline.</p>
+/// see [DataPipeline::delete_pipeline]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineInput {
@@ -147,6 +160,7 @@ pub struct DeletePipelineInput {
 }
 
 /// <p>Contains the parameters for DescribeObjects.</p>
+/// see [DataPipeline::describe_objects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeObjectsInput {
@@ -166,7 +180,24 @@ pub struct DescribeObjectsInput {
     pub pipeline_id: String,
 }
 
+impl Paged for DescribeObjectsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeObjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the output of DescribeObjects.</p>
+/// see [DataPipeline::describe_objects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeObjectsOutput {
@@ -183,7 +214,30 @@ pub struct DescribeObjectsOutput {
     pub pipeline_objects: Vec<PipelineObject>,
 }
 
+impl Paged for DescribeObjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for DescribeObjectsOutput {
+    type Item = PipelineObject;
+
+    fn into_pagination_page(self) -> Vec<PipelineObject> {
+        self.pipeline_objects
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.has_more_results.unwrap_or_default()
+    }
+}
+
 /// <p>Contains the parameters for DescribePipelines.</p>
+/// see [DataPipeline::describe_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePipelinesInput {
@@ -193,6 +247,7 @@ pub struct DescribePipelinesInput {
 }
 
 /// <p>Contains the output of DescribePipelines.</p>
+/// see [DataPipeline::describe_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelinesOutput {
@@ -202,6 +257,7 @@ pub struct DescribePipelinesOutput {
 }
 
 /// <p>Contains the parameters for EvaluateExpression.</p>
+/// see [DataPipeline::evaluate_expression]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluateExpressionInput {
@@ -217,6 +273,7 @@ pub struct EvaluateExpressionInput {
 }
 
 /// <p>Contains the output of EvaluateExpression.</p>
+/// see [DataPipeline::evaluate_expression]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluateExpressionOutput {
@@ -242,6 +299,7 @@ pub struct Field {
 }
 
 /// <p>Contains the parameters for GetPipelineDefinition.</p>
+/// see [DataPipeline::get_pipeline_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineDefinitionInput {
@@ -255,6 +313,7 @@ pub struct GetPipelineDefinitionInput {
 }
 
 /// <p>Contains the output of GetPipelineDefinition.</p>
+/// see [DataPipeline::get_pipeline_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineDefinitionOutput {
@@ -287,6 +346,7 @@ pub struct InstanceIdentity {
 }
 
 /// <p>Contains the parameters for ListPipelines.</p>
+/// see [DataPipeline::list_pipelines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
@@ -296,7 +356,24 @@ pub struct ListPipelinesInput {
     pub marker: Option<String>,
 }
 
+impl Paged for ListPipelinesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPipelinesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the output of ListPipelines.</p>
+/// see [DataPipeline::list_pipelines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesOutput {
@@ -311,6 +388,28 @@ pub struct ListPipelinesOutput {
     /// <p>The pipeline identifiers. If you require additional information about the pipelines, you can use these identifiers to call <a>DescribePipelines</a> and <a>GetPipelineDefinition</a>.</p>
     #[serde(rename = "pipelineIdList")]
     pub pipeline_id_list: Vec<PipelineIdName>,
+}
+
+impl Paged for ListPipelinesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for ListPipelinesOutput {
+    type Item = PipelineIdName;
+
+    fn into_pagination_page(self) -> Vec<PipelineIdName> {
+        self.pipeline_id_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.has_more_results.unwrap_or_default()
+    }
 }
 
 /// <p>Contains a logical operation for comparing the value of a field with a specified value.</p>
@@ -412,6 +511,7 @@ pub struct PipelineObject {
 }
 
 /// <p>Contains the parameters for PollForTask.</p>
+/// see [DataPipeline::poll_for_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForTaskInput {
@@ -429,6 +529,7 @@ pub struct PollForTaskInput {
 }
 
 /// <p>Contains the output of PollForTask.</p>
+/// see [DataPipeline::poll_for_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForTaskOutput {
@@ -439,6 +540,7 @@ pub struct PollForTaskOutput {
 }
 
 /// <p>Contains the parameters for PutPipelineDefinition.</p>
+/// see [DataPipeline::put_pipeline_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPipelineDefinitionInput {
@@ -459,6 +561,7 @@ pub struct PutPipelineDefinitionInput {
 }
 
 /// <p>Contains the output of PutPipelineDefinition.</p>
+/// see [DataPipeline::put_pipeline_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPipelineDefinitionOutput {
@@ -486,6 +589,7 @@ pub struct Query {
 }
 
 /// <p>Contains the parameters for QueryObjects.</p>
+/// see [DataPipeline::query_objects]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryObjectsInput {
@@ -509,7 +613,24 @@ pub struct QueryObjectsInput {
     pub sphere: String,
 }
 
+impl Paged for QueryObjectsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for QueryObjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.marker = key;
+    }
+}
+
 /// <p>Contains the output of QueryObjects.</p>
+/// see [DataPipeline::query_objects]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryObjectsOutput {
@@ -527,7 +648,30 @@ pub struct QueryObjectsOutput {
     pub marker: Option<String>,
 }
 
+impl Paged for QueryObjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedOutput for QueryObjectsOutput {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.ids.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.has_more_results.unwrap_or_default()
+    }
+}
+
 /// <p>Contains the parameters for RemoveTags.</p>
+/// see [DataPipeline::remove_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
@@ -540,11 +684,13 @@ pub struct RemoveTagsInput {
 }
 
 /// <p>Contains the output of RemoveTags.</p>
+/// see [DataPipeline::remove_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 /// <p>Contains the parameters for ReportTaskProgress.</p>
+/// see [DataPipeline::report_task_progress]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReportTaskProgressInput {
@@ -558,6 +704,7 @@ pub struct ReportTaskProgressInput {
 }
 
 /// <p>Contains the output of ReportTaskProgress.</p>
+/// see [DataPipeline::report_task_progress]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReportTaskProgressOutput {
@@ -567,6 +714,7 @@ pub struct ReportTaskProgressOutput {
 }
 
 /// <p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>
+/// see [DataPipeline::report_task_runner_heartbeat]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReportTaskRunnerHeartbeatInput {
@@ -584,6 +732,7 @@ pub struct ReportTaskRunnerHeartbeatInput {
 }
 
 /// <p>Contains the output of ReportTaskRunnerHeartbeat.</p>
+/// see [DataPipeline::report_task_runner_heartbeat]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReportTaskRunnerHeartbeatOutput {
@@ -606,6 +755,7 @@ pub struct Selector {
 }
 
 /// <p>Contains the parameters for SetStatus.</p>
+/// see [DataPipeline::set_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetStatusInput {
@@ -621,6 +771,7 @@ pub struct SetStatusInput {
 }
 
 /// <p>Contains the parameters for SetTaskStatus.</p>
+/// see [DataPipeline::set_task_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTaskStatusInput {
@@ -645,6 +796,7 @@ pub struct SetTaskStatusInput {
 }
 
 /// <p>Contains the output of SetTaskStatus.</p>
+/// see [DataPipeline::set_task_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetTaskStatusOutput {}
@@ -683,6 +835,7 @@ pub struct TaskObject {
 }
 
 /// <p>Contains the parameters for ValidatePipelineDefinition.</p>
+/// see [DataPipeline::validate_pipeline_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidatePipelineDefinitionInput {
@@ -703,6 +856,7 @@ pub struct ValidatePipelineDefinitionInput {
 }
 
 /// <p>Contains the output of ValidatePipelineDefinition.</p>
+/// see [DataPipeline::validate_pipeline_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidatePipelineDefinitionOutput {
@@ -1677,7 +1831,7 @@ impl fmt::Display for ValidatePipelineDefinitionError {
 impl Error for ValidatePipelineDefinitionError {}
 /// Trait representing the capabilities of the AWS Data Pipeline API. AWS Data Pipeline clients implement this trait.
 #[async_trait]
-pub trait DataPipeline {
+pub trait DataPipeline: Clone + Sync + Send + 'static {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
     async fn activate_pipeline(
         &self,
@@ -1714,6 +1868,17 @@ pub trait DataPipeline {
         input: DescribeObjectsInput,
     ) -> Result<DescribeObjectsOutput, RusotoError<DescribeObjectsError>>;
 
+    /// Auto-paginating version of `describe_objects`
+    fn describe_objects_pages<'a>(
+        &'a self,
+        mut input: DescribeObjectsInput,
+    ) -> RusotoStream<'a, PipelineObject, DescribeObjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_objects(input.clone())
+        }))
+    }
+
     /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
     async fn describe_pipelines(
         &self,
@@ -1738,6 +1903,17 @@ pub trait DataPipeline {
         input: ListPipelinesInput,
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
 
+    /// Auto-paginating version of `list_pipelines`
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesInput,
+    ) -> RusotoStream<'a, PipelineIdName, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
+    }
+
     /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
     async fn poll_for_task(
         &self,
@@ -1755,6 +1931,17 @@ pub trait DataPipeline {
         &self,
         input: QueryObjectsInput,
     ) -> Result<QueryObjectsOutput, RusotoError<QueryObjectsError>>;
+
+    /// Auto-paginating version of `query_objects`
+    fn query_objects_pages<'a>(
+        &'a self,
+        mut input: QueryObjectsInput,
+    ) -> RusotoStream<'a, String, QueryObjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.query_objects(input.clone())
+        }))
+    }
 
     /// <p>Removes existing tags from the specified pipeline.</p>
     async fn remove_tags(

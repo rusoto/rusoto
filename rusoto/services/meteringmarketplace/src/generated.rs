@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -53,6 +57,7 @@ impl MarketplaceMeteringClient {
 
 use serde_json;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
+/// see [MarketplaceMetering::batch_meter_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchMeterUsageRequest {
@@ -65,6 +70,7 @@ pub struct BatchMeterUsageRequest {
 }
 
 /// <p>Contains the UsageRecords processed by BatchMeterUsage and any records that have failed due to transient error.</p>
+/// see [MarketplaceMetering::batch_meter_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchMeterUsageResult {
@@ -78,6 +84,7 @@ pub struct BatchMeterUsageResult {
     pub unprocessed_records: Option<Vec<UsageRecord>>,
 }
 
+/// see [MarketplaceMetering::meter_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeterUsageRequest {
@@ -104,6 +111,7 @@ pub struct MeterUsageRequest {
     pub usage_quantity: Option<i64>,
 }
 
+/// see [MarketplaceMetering::meter_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeterUsageResult {
@@ -113,6 +121,7 @@ pub struct MeterUsageResult {
     pub metering_record_id: Option<String>,
 }
 
+/// see [MarketplaceMetering::register_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterUsageRequest {
@@ -128,6 +137,7 @@ pub struct RegisterUsageRequest {
     pub public_key_version: i64,
 }
 
+/// see [MarketplaceMetering::register_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterUsageResult {
@@ -142,6 +152,7 @@ pub struct RegisterUsageResult {
 }
 
 /// <p>Contains input to the ResolveCustomer operation.</p>
+/// see [MarketplaceMetering::resolve_customer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResolveCustomerRequest {
@@ -151,6 +162,7 @@ pub struct ResolveCustomerRequest {
 }
 
 /// <p>The result of the ResolveCustomer operation. Contains the CustomerIdentifier and product code.</p>
+/// see [MarketplaceMetering::resolve_customer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolveCustomerResult {
@@ -531,7 +543,7 @@ impl fmt::Display for ResolveCustomerError {
 impl Error for ResolveCustomerError {}
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
 #[async_trait]
-pub trait MarketplaceMetering {
+pub trait MarketplaceMetering: Clone + Sync + Send + 'static {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p> <p>A UsageRecord can optionally include multiple usage allocations, to provide customers with usagedata split into buckets by tags that you define (or allow the customer to define).</p> <p>BatchMeterUsage requests must be less than 1MB in size.</p>
     async fn batch_meter_usage(
         &self,

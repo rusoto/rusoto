@@ -15,15 +15,20 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// see [CodeStarNotifications::create_notification_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRuleRequest {
@@ -56,6 +61,7 @@ pub struct CreateNotificationRuleRequest {
     pub targets: Vec<Target>,
 }
 
+/// see [CodeStarNotifications::create_notification_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotificationRuleResult {
@@ -65,6 +71,7 @@ pub struct CreateNotificationRuleResult {
     pub arn: Option<String>,
 }
 
+/// see [CodeStarNotifications::delete_notification_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationRuleRequest {
@@ -73,6 +80,7 @@ pub struct DeleteNotificationRuleRequest {
     pub arn: String,
 }
 
+/// see [CodeStarNotifications::delete_notification_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNotificationRuleResult {
@@ -82,6 +90,7 @@ pub struct DeleteNotificationRuleResult {
     pub arn: Option<String>,
 }
 
+/// see [CodeStarNotifications::delete_target]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTargetRequest {
@@ -94,10 +103,12 @@ pub struct DeleteTargetRequest {
     pub target_address: String,
 }
 
+/// see [CodeStarNotifications::delete_target]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTargetResult {}
 
+/// see [CodeStarNotifications::describe_notification_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationRuleRequest {
@@ -106,6 +117,7 @@ pub struct DescribeNotificationRuleRequest {
     pub arn: String,
 }
 
+/// see [CodeStarNotifications::describe_notification_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotificationRuleResult {
@@ -188,6 +200,7 @@ pub struct ListEventTypesFilter {
     pub value: String,
 }
 
+/// see [CodeStarNotifications::list_event_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventTypesRequest {
@@ -205,6 +218,23 @@ pub struct ListEventTypesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEventTypesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEventTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeStarNotifications::list_event_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventTypesResult {
@@ -216,6 +246,28 @@ pub struct ListEventTypesResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for ListEventTypesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEventTypesResult {
+    type Item = EventTypeSummary;
+
+    fn into_pagination_page(self) -> Vec<EventTypeSummary> {
+        self.event_types.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Information about a filter to apply to the list of returned notification rules. You can filter by event type, owner, resource, or target.</p>
@@ -230,6 +282,7 @@ pub struct ListNotificationRulesFilter {
     pub value: String,
 }
 
+/// see [CodeStarNotifications::list_notification_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNotificationRulesRequest {
@@ -247,6 +300,23 @@ pub struct ListNotificationRulesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListNotificationRulesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNotificationRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeStarNotifications::list_notification_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotificationRulesResult {
@@ -260,6 +330,29 @@ pub struct ListNotificationRulesResult {
     pub notification_rules: Option<Vec<NotificationRuleSummary>>,
 }
 
+impl Paged for ListNotificationRulesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListNotificationRulesResult {
+    type Item = NotificationRuleSummary;
+
+    fn into_pagination_page(self) -> Vec<NotificationRuleSummary> {
+        self.notification_rules.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [CodeStarNotifications::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -268,6 +361,7 @@ pub struct ListTagsForResourceRequest {
     pub arn: String,
 }
 
+/// see [CodeStarNotifications::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -289,6 +383,7 @@ pub struct ListTargetsFilter {
     pub value: String,
 }
 
+/// see [CodeStarNotifications::list_targets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsRequest {
@@ -306,6 +401,23 @@ pub struct ListTargetsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTargetsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [CodeStarNotifications::list_targets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsResult {
@@ -317,6 +429,28 @@ pub struct ListTargetsResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<TargetSummary>>,
+}
+
+impl Paged for ListTargetsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTargetsResult {
+    type Item = TargetSummary;
+
+    fn into_pagination_page(self) -> Vec<TargetSummary> {
+        self.targets.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Information about a specified notification rule.</p>
@@ -333,6 +467,7 @@ pub struct NotificationRuleSummary {
     pub id: Option<String>,
 }
 
+/// see [CodeStarNotifications::subscribe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeRequest {
@@ -347,6 +482,7 @@ pub struct SubscribeRequest {
     pub target: Target,
 }
 
+/// see [CodeStarNotifications::subscribe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscribeResult {
@@ -356,6 +492,7 @@ pub struct SubscribeResult {
     pub arn: Option<String>,
 }
 
+/// see [CodeStarNotifications::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -367,6 +504,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [CodeStarNotifications::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {
@@ -408,6 +546,7 @@ pub struct TargetSummary {
     pub target_type: Option<String>,
 }
 
+/// see [CodeStarNotifications::unsubscribe]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeRequest {
@@ -419,6 +558,7 @@ pub struct UnsubscribeRequest {
     pub target_address: String,
 }
 
+/// see [CodeStarNotifications::unsubscribe]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnsubscribeResult {
@@ -427,6 +567,7 @@ pub struct UnsubscribeResult {
     pub arn: String,
 }
 
+/// see [CodeStarNotifications::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -438,10 +579,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [CodeStarNotifications::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {}
 
+/// see [CodeStarNotifications::update_notification_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationRuleRequest {
@@ -470,6 +613,7 @@ pub struct UpdateNotificationRuleRequest {
     pub targets: Option<Vec<Target>>,
 }
 
+/// see [CodeStarNotifications::update_notification_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationRuleResult {}
@@ -918,7 +1062,7 @@ impl fmt::Display for UpdateNotificationRuleError {
 impl Error for UpdateNotificationRuleError {}
 /// Trait representing the capabilities of the AWS CodeStar Notifications API. AWS CodeStar Notifications clients implement this trait.
 #[async_trait]
-pub trait CodeStarNotifications {
+pub trait CodeStarNotifications: Clone + Sync + Send + 'static {
     /// <p>Creates a notification rule for a resource. The rule specifies the events you want notifications about and the targets (such as SNS topics) where you want to receive them.</p>
     async fn create_notification_rule(
         &self,
@@ -949,11 +1093,33 @@ pub trait CodeStarNotifications {
         input: ListEventTypesRequest,
     ) -> Result<ListEventTypesResult, RusotoError<ListEventTypesError>>;
 
+    /// Auto-paginating version of `list_event_types`
+    fn list_event_types_pages<'a>(
+        &'a self,
+        mut input: ListEventTypesRequest,
+    ) -> RusotoStream<'a, EventTypeSummary, ListEventTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_event_types(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of the notification rules for an AWS account.</p>
     async fn list_notification_rules(
         &self,
         input: ListNotificationRulesRequest,
     ) -> Result<ListNotificationRulesResult, RusotoError<ListNotificationRulesError>>;
+
+    /// Auto-paginating version of `list_notification_rules`
+    fn list_notification_rules_pages<'a>(
+        &'a self,
+        mut input: ListNotificationRulesRequest,
+    ) -> RusotoStream<'a, NotificationRuleSummary, ListNotificationRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_notification_rules(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of the tags associated with a notification rule.</p>
     async fn list_tags_for_resource(
@@ -966,6 +1132,17 @@ pub trait CodeStarNotifications {
         &self,
         input: ListTargetsRequest,
     ) -> Result<ListTargetsResult, RusotoError<ListTargetsError>>;
+
+    /// Auto-paginating version of `list_targets`
+    fn list_targets_pages<'a>(
+        &'a self,
+        mut input: ListTargetsRequest,
+    ) -> RusotoStream<'a, TargetSummary, ListTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_targets(input.clone())
+        }))
+    }
 
     /// <p>Creates an association between a notification rule and an SNS topic so that the associated target can receive notifications when the events described in the rule are triggered.</p>
     async fn subscribe(

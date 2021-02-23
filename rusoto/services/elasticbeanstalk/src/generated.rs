@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -69,6 +73,7 @@ impl ARNDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [ElasticBeanstalk::abort_environment_update]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortEnvironmentUpdateMessage {
@@ -239,6 +244,8 @@ impl ApplicationDescriptionListDeserializer {
     }
 }
 /// <p>Result message containing a single description of an application.</p>
+/// see [ElasticBeanstalk::create_application]
+/// see [ElasticBeanstalk::update_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationDescriptionMessage {
@@ -273,6 +280,7 @@ impl ApplicationDescriptionMessageDeserializer {
     }
 }
 /// <p>Result message containing a list of application descriptions.</p>
+/// see [ElasticBeanstalk::describe_applications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationDescriptionsMessage {
@@ -440,6 +448,7 @@ impl ApplicationResourceLifecycleConfigSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::update_application_resource_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationResourceLifecycleDescriptionMessage {
@@ -607,6 +616,8 @@ impl ApplicationVersionDescriptionListDeserializer {
     }
 }
 /// <p>Result message wrapping a single description of an application version.</p>
+/// see [ElasticBeanstalk::create_application_version]
+/// see [ElasticBeanstalk::update_application_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationVersionDescriptionMessage {
@@ -642,6 +653,7 @@ impl ApplicationVersionDescriptionMessageDeserializer {
     }
 }
 /// <p>Result message wrapping a list of application version descriptions.</p>
+/// see [ElasticBeanstalk::describe_application_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationVersionDescriptionsMessage {
@@ -649,6 +661,28 @@ pub struct ApplicationVersionDescriptionsMessage {
     pub application_versions: Option<Vec<ApplicationVersionDescription>>,
     /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ApplicationVersionDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ApplicationVersionDescriptionsMessage {
+    type Item = ApplicationVersionDescription;
+
+    fn into_pagination_page(self) -> Vec<ApplicationVersionDescription> {
+        self.application_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -759,6 +793,7 @@ impl ApplicationVersionStatusDeserializer {
     }
 }
 /// <p>Request to execute a scheduled managed action immediately.</p>
+/// see [ElasticBeanstalk::apply_environment_managed_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyEnvironmentManagedActionRequest {
@@ -790,6 +825,7 @@ impl ApplyEnvironmentManagedActionRequestSerializer {
 }
 
 /// <p>The result message containing information about the managed action.</p>
+/// see [ElasticBeanstalk::apply_environment_managed_action]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyEnvironmentManagedActionResult {
@@ -838,6 +874,7 @@ impl ApplyEnvironmentManagedActionResultDeserializer {
     }
 }
 /// <p>Request to add or change the operations role used by an environment.</p>
+/// see [ElasticBeanstalk::associate_environment_operations_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEnvironmentOperationsRoleMessage {
@@ -1143,6 +1180,7 @@ impl CausesDeserializer {
     }
 }
 /// <p>Results message indicating whether a CNAME is available.</p>
+/// see [ElasticBeanstalk::check_dns_availability]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDNSAvailabilityMessage {
@@ -1164,6 +1202,7 @@ impl CheckDNSAvailabilityMessageSerializer {
 }
 
 /// <p>Indicates if the specified CNAME is available.</p>
+/// see [ElasticBeanstalk::check_dns_availability]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CheckDNSAvailabilityResultMessage {
@@ -1214,6 +1253,7 @@ impl CnameAvailabilityDeserializer {
     }
 }
 /// <p>Request to create or update a group of environments.</p>
+/// see [ElasticBeanstalk::compose_environments]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComposeEnvironmentsMessage {
@@ -1577,6 +1617,7 @@ impl ConfigurationOptionValueTypeDeserializer {
     }
 }
 /// <p>Describes the settings for a specified configuration set.</p>
+/// see [ElasticBeanstalk::describe_configuration_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationOptionsDescription {
@@ -1626,6 +1667,8 @@ impl ConfigurationOptionsDescriptionDeserializer {
     }
 }
 /// <p>Describes the settings for a configuration set.</p>
+/// see [ElasticBeanstalk::create_configuration_template]
+/// see [ElasticBeanstalk::update_configuration_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsDescription {
@@ -1748,6 +1791,7 @@ impl ConfigurationSettingsDescriptionListDeserializer {
     }
 }
 /// <p>The results from a request to change the configuration settings of an environment.</p>
+/// see [ElasticBeanstalk::describe_configuration_settings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsDescriptions {
@@ -1784,6 +1828,7 @@ impl ConfigurationSettingsDescriptionsDeserializer {
     }
 }
 /// <p>Provides a list of validation messages.</p>
+/// see [ElasticBeanstalk::validate_configuration_settings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsValidationMessages {
@@ -1845,6 +1890,7 @@ impl ConfigurationTemplateNamesListDeserializer {
     }
 }
 /// <p>Request to create an application.</p>
+/// see [ElasticBeanstalk::create_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationMessage {
@@ -1888,6 +1934,7 @@ impl CreateApplicationMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [ElasticBeanstalk::create_application_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionMessage {
@@ -1965,6 +2012,7 @@ impl CreateApplicationVersionMessageSerializer {
 }
 
 /// <p>Request to create a configuration template.</p>
+/// see [ElasticBeanstalk::create_configuration_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationTemplateMessage {
@@ -2035,6 +2083,7 @@ impl CreateConfigurationTemplateMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [ElasticBeanstalk::create_environment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentMessage {
@@ -2136,6 +2185,7 @@ impl CreateEnvironmentMessageSerializer {
 }
 
 /// <p>Request to create a new platform version.</p>
+/// see [ElasticBeanstalk::create_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformVersionRequest {
@@ -2188,6 +2238,7 @@ impl CreatePlatformVersionRequestSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::create_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePlatformVersionResult {
@@ -2227,6 +2278,7 @@ impl CreatePlatformVersionResultDeserializer {
     }
 }
 /// <p>Results of a <a>CreateStorageLocationResult</a> call.</p>
+/// see [ElasticBeanstalk::create_storage_location]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStorageLocationResultMessage {
@@ -2327,6 +2379,7 @@ impl DNSCnameDeserializer {
     }
 }
 /// <p>Request to delete an application.</p>
+/// see [ElasticBeanstalk::delete_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationMessage {
@@ -2359,6 +2412,7 @@ impl DeleteApplicationMessageSerializer {
 }
 
 /// <p>Request to delete an application version.</p>
+/// see [ElasticBeanstalk::delete_application_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationVersionMessage {
@@ -2391,6 +2445,7 @@ impl DeleteApplicationVersionMessageSerializer {
 }
 
 /// <p>Request to delete a configuration template.</p>
+/// see [ElasticBeanstalk::delete_configuration_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationTemplateMessage {
@@ -2418,6 +2473,7 @@ impl DeleteConfigurationTemplateMessageSerializer {
 }
 
 /// <p>Request to delete a draft environment configuration.</p>
+/// see [ElasticBeanstalk::delete_environment_configuration]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentConfigurationMessage {
@@ -2447,6 +2503,7 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::delete_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlatformVersionRequest {
@@ -2469,6 +2526,7 @@ impl DeletePlatformVersionRequestSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::delete_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeletePlatformVersionResult {
@@ -2559,6 +2617,7 @@ impl DeploymentTimestampDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// see [ElasticBeanstalk::describe_account_attributes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountAttributesResult {
@@ -2593,6 +2652,7 @@ impl DescribeAccountAttributesResultDeserializer {
     }
 }
 /// <p>Request to describe application versions.</p>
+/// see [ElasticBeanstalk::describe_application_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationVersionsMessage {
@@ -2604,6 +2664,22 @@ pub struct DescribeApplicationVersionsMessage {
     pub next_token: Option<String>,
     /// <p>Specify a version label to show a specific application version.</p>
     pub version_labels: Option<Vec<String>>,
+}
+
+impl Paged for DescribeApplicationVersionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeApplicationVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeApplicationVersionsMessage` contents to a `SignedRequest`.
@@ -2635,6 +2711,7 @@ impl DescribeApplicationVersionsMessageSerializer {
 }
 
 /// <p>Request to describe one or more applications.</p>
+/// see [ElasticBeanstalk::describe_applications]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationsMessage {
@@ -2662,6 +2739,7 @@ impl DescribeApplicationsMessageSerializer {
 }
 
 /// <p>Result message containing a list of application version descriptions.</p>
+/// see [ElasticBeanstalk::describe_configuration_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationOptionsMessage {
@@ -2714,6 +2792,7 @@ impl DescribeConfigurationOptionsMessageSerializer {
 }
 
 /// <p>Result message containing all of the configuration settings for a specified solution stack or configuration template.</p>
+/// see [ElasticBeanstalk::describe_configuration_settings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationSettingsMessage {
@@ -2748,6 +2827,7 @@ impl DescribeConfigurationSettingsMessageSerializer {
 }
 
 /// <p>See the example below to learn how to create a request body.</p>
+/// see [ElasticBeanstalk::describe_environment_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentHealthRequest {
@@ -2785,6 +2865,7 @@ impl DescribeEnvironmentHealthRequestSerializer {
 }
 
 /// <p>Health details for an AWS Elastic Beanstalk environment.</p>
+/// see [ElasticBeanstalk::describe_environment_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentHealthResult {
@@ -2867,6 +2948,7 @@ impl DescribeEnvironmentHealthResultDeserializer {
     }
 }
 /// <p>Request to list completed and failed managed actions.</p>
+/// see [ElasticBeanstalk::describe_environment_managed_action_history]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentManagedActionHistoryRequest {
@@ -2878,6 +2960,22 @@ pub struct DescribeEnvironmentManagedActionHistoryRequest {
     pub max_items: Option<i64>,
     /// <p>The pagination token returned by a previous request.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeEnvironmentManagedActionHistoryRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEnvironmentManagedActionHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeEnvironmentManagedActionHistoryRequest` contents to a `SignedRequest`.
@@ -2909,6 +3007,7 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
 }
 
 /// <p>A result message containing a list of completed and failed managed actions.</p>
+/// see [ElasticBeanstalk::describe_environment_managed_action_history]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentManagedActionHistoryResult {
@@ -2916,6 +3015,28 @@ pub struct DescribeEnvironmentManagedActionHistoryResult {
     pub managed_action_history_items: Option<Vec<ManagedActionHistoryItem>>,
     /// <p>A pagination token that you pass to <a>DescribeEnvironmentManagedActionHistory</a> to get the next page of results.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for DescribeEnvironmentManagedActionHistoryResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeEnvironmentManagedActionHistoryResult {
+    type Item = ManagedActionHistoryItem;
+
+    fn into_pagination_page(self) -> Vec<ManagedActionHistoryItem> {
+        self.managed_action_history_items.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -2950,6 +3071,7 @@ impl DescribeEnvironmentManagedActionHistoryResultDeserializer {
     }
 }
 /// <p>Request to list an environment's upcoming and in-progress managed actions.</p>
+/// see [ElasticBeanstalk::describe_environment_managed_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentManagedActionsRequest {
@@ -2983,6 +3105,7 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
 }
 
 /// <p>The result message containing a list of managed actions.</p>
+/// see [ElasticBeanstalk::describe_environment_managed_actions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentManagedActionsResult {
@@ -3016,6 +3139,7 @@ impl DescribeEnvironmentManagedActionsResultDeserializer {
     }
 }
 /// <p>Request to describe the resources in an environment.</p>
+/// see [ElasticBeanstalk::describe_environment_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentResourcesMessage {
@@ -3044,6 +3168,7 @@ impl DescribeEnvironmentResourcesMessageSerializer {
 }
 
 /// <p>Request to describe one or more environments.</p>
+/// see [ElasticBeanstalk::describe_environments]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentsMessage {
@@ -3063,6 +3188,22 @@ pub struct DescribeEnvironmentsMessage {
     pub next_token: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application version.</p>
     pub version_label: Option<String>,
+}
+
+impl Paged for DescribeEnvironmentsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEnvironmentsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeEnvironmentsMessage` contents to a `SignedRequest`.
@@ -3113,6 +3254,7 @@ impl DescribeEnvironmentsMessageSerializer {
 }
 
 /// <p>Request to retrieve a list of events for an environment.</p>
+/// see [ElasticBeanstalk::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
@@ -3140,6 +3282,22 @@ pub struct DescribeEventsMessage {
     pub template_name: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this application version.</p>
     pub version_label: Option<String>,
+}
+
+impl Paged for DescribeEventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
@@ -3191,6 +3349,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p>Parameters for a call to <code>DescribeInstancesHealth</code>.</p>
+/// see [ElasticBeanstalk::describe_instances_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesHealthRequest {
@@ -3233,6 +3392,7 @@ impl DescribeInstancesHealthRequestSerializer {
 }
 
 /// <p>Detailed health information about the Amazon EC2 instances in an AWS Elastic Beanstalk environment.</p>
+/// see [ElasticBeanstalk::describe_instances_health]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstancesHealthResult {
@@ -3280,6 +3440,7 @@ impl DescribeInstancesHealthResultDeserializer {
         )
     }
 }
+/// see [ElasticBeanstalk::describe_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlatformVersionRequest {
@@ -3302,6 +3463,7 @@ impl DescribePlatformVersionRequestSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::describe_platform_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePlatformVersionResult {
@@ -3345,6 +3507,7 @@ impl DescriptionDeserializer {
     }
 }
 /// <p>Request to disassociate the operations role from an environment.</p>
+/// see [ElasticBeanstalk::disassociate_environment_operations_role]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateEnvironmentOperationsRoleMessage {
@@ -3397,6 +3560,9 @@ impl EnvironmentArnDeserializer {
     }
 }
 /// <p>Describes the properties of an environment.</p>
+/// see [ElasticBeanstalk::create_environment]
+/// see [ElasticBeanstalk::terminate_environment]
+/// see [ElasticBeanstalk::update_environment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentDescription {
@@ -3585,6 +3751,8 @@ impl EnvironmentDescriptionsListDeserializer {
     }
 }
 /// <p>Result message containing a list of environment descriptions.</p>
+/// see [ElasticBeanstalk::compose_environments]
+/// see [ElasticBeanstalk::describe_environments]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentDescriptionsMessage {
@@ -3592,6 +3760,28 @@ pub struct EnvironmentDescriptionsMessage {
     pub environments: Option<Vec<EnvironmentDescription>>,
     /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for EnvironmentDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for EnvironmentDescriptionsMessage {
+    type Item = EnvironmentDescription;
+
+    fn into_pagination_page(self) -> Vec<EnvironmentDescription> {
+        self.environments.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -3916,6 +4106,7 @@ impl EnvironmentResourceDescriptionDeserializer {
     }
 }
 /// <p>Result message containing a list of environment resource descriptions.</p>
+/// see [ElasticBeanstalk::describe_environment_resources]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentResourceDescriptionsMessage {
@@ -4159,6 +4350,7 @@ impl EventDescriptionListDeserializer {
     }
 }
 /// <p>Result message wrapping a list of event descriptions.</p>
+/// see [ElasticBeanstalk::describe_events]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventDescriptionsMessage {
@@ -4166,6 +4358,28 @@ pub struct EventDescriptionsMessage {
     pub events: Option<Vec<EventDescription>>,
     /// <p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>
     pub next_token: Option<String>,
+}
+
+impl Paged for EventDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for EventDescriptionsMessage {
+    type Item = EventDescription;
+
+    fn into_pagination_page(self) -> Vec<EventDescription> {
+        self.events.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4555,6 +4769,7 @@ impl LaunchedAtDeserializer {
     }
 }
 /// <p>A list of available AWS Elastic Beanstalk solution stacks.</p>
+/// see [ElasticBeanstalk::list_available_solution_stacks]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAvailableSolutionStacksResultMessage {
@@ -4600,6 +4815,7 @@ impl ListAvailableSolutionStacksResultMessageDeserializer {
         )
     }
 }
+/// see [ElasticBeanstalk::list_platform_branches]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformBranchesRequest {
@@ -4636,6 +4852,7 @@ impl ListPlatformBranchesRequestSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::list_platform_branches]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformBranchesResult {
@@ -4676,6 +4893,7 @@ impl ListPlatformBranchesResultDeserializer {
         )
     }
 }
+/// see [ElasticBeanstalk::list_platform_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformVersionsRequest {
@@ -4685,6 +4903,22 @@ pub struct ListPlatformVersionsRequest {
     pub max_records: Option<i64>,
     /// <p>For a paginated request. Specify a token from a previous response page to retrieve the next response page. All other parameter values must be identical to the ones specified in the initial request.</p> <p>If no <code>NextToken</code> is specified, the first page is retrieved.</p>
     pub next_token: Option<String>,
+}
+
+impl Paged for ListPlatformVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlatformVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
 }
 
 /// Serialize `ListPlatformVersionsRequest` contents to a `SignedRequest`.
@@ -4712,6 +4946,7 @@ impl ListPlatformVersionsRequestSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::list_platform_versions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformVersionsResult {
@@ -4719,6 +4954,28 @@ pub struct ListPlatformVersionsResult {
     pub next_token: Option<String>,
     /// <p>Summary information about the platform versions.</p>
     pub platform_summary_list: Option<Vec<PlatformSummary>>,
+}
+
+impl Paged for ListPlatformVersionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPlatformVersionsResult {
+    type Item = PlatformSummary;
+
+    fn into_pagination_page(self) -> Vec<PlatformSummary> {
+        self.platform_summary_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 #[allow(dead_code)]
@@ -4752,6 +5009,7 @@ impl ListPlatformVersionsResultDeserializer {
         )
     }
 }
+/// see [ElasticBeanstalk::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
@@ -6080,6 +6338,7 @@ impl QueueListDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [ElasticBeanstalk::rebuild_environment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildEnvironmentMessage {
@@ -6140,6 +6399,7 @@ impl RequestCountDeserializer {
     }
 }
 /// <p>Request to retrieve logs from an environment and store them in your Elastic Beanstalk storage bucket.</p>
+/// see [ElasticBeanstalk::request_environment_info]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestEnvironmentInfoMessage {
@@ -6292,6 +6552,7 @@ impl ResourceQuotasDeserializer {
         })
     }
 }
+/// see [ElasticBeanstalk::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceTagsDescriptionMessage {
@@ -6331,6 +6592,7 @@ impl ResourceTagsDescriptionMessageDeserializer {
     }
 }
 /// <p><p/></p>
+/// see [ElasticBeanstalk::restart_app_server]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestartAppServerMessage {
@@ -6359,6 +6621,7 @@ impl RestartAppServerMessageSerializer {
 }
 
 /// <p>Request to download logs retrieved with <a>RequestEnvironmentInfo</a>.</p>
+/// see [ElasticBeanstalk::retrieve_environment_info]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveEnvironmentInfoMessage {
@@ -6390,6 +6653,7 @@ impl RetrieveEnvironmentInfoMessageSerializer {
 }
 
 /// <p>Result message containing a description of the requested environment info.</p>
+/// see [ElasticBeanstalk::retrieve_environment_info]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RetrieveEnvironmentInfoResultMessage {
@@ -6942,6 +7206,7 @@ impl SupportedTierListDeserializer {
     }
 }
 /// <p>Swaps the CNAMEs of two environments.</p>
+/// see [ElasticBeanstalk::swap_environment_cnam_es]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SwapEnvironmentCNAMEsMessage {
@@ -7148,6 +7413,7 @@ impl TagsSerializer {
 }
 
 /// <p>Request to terminate an environment.</p>
+/// see [ElasticBeanstalk::terminate_environment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateEnvironmentMessage {
@@ -7247,6 +7513,7 @@ impl TriggerListDeserializer {
     }
 }
 /// <p>Request to update an application.</p>
+/// see [ElasticBeanstalk::update_application]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationMessage {
@@ -7275,6 +7542,7 @@ impl UpdateApplicationMessageSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::update_application_resource_lifecycle]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationResourceLifecycleMessage {
@@ -7306,6 +7574,7 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
 }
 
 /// <p><p/></p>
+/// see [ElasticBeanstalk::update_application_version]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationVersionMessage {
@@ -7338,6 +7607,7 @@ impl UpdateApplicationVersionMessageSerializer {
 }
 
 /// <p>The result message containing the options for the specified solution stack.</p>
+/// see [ElasticBeanstalk::update_configuration_template]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationTemplateMessage {
@@ -7396,6 +7666,7 @@ impl UpdateDateDeserializer {
     }
 }
 /// <p>Request to update an environment.</p>
+/// see [ElasticBeanstalk::update_environment]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentMessage {
@@ -7485,6 +7756,7 @@ impl UpdateEnvironmentMessageSerializer {
     }
 }
 
+/// see [ElasticBeanstalk::update_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagsForResourceMessage {
@@ -7532,6 +7804,7 @@ impl UserDefinedOptionDeserializer {
     }
 }
 /// <p>A list of validation messages for a specified configuration template.</p>
+/// see [ElasticBeanstalk::validate_configuration_settings]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateConfigurationSettingsMessage {
@@ -10076,7 +10349,7 @@ impl fmt::Display for ValidateConfigurationSettingsError {
 impl Error for ValidateConfigurationSettingsError {}
 /// Trait representing the capabilities of the Elastic Beanstalk API. Elastic Beanstalk clients implement this trait.
 #[async_trait]
-pub trait ElasticBeanstalk {
+pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     async fn abort_environment_update(
         &self,
@@ -10183,6 +10456,17 @@ pub trait ElasticBeanstalk {
         input: DescribeApplicationVersionsMessage,
     ) -> Result<ApplicationVersionDescriptionsMessage, RusotoError<DescribeApplicationVersionsError>>;
 
+    /// Auto-paginating version of `describe_application_versions`
+    fn describe_application_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeApplicationVersionsMessage,
+    ) -> RusotoStream<'a, ApplicationVersionDescription, DescribeApplicationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_application_versions(input.clone())
+        }))
+    }
+
     /// <p>Returns the descriptions of existing applications.</p>
     async fn describe_applications(
         &self,
@@ -10216,6 +10500,18 @@ pub trait ElasticBeanstalk {
         RusotoError<DescribeEnvironmentManagedActionHistoryError>,
     >;
 
+    /// Auto-paginating version of `describe_environment_managed_action_history`
+    fn describe_environment_managed_action_history_pages<'a>(
+        &'a self,
+        mut input: DescribeEnvironmentManagedActionHistoryRequest,
+    ) -> RusotoStream<'a, ManagedActionHistoryItem, DescribeEnvironmentManagedActionHistoryError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_environment_managed_action_history(input.clone())
+        }))
+    }
+
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     async fn describe_environment_managed_actions(
         &self,
@@ -10240,11 +10536,33 @@ pub trait ElasticBeanstalk {
         input: DescribeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, RusotoError<DescribeEnvironmentsError>>;
 
+    /// Auto-paginating version of `describe_environments`
+    fn describe_environments_pages<'a>(
+        &'a self,
+        mut input: DescribeEnvironmentsMessage,
+    ) -> RusotoStream<'a, EnvironmentDescription, DescribeEnvironmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_environments(input.clone())
+        }))
+    }
+
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventDescriptionsMessage, RusotoError<DescribeEventsError>>;
+
+    /// Auto-paginating version of `describe_events`
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, EventDescription, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
+    }
 
     /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     async fn describe_instances_health(
@@ -10283,6 +10601,17 @@ pub trait ElasticBeanstalk {
         &self,
         input: ListPlatformVersionsRequest,
     ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>>;
+
+    /// Auto-paginating version of `list_platform_versions`
+    fn list_platform_versions_pages<'a>(
+        &'a self,
+        mut input: ListPlatformVersionsRequest,
+    ) -> RusotoStream<'a, PlatformSummary, ListPlatformVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_platform_versions(input.clone())
+        }))
+    }
 
     /// <p>Return the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p>
     async fn list_tags_for_resource(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -369,6 +373,7 @@ pub struct CoverageNormalizedUnits {
     pub total_running_normalized_units: Option<String>,
 }
 
+/// see [CostExplorer::create_anomaly_monitor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAnomalyMonitorRequest {
@@ -377,6 +382,7 @@ pub struct CreateAnomalyMonitorRequest {
     pub anomaly_monitor: AnomalyMonitor,
 }
 
+/// see [CostExplorer::create_anomaly_monitor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAnomalyMonitorResponse {
@@ -385,6 +391,7 @@ pub struct CreateAnomalyMonitorResponse {
     pub monitor_arn: String,
 }
 
+/// see [CostExplorer::create_anomaly_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAnomalySubscriptionRequest {
@@ -393,6 +400,7 @@ pub struct CreateAnomalySubscriptionRequest {
     pub anomaly_subscription: AnomalySubscription,
 }
 
+/// see [CostExplorer::create_anomaly_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAnomalySubscriptionResponse {
@@ -401,6 +409,7 @@ pub struct CreateAnomalySubscriptionResponse {
     pub subscription_arn: String,
 }
 
+/// see [CostExplorer::create_cost_category_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCostCategoryDefinitionRequest {
@@ -413,6 +422,7 @@ pub struct CreateCostCategoryDefinitionRequest {
     pub rules: Vec<CostCategoryRule>,
 }
 
+/// see [CostExplorer::create_cost_category_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCostCategoryDefinitionResponse {
@@ -487,6 +497,7 @@ pub struct DateInterval {
     pub start: String,
 }
 
+/// see [CostExplorer::delete_anomaly_monitor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnomalyMonitorRequest {
@@ -495,10 +506,12 @@ pub struct DeleteAnomalyMonitorRequest {
     pub monitor_arn: String,
 }
 
+/// see [CostExplorer::delete_anomaly_monitor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAnomalyMonitorResponse {}
 
+/// see [CostExplorer::delete_anomaly_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnomalySubscriptionRequest {
@@ -507,10 +520,12 @@ pub struct DeleteAnomalySubscriptionRequest {
     pub subscription_arn: String,
 }
 
+/// see [CostExplorer::delete_anomaly_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAnomalySubscriptionResponse {}
 
+/// see [CostExplorer::delete_cost_category_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCostCategoryDefinitionRequest {
@@ -519,6 +534,7 @@ pub struct DeleteCostCategoryDefinitionRequest {
     pub cost_category_arn: String,
 }
 
+/// see [CostExplorer::delete_cost_category_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCostCategoryDefinitionResponse {
@@ -532,6 +548,7 @@ pub struct DeleteCostCategoryDefinitionResponse {
     pub effective_end: Option<String>,
 }
 
+/// see [CostExplorer::describe_cost_category_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCostCategoryDefinitionRequest {
@@ -544,6 +561,7 @@ pub struct DescribeCostCategoryDefinitionRequest {
     pub effective_on: Option<String>,
 }
 
+/// see [CostExplorer::describe_cost_category_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCostCategoryDefinitionResponse {
@@ -823,6 +841,7 @@ pub struct ForecastResult {
     pub time_period: Option<DateInterval>,
 }
 
+/// see [CostExplorer::get_anomalies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnomaliesRequest {
@@ -851,6 +870,7 @@ pub struct GetAnomaliesRequest {
     pub total_impact: Option<TotalImpactFilter>,
 }
 
+/// see [CostExplorer::get_anomalies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnomaliesResponse {
@@ -863,6 +883,7 @@ pub struct GetAnomaliesResponse {
     pub next_page_token: Option<String>,
 }
 
+/// see [CostExplorer::get_anomaly_monitors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnomalyMonitorsRequest {
@@ -880,6 +901,7 @@ pub struct GetAnomalyMonitorsRequest {
     pub next_page_token: Option<String>,
 }
 
+/// see [CostExplorer::get_anomaly_monitors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnomalyMonitorsResponse {
@@ -892,6 +914,7 @@ pub struct GetAnomalyMonitorsResponse {
     pub next_page_token: Option<String>,
 }
 
+/// see [CostExplorer::get_anomaly_subscriptions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnomalySubscriptionsRequest {
@@ -913,6 +936,7 @@ pub struct GetAnomalySubscriptionsRequest {
     pub subscription_arn_list: Option<Vec<String>>,
 }
 
+/// see [CostExplorer::get_anomaly_subscriptions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnomalySubscriptionsResponse {
@@ -925,6 +949,7 @@ pub struct GetAnomalySubscriptionsResponse {
     pub next_page_token: Option<String>,
 }
 
+/// see [CostExplorer::get_cost_and_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageRequest {
@@ -952,6 +977,7 @@ pub struct GetCostAndUsageRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_cost_and_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostAndUsageResponse {
@@ -969,6 +995,7 @@ pub struct GetCostAndUsageResponse {
     pub results_by_time: Option<Vec<ResultByTime>>,
 }
 
+/// see [CostExplorer::get_cost_and_usage_with_resources]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageWithResourcesRequest {
@@ -996,6 +1023,7 @@ pub struct GetCostAndUsageWithResourcesRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_cost_and_usage_with_resources]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostAndUsageWithResourcesResponse {
@@ -1013,6 +1041,7 @@ pub struct GetCostAndUsageWithResourcesResponse {
     pub results_by_time: Option<Vec<ResultByTime>>,
 }
 
+/// see [CostExplorer::get_cost_forecast]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostForecastRequest {
@@ -1035,6 +1064,7 @@ pub struct GetCostForecastRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_cost_forecast]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostForecastResponse {
@@ -1048,6 +1078,7 @@ pub struct GetCostForecastResponse {
     pub total: Option<MetricValue>,
 }
 
+/// see [CostExplorer::get_dimension_values]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDimensionValuesRequest {
@@ -1071,6 +1102,7 @@ pub struct GetDimensionValuesRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_dimension_values]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDimensionValuesResponse {
@@ -1090,6 +1122,7 @@ pub struct GetDimensionValuesResponse {
 }
 
 /// <p>You can use the following request parameters to query for how much of your instance usage a reservation covered.</p>
+/// see [CostExplorer::get_reservation_coverage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationCoverageRequest {
@@ -1118,6 +1151,7 @@ pub struct GetReservationCoverageRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_reservation_coverage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReservationCoverageResponse {
@@ -1134,6 +1168,7 @@ pub struct GetReservationCoverageResponse {
     pub total: Option<Coverage>,
 }
 
+/// see [CostExplorer::get_reservation_purchase_recommendation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationPurchaseRecommendationRequest {
@@ -1174,6 +1209,7 @@ pub struct GetReservationPurchaseRecommendationRequest {
     pub term_in_years: Option<String>,
 }
 
+/// see [CostExplorer::get_reservation_purchase_recommendation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReservationPurchaseRecommendationResponse {
@@ -1191,6 +1227,7 @@ pub struct GetReservationPurchaseRecommendationResponse {
     pub recommendations: Option<Vec<ReservationPurchaseRecommendation>>,
 }
 
+/// see [CostExplorer::get_reservation_utilization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservationUtilizationRequest {
@@ -1215,6 +1252,7 @@ pub struct GetReservationUtilizationRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_reservation_utilization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReservationUtilizationResponse {
@@ -1231,6 +1269,7 @@ pub struct GetReservationUtilizationResponse {
     pub utilizations_by_time: Vec<UtilizationByTime>,
 }
 
+/// see [CostExplorer::get_rightsizing_recommendation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRightsizingRecommendationRequest {
@@ -1254,6 +1293,7 @@ pub struct GetRightsizingRecommendationRequest {
     pub service: String,
 }
 
+/// see [CostExplorer::get_rightsizing_recommendation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRightsizingRecommendationResponse {
@@ -1279,6 +1319,7 @@ pub struct GetRightsizingRecommendationResponse {
     pub summary: Option<RightsizingRecommendationSummary>,
 }
 
+/// see [CostExplorer::get_savings_plans_coverage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansCoverageRequest {
@@ -1311,6 +1352,7 @@ pub struct GetSavingsPlansCoverageRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_savings_plans_coverage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSavingsPlansCoverageResponse {
@@ -1323,6 +1365,7 @@ pub struct GetSavingsPlansCoverageResponse {
     pub savings_plans_coverages: Vec<SavingsPlansCoverage>,
 }
 
+/// see [CostExplorer::get_savings_plans_purchase_recommendation]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansPurchaseRecommendationRequest {
@@ -1356,6 +1399,7 @@ pub struct GetSavingsPlansPurchaseRecommendationRequest {
     pub term_in_years: String,
 }
 
+/// see [CostExplorer::get_savings_plans_purchase_recommendation]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSavingsPlansPurchaseRecommendationResponse {
@@ -1373,6 +1417,7 @@ pub struct GetSavingsPlansPurchaseRecommendationResponse {
     pub savings_plans_purchase_recommendation: Option<SavingsPlansPurchaseRecommendation>,
 }
 
+/// see [CostExplorer::get_savings_plans_utilization_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansUtilizationDetailsRequest {
@@ -1393,6 +1438,7 @@ pub struct GetSavingsPlansUtilizationDetailsRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_savings_plans_utilization_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSavingsPlansUtilizationDetailsResponse {
@@ -1411,6 +1457,7 @@ pub struct GetSavingsPlansUtilizationDetailsResponse {
     pub total: Option<SavingsPlansUtilizationAggregates>,
 }
 
+/// see [CostExplorer::get_savings_plans_utilization]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansUtilizationRequest {
@@ -1427,6 +1474,7 @@ pub struct GetSavingsPlansUtilizationRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_savings_plans_utilization]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSavingsPlansUtilizationResponse {
@@ -1439,6 +1487,7 @@ pub struct GetSavingsPlansUtilizationResponse {
     pub total: SavingsPlansUtilizationAggregates,
 }
 
+/// see [CostExplorer::get_tags]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
@@ -1459,6 +1508,7 @@ pub struct GetTagsRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_tags]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
@@ -1477,6 +1527,7 @@ pub struct GetTagsResponse {
     pub total_size: i64,
 }
 
+/// see [CostExplorer::get_usage_forecast]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageForecastRequest {
@@ -1499,6 +1550,7 @@ pub struct GetUsageForecastRequest {
     pub time_period: DateInterval,
 }
 
+/// see [CostExplorer::get_usage_forecast]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUsageForecastResponse {
@@ -1578,6 +1630,7 @@ pub struct InstanceDetails {
     pub redshift_instance_details: Option<RedshiftInstanceDetails>,
 }
 
+/// see [CostExplorer::list_cost_category_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCostCategoryDefinitionsRequest {
@@ -1595,6 +1648,7 @@ pub struct ListCostCategoryDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [CostExplorer::list_cost_category_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCostCategoryDefinitionsResponse {
@@ -1632,6 +1686,7 @@ pub struct ModifyRecommendationDetail {
     pub target_instances: Option<Vec<TargetInstance>>,
 }
 
+/// see [CostExplorer::provide_anomaly_feedback]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvideAnomalyFeedbackRequest {
@@ -1643,6 +1698,7 @@ pub struct ProvideAnomalyFeedbackRequest {
     pub feedback: String,
 }
 
+/// see [CostExplorer::provide_anomaly_feedback]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvideAnomalyFeedbackResponse {
@@ -2560,6 +2616,7 @@ pub struct TotalImpactFilter {
     pub start_value: f64,
 }
 
+/// see [CostExplorer::update_anomaly_monitor]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAnomalyMonitorRequest {
@@ -2572,6 +2629,7 @@ pub struct UpdateAnomalyMonitorRequest {
     pub monitor_name: Option<String>,
 }
 
+/// see [CostExplorer::update_anomaly_monitor]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAnomalyMonitorResponse {
@@ -2580,6 +2638,7 @@ pub struct UpdateAnomalyMonitorResponse {
     pub monitor_arn: String,
 }
 
+/// see [CostExplorer::update_anomaly_subscription]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAnomalySubscriptionRequest {
@@ -2608,6 +2667,7 @@ pub struct UpdateAnomalySubscriptionRequest {
     pub threshold: Option<f64>,
 }
 
+/// see [CostExplorer::update_anomaly_subscription]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAnomalySubscriptionResponse {
@@ -2616,6 +2676,7 @@ pub struct UpdateAnomalySubscriptionResponse {
     pub subscription_arn: String,
 }
 
+/// see [CostExplorer::update_cost_category_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCostCategoryDefinitionRequest {
@@ -2629,6 +2690,7 @@ pub struct UpdateCostCategoryDefinitionRequest {
     pub rules: Vec<CostCategoryRule>,
 }
 
+/// see [CostExplorer::update_cost_category_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCostCategoryDefinitionResponse {
@@ -3972,7 +4034,7 @@ impl fmt::Display for UpdateCostCategoryDefinitionError {
 impl Error for UpdateCostCategoryDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 #[async_trait]
-pub trait CostExplorer {
+pub trait CostExplorer: Clone + Sync + Send + 'static {
     /// <p>Creates a new cost anomaly detection monitor with the requested type and monitor specification. </p>
     async fn create_anomaly_monitor(
         &self,

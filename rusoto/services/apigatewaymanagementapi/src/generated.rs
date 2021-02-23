@@ -15,14 +15,19 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+/// see [ApiGatewayManagementApi::delete_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
@@ -30,6 +35,7 @@ pub struct DeleteConnectionRequest {
     pub connection_id: String,
 }
 
+/// see [ApiGatewayManagementApi::get_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
@@ -37,6 +43,7 @@ pub struct GetConnectionRequest {
     pub connection_id: String,
 }
 
+/// see [ApiGatewayManagementApi::get_connection]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionResponse {
@@ -64,6 +71,7 @@ pub struct Identity {
     pub user_agent: String,
 }
 
+/// see [ApiGatewayManagementApi::post_to_connection]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostToConnectionRequest {
@@ -212,7 +220,7 @@ impl fmt::Display for PostToConnectionError {
 impl Error for PostToConnectionError {}
 /// Trait representing the capabilities of the AmazonApiGatewayManagementApi API. AmazonApiGatewayManagementApi clients implement this trait.
 #[async_trait]
-pub trait ApiGatewayManagementApi {
+pub trait ApiGatewayManagementApi: Clone + Sync + Send + 'static {
     /// <p>Delete the connection with the provided id.</p>
     async fn delete_connection(
         &self,

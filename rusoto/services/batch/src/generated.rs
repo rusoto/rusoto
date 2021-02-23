@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -120,6 +124,7 @@ pub struct AttemptDetail {
 }
 
 /// <p>Contains the parameters for <code>CancelJob</code>.</p>
+/// see [Batch::cancel_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
@@ -131,6 +136,7 @@ pub struct CancelJobRequest {
     pub reason: String,
 }
 
+/// see [Batch::cancel_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
@@ -505,6 +511,7 @@ pub struct ContainerSummary {
 }
 
 /// <p>Contains the parameters for <code>CreateComputeEnvironment</code>.</p>
+/// see [Batch::create_compute_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComputeEnvironmentRequest {
@@ -531,6 +538,7 @@ pub struct CreateComputeEnvironmentRequest {
     pub type_: String,
 }
 
+/// see [Batch::create_compute_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComputeEnvironmentResponse {
@@ -545,6 +553,7 @@ pub struct CreateComputeEnvironmentResponse {
 }
 
 /// <p>Contains the parameters for <code>CreateJobQueue</code>.</p>
+/// see [Batch::create_job_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobQueueRequest {
@@ -567,6 +576,7 @@ pub struct CreateJobQueueRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Batch::create_job_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobQueueResponse {
@@ -579,6 +589,7 @@ pub struct CreateJobQueueResponse {
 }
 
 /// <p>Contains the parameters for <code>DeleteComputeEnvironment</code>.</p>
+/// see [Batch::delete_compute_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComputeEnvironmentRequest {
@@ -587,11 +598,13 @@ pub struct DeleteComputeEnvironmentRequest {
     pub compute_environment: String,
 }
 
+/// see [Batch::delete_compute_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComputeEnvironmentResponse {}
 
 /// <p>Contains the parameters for <code>DeleteJobQueue</code>.</p>
+/// see [Batch::delete_job_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobQueueRequest {
@@ -600,10 +613,12 @@ pub struct DeleteJobQueueRequest {
     pub job_queue: String,
 }
 
+/// see [Batch::delete_job_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobQueueResponse {}
 
+/// see [Batch::deregister_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterJobDefinitionRequest {
@@ -612,11 +627,13 @@ pub struct DeregisterJobDefinitionRequest {
     pub job_definition: String,
 }
 
+/// see [Batch::deregister_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterJobDefinitionResponse {}
 
 /// <p>Contains the parameters for <code>DescribeComputeEnvironments</code>.</p>
+/// see [Batch::describe_compute_environments]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComputeEnvironmentsRequest {
@@ -634,6 +651,23 @@ pub struct DescribeComputeEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeComputeEnvironmentsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeComputeEnvironmentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Batch::describe_compute_environments]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComputeEnvironmentsResponse {
@@ -647,7 +681,30 @@ pub struct DescribeComputeEnvironmentsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeComputeEnvironmentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeComputeEnvironmentsResponse {
+    type Item = ComputeEnvironmentDetail;
+
+    fn into_pagination_page(self) -> Vec<ComputeEnvironmentDetail> {
+        self.compute_environments.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Contains the parameters for <code>DescribeJobDefinitions</code>.</p>
+/// see [Batch::describe_job_definitions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobDefinitionsRequest {
@@ -673,6 +730,23 @@ pub struct DescribeJobDefinitionsRequest {
     pub status: Option<String>,
 }
 
+impl Paged for DescribeJobDefinitionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Batch::describe_job_definitions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobDefinitionsResponse {
@@ -686,7 +760,30 @@ pub struct DescribeJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeJobDefinitionsResponse {
+    type Item = JobDefinition;
+
+    fn into_pagination_page(self) -> Vec<JobDefinition> {
+        self.job_definitions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Contains the parameters for <code>DescribeJobQueues</code>.</p>
+/// see [Batch::describe_job_queues]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobQueuesRequest {
@@ -704,6 +801,23 @@ pub struct DescribeJobQueuesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeJobQueuesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeJobQueuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Batch::describe_job_queues]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobQueuesResponse {
@@ -717,7 +831,30 @@ pub struct DescribeJobQueuesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for DescribeJobQueuesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for DescribeJobQueuesResponse {
+    type Item = JobQueueDetail;
+
+    fn into_pagination_page(self) -> Vec<JobQueueDetail> {
+        self.job_queues.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p>Contains the parameters for <code>DescribeJobs</code>.</p>
+/// see [Batch::describe_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobsRequest {
@@ -726,6 +863,7 @@ pub struct DescribeJobsRequest {
     pub jobs: Vec<String>,
 }
 
+/// see [Batch::describe_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobsResponse {
@@ -1106,6 +1244,7 @@ pub struct LinuxParameters {
 }
 
 /// <p>Contains the parameters for <code>ListJobs</code>.</p>
+/// see [Batch::list_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
@@ -1135,6 +1274,23 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Batch::list_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
@@ -1147,6 +1303,29 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListJobsResponse {
+    type Item = JobSummary;
+
+    fn into_pagination_page(self) -> Vec<JobSummary> {
+        self.job_summary_list
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Batch::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1155,6 +1334,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Batch::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1310,6 +1490,7 @@ pub struct NodeRangeProperty {
 }
 
 /// <p>Contains the parameters for <code>RegisterJobDefinition</code>.</p>
+/// see [Batch::register_job_definition]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterJobDefinitionRequest {
@@ -1353,6 +1534,7 @@ pub struct RegisterJobDefinitionRequest {
     pub type_: String,
 }
 
+/// see [Batch::register_job_definition]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterJobDefinitionResponse {
@@ -1403,6 +1585,7 @@ pub struct Secret {
 }
 
 /// <p>Contains the parameters for <code>SubmitJob</code>.</p>
+/// see [Batch::submit_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitJobRequest {
@@ -1453,6 +1636,7 @@ pub struct SubmitJobRequest {
     pub timeout: Option<JobTimeout>,
 }
 
+/// see [Batch::submit_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubmitJobResponse {
@@ -1468,6 +1652,7 @@ pub struct SubmitJobResponse {
     pub job_name: String,
 }
 
+/// see [Batch::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1479,11 +1664,13 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Batch::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Contains the parameters for <code>TerminateJob</code>.</p>
+/// see [Batch::terminate_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateJobRequest {
@@ -1495,6 +1682,7 @@ pub struct TerminateJobRequest {
     pub reason: String,
 }
 
+/// see [Batch::terminate_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateJobResponse {}
@@ -1528,6 +1716,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
+/// see [Batch::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1539,11 +1728,13 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Batch::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Contains the parameters for <code>UpdateComputeEnvironment</code>.</p>
+/// see [Batch::update_compute_environment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateComputeEnvironmentRequest {
@@ -1564,6 +1755,7 @@ pub struct UpdateComputeEnvironmentRequest {
     pub state: Option<String>,
 }
 
+/// see [Batch::update_compute_environment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateComputeEnvironmentResponse {
@@ -1578,6 +1770,7 @@ pub struct UpdateComputeEnvironmentResponse {
 }
 
 /// <p>Contains the parameters for <code>UpdateJobQueue</code>.</p>
+/// see [Batch::update_job_queue]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobQueueRequest {
@@ -1598,6 +1791,7 @@ pub struct UpdateJobQueueRequest {
     pub state: Option<String>,
 }
 
+/// see [Batch::update_job_queue]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobQueueResponse {
@@ -2300,7 +2494,7 @@ impl fmt::Display for UpdateJobQueueError {
 impl Error for UpdateJobQueueError {}
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
 #[async_trait]
-pub trait Batch {
+pub trait Batch: Clone + Sync + Send + 'static {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are canceled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not canceled (but the API operation still succeeds, even if no job is canceled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
     async fn cancel_job(
         &self,
@@ -2343,17 +2537,50 @@ pub trait Batch {
         input: DescribeComputeEnvironmentsRequest,
     ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>;
 
+    /// Auto-paginating version of `describe_compute_environments`
+    fn describe_compute_environments_pages<'a>(
+        &'a self,
+        mut input: DescribeComputeEnvironmentsRequest,
+    ) -> RusotoStream<'a, ComputeEnvironmentDetail, DescribeComputeEnvironmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_compute_environments(input.clone())
+        }))
+    }
+
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
     async fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
     ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>>;
 
+    /// Auto-paginating version of `describe_job_definitions`
+    fn describe_job_definitions_pages<'a>(
+        &'a self,
+        mut input: DescribeJobDefinitionsRequest,
+    ) -> RusotoStream<'a, JobDefinition, DescribeJobDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_job_definitions(input.clone())
+        }))
+    }
+
     /// <p>Describes one or more of your job queues.</p>
     async fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
     ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>>;
+
+    /// Auto-paginating version of `describe_job_queues`
+    fn describe_job_queues_pages<'a>(
+        &'a self,
+        mut input: DescribeJobQueuesRequest,
+    ) -> RusotoStream<'a, JobQueueDetail, DescribeJobQueuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_job_queues(input.clone())
+        }))
+    }
 
     /// <p>Describes a list of AWS Batch jobs.</p>
     async fn describe_jobs(
@@ -2366,6 +2593,17 @@ pub trait Batch {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
+
+    /// Auto-paginating version of `list_jobs`
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobSummary, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
+    }
 
     /// <p>Lists the tags for an AWS Batch resource. AWS Batch resources that support tags are compute environments, jobs, job definitions, and job queues. ARNs for child jobs of array and multi-node parallel (MNP) jobs are not supported.</p>
     async fn list_tags_for_resource(

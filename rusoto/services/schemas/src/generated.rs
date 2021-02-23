@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -26,6 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 
+/// see [Schemas::create_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiscovererRequest {
@@ -42,6 +47,7 @@ pub struct CreateDiscovererRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::create_discoverer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiscovererResponse {
@@ -71,6 +77,7 @@ pub struct CreateDiscovererResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::create_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegistryRequest {
@@ -87,6 +94,7 @@ pub struct CreateRegistryRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::create_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegistryResponse {
@@ -108,6 +116,7 @@ pub struct CreateRegistryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::create_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
@@ -133,6 +142,7 @@ pub struct CreateSchemaRequest {
     pub type_: String,
 }
 
+/// see [Schemas::create_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
@@ -169,6 +179,7 @@ pub struct CreateSchemaResponse {
     pub version_created_date: Option<f64>,
 }
 
+/// see [Schemas::delete_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiscovererRequest {
@@ -177,6 +188,7 @@ pub struct DeleteDiscovererRequest {
     pub discoverer_id: String,
 }
 
+/// see [Schemas::delete_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistryRequest {
@@ -185,6 +197,7 @@ pub struct DeleteRegistryRequest {
     pub registry_name: String,
 }
 
+/// see [Schemas::delete_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
@@ -194,6 +207,7 @@ pub struct DeleteResourcePolicyRequest {
     pub registry_name: Option<String>,
 }
 
+/// see [Schemas::delete_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
@@ -205,6 +219,7 @@ pub struct DeleteSchemaRequest {
     pub schema_name: String,
 }
 
+/// see [Schemas::delete_schema_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaVersionRequest {
@@ -219,6 +234,7 @@ pub struct DeleteSchemaVersionRequest {
     pub schema_version: String,
 }
 
+/// see [Schemas::describe_code_binding]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeBindingRequest {
@@ -237,6 +253,7 @@ pub struct DescribeCodeBindingRequest {
     pub schema_version: Option<String>,
 }
 
+/// see [Schemas::describe_code_binding]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCodeBindingResponse {
@@ -258,6 +275,7 @@ pub struct DescribeCodeBindingResponse {
     pub status: Option<String>,
 }
 
+/// see [Schemas::describe_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDiscovererRequest {
@@ -266,6 +284,7 @@ pub struct DescribeDiscovererRequest {
     pub discoverer_id: String,
 }
 
+/// see [Schemas::describe_discoverer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDiscovererResponse {
@@ -295,6 +314,7 @@ pub struct DescribeDiscovererResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::describe_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegistryRequest {
@@ -303,6 +323,7 @@ pub struct DescribeRegistryRequest {
     pub registry_name: String,
 }
 
+/// see [Schemas::describe_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegistryResponse {
@@ -324,6 +345,7 @@ pub struct DescribeRegistryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::describe_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemaRequest {
@@ -339,6 +361,7 @@ pub struct DescribeSchemaRequest {
     pub schema_version: Option<String>,
 }
 
+/// see [Schemas::describe_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemaResponse {
@@ -405,6 +428,7 @@ pub struct DiscovererSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::export_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportSchemaRequest {
@@ -422,6 +446,7 @@ pub struct ExportSchemaRequest {
     pub type_: String,
 }
 
+/// see [Schemas::export_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportSchemaResponse {
@@ -442,6 +467,7 @@ pub struct ExportSchemaResponse {
     pub type_: Option<String>,
 }
 
+/// see [Schemas::get_code_binding_source]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCodeBindingSourceRequest {
@@ -460,11 +486,13 @@ pub struct GetCodeBindingSourceRequest {
     pub schema_version: Option<String>,
 }
 
+/// see [Schemas::get_code_binding_source]
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetCodeBindingSourceResponse {
     pub body: Option<bytes::Bytes>,
 }
 
+/// see [Schemas::get_discovered_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredSchemaRequest {
@@ -476,6 +504,7 @@ pub struct GetDiscoveredSchemaRequest {
     pub type_: String,
 }
 
+/// see [Schemas::get_discovered_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredSchemaResponse {
@@ -485,6 +514,7 @@ pub struct GetDiscoveredSchemaResponse {
     pub content: Option<String>,
 }
 
+/// see [Schemas::get_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyRequest {
@@ -494,6 +524,7 @@ pub struct GetResourcePolicyRequest {
     pub registry_name: Option<String>,
 }
 
+/// see [Schemas::get_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyResponse {
@@ -507,6 +538,7 @@ pub struct GetResourcePolicyResponse {
     pub revision_id: Option<String>,
 }
 
+/// see [Schemas::list_discoverers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoverersRequest {
@@ -527,6 +559,23 @@ pub struct ListDiscoverersRequest {
     pub source_arn_prefix: Option<String>,
 }
 
+impl Paged for ListDiscoverersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDiscoverersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Schemas::list_discoverers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoverersResponse {
@@ -540,6 +589,29 @@ pub struct ListDiscoverersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDiscoverersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDiscoverersResponse {
+    type Item = DiscovererSummary;
+
+    fn into_pagination_page(self) -> Vec<DiscovererSummary> {
+        self.discoverers.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Schemas::list_registries]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegistriesRequest {
@@ -560,6 +632,23 @@ pub struct ListRegistriesRequest {
     pub scope: Option<String>,
 }
 
+impl Paged for ListRegistriesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRegistriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Schemas::list_registries]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegistriesResponse {
@@ -573,6 +662,29 @@ pub struct ListRegistriesResponse {
     pub registries: Option<Vec<RegistrySummary>>,
 }
 
+impl Paged for ListRegistriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListRegistriesResponse {
+    type Item = RegistrySummary;
+
+    fn into_pagination_page(self) -> Vec<RegistrySummary> {
+        self.registries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Schemas::list_schema_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemaVersionsRequest {
@@ -591,6 +703,23 @@ pub struct ListSchemaVersionsRequest {
     pub schema_name: String,
 }
 
+impl Paged for ListSchemaVersionsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSchemaVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Schemas::list_schema_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemaVersionsResponse {
@@ -604,6 +733,29 @@ pub struct ListSchemaVersionsResponse {
     pub schema_versions: Option<Vec<SchemaVersionSummary>>,
 }
 
+impl Paged for ListSchemaVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSchemaVersionsResponse {
+    type Item = SchemaVersionSummary;
+
+    fn into_pagination_page(self) -> Vec<SchemaVersionSummary> {
+        self.schema_versions.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Schemas::list_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemasRequest {
@@ -623,6 +775,23 @@ pub struct ListSchemasRequest {
     pub schema_name_prefix: Option<String>,
 }
 
+impl Paged for ListSchemasRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSchemasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Schemas::list_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemasResponse {
@@ -636,6 +805,29 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<SchemaSummary>>,
 }
 
+impl Paged for ListSchemasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSchemasResponse {
+    type Item = SchemaSummary;
+
+    fn into_pagination_page(self) -> Vec<SchemaSummary> {
+        self.schemas.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Schemas::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -644,6 +836,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Schemas::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -652,6 +845,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::put_code_binding]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutCodeBindingRequest {
@@ -670,6 +864,7 @@ pub struct PutCodeBindingRequest {
     pub schema_version: Option<String>,
 }
 
+/// see [Schemas::put_code_binding]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutCodeBindingResponse {
@@ -692,6 +887,7 @@ pub struct PutCodeBindingResponse {
 }
 
 /// <p>The name of the policy.</p>
+/// see [Schemas::put_resource_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
@@ -708,6 +904,7 @@ pub struct PutResourcePolicyRequest {
     pub revision_id: Option<String>,
 }
 
+/// see [Schemas::put_resource_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
@@ -823,6 +1020,7 @@ pub struct SearchSchemaVersionSummary {
     pub type_: Option<String>,
 }
 
+/// see [Schemas::search_schemas]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSchemasRequest {
@@ -841,6 +1039,23 @@ pub struct SearchSchemasRequest {
     pub registry_name: String,
 }
 
+impl Paged for SearchSchemasRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSchemasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Schemas::search_schemas]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSchemasResponse {
@@ -854,6 +1069,29 @@ pub struct SearchSchemasResponse {
     pub schemas: Option<Vec<SearchSchemaSummary>>,
 }
 
+impl Paged for SearchSchemasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for SearchSchemasResponse {
+    type Item = SearchSchemaSummary;
+
+    fn into_pagination_page(self) -> Vec<SearchSchemaSummary> {
+        self.schemas.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Schemas::start_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDiscovererRequest {
@@ -862,6 +1100,7 @@ pub struct StartDiscovererRequest {
     pub discoverer_id: String,
 }
 
+/// see [Schemas::start_discoverer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDiscovererResponse {
@@ -875,6 +1114,7 @@ pub struct StartDiscovererResponse {
     pub state: Option<String>,
 }
 
+/// see [Schemas::stop_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDiscovererRequest {
@@ -883,6 +1123,7 @@ pub struct StopDiscovererRequest {
     pub discoverer_id: String,
 }
 
+/// see [Schemas::stop_discoverer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDiscovererResponse {
@@ -897,6 +1138,7 @@ pub struct StopDiscovererResponse {
 }
 
 /// <p></p>
+/// see [Schemas::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -908,6 +1150,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+/// see [Schemas::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -919,6 +1162,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Schemas::update_discoverer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDiscovererRequest {
@@ -931,6 +1175,7 @@ pub struct UpdateDiscovererRequest {
     pub discoverer_id: String,
 }
 
+/// see [Schemas::update_discoverer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDiscovererResponse {
@@ -961,6 +1206,7 @@ pub struct UpdateDiscovererResponse {
 }
 
 /// <p>Updates the registry.</p>
+/// see [Schemas::update_registry]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegistryRequest {
@@ -973,6 +1219,7 @@ pub struct UpdateRegistryRequest {
     pub registry_name: String,
 }
 
+/// see [Schemas::update_registry]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegistryResponse {
@@ -994,6 +1241,7 @@ pub struct UpdateRegistryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// see [Schemas::update_schema]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSchemaRequest {
@@ -1021,6 +1269,7 @@ pub struct UpdateSchemaRequest {
     pub type_: Option<String>,
 }
 
+/// see [Schemas::update_schema]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSchemaResponse {
@@ -2866,7 +3115,7 @@ impl fmt::Display for UpdateSchemaError {
 impl Error for UpdateSchemaError {}
 /// Trait representing the capabilities of the Schemas API. Schemas clients implement this trait.
 #[async_trait]
-pub trait Schemas {
+pub trait Schemas: Clone + Sync + Send + 'static {
     /// <p>Creates a discoverer.</p>
     async fn create_discoverer(
         &self,
@@ -2968,11 +3217,33 @@ pub trait Schemas {
         input: ListDiscoverersRequest,
     ) -> Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>>;
 
+    /// Auto-paginating version of `list_discoverers`
+    fn list_discoverers_pages<'a>(
+        &'a self,
+        mut input: ListDiscoverersRequest,
+    ) -> RusotoStream<'a, DiscovererSummary, ListDiscoverersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_discoverers(input.clone())
+        }))
+    }
+
     /// <p>List the registries.</p>
     async fn list_registries(
         &self,
         input: ListRegistriesRequest,
     ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>;
+
+    /// Auto-paginating version of `list_registries`
+    fn list_registries_pages<'a>(
+        &'a self,
+        mut input: ListRegistriesRequest,
+    ) -> RusotoStream<'a, RegistrySummary, ListRegistriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_registries(input.clone())
+        }))
+    }
 
     /// <p>Provides a list of the schema versions and related information.</p>
     async fn list_schema_versions(
@@ -2980,11 +3251,33 @@ pub trait Schemas {
         input: ListSchemaVersionsRequest,
     ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>>;
 
+    /// Auto-paginating version of `list_schema_versions`
+    fn list_schema_versions_pages<'a>(
+        &'a self,
+        mut input: ListSchemaVersionsRequest,
+    ) -> RusotoStream<'a, SchemaVersionSummary, ListSchemaVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_schema_versions(input.clone())
+        }))
+    }
+
     /// <p>List the schemas.</p>
     async fn list_schemas(
         &self,
         input: ListSchemasRequest,
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
+
+    /// Auto-paginating version of `list_schemas`
+    fn list_schemas_pages<'a>(
+        &'a self,
+        mut input: ListSchemasRequest,
+    ) -> RusotoStream<'a, SchemaSummary, ListSchemasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_schemas(input.clone())
+        }))
+    }
 
     /// <p>Get tags for resource.</p>
     async fn list_tags_for_resource(
@@ -3009,6 +3302,17 @@ pub trait Schemas {
         &self,
         input: SearchSchemasRequest,
     ) -> Result<SearchSchemasResponse, RusotoError<SearchSchemasError>>;
+
+    /// Auto-paginating version of `search_schemas`
+    fn search_schemas_pages<'a>(
+        &'a self,
+        mut input: SearchSchemasRequest,
+    ) -> RusotoStream<'a, SearchSchemaSummary, SearchSchemasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_schemas(input.clone())
+        }))
+    }
 
     /// <p>Starts the discoverer</p>
     async fn start_discoverer(

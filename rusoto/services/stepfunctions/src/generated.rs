@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -189,6 +193,7 @@ pub struct CloudWatchLogsLogGroup {
     pub log_group_arn: Option<String>,
 }
 
+/// see [StepFunctions::create_activity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateActivityInput {
@@ -201,6 +206,7 @@ pub struct CreateActivityInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [StepFunctions::create_activity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateActivityOutput {
@@ -212,6 +218,7 @@ pub struct CreateActivityOutput {
     pub creation_date: f64,
 }
 
+/// see [StepFunctions::create_state_machine]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStateMachineInput {
@@ -242,6 +249,7 @@ pub struct CreateStateMachineInput {
     pub type_: Option<String>,
 }
 
+/// see [StepFunctions::create_state_machine]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStateMachineOutput {
@@ -253,6 +261,7 @@ pub struct CreateStateMachineOutput {
     pub state_machine_arn: String,
 }
 
+/// see [StepFunctions::delete_activity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteActivityInput {
@@ -261,10 +270,12 @@ pub struct DeleteActivityInput {
     pub activity_arn: String,
 }
 
+/// see [StepFunctions::delete_activity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteActivityOutput {}
 
+/// see [StepFunctions::delete_state_machine]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStateMachineInput {
@@ -273,10 +284,12 @@ pub struct DeleteStateMachineInput {
     pub state_machine_arn: String,
 }
 
+/// see [StepFunctions::delete_state_machine]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStateMachineOutput {}
 
+/// see [StepFunctions::describe_activity]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeActivityInput {
@@ -285,6 +298,7 @@ pub struct DescribeActivityInput {
     pub activity_arn: String,
 }
 
+/// see [StepFunctions::describe_activity]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeActivityOutput {
@@ -299,6 +313,7 @@ pub struct DescribeActivityOutput {
     pub name: String,
 }
 
+/// see [StepFunctions::describe_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExecutionInput {
@@ -307,6 +322,7 @@ pub struct DescribeExecutionInput {
     pub execution_arn: String,
 }
 
+/// see [StepFunctions::describe_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExecutionOutput {
@@ -350,6 +366,7 @@ pub struct DescribeExecutionOutput {
     pub trace_header: Option<String>,
 }
 
+/// see [StepFunctions::describe_state_machine_for_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStateMachineForExecutionInput {
@@ -358,6 +375,7 @@ pub struct DescribeStateMachineForExecutionInput {
     pub execution_arn: String,
 }
 
+/// see [StepFunctions::describe_state_machine_for_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStateMachineForExecutionOutput {
@@ -385,6 +403,7 @@ pub struct DescribeStateMachineForExecutionOutput {
     pub update_date: f64,
 }
 
+/// see [StepFunctions::describe_state_machine]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStateMachineInput {
@@ -393,6 +412,7 @@ pub struct DescribeStateMachineInput {
     pub state_machine_arn: String,
 }
 
+/// see [StepFunctions::describe_state_machine]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStateMachineOutput {
@@ -526,6 +546,7 @@ pub struct ExecutionTimedOutEventDetails {
     pub error: Option<String>,
 }
 
+/// see [StepFunctions::get_activity_task]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActivityTaskInput {
@@ -538,6 +559,7 @@ pub struct GetActivityTaskInput {
     pub worker_name: Option<String>,
 }
 
+/// see [StepFunctions::get_activity_task]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetActivityTaskOutput {
@@ -551,6 +573,7 @@ pub struct GetActivityTaskOutput {
     pub task_token: Option<String>,
 }
 
+/// see [StepFunctions::get_execution_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExecutionHistoryInput {
@@ -575,6 +598,23 @@ pub struct GetExecutionHistoryInput {
     pub reverse_order: Option<bool>,
 }
 
+impl Paged for GetExecutionHistoryInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetExecutionHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [StepFunctions::get_execution_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExecutionHistoryOutput {
@@ -585,6 +625,28 @@ pub struct GetExecutionHistoryOutput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+impl Paged for GetExecutionHistoryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for GetExecutionHistoryOutput {
+    type Item = HistoryEvent;
+
+    fn into_pagination_page(self) -> Vec<HistoryEvent> {
+        self.events
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Contains details about the events of an execution.</p>
@@ -820,6 +882,7 @@ pub struct LambdaFunctionTimedOutEventDetails {
     pub error: Option<String>,
 }
 
+/// see [StepFunctions::list_activities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivitiesInput {
@@ -833,6 +896,23 @@ pub struct ListActivitiesInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListActivitiesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListActivitiesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [StepFunctions::list_activities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActivitiesOutput {
@@ -845,6 +925,29 @@ pub struct ListActivitiesOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListActivitiesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListActivitiesOutput {
+    type Item = ActivityListItem;
+
+    fn into_pagination_page(self) -> Vec<ActivityListItem> {
+        self.activities
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [StepFunctions::list_executions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExecutionsInput {
@@ -865,6 +968,23 @@ pub struct ListExecutionsInput {
     pub status_filter: Option<String>,
 }
 
+impl Paged for ListExecutionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [StepFunctions::list_executions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExecutionsOutput {
@@ -877,6 +997,29 @@ pub struct ListExecutionsOutput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListExecutionsOutput {
+    type Item = ExecutionListItem;
+
+    fn into_pagination_page(self) -> Vec<ExecutionListItem> {
+        self.executions
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [StepFunctions::list_state_machines]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStateMachinesInput {
@@ -890,6 +1033,23 @@ pub struct ListStateMachinesInput {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListStateMachinesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStateMachinesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [StepFunctions::list_state_machines]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStateMachinesOutput {
@@ -901,6 +1061,29 @@ pub struct ListStateMachinesOutput {
     pub state_machines: Vec<StateMachineListItem>,
 }
 
+impl Paged for ListStateMachinesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListStateMachinesOutput {
+    type Item = StateMachineListItem;
+
+    fn into_pagination_page(self) -> Vec<StateMachineListItem> {
+        self.state_machines
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [StepFunctions::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
@@ -909,6 +1092,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
+/// see [StepFunctions::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
@@ -968,6 +1152,7 @@ pub struct MapStateStartedEventDetails {
     pub length: Option<i64>,
 }
 
+/// see [StepFunctions::send_task_failure]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskFailureInput {
@@ -984,10 +1169,12 @@ pub struct SendTaskFailureInput {
     pub task_token: String,
 }
 
+/// see [StepFunctions::send_task_failure]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskFailureOutput {}
 
+/// see [StepFunctions::send_task_heartbeat]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskHeartbeatInput {
@@ -996,10 +1183,12 @@ pub struct SendTaskHeartbeatInput {
     pub task_token: String,
 }
 
+/// see [StepFunctions::send_task_heartbeat]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskHeartbeatOutput {}
 
+/// see [StepFunctions::send_task_success]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTaskSuccessInput {
@@ -1011,10 +1200,12 @@ pub struct SendTaskSuccessInput {
     pub task_token: String,
 }
 
+/// see [StepFunctions::send_task_success]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTaskSuccessOutput {}
 
+/// see [StepFunctions::start_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExecutionInput {
@@ -1035,6 +1226,7 @@ pub struct StartExecutionInput {
     pub trace_header: Option<String>,
 }
 
+/// see [StepFunctions::start_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExecutionOutput {
@@ -1046,6 +1238,7 @@ pub struct StartExecutionOutput {
     pub start_date: f64,
 }
 
+/// see [StepFunctions::start_sync_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSyncExecutionInput {
@@ -1066,6 +1259,7 @@ pub struct StartSyncExecutionInput {
     pub trace_header: Option<String>,
 }
 
+/// see [StepFunctions::start_sync_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSyncExecutionOutput {
@@ -1173,6 +1367,7 @@ pub struct StateMachineListItem {
     pub type_: String,
 }
 
+/// see [StepFunctions::stop_execution]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopExecutionInput {
@@ -1189,6 +1384,7 @@ pub struct StopExecutionInput {
     pub execution_arn: String,
 }
 
+/// see [StepFunctions::stop_execution]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopExecutionOutput {
@@ -1210,6 +1406,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [StepFunctions::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
@@ -1221,6 +1418,7 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
+/// see [StepFunctions::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
@@ -1392,6 +1590,7 @@ pub struct TracingConfiguration {
     pub enabled: Option<bool>,
 }
 
+/// see [StepFunctions::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -1403,10 +1602,12 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
+/// see [StepFunctions::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// see [StepFunctions::update_state_machine]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStateMachineInput {
@@ -1431,6 +1632,7 @@ pub struct UpdateStateMachineInput {
     pub tracing_configuration: Option<TracingConfiguration>,
 }
 
+/// see [StepFunctions::update_state_machine]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStateMachineOutput {
@@ -2519,7 +2721,7 @@ impl fmt::Display for UpdateStateMachineError {
 impl Error for UpdateStateMachineError {}
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 #[async_trait]
-pub trait StepFunctions {
+pub trait StepFunctions: Clone + Sync + Send + 'static {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_activity(
         &self,
@@ -2583,11 +2785,33 @@ pub trait StepFunctions {
         input: GetExecutionHistoryInput,
     ) -> Result<GetExecutionHistoryOutput, RusotoError<GetExecutionHistoryError>>;
 
+    /// Auto-paginating version of `get_execution_history`
+    fn get_execution_history_pages<'a>(
+        &'a self,
+        mut input: GetExecutionHistoryInput,
+    ) -> RusotoStream<'a, HistoryEvent, GetExecutionHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_execution_history(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     async fn list_activities(
         &self,
         input: ListActivitiesInput,
     ) -> Result<ListActivitiesOutput, RusotoError<ListActivitiesError>>;
+
+    /// Auto-paginating version of `list_activities`
+    fn list_activities_pages<'a>(
+        &'a self,
+        mut input: ListActivitiesInput,
+    ) -> RusotoStream<'a, ActivityListItem, ListActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_activities(input.clone())
+        }))
+    }
 
     /// <p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <p>This API action is not supported by <code>EXPRESS</code> state machines.</p>
     async fn list_executions(
@@ -2595,11 +2819,33 @@ pub trait StepFunctions {
         input: ListExecutionsInput,
     ) -> Result<ListExecutionsOutput, RusotoError<ListExecutionsError>>;
 
+    /// Auto-paginating version of `list_executions`
+    fn list_executions_pages<'a>(
+        &'a self,
+        mut input: ListExecutionsInput,
+    ) -> RusotoStream<'a, ExecutionListItem, ListExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_executions(input.clone())
+        }))
+    }
+
     /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     async fn list_state_machines(
         &self,
         input: ListStateMachinesInput,
     ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>;
+
+    /// Auto-paginating version of `list_state_machines`
+    fn list_state_machines_pages<'a>(
+        &'a self,
+        mut input: ListStateMachinesInput,
+    ) -> RusotoStream<'a, StateMachineListItem, ListStateMachinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_state_machines(input.clone())
+        }))
+    }
 
     /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn list_tags_for_resource(

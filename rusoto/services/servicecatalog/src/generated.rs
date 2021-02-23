@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl ServiceCatalogClient {
 }
 
 use serde_json;
+/// see [ServiceCatalog::accept_portfolio_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptPortfolioShareInput {
@@ -67,6 +72,7 @@ pub struct AcceptPortfolioShareInput {
     pub portfolio_share_type: Option<String>,
 }
 
+/// see [ServiceCatalog::accept_portfolio_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptPortfolioShareOutput {}
@@ -85,6 +91,7 @@ pub struct AccessLevelFilter {
     pub value: Option<String>,
 }
 
+/// see [ServiceCatalog::associate_budget_with_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateBudgetWithResourceInput {
@@ -96,10 +103,12 @@ pub struct AssociateBudgetWithResourceInput {
     pub resource_id: String,
 }
 
+/// see [ServiceCatalog::associate_budget_with_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateBudgetWithResourceOutput {}
 
+/// see [ServiceCatalog::associate_principal_with_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePrincipalWithPortfolioInput {
@@ -118,10 +127,12 @@ pub struct AssociatePrincipalWithPortfolioInput {
     pub principal_type: String,
 }
 
+/// see [ServiceCatalog::associate_principal_with_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePrincipalWithPortfolioOutput {}
 
+/// see [ServiceCatalog::associate_product_with_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateProductWithPortfolioInput {
@@ -141,10 +152,12 @@ pub struct AssociateProductWithPortfolioInput {
     pub source_portfolio_id: Option<String>,
 }
 
+/// see [ServiceCatalog::associate_product_with_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateProductWithPortfolioOutput {}
 
+/// see [ServiceCatalog::associate_service_action_with_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceActionWithProvisioningArtifactInput {
@@ -163,10 +176,12 @@ pub struct AssociateServiceActionWithProvisioningArtifactInput {
     pub service_action_id: String,
 }
 
+/// see [ServiceCatalog::associate_service_action_with_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceActionWithProvisioningArtifactOutput {}
 
+/// see [ServiceCatalog::associate_tag_option_with_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTagOptionWithResourceInput {
@@ -178,10 +193,12 @@ pub struct AssociateTagOptionWithResourceInput {
     pub tag_option_id: String,
 }
 
+/// see [ServiceCatalog::associate_tag_option_with_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTagOptionWithResourceOutput {}
 
+/// see [ServiceCatalog::batch_associate_service_action_with_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
@@ -194,6 +211,7 @@ pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
     pub service_action_associations: Vec<ServiceActionAssociation>,
 }
 
+/// see [ServiceCatalog::batch_associate_service_action_with_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
@@ -203,6 +221,7 @@ pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
     pub failed_service_action_associations: Option<Vec<FailedServiceActionAssociation>>,
 }
 
+/// see [ServiceCatalog::batch_disassociate_service_action_from_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
@@ -215,6 +234,7 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
     pub service_action_associations: Vec<ServiceActionAssociation>,
 }
 
+/// see [ServiceCatalog::batch_disassociate_service_action_from_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
@@ -288,6 +308,7 @@ pub struct ConstraintSummary {
     pub type_: Option<String>,
 }
 
+/// see [ServiceCatalog::copy_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyProductInput {
@@ -320,6 +341,7 @@ pub struct CopyProductInput {
     pub target_product_name: Option<String>,
 }
 
+/// see [ServiceCatalog::copy_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyProductOutput {
@@ -329,6 +351,7 @@ pub struct CopyProductOutput {
     pub copy_product_token: Option<String>,
 }
 
+/// see [ServiceCatalog::create_constraint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConstraintInput {
@@ -357,6 +380,7 @@ pub struct CreateConstraintInput {
     pub type_: String,
 }
 
+/// see [ServiceCatalog::create_constraint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConstraintOutput {
@@ -374,6 +398,7 @@ pub struct CreateConstraintOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::create_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePortfolioInput {
@@ -400,6 +425,7 @@ pub struct CreatePortfolioInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::create_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePortfolioOutput {
@@ -413,6 +439,7 @@ pub struct CreatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::create_portfolio_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePortfolioShareInput {
@@ -437,6 +464,7 @@ pub struct CreatePortfolioShareInput {
     pub share_tag_options: Option<bool>,
 }
 
+/// see [ServiceCatalog::create_portfolio_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePortfolioShareOutput {
@@ -446,6 +474,7 @@ pub struct CreatePortfolioShareOutput {
     pub portfolio_share_token: Option<String>,
 }
 
+/// see [ServiceCatalog::create_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProductInput {
@@ -494,6 +523,7 @@ pub struct CreateProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::create_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProductOutput {
@@ -511,6 +541,7 @@ pub struct CreateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::create_provisioned_product_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisionedProductPlanInput {
@@ -554,6 +585,7 @@ pub struct CreateProvisionedProductPlanInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::create_provisioned_product_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisionedProductPlanOutput {
@@ -579,6 +611,7 @@ pub struct CreateProvisionedProductPlanOutput {
     pub provisioning_artifact_id: Option<String>,
 }
 
+/// see [ServiceCatalog::create_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningArtifactInput {
@@ -597,6 +630,7 @@ pub struct CreateProvisioningArtifactInput {
     pub product_id: String,
 }
 
+/// see [ServiceCatalog::create_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningArtifactOutput {
@@ -614,6 +648,7 @@ pub struct CreateProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::create_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceActionInput {
@@ -639,6 +674,7 @@ pub struct CreateServiceActionInput {
     pub name: String,
 }
 
+/// see [ServiceCatalog::create_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServiceActionOutput {
@@ -648,6 +684,7 @@ pub struct CreateServiceActionOutput {
     pub service_action_detail: Option<ServiceActionDetail>,
 }
 
+/// see [ServiceCatalog::create_tag_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagOptionInput {
@@ -659,6 +696,7 @@ pub struct CreateTagOptionInput {
     pub value: String,
 }
 
+/// see [ServiceCatalog::create_tag_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagOptionOutput {
@@ -668,6 +706,7 @@ pub struct CreateTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
+/// see [ServiceCatalog::delete_constraint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConstraintInput {
@@ -680,10 +719,12 @@ pub struct DeleteConstraintInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::delete_constraint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConstraintOutput {}
 
+/// see [ServiceCatalog::delete_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePortfolioInput {
@@ -696,10 +737,12 @@ pub struct DeletePortfolioInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::delete_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePortfolioOutput {}
 
+/// see [ServiceCatalog::delete_portfolio_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePortfolioShareInput {
@@ -720,6 +763,7 @@ pub struct DeletePortfolioShareInput {
     pub portfolio_id: String,
 }
 
+/// see [ServiceCatalog::delete_portfolio_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePortfolioShareOutput {
@@ -729,6 +773,7 @@ pub struct DeletePortfolioShareOutput {
     pub portfolio_share_token: Option<String>,
 }
 
+/// see [ServiceCatalog::delete_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProductInput {
@@ -741,10 +786,12 @@ pub struct DeleteProductInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::delete_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProductOutput {}
 
+/// see [ServiceCatalog::delete_provisioned_product_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisionedProductPlanInput {
@@ -761,10 +808,12 @@ pub struct DeleteProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
+/// see [ServiceCatalog::delete_provisioned_product_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisionedProductPlanOutput {}
 
+/// see [ServiceCatalog::delete_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningArtifactInput {
@@ -780,10 +829,12 @@ pub struct DeleteProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
+/// see [ServiceCatalog::delete_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningArtifactOutput {}
 
+/// see [ServiceCatalog::delete_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceActionInput {
@@ -796,10 +847,12 @@ pub struct DeleteServiceActionInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::delete_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceActionOutput {}
 
+/// see [ServiceCatalog::delete_tag_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagOptionInput {
@@ -808,10 +861,12 @@ pub struct DeleteTagOptionInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::delete_tag_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagOptionOutput {}
 
+/// see [ServiceCatalog::describe_constraint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConstraintInput {
@@ -824,6 +879,7 @@ pub struct DescribeConstraintInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::describe_constraint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConstraintOutput {
@@ -841,6 +897,7 @@ pub struct DescribeConstraintOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_copy_product_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCopyProductStatusInput {
@@ -853,6 +910,7 @@ pub struct DescribeCopyProductStatusInput {
     pub copy_product_token: String,
 }
 
+/// see [ServiceCatalog::describe_copy_product_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCopyProductStatusOutput {
@@ -870,6 +928,7 @@ pub struct DescribeCopyProductStatusOutput {
     pub target_product_id: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePortfolioInput {
@@ -882,6 +941,7 @@ pub struct DescribePortfolioInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::describe_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePortfolioOutput {
@@ -903,6 +963,7 @@ pub struct DescribePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::describe_portfolio_share_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePortfolioShareStatusInput {
@@ -911,6 +972,7 @@ pub struct DescribePortfolioShareStatusInput {
     pub portfolio_share_token: String,
 }
 
+/// see [ServiceCatalog::describe_portfolio_share_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePortfolioShareStatusOutput {
@@ -936,6 +998,7 @@ pub struct DescribePortfolioShareStatusOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_portfolio_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePortfolioSharesInput {
@@ -955,6 +1018,7 @@ pub struct DescribePortfolioSharesInput {
     pub type_: String,
 }
 
+/// see [ServiceCatalog::describe_portfolio_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePortfolioSharesOutput {
@@ -968,6 +1032,7 @@ pub struct DescribePortfolioSharesOutput {
     pub portfolio_share_details: Option<Vec<PortfolioShareDetail>>,
 }
 
+/// see [ServiceCatalog::describe_product_as_admin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductAsAdminInput {
@@ -989,6 +1054,7 @@ pub struct DescribeProductAsAdminInput {
     pub source_portfolio_id: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_product_as_admin]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductAsAdminOutput {
@@ -1014,6 +1080,7 @@ pub struct DescribeProductAsAdminOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::describe_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductInput {
@@ -1031,6 +1098,7 @@ pub struct DescribeProductInput {
     pub name: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductOutput {
@@ -1052,6 +1120,7 @@ pub struct DescribeProductOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
+/// see [ServiceCatalog::describe_product_view]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProductViewInput {
@@ -1064,6 +1133,7 @@ pub struct DescribeProductViewInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::describe_product_view]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductViewOutput {
@@ -1078,6 +1148,7 @@ pub struct DescribeProductViewOutput {
 }
 
 /// <p>DescribeProvisionedProductAPI input structure. AcceptLanguage - [Optional] The language code for localization. Id - [Optional] The provisioned product identifier. Name - [Optional] Another provisioned product identifier. Customers must provide either Id or Name.</p>
+/// see [ServiceCatalog::describe_provisioned_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisionedProductInput {
@@ -1095,6 +1166,7 @@ pub struct DescribeProvisionedProductInput {
     pub name: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_provisioned_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisionedProductOutput {
@@ -1108,6 +1180,7 @@ pub struct DescribeProvisionedProductOutput {
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
 }
 
+/// see [ServiceCatalog::describe_provisioned_product_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisionedProductPlanInput {
@@ -1128,6 +1201,7 @@ pub struct DescribeProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
+/// see [ServiceCatalog::describe_provisioned_product_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisionedProductPlanOutput {
@@ -1145,6 +1219,7 @@ pub struct DescribeProvisionedProductPlanOutput {
     pub resource_changes: Option<Vec<ResourceChange>>,
 }
 
+/// see [ServiceCatalog::describe_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningArtifactInput {
@@ -1174,6 +1249,7 @@ pub struct DescribeProvisioningArtifactInput {
     pub verbose: Option<bool>,
 }
 
+/// see [ServiceCatalog::describe_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningArtifactOutput {
@@ -1191,6 +1267,7 @@ pub struct DescribeProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_provisioning_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningParametersInput {
@@ -1224,6 +1301,7 @@ pub struct DescribeProvisioningParametersInput {
     pub provisioning_artifact_name: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_provisioning_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningParametersOutput {
@@ -1253,6 +1331,7 @@ pub struct DescribeProvisioningParametersOutput {
     pub usage_instructions: Option<Vec<UsageInstruction>>,
 }
 
+/// see [ServiceCatalog::describe_record]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecordInput {
@@ -1273,6 +1352,7 @@ pub struct DescribeRecordInput {
     pub page_token: Option<String>,
 }
 
+/// see [ServiceCatalog::describe_record]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecordOutput {
@@ -1290,6 +1370,7 @@ pub struct DescribeRecordOutput {
     pub record_outputs: Option<Vec<RecordOutput>>,
 }
 
+/// see [ServiceCatalog::describe_service_action_execution_parameters]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceActionExecutionParametersInput {
@@ -1305,6 +1386,7 @@ pub struct DescribeServiceActionExecutionParametersInput {
     pub service_action_id: String,
 }
 
+/// see [ServiceCatalog::describe_service_action_execution_parameters]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceActionExecutionParametersOutput {
@@ -1314,6 +1396,7 @@ pub struct DescribeServiceActionExecutionParametersOutput {
     pub service_action_parameters: Option<Vec<ExecutionParameter>>,
 }
 
+/// see [ServiceCatalog::describe_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceActionInput {
@@ -1326,6 +1409,7 @@ pub struct DescribeServiceActionInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::describe_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceActionOutput {
@@ -1335,6 +1419,7 @@ pub struct DescribeServiceActionOutput {
     pub service_action_detail: Option<ServiceActionDetail>,
 }
 
+/// see [ServiceCatalog::describe_tag_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagOptionInput {
@@ -1343,6 +1428,7 @@ pub struct DescribeTagOptionInput {
     pub id: String,
 }
 
+/// see [ServiceCatalog::describe_tag_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagOptionOutput {
@@ -1352,14 +1438,17 @@ pub struct DescribeTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
+/// see [ServiceCatalog::disable_aws_organizations_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableAWSOrganizationsAccessInput {}
 
+/// see [ServiceCatalog::disable_aws_organizations_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableAWSOrganizationsAccessOutput {}
 
+/// see [ServiceCatalog::disassociate_budget_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateBudgetFromResourceInput {
@@ -1371,10 +1460,12 @@ pub struct DisassociateBudgetFromResourceInput {
     pub resource_id: String,
 }
 
+/// see [ServiceCatalog::disassociate_budget_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateBudgetFromResourceOutput {}
 
+/// see [ServiceCatalog::disassociate_principal_from_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePrincipalFromPortfolioInput {
@@ -1390,10 +1481,12 @@ pub struct DisassociatePrincipalFromPortfolioInput {
     pub principal_arn: String,
 }
 
+/// see [ServiceCatalog::disassociate_principal_from_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePrincipalFromPortfolioOutput {}
 
+/// see [ServiceCatalog::disassociate_product_from_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateProductFromPortfolioInput {
@@ -1409,10 +1502,12 @@ pub struct DisassociateProductFromPortfolioInput {
     pub product_id: String,
 }
 
+/// see [ServiceCatalog::disassociate_product_from_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateProductFromPortfolioOutput {}
 
+/// see [ServiceCatalog::disassociate_service_action_from_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceActionFromProvisioningArtifactInput {
@@ -1431,10 +1526,12 @@ pub struct DisassociateServiceActionFromProvisioningArtifactInput {
     pub service_action_id: String,
 }
 
+/// see [ServiceCatalog::disassociate_service_action_from_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceActionFromProvisioningArtifactOutput {}
 
+/// see [ServiceCatalog::disassociate_tag_option_from_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateTagOptionFromResourceInput {
@@ -1446,18 +1543,22 @@ pub struct DisassociateTagOptionFromResourceInput {
     pub tag_option_id: String,
 }
 
+/// see [ServiceCatalog::disassociate_tag_option_from_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTagOptionFromResourceOutput {}
 
+/// see [ServiceCatalog::enable_aws_organizations_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableAWSOrganizationsAccessInput {}
 
+/// see [ServiceCatalog::enable_aws_organizations_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableAWSOrganizationsAccessOutput {}
 
+/// see [ServiceCatalog::execute_provisioned_product_plan]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteProvisionedProductPlanInput {
@@ -1473,6 +1574,7 @@ pub struct ExecuteProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
+/// see [ServiceCatalog::execute_provisioned_product_plan]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteProvisionedProductPlanOutput {
@@ -1482,6 +1584,7 @@ pub struct ExecuteProvisionedProductPlanOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
+/// see [ServiceCatalog::execute_provisioned_product_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteProvisionedProductServiceActionInput {
@@ -1504,6 +1607,7 @@ pub struct ExecuteProvisionedProductServiceActionInput {
     pub service_action_id: String,
 }
 
+/// see [ServiceCatalog::execute_provisioned_product_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteProvisionedProductServiceActionOutput {
@@ -1557,10 +1661,12 @@ pub struct FailedServiceActionAssociation {
     pub service_action_id: Option<String>,
 }
 
+/// see [ServiceCatalog::get_aws_organizations_access_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAWSOrganizationsAccessStatusInput {}
 
+/// see [ServiceCatalog::get_aws_organizations_access_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAWSOrganizationsAccessStatusOutput {
@@ -1570,6 +1676,7 @@ pub struct GetAWSOrganizationsAccessStatusOutput {
     pub access_status: Option<String>,
 }
 
+/// see [ServiceCatalog::get_provisioned_product_outputs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProvisionedProductOutputsInput {
@@ -1599,6 +1706,7 @@ pub struct GetProvisionedProductOutputsInput {
     pub provisioned_product_name: Option<String>,
 }
 
+/// see [ServiceCatalog::get_provisioned_product_outputs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProvisionedProductOutputsOutput {
@@ -1612,6 +1720,7 @@ pub struct GetProvisionedProductOutputsOutput {
     pub outputs: Option<Vec<RecordOutput>>,
 }
 
+/// see [ServiceCatalog::import_as_provisioned_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportAsProvisionedProductInput {
@@ -1636,6 +1745,7 @@ pub struct ImportAsProvisionedProductInput {
     pub provisioning_artifact_id: String,
 }
 
+/// see [ServiceCatalog::import_as_provisioned_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportAsProvisionedProductOutput {
@@ -1680,6 +1790,7 @@ pub struct LaunchPathSummary {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::list_accepted_portfolio_shares]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAcceptedPortfolioSharesInput {
@@ -1701,6 +1812,23 @@ pub struct ListAcceptedPortfolioSharesInput {
     pub portfolio_share_type: Option<String>,
 }
 
+impl Paged for ListAcceptedPortfolioSharesInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListAcceptedPortfolioSharesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_accepted_portfolio_shares]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAcceptedPortfolioSharesOutput {
@@ -1714,6 +1842,29 @@ pub struct ListAcceptedPortfolioSharesOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
+impl Paged for ListAcceptedPortfolioSharesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListAcceptedPortfolioSharesOutput {
+    type Item = PortfolioDetail;
+
+    fn into_pagination_page(self) -> Vec<PortfolioDetail> {
+        self.portfolio_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_budgets_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBudgetsForResourceInput {
@@ -1734,6 +1885,7 @@ pub struct ListBudgetsForResourceInput {
     pub resource_id: String,
 }
 
+/// see [ServiceCatalog::list_budgets_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBudgetsForResourceOutput {
@@ -1747,6 +1899,7 @@ pub struct ListBudgetsForResourceOutput {
     pub next_page_token: Option<String>,
 }
 
+/// see [ServiceCatalog::list_constraints_for_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConstraintsForPortfolioInput {
@@ -1771,6 +1924,23 @@ pub struct ListConstraintsForPortfolioInput {
     pub product_id: Option<String>,
 }
 
+impl Paged for ListConstraintsForPortfolioInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListConstraintsForPortfolioInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_constraints_for_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConstraintsForPortfolioOutput {
@@ -1784,6 +1954,29 @@ pub struct ListConstraintsForPortfolioOutput {
     pub next_page_token: Option<String>,
 }
 
+impl Paged for ListConstraintsForPortfolioOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListConstraintsForPortfolioOutput {
+    type Item = ConstraintDetail;
+
+    fn into_pagination_page(self) -> Vec<ConstraintDetail> {
+        self.constraint_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_launch_paths]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLaunchPathsInput {
@@ -1804,6 +1997,23 @@ pub struct ListLaunchPathsInput {
     pub product_id: String,
 }
 
+impl Paged for ListLaunchPathsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListLaunchPathsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_launch_paths]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLaunchPathsOutput {
@@ -1817,6 +2027,29 @@ pub struct ListLaunchPathsOutput {
     pub next_page_token: Option<String>,
 }
 
+impl Paged for ListLaunchPathsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListLaunchPathsOutput {
+    type Item = LaunchPathSummary;
+
+    fn into_pagination_page(self) -> Vec<LaunchPathSummary> {
+        self.launch_path_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_organization_portfolio_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationPortfolioAccessInput {
@@ -1840,6 +2073,23 @@ pub struct ListOrganizationPortfolioAccessInput {
     pub portfolio_id: String,
 }
 
+impl Paged for ListOrganizationPortfolioAccessInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListOrganizationPortfolioAccessInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_organization_portfolio_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationPortfolioAccessOutput {
@@ -1853,6 +2103,29 @@ pub struct ListOrganizationPortfolioAccessOutput {
     pub organization_nodes: Option<Vec<OrganizationNode>>,
 }
 
+impl Paged for ListOrganizationPortfolioAccessOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListOrganizationPortfolioAccessOutput {
+    type Item = OrganizationNode;
+
+    fn into_pagination_page(self) -> Vec<OrganizationNode> {
+        self.organization_nodes.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_portfolio_access]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfolioAccessInput {
@@ -1877,6 +2150,7 @@ pub struct ListPortfolioAccessInput {
     pub portfolio_id: String,
 }
 
+/// see [ServiceCatalog::list_portfolio_access]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfolioAccessOutput {
@@ -1890,6 +2164,7 @@ pub struct ListPortfolioAccessOutput {
     pub next_page_token: Option<String>,
 }
 
+/// see [ServiceCatalog::list_portfolios_for_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfoliosForProductInput {
@@ -1910,6 +2185,23 @@ pub struct ListPortfoliosForProductInput {
     pub product_id: String,
 }
 
+impl Paged for ListPortfoliosForProductInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListPortfoliosForProductInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_portfolios_for_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfoliosForProductOutput {
@@ -1923,6 +2215,29 @@ pub struct ListPortfoliosForProductOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
+impl Paged for ListPortfoliosForProductOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListPortfoliosForProductOutput {
+    type Item = PortfolioDetail;
+
+    fn into_pagination_page(self) -> Vec<PortfolioDetail> {
+        self.portfolio_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_portfolios]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPortfoliosInput {
@@ -1940,6 +2255,23 @@ pub struct ListPortfoliosInput {
     pub page_token: Option<String>,
 }
 
+impl Paged for ListPortfoliosInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListPortfoliosInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_portfolios]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfoliosOutput {
@@ -1953,6 +2285,29 @@ pub struct ListPortfoliosOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
+impl Paged for ListPortfoliosOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListPortfoliosOutput {
+    type Item = PortfolioDetail;
+
+    fn into_pagination_page(self) -> Vec<PortfolioDetail> {
+        self.portfolio_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_principals_for_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalsForPortfolioInput {
@@ -1973,6 +2328,23 @@ pub struct ListPrincipalsForPortfolioInput {
     pub portfolio_id: String,
 }
 
+impl Paged for ListPrincipalsForPortfolioInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListPrincipalsForPortfolioInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_principals_for_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalsForPortfolioOutput {
@@ -1986,6 +2358,29 @@ pub struct ListPrincipalsForPortfolioOutput {
     pub principals: Option<Vec<Principal>>,
 }
 
+impl Paged for ListPrincipalsForPortfolioOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListPrincipalsForPortfolioOutput {
+    type Item = Principal;
+
+    fn into_pagination_page(self) -> Vec<Principal> {
+        self.principals.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_provisioned_product_plans]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisionedProductPlansInput {
@@ -2011,6 +2406,23 @@ pub struct ListProvisionedProductPlansInput {
     pub provision_product_id: Option<String>,
 }
 
+impl Paged for ListProvisionedProductPlansInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListProvisionedProductPlansInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_provisioned_product_plans]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisionedProductPlansOutput {
@@ -2024,6 +2436,29 @@ pub struct ListProvisionedProductPlansOutput {
     pub provisioned_product_plans: Option<Vec<ProvisionedProductPlanSummary>>,
 }
 
+impl Paged for ListProvisionedProductPlansOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListProvisionedProductPlansOutput {
+    type Item = ProvisionedProductPlanSummary;
+
+    fn into_pagination_page(self) -> Vec<ProvisionedProductPlanSummary> {
+        self.provisioned_product_plans.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_provisioning_artifacts_for_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningArtifactsForServiceActionInput {
@@ -2044,6 +2479,23 @@ pub struct ListProvisioningArtifactsForServiceActionInput {
     pub service_action_id: String,
 }
 
+impl Paged for ListProvisioningArtifactsForServiceActionInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListProvisioningArtifactsForServiceActionInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_provisioning_artifacts_for_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningArtifactsForServiceActionOutput {
@@ -2057,6 +2509,29 @@ pub struct ListProvisioningArtifactsForServiceActionOutput {
     pub provisioning_artifact_views: Option<Vec<ProvisioningArtifactView>>,
 }
 
+impl Paged for ListProvisioningArtifactsForServiceActionOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListProvisioningArtifactsForServiceActionOutput {
+    type Item = ProvisioningArtifactView;
+
+    fn into_pagination_page(self) -> Vec<ProvisioningArtifactView> {
+        self.provisioning_artifact_views.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_provisioning_artifacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningArtifactsInput {
@@ -2069,6 +2544,7 @@ pub struct ListProvisioningArtifactsInput {
     pub product_id: String,
 }
 
+/// see [ServiceCatalog::list_provisioning_artifacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningArtifactsOutput {
@@ -2082,6 +2558,7 @@ pub struct ListProvisioningArtifactsOutput {
     pub provisioning_artifact_details: Option<Vec<ProvisioningArtifactDetail>>,
 }
 
+/// see [ServiceCatalog::list_record_history]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecordHistoryInput {
@@ -2107,6 +2584,23 @@ pub struct ListRecordHistoryInput {
     pub search_filter: Option<ListRecordHistorySearchFilter>,
 }
 
+impl Paged for ListRecordHistoryInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListRecordHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_record_history]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecordHistoryOutput {
@@ -2118,6 +2612,28 @@ pub struct ListRecordHistoryOutput {
     #[serde(rename = "RecordDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_details: Option<Vec<RecordDetail>>,
+}
+
+impl Paged for ListRecordHistoryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListRecordHistoryOutput {
+    type Item = RecordDetail;
+
+    fn into_pagination_page(self) -> Vec<RecordDetail> {
+        self.record_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>The search filter to use when listing history records.</p>
@@ -2134,6 +2650,7 @@ pub struct ListRecordHistorySearchFilter {
     pub value: Option<String>,
 }
 
+/// see [ServiceCatalog::list_resources_for_tag_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesForTagOptionInput {
@@ -2154,6 +2671,23 @@ pub struct ListResourcesForTagOptionInput {
     pub tag_option_id: String,
 }
 
+impl Paged for ListResourcesForTagOptionInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListResourcesForTagOptionInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_resources_for_tag_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesForTagOptionOutput {
@@ -2167,6 +2701,29 @@ pub struct ListResourcesForTagOptionOutput {
     pub resource_details: Option<Vec<ResourceDetail>>,
 }
 
+impl Paged for ListResourcesForTagOptionOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedOutput for ListResourcesForTagOptionOutput {
+    type Item = ResourceDetail;
+
+    fn into_pagination_page(self) -> Vec<ResourceDetail> {
+        self.resource_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_service_actions_for_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceActionsForProvisioningArtifactInput {
@@ -2190,6 +2747,23 @@ pub struct ListServiceActionsForProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
+impl Paged for ListServiceActionsForProvisioningArtifactInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListServiceActionsForProvisioningArtifactInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_service_actions_for_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceActionsForProvisioningArtifactOutput {
@@ -2203,6 +2777,29 @@ pub struct ListServiceActionsForProvisioningArtifactOutput {
     pub service_action_summaries: Option<Vec<ServiceActionSummary>>,
 }
 
+impl Paged for ListServiceActionsForProvisioningArtifactOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListServiceActionsForProvisioningArtifactOutput {
+    type Item = ServiceActionSummary;
+
+    fn into_pagination_page(self) -> Vec<ServiceActionSummary> {
+        self.service_action_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_service_actions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceActionsInput {
@@ -2220,6 +2817,23 @@ pub struct ListServiceActionsInput {
     pub page_token: Option<String>,
 }
 
+impl Paged for ListServiceActionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListServiceActionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_service_actions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceActionsOutput {
@@ -2233,6 +2847,29 @@ pub struct ListServiceActionsOutput {
     pub service_action_summaries: Option<Vec<ServiceActionSummary>>,
 }
 
+impl Paged for ListServiceActionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ListServiceActionsOutput {
+    type Item = ServiceActionSummary;
+
+    fn into_pagination_page(self) -> Vec<ServiceActionSummary> {
+        self.service_action_summaries.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::list_stack_instances_for_provisioned_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackInstancesForProvisionedProductInput {
@@ -2253,6 +2890,7 @@ pub struct ListStackInstancesForProvisionedProductInput {
     pub provisioned_product_id: String,
 }
 
+/// see [ServiceCatalog::list_stack_instances_for_provisioned_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStackInstancesForProvisionedProductOutput {
@@ -2284,6 +2922,7 @@ pub struct ListTagOptionsFilters {
     pub value: Option<String>,
 }
 
+/// see [ServiceCatalog::list_tag_options]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagOptionsInput {
@@ -2301,6 +2940,23 @@ pub struct ListTagOptionsInput {
     pub page_token: Option<String>,
 }
 
+impl Paged for ListTagOptionsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListTagOptionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::list_tag_options]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagOptionsOutput {
@@ -2312,6 +2968,28 @@ pub struct ListTagOptionsOutput {
     #[serde(rename = "TagOptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_details: Option<Vec<TagOptionDetail>>,
+}
+
+impl Paged for ListTagOptionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedOutput for ListTagOptionsOutput {
+    type Item = TagOptionDetail;
+
+    fn into_pagination_page(self) -> Vec<TagOptionDetail> {
+        self.tag_option_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p>Information about the organization node.</p>
@@ -2489,6 +3167,7 @@ pub struct ProductViewSummary {
     pub type_: Option<String>,
 }
 
+/// see [ServiceCatalog::provision_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvisionProductInput {
@@ -2544,6 +3223,7 @@ pub struct ProvisionProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::provision_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionProductOutput {
@@ -3128,6 +3808,7 @@ pub struct RecordTag {
     pub value: Option<String>,
 }
 
+/// see [ServiceCatalog::reject_portfolio_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectPortfolioShareInput {
@@ -3144,6 +3825,7 @@ pub struct RejectPortfolioShareInput {
     pub portfolio_share_type: Option<String>,
 }
 
+/// see [ServiceCatalog::reject_portfolio_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectPortfolioShareOutput {}
@@ -3244,6 +3926,7 @@ pub struct ResourceTargetDefinition {
     pub requires_recreation: Option<String>,
 }
 
+/// see [ServiceCatalog::scan_provisioned_products]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScanProvisionedProductsInput {
@@ -3265,6 +3948,23 @@ pub struct ScanProvisionedProductsInput {
     pub page_token: Option<String>,
 }
 
+impl Paged for ScanProvisionedProductsInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ScanProvisionedProductsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::scan_provisioned_products]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScanProvisionedProductsOutput {
@@ -3278,6 +3978,29 @@ pub struct ScanProvisionedProductsOutput {
     pub provisioned_products: Option<Vec<ProvisionedProductDetail>>,
 }
 
+impl Paged for ScanProvisionedProductsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for ScanProvisionedProductsOutput {
+    type Item = ProvisionedProductDetail;
+
+    fn into_pagination_page(self) -> Vec<ProvisionedProductDetail> {
+        self.provisioned_products.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::search_products_as_admin]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProductsAsAdminInput {
@@ -3315,6 +4038,23 @@ pub struct SearchProductsAsAdminInput {
     pub sort_order: Option<String>,
 }
 
+impl Paged for SearchProductsAsAdminInput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for SearchProductsAsAdminInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.page_token = key;
+    }
+}
+
+/// see [ServiceCatalog::search_products_as_admin]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProductsAsAdminOutput {
@@ -3328,6 +4068,29 @@ pub struct SearchProductsAsAdminOutput {
     pub product_view_details: Option<Vec<ProductViewDetail>>,
 }
 
+impl Paged for SearchProductsAsAdminOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedOutput for SearchProductsAsAdminOutput {
+    type Item = ProductViewDetail;
+
+    fn into_pagination_page(self) -> Vec<ProductViewDetail> {
+        self.product_view_details.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [ServiceCatalog::search_products]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProductsInput {
@@ -3357,6 +4120,7 @@ pub struct SearchProductsInput {
     pub sort_order: Option<String>,
 }
 
+/// see [ServiceCatalog::search_products]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProductsOutput {
@@ -3375,6 +4139,7 @@ pub struct SearchProductsOutput {
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
+/// see [ServiceCatalog::search_provisioned_products]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchProvisionedProductsInput {
@@ -3408,6 +4173,7 @@ pub struct SearchProvisionedProductsInput {
     pub sort_order: Option<String>,
 }
 
+/// see [ServiceCatalog::search_provisioned_products]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProvisionedProductsOutput {
@@ -3577,6 +4343,7 @@ pub struct TagOptionSummary {
     pub values: Option<Vec<String>>,
 }
 
+/// see [ServiceCatalog::terminate_provisioned_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateProvisionedProductInput {
@@ -3605,6 +4372,7 @@ pub struct TerminateProvisionedProductInput {
     pub terminate_token: String,
 }
 
+/// see [ServiceCatalog::terminate_provisioned_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateProvisionedProductOutput {
@@ -3614,6 +4382,7 @@ pub struct TerminateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
+/// see [ServiceCatalog::update_constraint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConstraintInput {
@@ -3634,6 +4403,7 @@ pub struct UpdateConstraintInput {
     pub parameters: Option<String>,
 }
 
+/// see [ServiceCatalog::update_constraint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConstraintOutput {
@@ -3651,6 +4421,7 @@ pub struct UpdateConstraintOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::update_portfolio]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePortfolioInput {
@@ -3683,6 +4454,7 @@ pub struct UpdatePortfolioInput {
     pub remove_tags: Option<Vec<String>>,
 }
 
+/// see [ServiceCatalog::update_portfolio]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePortfolioOutput {
@@ -3696,6 +4468,7 @@ pub struct UpdatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::update_portfolio_share]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePortfolioShareInput {
@@ -3719,6 +4492,7 @@ pub struct UpdatePortfolioShareInput {
     pub share_tag_options: Option<bool>,
 }
 
+/// see [ServiceCatalog::update_portfolio_share]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePortfolioShareOutput {
@@ -3732,6 +4506,7 @@ pub struct UpdatePortfolioShareOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::update_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProductInput {
@@ -3780,6 +4555,7 @@ pub struct UpdateProductInput {
     pub support_url: Option<String>,
 }
 
+/// see [ServiceCatalog::update_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProductOutput {
@@ -3793,6 +4569,7 @@ pub struct UpdateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [ServiceCatalog::update_provisioned_product]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisionedProductInput {
@@ -3849,6 +4626,7 @@ pub struct UpdateProvisionedProductInput {
     pub update_token: String,
 }
 
+/// see [ServiceCatalog::update_provisioned_product]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisionedProductOutput {
@@ -3858,6 +4636,7 @@ pub struct UpdateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
+/// see [ServiceCatalog::update_provisioned_product_properties]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisionedProductPropertiesInput {
@@ -3876,6 +4655,7 @@ pub struct UpdateProvisionedProductPropertiesInput {
     pub provisioned_product_properties: ::std::collections::HashMap<String, String>,
 }
 
+/// see [ServiceCatalog::update_provisioned_product_properties]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisionedProductPropertiesOutput {
@@ -3897,6 +4677,7 @@ pub struct UpdateProvisionedProductPropertiesOutput {
     pub status: Option<String>,
 }
 
+/// see [ServiceCatalog::update_provisioning_artifact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningArtifactInput {
@@ -3928,6 +4709,7 @@ pub struct UpdateProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
+/// see [ServiceCatalog::update_provisioning_artifact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisioningArtifactOutput {
@@ -3996,6 +4778,7 @@ pub struct UpdateProvisioningPreferences {
     pub stack_set_regions: Option<Vec<String>>,
 }
 
+/// see [ServiceCatalog::update_service_action]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceActionInput {
@@ -4020,6 +4803,7 @@ pub struct UpdateServiceActionInput {
     pub name: Option<String>,
 }
 
+/// see [ServiceCatalog::update_service_action]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceActionOutput {
@@ -4029,6 +4813,7 @@ pub struct UpdateServiceActionOutput {
     pub service_action_detail: Option<ServiceActionDetail>,
 }
 
+/// see [ServiceCatalog::update_tag_option]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagOptionInput {
@@ -4045,6 +4830,7 @@ pub struct UpdateTagOptionInput {
     pub value: Option<String>,
 }
 
+/// see [ServiceCatalog::update_tag_option]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTagOptionOutput {
@@ -7902,7 +8688,7 @@ impl fmt::Display for UpdateTagOptionError {
 impl Error for UpdateTagOptionError {}
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 #[async_trait]
-pub trait ServiceCatalog {
+pub trait ServiceCatalog: Clone + Sync + Send + 'static {
     /// <p>Accepts an offer to share the specified portfolio.</p>
     async fn accept_portfolio_share(
         &self,
@@ -8269,6 +9055,17 @@ pub trait ServiceCatalog {
         input: ListAcceptedPortfolioSharesInput,
     ) -> Result<ListAcceptedPortfolioSharesOutput, RusotoError<ListAcceptedPortfolioSharesError>>;
 
+    /// Auto-paginating version of `list_accepted_portfolio_shares`
+    fn list_accepted_portfolio_shares_pages<'a>(
+        &'a self,
+        mut input: ListAcceptedPortfolioSharesInput,
+    ) -> RusotoStream<'a, PortfolioDetail, ListAcceptedPortfolioSharesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_accepted_portfolio_shares(input.clone())
+        }))
+    }
+
     /// <p>Lists all the budgets associated to the specified resource.</p>
     async fn list_budgets_for_resource(
         &self,
@@ -8281,11 +9078,33 @@ pub trait ServiceCatalog {
         input: ListConstraintsForPortfolioInput,
     ) -> Result<ListConstraintsForPortfolioOutput, RusotoError<ListConstraintsForPortfolioError>>;
 
+    /// Auto-paginating version of `list_constraints_for_portfolio`
+    fn list_constraints_for_portfolio_pages<'a>(
+        &'a self,
+        mut input: ListConstraintsForPortfolioInput,
+    ) -> RusotoStream<'a, ConstraintDetail, ListConstraintsForPortfolioError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_constraints_for_portfolio(input.clone())
+        }))
+    }
+
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     async fn list_launch_paths(
         &self,
         input: ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>>;
+
+    /// Auto-paginating version of `list_launch_paths`
+    fn list_launch_paths_pages<'a>(
+        &'a self,
+        mut input: ListLaunchPathsInput,
+    ) -> RusotoStream<'a, LaunchPathSummary, ListLaunchPathsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_launch_paths(input.clone())
+        }))
+    }
 
     /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the management account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_organization_portfolio_access(
@@ -8295,6 +9114,17 @@ pub trait ServiceCatalog {
         ListOrganizationPortfolioAccessOutput,
         RusotoError<ListOrganizationPortfolioAccessError>,
     >;
+
+    /// Auto-paginating version of `list_organization_portfolio_access`
+    fn list_organization_portfolio_access_pages<'a>(
+        &'a self,
+        mut input: ListOrganizationPortfolioAccessInput,
+    ) -> RusotoStream<'a, OrganizationNode, ListOrganizationPortfolioAccessError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_organization_portfolio_access(input.clone())
+        }))
+    }
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p> <p>A delegated admin can list the accounts that have access to the shared portfolio. Note that if a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_portfolio_access(
@@ -8308,11 +9138,33 @@ pub trait ServiceCatalog {
         input: ListPortfoliosInput,
     ) -> Result<ListPortfoliosOutput, RusotoError<ListPortfoliosError>>;
 
+    /// Auto-paginating version of `list_portfolios`
+    fn list_portfolios_pages<'a>(
+        &'a self,
+        mut input: ListPortfoliosInput,
+    ) -> RusotoStream<'a, PortfolioDetail, ListPortfoliosError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_portfolios(input.clone())
+        }))
+    }
+
     /// <p>Lists all portfolios that the specified product is associated with.</p>
     async fn list_portfolios_for_product(
         &self,
         input: ListPortfoliosForProductInput,
     ) -> Result<ListPortfoliosForProductOutput, RusotoError<ListPortfoliosForProductError>>;
+
+    /// Auto-paginating version of `list_portfolios_for_product`
+    fn list_portfolios_for_product_pages<'a>(
+        &'a self,
+        mut input: ListPortfoliosForProductInput,
+    ) -> RusotoStream<'a, PortfolioDetail, ListPortfoliosForProductError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_portfolios_for_product(input.clone())
+        }))
+    }
 
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
     async fn list_principals_for_portfolio(
@@ -8320,11 +9172,33 @@ pub trait ServiceCatalog {
         input: ListPrincipalsForPortfolioInput,
     ) -> Result<ListPrincipalsForPortfolioOutput, RusotoError<ListPrincipalsForPortfolioError>>;
 
+    /// Auto-paginating version of `list_principals_for_portfolio`
+    fn list_principals_for_portfolio_pages<'a>(
+        &'a self,
+        mut input: ListPrincipalsForPortfolioInput,
+    ) -> RusotoStream<'a, Principal, ListPrincipalsForPortfolioError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_principals_for_portfolio(input.clone())
+        }))
+    }
+
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
     async fn list_provisioned_product_plans(
         &self,
         input: ListProvisionedProductPlansInput,
     ) -> Result<ListProvisionedProductPlansOutput, RusotoError<ListProvisionedProductPlansError>>;
+
+    /// Auto-paginating version of `list_provisioned_product_plans`
+    fn list_provisioned_product_plans_pages<'a>(
+        &'a self,
+        mut input: ListProvisionedProductPlansInput,
+    ) -> RusotoStream<'a, ProvisionedProductPlanSummary, ListProvisionedProductPlansError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_provisioned_product_plans(input.clone())
+        }))
+    }
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     async fn list_provisioning_artifacts(
@@ -8341,11 +9215,34 @@ pub trait ServiceCatalog {
         RusotoError<ListProvisioningArtifactsForServiceActionError>,
     >;
 
+    /// Auto-paginating version of `list_provisioning_artifacts_for_service_action`
+    fn list_provisioning_artifacts_for_service_action_pages<'a>(
+        &'a self,
+        mut input: ListProvisioningArtifactsForServiceActionInput,
+    ) -> RusotoStream<'a, ProvisioningArtifactView, ListProvisioningArtifactsForServiceActionError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_provisioning_artifacts_for_service_action(input.clone())
+        }))
+    }
+
     /// <p>Lists the specified requests or all performed requests.</p>
     async fn list_record_history(
         &self,
         input: ListRecordHistoryInput,
     ) -> Result<ListRecordHistoryOutput, RusotoError<ListRecordHistoryError>>;
+
+    /// Auto-paginating version of `list_record_history`
+    fn list_record_history_pages<'a>(
+        &'a self,
+        mut input: ListRecordHistoryInput,
+    ) -> RusotoStream<'a, RecordDetail, ListRecordHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_record_history(input.clone())
+        }))
+    }
 
     /// <p>Lists the resources associated with the specified TagOption.</p>
     async fn list_resources_for_tag_option(
@@ -8353,11 +9250,33 @@ pub trait ServiceCatalog {
         input: ListResourcesForTagOptionInput,
     ) -> Result<ListResourcesForTagOptionOutput, RusotoError<ListResourcesForTagOptionError>>;
 
+    /// Auto-paginating version of `list_resources_for_tag_option`
+    fn list_resources_for_tag_option_pages<'a>(
+        &'a self,
+        mut input: ListResourcesForTagOptionInput,
+    ) -> RusotoStream<'a, ResourceDetail, ListResourcesForTagOptionError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resources_for_tag_option(input.clone())
+        }))
+    }
+
     /// <p>Lists all self-service actions.</p>
     async fn list_service_actions(
         &self,
         input: ListServiceActionsInput,
     ) -> Result<ListServiceActionsOutput, RusotoError<ListServiceActionsError>>;
+
+    /// Auto-paginating version of `list_service_actions`
+    fn list_service_actions_pages<'a>(
+        &'a self,
+        mut input: ListServiceActionsInput,
+    ) -> RusotoStream<'a, ServiceActionSummary, ListServiceActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_service_actions(input.clone())
+        }))
+    }
 
     /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
     async fn list_service_actions_for_provisioning_artifact(
@@ -8367,6 +9286,18 @@ pub trait ServiceCatalog {
         ListServiceActionsForProvisioningArtifactOutput,
         RusotoError<ListServiceActionsForProvisioningArtifactError>,
     >;
+
+    /// Auto-paginating version of `list_service_actions_for_provisioning_artifact`
+    fn list_service_actions_for_provisioning_artifact_pages<'a>(
+        &'a self,
+        mut input: ListServiceActionsForProvisioningArtifactInput,
+    ) -> RusotoStream<'a, ServiceActionSummary, ListServiceActionsForProvisioningArtifactError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_service_actions_for_provisioning_artifact(input.clone())
+        }))
+    }
 
     /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
     async fn list_stack_instances_for_provisioned_product(
@@ -8382,6 +9313,17 @@ pub trait ServiceCatalog {
         &self,
         input: ListTagOptionsInput,
     ) -> Result<ListTagOptionsOutput, RusotoError<ListTagOptionsError>>;
+
+    /// Auto-paginating version of `list_tag_options`
+    fn list_tag_options_pages<'a>(
+        &'a self,
+        mut input: ListTagOptionsInput,
+    ) -> RusotoStream<'a, TagOptionDetail, ListTagOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tag_options(input.clone())
+        }))
+    }
 
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     async fn provision_product(
@@ -8401,6 +9343,17 @@ pub trait ServiceCatalog {
         input: ScanProvisionedProductsInput,
     ) -> Result<ScanProvisionedProductsOutput, RusotoError<ScanProvisionedProductsError>>;
 
+    /// Auto-paginating version of `scan_provisioned_products`
+    fn scan_provisioned_products_pages<'a>(
+        &'a self,
+        mut input: ScanProvisionedProductsInput,
+    ) -> RusotoStream<'a, ProvisionedProductDetail, ScanProvisionedProductsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.scan_provisioned_products(input.clone())
+        }))
+    }
+
     /// <p>Gets information about the products to which the caller has access.</p>
     async fn search_products(
         &self,
@@ -8412,6 +9365,17 @@ pub trait ServiceCatalog {
         &self,
         input: SearchProductsAsAdminInput,
     ) -> Result<SearchProductsAsAdminOutput, RusotoError<SearchProductsAsAdminError>>;
+
+    /// Auto-paginating version of `search_products_as_admin`
+    fn search_products_as_admin_pages<'a>(
+        &'a self,
+        mut input: SearchProductsAsAdminInput,
+    ) -> RusotoStream<'a, ProductViewDetail, SearchProductsAsAdminError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_products_as_admin(input.clone())
+        }))
+    }
 
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
     async fn search_provisioned_products(

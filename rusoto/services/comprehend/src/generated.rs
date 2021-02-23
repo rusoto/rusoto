@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -75,6 +79,7 @@ pub struct BatchDetectDominantLanguageItemResult {
     pub languages: Option<Vec<DominantLanguage>>,
 }
 
+/// see [Comprehend::batch_detect_dominant_language]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectDominantLanguageRequest {
@@ -83,6 +88,7 @@ pub struct BatchDetectDominantLanguageRequest {
     pub text_list: Vec<String>,
 }
 
+/// see [Comprehend::batch_detect_dominant_language]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectDominantLanguageResponse {
@@ -108,6 +114,7 @@ pub struct BatchDetectEntitiesItemResult {
     pub index: Option<i64>,
 }
 
+/// see [Comprehend::batch_detect_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectEntitiesRequest {
@@ -119,6 +126,7 @@ pub struct BatchDetectEntitiesRequest {
     pub text_list: Vec<String>,
 }
 
+/// see [Comprehend::batch_detect_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectEntitiesResponse {
@@ -144,6 +152,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
     pub key_phrases: Option<Vec<KeyPhrase>>,
 }
 
+/// see [Comprehend::batch_detect_key_phrases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectKeyPhrasesRequest {
@@ -155,6 +164,7 @@ pub struct BatchDetectKeyPhrasesRequest {
     pub text_list: Vec<String>,
 }
 
+/// see [Comprehend::batch_detect_key_phrases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectKeyPhrasesResponse {
@@ -184,6 +194,7 @@ pub struct BatchDetectSentimentItemResult {
     pub sentiment_score: Option<SentimentScore>,
 }
 
+/// see [Comprehend::batch_detect_sentiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSentimentRequest {
@@ -195,6 +206,7 @@ pub struct BatchDetectSentimentRequest {
     pub text_list: Vec<String>,
 }
 
+/// see [Comprehend::batch_detect_sentiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSentimentResponse {
@@ -220,6 +232,7 @@ pub struct BatchDetectSyntaxItemResult {
     pub syntax_tokens: Option<Vec<SyntaxToken>>,
 }
 
+/// see [Comprehend::batch_detect_syntax]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSyntaxRequest {
@@ -231,6 +244,7 @@ pub struct BatchDetectSyntaxRequest {
     pub text_list: Vec<String>,
 }
 
+/// see [Comprehend::batch_detect_syntax]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSyntaxResponse {
@@ -320,6 +334,7 @@ pub struct ClassifierMetadata {
     pub number_of_trained_documents: Option<i64>,
 }
 
+/// see [Comprehend::classify_document]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassifyDocumentRequest {
@@ -331,6 +346,7 @@ pub struct ClassifyDocumentRequest {
     pub text: String,
 }
 
+/// see [Comprehend::classify_document]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifyDocumentResponse {
@@ -344,6 +360,7 @@ pub struct ClassifyDocumentResponse {
     pub labels: Option<Vec<DocumentLabel>>,
 }
 
+/// see [Comprehend::create_document_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
@@ -385,6 +402,7 @@ pub struct CreateDocumentClassifierRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::create_document_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDocumentClassifierResponse {
@@ -394,6 +412,7 @@ pub struct CreateDocumentClassifierResponse {
     pub document_classifier_arn: Option<String>,
 }
 
+/// see [Comprehend::create_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointRequest {
@@ -416,6 +435,7 @@ pub struct CreateEndpointRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Comprehend::create_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointResponse {
@@ -425,6 +445,7 @@ pub struct CreateEndpointResponse {
     pub endpoint_arn: Option<String>,
 }
 
+/// see [Comprehend::create_entity_recognizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEntityRecognizerRequest {
@@ -458,6 +479,7 @@ pub struct CreateEntityRecognizerRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::create_entity_recognizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEntityRecognizerResponse {
@@ -467,6 +489,7 @@ pub struct CreateEntityRecognizerResponse {
     pub entity_recognizer_arn: Option<String>,
 }
 
+/// see [Comprehend::delete_document_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentClassifierRequest {
@@ -475,10 +498,12 @@ pub struct DeleteDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
+/// see [Comprehend::delete_document_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentClassifierResponse {}
 
+/// see [Comprehend::delete_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointRequest {
@@ -487,10 +512,12 @@ pub struct DeleteEndpointRequest {
     pub endpoint_arn: String,
 }
 
+/// see [Comprehend::delete_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEndpointResponse {}
 
+/// see [Comprehend::delete_entity_recognizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEntityRecognizerRequest {
@@ -499,10 +526,12 @@ pub struct DeleteEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
+/// see [Comprehend::delete_entity_recognizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEntityRecognizerResponse {}
 
+/// see [Comprehend::describe_document_classification_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassificationJobRequest {
@@ -511,6 +540,7 @@ pub struct DescribeDocumentClassificationJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_document_classification_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassificationJobResponse {
@@ -520,6 +550,7 @@ pub struct DescribeDocumentClassificationJobResponse {
     pub document_classification_job_properties: Option<DocumentClassificationJobProperties>,
 }
 
+/// see [Comprehend::describe_document_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassifierRequest {
@@ -528,6 +559,7 @@ pub struct DescribeDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
+/// see [Comprehend::describe_document_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassifierResponse {
@@ -537,6 +569,7 @@ pub struct DescribeDocumentClassifierResponse {
     pub document_classifier_properties: Option<DocumentClassifierProperties>,
 }
 
+/// see [Comprehend::describe_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDominantLanguageDetectionJobRequest {
@@ -545,6 +578,7 @@ pub struct DescribeDominantLanguageDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDominantLanguageDetectionJobResponse {
@@ -554,6 +588,7 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
     pub dominant_language_detection_job_properties: Option<DominantLanguageDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
@@ -562,6 +597,7 @@ pub struct DescribeEndpointRequest {
     pub endpoint_arn: String,
 }
 
+/// see [Comprehend::describe_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointResponse {
@@ -571,6 +607,7 @@ pub struct DescribeEndpointResponse {
     pub endpoint_properties: Option<EndpointProperties>,
 }
 
+/// see [Comprehend::describe_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionJobRequest {
@@ -579,6 +616,7 @@ pub struct DescribeEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntitiesDetectionJobResponse {
@@ -588,6 +626,7 @@ pub struct DescribeEntitiesDetectionJobResponse {
     pub entities_detection_job_properties: Option<EntitiesDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_entity_recognizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRecognizerRequest {
@@ -596,6 +635,7 @@ pub struct DescribeEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
+/// see [Comprehend::describe_entity_recognizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityRecognizerResponse {
@@ -605,6 +645,7 @@ pub struct DescribeEntityRecognizerResponse {
     pub entity_recognizer_properties: Option<EntityRecognizerProperties>,
 }
 
+/// see [Comprehend::describe_events_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsDetectionJobRequest {
@@ -613,6 +654,7 @@ pub struct DescribeEventsDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_events_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsDetectionJobResponse {
@@ -622,6 +664,7 @@ pub struct DescribeEventsDetectionJobResponse {
     pub events_detection_job_properties: Option<EventsDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPhrasesDetectionJobRequest {
@@ -630,6 +673,7 @@ pub struct DescribeKeyPhrasesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKeyPhrasesDetectionJobResponse {
@@ -639,6 +683,7 @@ pub struct DescribeKeyPhrasesDetectionJobResponse {
     pub key_phrases_detection_job_properties: Option<KeyPhrasesDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePiiEntitiesDetectionJobRequest {
@@ -647,6 +692,7 @@ pub struct DescribePiiEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePiiEntitiesDetectionJobResponse {
@@ -655,6 +701,7 @@ pub struct DescribePiiEntitiesDetectionJobResponse {
     pub pii_entities_detection_job_properties: Option<PiiEntitiesDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_sentiment_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSentimentDetectionJobRequest {
@@ -663,6 +710,7 @@ pub struct DescribeSentimentDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_sentiment_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSentimentDetectionJobResponse {
@@ -672,6 +720,7 @@ pub struct DescribeSentimentDetectionJobResponse {
     pub sentiment_detection_job_properties: Option<SentimentDetectionJobProperties>,
 }
 
+/// see [Comprehend::describe_topics_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTopicsDetectionJobRequest {
@@ -680,6 +729,7 @@ pub struct DescribeTopicsDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::describe_topics_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTopicsDetectionJobResponse {
@@ -689,6 +739,7 @@ pub struct DescribeTopicsDetectionJobResponse {
     pub topics_detection_job_properties: Option<TopicsDetectionJobProperties>,
 }
 
+/// see [Comprehend::detect_dominant_language]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectDominantLanguageRequest {
@@ -697,6 +748,7 @@ pub struct DetectDominantLanguageRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_dominant_language]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectDominantLanguageResponse {
@@ -706,6 +758,7 @@ pub struct DetectDominantLanguageResponse {
     pub languages: Option<Vec<DominantLanguage>>,
 }
 
+/// see [Comprehend::detect_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
@@ -722,6 +775,7 @@ pub struct DetectEntitiesRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
@@ -731,6 +785,7 @@ pub struct DetectEntitiesResponse {
     pub entities: Option<Vec<Entity>>,
 }
 
+/// see [Comprehend::detect_key_phrases]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectKeyPhrasesRequest {
@@ -742,6 +797,7 @@ pub struct DetectKeyPhrasesRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_key_phrases]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectKeyPhrasesResponse {
@@ -751,6 +807,7 @@ pub struct DetectKeyPhrasesResponse {
     pub key_phrases: Option<Vec<KeyPhrase>>,
 }
 
+/// see [Comprehend::detect_pii_entities]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectPiiEntitiesRequest {
@@ -762,6 +819,7 @@ pub struct DetectPiiEntitiesRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_pii_entities]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectPiiEntitiesResponse {
@@ -771,6 +829,7 @@ pub struct DetectPiiEntitiesResponse {
     pub entities: Option<Vec<PiiEntity>>,
 }
 
+/// see [Comprehend::detect_sentiment]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSentimentRequest {
@@ -782,6 +841,7 @@ pub struct DetectSentimentRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_sentiment]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSentimentResponse {
@@ -795,6 +855,7 @@ pub struct DetectSentimentResponse {
     pub sentiment_score: Option<SentimentScore>,
 }
 
+/// see [Comprehend::detect_syntax]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSyntaxRequest {
@@ -806,6 +867,7 @@ pub struct DetectSyntaxRequest {
     pub text: String,
 }
 
+/// see [Comprehend::detect_syntax]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSyntaxResponse {
@@ -1683,6 +1745,7 @@ pub struct KeyPhrasesDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::list_document_classification_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassificationJobsRequest {
@@ -1700,6 +1763,23 @@ pub struct ListDocumentClassificationJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentClassificationJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentClassificationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_document_classification_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassificationJobsResponse {
@@ -1714,6 +1794,30 @@ pub struct ListDocumentClassificationJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentClassificationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDocumentClassificationJobsResponse {
+    type Item = DocumentClassificationJobProperties;
+
+    fn into_pagination_page(self) -> Vec<DocumentClassificationJobProperties> {
+        self.document_classification_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_document_classifiers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassifiersRequest {
@@ -1731,6 +1835,23 @@ pub struct ListDocumentClassifiersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentClassifiersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentClassifiersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_document_classifiers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassifiersResponse {
@@ -1744,6 +1865,29 @@ pub struct ListDocumentClassifiersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDocumentClassifiersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDocumentClassifiersResponse {
+    type Item = DocumentClassifierProperties;
+
+    fn into_pagination_page(self) -> Vec<DocumentClassifierProperties> {
+        self.document_classifier_properties_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_dominant_language_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDominantLanguageDetectionJobsRequest {
@@ -1761,6 +1905,23 @@ pub struct ListDominantLanguageDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDominantLanguageDetectionJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDominantLanguageDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_dominant_language_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDominantLanguageDetectionJobsResponse {
@@ -1775,6 +1936,30 @@ pub struct ListDominantLanguageDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDominantLanguageDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDominantLanguageDetectionJobsResponse {
+    type Item = DominantLanguageDetectionJobProperties;
+
+    fn into_pagination_page(self) -> Vec<DominantLanguageDetectionJobProperties> {
+        self.dominant_language_detection_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_endpoints]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsRequest {
@@ -1792,6 +1977,7 @@ pub struct ListEndpointsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Comprehend::list_endpoints]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointsResponse {
@@ -1805,6 +1991,7 @@ pub struct ListEndpointsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Comprehend::list_entities_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionJobsRequest {
@@ -1822,6 +2009,23 @@ pub struct ListEntitiesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntitiesDetectionJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntitiesDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_entities_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesDetectionJobsResponse {
@@ -1835,6 +2039,30 @@ pub struct ListEntitiesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntitiesDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEntitiesDetectionJobsResponse {
+    type Item = EntitiesDetectionJobProperties;
+
+    fn into_pagination_page(self) -> Vec<EntitiesDetectionJobProperties> {
+        self.entities_detection_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_entity_recognizers]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntityRecognizersRequest {
@@ -1852,6 +2080,23 @@ pub struct ListEntityRecognizersRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntityRecognizersRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntityRecognizersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_entity_recognizers]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntityRecognizersResponse {
@@ -1865,6 +2110,29 @@ pub struct ListEntityRecognizersResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListEntityRecognizersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListEntityRecognizersResponse {
+    type Item = EntityRecognizerProperties;
+
+    fn into_pagination_page(self) -> Vec<EntityRecognizerProperties> {
+        self.entity_recognizer_properties_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_events_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventsDetectionJobsRequest {
@@ -1882,6 +2150,7 @@ pub struct ListEventsDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Comprehend::list_events_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventsDetectionJobsResponse {
@@ -1895,6 +2164,7 @@ pub struct ListEventsDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Comprehend::list_key_phrases_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPhrasesDetectionJobsRequest {
@@ -1912,6 +2182,23 @@ pub struct ListKeyPhrasesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListKeyPhrasesDetectionJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListKeyPhrasesDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_key_phrases_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeyPhrasesDetectionJobsResponse {
@@ -1925,6 +2212,30 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListKeyPhrasesDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListKeyPhrasesDetectionJobsResponse {
+    type Item = KeyPhrasesDetectionJobProperties;
+
+    fn into_pagination_page(self) -> Vec<KeyPhrasesDetectionJobProperties> {
+        self.key_phrases_detection_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_pii_entities_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPiiEntitiesDetectionJobsRequest {
@@ -1942,6 +2253,7 @@ pub struct ListPiiEntitiesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Comprehend::list_pii_entities_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPiiEntitiesDetectionJobsResponse {
@@ -1955,6 +2267,7 @@ pub struct ListPiiEntitiesDetectionJobsResponse {
     pub pii_entities_detection_job_properties_list: Option<Vec<PiiEntitiesDetectionJobProperties>>,
 }
 
+/// see [Comprehend::list_sentiment_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSentimentDetectionJobsRequest {
@@ -1972,6 +2285,23 @@ pub struct ListSentimentDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListSentimentDetectionJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSentimentDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_sentiment_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSentimentDetectionJobsResponse {
@@ -1985,6 +2315,30 @@ pub struct ListSentimentDetectionJobsResponse {
     pub sentiment_detection_job_properties_list: Option<Vec<SentimentDetectionJobProperties>>,
 }
 
+impl Paged for ListSentimentDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSentimentDetectionJobsResponse {
+    type Item = SentimentDetectionJobProperties;
+
+    fn into_pagination_page(self) -> Vec<SentimentDetectionJobProperties> {
+        self.sentiment_detection_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Comprehend::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1993,6 +2347,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Comprehend::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -2006,6 +2361,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [Comprehend::list_topics_detection_jobs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsDetectionJobsRequest {
@@ -2023,6 +2379,23 @@ pub struct ListTopicsDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListTopicsDetectionJobsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTopicsDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Comprehend::list_topics_detection_jobs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicsDetectionJobsResponse {
@@ -2034,6 +2407,29 @@ pub struct ListTopicsDetectionJobsResponse {
     #[serde(rename = "TopicsDetectionJobPropertiesList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub topics_detection_job_properties_list: Option<Vec<TopicsDetectionJobProperties>>,
+}
+
+impl Paged for ListTopicsDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListTopicsDetectionJobsResponse {
+    type Item = TopicsDetectionJobProperties;
+
+    fn into_pagination_page(self) -> Vec<TopicsDetectionJobProperties> {
+        self.topics_detection_job_properties_list
+            .unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
 }
 
 /// <p><p>Provides configuration parameters for the output of topic detection jobs.</p> <p/></p>
@@ -2288,6 +2684,7 @@ pub struct SentimentScore {
     pub positive: Option<f32>,
 }
 
+/// see [Comprehend::start_document_classification_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentClassificationJobRequest {
@@ -2321,6 +2718,7 @@ pub struct StartDocumentClassificationJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_document_classification_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentClassificationJobResponse {
@@ -2334,6 +2732,7 @@ pub struct StartDocumentClassificationJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDominantLanguageDetectionJobRequest {
@@ -2364,6 +2763,7 @@ pub struct StartDominantLanguageDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDominantLanguageDetectionJobResponse {
@@ -2377,6 +2777,7 @@ pub struct StartDominantLanguageDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionJobRequest {
@@ -2414,6 +2815,7 @@ pub struct StartEntitiesDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartEntitiesDetectionJobResponse {
@@ -2427,6 +2829,7 @@ pub struct StartEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_events_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEventsDetectionJobRequest {
@@ -2455,6 +2858,7 @@ pub struct StartEventsDetectionJobRequest {
     pub target_event_types: Vec<String>,
 }
 
+/// see [Comprehend::start_events_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartEventsDetectionJobResponse {
@@ -2468,6 +2872,7 @@ pub struct StartEventsDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartKeyPhrasesDetectionJobRequest {
@@ -2501,6 +2906,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartKeyPhrasesDetectionJobResponse {
@@ -2514,6 +2920,7 @@ pub struct StartKeyPhrasesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPiiEntitiesDetectionJobRequest {
@@ -2546,6 +2953,7 @@ pub struct StartPiiEntitiesDetectionJobRequest {
     pub redaction_config: Option<RedactionConfig>,
 }
 
+/// see [Comprehend::start_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPiiEntitiesDetectionJobResponse {
@@ -2559,6 +2967,7 @@ pub struct StartPiiEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_sentiment_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSentimentDetectionJobRequest {
@@ -2592,6 +3001,7 @@ pub struct StartSentimentDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_sentiment_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSentimentDetectionJobResponse {
@@ -2605,6 +3015,7 @@ pub struct StartSentimentDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::start_topics_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTopicsDetectionJobRequest {
@@ -2639,6 +3050,7 @@ pub struct StartTopicsDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::start_topics_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTopicsDetectionJobResponse {
@@ -2652,6 +3064,7 @@ pub struct StartTopicsDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDominantLanguageDetectionJobRequest {
@@ -2660,6 +3073,7 @@ pub struct StopDominantLanguageDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_dominant_language_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDominantLanguageDetectionJobResponse {
@@ -2673,6 +3087,7 @@ pub struct StopDominantLanguageDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionJobRequest {
@@ -2681,6 +3096,7 @@ pub struct StopEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopEntitiesDetectionJobResponse {
@@ -2694,6 +3110,7 @@ pub struct StopEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_events_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEventsDetectionJobRequest {
@@ -2702,6 +3119,7 @@ pub struct StopEventsDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_events_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopEventsDetectionJobResponse {
@@ -2715,6 +3133,7 @@ pub struct StopEventsDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopKeyPhrasesDetectionJobRequest {
@@ -2723,6 +3142,7 @@ pub struct StopKeyPhrasesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_key_phrases_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopKeyPhrasesDetectionJobResponse {
@@ -2736,6 +3156,7 @@ pub struct StopKeyPhrasesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPiiEntitiesDetectionJobRequest {
@@ -2744,6 +3165,7 @@ pub struct StopPiiEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_pii_entities_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPiiEntitiesDetectionJobResponse {
@@ -2757,6 +3179,7 @@ pub struct StopPiiEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_sentiment_detection_job]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopSentimentDetectionJobRequest {
@@ -2765,6 +3188,7 @@ pub struct StopSentimentDetectionJobRequest {
     pub job_id: String,
 }
 
+/// see [Comprehend::stop_sentiment_detection_job]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopSentimentDetectionJobResponse {
@@ -2778,6 +3202,7 @@ pub struct StopSentimentDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
+/// see [Comprehend::stop_training_document_classifier]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingDocumentClassifierRequest {
@@ -2786,10 +3211,12 @@ pub struct StopTrainingDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
+/// see [Comprehend::stop_training_document_classifier]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingDocumentClassifierResponse {}
 
+/// see [Comprehend::stop_training_entity_recognizer]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingEntityRecognizerRequest {
@@ -2798,6 +3225,7 @@ pub struct StopTrainingEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
+/// see [Comprehend::stop_training_entity_recognizer]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingEntityRecognizerResponse {}
@@ -2840,6 +3268,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+/// see [Comprehend::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2851,6 +3280,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [Comprehend::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2931,6 +3361,7 @@ pub struct TopicsDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// see [Comprehend::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2942,10 +3373,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Comprehend::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [Comprehend::update_endpoint]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointRequest {
@@ -2957,6 +3390,7 @@ pub struct UpdateEndpointRequest {
     pub endpoint_arn: String,
 }
 
+/// see [Comprehend::update_endpoint]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointResponse {}
@@ -6524,7 +6958,7 @@ impl fmt::Display for UpdateEndpointError {
 impl Error for UpdateEndpointError {}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 #[async_trait]
-pub trait Comprehend {
+pub trait Comprehend: Clone + Sync + Send + 'static {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     async fn batch_detect_dominant_language(
         &self,
@@ -6723,11 +7157,34 @@ pub trait Comprehend {
         RusotoError<ListDocumentClassificationJobsError>,
     >;
 
+    /// Auto-paginating version of `list_document_classification_jobs`
+    fn list_document_classification_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDocumentClassificationJobsRequest,
+    ) -> RusotoStream<'a, DocumentClassificationJobProperties, ListDocumentClassificationJobsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_document_classification_jobs(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of the document classifiers that you have created.</p>
     async fn list_document_classifiers(
         &self,
         input: ListDocumentClassifiersRequest,
     ) -> Result<ListDocumentClassifiersResponse, RusotoError<ListDocumentClassifiersError>>;
+
+    /// Auto-paginating version of `list_document_classifiers`
+    fn list_document_classifiers_pages<'a>(
+        &'a self,
+        mut input: ListDocumentClassifiersRequest,
+    ) -> RusotoStream<'a, DocumentClassifierProperties, ListDocumentClassifiersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_document_classifiers(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
     async fn list_dominant_language_detection_jobs(
@@ -6737,6 +7194,21 @@ pub trait Comprehend {
         ListDominantLanguageDetectionJobsResponse,
         RusotoError<ListDominantLanguageDetectionJobsError>,
     >;
+
+    /// Auto-paginating version of `list_dominant_language_detection_jobs`
+    fn list_dominant_language_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDominantLanguageDetectionJobsRequest,
+    ) -> RusotoStream<
+        'a,
+        DominantLanguageDetectionJobProperties,
+        ListDominantLanguageDetectionJobsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dominant_language_detection_jobs(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of all existing endpoints that you've created.</p>
     async fn list_endpoints(
@@ -6750,11 +7222,33 @@ pub trait Comprehend {
         input: ListEntitiesDetectionJobsRequest,
     ) -> Result<ListEntitiesDetectionJobsResponse, RusotoError<ListEntitiesDetectionJobsError>>;
 
+    /// Auto-paginating version of `list_entities_detection_jobs`
+    fn list_entities_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListEntitiesDetectionJobsRequest,
+    ) -> RusotoStream<'a, EntitiesDetectionJobProperties, ListEntitiesDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entities_detection_jobs(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
     async fn list_entity_recognizers(
         &self,
         input: ListEntityRecognizersRequest,
     ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>>;
+
+    /// Auto-paginating version of `list_entity_recognizers`
+    fn list_entity_recognizers_pages<'a>(
+        &'a self,
+        mut input: ListEntityRecognizersRequest,
+    ) -> RusotoStream<'a, EntityRecognizerProperties, ListEntityRecognizersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entity_recognizers(input.clone())
+        }))
+    }
 
     /// <p>Gets a list of the events detection jobs that you have submitted.</p>
     async fn list_events_detection_jobs(
@@ -6768,6 +7262,17 @@ pub trait Comprehend {
         input: ListKeyPhrasesDetectionJobsRequest,
     ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>;
 
+    /// Auto-paginating version of `list_key_phrases_detection_jobs`
+    fn list_key_phrases_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListKeyPhrasesDetectionJobsRequest,
+    ) -> RusotoStream<'a, KeyPhrasesDetectionJobProperties, ListKeyPhrasesDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_key_phrases_detection_jobs(input.clone())
+        }))
+    }
+
     /// <p>Gets a list of the PII entity detection jobs that you have submitted.</p>
     async fn list_pii_entities_detection_jobs(
         &self,
@@ -6780,6 +7285,17 @@ pub trait Comprehend {
         input: ListSentimentDetectionJobsRequest,
     ) -> Result<ListSentimentDetectionJobsResponse, RusotoError<ListSentimentDetectionJobsError>>;
 
+    /// Auto-paginating version of `list_sentiment_detection_jobs`
+    fn list_sentiment_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListSentimentDetectionJobsRequest,
+    ) -> RusotoStream<'a, SentimentDetectionJobProperties, ListSentimentDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_sentiment_detection_jobs(input.clone())
+        }))
+    }
+
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
     async fn list_tags_for_resource(
         &self,
@@ -6791,6 +7307,17 @@ pub trait Comprehend {
         &self,
         input: ListTopicsDetectionJobsRequest,
     ) -> Result<ListTopicsDetectionJobsResponse, RusotoError<ListTopicsDetectionJobsError>>;
+
+    /// Auto-paginating version of `list_topics_detection_jobs`
+    fn list_topics_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListTopicsDetectionJobsRequest,
+    ) -> RusotoStream<'a, TopicsDetectionJobProperties, ListTopicsDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_topics_detection_jobs(input.clone())
+        }))
+    }
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
     async fn start_document_classification_job(

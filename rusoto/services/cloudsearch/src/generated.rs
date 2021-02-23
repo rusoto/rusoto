@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -377,6 +381,7 @@ impl BooleanDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>
+/// see [CloudSearch::build_suggesters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BuildSuggestersRequest {
@@ -397,6 +402,7 @@ impl BuildSuggestersRequestSerializer {
 }
 
 /// <p>The result of a <code>BuildSuggester</code> request. Contains a list of the fields used for suggestions.</p>
+/// see [CloudSearch::build_suggesters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BuildSuggestersResponse {
@@ -429,6 +435,7 @@ impl BuildSuggestersResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>CreateDomain</a></code> operation. Specifies a name for the new search domain.</p>
+/// see [CloudSearch::create_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
@@ -450,6 +457,7 @@ impl CreateDomainRequestSerializer {
 }
 
 /// <p>The result of a <code>CreateDomainRequest</code>. Contains the status of a newly created domain.</p>
+/// see [CloudSearch::create_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDomainResponse {
@@ -651,6 +659,7 @@ impl DateOptionsSerializer {
 }
 
 /// <p>Container for the parameters to the <code><a>DefineAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme configuration.</p>
+/// see [CloudSearch::define_analysis_scheme]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineAnalysisSchemeRequest {
@@ -677,6 +686,7 @@ impl DefineAnalysisSchemeRequestSerializer {
 }
 
 /// <p>The result of a <code><a>DefineAnalysisScheme</a></code> request. Contains the status of the newly-configured analysis scheme.</p>
+/// see [CloudSearch::define_analysis_scheme]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineAnalysisSchemeResponse {
@@ -708,6 +718,7 @@ impl DefineAnalysisSchemeResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DefineExpression</a></code> operation. Specifies the name of the domain you want to update and the expression you want to configure.</p>
+/// see [CloudSearch::define_expression]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineExpressionRequest {
@@ -734,6 +745,7 @@ impl DefineExpressionRequestSerializer {
 }
 
 /// <p>The result of a <code>DefineExpression</code> request. Contains the status of the newly-configured expression.</p>
+/// see [CloudSearch::define_expression]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineExpressionResponse {
@@ -765,6 +777,7 @@ impl DefineExpressionResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DefineIndexField</a></code> operation. Specifies the name of the domain you want to update and the index field configuration.</p>
+/// see [CloudSearch::define_index_field]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineIndexFieldRequest {
@@ -792,6 +805,7 @@ impl DefineIndexFieldRequestSerializer {
 }
 
 /// <p>The result of a <code><a>DefineIndexField</a></code> request. Contains the status of the newly-configured index field.</p>
+/// see [CloudSearch::define_index_field]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineIndexFieldResponse {
@@ -823,6 +837,7 @@ impl DefineIndexFieldResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DefineSuggester</a></code> operation. Specifies the name of the domain you want to update and the suggester configuration.</p>
+/// see [CloudSearch::define_suggester]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefineSuggesterRequest {
@@ -849,6 +864,7 @@ impl DefineSuggesterRequestSerializer {
 }
 
 /// <p>The result of a <code>DefineSuggester</code> request. Contains the status of the newly-configured suggester.</p>
+/// see [CloudSearch::define_suggester]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefineSuggesterResponse {
@@ -880,6 +896,7 @@ impl DefineSuggesterResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DeleteAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme you want to delete. </p>
+/// see [CloudSearch::delete_analysis_scheme]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnalysisSchemeRequest {
@@ -906,6 +923,7 @@ impl DeleteAnalysisSchemeRequestSerializer {
 }
 
 /// <p>The result of a <code>DeleteAnalysisScheme</code> request. Contains the status of the deleted analysis scheme.</p>
+/// see [CloudSearch::delete_analysis_scheme]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteAnalysisSchemeResponse {
@@ -938,6 +956,7 @@ impl DeleteAnalysisSchemeResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DeleteDomain</a></code> operation. Specifies the name of the domain you want to delete.</p>
+/// see [CloudSearch::delete_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
@@ -959,6 +978,7 @@ impl DeleteDomainRequestSerializer {
 }
 
 /// <p>The result of a <code>DeleteDomain</code> request. Contains the status of a newly deleted domain, or no status if the domain has already been completely deleted.</p>
+/// see [CloudSearch::delete_domain]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteDomainResponse {
@@ -988,6 +1008,7 @@ impl DeleteDomainResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DeleteExpression</a></code> operation. Specifies the name of the domain you want to update and the name of the expression you want to delete.</p>
+/// see [CloudSearch::delete_expression]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExpressionRequest {
@@ -1014,6 +1035,7 @@ impl DeleteExpressionRequestSerializer {
 }
 
 /// <p>The result of a <code><a>DeleteExpression</a></code> request. Specifies the expression being deleted.</p>
+/// see [CloudSearch::delete_expression]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteExpressionResponse {
@@ -1046,6 +1068,7 @@ impl DeleteExpressionResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DeleteIndexField</a></code> operation. Specifies the name of the domain you want to update and the name of the index field you want to delete.</p>
+/// see [CloudSearch::delete_index_field]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIndexFieldRequest {
@@ -1072,6 +1095,7 @@ impl DeleteIndexFieldRequestSerializer {
 }
 
 /// <p>The result of a <code><a>DeleteIndexField</a></code> request.</p>
+/// see [CloudSearch::delete_index_field]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIndexFieldResponse {
@@ -1104,6 +1128,7 @@ impl DeleteIndexFieldResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DeleteSuggester</a></code> operation. Specifies the name of the domain you want to update and name of the suggester you want to delete.</p>
+/// see [CloudSearch::delete_suggester]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSuggesterRequest {
@@ -1130,6 +1155,7 @@ impl DeleteSuggesterRequestSerializer {
 }
 
 /// <p>The result of a <code>DeleteSuggester</code> request. Contains the status of the deleted suggester.</p>
+/// see [CloudSearch::delete_suggester]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteSuggesterResponse {
@@ -1162,6 +1188,7 @@ impl DeleteSuggesterResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeAnalysisSchemes</a></code> operation. Specifies the name of the domain you want to describe. To limit the response to particular analysis schemes, specify the names of the analysis schemes you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>. </p>
+/// see [CloudSearch::describe_analysis_schemes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAnalysisSchemesRequest {
@@ -1197,6 +1224,7 @@ impl DescribeAnalysisSchemesRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeAnalysisSchemes</code> request. Contains the analysis schemes configured for the domain specified in the request.</p>
+/// see [CloudSearch::describe_analysis_schemes]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAnalysisSchemesResponse {
@@ -1233,6 +1261,7 @@ impl DescribeAnalysisSchemesResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
+/// see [CloudSearch::describe_availability_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAvailabilityOptionsRequest {
@@ -1259,6 +1288,7 @@ impl DescribeAvailabilityOptionsRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeAvailabilityOptions</code> request. Indicates whether or not the Multi-AZ option is enabled for the domain specified in the request. </p>
+/// see [CloudSearch::describe_availability_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAvailabilityOptionsResponse {
@@ -1294,6 +1324,7 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomainEndpointOptions</a></code> operation. Specify the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
+/// see [CloudSearch::describe_domain_endpoint_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainEndpointOptionsRequest {
@@ -1320,6 +1351,7 @@ impl DescribeDomainEndpointOptionsRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeDomainEndpointOptions</code> request. Contains the status and configuration of a search domain's endpoint options. </p>
+/// see [CloudSearch::describe_domain_endpoint_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDomainEndpointOptionsResponse {
@@ -1355,6 +1387,7 @@ impl DescribeDomainEndpointOptionsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. By default shows the status of all domains. To restrict the response to particular domains, specify the names of the domains you want to describe.</p>
+/// see [CloudSearch::describe_domains]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainsRequest {
@@ -1382,6 +1415,7 @@ impl DescribeDomainsRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeDomains</code> request. Contains the status of the domains specified in the request or all domains owned by the account.</p>
+/// see [CloudSearch::describe_domains]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDomainsResponse {
@@ -1416,6 +1450,7 @@ impl DescribeDomainsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular expressions, specify the names of the expressions you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+/// see [CloudSearch::describe_expressions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExpressionsRequest {
@@ -1451,6 +1486,7 @@ impl DescribeExpressionsRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeExpressions</code> request. Contains the expressions configured for the domain specified in the request.</p>
+/// see [CloudSearch::describe_expressions]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeExpressionsResponse {
@@ -1486,6 +1522,7 @@ impl DescribeExpressionsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeIndexFields</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular index fields, specify the names of the index fields you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+/// see [CloudSearch::describe_index_fields]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexFieldsRequest {
@@ -1521,6 +1558,7 @@ impl DescribeIndexFieldsRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeIndexFields</code> request. Contains the index fields configured for the domain specified in the request.</p>
+/// see [CloudSearch::describe_index_fields]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeIndexFieldsResponse {
@@ -1556,6 +1594,7 @@ impl DescribeIndexFieldsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeScalingParameters</a></code> operation. Specifies the name of the domain you want to describe. </p>
+/// see [CloudSearch::describe_scaling_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingParametersRequest {
@@ -1576,6 +1615,7 @@ impl DescribeScalingParametersRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeScalingParameters</code> request. Contains the scaling parameters configured for the domain specified in the request.</p>
+/// see [CloudSearch::describe_scaling_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeScalingParametersResponse {
@@ -1609,6 +1649,7 @@ impl DescribeScalingParametersResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+/// see [CloudSearch::describe_service_access_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceAccessPoliciesRequest {
@@ -1635,6 +1676,7 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeServiceAccessPolicies</code> request.</p>
+/// see [CloudSearch::describe_service_access_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeServiceAccessPoliciesResponse {
@@ -1667,6 +1709,7 @@ impl DescribeServiceAccessPoliciesResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>DescribeSuggester</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular suggesters, specify the names of the suggesters you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+/// see [CloudSearch::describe_suggesters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSuggestersRequest {
@@ -1702,6 +1745,7 @@ impl DescribeSuggestersRequestSerializer {
 }
 
 /// <p>The result of a <code>DescribeSuggesters</code> request.</p>
+/// see [CloudSearch::describe_suggesters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSuggestersResponse {
@@ -2420,6 +2464,7 @@ impl FieldValueDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>IndexDocuments</a></code> operation. Specifies the name of the domain you want to re-index.</p>
+/// see [CloudSearch::index_documents]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexDocumentsRequest {
@@ -2440,6 +2485,7 @@ impl IndexDocumentsRequestSerializer {
 }
 
 /// <p>The result of an <code>IndexDocuments</code> request. Contains the status of the indexing operation, including the fields being indexed.</p>
+/// see [CloudSearch::index_documents]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IndexDocumentsResponse {
@@ -3029,6 +3075,7 @@ impl LimitsDeserializer {
     }
 }
 /// <p>The result of a <code>ListDomainNames</code> request. Contains a list of the domains owned by an account.</p>
+/// see [CloudSearch::list_domain_names]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDomainNamesResponse {
@@ -3835,6 +3882,7 @@ impl UIntValueDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>UpdateAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to update and the Multi-AZ availability option.</p>
+/// see [CloudSearch::update_availability_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAvailabilityOptionsRequest {
@@ -3858,6 +3906,7 @@ impl UpdateAvailabilityOptionsRequestSerializer {
 }
 
 /// <p>The result of a <code>UpdateAvailabilityOptions</code> request. Contains the status of the domain's availability options. </p>
+/// see [CloudSearch::update_availability_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateAvailabilityOptionsResponse {
@@ -3893,6 +3942,7 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>UpdateDomainEndpointOptions</a></code> operation. Specifies the name of the domain you want to update and the domain endpoint options.</p>
+/// see [CloudSearch::update_domain_endpoint_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEndpointOptionsRequest {
@@ -3921,6 +3971,7 @@ impl UpdateDomainEndpointOptionsRequestSerializer {
 }
 
 /// <p>The result of a <code>UpdateDomainEndpointOptions</code> request. Contains the configuration and status of the domain's endpoint options. </p>
+/// see [CloudSearch::update_domain_endpoint_options]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDomainEndpointOptionsResponse {
@@ -3956,6 +4007,7 @@ impl UpdateDomainEndpointOptionsResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>UpdateScalingParameters</a></code> operation. Specifies the name of the domain you want to update and the scaling parameters you want to configure.</p>
+/// see [CloudSearch::update_scaling_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScalingParametersRequest {
@@ -3982,6 +4034,7 @@ impl UpdateScalingParametersRequestSerializer {
 }
 
 /// <p>The result of a <code>UpdateScalingParameters</code> request. Contains the status of the newly-configured scaling parameters.</p>
+/// see [CloudSearch::update_scaling_parameters]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateScalingParametersResponse {
@@ -4015,6 +4068,7 @@ impl UpdateScalingParametersResponseDeserializer {
     }
 }
 /// <p>Container for the parameters to the <code><a>UpdateServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to update and the access rules you want to configure.</p>
+/// see [CloudSearch::update_service_access_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceAccessPoliciesRequest {
@@ -4041,6 +4095,7 @@ impl UpdateServiceAccessPoliciesRequestSerializer {
 }
 
 /// <p>The result of an <code>UpdateServiceAccessPolicies</code> request. Contains the new access policies.</p>
+/// see [CloudSearch::update_service_access_policies]
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateServiceAccessPoliciesResponse {
@@ -5882,7 +5937,7 @@ impl fmt::Display for UpdateServiceAccessPoliciesError {
 impl Error for UpdateServiceAccessPoliciesError {}
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
 #[async_trait]
-pub trait CloudSearch {
+pub trait CloudSearch: Clone + Sync + Send + 'static {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     async fn build_suggesters(
         &self,

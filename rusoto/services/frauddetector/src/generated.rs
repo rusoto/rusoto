@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -69,6 +73,7 @@ pub struct FraudDetectorBatchCreateVariableError {
     pub name: Option<String>,
 }
 
+/// see [FraudDetector::batch_create_variable]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateVariableRequest {
@@ -81,6 +86,7 @@ pub struct BatchCreateVariableRequest {
     pub variable_entries: Vec<VariableEntry>,
 }
 
+/// see [FraudDetector::batch_create_variable]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateVariableResult {
@@ -108,6 +114,7 @@ pub struct FraudDetectorBatchGetVariableError {
     pub name: Option<String>,
 }
 
+/// see [FraudDetector::batch_get_variable]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetVariableRequest {
@@ -116,6 +123,7 @@ pub struct BatchGetVariableRequest {
     pub names: Vec<String>,
 }
 
+/// see [FraudDetector::batch_get_variable]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetVariableResult {
@@ -129,6 +137,7 @@ pub struct BatchGetVariableResult {
     pub variables: Option<Vec<Variable>>,
 }
 
+/// see [FraudDetector::create_detector_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorVersionRequest {
@@ -160,6 +169,7 @@ pub struct CreateDetectorVersionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::create_detector_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorVersionResult {
@@ -177,6 +187,7 @@ pub struct CreateDetectorVersionResult {
     pub status: Option<String>,
 }
 
+/// see [FraudDetector::create_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
@@ -199,10 +210,12 @@ pub struct CreateModelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::create_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelResult {}
 
+/// see [FraudDetector::create_model_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelVersionRequest {
@@ -228,6 +241,7 @@ pub struct CreateModelVersionRequest {
     pub training_data_source: String,
 }
 
+/// see [FraudDetector::create_model_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelVersionResult {
@@ -249,6 +263,7 @@ pub struct CreateModelVersionResult {
     pub status: Option<String>,
 }
 
+/// see [FraudDetector::create_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
@@ -277,6 +292,7 @@ pub struct CreateRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::create_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleResult {
@@ -286,6 +302,7 @@ pub struct CreateRuleResult {
     pub rule: Option<Rule>,
 }
 
+/// see [FraudDetector::create_variable]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVariableRequest {
@@ -315,6 +332,7 @@ pub struct CreateVariableRequest {
     pub variable_type: Option<String>,
 }
 
+/// see [FraudDetector::create_variable]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVariableResult {}
@@ -333,6 +351,7 @@ pub struct DataValidationMetrics {
     pub file_level_messages: Option<Vec<FileValidationMessage>>,
 }
 
+/// see [FraudDetector::delete_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
@@ -341,10 +360,12 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
+/// see [FraudDetector::delete_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResult {}
 
+/// see [FraudDetector::delete_detector_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorVersionRequest {
@@ -356,10 +377,12 @@ pub struct DeleteDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
+/// see [FraudDetector::delete_detector_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorVersionResult {}
 
+/// see [FraudDetector::delete_entity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEntityTypeRequest {
@@ -368,10 +391,12 @@ pub struct DeleteEntityTypeRequest {
     pub name: String,
 }
 
+/// see [FraudDetector::delete_entity_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEntityTypeResult {}
 
+/// see [FraudDetector::delete_event]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventRequest {
@@ -383,10 +408,12 @@ pub struct DeleteEventRequest {
     pub event_type_name: String,
 }
 
+/// see [FraudDetector::delete_event]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventResult {}
 
+/// see [FraudDetector::delete_event_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventTypeRequest {
@@ -395,10 +422,12 @@ pub struct DeleteEventTypeRequest {
     pub name: String,
 }
 
+/// see [FraudDetector::delete_event_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventTypeResult {}
 
+/// see [FraudDetector::delete_external_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteExternalModelRequest {
@@ -407,10 +436,12 @@ pub struct DeleteExternalModelRequest {
     pub model_endpoint: String,
 }
 
+/// see [FraudDetector::delete_external_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteExternalModelResult {}
 
+/// see [FraudDetector::delete_label]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLabelRequest {
@@ -419,10 +450,12 @@ pub struct DeleteLabelRequest {
     pub name: String,
 }
 
+/// see [FraudDetector::delete_label]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLabelResult {}
 
+/// see [FraudDetector::delete_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
@@ -434,10 +467,12 @@ pub struct DeleteModelRequest {
     pub model_type: String,
 }
 
+/// see [FraudDetector::delete_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteModelResult {}
 
+/// see [FraudDetector::delete_model_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelVersionRequest {
@@ -452,10 +487,12 @@ pub struct DeleteModelVersionRequest {
     pub model_version_number: String,
 }
 
+/// see [FraudDetector::delete_model_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteModelVersionResult {}
 
+/// see [FraudDetector::delete_outcome]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOutcomeRequest {
@@ -464,10 +501,12 @@ pub struct DeleteOutcomeRequest {
     pub name: String,
 }
 
+/// see [FraudDetector::delete_outcome]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOutcomeResult {}
 
+/// see [FraudDetector::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
@@ -475,10 +514,12 @@ pub struct DeleteRuleRequest {
     pub rule: Rule,
 }
 
+/// see [FraudDetector::delete_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleResult {}
 
+/// see [FraudDetector::delete_variable]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVariableRequest {
@@ -487,10 +528,12 @@ pub struct DeleteVariableRequest {
     pub name: String,
 }
 
+/// see [FraudDetector::delete_variable]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVariableResult {}
 
+/// see [FraudDetector::describe_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorRequest {
@@ -507,6 +550,7 @@ pub struct DescribeDetectorRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::describe_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorResult {
@@ -528,6 +572,7 @@ pub struct DescribeDetectorResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::describe_model_versions]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelVersionsRequest {
@@ -553,6 +598,7 @@ pub struct DescribeModelVersionsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::describe_model_versions]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelVersionsResult {
@@ -791,6 +837,7 @@ pub struct FileValidationMessage {
     pub type_: Option<String>,
 }
 
+/// see [FraudDetector::get_detector_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorVersionRequest {
@@ -802,6 +849,7 @@ pub struct GetDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
+/// see [FraudDetector::get_detector_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorVersionResult {
@@ -851,6 +899,7 @@ pub struct GetDetectorVersionResult {
     pub status: Option<String>,
 }
 
+/// see [FraudDetector::get_detectors]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorsRequest {
@@ -868,6 +917,7 @@ pub struct GetDetectorsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_detectors]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorsResult {
@@ -881,6 +931,7 @@ pub struct GetDetectorsResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_entity_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntityTypesRequest {
@@ -898,6 +949,7 @@ pub struct GetEntityTypesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_entity_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEntityTypesResult {
@@ -911,6 +963,7 @@ pub struct GetEntityTypesResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_event_prediction]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventPredictionRequest {
@@ -943,6 +996,7 @@ pub struct GetEventPredictionRequest {
         Option<::std::collections::HashMap<String, ModelEndpointDataBlob>>,
 }
 
+/// see [FraudDetector::get_event_prediction]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEventPredictionResult {
@@ -956,6 +1010,7 @@ pub struct GetEventPredictionResult {
     pub rule_results: Option<Vec<RuleResult>>,
 }
 
+/// see [FraudDetector::get_event_types]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventTypesRequest {
@@ -973,6 +1028,7 @@ pub struct GetEventTypesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_event_types]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEventTypesResult {
@@ -986,6 +1042,7 @@ pub struct GetEventTypesResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_external_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExternalModelsRequest {
@@ -1003,6 +1060,7 @@ pub struct GetExternalModelsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_external_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExternalModelsResult {
@@ -1016,6 +1074,7 @@ pub struct GetExternalModelsResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_kms_encryption_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKMSEncryptionKeyResult {
@@ -1025,6 +1084,7 @@ pub struct GetKMSEncryptionKeyResult {
     pub kms_key: Option<KMSKey>,
 }
 
+/// see [FraudDetector::get_labels]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLabelsRequest {
@@ -1042,6 +1102,7 @@ pub struct GetLabelsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_labels]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLabelsResult {
@@ -1055,6 +1116,7 @@ pub struct GetLabelsResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_model_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelVersionRequest {
@@ -1069,6 +1131,7 @@ pub struct GetModelVersionRequest {
     pub model_version_number: String,
 }
 
+/// see [FraudDetector::get_model_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelVersionResult {
@@ -1106,6 +1169,7 @@ pub struct GetModelVersionResult {
     pub training_data_source: Option<String>,
 }
 
+/// see [FraudDetector::get_models]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
@@ -1127,6 +1191,7 @@ pub struct GetModelsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_models]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResult {
@@ -1140,6 +1205,7 @@ pub struct GetModelsResult {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_outcomes]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutcomesRequest {
@@ -1157,6 +1223,7 @@ pub struct GetOutcomesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_outcomes]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOutcomesResult {
@@ -1170,6 +1237,7 @@ pub struct GetOutcomesResult {
     pub outcomes: Option<Vec<Outcome>>,
 }
 
+/// see [FraudDetector::get_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRulesRequest {
@@ -1194,6 +1262,7 @@ pub struct GetRulesRequest {
     pub rule_version: Option<String>,
 }
 
+/// see [FraudDetector::get_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRulesResult {
@@ -1207,6 +1276,7 @@ pub struct GetRulesResult {
     pub rule_details: Option<Vec<RuleDetail>>,
 }
 
+/// see [FraudDetector::get_variables]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVariablesRequest {
@@ -1224,6 +1294,7 @@ pub struct GetVariablesRequest {
     pub next_token: Option<String>,
 }
 
+/// see [FraudDetector::get_variables]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVariablesResult {
@@ -1281,6 +1352,7 @@ pub struct LabelSchema {
     pub label_mapper: ::std::collections::HashMap<String, Vec<String>>,
 }
 
+/// see [FraudDetector::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1297,6 +1369,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [FraudDetector::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
@@ -1533,6 +1606,7 @@ pub struct Outcome {
     pub name: Option<String>,
 }
 
+/// see [FraudDetector::put_detector]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDetectorRequest {
@@ -1552,10 +1626,12 @@ pub struct PutDetectorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_detector]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDetectorResult {}
 
+/// see [FraudDetector::put_entity_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEntityTypeRequest {
@@ -1572,10 +1648,12 @@ pub struct PutEntityTypeRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_entity_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEntityTypeResult {}
 
+/// see [FraudDetector::put_event_type]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventTypeRequest {
@@ -1602,10 +1680,12 @@ pub struct PutEventTypeRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_event_type]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEventTypeResult {}
 
+/// see [FraudDetector::put_external_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutExternalModelRequest {
@@ -1633,10 +1713,12 @@ pub struct PutExternalModelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_external_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutExternalModelResult {}
 
+/// see [FraudDetector::put_kms_encryption_key]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutKMSEncryptionKeyRequest {
@@ -1645,10 +1727,12 @@ pub struct PutKMSEncryptionKeyRequest {
     pub kms_encryption_key_arn: String,
 }
 
+/// see [FraudDetector::put_kms_encryption_key]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutKMSEncryptionKeyResult {}
 
+/// see [FraudDetector::put_label]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLabelRequest {
@@ -1665,10 +1749,12 @@ pub struct PutLabelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_label]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLabelResult {}
 
+/// see [FraudDetector::put_outcome]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOutcomeRequest {
@@ -1685,6 +1771,7 @@ pub struct PutOutcomeRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::put_outcome]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOutcomeResult {}
@@ -1774,6 +1861,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [FraudDetector::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1785,6 +1873,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [FraudDetector::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {}
@@ -1827,6 +1916,7 @@ pub struct TrainingResult {
     pub training_metrics: Option<TrainingMetrics>,
 }
 
+/// see [FraudDetector::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1838,10 +1928,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [FraudDetector::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {}
 
+/// see [FraudDetector::update_detector_version_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionMetadataRequest {
@@ -1856,10 +1948,12 @@ pub struct UpdateDetectorVersionMetadataRequest {
     pub detector_version_id: String,
 }
 
+/// see [FraudDetector::update_detector_version_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionMetadataResult {}
 
+/// see [FraudDetector::update_detector_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionRequest {
@@ -1889,10 +1983,12 @@ pub struct UpdateDetectorVersionRequest {
     pub rules: Vec<Rule>,
 }
 
+/// see [FraudDetector::update_detector_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionResult {}
 
+/// see [FraudDetector::update_detector_version_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionStatusRequest {
@@ -1907,10 +2003,12 @@ pub struct UpdateDetectorVersionStatusRequest {
     pub status: String,
 }
 
+/// see [FraudDetector::update_detector_version_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionStatusResult {}
 
+/// see [FraudDetector::update_model]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
@@ -1926,10 +2024,12 @@ pub struct UpdateModelRequest {
     pub model_type: String,
 }
 
+/// see [FraudDetector::update_model]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelResult {}
 
+/// see [FraudDetector::update_model_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelVersionRequest {
@@ -1952,6 +2052,7 @@ pub struct UpdateModelVersionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::update_model_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelVersionResult {
@@ -1973,6 +2074,7 @@ pub struct UpdateModelVersionResult {
     pub status: Option<String>,
 }
 
+/// see [FraudDetector::update_model_version_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelVersionStatusRequest {
@@ -1990,10 +2092,12 @@ pub struct UpdateModelVersionStatusRequest {
     pub status: String,
 }
 
+/// see [FraudDetector::update_model_version_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelVersionStatusResult {}
 
+/// see [FraudDetector::update_rule_metadata]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleMetadataRequest {
@@ -2005,10 +2109,12 @@ pub struct UpdateRuleMetadataRequest {
     pub rule: Rule,
 }
 
+/// see [FraudDetector::update_rule_metadata]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleMetadataResult {}
 
+/// see [FraudDetector::update_rule_version]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleVersionRequest {
@@ -2034,6 +2140,7 @@ pub struct UpdateRuleVersionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [FraudDetector::update_rule_version]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleVersionResult {
@@ -2043,6 +2150,7 @@ pub struct UpdateRuleVersionResult {
     pub rule: Option<Rule>,
 }
 
+/// see [FraudDetector::update_variable]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVariableRequest {
@@ -2063,6 +2171,7 @@ pub struct UpdateVariableRequest {
     pub variable_type: Option<String>,
 }
 
+/// see [FraudDetector::update_variable]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVariableResult {}
@@ -4497,7 +4606,7 @@ impl fmt::Display for UpdateVariableError {
 impl Error for UpdateVariableError {}
 /// Trait representing the capabilities of the Amazon Fraud Detector API. Amazon Fraud Detector clients implement this trait.
 #[async_trait]
-pub trait FraudDetector {
+pub trait FraudDetector: Clone + Sync + Send + 'static {
     /// <p>Creates a batch of variables.</p>
     async fn batch_create_variable(
         &self,

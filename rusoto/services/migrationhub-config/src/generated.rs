@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -51,6 +55,7 @@ impl MigrationHubConfigClient {
 }
 
 use serde_json;
+/// see [MigrationHubConfig::create_home_region_control]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHomeRegionControlRequest {
@@ -66,6 +71,7 @@ pub struct CreateHomeRegionControlRequest {
     pub target: Target,
 }
 
+/// see [MigrationHubConfig::create_home_region_control]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHomeRegionControlResult {
@@ -75,6 +81,7 @@ pub struct CreateHomeRegionControlResult {
     pub home_region_control: Option<HomeRegionControl>,
 }
 
+/// see [MigrationHubConfig::describe_home_region_controls]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHomeRegionControlsRequest {
@@ -100,6 +107,7 @@ pub struct DescribeHomeRegionControlsRequest {
     pub target: Option<Target>,
 }
 
+/// see [MigrationHubConfig::describe_home_region_controls]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHomeRegionControlsResult {
@@ -113,10 +121,12 @@ pub struct DescribeHomeRegionControlsResult {
     pub next_token: Option<String>,
 }
 
+/// see [MigrationHubConfig::get_home_region]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHomeRegionRequest {}
 
+/// see [MigrationHubConfig::get_home_region]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHomeRegionResult {
@@ -356,7 +366,7 @@ impl fmt::Display for GetHomeRegionError {
 impl Error for GetHomeRegionError {}
 /// Trait representing the capabilities of the AWS Migration Hub Config API. AWS Migration Hub Config clients implement this trait.
 #[async_trait]
-pub trait MigrationHubConfig {
+pub trait MigrationHubConfig: Clone + Sync + Send + 'static {
     /// <p>This API sets up the home region for the calling account only.</p>
     async fn create_home_region_control(
         &self,

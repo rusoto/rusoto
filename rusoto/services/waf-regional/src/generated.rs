@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -78,6 +82,7 @@ pub struct ActivatedRule {
     pub type_: Option<String>,
 }
 
+/// see [WAFRegional::associate_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebACLRequest {
@@ -89,6 +94,7 @@ pub struct AssociateWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::associate_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebACLResponse {}
@@ -155,6 +161,7 @@ pub struct ByteMatchTuple {
     pub text_transformation: String,
 }
 
+/// see [WAFRegional::create_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateByteMatchSetRequest {
@@ -166,6 +173,7 @@ pub struct CreateByteMatchSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateByteMatchSetResponse {
@@ -179,6 +187,7 @@ pub struct CreateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::create_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGeoMatchSetRequest {
@@ -190,6 +199,7 @@ pub struct CreateGeoMatchSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGeoMatchSetResponse {
@@ -203,6 +213,7 @@ pub struct CreateGeoMatchSetResponse {
     pub geo_match_set: Option<GeoMatchSet>,
 }
 
+/// see [WAFRegional::create_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
@@ -214,6 +225,7 @@ pub struct CreateIPSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
@@ -227,6 +239,7 @@ pub struct CreateIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
+/// see [WAFRegional::create_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRateBasedRuleRequest {
@@ -251,6 +264,7 @@ pub struct CreateRateBasedRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [WAFRegional::create_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRateBasedRuleResponse {
@@ -264,6 +278,7 @@ pub struct CreateRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
+/// see [WAFRegional::create_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexMatchSetRequest {
@@ -275,6 +290,7 @@ pub struct CreateRegexMatchSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegexMatchSetResponse {
@@ -288,6 +304,7 @@ pub struct CreateRegexMatchSetResponse {
     pub regex_match_set: Option<RegexMatchSet>,
 }
 
+/// see [WAFRegional::create_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRegexPatternSetRequest {
@@ -299,6 +316,7 @@ pub struct CreateRegexPatternSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRegexPatternSetResponse {
@@ -312,6 +330,7 @@ pub struct CreateRegexPatternSetResponse {
     pub regex_pattern_set: Option<RegexPatternSet>,
 }
 
+/// see [WAFRegional::create_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleGroupRequest {
@@ -330,6 +349,7 @@ pub struct CreateRuleGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [WAFRegional::create_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleGroupResponse {
@@ -343,6 +363,7 @@ pub struct CreateRuleGroupResponse {
     pub rule_group: Option<RuleGroup>,
 }
 
+/// see [WAFRegional::create_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
@@ -361,6 +382,7 @@ pub struct CreateRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [WAFRegional::create_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleResponse {
@@ -374,6 +396,7 @@ pub struct CreateRuleResponse {
     pub rule: Option<Rule>,
 }
 
+/// see [WAFRegional::create_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSizeConstraintSetRequest {
@@ -385,6 +408,7 @@ pub struct CreateSizeConstraintSetRequest {
     pub name: String,
 }
 
+/// see [WAFRegional::create_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSizeConstraintSetResponse {
@@ -399,6 +423,7 @@ pub struct CreateSizeConstraintSetResponse {
 }
 
 /// <p>A request to create a <a>SqlInjectionMatchSet</a>.</p>
+/// see [WAFRegional::create_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSqlInjectionMatchSetRequest {
@@ -411,6 +436,7 @@ pub struct CreateSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a <code>CreateSqlInjectionMatchSet</code> request.</p>
+/// see [WAFRegional::create_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSqlInjectionMatchSetResponse {
@@ -424,6 +450,7 @@ pub struct CreateSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
+/// see [WAFRegional::create_web_acl_migration_stack]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebACLMigrationStackRequest {
@@ -438,6 +465,7 @@ pub struct CreateWebACLMigrationStackRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::create_web_acl_migration_stack]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebACLMigrationStackResponse {
@@ -446,6 +474,7 @@ pub struct CreateWebACLMigrationStackResponse {
     pub s3_object_url: String,
 }
 
+/// see [WAFRegional::create_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebACLRequest {
@@ -467,6 +496,7 @@ pub struct CreateWebACLRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// see [WAFRegional::create_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebACLResponse {
@@ -481,6 +511,7 @@ pub struct CreateWebACLResponse {
 }
 
 /// <p>A request to create an <a>XssMatchSet</a>.</p>
+/// see [WAFRegional::create_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateXssMatchSetRequest {
@@ -493,6 +524,7 @@ pub struct CreateXssMatchSetRequest {
 }
 
 /// <p>The response to a <code>CreateXssMatchSet</code> request.</p>
+/// see [WAFRegional::create_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateXssMatchSetResponse {
@@ -506,6 +538,7 @@ pub struct CreateXssMatchSetResponse {
     pub xss_match_set: Option<XssMatchSet>,
 }
 
+/// see [WAFRegional::delete_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteByteMatchSetRequest {
@@ -517,6 +550,7 @@ pub struct DeleteByteMatchSetRequest {
     pub change_token: String,
 }
 
+/// see [WAFRegional::delete_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteByteMatchSetResponse {
@@ -526,6 +560,7 @@ pub struct DeleteByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGeoMatchSetRequest {
@@ -537,6 +572,7 @@ pub struct DeleteGeoMatchSetRequest {
     pub geo_match_set_id: String,
 }
 
+/// see [WAFRegional::delete_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGeoMatchSetResponse {
@@ -546,6 +582,7 @@ pub struct DeleteGeoMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
@@ -557,6 +594,7 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [WAFRegional::delete_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {
@@ -566,6 +604,7 @@ pub struct DeleteIPSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggingConfigurationRequest {
@@ -574,10 +613,12 @@ pub struct DeleteLoggingConfigurationRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::delete_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoggingConfigurationResponse {}
 
+/// see [WAFRegional::delete_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePermissionPolicyRequest {
@@ -586,10 +627,12 @@ pub struct DeletePermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::delete_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePermissionPolicyResponse {}
 
+/// see [WAFRegional::delete_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRateBasedRuleRequest {
@@ -601,6 +644,7 @@ pub struct DeleteRateBasedRuleRequest {
     pub rule_id: String,
 }
 
+/// see [WAFRegional::delete_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRateBasedRuleResponse {
@@ -610,6 +654,7 @@ pub struct DeleteRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexMatchSetRequest {
@@ -621,6 +666,7 @@ pub struct DeleteRegexMatchSetRequest {
     pub regex_match_set_id: String,
 }
 
+/// see [WAFRegional::delete_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegexMatchSetResponse {
@@ -630,6 +676,7 @@ pub struct DeleteRegexMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegexPatternSetRequest {
@@ -641,6 +688,7 @@ pub struct DeleteRegexPatternSetRequest {
     pub regex_pattern_set_id: String,
 }
 
+/// see [WAFRegional::delete_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegexPatternSetResponse {
@@ -650,6 +698,7 @@ pub struct DeleteRegexPatternSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleGroupRequest {
@@ -661,6 +710,7 @@ pub struct DeleteRuleGroupRequest {
     pub rule_group_id: String,
 }
 
+/// see [WAFRegional::delete_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleGroupResponse {
@@ -670,6 +720,7 @@ pub struct DeleteRuleGroupResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleRequest {
@@ -681,6 +732,7 @@ pub struct DeleteRuleRequest {
     pub rule_id: String,
 }
 
+/// see [WAFRegional::delete_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleResponse {
@@ -690,6 +742,7 @@ pub struct DeleteRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSizeConstraintSetRequest {
@@ -701,6 +754,7 @@ pub struct DeleteSizeConstraintSetRequest {
     pub size_constraint_set_id: String,
 }
 
+/// see [WAFRegional::delete_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSizeConstraintSetResponse {
@@ -711,6 +765,7 @@ pub struct DeleteSizeConstraintSetResponse {
 }
 
 /// <p>A request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>
+/// see [WAFRegional::delete_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSqlInjectionMatchSetRequest {
@@ -723,6 +778,7 @@ pub struct DeleteSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>
+/// see [WAFRegional::delete_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSqlInjectionMatchSetResponse {
@@ -732,6 +788,7 @@ pub struct DeleteSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::delete_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebACLRequest {
@@ -743,6 +800,7 @@ pub struct DeleteWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::delete_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebACLResponse {
@@ -753,6 +811,7 @@ pub struct DeleteWebACLResponse {
 }
 
 /// <p>A request to delete an <a>XssMatchSet</a> from AWS WAF.</p>
+/// see [WAFRegional::delete_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteXssMatchSetRequest {
@@ -765,6 +824,7 @@ pub struct DeleteXssMatchSetRequest {
 }
 
 /// <p>The response to a request to delete an <a>XssMatchSet</a> from AWS WAF.</p>
+/// see [WAFRegional::delete_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteXssMatchSetResponse {
@@ -774,6 +834,7 @@ pub struct DeleteXssMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::disassociate_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebACLRequest {
@@ -782,6 +843,7 @@ pub struct DisassociateWebACLRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::disassociate_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebACLResponse {}
@@ -857,6 +919,7 @@ pub struct GeoMatchSetUpdate {
     pub geo_match_constraint: GeoMatchConstraint,
 }
 
+/// see [WAFRegional::get_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetByteMatchSetRequest {
@@ -865,6 +928,7 @@ pub struct GetByteMatchSetRequest {
     pub byte_match_set_id: String,
 }
 
+/// see [WAFRegional::get_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetByteMatchSetResponse {
@@ -874,10 +938,12 @@ pub struct GetByteMatchSetResponse {
     pub byte_match_set: Option<ByteMatchSet>,
 }
 
+/// see [WAFRegional::get_change_token]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenRequest {}
 
+/// see [WAFRegional::get_change_token]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetChangeTokenResponse {
@@ -887,6 +953,7 @@ pub struct GetChangeTokenResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::get_change_token_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetChangeTokenStatusRequest {
@@ -895,6 +962,7 @@ pub struct GetChangeTokenStatusRequest {
     pub change_token: String,
 }
 
+/// see [WAFRegional::get_change_token_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetChangeTokenStatusResponse {
@@ -904,6 +972,7 @@ pub struct GetChangeTokenStatusResponse {
     pub change_token_status: Option<String>,
 }
 
+/// see [WAFRegional::get_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGeoMatchSetRequest {
@@ -912,6 +981,7 @@ pub struct GetGeoMatchSetRequest {
     pub geo_match_set_id: String,
 }
 
+/// see [WAFRegional::get_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGeoMatchSetResponse {
@@ -921,6 +991,7 @@ pub struct GetGeoMatchSetResponse {
     pub geo_match_set: Option<GeoMatchSet>,
 }
 
+/// see [WAFRegional::get_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
@@ -929,6 +1000,7 @@ pub struct GetIPSetRequest {
     pub ip_set_id: String,
 }
 
+/// see [WAFRegional::get_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
@@ -938,6 +1010,7 @@ pub struct GetIPSetResponse {
     pub ip_set: Option<IPSet>,
 }
 
+/// see [WAFRegional::get_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingConfigurationRequest {
@@ -946,6 +1019,7 @@ pub struct GetLoggingConfigurationRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::get_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggingConfigurationResponse {
@@ -955,6 +1029,7 @@ pub struct GetLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [WAFRegional::get_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionPolicyRequest {
@@ -963,6 +1038,7 @@ pub struct GetPermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::get_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPermissionPolicyResponse {
@@ -972,6 +1048,7 @@ pub struct GetPermissionPolicyResponse {
     pub policy: Option<String>,
 }
 
+/// see [WAFRegional::get_rate_based_rule_managed_keys]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleManagedKeysRequest {
@@ -984,6 +1061,7 @@ pub struct GetRateBasedRuleManagedKeysRequest {
     pub rule_id: String,
 }
 
+/// see [WAFRegional::get_rate_based_rule_managed_keys]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRateBasedRuleManagedKeysResponse {
@@ -997,6 +1075,7 @@ pub struct GetRateBasedRuleManagedKeysResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::get_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRateBasedRuleRequest {
@@ -1005,6 +1084,7 @@ pub struct GetRateBasedRuleRequest {
     pub rule_id: String,
 }
 
+/// see [WAFRegional::get_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRateBasedRuleResponse {
@@ -1014,6 +1094,7 @@ pub struct GetRateBasedRuleResponse {
     pub rule: Option<RateBasedRule>,
 }
 
+/// see [WAFRegional::get_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexMatchSetRequest {
@@ -1022,6 +1103,7 @@ pub struct GetRegexMatchSetRequest {
     pub regex_match_set_id: String,
 }
 
+/// see [WAFRegional::get_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegexMatchSetResponse {
@@ -1031,6 +1113,7 @@ pub struct GetRegexMatchSetResponse {
     pub regex_match_set: Option<RegexMatchSet>,
 }
 
+/// see [WAFRegional::get_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegexPatternSetRequest {
@@ -1039,6 +1122,7 @@ pub struct GetRegexPatternSetRequest {
     pub regex_pattern_set_id: String,
 }
 
+/// see [WAFRegional::get_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegexPatternSetResponse {
@@ -1048,6 +1132,7 @@ pub struct GetRegexPatternSetResponse {
     pub regex_pattern_set: Option<RegexPatternSet>,
 }
 
+/// see [WAFRegional::get_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleGroupRequest {
@@ -1056,6 +1141,7 @@ pub struct GetRuleGroupRequest {
     pub rule_group_id: String,
 }
 
+/// see [WAFRegional::get_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRuleGroupResponse {
@@ -1065,6 +1151,7 @@ pub struct GetRuleGroupResponse {
     pub rule_group: Option<RuleGroup>,
 }
 
+/// see [WAFRegional::get_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRuleRequest {
@@ -1073,6 +1160,7 @@ pub struct GetRuleRequest {
     pub rule_id: String,
 }
 
+/// see [WAFRegional::get_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRuleResponse {
@@ -1082,6 +1170,7 @@ pub struct GetRuleResponse {
     pub rule: Option<Rule>,
 }
 
+/// see [WAFRegional::get_sampled_requests]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSampledRequestsRequest {
@@ -1099,6 +1188,7 @@ pub struct GetSampledRequestsRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::get_sampled_requests]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSampledRequestsResponse {
@@ -1116,6 +1206,7 @@ pub struct GetSampledRequestsResponse {
     pub time_window: Option<TimeWindow>,
 }
 
+/// see [WAFRegional::get_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSizeConstraintSetRequest {
@@ -1124,6 +1215,7 @@ pub struct GetSizeConstraintSetRequest {
     pub size_constraint_set_id: String,
 }
 
+/// see [WAFRegional::get_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSizeConstraintSetResponse {
@@ -1134,6 +1226,7 @@ pub struct GetSizeConstraintSetResponse {
 }
 
 /// <p>A request to get a <a>SqlInjectionMatchSet</a>.</p>
+/// see [WAFRegional::get_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSqlInjectionMatchSetRequest {
@@ -1143,6 +1236,7 @@ pub struct GetSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to a <a>GetSqlInjectionMatchSet</a> request.</p>
+/// see [WAFRegional::get_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSqlInjectionMatchSetResponse {
@@ -1152,6 +1246,7 @@ pub struct GetSqlInjectionMatchSetResponse {
     pub sql_injection_match_set: Option<SqlInjectionMatchSet>,
 }
 
+/// see [WAFRegional::get_web_acl_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebACLForResourceRequest {
@@ -1160,6 +1255,7 @@ pub struct GetWebACLForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::get_web_acl_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebACLForResourceResponse {
@@ -1169,6 +1265,7 @@ pub struct GetWebACLForResourceResponse {
     pub web_acl_summary: Option<WebACLSummary>,
 }
 
+/// see [WAFRegional::get_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebACLRequest {
@@ -1177,6 +1274,7 @@ pub struct GetWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::get_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebACLResponse {
@@ -1187,6 +1285,7 @@ pub struct GetWebACLResponse {
 }
 
 /// <p>A request to get an <a>XssMatchSet</a>.</p>
+/// see [WAFRegional::get_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetXssMatchSetRequest {
@@ -1196,6 +1295,7 @@ pub struct GetXssMatchSetRequest {
 }
 
 /// <p>The response to a <a>GetXssMatchSet</a> request.</p>
+/// see [WAFRegional::get_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetXssMatchSetResponse {
@@ -1300,6 +1400,7 @@ pub struct IPSetUpdate {
     pub ip_set_descriptor: IPSetDescriptor,
 }
 
+/// see [WAFRegional::list_activated_rules_in_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActivatedRulesInRuleGroupRequest {
@@ -1317,6 +1418,7 @@ pub struct ListActivatedRulesInRuleGroupRequest {
     pub rule_group_id: Option<String>,
 }
 
+/// see [WAFRegional::list_activated_rules_in_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActivatedRulesInRuleGroupResponse {
@@ -1330,6 +1432,7 @@ pub struct ListActivatedRulesInRuleGroupResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_byte_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListByteMatchSetsRequest {
@@ -1343,6 +1446,7 @@ pub struct ListByteMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_byte_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListByteMatchSetsResponse {
@@ -1356,6 +1460,7 @@ pub struct ListByteMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_geo_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGeoMatchSetsRequest {
@@ -1369,6 +1474,7 @@ pub struct ListGeoMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_geo_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGeoMatchSetsResponse {
@@ -1382,6 +1488,7 @@ pub struct ListGeoMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_ip_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
@@ -1395,6 +1502,7 @@ pub struct ListIPSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_ip_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
@@ -1408,6 +1516,7 @@ pub struct ListIPSetsResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_logging_configurations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggingConfigurationsRequest {
@@ -1421,6 +1530,7 @@ pub struct ListLoggingConfigurationsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_logging_configurations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggingConfigurationsResponse {
@@ -1434,6 +1544,7 @@ pub struct ListLoggingConfigurationsResponse {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_rate_based_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRateBasedRulesRequest {
@@ -1447,6 +1558,7 @@ pub struct ListRateBasedRulesRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_rate_based_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRateBasedRulesResponse {
@@ -1460,6 +1572,7 @@ pub struct ListRateBasedRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
+/// see [WAFRegional::list_regex_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexMatchSetsRequest {
@@ -1473,6 +1586,7 @@ pub struct ListRegexMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_regex_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegexMatchSetsResponse {
@@ -1486,6 +1600,7 @@ pub struct ListRegexMatchSetsResponse {
     pub regex_match_sets: Option<Vec<RegexMatchSetSummary>>,
 }
 
+/// see [WAFRegional::list_regex_pattern_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRegexPatternSetsRequest {
@@ -1499,6 +1614,7 @@ pub struct ListRegexPatternSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_regex_pattern_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRegexPatternSetsResponse {
@@ -1512,6 +1628,7 @@ pub struct ListRegexPatternSetsResponse {
     pub regex_pattern_sets: Option<Vec<RegexPatternSetSummary>>,
 }
 
+/// see [WAFRegional::list_resources_for_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesForWebACLRequest {
@@ -1524,6 +1641,7 @@ pub struct ListResourcesForWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::list_resources_for_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesForWebACLResponse {
@@ -1533,6 +1651,7 @@ pub struct ListResourcesForWebACLResponse {
     pub resource_arns: Option<Vec<String>>,
 }
 
+/// see [WAFRegional::list_rule_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRuleGroupsRequest {
@@ -1546,6 +1665,7 @@ pub struct ListRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_rule_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRuleGroupsResponse {
@@ -1559,6 +1679,7 @@ pub struct ListRuleGroupsResponse {
     pub rule_groups: Option<Vec<RuleGroupSummary>>,
 }
 
+/// see [WAFRegional::list_rules]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesRequest {
@@ -1572,6 +1693,7 @@ pub struct ListRulesRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_rules]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesResponse {
@@ -1585,6 +1707,7 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
+/// see [WAFRegional::list_size_constraint_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSizeConstraintSetsRequest {
@@ -1598,6 +1721,7 @@ pub struct ListSizeConstraintSetsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_size_constraint_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSizeConstraintSetsResponse {
@@ -1612,6 +1736,7 @@ pub struct ListSizeConstraintSetsResponse {
 }
 
 /// <p>A request to list the <a>SqlInjectionMatchSet</a> objects created by the current AWS account.</p>
+/// see [WAFRegional::list_sql_injection_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSqlInjectionMatchSetsRequest {
@@ -1626,6 +1751,7 @@ pub struct ListSqlInjectionMatchSetsRequest {
 }
 
 /// <p>The response to a <a>ListSqlInjectionMatchSets</a> request.</p>
+/// see [WAFRegional::list_sql_injection_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSqlInjectionMatchSetsResponse {
@@ -1639,6 +1765,7 @@ pub struct ListSqlInjectionMatchSetsResponse {
     pub sql_injection_match_sets: Option<Vec<SqlInjectionMatchSetSummary>>,
 }
 
+/// see [WAFRegional::list_subscribed_rule_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscribedRuleGroupsRequest {
@@ -1652,6 +1779,7 @@ pub struct ListSubscribedRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_subscribed_rule_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscribedRuleGroupsResponse {
@@ -1665,6 +1793,7 @@ pub struct ListSubscribedRuleGroupsResponse {
     pub rule_groups: Option<Vec<SubscribedRuleGroupSummary>>,
 }
 
+/// see [WAFRegional::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -1681,6 +1810,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -1694,6 +1824,7 @@ pub struct ListTagsForResourceResponse {
     pub tag_info_for_resource: Option<TagInfoForResource>,
 }
 
+/// see [WAFRegional::list_web_ac_ls]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebACLsRequest {
@@ -1707,6 +1838,7 @@ pub struct ListWebACLsRequest {
     pub next_marker: Option<String>,
 }
 
+/// see [WAFRegional::list_web_ac_ls]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebACLsResponse {
@@ -1721,6 +1853,7 @@ pub struct ListWebACLsResponse {
 }
 
 /// <p>A request to list the <a>XssMatchSet</a> objects created by the current AWS account.</p>
+/// see [WAFRegional::list_xss_match_sets]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListXssMatchSetsRequest {
@@ -1735,6 +1868,7 @@ pub struct ListXssMatchSetsRequest {
 }
 
 /// <p>The response to a <a>ListXssMatchSets</a> request.</p>
+/// see [WAFRegional::list_xss_match_sets]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListXssMatchSetsResponse {
@@ -1777,6 +1911,7 @@ pub struct Predicate {
     pub type_: String,
 }
 
+/// see [WAFRegional::put_logging_configuration]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingConfigurationRequest {
@@ -1785,6 +1920,7 @@ pub struct PutLoggingConfigurationRequest {
     pub logging_configuration: LoggingConfiguration,
 }
 
+/// see [WAFRegional::put_logging_configuration]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLoggingConfigurationResponse {
@@ -1794,6 +1930,7 @@ pub struct PutLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
+/// see [WAFRegional::put_permission_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionPolicyRequest {
@@ -1805,6 +1942,7 @@ pub struct PutPermissionPolicyRequest {
     pub resource_arn: String,
 }
 
+/// see [WAFRegional::put_permission_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPermissionPolicyResponse {}
@@ -2188,6 +2326,7 @@ pub struct TagInfoForResource {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [WAFRegional::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -2199,6 +2338,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
+/// see [WAFRegional::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -2214,6 +2354,7 @@ pub struct TimeWindow {
     pub start_time: f64,
 }
 
+/// see [WAFRegional::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2225,10 +2366,12 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [WAFRegional::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// see [WAFRegional::update_byte_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateByteMatchSetRequest {
@@ -2243,6 +2386,7 @@ pub struct UpdateByteMatchSetRequest {
     pub updates: Vec<ByteMatchSetUpdate>,
 }
 
+/// see [WAFRegional::update_byte_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateByteMatchSetResponse {
@@ -2252,6 +2396,7 @@ pub struct UpdateByteMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_geo_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGeoMatchSetRequest {
@@ -2266,6 +2411,7 @@ pub struct UpdateGeoMatchSetRequest {
     pub updates: Vec<GeoMatchSetUpdate>,
 }
 
+/// see [WAFRegional::update_geo_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGeoMatchSetResponse {
@@ -2275,6 +2421,7 @@ pub struct UpdateGeoMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_ip_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
@@ -2289,6 +2436,7 @@ pub struct UpdateIPSetRequest {
     pub updates: Vec<IPSetUpdate>,
 }
 
+/// see [WAFRegional::update_ip_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {
@@ -2298,6 +2446,7 @@ pub struct UpdateIPSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_rate_based_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRateBasedRuleRequest {
@@ -2315,6 +2464,7 @@ pub struct UpdateRateBasedRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
+/// see [WAFRegional::update_rate_based_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRateBasedRuleResponse {
@@ -2324,6 +2474,7 @@ pub struct UpdateRateBasedRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_regex_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexMatchSetRequest {
@@ -2338,6 +2489,7 @@ pub struct UpdateRegexMatchSetRequest {
     pub updates: Vec<RegexMatchSetUpdate>,
 }
 
+/// see [WAFRegional::update_regex_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegexMatchSetResponse {
@@ -2347,6 +2499,7 @@ pub struct UpdateRegexMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_regex_pattern_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegexPatternSetRequest {
@@ -2361,6 +2514,7 @@ pub struct UpdateRegexPatternSetRequest {
     pub updates: Vec<RegexPatternSetUpdate>,
 }
 
+/// see [WAFRegional::update_regex_pattern_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRegexPatternSetResponse {
@@ -2370,6 +2524,7 @@ pub struct UpdateRegexPatternSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_rule_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleGroupRequest {
@@ -2384,6 +2539,7 @@ pub struct UpdateRuleGroupRequest {
     pub updates: Vec<RuleGroupUpdate>,
 }
 
+/// see [WAFRegional::update_rule_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleGroupResponse {
@@ -2393,6 +2549,7 @@ pub struct UpdateRuleGroupResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_rule]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleRequest {
@@ -2407,6 +2564,7 @@ pub struct UpdateRuleRequest {
     pub updates: Vec<RuleUpdate>,
 }
 
+/// see [WAFRegional::update_rule]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleResponse {
@@ -2416,6 +2574,7 @@ pub struct UpdateRuleResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_size_constraint_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSizeConstraintSetRequest {
@@ -2430,6 +2589,7 @@ pub struct UpdateSizeConstraintSetRequest {
     pub updates: Vec<SizeConstraintSetUpdate>,
 }
 
+/// see [WAFRegional::update_size_constraint_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSizeConstraintSetResponse {
@@ -2440,6 +2600,7 @@ pub struct UpdateSizeConstraintSetResponse {
 }
 
 /// <p>A request to update a <a>SqlInjectionMatchSet</a>.</p>
+/// see [WAFRegional::update_sql_injection_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSqlInjectionMatchSetRequest {
@@ -2455,6 +2616,7 @@ pub struct UpdateSqlInjectionMatchSetRequest {
 }
 
 /// <p>The response to an <a>UpdateSqlInjectionMatchSets</a> request.</p>
+/// see [WAFRegional::update_sql_injection_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSqlInjectionMatchSetResponse {
@@ -2464,6 +2626,7 @@ pub struct UpdateSqlInjectionMatchSetResponse {
     pub change_token: Option<String>,
 }
 
+/// see [WAFRegional::update_web_acl]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebACLRequest {
@@ -2483,6 +2646,7 @@ pub struct UpdateWebACLRequest {
     pub web_acl_id: String,
 }
 
+/// see [WAFRegional::update_web_acl]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebACLResponse {
@@ -2493,6 +2657,7 @@ pub struct UpdateWebACLResponse {
 }
 
 /// <p>A request to update an <a>XssMatchSet</a>.</p>
+/// see [WAFRegional::update_xss_match_set]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateXssMatchSetRequest {
@@ -2508,6 +2673,7 @@ pub struct UpdateXssMatchSetRequest {
 }
 
 /// <p>The response to an <a>UpdateXssMatchSets</a> request.</p>
+/// see [WAFRegional::update_xss_match_set]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateXssMatchSetResponse {
@@ -7395,7 +7561,7 @@ impl fmt::Display for UpdateXssMatchSetError {
 impl Error for UpdateXssMatchSetError {}
 /// Trait representing the capabilities of the WAF Regional API. WAF Regional clients implement this trait.
 #[async_trait]
-pub trait WAFRegional {
+pub trait WAFRegional: Clone + Sync + Send + 'static {
     /// <p><note> <p>This is <b>AWS WAF Classic Regional</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Associates a web ACL with a resource, either an application load balancer or Amazon API Gateway stage.</p></p>
     async fn associate_web_acl(
         &self,

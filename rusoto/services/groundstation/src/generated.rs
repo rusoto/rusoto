@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -73,6 +77,7 @@ pub struct AntennaUplinkConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::cancel_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelContactRequest {
@@ -95,6 +100,9 @@ pub struct ConfigDetails {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_config]
+/// see [GroundStation::delete_config]
+/// see [GroundStation::update_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigIdResponse {
@@ -222,6 +230,8 @@ pub struct ContactData {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::cancel_contact]
+/// see [GroundStation::reserve_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContactIdResponse {
@@ -232,6 +242,7 @@ pub struct ContactIdResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigRequest {
@@ -248,6 +259,7 @@ pub struct CreateConfigRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_dataflow_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataflowEndpointGroupRequest {
@@ -261,6 +273,7 @@ pub struct CreateDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_mission_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMissionProfileRequest {
@@ -340,6 +353,8 @@ pub struct DataflowEndpointConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_dataflow_endpoint_group]
+/// see [GroundStation::delete_dataflow_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataflowEndpointGroupIdResponse {
@@ -372,6 +387,7 @@ pub struct DecodeConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::delete_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigRequest {
@@ -384,6 +400,7 @@ pub struct DeleteConfigRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::delete_dataflow_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataflowEndpointGroupRequest {
@@ -393,6 +410,7 @@ pub struct DeleteDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::delete_mission_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMissionProfileRequest {
@@ -410,6 +428,7 @@ pub struct DemodulationConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::describe_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContactRequest {
@@ -419,6 +438,7 @@ pub struct DescribeContactRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::describe_contact]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContactResponse {
@@ -561,6 +581,7 @@ pub struct FrequencyBandwidth {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigRequest {
@@ -573,6 +594,7 @@ pub struct GetConfigRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_config]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigResponse {
@@ -599,6 +621,7 @@ pub struct GetConfigResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_dataflow_endpoint_group]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataflowEndpointGroupRequest {
@@ -608,6 +631,7 @@ pub struct GetDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_dataflow_endpoint_group]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataflowEndpointGroupResponse {
@@ -630,6 +654,7 @@ pub struct GetDataflowEndpointGroupResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_minute_usage]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMinuteUsageRequest {
@@ -642,6 +667,7 @@ pub struct GetMinuteUsageRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_minute_usage]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMinuteUsageResponse {
@@ -668,6 +694,7 @@ pub struct GetMinuteUsageResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_mission_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMissionProfileRequest {
@@ -677,6 +704,7 @@ pub struct GetMissionProfileRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_mission_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMissionProfileResponse {
@@ -723,6 +751,7 @@ pub struct GetMissionProfileResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_satellite]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSatelliteRequest {
@@ -732,6 +761,7 @@ pub struct GetSatelliteRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::get_satellite]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSatelliteResponse {
@@ -772,6 +802,7 @@ pub struct GroundStationData {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::list_configs]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigsRequest {
@@ -785,7 +816,24 @@ pub struct ListConfigsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListConfigsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_configs]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigsResponse {
@@ -799,7 +847,30 @@ pub struct ListConfigsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListConfigsResponse {
+    type Item = ConfigListItem;
+
+    fn into_pagination_page(self) -> Vec<ConfigListItem> {
+        self.config_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_contacts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactsRequest {
@@ -834,7 +905,24 @@ pub struct ListContactsRequest {
     pub status_list: Vec<String>,
 }
 
+impl Paged for ListContactsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListContactsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_contacts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactsResponse {
@@ -848,7 +936,30 @@ pub struct ListContactsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListContactsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListContactsResponse {
+    type Item = ContactData;
+
+    fn into_pagination_page(self) -> Vec<ContactData> {
+        self.contact_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_dataflow_endpoint_groups]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataflowEndpointGroupsRequest {
@@ -862,7 +973,24 @@ pub struct ListDataflowEndpointGroupsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDataflowEndpointGroupsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataflowEndpointGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_dataflow_endpoint_groups]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataflowEndpointGroupsResponse {
@@ -876,7 +1004,30 @@ pub struct ListDataflowEndpointGroupsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListDataflowEndpointGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListDataflowEndpointGroupsResponse {
+    type Item = DataflowEndpointListItem;
+
+    fn into_pagination_page(self) -> Vec<DataflowEndpointListItem> {
+        self.dataflow_endpoint_group_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_ground_stations]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroundStationsRequest {
@@ -894,7 +1045,24 @@ pub struct ListGroundStationsRequest {
     pub satellite_id: Option<String>,
 }
 
+impl Paged for ListGroundStationsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroundStationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_ground_stations]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroundStationsResponse {
@@ -908,7 +1076,30 @@ pub struct ListGroundStationsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListGroundStationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListGroundStationsResponse {
+    type Item = GroundStationData;
+
+    fn into_pagination_page(self) -> Vec<GroundStationData> {
+        self.ground_station_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_mission_profiles]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMissionProfilesRequest {
@@ -922,7 +1113,24 @@ pub struct ListMissionProfilesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMissionProfilesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMissionProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_mission_profiles]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMissionProfilesResponse {
@@ -936,7 +1144,30 @@ pub struct ListMissionProfilesResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMissionProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMissionProfilesResponse {
+    type Item = MissionProfileListItem;
+
+    fn into_pagination_page(self) -> Vec<MissionProfileListItem> {
+        self.mission_profile_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_satellites]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSatellitesRequest {
@@ -950,7 +1181,24 @@ pub struct ListSatellitesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListSatellitesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSatellitesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_satellites]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSatellitesResponse {
@@ -964,7 +1212,30 @@ pub struct ListSatellitesResponse {
     pub satellites: Option<Vec<SatelliteListItem>>,
 }
 
+impl Paged for ListSatellitesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListSatellitesResponse {
+    type Item = SatelliteListItem;
+
+    fn into_pagination_page(self) -> Vec<SatelliteListItem> {
+        self.satellites.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
 /// <p><p/></p>
+/// see [GroundStation::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -974,6 +1245,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -984,6 +1256,9 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::create_mission_profile]
+/// see [GroundStation::delete_mission_profile]
+/// see [GroundStation::update_mission_profile]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MissionProfileIdResponse {
@@ -1016,6 +1291,7 @@ pub struct MissionProfileListItem {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::reserve_contact]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReserveContactRequest {
@@ -1125,6 +1401,7 @@ pub struct SpectrumConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1137,6 +1414,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
@@ -1150,6 +1428,7 @@ pub struct TrackingConfig {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1162,11 +1441,13 @@ pub struct UntagResourceRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p><p/></p>
+/// see [GroundStation::update_config]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigRequest {
@@ -1185,6 +1466,7 @@ pub struct UpdateConfigRequest {
 }
 
 /// <p><p/></p>
+/// see [GroundStation::update_mission_profile]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMissionProfileRequest {
@@ -2346,7 +2628,7 @@ impl fmt::Display for UpdateMissionProfileError {
 impl Error for UpdateMissionProfileError {}
 /// Trait representing the capabilities of the AWS Ground Station API. AWS Ground Station clients implement this trait.
 #[async_trait]
-pub trait GroundStation {
+pub trait GroundStation: Clone + Sync + Send + 'static {
     /// <p>Cancels a contact with a specified contact ID.</p>
     async fn cancel_contact(
         &self,
@@ -2431,11 +2713,33 @@ pub trait GroundStation {
         input: ListConfigsRequest,
     ) -> Result<ListConfigsResponse, RusotoError<ListConfigsError>>;
 
+    /// Auto-paginating version of `list_configs`
+    fn list_configs_pages<'a>(
+        &'a self,
+        mut input: ListConfigsRequest,
+    ) -> RusotoStream<'a, ConfigListItem, ListConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_configs(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of contacts.</p> <p>If <code>statusList</code> contains AVAILABLE, the request must include <code>groundStation</code>, <code>missionprofileArn</code>, and <code>satelliteArn</code>. </p>
     async fn list_contacts(
         &self,
         input: ListContactsRequest,
     ) -> Result<ListContactsResponse, RusotoError<ListContactsError>>;
+
+    /// Auto-paginating version of `list_contacts`
+    fn list_contacts_pages<'a>(
+        &'a self,
+        mut input: ListContactsRequest,
+    ) -> RusotoStream<'a, ContactData, ListContactsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_contacts(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of <code>DataflowEndpoint</code> groups.</p>
     async fn list_dataflow_endpoint_groups(
@@ -2443,11 +2747,33 @@ pub trait GroundStation {
         input: ListDataflowEndpointGroupsRequest,
     ) -> Result<ListDataflowEndpointGroupsResponse, RusotoError<ListDataflowEndpointGroupsError>>;
 
+    /// Auto-paginating version of `list_dataflow_endpoint_groups`
+    fn list_dataflow_endpoint_groups_pages<'a>(
+        &'a self,
+        mut input: ListDataflowEndpointGroupsRequest,
+    ) -> RusotoStream<'a, DataflowEndpointListItem, ListDataflowEndpointGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dataflow_endpoint_groups(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of ground stations. </p>
     async fn list_ground_stations(
         &self,
         input: ListGroundStationsRequest,
     ) -> Result<ListGroundStationsResponse, RusotoError<ListGroundStationsError>>;
+
+    /// Auto-paginating version of `list_ground_stations`
+    fn list_ground_stations_pages<'a>(
+        &'a self,
+        mut input: ListGroundStationsRequest,
+    ) -> RusotoStream<'a, GroundStationData, ListGroundStationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ground_stations(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of mission profiles.</p>
     async fn list_mission_profiles(
@@ -2455,11 +2781,33 @@ pub trait GroundStation {
         input: ListMissionProfilesRequest,
     ) -> Result<ListMissionProfilesResponse, RusotoError<ListMissionProfilesError>>;
 
+    /// Auto-paginating version of `list_mission_profiles`
+    fn list_mission_profiles_pages<'a>(
+        &'a self,
+        mut input: ListMissionProfilesRequest,
+    ) -> RusotoStream<'a, MissionProfileListItem, ListMissionProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_mission_profiles(input.clone())
+        }))
+    }
+
     /// <p>Returns a list of satellites.</p>
     async fn list_satellites(
         &self,
         input: ListSatellitesRequest,
     ) -> Result<ListSatellitesResponse, RusotoError<ListSatellitesError>>;
+
+    /// Auto-paginating version of `list_satellites`
+    fn list_satellites_pages<'a>(
+        &'a self,
+        mut input: ListSatellitesRequest,
+    ) -> RusotoStream<'a, SatelliteListItem, ListSatellitesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_satellites(input.clone())
+        }))
+    }
 
     /// <p>Returns a list of tags for a specified resource.</p>
     async fn list_tags_for_resource(

@@ -15,9 +15,13 @@ use std::fmt;
 
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
+#[allow(unused_imports)]
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -117,6 +121,7 @@ pub struct AppsListDataSummary {
     pub list_name: Option<String>,
 }
 
+/// see [Fms::associate_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateAdminAccountRequest {
@@ -193,6 +198,7 @@ pub struct ComplianceViolator {
     pub violation_reason: Option<String>,
 }
 
+/// see [Fms::delete_apps_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppsListRequest {
@@ -201,10 +207,12 @@ pub struct DeleteAppsListRequest {
     pub list_id: String,
 }
 
+/// see [Fms::delete_notification_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationChannelRequest {}
 
+/// see [Fms::delete_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
@@ -217,6 +225,7 @@ pub struct DeletePolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Fms::delete_protocols_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProtocolsListRequest {
@@ -225,6 +234,7 @@ pub struct DeleteProtocolsListRequest {
     pub list_id: String,
 }
 
+/// see [Fms::disassociate_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateAdminAccountRequest {}
@@ -247,10 +257,12 @@ pub struct EvaluationResult {
     pub violator_count: Option<i64>,
 }
 
+/// see [Fms::get_admin_account]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAdminAccountRequest {}
 
+/// see [Fms::get_admin_account]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAdminAccountResponse {
@@ -264,6 +276,7 @@ pub struct GetAdminAccountResponse {
     pub role_status: Option<String>,
 }
 
+/// see [Fms::get_apps_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppsListRequest {
@@ -276,6 +289,7 @@ pub struct GetAppsListRequest {
     pub list_id: String,
 }
 
+/// see [Fms::get_apps_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppsListResponse {
@@ -289,6 +303,7 @@ pub struct GetAppsListResponse {
     pub apps_list_arn: Option<String>,
 }
 
+/// see [Fms::get_compliance_detail]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailRequest {
@@ -300,6 +315,7 @@ pub struct GetComplianceDetailRequest {
     pub policy_id: String,
 }
 
+/// see [Fms::get_compliance_detail]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailResponse {
@@ -309,10 +325,12 @@ pub struct GetComplianceDetailResponse {
     pub policy_compliance_detail: Option<PolicyComplianceDetail>,
 }
 
+/// see [Fms::get_notification_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNotificationChannelRequest {}
 
+/// see [Fms::get_notification_channel]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNotificationChannelResponse {
@@ -326,6 +344,7 @@ pub struct GetNotificationChannelResponse {
     pub sns_topic_arn: Option<String>,
 }
 
+/// see [Fms::get_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
@@ -334,6 +353,7 @@ pub struct GetPolicyRequest {
     pub policy_id: String,
 }
 
+/// see [Fms::get_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
@@ -347,6 +367,7 @@ pub struct GetPolicyResponse {
     pub policy_arn: Option<String>,
 }
 
+/// see [Fms::get_protection_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProtectionStatusRequest {
@@ -375,6 +396,7 @@ pub struct GetProtectionStatusRequest {
     pub start_time: Option<f64>,
 }
 
+/// see [Fms::get_protection_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProtectionStatusResponse {
@@ -396,6 +418,7 @@ pub struct GetProtectionStatusResponse {
     pub service_type: Option<String>,
 }
 
+/// see [Fms::get_protocols_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProtocolsListRequest {
@@ -408,6 +431,7 @@ pub struct GetProtocolsListRequest {
     pub list_id: String,
 }
 
+/// see [Fms::get_protocols_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProtocolsListResponse {
@@ -421,6 +445,7 @@ pub struct GetProtocolsListResponse {
     pub protocols_list_arn: Option<String>,
 }
 
+/// see [Fms::get_violation_details]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetViolationDetailsRequest {
@@ -438,6 +463,7 @@ pub struct GetViolationDetailsRequest {
     pub resource_type: String,
 }
 
+/// see [Fms::get_violation_details]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetViolationDetailsResponse {
@@ -447,6 +473,7 @@ pub struct GetViolationDetailsResponse {
     pub violation_detail: Option<ViolationDetail>,
 }
 
+/// see [Fms::list_apps_lists]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsListsRequest {
@@ -463,6 +490,7 @@ pub struct ListAppsListsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Fms::list_apps_lists]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsListsResponse {
@@ -476,6 +504,7 @@ pub struct ListAppsListsResponse {
     pub next_token: Option<String>,
 }
 
+/// see [Fms::list_compliance_status]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceStatusRequest {
@@ -492,6 +521,23 @@ pub struct ListComplianceStatusRequest {
     pub policy_id: String,
 }
 
+impl Paged for ListComplianceStatusRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListComplianceStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Fms::list_compliance_status]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComplianceStatusResponse {
@@ -505,6 +551,29 @@ pub struct ListComplianceStatusResponse {
     pub policy_compliance_status_list: Option<Vec<PolicyComplianceStatus>>,
 }
 
+impl Paged for ListComplianceStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListComplianceStatusResponse {
+    type Item = PolicyComplianceStatus;
+
+    fn into_pagination_page(self) -> Vec<PolicyComplianceStatus> {
+        self.policy_compliance_status_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Fms::list_member_accounts]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMemberAccountsRequest {
@@ -518,6 +587,23 @@ pub struct ListMemberAccountsRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMemberAccountsRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMemberAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Fms::list_member_accounts]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMemberAccountsResponse {
@@ -531,6 +617,29 @@ pub struct ListMemberAccountsResponse {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListMemberAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListMemberAccountsResponse {
+    type Item = String;
+
+    fn into_pagination_page(self) -> Vec<String> {
+        self.member_accounts.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Fms::list_policies]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
@@ -544,6 +653,23 @@ pub struct ListPoliciesRequest {
     pub next_token: Option<String>,
 }
 
+impl Paged for ListPoliciesRequest {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
+        self.next_token = key;
+    }
+}
+
+/// see [Fms::list_policies]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesResponse {
@@ -557,6 +683,29 @@ pub struct ListPoliciesResponse {
     pub policy_list: Option<Vec<PolicySummary>>,
 }
 
+impl Paged for ListPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedOutput for ListPoliciesResponse {
+    type Item = PolicySummary;
+
+    fn into_pagination_page(self) -> Vec<PolicySummary> {
+        self.policy_list.unwrap_or_default()
+    }
+
+    fn has_another_page(&self) -> bool {
+        self.pagination_token().is_some()
+    }
+}
+
+/// see [Fms::list_protocols_lists]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtocolsListsRequest {
@@ -573,6 +722,7 @@ pub struct ListProtocolsListsRequest {
     pub next_token: Option<String>,
 }
 
+/// see [Fms::list_protocols_lists]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtocolsListsResponse {
@@ -586,6 +736,7 @@ pub struct ListProtocolsListsResponse {
     pub protocols_lists: Option<Vec<ProtocolsListDataSummary>>,
 }
 
+/// see [Fms::list_tags_for_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -594,6 +745,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
+/// see [Fms::list_tags_for_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
@@ -926,6 +1078,7 @@ pub struct ProtocolsListDataSummary {
     pub protocols_list: Option<Vec<String>>,
 }
 
+/// see [Fms::put_apps_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppsListRequest {
@@ -938,6 +1091,7 @@ pub struct PutAppsListRequest {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [Fms::put_apps_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppsListResponse {
@@ -951,6 +1105,7 @@ pub struct PutAppsListResponse {
     pub apps_list_arn: Option<String>,
 }
 
+/// see [Fms::put_notification_channel]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutNotificationChannelRequest {
@@ -962,6 +1117,7 @@ pub struct PutNotificationChannelRequest {
     pub sns_topic_arn: String,
 }
 
+/// see [Fms::put_policy]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPolicyRequest {
@@ -974,6 +1130,7 @@ pub struct PutPolicyRequest {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [Fms::put_policy]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPolicyResponse {
@@ -987,6 +1144,7 @@ pub struct PutPolicyResponse {
     pub policy_arn: Option<String>,
 }
 
+/// see [Fms::put_protocols_list]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutProtocolsListRequest {
@@ -999,6 +1157,7 @@ pub struct PutProtocolsListRequest {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+/// see [Fms::put_protocols_list]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutProtocolsListResponse {
@@ -1167,6 +1326,7 @@ pub struct Tag {
     pub value: String,
 }
 
+/// see [Fms::tag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1178,10 +1338,12 @@ pub struct TagResourceRequest {
     pub tag_list: Vec<Tag>,
 }
 
+/// see [Fms::tag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// see [Fms::untag_resource]
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1193,6 +1355,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
+/// see [Fms::untag_resource]
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
@@ -2462,7 +2625,7 @@ impl fmt::Display for UntagResourceError {
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the FMS API. FMS clients implement this trait.
 #[async_trait]
-pub trait Fms {
+pub trait Fms: Clone + Sync + Send + 'static {
     /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with the master account of your AWS organization or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall Manager administrator account. </p>
     async fn associate_admin_account(
         &self,
@@ -2555,17 +2718,50 @@ pub trait Fms {
         input: ListComplianceStatusRequest,
     ) -> Result<ListComplianceStatusResponse, RusotoError<ListComplianceStatusError>>;
 
+    /// Auto-paginating version of `list_compliance_status`
+    fn list_compliance_status_pages<'a>(
+        &'a self,
+        mut input: ListComplianceStatusRequest,
+    ) -> RusotoStream<'a, PolicyComplianceStatus, ListComplianceStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compliance_status(input.clone())
+        }))
+    }
+
     /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
     async fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
     ) -> Result<ListMemberAccountsResponse, RusotoError<ListMemberAccountsError>>;
 
+    /// Auto-paginating version of `list_member_accounts`
+    fn list_member_accounts_pages<'a>(
+        &'a self,
+        mut input: ListMemberAccountsRequest,
+    ) -> RusotoStream<'a, String, ListMemberAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_member_accounts(input.clone())
+        }))
+    }
+
     /// <p>Returns an array of <code>PolicySummary</code> objects.</p>
     async fn list_policies(
         &self,
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
+
+    /// Auto-paginating version of `list_policies`
+    fn list_policies_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesRequest,
+    ) -> RusotoStream<'a, PolicySummary, ListPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies(input.clone())
+        }))
+    }
 
     /// <p>Returns an array of <code>ProtocolsListDataSummary</code> objects.</p>
     async fn list_protocols_lists(
