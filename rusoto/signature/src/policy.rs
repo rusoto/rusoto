@@ -6,12 +6,10 @@
 //!
 
 use crate::{region::Region, signature::SignedRequest};
-use chrono::Datelike;
 use chrono::{DateTime, Utc};
 use serde::ser::{SerializeSeq, Serializer};
 use serde::Serialize;
 use std::collections::HashMap;
-use time::Date;
 
 #[derive(Default)]
 pub struct PostPolicy<'a> {
@@ -288,12 +286,7 @@ impl<'a> PostPolicy<'a> {
 
         let policy_as_base64 = base64::encode(policy_as_json);
 
-        let signature_date = Date::try_from_ymd(
-            current_time.date().year() as i32,
-            current_time.date().month() as u8,
-            current_time.date().day() as u8,
-        )
-        .unwrap();
+        let signature_date = current_time.date().naive_utc();
 
         let x_amz_signature = crate::signature::sign_string(
             &policy_as_base64,
