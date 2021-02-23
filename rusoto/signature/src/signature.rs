@@ -592,7 +592,7 @@ fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
 }
 
 /// Takes a message and signs it using AWS secret, time, region keys and service keys.
-fn sign_string(
+pub(crate) fn sign_string(
     string_to_sign: &str,
     secret: &str,
     date: NaiveDate,
