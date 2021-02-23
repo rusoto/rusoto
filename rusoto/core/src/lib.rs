@@ -39,11 +39,11 @@ pub mod signature;
 pub use crate::client::Client;
 #[doc(hidden)]
 pub mod encoding;
+pub mod pagination;
 #[doc(hidden)]
 pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
-pub mod pagination;
 
 pub use crate::error::{RusotoError, RusotoResult};
 pub use crate::region::Region;

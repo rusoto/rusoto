@@ -1,33 +1,39 @@
 //! Traits and helperfunctions for dealing with paged responses
 
-use futures::{stream, Stream, TryStreamExt, Future};
-use crate::{RusotoError};
-use std::pin::Pin;
+use crate::RusotoResult;
+use futures::{Future, Stream, StreamExt, TryStreamExt};
+use std::borrow::Cow;
 
 /// A stream of results returned over multiple pages by amazon
-pub type RusotoStream<I, E> = Pin<Box<dyn Stream<Item = Result<I, RusotoError<E>>>>>;
+pub type RusotoStream<'a, I, E> = Box<dyn Stream<Item = RusotoResult<I, E>> + 'a>;
+
+/// Trait representing a request or response that can have a token added to fetch subsequent pages
+/// It will normally be used to move the `Token` from the reponse to the next request to be made
+pub trait Paged {
+    /// The type of the paging token, usuaully `Option<String>` but sometimes a tuple or something more exotic
+    type Token: Clone;
+
+    /// Takes the token out of the request/repsonse leaving `None` in it's place
+    /// If the token is part of result set it is cloned instead.
+    fn take_pagination_token(&mut self) -> Self::Token;
+
+    /// Get the token for getting the next page
+    // COW because while wost iplementations will return a reference
+    // Some need to assemble the token so reference
+    fn pagination_token(&self) -> Cow<Self::Token>;
+}
 
 /// Trait representing a request that can have a token added to fetch subsequent pages
-pub trait PagedRequest {
-    /// The type of the paging token, usuaully `Option<String>` but sometimes a tuple or something mor exotic
-    type Token;
-
+/// It will normally be used to move the `Token` from the reponse to the next request to be made
+pub trait PagedRequest: Paged {
     /// Set the token to get the next page
-    /// See [PagedOutput::pagination_token]
     fn set_pagination_token(&mut self, key: Self::Token);
-} 
+}
 
-
-/// Trait representing the partial output of a request that may have more pages of results 
-pub trait PagedOutput {
+/// Trait representing the partial output of a request that may have more pages of results
+pub trait PagedOutput: Paged {
     /// The type of the item that is being paged through
     type Item;
-    /// The type of the paging token, usuaully `Option<String>` but sometimes a tuple or something mor exotic
-    type Token;
-    
-    /// Get the token for sending in the request to get the next page
-    /// See [PagedRequest::with_pagination_token]
-    fn pagination_token(&self) -> Self::Token;
 
     /// Throw away the pagining metadata and extract the list of results
     fn into_pagination_page(self) -> Vec<Self::Item>;
@@ -36,42 +42,42 @@ pub trait PagedOutput {
     fn has_another_page(&self) -> bool;
 }
 
-enum PageState<C, R, F> {
-    Next(C, R, F),
-    End,
-}    
-
+enum PageState<T> {
+    Token(T),
+    Done,
+}
 
 /// A helper function to wrap a simple call that takes a pagination token and keep calling it
 /// until the last page is reached, returns the results as a stream
-pub fn all_pages<C, R, O, I, T, F, E>(client: C, init: R, f: F) -> RusotoStream<I, E> where
-    C: Send + 'static,
-    R: PagedRequest<Token = T> + 'static,
-    I: Send + 'static,
-    O: PagedOutput<Token = T, Item = I>,
-    F: for<'a> FnMut(&'a C, &'a R) -> Pin<Box<dyn Future<Output = Result<O, RusotoError<E>>> + 'a>> + 'static,
+pub fn aws_stream<T: 'static, PO, E, F, I>(
+    token: T,
+    action: impl FnMut(T) -> F,
+) -> impl Stream<Item = RusotoResult<I, E>>
+where
+    PO: PagedOutput<Token = T, Item = I>,
+    F: Future<Output = RusotoResult<PO, E>>,
 {
-    
-    Box::pin(
-        stream::try_unfold(
-            PageState::Next(client, init, f),
-            move |state| { async move {
-                if let PageState::Next(client, mut input, mut f) = state {
-                    let resp: O = f(&client, &input).await?;
-                    let next_state = if resp.has_another_page() {
-                        input.set_pagination_token(resp.pagination_token());
-                        PageState::Next(client, input, f)
-                    } else {
-                        PageState::End
-                    };
-                    Ok(Some((
-                        stream::iter(resp.into_pagination_page().into_iter().map(Ok)),
-                        next_state,
-                    )))
-                } else {
-                    Ok(None) as Result<_, RusotoError<E>>
-                }
-            }},
-        )
-        .try_flatten())
+    futures::stream::try_unfold(
+        (PageState::Token(token), action),
+        move |(state, mut action)| async move {
+            let token = match state {
+                PageState::Token(token) => token,
+                PageState::Done => return RusotoResult::<_, E>::Ok(None),
+            };
+
+            let mut response = action(token).await?;
+
+            let next_state = if response.has_another_page() {
+                PageState::Token(response.take_pagination_token())
+            } else {
+                PageState::Done
+            };
+
+            Ok(Some((
+                futures::stream::iter(response.into_pagination_page().into_iter()).map(Ok),
+                (next_state, action),
+            )))
+        },
+    )
+    .try_flatten()
 }

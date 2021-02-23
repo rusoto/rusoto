@@ -161,7 +161,9 @@ where
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoError}};
         #[allow(unused_imports)]
-        use rusoto_core::pagination::{{PagedRequest, PagedOutput, RusotoStream, all_pages}};
+        use rusoto_core::pagination::{{Paged, PagedOutput, PagedRequest, RusotoStream, aws_stream}};
+        #[allow(unused_imports)]
+        use std::borrow::Cow;
     "
     )?;
 
@@ -367,9 +369,10 @@ fn write_paged_version(
             "
             /// Auto-paginating version of `{wrapped_operation}`
             {method_signature} {{
-                all_pages(self.clone(), input, move |client, state| {{
-                    client.{wrapped_operation}(state.clone())
-                }})
+                Box::new(aws_stream(input.take_pagination_token(), move |token| {{
+                    input.set_pagination_token(token);
+                    self.{wrapped_operation}(input.clone())
+                }}))
             }}
             ",
             method_signature = generate_method_signature_paged(operation_name, service, operation),
@@ -396,7 +399,7 @@ fn generate_method_signature_paged(
         ));
 
     format!(
-        "fn {fn_name}(&self, input: {input_type}) -> RusotoStream<{output_type}, {error_type}>",
+        "fn {fn_name}<'a>(&'a self, mut input: {input_type}) -> RusotoStream<'a, {output_type}, {error_type}>",
         input_type = operation.input.as_ref().unwrap().shape,
         fn_name = fn_name,
         output_type = &output_type,
@@ -460,54 +463,126 @@ pub fn get_rust_type(
     }
 }
 
+#[derive(PartialEq, Eq, Copy, Clone)]
+enum ExtractType {
+    Borrow,
+    Take,
+    Move,
+}
+
+#[derive(PartialEq, Eq, Copy, Clone)]
+enum ReturnType {
+    Option,
+    Default,
+    Cow,
+}
+
 fn extract_pagination_output(
     path: &JMESPath,
     service: &Service,
     shape: &str,
-    to_owned: bool,
+    extract_type: ExtractType,
+    return_type: ReturnType,
 ) -> String {
     match path {
         JMESPath::Or(alternatives) => {
-            alternatives
+            let bits = alternatives
                 .iter()
-                .map(|or_path| extract_pagination_output(or_path, service, shape, to_owned))
-                .collect::<Vec<String>>()
-                .join(".or(")
-                + ")"
+                .map(|or_path| {
+                    extract_pagination_output(
+                        or_path,
+                        service,
+                        shape,
+                        extract_type,
+                        ReturnType::Option,
+                    )
+                })
+                .collect::<Vec<String>>();
+            if return_type == ReturnType::Cow {
+                format!(
+                    "Cow::Owned(({}.as_ref()).cloned())",
+                    bits.join(".as_ref()).or_else(|| ")
+                )
+            } else {
+                "(".to_owned() + &bits.join(").or_else(|| ") + ")"
+            }
         }
         JMESPath::Path(steps) => {
             let mut shape_name: String = shape.to_owned();
-            let mut lookups = "Some(self".to_string();
+            let mut required = true;
+            let mut used_try = false;
+            let mut lookups = "self".to_string();
+
             for step in steps {
+                if !required {
+                    if extract_type != ExtractType::Move {
+                        lookups.push_str(".as_ref()");
+                    }
+                    lookups.push_str("?");
+                    used_try = true;
+                }
+
                 let shape = service
                     .get_shape(&shape_name)
                     .expect("referenced shape should exist");
+
                 match step {
                     JMESTerm::Key(name) => {
                         lookups.push_str(".");
                         lookups.push_str(&generate_field_name(name));
+                        required = shape.required(name);
                         shape_name = shape
                             .members_type(name)
                             .expect("shape should have paginantion field")
                             .to_string();
-                        if !shape.required(name) {
-                            if to_owned {
-                                lookups.push_str(".as_ref()");
-                            }
-                            lookups.push_str("?");
-                        }
                     }
                     JMESTerm::Last => {
                         lookups.push_str(".last()?");
+                        required = true;
+                        used_try = true;
                         shape_name = shape.member_type().to_string();
                     }
                 }
             }
-            if to_owned {
-                lookups.push_str(".clone()");
+
+            // take token from the root, otherwise the token might be part of the results too so clone it
+            if extract_type == ExtractType::Take {
+                if steps.len() == 1 {
+                    if required {
+                        lookups =
+                            format!("std::mem::replace(&mut {}, Default::default())", lookups);
+                    } else {
+                        lookups.push_str(".take()");
+                    }
+                } else {
+                    lookups.push_str(".clone()");
+                }
             }
-            lookups.push_str(")");
-            lookups
+
+            match (return_type, required, used_try) {
+                (ReturnType::Option, true, _) => format!("Some({})", lookups),
+                (ReturnType::Option, false, _) => lookups,
+                (ReturnType::Cow, true, true) => {
+                    format!("Cow::Owned((|| Some({}.clone()))())", lookups)
+                }
+                (ReturnType::Cow, false, true) => format!("Cow::Owned((|| {}.clone())())", lookups),
+                (ReturnType::Cow, true, false) => format!("Cow::Owned(Some({}.clone()))", lookups),
+                (ReturnType::Cow, false, false) => format!("Cow::Borrowed(&{})", lookups),
+                (ReturnType::Default, true, true) if extract_type == ExtractType::Move => {
+                    format!("(move || Some({}))().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, false, true) if extract_type == ExtractType::Move => {
+                    format!("(move || {})().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, true, true) => {
+                    format!("(|| Some({}))().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, false, true) => {
+                    format!("(|| {})().unwrap_or_default()", lookups)
+                }
+                (ReturnType::Default, true, false) => lookups,
+                (ReturnType::Default, false, false) => format!("{}.unwrap_or_default()", lookups),
+            }
         }
     }
 }
@@ -920,39 +995,100 @@ where
                 operation.name, pagination
             ));
 
+            let pagination_token = if operation.input_shape() == name {
+                &pagination.input_token
+            } else {
+                &pagination.output_token
+            };
+
+            let take_token_code = if let Some(token) = pagination_token.only() {
+                extract_pagination_output(
+                    &JMESPath::parse(&token),
+                    service,
+                    name,
+                    ExtractType::Take,
+                    ReturnType::Option,
+                )
+            } else {
+                format!(
+                    "({})",
+                    pagination_token
+                        .as_slice()
+                        .iter()
+                        .map(|token| { format!("self.{}.take()", token.to_snake_case()) })
+                        .collect::<Vec<String>>()
+                        .join(", ")
+                )
+            };
+
+            let get_token_code = if let Some(token) = pagination_token.only() {
+                extract_pagination_output(
+                    &JMESPath::parse(&token),
+                    service,
+                    name,
+                    ExtractType::Borrow,
+                    ReturnType::Cow,
+                )
+            } else {
+                // the token is in multiple parts so we can't return a reference to it, so create a new one
+                // and return it as owned
+                format!(
+                    "Cow::Owned(({}))",
+                    pagination_token
+                        .as_slice()
+                        .iter()
+                        .map(|token| { format!("self.{}.clone()", token.to_snake_case()) })
+                        .collect::<Vec<String>>()
+                        .join(", ")
+                )
+            };
+            implementation = format!(
+                "
+                    impl Paged for {name} {{
+                        type Token = {key_type};
+                        fn take_pagination_token(&mut self) -> {key_type} {{
+                            {take_token_code}
+                        }}
+                        fn pagination_token(&self) -> Cow<{key_type}> {{
+                            {get_token_code}
+                        }}
+                    }}
+                    ",
+                name = name,
+                key_type = key_type,
+                take_token_code = take_token_code,
+                get_token_code = get_token_code
+            );
             if operation.input_shape() == name {
-                let key_code = if let Some(input_token) = pagination.input_token.only() {
-                    format!("self.{} = key;", input_token.to_snake_case())
+                let key_code = if let Some(pagination_token) = pagination_token.only() {
+                    format!("self.{} = key;", pagination_token.to_snake_case())
                 } else {
-                    pagination
-                        .input_token
+                    pagination_token
                         .as_slice()
                         .iter()
                         .enumerate()
-                        .map(|(i, input_token)| {
-                            format!("self.{} = key.{};", input_token.to_snake_case(), i)
-                        })
+                        .map(|(i, token)| format!("self.{} = key.{};", token.to_snake_case(), i))
                         .collect::<Vec<String>>()
                         .join("\n")
                 };
 
                 implementation = format!(
                     "
+                    {impl_paged}
+
                     impl PagedRequest for {name} {{
-                        type Token = {key_type};
                         fn set_pagination_token(&mut self, key: {key_type}) {{
                             {key_code}
                         }}
                     }}
                     ",
+                    impl_paged = implementation,
                     name = name,
                     key_code = key_code,
-                    key_type = key_type
+                    key_type = key_type,
                 );
             } else {
-                let mut impls = vec![];
-                let mut trait_impls = vec![];
-                if let Some(result_key) = pagination.result_key.only() {
+                let into_page_code = if let Some(result_key) = pagination.result_key.only() {
                     let shape_name = get_pagination_item_shape(pagination, service, operation)
                         .expect("pagination result should exist");
 
@@ -960,113 +1096,57 @@ where
                         .get_shape(&shape_name)
                         .expect("pagination result shape should exist");
 
-                    let mapper = if shape.shape_type == ShapeType::List {
-                        ""
-                    } else {
-                        ".map(|x| vec![x])"
+                    let mut page_code = extract_pagination_output(
+                        &JMESPath::parse(&result_key),
+                        service,
+                        name,
+                        ExtractType::Move,
+                        ReturnType::Default,
+                    );
+
+                    if shape.shape_type != ShapeType::List {
+                        page_code =
+                            page_code.replace("unwrap_or_default()", "into_iter().collect()");
                     };
-                    impls.push(format!(
-                        "
-                    fn pagination_page_opt(self) -> Option<Vec<{page_type}>> {{
-                        {page_code}{mapper}
-                    }}",
-                        page_code = extract_pagination_output(
-                            &JMESPath::parse(&result_key),
-                            service,
-                            name,
-                            true
-                        ),
-                        page_type = page_type,
-                        mapper = mapper
-                    ));
 
-                    trait_impls.push(format!(
-                        "
-                      fn into_pagination_page(self) -> Vec<{page_type}> {{
-                        self.pagination_page_opt().unwrap_or_default()
-                      }}
-                    ",
-                        page_type = page_type
-                    ));
+                    page_code
                 } else {
-                    trait_impls.push(format!(
-                        "
-                    fn into_pagination_page(self) -> Vec<{page_type}> {{
-                        vec![self]
-                      }}
-                    ",
-                        page_type = page_type
-                    ));
+                    "vec![self]".to_owned()
                 };
 
-                let key_code = if let Some(output_token) = pagination.output_token.only() {
-                    extract_pagination_output(&JMESPath::parse(&output_token), service, name, true)
-                } else {
-                    format!(
-                        "({})",
-                        pagination
-                            .output_token
-                            .as_slice()
-                            .iter()
-                            .map(|path| format!("self.{}.clone()", path.to_snake_case()))
-                            .collect::<Vec<String>>()
-                            .join(", ")
+                let has_page_code = if let Some(more_results) = &pagination.more_results {
+                    extract_pagination_output(
+                        &JMESPath::parse(&more_results),
+                        service,
+                        name,
+                        ExtractType::Borrow,
+                        ReturnType::Default,
                     )
-                };
-
-                if let Some(more_results) = &pagination.more_results {
-                    impls.push(format!(
-                        "
-                        fn has_another_page_opt(&self) -> Option<bool> {{
-                            {}
-                        }}
-                    ",
-                        extract_pagination_output(
-                            &JMESPath::parse(&more_results),
-                            service,
-                            name,
-                            true
-                        )
-                    ));
-                    trait_impls.push(
-                        "
-                        fn has_another_page(&self) -> bool {{
-                            self.has_another_page_opt().unwrap_or(false)
-                        }}
-                    "
-                        .to_owned(),
-                    );
                 } else {
-                    trait_impls.push(
-                        "
-                    fn has_another_page(&self) -> bool {{
-                        self.pagination_token().is_some()
-                    }}"
-                        .to_owned(),
-                    );
+                    "self.pagination_token().is_some()".to_owned()
                 };
 
                 implementation = format!(
                     "
-                    impl {name} {{
-                        {impls}
-                    }}
+                    {impl_paged}
 
                     impl PagedOutput for {name} {{
                         type Item = {page_type};
-                        type Token = {key_type};
-                        fn pagination_token(&self) -> {key_type} {{
-                            {key_code}
+
+                        fn into_pagination_page(self) -> Vec<{page_type}> {{
+                            {into_page_code}
                         }}
-                        {trait_impls}
+
+                        fn has_another_page(&self) -> bool {{
+                            {has_page_code}
+                        }}
                     }}
                     ",
+                    impl_paged = implementation,
                     name = name,
-                    key_type = key_type,
-                    key_code = key_code,
                     page_type = page_type,
-                    impls = impls.join("\n"),
-                    trait_impls = trait_impls.join("\n")
+                    has_page_code = has_page_code,
+                    into_page_code = into_page_code,
                 );
             }
         }
