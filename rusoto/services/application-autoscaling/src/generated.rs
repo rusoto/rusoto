@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -182,11 +184,19 @@ pub struct DescribeScalableTargetsRequest {
     pub service_namespace: String,
 }
 
-impl PagedRequest for DescribeScalableTargetsRequest {
+impl Paged for DescribeScalableTargetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalableTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -204,27 +214,25 @@ pub struct DescribeScalableTargetsResponse {
     pub scalable_targets: Option<Vec<ScalableTarget>>,
 }
 
-impl DescribeScalableTargetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScalableTarget>> {
-        Some(self.scalable_targets.as_ref()?.clone())
+impl Paged for DescribeScalableTargetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScalableTargetsResponse {
     type Item = ScalableTarget;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalableTarget> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scalable_targets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -253,11 +261,19 @@ pub struct DescribeScalingActivitiesRequest {
     pub service_namespace: String,
 }
 
-impl PagedRequest for DescribeScalingActivitiesRequest {
+impl Paged for DescribeScalingActivitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingActivitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -275,27 +291,25 @@ pub struct DescribeScalingActivitiesResponse {
     pub scaling_activities: Option<Vec<ScalingActivity>>,
 }
 
-impl DescribeScalingActivitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScalingActivity>> {
-        Some(self.scaling_activities.as_ref()?.clone())
+impl Paged for DescribeScalingActivitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScalingActivitiesResponse {
     type Item = ScalingActivity;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalingActivity> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scaling_activities.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -328,11 +342,19 @@ pub struct DescribeScalingPoliciesRequest {
     pub service_namespace: String,
 }
 
-impl PagedRequest for DescribeScalingPoliciesRequest {
+impl Paged for DescribeScalingPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -350,27 +372,25 @@ pub struct DescribeScalingPoliciesResponse {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
-impl DescribeScalingPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScalingPolicy>> {
-        Some(self.scaling_policies.as_ref()?.clone())
+impl Paged for DescribeScalingPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScalingPoliciesResponse {
     type Item = ScalingPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalingPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scaling_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -403,11 +423,19 @@ pub struct DescribeScheduledActionsRequest {
     pub service_namespace: String,
 }
 
-impl PagedRequest for DescribeScheduledActionsRequest {
+impl Paged for DescribeScheduledActionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScheduledActionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -425,27 +453,25 @@ pub struct DescribeScheduledActionsResponse {
     pub scheduled_actions: Option<Vec<ScheduledAction>>,
 }
 
-impl DescribeScheduledActionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScheduledAction>> {
-        Some(self.scheduled_actions.as_ref()?.clone())
+impl Paged for DescribeScheduledActionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScheduledActionsResponse {
     type Item = ScheduledAction;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScheduledAction> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scheduled_actions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1362,13 +1388,14 @@ pub trait ApplicationAutoScaling: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScalableTargetsResponse, RusotoError<DescribeScalableTargetsError>>;
 
     /// Auto-paginating version of `describe_scalable_targets`
-    fn describe_scalable_targets_pages(
-        &self,
-        input: DescribeScalableTargetsRequest,
-    ) -> RusotoStream<ScalableTarget, DescribeScalableTargetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scalable_targets(state.clone())
-        })
+    fn describe_scalable_targets_pages<'a>(
+        &'a self,
+        mut input: DescribeScalableTargetsRequest,
+    ) -> RusotoStream<'a, ScalableTarget, DescribeScalableTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scalable_targets(input.clone())
+        }))
     }
 
     /// <p>Provides descriptive information about the scaling activities in the specified namespace from the previous six weeks.</p> <p>You can filter the results using <code>ResourceId</code> and <code>ScalableDimension</code>.</p>
@@ -1378,13 +1405,14 @@ pub trait ApplicationAutoScaling: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScalingActivitiesResponse, RusotoError<DescribeScalingActivitiesError>>;
 
     /// Auto-paginating version of `describe_scaling_activities`
-    fn describe_scaling_activities_pages(
-        &self,
-        input: DescribeScalingActivitiesRequest,
-    ) -> RusotoStream<ScalingActivity, DescribeScalingActivitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scaling_activities(state.clone())
-        })
+    fn describe_scaling_activities_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingActivitiesRequest,
+    ) -> RusotoStream<'a, ScalingActivity, DescribeScalingActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_activities(input.clone())
+        }))
     }
 
     /// <p>Describes the Application Auto Scaling scaling policies for the specified service namespace.</p> <p>You can filter the results using <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>PolicyNames</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html">Target Tracking Scaling Policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html">Step Scaling Policies</a> in the <i>Application Auto Scaling User Guide</i>.</p>
@@ -1394,13 +1422,14 @@ pub trait ApplicationAutoScaling: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScalingPoliciesResponse, RusotoError<DescribeScalingPoliciesError>>;
 
     /// Auto-paginating version of `describe_scaling_policies`
-    fn describe_scaling_policies_pages(
-        &self,
-        input: DescribeScalingPoliciesRequest,
-    ) -> RusotoStream<ScalingPolicy, DescribeScalingPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scaling_policies(state.clone())
-        })
+    fn describe_scaling_policies_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingPoliciesRequest,
+    ) -> RusotoStream<'a, ScalingPolicy, DescribeScalingPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_policies(input.clone())
+        }))
     }
 
     /// <p>Describes the Application Auto Scaling scheduled actions for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>ScheduledActionNames</code> parameters.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-scheduled-scaling.html">Scheduled Scaling</a> in the <i>Application Auto Scaling User Guide</i>.</p>
@@ -1410,13 +1439,14 @@ pub trait ApplicationAutoScaling: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScheduledActionsResponse, RusotoError<DescribeScheduledActionsError>>;
 
     /// Auto-paginating version of `describe_scheduled_actions`
-    fn describe_scheduled_actions_pages(
-        &self,
-        input: DescribeScheduledActionsRequest,
-    ) -> RusotoStream<ScheduledAction, DescribeScheduledActionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scheduled_actions(state.clone())
-        })
+    fn describe_scheduled_actions_pages<'a>(
+        &'a self,
+        mut input: DescribeScheduledActionsRequest,
+    ) -> RusotoStream<'a, ScheduledAction, DescribeScheduledActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scheduled_actions(input.clone())
+        }))
     }
 
     /// <p><p>Creates or updates a scaling policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy until you have registered the resource as a scalable target.</p> <p>Multiple scaling policies can be in force at the same time for the same scalable target. You can have one or more target tracking scaling policies, one or more step scaling policies, or both. However, there is a chance that multiple policies could conflict, instructing the scalable target to scale out or in at the same time. Application Auto Scaling gives precedence to the policy that provides the largest capacity for both scale out and scale in. For example, if one policy increases capacity by 3, another policy increases capacity by 200 percent, and the current capacity is 10, Application Auto Scaling uses the policy with the highest calculated capacity (200% of 10 = 20) and scales out to 30. </p> <p>We recommend caution, however, when using target tracking scaling policies with step scaling policies because conflicts between these policies can cause undesirable behavior. For example, if the step scaling policy initiates a scale-in activity before the target tracking policy is ready to scale in, the scale-in activity will not be blocked. After the scale-in activity completes, the target tracking policy could instruct the scalable target to scale out again. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html">Target Tracking Scaling Policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html">Step Scaling Policies</a> in the <i>Application Auto Scaling User Guide</i>.</p> <note> <p>If a scalable target is deregistered, the scalable target is no longer available to execute scaling policies. Any scaling policies that were specified for the scalable target are deleted.</p> </note></p>

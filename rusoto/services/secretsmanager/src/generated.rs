@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -479,11 +481,19 @@ pub struct ListSecretsRequest {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListSecretsRequest {
+impl Paged for ListSecretsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSecretsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -501,27 +511,25 @@ pub struct ListSecretsResponse {
     pub secret_list: Option<Vec<SecretListEntry>>,
 }
 
-impl ListSecretsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SecretListEntry>> {
-        Some(self.secret_list.as_ref()?.clone())
+impl Paged for ListSecretsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSecretsResponse {
     type Item = SecretListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SecretListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.secret_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2020,13 +2028,14 @@ pub trait SecretsManager: Clone + Sync + Send + 'static {
     ) -> Result<ListSecretsResponse, RusotoError<ListSecretsError>>;
 
     /// Auto-paginating version of `list_secrets`
-    fn list_secrets_pages(
-        &self,
-        input: ListSecretsRequest,
-    ) -> RusotoStream<SecretListEntry, ListSecretsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_secrets(state.clone())
-        })
+    fn list_secrets_pages<'a>(
+        &'a self,
+        mut input: ListSecretsRequest,
+    ) -> RusotoStream<'a, SecretListEntry, ListSecretsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_secrets(input.clone())
+        }))
     }
 
     /// <p><p>Attaches the contents of the specified resource-based permission policy to a secret. A resource-based policy is optional. Alternatively, you can use IAM identity-based policies that specify the secret&#39;s Amazon Resource Name (ARN) in the policy statement&#39;s <code>Resources</code> element. You can also use a combination of both identity-based and resource-based policies. The affected users and roles receive the permissions that are permitted by all of the relevant policies. For more information, see <a href="http://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_resource-based-policies.html">Using Resource-Based Policies for AWS Secrets Manager</a>. For the complete description of the AWS policy syntax and grammar, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html">IAM JSON Policy Reference</a> in the <i>IAM User Guide</i>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p>secretsmanager:PutResourcePolicy</p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p>To retrieve the resource policy attached to a secret, use <a>GetResourcePolicy</a>.</p> </li> <li> <p>To delete the resource-based policy that&#39;s attached to a secret, use <a>DeleteResourcePolicy</a>.</p> </li> <li> <p>To list all of the currently available secrets, use <a>ListSecrets</a>.</p> </li> </ul></p>

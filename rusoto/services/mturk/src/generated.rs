@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -767,11 +769,19 @@ pub struct ListAssignmentsForHITRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAssignmentsForHITRequest {
+impl Paged for ListAssignmentsForHITRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssignmentsForHITRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -792,27 +802,25 @@ pub struct ListAssignmentsForHITResponse {
     pub num_results: Option<i64>,
 }
 
-impl ListAssignmentsForHITResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Assignment>> {
-        Some(self.assignments.as_ref()?.clone())
+impl Paged for ListAssignmentsForHITResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAssignmentsForHITResponse {
     type Item = Assignment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Assignment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.assignments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -837,11 +845,19 @@ pub struct ListBonusPaymentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBonusPaymentsRequest {
+impl Paged for ListBonusPaymentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBonusPaymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -862,27 +878,25 @@ pub struct ListBonusPaymentsResponse {
     pub num_results: Option<i64>,
 }
 
-impl ListBonusPaymentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BonusPayment>> {
-        Some(self.bonus_payments.as_ref()?.clone())
+impl Paged for ListBonusPaymentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBonusPaymentsResponse {
     type Item = BonusPayment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BonusPayment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.bonus_payments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -903,11 +917,19 @@ pub struct ListHITsForQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
-impl PagedRequest for ListHITsForQualificationTypeRequest {
+impl Paged for ListHITsForQualificationTypeRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHITsForQualificationTypeRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -928,27 +950,25 @@ pub struct ListHITsForQualificationTypeResponse {
     pub num_results: Option<i64>,
 }
 
-impl ListHITsForQualificationTypeResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
-        Some(self.hi_ts.as_ref()?.clone())
+impl Paged for ListHITsForQualificationTypeResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHITsForQualificationTypeResponse {
     type Item = HIT;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HIT> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hi_ts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -965,11 +985,19 @@ pub struct ListHITsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHITsRequest {
+impl Paged for ListHITsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHITsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -990,27 +1018,25 @@ pub struct ListHITsResponse {
     pub num_results: Option<i64>,
 }
 
-impl ListHITsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
-        Some(self.hi_ts.as_ref()?.clone())
+impl Paged for ListHITsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHITsResponse {
     type Item = HIT;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HIT> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hi_ts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1031,11 +1057,19 @@ pub struct ListQualificationRequestsRequest {
     pub qualification_type_id: Option<String>,
 }
 
-impl PagedRequest for ListQualificationRequestsRequest {
+impl Paged for ListQualificationRequestsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQualificationRequestsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1056,27 +1090,25 @@ pub struct ListQualificationRequestsResponse {
     pub qualification_requests: Option<Vec<QualificationRequest>>,
 }
 
-impl ListQualificationRequestsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<QualificationRequest>> {
-        Some(self.qualification_requests.as_ref()?.clone())
+impl Paged for ListQualificationRequestsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQualificationRequestsResponse {
     type Item = QualificationRequest;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<QualificationRequest> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.qualification_requests.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1104,11 +1136,19 @@ pub struct ListQualificationTypesRequest {
     pub query: Option<String>,
 }
 
-impl PagedRequest for ListQualificationTypesRequest {
+impl Paged for ListQualificationTypesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQualificationTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1129,27 +1169,25 @@ pub struct ListQualificationTypesResponse {
     pub qualification_types: Option<Vec<QualificationType>>,
 }
 
-impl ListQualificationTypesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<QualificationType>> {
-        Some(self.qualification_types.as_ref()?.clone())
+impl Paged for ListQualificationTypesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQualificationTypesResponse {
     type Item = QualificationType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<QualificationType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.qualification_types.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1233,11 +1271,19 @@ pub struct ListReviewableHITsRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListReviewableHITsRequest {
+impl Paged for ListReviewableHITsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReviewableHITsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1258,27 +1304,25 @@ pub struct ListReviewableHITsResponse {
     pub num_results: Option<i64>,
 }
 
-impl ListReviewableHITsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HIT>> {
-        Some(self.hi_ts.as_ref()?.clone())
+impl Paged for ListReviewableHITsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReviewableHITsResponse {
     type Item = HIT;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HIT> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hi_ts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1295,11 +1339,19 @@ pub struct ListWorkerBlocksRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWorkerBlocksRequest {
+impl Paged for ListWorkerBlocksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorkerBlocksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1320,27 +1372,25 @@ pub struct ListWorkerBlocksResponse {
     pub worker_blocks: Option<Vec<WorkerBlock>>,
 }
 
-impl ListWorkerBlocksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<WorkerBlock>> {
-        Some(self.worker_blocks.as_ref()?.clone())
+impl Paged for ListWorkerBlocksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorkerBlocksResponse {
     type Item = WorkerBlock;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkerBlock> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.worker_blocks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1365,11 +1415,19 @@ pub struct ListWorkersWithQualificationTypeRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListWorkersWithQualificationTypeRequest {
+impl Paged for ListWorkersWithQualificationTypeRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorkersWithQualificationTypeRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1390,27 +1448,25 @@ pub struct ListWorkersWithQualificationTypeResponse {
     pub qualifications: Option<Vec<Qualification>>,
 }
 
-impl ListWorkersWithQualificationTypeResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Qualification>> {
-        Some(self.qualifications.as_ref()?.clone())
+impl Paged for ListWorkersWithQualificationTypeResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorkersWithQualificationTypeResponse {
     type Item = Qualification;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Qualification> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.qualifications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3591,13 +3647,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListAssignmentsForHITResponse, RusotoError<ListAssignmentsForHITError>>;
 
     /// Auto-paginating version of `list_assignments_for_hit`
-    fn list_assignments_for_hit_pages(
-        &self,
-        input: ListAssignmentsForHITRequest,
-    ) -> RusotoStream<Assignment, ListAssignmentsForHITError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_assignments_for_hit(state.clone())
-        })
+    fn list_assignments_for_hit_pages<'a>(
+        &'a self,
+        mut input: ListAssignmentsForHITRequest,
+    ) -> RusotoStream<'a, Assignment, ListAssignmentsForHITError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assignments_for_hit(input.clone())
+        }))
     }
 
     /// <p> The <code>ListBonusPayments</code> operation retrieves the amounts of bonuses you have paid to Workers for a given HIT or assignment. </p>
@@ -3607,13 +3664,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListBonusPaymentsResponse, RusotoError<ListBonusPaymentsError>>;
 
     /// Auto-paginating version of `list_bonus_payments`
-    fn list_bonus_payments_pages(
-        &self,
-        input: ListBonusPaymentsRequest,
-    ) -> RusotoStream<BonusPayment, ListBonusPaymentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_bonus_payments(state.clone())
-        })
+    fn list_bonus_payments_pages<'a>(
+        &'a self,
+        mut input: ListBonusPaymentsRequest,
+    ) -> RusotoStream<'a, BonusPayment, ListBonusPaymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bonus_payments(input.clone())
+        }))
     }
 
     /// <p> The <code>ListHITs</code> operation returns all of a Requester's HITs. The operation returns HITs of any status, except for HITs that have been deleted of with the DeleteHIT operation or that have been auto-deleted. </p>
@@ -3623,10 +3681,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListHITsResponse, RusotoError<ListHITsError>>;
 
     /// Auto-paginating version of `list_hi_ts`
-    fn list_hi_ts_pages(&self, input: ListHITsRequest) -> RusotoStream<HIT, ListHITsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_hi_ts(state.clone())
-        })
+    fn list_hi_ts_pages<'a>(
+        &'a self,
+        mut input: ListHITsRequest,
+    ) -> RusotoStream<'a, HIT, ListHITsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hi_ts(input.clone())
+        }))
     }
 
     /// <p> The <code>ListHITsForQualificationType</code> operation returns the HITs that use the given Qualification type for a Qualification requirement. The operation returns HITs of any status, except for HITs that have been deleted with the <code>DeleteHIT</code> operation or that have been auto-deleted. </p>
@@ -3636,13 +3698,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListHITsForQualificationTypeResponse, RusotoError<ListHITsForQualificationTypeError>>;
 
     /// Auto-paginating version of `list_hi_ts_for_qualification_type`
-    fn list_hi_ts_for_qualification_type_pages(
-        &self,
-        input: ListHITsForQualificationTypeRequest,
-    ) -> RusotoStream<HIT, ListHITsForQualificationTypeError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_hi_ts_for_qualification_type(state.clone())
-        })
+    fn list_hi_ts_for_qualification_type_pages<'a>(
+        &'a self,
+        mut input: ListHITsForQualificationTypeRequest,
+    ) -> RusotoStream<'a, HIT, ListHITsForQualificationTypeError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hi_ts_for_qualification_type(input.clone())
+        }))
     }
 
     /// <p> The <code>ListQualificationRequests</code> operation retrieves requests for Qualifications of a particular Qualification type. The owner of the Qualification type calls this operation to poll for pending requests, and accepts them using the AcceptQualification operation. </p>
@@ -3652,13 +3715,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListQualificationRequestsResponse, RusotoError<ListQualificationRequestsError>>;
 
     /// Auto-paginating version of `list_qualification_requests`
-    fn list_qualification_requests_pages(
-        &self,
-        input: ListQualificationRequestsRequest,
-    ) -> RusotoStream<QualificationRequest, ListQualificationRequestsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_qualification_requests(state.clone())
-        })
+    fn list_qualification_requests_pages<'a>(
+        &'a self,
+        mut input: ListQualificationRequestsRequest,
+    ) -> RusotoStream<'a, QualificationRequest, ListQualificationRequestsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_qualification_requests(input.clone())
+        }))
     }
 
     /// <p> The <code>ListQualificationTypes</code> operation returns a list of Qualification types, filtered by an optional search term. </p>
@@ -3668,13 +3732,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListQualificationTypesResponse, RusotoError<ListQualificationTypesError>>;
 
     /// Auto-paginating version of `list_qualification_types`
-    fn list_qualification_types_pages(
-        &self,
-        input: ListQualificationTypesRequest,
-    ) -> RusotoStream<QualificationType, ListQualificationTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_qualification_types(state.clone())
-        })
+    fn list_qualification_types_pages<'a>(
+        &'a self,
+        mut input: ListQualificationTypesRequest,
+    ) -> RusotoStream<'a, QualificationType, ListQualificationTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_qualification_types(input.clone())
+        }))
     }
 
     /// <p> The <code>ListReviewPolicyResultsForHIT</code> operation retrieves the computed results and the actions taken in the course of executing your Review Policies for a given HIT. For information about how to specify Review Policies when you call CreateHIT, see Review Policies. The ListReviewPolicyResultsForHIT operation can return results for both Assignment-level and HIT-level review results. </p>
@@ -3693,13 +3758,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListReviewableHITsResponse, RusotoError<ListReviewableHITsError>>;
 
     /// Auto-paginating version of `list_reviewable_hi_ts`
-    fn list_reviewable_hi_ts_pages(
-        &self,
-        input: ListReviewableHITsRequest,
-    ) -> RusotoStream<HIT, ListReviewableHITsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_reviewable_hi_ts(state.clone())
-        })
+    fn list_reviewable_hi_ts_pages<'a>(
+        &'a self,
+        mut input: ListReviewableHITsRequest,
+    ) -> RusotoStream<'a, HIT, ListReviewableHITsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_reviewable_hi_ts(input.clone())
+        }))
     }
 
     /// <p>The <code>ListWorkersBlocks</code> operation retrieves a list of Workers who are blocked from working on your HITs.</p>
@@ -3709,13 +3775,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     ) -> Result<ListWorkerBlocksResponse, RusotoError<ListWorkerBlocksError>>;
 
     /// Auto-paginating version of `list_worker_blocks`
-    fn list_worker_blocks_pages(
-        &self,
-        input: ListWorkerBlocksRequest,
-    ) -> RusotoStream<WorkerBlock, ListWorkerBlocksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_worker_blocks(state.clone())
-        })
+    fn list_worker_blocks_pages<'a>(
+        &'a self,
+        mut input: ListWorkerBlocksRequest,
+    ) -> RusotoStream<'a, WorkerBlock, ListWorkerBlocksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_worker_blocks(input.clone())
+        }))
     }
 
     /// <p> The <code>ListWorkersWithQualificationType</code> operation returns all of the Workers that have been associated with a given Qualification type. </p>
@@ -3728,13 +3795,14 @@ pub trait MechanicalTurk: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_workers_with_qualification_type`
-    fn list_workers_with_qualification_type_pages(
-        &self,
-        input: ListWorkersWithQualificationTypeRequest,
-    ) -> RusotoStream<Qualification, ListWorkersWithQualificationTypeError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_workers_with_qualification_type(state.clone())
-        })
+    fn list_workers_with_qualification_type_pages<'a>(
+        &'a self,
+        mut input: ListWorkersWithQualificationTypeRequest,
+    ) -> RusotoStream<'a, Qualification, ListWorkersWithQualificationTypeError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_workers_with_qualification_type(input.clone())
+        }))
     }
 
     /// <p> The <code>NotifyWorkers</code> operation sends an email to one or more Workers that you specify with the Worker ID. You can specify up to 100 Worker IDs to send the same message with a single call to the NotifyWorkers operation. The NotifyWorkers operation will send a notification email to a Worker only if you have previously approved or rejected work from the Worker. </p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -343,11 +345,19 @@ pub struct ListGroupResourcesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListGroupResourcesInput {
+impl Paged for ListGroupResourcesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupResourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -369,27 +379,25 @@ pub struct ListGroupResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-impl ListGroupResourcesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceIdentifier>> {
-        Some(self.resource_identifiers.as_ref()?.clone())
+impl Paged for ListGroupResourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupResourcesOutput {
     type Item = ResourceIdentifier;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceIdentifier> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_identifiers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -411,11 +419,19 @@ pub struct ListGroupsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListGroupsInput {
+impl Paged for ListGroupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -433,23 +449,25 @@ pub struct ListGroupsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListGroupsOutput {}
+impl Paged for ListGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
 
 impl PagedOutput for ListGroupsOutput {
     type Item = ListGroupsOutput;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListGroupsOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -521,11 +539,19 @@ pub struct SearchResourcesInput {
     pub resource_query: ResourceQuery,
 }
 
-impl PagedRequest for SearchResourcesInput {
+impl Paged for SearchResourcesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchResourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -547,27 +573,25 @@ pub struct SearchResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-impl SearchResourcesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceIdentifier>> {
-        Some(self.resource_identifiers.as_ref()?.clone())
+impl Paged for SearchResourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchResourcesOutput {
     type Item = ResourceIdentifier;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceIdentifier> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_identifiers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1648,13 +1672,14 @@ pub trait ResourceGroups: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>;
 
     /// Auto-paginating version of `list_group_resources`
-    fn list_group_resources_pages(
-        &self,
-        input: ListGroupResourcesInput,
-    ) -> RusotoStream<ResourceIdentifier, ListGroupResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_group_resources(state.clone())
-        })
+    fn list_group_resources_pages<'a>(
+        &'a self,
+        mut input: ListGroupResourcesInput,
+    ) -> RusotoStream<'a, ResourceIdentifier, ListGroupResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_resources(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing resource groups in your account.</p>
@@ -1664,13 +1689,14 @@ pub trait ResourceGroups: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>>;
 
     /// Auto-paginating version of `list_groups`
-    fn list_groups_pages(
-        &self,
-        input: ListGroupsInput,
-    ) -> RusotoStream<ListGroupsOutput, ListGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups(state.clone())
-        })
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsInput,
+    ) -> RusotoStream<'a, ListGroupsOutput, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
@@ -1680,13 +1706,14 @@ pub trait ResourceGroups: Clone + Sync + Send + 'static {
     ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>;
 
     /// Auto-paginating version of `search_resources`
-    fn search_resources_pages(
-        &self,
-        input: SearchResourcesInput,
-    ) -> RusotoStream<ResourceIdentifier, SearchResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_resources(state.clone())
-        })
+    fn search_resources_pages<'a>(
+        &'a self,
+        mut input: SearchResourcesInput,
+    ) -> RusotoStream<'a, ResourceIdentifier, SearchResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_resources(input.clone())
+        }))
     }
 
     /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important></p>

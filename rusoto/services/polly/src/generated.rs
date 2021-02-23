@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -63,11 +65,19 @@ pub struct DescribeVoicesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeVoicesInput {
+impl Paged for DescribeVoicesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeVoicesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -85,27 +95,25 @@ pub struct DescribeVoicesOutput {
     pub voices: Option<Vec<Voice>>,
 }
 
-impl DescribeVoicesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Voice>> {
-        Some(self.voices.as_ref()?.clone())
+impl Paged for DescribeVoicesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeVoicesOutput {
     type Item = Voice;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Voice> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.voices.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -219,11 +227,19 @@ pub struct ListLexiconsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLexiconsInput {
+impl Paged for ListLexiconsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLexiconsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -241,27 +257,25 @@ pub struct ListLexiconsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListLexiconsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<LexiconDescription>> {
-        Some(self.lexicons.as_ref()?.clone())
+impl Paged for ListLexiconsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLexiconsOutput {
     type Item = LexiconDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LexiconDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.lexicons.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -283,11 +297,19 @@ pub struct ListSpeechSynthesisTasksInput {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListSpeechSynthesisTasksInput {
+impl Paged for ListSpeechSynthesisTasksInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSpeechSynthesisTasksInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -305,27 +327,25 @@ pub struct ListSpeechSynthesisTasksOutput {
     pub synthesis_tasks: Option<Vec<SynthesisTask>>,
 }
 
-impl ListSpeechSynthesisTasksOutput {
-    fn pagination_page_opt(self) -> Option<Vec<SynthesisTask>> {
-        Some(self.synthesis_tasks.as_ref()?.clone())
+impl Paged for ListSpeechSynthesisTasksOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSpeechSynthesisTasksOutput {
     type Item = SynthesisTask;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SynthesisTask> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.synthesis_tasks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1084,13 +1104,14 @@ pub trait Polly: Clone + Sync + Send + 'static {
     ) -> Result<DescribeVoicesOutput, RusotoError<DescribeVoicesError>>;
 
     /// Auto-paginating version of `describe_voices`
-    fn describe_voices_pages(
-        &self,
-        input: DescribeVoicesInput,
-    ) -> RusotoStream<Voice, DescribeVoicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_voices(state.clone())
-        })
+    fn describe_voices_pages<'a>(
+        &'a self,
+        mut input: DescribeVoicesInput,
+    ) -> RusotoStream<'a, Voice, DescribeVoicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_voices(input.clone())
+        }))
     }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
@@ -1112,13 +1133,14 @@ pub trait Polly: Clone + Sync + Send + 'static {
     ) -> Result<ListLexiconsOutput, RusotoError<ListLexiconsError>>;
 
     /// Auto-paginating version of `list_lexicons`
-    fn list_lexicons_pages(
-        &self,
-        input: ListLexiconsInput,
-    ) -> RusotoStream<LexiconDescription, ListLexiconsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_lexicons(state.clone())
-        })
+    fn list_lexicons_pages<'a>(
+        &'a self,
+        mut input: ListLexiconsInput,
+    ) -> RusotoStream<'a, LexiconDescription, ListLexiconsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_lexicons(input.clone())
+        }))
     }
 
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
@@ -1128,13 +1150,14 @@ pub trait Polly: Clone + Sync + Send + 'static {
     ) -> Result<ListSpeechSynthesisTasksOutput, RusotoError<ListSpeechSynthesisTasksError>>;
 
     /// Auto-paginating version of `list_speech_synthesis_tasks`
-    fn list_speech_synthesis_tasks_pages(
-        &self,
-        input: ListSpeechSynthesisTasksInput,
-    ) -> RusotoStream<SynthesisTask, ListSpeechSynthesisTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_speech_synthesis_tasks(state.clone())
-        })
+    fn list_speech_synthesis_tasks_pages<'a>(
+        &'a self,
+        mut input: ListSpeechSynthesisTasksInput,
+    ) -> RusotoStream<'a, SynthesisTask, ListSpeechSynthesisTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_speech_synthesis_tasks(input.clone())
+        }))
     }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>

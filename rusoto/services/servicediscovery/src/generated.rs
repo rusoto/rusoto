@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -554,11 +556,19 @@ pub struct ListInstancesRequest {
     pub service_id: String,
 }
 
-impl PagedRequest for ListInstancesRequest {
+impl Paged for ListInstancesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -576,27 +586,25 @@ pub struct ListInstancesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<InstanceSummary>> {
-        Some(self.instances.as_ref()?.clone())
+impl Paged for ListInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListInstancesResponse {
     type Item = InstanceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<InstanceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -618,11 +626,19 @@ pub struct ListNamespacesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListNamespacesRequest {
+impl Paged for ListNamespacesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNamespacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -640,27 +656,25 @@ pub struct ListNamespacesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListNamespacesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<NamespaceSummary>> {
-        Some(self.namespaces.as_ref()?.clone())
+impl Paged for ListNamespacesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListNamespacesResponse {
     type Item = NamespaceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<NamespaceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.namespaces.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -682,11 +696,19 @@ pub struct ListOperationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListOperationsRequest {
+impl Paged for ListOperationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOperationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -704,27 +726,25 @@ pub struct ListOperationsResponse {
     pub operations: Option<Vec<OperationSummary>>,
 }
 
-impl ListOperationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OperationSummary>> {
-        Some(self.operations.as_ref()?.clone())
+impl Paged for ListOperationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOperationsResponse {
     type Item = OperationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OperationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.operations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -746,11 +766,19 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListServicesRequest {
+impl Paged for ListServicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -768,27 +796,25 @@ pub struct ListServicesResponse {
     pub services: Option<Vec<ServiceSummary>>,
 }
 
-impl ListServicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceSummary>> {
-        Some(self.services.as_ref()?.clone())
+impl Paged for ListServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServicesResponse {
     type Item = ServiceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2357,13 +2383,14 @@ pub trait ServiceDiscovery: Clone + Sync + Send + 'static {
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>>;
 
     /// Auto-paginating version of `list_instances`
-    fn list_instances_pages(
-        &self,
-        input: ListInstancesRequest,
-    ) -> RusotoStream<InstanceSummary, ListInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_instances(state.clone())
-        })
+    fn list_instances_pages<'a>(
+        &'a self,
+        mut input: ListInstancesRequest,
+    ) -> RusotoStream<'a, InstanceSummary, ListInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instances(input.clone())
+        }))
     }
 
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
@@ -2373,13 +2400,14 @@ pub trait ServiceDiscovery: Clone + Sync + Send + 'static {
     ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>;
 
     /// Auto-paginating version of `list_namespaces`
-    fn list_namespaces_pages(
-        &self,
-        input: ListNamespacesRequest,
-    ) -> RusotoStream<NamespaceSummary, ListNamespacesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_namespaces(state.clone())
-        })
+    fn list_namespaces_pages<'a>(
+        &'a self,
+        mut input: ListNamespacesRequest,
+    ) -> RusotoStream<'a, NamespaceSummary, ListNamespacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_namespaces(input.clone())
+        }))
     }
 
     /// <p>Lists operations that match the criteria that you specify.</p>
@@ -2389,13 +2417,14 @@ pub trait ServiceDiscovery: Clone + Sync + Send + 'static {
     ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
 
     /// Auto-paginating version of `list_operations`
-    fn list_operations_pages(
-        &self,
-        input: ListOperationsRequest,
-    ) -> RusotoStream<OperationSummary, ListOperationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_operations(state.clone())
-        })
+    fn list_operations_pages<'a>(
+        &'a self,
+        mut input: ListOperationsRequest,
+    ) -> RusotoStream<'a, OperationSummary, ListOperationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_operations(input.clone())
+        }))
     }
 
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
@@ -2405,13 +2434,14 @@ pub trait ServiceDiscovery: Clone + Sync + Send + 'static {
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
 
     /// Auto-paginating version of `list_services`
-    fn list_services_pages(
-        &self,
-        input: ListServicesRequest,
-    ) -> RusotoStream<ServiceSummary, ListServicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_services(state.clone())
-        })
+    fn list_services_pages<'a>(
+        &'a self,
+        mut input: ListServicesRequest,
+    ) -> RusotoStream<'a, ServiceSummary, ListServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_services(input.clone())
+        }))
     }
 
     /// <p>Lists tags for the specified resource.</p>

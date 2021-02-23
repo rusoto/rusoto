@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -601,11 +603,19 @@ pub struct ListResolverDnssecConfigsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResolverDnssecConfigsRequest {
+impl Paged for ListResolverDnssecConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverDnssecConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -623,27 +633,25 @@ pub struct ListResolverDnssecConfigsResponse {
     pub resolver_dnssec_configs: Option<Vec<ResolverDnssecConfig>>,
 }
 
-impl ListResolverDnssecConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverDnssecConfig>> {
-        Some(self.resolver_dnssec_configs.as_ref()?.clone())
+impl Paged for ListResolverDnssecConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverDnssecConfigsResponse {
     type Item = ResolverDnssecConfig;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverDnssecConfig> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_dnssec_configs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -664,11 +672,19 @@ pub struct ListResolverEndpointIpAddressesRequest {
     pub resolver_endpoint_id: String,
 }
 
-impl PagedRequest for ListResolverEndpointIpAddressesRequest {
+impl Paged for ListResolverEndpointIpAddressesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverEndpointIpAddressesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -690,27 +706,25 @@ pub struct ListResolverEndpointIpAddressesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListResolverEndpointIpAddressesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<IpAddressResponse>> {
-        Some(self.ip_addresses.as_ref()?.clone())
+impl Paged for ListResolverEndpointIpAddressesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverEndpointIpAddressesResponse {
     type Item = IpAddressResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<IpAddressResponse> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ip_addresses.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -732,11 +746,19 @@ pub struct ListResolverEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResolverEndpointsRequest {
+impl Paged for ListResolverEndpointsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverEndpointsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -758,27 +780,25 @@ pub struct ListResolverEndpointsResponse {
     pub resolver_endpoints: Option<Vec<ResolverEndpoint>>,
 }
 
-impl ListResolverEndpointsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverEndpoint>> {
-        Some(self.resolver_endpoints.as_ref()?.clone())
+impl Paged for ListResolverEndpointsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverEndpointsResponse {
     type Item = ResolverEndpoint;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverEndpoint> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_endpoints.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -808,11 +828,19 @@ pub struct ListResolverQueryLogConfigAssociationsRequest {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListResolverQueryLogConfigAssociationsRequest {
+impl Paged for ListResolverQueryLogConfigAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverQueryLogConfigAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -838,31 +866,26 @@ pub struct ListResolverQueryLogConfigAssociationsResponse {
     pub total_filtered_count: Option<i64>,
 }
 
-impl ListResolverQueryLogConfigAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverQueryLogConfigAssociation>> {
-        Some(
-            self.resolver_query_log_config_associations
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListResolverQueryLogConfigAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverQueryLogConfigAssociationsResponse {
     type Item = ResolverQueryLogConfigAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverQueryLogConfigAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_query_log_config_associations
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -892,11 +915,19 @@ pub struct ListResolverQueryLogConfigsRequest {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListResolverQueryLogConfigsRequest {
+impl Paged for ListResolverQueryLogConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverQueryLogConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -922,27 +953,25 @@ pub struct ListResolverQueryLogConfigsResponse {
     pub total_filtered_count: Option<i64>,
 }
 
-impl ListResolverQueryLogConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverQueryLogConfig>> {
-        Some(self.resolver_query_log_configs.as_ref()?.clone())
+impl Paged for ListResolverQueryLogConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverQueryLogConfigsResponse {
     type Item = ResolverQueryLogConfig;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverQueryLogConfig> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_query_log_configs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -964,11 +993,19 @@ pub struct ListResolverRuleAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResolverRuleAssociationsRequest {
+impl Paged for ListResolverRuleAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverRuleAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -990,27 +1027,25 @@ pub struct ListResolverRuleAssociationsResponse {
     pub resolver_rule_associations: Option<Vec<ResolverRuleAssociation>>,
 }
 
-impl ListResolverRuleAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverRuleAssociation>> {
-        Some(self.resolver_rule_associations.as_ref()?.clone())
+impl Paged for ListResolverRuleAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverRuleAssociationsResponse {
     type Item = ResolverRuleAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverRuleAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_rule_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1032,11 +1067,19 @@ pub struct ListResolverRulesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResolverRulesRequest {
+impl Paged for ListResolverRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResolverRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1058,27 +1101,25 @@ pub struct ListResolverRulesResponse {
     pub resolver_rules: Option<Vec<ResolverRule>>,
 }
 
-impl ListResolverRulesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResolverRule>> {
-        Some(self.resolver_rules.as_ref()?.clone())
+impl Paged for ListResolverRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResolverRulesResponse {
     type Item = ResolverRule;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResolverRule> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resolver_rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1099,11 +1140,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1121,27 +1170,25 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4239,13 +4286,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListResolverDnssecConfigsResponse, RusotoError<ListResolverDnssecConfigsError>>;
 
     /// Auto-paginating version of `list_resolver_dnssec_configs`
-    fn list_resolver_dnssec_configs_pages(
-        &self,
-        input: ListResolverDnssecConfigsRequest,
-    ) -> RusotoStream<ResolverDnssecConfig, ListResolverDnssecConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_dnssec_configs(state.clone())
-        })
+    fn list_resolver_dnssec_configs_pages<'a>(
+        &'a self,
+        mut input: ListResolverDnssecConfigsRequest,
+    ) -> RusotoStream<'a, ResolverDnssecConfig, ListResolverDnssecConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_dnssec_configs(input.clone())
+        }))
     }
 
     /// <p>Gets the IP addresses for a specified Resolver endpoint.</p>
@@ -4258,13 +4306,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_resolver_endpoint_ip_addresses`
-    fn list_resolver_endpoint_ip_addresses_pages(
-        &self,
-        input: ListResolverEndpointIpAddressesRequest,
-    ) -> RusotoStream<IpAddressResponse, ListResolverEndpointIpAddressesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_endpoint_ip_addresses(state.clone())
-        })
+    fn list_resolver_endpoint_ip_addresses_pages<'a>(
+        &'a self,
+        mut input: ListResolverEndpointIpAddressesRequest,
+    ) -> RusotoStream<'a, IpAddressResponse, ListResolverEndpointIpAddressesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_endpoint_ip_addresses(input.clone())
+        }))
     }
 
     /// <p>Lists all the Resolver endpoints that were created using the current AWS account.</p>
@@ -4274,13 +4323,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListResolverEndpointsResponse, RusotoError<ListResolverEndpointsError>>;
 
     /// Auto-paginating version of `list_resolver_endpoints`
-    fn list_resolver_endpoints_pages(
-        &self,
-        input: ListResolverEndpointsRequest,
-    ) -> RusotoStream<ResolverEndpoint, ListResolverEndpointsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_endpoints(state.clone())
-        })
+    fn list_resolver_endpoints_pages<'a>(
+        &'a self,
+        mut input: ListResolverEndpointsRequest,
+    ) -> RusotoStream<'a, ResolverEndpoint, ListResolverEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_endpoints(input.clone())
+        }))
     }
 
     /// <p>Lists information about associations between Amazon VPCs and query logging configurations.</p>
@@ -4293,14 +4343,18 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_resolver_query_log_config_associations`
-    fn list_resolver_query_log_config_associations_pages(
-        &self,
-        input: ListResolverQueryLogConfigAssociationsRequest,
-    ) -> RusotoStream<ResolverQueryLogConfigAssociation, ListResolverQueryLogConfigAssociationsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_query_log_config_associations(state.clone())
-        })
+    fn list_resolver_query_log_config_associations_pages<'a>(
+        &'a self,
+        mut input: ListResolverQueryLogConfigAssociationsRequest,
+    ) -> RusotoStream<
+        'a,
+        ResolverQueryLogConfigAssociation,
+        ListResolverQueryLogConfigAssociationsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_query_log_config_associations(input.clone())
+        }))
     }
 
     /// <p>Lists information about the specified query logging configurations. Each configuration defines where you want Resolver to save DNS query logs and specifies the VPCs that you want to log queries for.</p>
@@ -4310,13 +4364,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListResolverQueryLogConfigsResponse, RusotoError<ListResolverQueryLogConfigsError>>;
 
     /// Auto-paginating version of `list_resolver_query_log_configs`
-    fn list_resolver_query_log_configs_pages(
-        &self,
-        input: ListResolverQueryLogConfigsRequest,
-    ) -> RusotoStream<ResolverQueryLogConfig, ListResolverQueryLogConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_query_log_configs(state.clone())
-        })
+    fn list_resolver_query_log_configs_pages<'a>(
+        &'a self,
+        mut input: ListResolverQueryLogConfigsRequest,
+    ) -> RusotoStream<'a, ResolverQueryLogConfig, ListResolverQueryLogConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_query_log_configs(input.clone())
+        }))
     }
 
     /// <p>Lists the associations that were created between Resolver rules and VPCs using the current AWS account.</p>
@@ -4326,13 +4381,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListResolverRuleAssociationsResponse, RusotoError<ListResolverRuleAssociationsError>>;
 
     /// Auto-paginating version of `list_resolver_rule_associations`
-    fn list_resolver_rule_associations_pages(
-        &self,
-        input: ListResolverRuleAssociationsRequest,
-    ) -> RusotoStream<ResolverRuleAssociation, ListResolverRuleAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_rule_associations(state.clone())
-        })
+    fn list_resolver_rule_associations_pages<'a>(
+        &'a self,
+        mut input: ListResolverRuleAssociationsRequest,
+    ) -> RusotoStream<'a, ResolverRuleAssociation, ListResolverRuleAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_rule_associations(input.clone())
+        }))
     }
 
     /// <p>Lists the Resolver rules that were created using the current AWS account.</p>
@@ -4342,13 +4398,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>>;
 
     /// Auto-paginating version of `list_resolver_rules`
-    fn list_resolver_rules_pages(
-        &self,
-        input: ListResolverRulesRequest,
-    ) -> RusotoStream<ResolverRule, ListResolverRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resolver_rules(state.clone())
-        })
+    fn list_resolver_rules_pages<'a>(
+        &'a self,
+        mut input: ListResolverRulesRequest,
+    ) -> RusotoStream<'a, ResolverRule, ListResolverRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resolver_rules(input.clone())
+        }))
     }
 
     /// <p>Lists the tags that you associated with the specified resource.</p>
@@ -4358,13 +4415,14 @@ pub trait Route53Resolver: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Specifies an AWS account that you want to share a query logging configuration with, the query logging configuration that you want to share, and the operations that you want the account to be able to perform on the configuration.</p>

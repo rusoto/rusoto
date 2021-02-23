@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -649,11 +651,19 @@ pub struct DescribeComputeEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeComputeEnvironmentsRequest {
+impl Paged for DescribeComputeEnvironmentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeComputeEnvironmentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -671,27 +681,25 @@ pub struct DescribeComputeEnvironmentsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeComputeEnvironmentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ComputeEnvironmentDetail>> {
-        Some(self.compute_environments.as_ref()?.clone())
+impl Paged for DescribeComputeEnvironmentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeComputeEnvironmentsResponse {
     type Item = ComputeEnvironmentDetail;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ComputeEnvironmentDetail> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.compute_environments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -722,11 +730,19 @@ pub struct DescribeJobDefinitionsRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for DescribeJobDefinitionsRequest {
+impl Paged for DescribeJobDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeJobDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -744,27 +760,25 @@ pub struct DescribeJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeJobDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<JobDefinition>> {
-        Some(self.job_definitions.as_ref()?.clone())
+impl Paged for DescribeJobDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeJobDefinitionsResponse {
     type Item = JobDefinition;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobDefinition> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -787,11 +801,19 @@ pub struct DescribeJobQueuesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeJobQueuesRequest {
+impl Paged for DescribeJobQueuesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeJobQueuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -809,27 +831,25 @@ pub struct DescribeJobQueuesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeJobQueuesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<JobQueueDetail>> {
-        Some(self.job_queues.as_ref()?.clone())
+impl Paged for DescribeJobQueuesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeJobQueuesResponse {
     type Item = JobQueueDetail;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobQueueDetail> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_queues.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1254,11 +1274,19 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListJobsRequest {
+impl Paged for ListJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1275,27 +1303,25 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<JobSummary>> {
-        Some(self.job_summary_list.clone())
+impl Paged for ListJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobsResponse {
     type Item = JobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_summary_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2512,13 +2538,14 @@ pub trait Batch: Clone + Sync + Send + 'static {
     ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>;
 
     /// Auto-paginating version of `describe_compute_environments`
-    fn describe_compute_environments_pages(
-        &self,
-        input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoStream<ComputeEnvironmentDetail, DescribeComputeEnvironmentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_compute_environments(state.clone())
-        })
+    fn describe_compute_environments_pages<'a>(
+        &'a self,
+        mut input: DescribeComputeEnvironmentsRequest,
+    ) -> RusotoStream<'a, ComputeEnvironmentDetail, DescribeComputeEnvironmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_compute_environments(input.clone())
+        }))
     }
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
@@ -2528,13 +2555,14 @@ pub trait Batch: Clone + Sync + Send + 'static {
     ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>>;
 
     /// Auto-paginating version of `describe_job_definitions`
-    fn describe_job_definitions_pages(
-        &self,
-        input: DescribeJobDefinitionsRequest,
-    ) -> RusotoStream<JobDefinition, DescribeJobDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_job_definitions(state.clone())
-        })
+    fn describe_job_definitions_pages<'a>(
+        &'a self,
+        mut input: DescribeJobDefinitionsRequest,
+    ) -> RusotoStream<'a, JobDefinition, DescribeJobDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_job_definitions(input.clone())
+        }))
     }
 
     /// <p>Describes one or more of your job queues.</p>
@@ -2544,13 +2572,14 @@ pub trait Batch: Clone + Sync + Send + 'static {
     ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>>;
 
     /// Auto-paginating version of `describe_job_queues`
-    fn describe_job_queues_pages(
-        &self,
-        input: DescribeJobQueuesRequest,
-    ) -> RusotoStream<JobQueueDetail, DescribeJobQueuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_job_queues(state.clone())
-        })
+    fn describe_job_queues_pages<'a>(
+        &'a self,
+        mut input: DescribeJobQueuesRequest,
+    ) -> RusotoStream<'a, JobQueueDetail, DescribeJobQueuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_job_queues(input.clone())
+        }))
     }
 
     /// <p>Describes a list of AWS Batch jobs.</p>
@@ -2566,10 +2595,14 @@ pub trait Batch: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<JobSummary, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobSummary, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for an AWS Batch resource. AWS Batch resources that support tags are compute environments, jobs, job definitions, and job queues. ARNs for child jobs of array and multi-node parallel (MNP) jobs are not supported.</p>

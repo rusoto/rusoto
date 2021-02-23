@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -753,11 +755,19 @@ pub struct ListJobsByPipelineRequest {
     pub pipeline_id: String,
 }
 
-impl PagedRequest for ListJobsByPipelineRequest {
+impl Paged for ListJobsByPipelineRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListJobsByPipelineRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.page_token = key;
-        self
     }
 }
 
@@ -776,27 +786,25 @@ pub struct ListJobsByPipelineResponse {
     pub next_page_token: Option<String>,
 }
 
-impl ListJobsByPipelineResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Job>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListJobsByPipelineResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for ListJobsByPipelineResponse {
     type Item = Job;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Job> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -818,11 +826,19 @@ pub struct ListJobsByStatusRequest {
     pub status: String,
 }
 
-impl PagedRequest for ListJobsByStatusRequest {
+impl Paged for ListJobsByStatusRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListJobsByStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.page_token = key;
-        self
     }
 }
 
@@ -841,27 +857,25 @@ pub struct ListJobsByStatusResponse {
     pub next_page_token: Option<String>,
 }
 
-impl ListJobsByStatusResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Job>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListJobsByStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for ListJobsByStatusResponse {
     type Item = Job;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Job> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -880,11 +894,19 @@ pub struct ListPipelinesRequest {
     pub page_token: Option<String>,
 }
 
-impl PagedRequest for ListPipelinesRequest {
+impl Paged for ListPipelinesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListPipelinesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.page_token = key;
-        self
     }
 }
 
@@ -903,27 +925,25 @@ pub struct ListPipelinesResponse {
     pub pipelines: Option<Vec<Pipeline>>,
 }
 
-impl ListPipelinesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Pipeline>> {
-        Some(self.pipelines.as_ref()?.clone())
+impl Paged for ListPipelinesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for ListPipelinesResponse {
     type Item = Pipeline;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Pipeline> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pipelines.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -942,11 +962,19 @@ pub struct ListPresetsRequest {
     pub page_token: Option<String>,
 }
 
-impl PagedRequest for ListPresetsRequest {
+impl Paged for ListPresetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.page_token)
+    }
+}
+
+impl PagedRequest for ListPresetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.page_token = key;
-        self
     }
 }
 
@@ -965,27 +993,25 @@ pub struct ListPresetsResponse {
     pub presets: Option<Vec<Preset>>,
 }
 
-impl ListPresetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Preset>> {
-        Some(self.presets.as_ref()?.clone())
+impl Paged for ListPresetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for ListPresetsResponse {
     type Item = Preset;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Preset> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.presets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2509,13 +2535,14 @@ pub trait Ets: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsByPipelineResponse, RusotoError<ListJobsByPipelineError>>;
 
     /// Auto-paginating version of `list_jobs_by_pipeline`
-    fn list_jobs_by_pipeline_pages(
-        &self,
-        input: ListJobsByPipelineRequest,
-    ) -> RusotoStream<Job, ListJobsByPipelineError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs_by_pipeline(state.clone())
-        })
+    fn list_jobs_by_pipeline_pages<'a>(
+        &'a self,
+        mut input: ListJobsByPipelineRequest,
+    ) -> RusotoStream<'a, Job, ListJobsByPipelineError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs_by_pipeline(input.clone())
+        }))
     }
 
     /// <p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>
@@ -2525,13 +2552,14 @@ pub trait Ets: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>>;
 
     /// Auto-paginating version of `list_jobs_by_status`
-    fn list_jobs_by_status_pages(
-        &self,
-        input: ListJobsByStatusRequest,
-    ) -> RusotoStream<Job, ListJobsByStatusError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs_by_status(state.clone())
-        })
+    fn list_jobs_by_status_pages<'a>(
+        &'a self,
+        mut input: ListJobsByStatusRequest,
+    ) -> RusotoStream<'a, Job, ListJobsByStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs_by_status(input.clone())
+        }))
     }
 
     /// <p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>
@@ -2541,13 +2569,14 @@ pub trait Ets: Clone + Sync + Send + 'static {
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
 
     /// Auto-paginating version of `list_pipelines`
-    fn list_pipelines_pages(
-        &self,
-        input: ListPipelinesRequest,
-    ) -> RusotoStream<Pipeline, ListPipelinesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_pipelines(state.clone())
-        })
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesRequest,
+    ) -> RusotoStream<'a, Pipeline, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
     }
 
     /// <p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>
@@ -2557,13 +2586,14 @@ pub trait Ets: Clone + Sync + Send + 'static {
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
 
     /// Auto-paginating version of `list_presets`
-    fn list_presets_pages(
-        &self,
-        input: ListPresetsRequest,
-    ) -> RusotoStream<Preset, ListPresetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_presets(state.clone())
-        })
+    fn list_presets_pages<'a>(
+        &'a self,
+        mut input: ListPresetsRequest,
+    ) -> RusotoStream<'a, Preset, ListPresetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_presets(input.clone())
+        }))
     }
 
     /// <p>The ReadJob operation returns detailed information about a job.</p>

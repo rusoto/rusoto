@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -557,11 +559,19 @@ pub struct ListDiscoverersRequest {
     pub source_arn_prefix: Option<String>,
 }
 
-impl PagedRequest for ListDiscoverersRequest {
+impl Paged for ListDiscoverersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDiscoverersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -579,27 +589,25 @@ pub struct ListDiscoverersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDiscoverersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DiscovererSummary>> {
-        Some(self.discoverers.as_ref()?.clone())
+impl Paged for ListDiscoverersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDiscoverersResponse {
     type Item = DiscovererSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DiscovererSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.discoverers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -624,11 +632,19 @@ pub struct ListRegistriesRequest {
     pub scope: Option<String>,
 }
 
-impl PagedRequest for ListRegistriesRequest {
+impl Paged for ListRegistriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRegistriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -646,27 +662,25 @@ pub struct ListRegistriesResponse {
     pub registries: Option<Vec<RegistrySummary>>,
 }
 
-impl ListRegistriesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RegistrySummary>> {
-        Some(self.registries.as_ref()?.clone())
+impl Paged for ListRegistriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRegistriesResponse {
     type Item = RegistrySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RegistrySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.registries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -689,11 +703,19 @@ pub struct ListSchemaVersionsRequest {
     pub schema_name: String,
 }
 
-impl PagedRequest for ListSchemaVersionsRequest {
+impl Paged for ListSchemaVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSchemaVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -711,27 +733,25 @@ pub struct ListSchemaVersionsResponse {
     pub schema_versions: Option<Vec<SchemaVersionSummary>>,
 }
 
-impl ListSchemaVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SchemaVersionSummary>> {
-        Some(self.schema_versions.as_ref()?.clone())
+impl Paged for ListSchemaVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSchemaVersionsResponse {
     type Item = SchemaVersionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SchemaVersionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.schema_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -755,11 +775,19 @@ pub struct ListSchemasRequest {
     pub schema_name_prefix: Option<String>,
 }
 
-impl PagedRequest for ListSchemasRequest {
+impl Paged for ListSchemasRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSchemasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -777,27 +805,25 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<SchemaSummary>>,
 }
 
-impl ListSchemasResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SchemaSummary>> {
-        Some(self.schemas.as_ref()?.clone())
+impl Paged for ListSchemasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSchemasResponse {
     type Item = SchemaSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SchemaSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.schemas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1013,11 +1039,19 @@ pub struct SearchSchemasRequest {
     pub registry_name: String,
 }
 
-impl PagedRequest for SearchSchemasRequest {
+impl Paged for SearchSchemasRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSchemasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1035,27 +1069,25 @@ pub struct SearchSchemasResponse {
     pub schemas: Option<Vec<SearchSchemaSummary>>,
 }
 
-impl SearchSchemasResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SearchSchemaSummary>> {
-        Some(self.schemas.as_ref()?.clone())
+impl Paged for SearchSchemasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchSchemasResponse {
     type Item = SearchSchemaSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SearchSchemaSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.schemas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3186,13 +3218,14 @@ pub trait Schemas: Clone + Sync + Send + 'static {
     ) -> Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>>;
 
     /// Auto-paginating version of `list_discoverers`
-    fn list_discoverers_pages(
-        &self,
-        input: ListDiscoverersRequest,
-    ) -> RusotoStream<DiscovererSummary, ListDiscoverersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_discoverers(state.clone())
-        })
+    fn list_discoverers_pages<'a>(
+        &'a self,
+        mut input: ListDiscoverersRequest,
+    ) -> RusotoStream<'a, DiscovererSummary, ListDiscoverersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_discoverers(input.clone())
+        }))
     }
 
     /// <p>List the registries.</p>
@@ -3202,13 +3235,14 @@ pub trait Schemas: Clone + Sync + Send + 'static {
     ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>;
 
     /// Auto-paginating version of `list_registries`
-    fn list_registries_pages(
-        &self,
-        input: ListRegistriesRequest,
-    ) -> RusotoStream<RegistrySummary, ListRegistriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_registries(state.clone())
-        })
+    fn list_registries_pages<'a>(
+        &'a self,
+        mut input: ListRegistriesRequest,
+    ) -> RusotoStream<'a, RegistrySummary, ListRegistriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_registries(input.clone())
+        }))
     }
 
     /// <p>Provides a list of the schema versions and related information.</p>
@@ -3218,13 +3252,14 @@ pub trait Schemas: Clone + Sync + Send + 'static {
     ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>>;
 
     /// Auto-paginating version of `list_schema_versions`
-    fn list_schema_versions_pages(
-        &self,
-        input: ListSchemaVersionsRequest,
-    ) -> RusotoStream<SchemaVersionSummary, ListSchemaVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_schema_versions(state.clone())
-        })
+    fn list_schema_versions_pages<'a>(
+        &'a self,
+        mut input: ListSchemaVersionsRequest,
+    ) -> RusotoStream<'a, SchemaVersionSummary, ListSchemaVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_schema_versions(input.clone())
+        }))
     }
 
     /// <p>List the schemas.</p>
@@ -3234,13 +3269,14 @@ pub trait Schemas: Clone + Sync + Send + 'static {
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
 
     /// Auto-paginating version of `list_schemas`
-    fn list_schemas_pages(
-        &self,
-        input: ListSchemasRequest,
-    ) -> RusotoStream<SchemaSummary, ListSchemasError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_schemas(state.clone())
-        })
+    fn list_schemas_pages<'a>(
+        &'a self,
+        mut input: ListSchemasRequest,
+    ) -> RusotoStream<'a, SchemaSummary, ListSchemasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_schemas(input.clone())
+        }))
     }
 
     /// <p>Get tags for resource.</p>
@@ -3268,13 +3304,14 @@ pub trait Schemas: Clone + Sync + Send + 'static {
     ) -> Result<SearchSchemasResponse, RusotoError<SearchSchemasError>>;
 
     /// Auto-paginating version of `search_schemas`
-    fn search_schemas_pages(
-        &self,
-        input: SearchSchemasRequest,
-    ) -> RusotoStream<SearchSchemaSummary, SearchSchemasError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_schemas(state.clone())
-        })
+    fn search_schemas_pages<'a>(
+        &'a self,
+        mut input: SearchSchemasRequest,
+    ) -> RusotoStream<'a, SearchSchemaSummary, SearchSchemasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_schemas(input.clone())
+        }))
     }
 
     /// <p>Starts the discoverer</p>

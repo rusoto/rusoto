@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -837,11 +839,19 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCertificatesMessage {
+impl Paged for DescribeCertificatesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCertificatesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -859,27 +869,25 @@ pub struct DescribeCertificatesResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeCertificatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
-        Some(self.certificates.as_ref()?.clone())
+impl Paged for DescribeCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeCertificatesResponse {
     type Item = Certificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Certificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.certificates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -902,11 +910,19 @@ pub struct DescribeConnectionsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeConnectionsMessage {
+impl Paged for DescribeConnectionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeConnectionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -925,27 +941,25 @@ pub struct DescribeConnectionsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeConnectionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Connection>> {
-        Some(self.connections.as_ref()?.clone())
+impl Paged for DescribeConnectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeConnectionsResponse {
     type Item = Connection;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Connection> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.connections.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -968,11 +982,19 @@ pub struct DescribeEndpointTypesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeEndpointTypesMessage {
+impl Paged for DescribeEndpointTypesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEndpointTypesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -991,27 +1013,25 @@ pub struct DescribeEndpointTypesResponse {
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
 }
 
-impl DescribeEndpointTypesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SupportedEndpointType>> {
-        Some(self.supported_endpoint_types.as_ref()?.clone())
+impl Paged for DescribeEndpointTypesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeEndpointTypesResponse {
     type Item = SupportedEndpointType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SupportedEndpointType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.supported_endpoint_types.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1034,11 +1054,19 @@ pub struct DescribeEndpointsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeEndpointsMessage {
+impl Paged for DescribeEndpointsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEndpointsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1057,27 +1085,25 @@ pub struct DescribeEndpointsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeEndpointsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Endpoint>> {
-        Some(self.endpoints.as_ref()?.clone())
+impl Paged for DescribeEndpointsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeEndpointsResponse {
     type Item = Endpoint;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Endpoint> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.endpoints.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1130,11 +1156,19 @@ pub struct DescribeEventSubscriptionsMessage {
     pub subscription_name: Option<String>,
 }
 
-impl PagedRequest for DescribeEventSubscriptionsMessage {
+impl Paged for DescribeEventSubscriptionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1153,27 +1187,25 @@ pub struct DescribeEventSubscriptionsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeEventSubscriptionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EventSubscription>> {
-        Some(self.event_subscriptions_list.as_ref()?.clone())
+impl Paged for DescribeEventSubscriptionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeEventSubscriptionsResponse {
     type Item = EventSubscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventSubscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_subscriptions_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1220,11 +1252,19 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<f64>,
 }
 
-impl PagedRequest for DescribeEventsMessage {
+impl Paged for DescribeEventsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1243,27 +1283,25 @@ pub struct DescribeEventsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for DescribeEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeEventsResponse {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1282,11 +1320,19 @@ pub struct DescribeOrderableReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeOrderableReplicationInstancesMessage {
+impl Paged for DescribeOrderableReplicationInstancesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOrderableReplicationInstancesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1305,27 +1351,25 @@ pub struct DescribeOrderableReplicationInstancesResponse {
     pub orderable_replication_instances: Option<Vec<OrderableReplicationInstance>>,
 }
 
-impl DescribeOrderableReplicationInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OrderableReplicationInstance>> {
-        Some(self.orderable_replication_instances.as_ref()?.clone())
+impl Paged for DescribeOrderableReplicationInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeOrderableReplicationInstancesResponse {
     type Item = OrderableReplicationInstance;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrderableReplicationInstance> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.orderable_replication_instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1442,11 +1486,19 @@ pub struct DescribeReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeReplicationInstancesMessage {
+impl Paged for DescribeReplicationInstancesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReplicationInstancesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1465,27 +1517,25 @@ pub struct DescribeReplicationInstancesResponse {
     pub replication_instances: Option<Vec<ReplicationInstance>>,
 }
 
-impl DescribeReplicationInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationInstance>> {
-        Some(self.replication_instances.as_ref()?.clone())
+impl Paged for DescribeReplicationInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeReplicationInstancesResponse {
     type Item = ReplicationInstance;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationInstance> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1508,11 +1558,19 @@ pub struct DescribeReplicationSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeReplicationSubnetGroupsMessage {
+impl Paged for DescribeReplicationSubnetGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReplicationSubnetGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1531,27 +1589,25 @@ pub struct DescribeReplicationSubnetGroupsResponse {
     pub replication_subnet_groups: Option<Vec<ReplicationSubnetGroup>>,
 }
 
-impl DescribeReplicationSubnetGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationSubnetGroup>> {
-        Some(self.replication_subnet_groups.as_ref()?.clone())
+impl Paged for DescribeReplicationSubnetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeReplicationSubnetGroupsResponse {
     type Item = ReplicationSubnetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationSubnetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_subnet_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1574,11 +1630,19 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
     pub replication_task_arn: Option<String>,
 }
 
-impl PagedRequest for DescribeReplicationTaskAssessmentResultsMessage {
+impl Paged for DescribeReplicationTaskAssessmentResultsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReplicationTaskAssessmentResultsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1601,27 +1665,25 @@ pub struct DescribeReplicationTaskAssessmentResultsResponse {
     pub replication_task_assessment_results: Option<Vec<ReplicationTaskAssessmentResult>>,
 }
 
-impl DescribeReplicationTaskAssessmentResultsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationTaskAssessmentResult>> {
-        Some(self.replication_task_assessment_results.as_ref()?.clone())
+impl Paged for DescribeReplicationTaskAssessmentResultsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeReplicationTaskAssessmentResultsResponse {
     type Item = ReplicationTaskAssessmentResult;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationTaskAssessmentResult> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_task_assessment_results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1716,11 +1778,19 @@ pub struct DescribeReplicationTasksMessage {
     pub without_settings: Option<bool>,
 }
 
-impl PagedRequest for DescribeReplicationTasksMessage {
+impl Paged for DescribeReplicationTasksMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReplicationTasksMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1739,27 +1809,25 @@ pub struct DescribeReplicationTasksResponse {
     pub replication_tasks: Option<Vec<ReplicationTask>>,
 }
 
-impl DescribeReplicationTasksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationTask>> {
-        Some(self.replication_tasks.as_ref()?.clone())
+impl Paged for DescribeReplicationTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeReplicationTasksResponse {
     type Item = ReplicationTask;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationTask> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_tasks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1781,11 +1849,19 @@ pub struct DescribeSchemasMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeSchemasMessage {
+impl Paged for DescribeSchemasMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSchemasMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1804,27 +1880,25 @@ pub struct DescribeSchemasResponse {
     pub schemas: Option<Vec<String>>,
 }
 
-impl DescribeSchemasResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.schemas.as_ref()?.clone())
+impl Paged for DescribeSchemasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeSchemasResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.schemas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1850,11 +1924,19 @@ pub struct DescribeTableStatisticsMessage {
     pub replication_task_arn: String,
 }
 
-impl PagedRequest for DescribeTableStatisticsMessage {
+impl Paged for DescribeTableStatisticsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTableStatisticsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1877,27 +1959,25 @@ pub struct DescribeTableStatisticsResponse {
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
-impl DescribeTableStatisticsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TableStatistics>> {
-        Some(self.table_statistics.as_ref()?.clone())
+impl Paged for DescribeTableStatisticsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeTableStatisticsResponse {
     type Item = TableStatistics;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TableStatistics> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.table_statistics.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7217,13 +7297,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>>;
 
     /// Auto-paginating version of `describe_certificates`
-    fn describe_certificates_pages(
-        &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoStream<Certificate, DescribeCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_certificates(state.clone())
-        })
+    fn describe_certificates_pages<'a>(
+        &'a self,
+        mut input: DescribeCertificatesMessage,
+    ) -> RusotoStream<'a, Certificate, DescribeCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_certificates(input.clone())
+        }))
     }
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
@@ -7233,13 +7314,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>>;
 
     /// Auto-paginating version of `describe_connections`
-    fn describe_connections_pages(
-        &self,
-        input: DescribeConnectionsMessage,
-    ) -> RusotoStream<Connection, DescribeConnectionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_connections(state.clone())
-        })
+    fn describe_connections_pages<'a>(
+        &'a self,
+        mut input: DescribeConnectionsMessage,
+    ) -> RusotoStream<'a, Connection, DescribeConnectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_connections(input.clone())
+        }))
     }
 
     /// <p>Returns information about the type of endpoints available.</p>
@@ -7249,13 +7331,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>>;
 
     /// Auto-paginating version of `describe_endpoint_types`
-    fn describe_endpoint_types_pages(
-        &self,
-        input: DescribeEndpointTypesMessage,
-    ) -> RusotoStream<SupportedEndpointType, DescribeEndpointTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_endpoint_types(state.clone())
-        })
+    fn describe_endpoint_types_pages<'a>(
+        &'a self,
+        mut input: DescribeEndpointTypesMessage,
+    ) -> RusotoStream<'a, SupportedEndpointType, DescribeEndpointTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_endpoint_types(input.clone())
+        }))
     }
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
@@ -7265,13 +7348,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
     /// Auto-paginating version of `describe_endpoints`
-    fn describe_endpoints_pages(
-        &self,
-        input: DescribeEndpointsMessage,
-    ) -> RusotoStream<Endpoint, DescribeEndpointsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_endpoints(state.clone())
-        })
+    fn describe_endpoints_pages<'a>(
+        &'a self,
+        mut input: DescribeEndpointsMessage,
+    ) -> RusotoStream<'a, Endpoint, DescribeEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_endpoints(input.clone())
+        }))
     }
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
@@ -7287,13 +7371,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>;
 
     /// Auto-paginating version of `describe_event_subscriptions`
-    fn describe_event_subscriptions_pages(
-        &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoStream<EventSubscription, DescribeEventSubscriptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_event_subscriptions(state.clone())
-        })
+    fn describe_event_subscriptions_pages<'a>(
+        &'a self,
+        mut input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<'a, EventSubscription, DescribeEventSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_event_subscriptions(input.clone())
+        }))
     }
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
@@ -7303,13 +7388,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
@@ -7322,14 +7408,15 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_orderable_replication_instances`
-    fn describe_orderable_replication_instances_pages(
-        &self,
-        input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoStream<OrderableReplicationInstance, DescribeOrderableReplicationInstancesError>
+    fn describe_orderable_replication_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeOrderableReplicationInstancesMessage,
+    ) -> RusotoStream<'a, OrderableReplicationInstance, DescribeOrderableReplicationInstancesError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_orderable_replication_instances(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_orderable_replication_instances(input.clone())
+        }))
     }
 
     /// <p>For internal use only</p>
@@ -7363,13 +7450,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>;
 
     /// Auto-paginating version of `describe_replication_instances`
-    fn describe_replication_instances_pages(
-        &self,
-        input: DescribeReplicationInstancesMessage,
-    ) -> RusotoStream<ReplicationInstance, DescribeReplicationInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_replication_instances(state.clone())
-        })
+    fn describe_replication_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeReplicationInstancesMessage,
+    ) -> RusotoStream<'a, ReplicationInstance, DescribeReplicationInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_replication_instances(input.clone())
+        }))
     }
 
     /// <p>Returns information about the replication subnet groups.</p>
@@ -7382,13 +7470,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_replication_subnet_groups`
-    fn describe_replication_subnet_groups_pages(
-        &self,
-        input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoStream<ReplicationSubnetGroup, DescribeReplicationSubnetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_replication_subnet_groups(state.clone())
-        })
+    fn describe_replication_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeReplicationSubnetGroupsMessage,
+    ) -> RusotoStream<'a, ReplicationSubnetGroup, DescribeReplicationSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_replication_subnet_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
@@ -7401,14 +7490,18 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_replication_task_assessment_results`
-    fn describe_replication_task_assessment_results_pages(
-        &self,
-        input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoStream<ReplicationTaskAssessmentResult, DescribeReplicationTaskAssessmentResultsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_replication_task_assessment_results(state.clone())
-        })
+    fn describe_replication_task_assessment_results_pages<'a>(
+        &'a self,
+        mut input: DescribeReplicationTaskAssessmentResultsMessage,
+    ) -> RusotoStream<
+        'a,
+        ReplicationTaskAssessmentResult,
+        DescribeReplicationTaskAssessmentResultsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_replication_task_assessment_results(input.clone())
+        }))
     }
 
     /// <p><p>Returns a paginated list of premigration assessment runs based on filter settings.</p> <p>These filter settings can specify a combination of premigration assessment runs, migration tasks, replication instances, and assessment run status values.</p> <note> <p>This operation doesn&#39;t return information about individual assessments. For this information, see the <code>DescribeReplicationTaskIndividualAssessments</code> operation. </p> </note></p>
@@ -7436,13 +7529,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>>;
 
     /// Auto-paginating version of `describe_replication_tasks`
-    fn describe_replication_tasks_pages(
-        &self,
-        input: DescribeReplicationTasksMessage,
-    ) -> RusotoStream<ReplicationTask, DescribeReplicationTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_replication_tasks(state.clone())
-        })
+    fn describe_replication_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeReplicationTasksMessage,
+    ) -> RusotoStream<'a, ReplicationTask, DescribeReplicationTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_replication_tasks(input.clone())
+        }))
     }
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
@@ -7452,13 +7546,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>>;
 
     /// Auto-paginating version of `describe_schemas`
-    fn describe_schemas_pages(
-        &self,
-        input: DescribeSchemasMessage,
-    ) -> RusotoStream<String, DescribeSchemasError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_schemas(state.clone())
-        })
+    fn describe_schemas_pages<'a>(
+        &'a self,
+        mut input: DescribeSchemasMessage,
+    ) -> RusotoStream<'a, String, DescribeSchemasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_schemas(input.clone())
+        }))
     }
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
@@ -7468,13 +7563,14 @@ pub trait DatabaseMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>>;
 
     /// Auto-paginating version of `describe_table_statistics`
-    fn describe_table_statistics_pages(
-        &self,
-        input: DescribeTableStatisticsMessage,
-    ) -> RusotoStream<TableStatistics, DescribeTableStatisticsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_table_statistics(state.clone())
-        })
+    fn describe_table_statistics_pages<'a>(
+        &'a self,
+        mut input: DescribeTableStatisticsMessage,
+    ) -> RusotoStream<'a, TableStatistics, DescribeTableStatisticsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_table_statistics(input.clone())
+        }))
     }
 
     /// <p>Uploads the specified certificate.</p>

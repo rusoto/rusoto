@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -575,11 +577,19 @@ pub struct ListDomainsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListDomainsRequest {
+impl Paged for ListDomainsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListDomainsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -597,27 +607,25 @@ pub struct ListDomainsResponse {
     pub next_page_marker: Option<String>,
 }
 
-impl ListDomainsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DomainSummary>> {
-        Some(self.domains.clone())
+impl Paged for ListDomainsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_marker)
     }
 }
 
 impl PagedOutput for ListDomainsResponse {
     type Item = DomainSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DomainSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.domains
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -640,11 +648,19 @@ pub struct ListOperationsRequest {
     pub submitted_since: Option<f64>,
 }
 
-impl PagedRequest for ListOperationsRequest {
+impl Paged for ListOperationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListOperationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -662,27 +678,25 @@ pub struct ListOperationsResponse {
     pub operations: Vec<OperationSummary>,
 }
 
-impl ListOperationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OperationSummary>> {
-        Some(self.operations.clone())
+impl Paged for ListOperationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_marker)
     }
 }
 
 impl PagedOutput for ListOperationsResponse {
     type Item = OperationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OperationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.operations
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1113,11 +1127,19 @@ pub struct ViewBillingRequest {
     pub start: Option<f64>,
 }
 
-impl PagedRequest for ViewBillingRequest {
+impl Paged for ViewBillingRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ViewBillingRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1136,27 +1158,25 @@ pub struct ViewBillingResponse {
     pub next_page_marker: Option<String>,
 }
 
-impl ViewBillingResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BillingRecord>> {
-        Some(self.billing_records.as_ref()?.clone())
+impl Paged for ViewBillingResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_marker)
     }
 }
 
 impl PagedOutput for ViewBillingResponse {
     type Item = BillingRecord;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BillingRecord> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.billing_records.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2604,13 +2624,14 @@ pub trait Route53Domains: Clone + Sync + Send + 'static {
     ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
 
     /// Auto-paginating version of `list_domains`
-    fn list_domains_pages(
-        &self,
-        input: ListDomainsRequest,
-    ) -> RusotoStream<DomainSummary, ListDomainsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_domains(state.clone())
-        })
+    fn list_domains_pages<'a>(
+        &'a self,
+        mut input: ListDomainsRequest,
+    ) -> RusotoStream<'a, DomainSummary, ListDomainsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domains(input.clone())
+        }))
     }
 
     /// <p>Returns information about all of the operations that return an operation ID and that have ever been performed on domains that were registered by the current account. </p>
@@ -2620,13 +2641,14 @@ pub trait Route53Domains: Clone + Sync + Send + 'static {
     ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
 
     /// Auto-paginating version of `list_operations`
-    fn list_operations_pages(
-        &self,
-        input: ListOperationsRequest,
-    ) -> RusotoStream<OperationSummary, ListOperationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_operations(state.clone())
-        })
+    fn list_operations_pages<'a>(
+        &'a self,
+        mut input: ListOperationsRequest,
+    ) -> RusotoStream<'a, OperationSummary, ListOperationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_operations(input.clone())
+        }))
     }
 
     /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
@@ -2717,13 +2739,14 @@ pub trait Route53Domains: Clone + Sync + Send + 'static {
     ) -> Result<ViewBillingResponse, RusotoError<ViewBillingError>>;
 
     /// Auto-paginating version of `view_billing`
-    fn view_billing_pages(
-        &self,
-        input: ViewBillingRequest,
-    ) -> RusotoStream<BillingRecord, ViewBillingError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.view_billing(state.clone())
-        })
+    fn view_billing_pages<'a>(
+        &'a self,
+        mut input: ViewBillingRequest,
+    ) -> RusotoStream<'a, BillingRecord, ViewBillingError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.view_billing(input.clone())
+        }))
     }
 }
 /// A client for the Amazon Route 53 Domains API.

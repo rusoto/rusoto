@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1027,11 +1029,19 @@ pub struct GetRateBasedRuleManagedKeysRequest {
     pub rule_id: String,
 }
 
-impl PagedRequest for GetRateBasedRuleManagedKeysRequest {
+impl Paged for GetRateBasedRuleManagedKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for GetRateBasedRuleManagedKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1049,27 +1059,25 @@ pub struct GetRateBasedRuleManagedKeysResponse {
     pub next_marker: Option<String>,
 }
 
-impl GetRateBasedRuleManagedKeysResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.managed_keys.as_ref()?.clone())
+impl Paged for GetRateBasedRuleManagedKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for GetRateBasedRuleManagedKeysResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.managed_keys.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1397,11 +1405,19 @@ pub struct ListActivatedRulesInRuleGroupRequest {
     pub rule_group_id: Option<String>,
 }
 
-impl PagedRequest for ListActivatedRulesInRuleGroupRequest {
+impl Paged for ListActivatedRulesInRuleGroupRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListActivatedRulesInRuleGroupRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1419,27 +1435,25 @@ pub struct ListActivatedRulesInRuleGroupResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListActivatedRulesInRuleGroupResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ActivatedRule>> {
-        Some(self.activated_rules.as_ref()?.clone())
+impl Paged for ListActivatedRulesInRuleGroupResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListActivatedRulesInRuleGroupResponse {
     type Item = ActivatedRule;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActivatedRule> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.activated_rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1457,11 +1471,19 @@ pub struct ListByteMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListByteMatchSetsRequest {
+impl Paged for ListByteMatchSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListByteMatchSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1479,27 +1501,25 @@ pub struct ListByteMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListByteMatchSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ByteMatchSetSummary>> {
-        Some(self.byte_match_sets.as_ref()?.clone())
+impl Paged for ListByteMatchSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListByteMatchSetsResponse {
     type Item = ByteMatchSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ByteMatchSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.byte_match_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1517,11 +1537,19 @@ pub struct ListGeoMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListGeoMatchSetsRequest {
+impl Paged for ListGeoMatchSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListGeoMatchSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1539,27 +1567,25 @@ pub struct ListGeoMatchSetsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListGeoMatchSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GeoMatchSetSummary>> {
-        Some(self.geo_match_sets.as_ref()?.clone())
+impl Paged for ListGeoMatchSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListGeoMatchSetsResponse {
     type Item = GeoMatchSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GeoMatchSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.geo_match_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1577,11 +1603,19 @@ pub struct ListIPSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListIPSetsRequest {
+impl Paged for ListIPSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListIPSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1599,27 +1633,25 @@ pub struct ListIPSetsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListIPSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<IPSetSummary>> {
-        Some(self.ip_sets.as_ref()?.clone())
+impl Paged for ListIPSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListIPSetsResponse {
     type Item = IPSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<IPSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ip_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1637,11 +1669,19 @@ pub struct ListLoggingConfigurationsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListLoggingConfigurationsRequest {
+impl Paged for ListLoggingConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListLoggingConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1659,27 +1699,25 @@ pub struct ListLoggingConfigurationsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListLoggingConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LoggingConfiguration>> {
-        Some(self.logging_configurations.as_ref()?.clone())
+impl Paged for ListLoggingConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListLoggingConfigurationsResponse {
     type Item = LoggingConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LoggingConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.logging_configurations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1697,11 +1735,19 @@ pub struct ListRateBasedRulesRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListRateBasedRulesRequest {
+impl Paged for ListRateBasedRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListRateBasedRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1719,27 +1765,25 @@ pub struct ListRateBasedRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
-impl ListRateBasedRulesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RuleSummary>> {
-        Some(self.rules.as_ref()?.clone())
+impl Paged for ListRateBasedRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListRateBasedRulesResponse {
     type Item = RuleSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RuleSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1757,11 +1801,19 @@ pub struct ListRegexMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListRegexMatchSetsRequest {
+impl Paged for ListRegexMatchSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListRegexMatchSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1779,27 +1831,25 @@ pub struct ListRegexMatchSetsResponse {
     pub regex_match_sets: Option<Vec<RegexMatchSetSummary>>,
 }
 
-impl ListRegexMatchSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RegexMatchSetSummary>> {
-        Some(self.regex_match_sets.as_ref()?.clone())
+impl Paged for ListRegexMatchSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListRegexMatchSetsResponse {
     type Item = RegexMatchSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RegexMatchSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.regex_match_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1817,11 +1867,19 @@ pub struct ListRegexPatternSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListRegexPatternSetsRequest {
+impl Paged for ListRegexPatternSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListRegexPatternSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1839,27 +1897,25 @@ pub struct ListRegexPatternSetsResponse {
     pub regex_pattern_sets: Option<Vec<RegexPatternSetSummary>>,
 }
 
-impl ListRegexPatternSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RegexPatternSetSummary>> {
-        Some(self.regex_pattern_sets.as_ref()?.clone())
+impl Paged for ListRegexPatternSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListRegexPatternSetsResponse {
     type Item = RegexPatternSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RegexPatternSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.regex_pattern_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1877,11 +1933,19 @@ pub struct ListRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListRuleGroupsRequest {
+impl Paged for ListRuleGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListRuleGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1899,27 +1963,25 @@ pub struct ListRuleGroupsResponse {
     pub rule_groups: Option<Vec<RuleGroupSummary>>,
 }
 
-impl ListRuleGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RuleGroupSummary>> {
-        Some(self.rule_groups.as_ref()?.clone())
+impl Paged for ListRuleGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListRuleGroupsResponse {
     type Item = RuleGroupSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RuleGroupSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rule_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1937,11 +1999,19 @@ pub struct ListRulesRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListRulesRequest {
+impl Paged for ListRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -1959,27 +2029,25 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<RuleSummary>>,
 }
 
-impl ListRulesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RuleSummary>> {
-        Some(self.rules.as_ref()?.clone())
+impl Paged for ListRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListRulesResponse {
     type Item = RuleSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RuleSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1997,11 +2065,19 @@ pub struct ListSizeConstraintSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListSizeConstraintSetsRequest {
+impl Paged for ListSizeConstraintSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListSizeConstraintSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -2019,27 +2095,25 @@ pub struct ListSizeConstraintSetsResponse {
     pub size_constraint_sets: Option<Vec<SizeConstraintSetSummary>>,
 }
 
-impl ListSizeConstraintSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SizeConstraintSetSummary>> {
-        Some(self.size_constraint_sets.as_ref()?.clone())
+impl Paged for ListSizeConstraintSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListSizeConstraintSetsResponse {
     type Item = SizeConstraintSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SizeConstraintSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.size_constraint_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2058,11 +2132,19 @@ pub struct ListSqlInjectionMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListSqlInjectionMatchSetsRequest {
+impl Paged for ListSqlInjectionMatchSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListSqlInjectionMatchSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -2081,27 +2163,25 @@ pub struct ListSqlInjectionMatchSetsResponse {
     pub sql_injection_match_sets: Option<Vec<SqlInjectionMatchSetSummary>>,
 }
 
-impl ListSqlInjectionMatchSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SqlInjectionMatchSetSummary>> {
-        Some(self.sql_injection_match_sets.as_ref()?.clone())
+impl Paged for ListSqlInjectionMatchSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListSqlInjectionMatchSetsResponse {
     type Item = SqlInjectionMatchSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SqlInjectionMatchSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.sql_injection_match_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2119,11 +2199,19 @@ pub struct ListSubscribedRuleGroupsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListSubscribedRuleGroupsRequest {
+impl Paged for ListSubscribedRuleGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListSubscribedRuleGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -2141,27 +2229,25 @@ pub struct ListSubscribedRuleGroupsResponse {
     pub rule_groups: Option<Vec<SubscribedRuleGroupSummary>>,
 }
 
-impl ListSubscribedRuleGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SubscribedRuleGroupSummary>> {
-        Some(self.rule_groups.as_ref()?.clone())
+impl Paged for ListSubscribedRuleGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListSubscribedRuleGroupsResponse {
     type Item = SubscribedRuleGroupSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SubscribedRuleGroupSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rule_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2210,11 +2296,19 @@ pub struct ListWebACLsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListWebACLsRequest {
+impl Paged for ListWebACLsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListWebACLsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -2232,27 +2326,25 @@ pub struct ListWebACLsResponse {
     pub web_ac_ls: Option<Vec<WebACLSummary>>,
 }
 
-impl ListWebACLsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<WebACLSummary>> {
-        Some(self.web_ac_ls.as_ref()?.clone())
+impl Paged for ListWebACLsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListWebACLsResponse {
     type Item = WebACLSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WebACLSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.web_ac_ls.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2271,11 +2363,19 @@ pub struct ListXssMatchSetsRequest {
     pub next_marker: Option<String>,
 }
 
-impl PagedRequest for ListXssMatchSetsRequest {
+impl Paged for ListXssMatchSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
+    }
+}
+
+impl PagedRequest for ListXssMatchSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_marker = key;
-        self
     }
 }
 
@@ -2294,27 +2394,25 @@ pub struct ListXssMatchSetsResponse {
     pub xss_match_sets: Option<Vec<XssMatchSetSummary>>,
 }
 
-impl ListXssMatchSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<XssMatchSetSummary>> {
-        Some(self.xss_match_sets.as_ref()?.clone())
+impl Paged for ListXssMatchSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListXssMatchSetsResponse {
     type Item = XssMatchSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<XssMatchSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.xss_match_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7984,13 +8082,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<GetRateBasedRuleManagedKeysResponse, RusotoError<GetRateBasedRuleManagedKeysError>>;
 
     /// Auto-paginating version of `get_rate_based_rule_managed_keys`
-    fn get_rate_based_rule_managed_keys_pages(
-        &self,
-        input: GetRateBasedRuleManagedKeysRequest,
-    ) -> RusotoStream<String, GetRateBasedRuleManagedKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_rate_based_rule_managed_keys(state.clone())
-        })
+    fn get_rate_based_rule_managed_keys_pages<'a>(
+        &'a self,
+        mut input: GetRateBasedRuleManagedKeysRequest,
+    ) -> RusotoStream<'a, String, GetRateBasedRuleManagedKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_rate_based_rule_managed_keys(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns the <a>RegexMatchSet</a> specified by <code>RegexMatchSetId</code>.</p></p>
@@ -8057,13 +8156,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_activated_rules_in_rule_group`
-    fn list_activated_rules_in_rule_group_pages(
-        &self,
-        input: ListActivatedRulesInRuleGroupRequest,
-    ) -> RusotoStream<ActivatedRule, ListActivatedRulesInRuleGroupError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_activated_rules_in_rule_group(state.clone())
-        })
+    fn list_activated_rules_in_rule_group_pages<'a>(
+        &'a self,
+        mut input: ListActivatedRulesInRuleGroupRequest,
+    ) -> RusotoStream<'a, ActivatedRule, ListActivatedRulesInRuleGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_activated_rules_in_rule_group(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>ByteMatchSetSummary</a> objects.</p></p>
@@ -8073,13 +8173,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListByteMatchSetsResponse, RusotoError<ListByteMatchSetsError>>;
 
     /// Auto-paginating version of `list_byte_match_sets`
-    fn list_byte_match_sets_pages(
-        &self,
-        input: ListByteMatchSetsRequest,
-    ) -> RusotoStream<ByteMatchSetSummary, ListByteMatchSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_byte_match_sets(state.clone())
-        })
+    fn list_byte_match_sets_pages<'a>(
+        &'a self,
+        mut input: ListByteMatchSetsRequest,
+    ) -> RusotoStream<'a, ByteMatchSetSummary, ListByteMatchSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_byte_match_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>GeoMatchSetSummary</a> objects in the response.</p></p>
@@ -8089,13 +8190,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListGeoMatchSetsResponse, RusotoError<ListGeoMatchSetsError>>;
 
     /// Auto-paginating version of `list_geo_match_sets`
-    fn list_geo_match_sets_pages(
-        &self,
-        input: ListGeoMatchSetsRequest,
-    ) -> RusotoStream<GeoMatchSetSummary, ListGeoMatchSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_geo_match_sets(state.clone())
-        })
+    fn list_geo_match_sets_pages<'a>(
+        &'a self,
+        mut input: ListGeoMatchSetsRequest,
+    ) -> RusotoStream<'a, GeoMatchSetSummary, ListGeoMatchSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_geo_match_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>IPSetSummary</a> objects in the response.</p></p>
@@ -8105,13 +8207,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListIPSetsResponse, RusotoError<ListIPSetsError>>;
 
     /// Auto-paginating version of `list_ip_sets`
-    fn list_ip_sets_pages(
-        &self,
-        input: ListIPSetsRequest,
-    ) -> RusotoStream<IPSetSummary, ListIPSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_ip_sets(state.clone())
-        })
+    fn list_ip_sets_pages<'a>(
+        &'a self,
+        mut input: ListIPSetsRequest,
+    ) -> RusotoStream<'a, IPSetSummary, ListIPSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ip_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>LoggingConfiguration</a> objects.</p></p>
@@ -8121,13 +8224,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListLoggingConfigurationsResponse, RusotoError<ListLoggingConfigurationsError>>;
 
     /// Auto-paginating version of `list_logging_configurations`
-    fn list_logging_configurations_pages(
-        &self,
-        input: ListLoggingConfigurationsRequest,
-    ) -> RusotoStream<LoggingConfiguration, ListLoggingConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_logging_configurations(state.clone())
-        })
+    fn list_logging_configurations_pages<'a>(
+        &'a self,
+        mut input: ListLoggingConfigurationsRequest,
+    ) -> RusotoStream<'a, LoggingConfiguration, ListLoggingConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_logging_configurations(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleSummary</a> objects.</p></p>
@@ -8137,13 +8241,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListRateBasedRulesResponse, RusotoError<ListRateBasedRulesError>>;
 
     /// Auto-paginating version of `list_rate_based_rules`
-    fn list_rate_based_rules_pages(
-        &self,
-        input: ListRateBasedRulesRequest,
-    ) -> RusotoStream<RuleSummary, ListRateBasedRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_rate_based_rules(state.clone())
-        })
+    fn list_rate_based_rules_pages<'a>(
+        &'a self,
+        mut input: ListRateBasedRulesRequest,
+    ) -> RusotoStream<'a, RuleSummary, ListRateBasedRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rate_based_rules(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RegexMatchSetSummary</a> objects.</p></p>
@@ -8153,13 +8258,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListRegexMatchSetsResponse, RusotoError<ListRegexMatchSetsError>>;
 
     /// Auto-paginating version of `list_regex_match_sets`
-    fn list_regex_match_sets_pages(
-        &self,
-        input: ListRegexMatchSetsRequest,
-    ) -> RusotoStream<RegexMatchSetSummary, ListRegexMatchSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_regex_match_sets(state.clone())
-        })
+    fn list_regex_match_sets_pages<'a>(
+        &'a self,
+        mut input: ListRegexMatchSetsRequest,
+    ) -> RusotoStream<'a, RegexMatchSetSummary, ListRegexMatchSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_regex_match_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RegexPatternSetSummary</a> objects.</p></p>
@@ -8169,13 +8275,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListRegexPatternSetsResponse, RusotoError<ListRegexPatternSetsError>>;
 
     /// Auto-paginating version of `list_regex_pattern_sets`
-    fn list_regex_pattern_sets_pages(
-        &self,
-        input: ListRegexPatternSetsRequest,
-    ) -> RusotoStream<RegexPatternSetSummary, ListRegexPatternSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_regex_pattern_sets(state.clone())
-        })
+    fn list_regex_pattern_sets_pages<'a>(
+        &'a self,
+        mut input: ListRegexPatternSetsRequest,
+    ) -> RusotoStream<'a, RegexPatternSetSummary, ListRegexPatternSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_regex_pattern_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleGroup</a> objects.</p></p>
@@ -8185,13 +8292,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListRuleGroupsResponse, RusotoError<ListRuleGroupsError>>;
 
     /// Auto-paginating version of `list_rule_groups`
-    fn list_rule_groups_pages(
-        &self,
-        input: ListRuleGroupsRequest,
-    ) -> RusotoStream<RuleGroupSummary, ListRuleGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_rule_groups(state.clone())
-        })
+    fn list_rule_groups_pages<'a>(
+        &'a self,
+        mut input: ListRuleGroupsRequest,
+    ) -> RusotoStream<'a, RuleGroupSummary, ListRuleGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rule_groups(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleSummary</a> objects.</p></p>
@@ -8201,13 +8309,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListRulesResponse, RusotoError<ListRulesError>>;
 
     /// Auto-paginating version of `list_rules`
-    fn list_rules_pages(
-        &self,
-        input: ListRulesRequest,
-    ) -> RusotoStream<RuleSummary, ListRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_rules(state.clone())
-        })
+    fn list_rules_pages<'a>(
+        &'a self,
+        mut input: ListRulesRequest,
+    ) -> RusotoStream<'a, RuleSummary, ListRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rules(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>SizeConstraintSetSummary</a> objects.</p></p>
@@ -8217,13 +8326,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListSizeConstraintSetsResponse, RusotoError<ListSizeConstraintSetsError>>;
 
     /// Auto-paginating version of `list_size_constraint_sets`
-    fn list_size_constraint_sets_pages(
-        &self,
-        input: ListSizeConstraintSetsRequest,
-    ) -> RusotoStream<SizeConstraintSetSummary, ListSizeConstraintSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_size_constraint_sets(state.clone())
-        })
+    fn list_size_constraint_sets_pages<'a>(
+        &'a self,
+        mut input: ListSizeConstraintSetsRequest,
+    ) -> RusotoStream<'a, SizeConstraintSetSummary, ListSizeConstraintSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_size_constraint_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>SqlInjectionMatchSet</a> objects.</p></p>
@@ -8233,13 +8343,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListSqlInjectionMatchSetsResponse, RusotoError<ListSqlInjectionMatchSetsError>>;
 
     /// Auto-paginating version of `list_sql_injection_match_sets`
-    fn list_sql_injection_match_sets_pages(
-        &self,
-        input: ListSqlInjectionMatchSetsRequest,
-    ) -> RusotoStream<SqlInjectionMatchSetSummary, ListSqlInjectionMatchSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_sql_injection_match_sets(state.clone())
-        })
+    fn list_sql_injection_match_sets_pages<'a>(
+        &'a self,
+        mut input: ListSqlInjectionMatchSetsRequest,
+    ) -> RusotoStream<'a, SqlInjectionMatchSetSummary, ListSqlInjectionMatchSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_sql_injection_match_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>RuleGroup</a> objects that you are subscribed to.</p></p>
@@ -8249,13 +8360,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListSubscribedRuleGroupsResponse, RusotoError<ListSubscribedRuleGroupsError>>;
 
     /// Auto-paginating version of `list_subscribed_rule_groups`
-    fn list_subscribed_rule_groups_pages(
-        &self,
-        input: ListSubscribedRuleGroupsRequest,
-    ) -> RusotoStream<SubscribedRuleGroupSummary, ListSubscribedRuleGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_subscribed_rule_groups(state.clone())
-        })
+    fn list_subscribed_rule_groups_pages<'a>(
+        &'a self,
+        mut input: ListSubscribedRuleGroupsRequest,
+    ) -> RusotoStream<'a, SubscribedRuleGroupSummary, ListSubscribedRuleGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscribed_rule_groups(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Retrieves the tags associated with the specified AWS resource. Tags are key:value pairs that you can use to categorize and manage your resources, for purposes like billing. For example, you might set the tag key to &quot;customer&quot; and the value to the customer name or ID. You can specify one or more tags to add to each AWS resource, up to 50 tags for a resource.</p> <p>Tagging is only available through the API, SDKs, and CLI. You can&#39;t manage or view tags through the AWS WAF Classic console. You can tag the AWS resources that you manage through AWS WAF Classic: web ACLs, rule groups, and rules. </p></p>
@@ -8271,13 +8383,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListWebACLsResponse, RusotoError<ListWebACLsError>>;
 
     /// Auto-paginating version of `list_web_ac_ls`
-    fn list_web_ac_ls_pages(
-        &self,
-        input: ListWebACLsRequest,
-    ) -> RusotoStream<WebACLSummary, ListWebACLsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_web_ac_ls(state.clone())
-        })
+    fn list_web_ac_ls_pages<'a>(
+        &'a self,
+        mut input: ListWebACLsRequest,
+    ) -> RusotoStream<'a, WebACLSummary, ListWebACLsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_web_ac_ls(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Returns an array of <a>XssMatchSet</a> objects.</p></p>
@@ -8287,13 +8400,14 @@ pub trait Waf: Clone + Sync + Send + 'static {
     ) -> Result<ListXssMatchSetsResponse, RusotoError<ListXssMatchSetsError>>;
 
     /// Auto-paginating version of `list_xss_match_sets`
-    fn list_xss_match_sets_pages(
-        &self,
-        input: ListXssMatchSetsRequest,
-    ) -> RusotoStream<XssMatchSetSummary, ListXssMatchSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_xss_match_sets(state.clone())
-        })
+    fn list_xss_match_sets_pages<'a>(
+        &'a self,
+        mut input: ListXssMatchSetsRequest,
+    ) -> RusotoStream<'a, XssMatchSetSummary, ListXssMatchSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_xss_match_sets(input.clone())
+        }))
     }
 
     /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose. </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p></p>

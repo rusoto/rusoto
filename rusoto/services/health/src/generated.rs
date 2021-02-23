@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -121,11 +123,19 @@ pub struct DescribeAffectedAccountsForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAffectedAccountsForOrganizationRequest {
+impl Paged for DescribeAffectedAccountsForOrganizationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAffectedAccountsForOrganizationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -147,27 +157,25 @@ pub struct DescribeAffectedAccountsForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAffectedAccountsForOrganizationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.affected_accounts.as_ref()?.clone())
+impl Paged for DescribeAffectedAccountsForOrganizationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAffectedAccountsForOrganizationResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.affected_accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -192,11 +200,19 @@ pub struct DescribeAffectedEntitiesForOrganizationRequest {
     pub organization_entity_filters: Vec<EventAccountFilter>,
 }
 
-impl PagedRequest for DescribeAffectedEntitiesForOrganizationRequest {
+impl Paged for DescribeAffectedEntitiesForOrganizationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAffectedEntitiesForOrganizationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -218,27 +234,25 @@ pub struct DescribeAffectedEntitiesForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAffectedEntitiesForOrganizationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AffectedEntity>> {
-        Some(self.entities.as_ref()?.clone())
+impl Paged for DescribeAffectedEntitiesForOrganizationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAffectedEntitiesForOrganizationResponse {
     type Item = AffectedEntity;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AffectedEntity> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entities.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -263,11 +277,19 @@ pub struct DescribeAffectedEntitiesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAffectedEntitiesRequest {
+impl Paged for DescribeAffectedEntitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAffectedEntitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -285,27 +307,25 @@ pub struct DescribeAffectedEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAffectedEntitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AffectedEntity>> {
-        Some(self.entities.as_ref()?.clone())
+impl Paged for DescribeAffectedEntitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAffectedEntitiesResponse {
     type Item = AffectedEntity;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AffectedEntity> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entities.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -350,11 +370,19 @@ pub struct DescribeEventAggregatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEventAggregatesRequest {
+impl Paged for DescribeEventAggregatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventAggregatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -372,27 +400,25 @@ pub struct DescribeEventAggregatesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEventAggregatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EventAggregate>> {
-        Some(self.event_aggregates.as_ref()?.clone())
+impl Paged for DescribeEventAggregatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventAggregatesResponse {
     type Item = EventAggregate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventAggregate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_aggregates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -472,11 +498,19 @@ pub struct DescribeEventTypesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEventTypesRequest {
+impl Paged for DescribeEventTypesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -494,27 +528,25 @@ pub struct DescribeEventTypesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEventTypesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.event_types.as_ref()?.clone())
+impl Paged for DescribeEventTypesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventTypesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_types.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -540,11 +572,19 @@ pub struct DescribeEventsForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsForOrganizationRequest {
+impl Paged for DescribeEventsForOrganizationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsForOrganizationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -562,27 +602,25 @@ pub struct DescribeEventsForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEventsForOrganizationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OrganizationEvent>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for DescribeEventsForOrganizationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventsForOrganizationResponse {
     type Item = OrganizationEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrganizationEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -608,11 +646,19 @@ pub struct DescribeEventsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsRequest {
+impl Paged for DescribeEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -630,27 +676,25 @@ pub struct DescribeEventsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for DescribeEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventsResponse {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1542,13 +1586,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_affected_accounts_for_organization`
-    fn describe_affected_accounts_for_organization_pages(
-        &self,
-        input: DescribeAffectedAccountsForOrganizationRequest,
-    ) -> RusotoStream<String, DescribeAffectedAccountsForOrganizationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_affected_accounts_for_organization(state.clone())
-        })
+    fn describe_affected_accounts_for_organization_pages<'a>(
+        &'a self,
+        mut input: DescribeAffectedAccountsForOrganizationRequest,
+    ) -> RusotoStream<'a, String, DescribeAffectedAccountsForOrganizationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_affected_accounts_for_organization(input.clone())
+        }))
     }
 
     /// <p><p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
@@ -1558,13 +1603,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAffectedEntitiesResponse, RusotoError<DescribeAffectedEntitiesError>>;
 
     /// Auto-paginating version of `describe_affected_entities`
-    fn describe_affected_entities_pages(
-        &self,
-        input: DescribeAffectedEntitiesRequest,
-    ) -> RusotoStream<AffectedEntity, DescribeAffectedEntitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_affected_entities(state.clone())
-        })
+    fn describe_affected_entities_pages<'a>(
+        &'a self,
+        mut input: DescribeAffectedEntitiesRequest,
+    ) -> RusotoStream<'a, AffectedEntity, DescribeAffectedEntitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_affected_entities(input.clone())
+        }))
     }
 
     /// <p><p>Returns a list of entities that have been affected by one or more events for one or more accounts in your organization in AWS Organizations, based on the filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service.</p> <p>At least one event Amazon Resource Name (ARN) and account ID are required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html">EnableHealthServiceAccessForOrganization</a> operation from your organization&#39;s master account. </p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
@@ -1577,13 +1623,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_affected_entities_for_organization`
-    fn describe_affected_entities_for_organization_pages(
-        &self,
-        input: DescribeAffectedEntitiesForOrganizationRequest,
-    ) -> RusotoStream<AffectedEntity, DescribeAffectedEntitiesForOrganizationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_affected_entities_for_organization(state.clone())
-        })
+    fn describe_affected_entities_for_organization_pages<'a>(
+        &'a self,
+        mut input: DescribeAffectedEntitiesForOrganizationRequest,
+    ) -> RusotoStream<'a, AffectedEntity, DescribeAffectedEntitiesForOrganizationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_affected_entities_for_organization(input.clone())
+        }))
     }
 
     /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
@@ -1599,13 +1646,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventAggregatesResponse, RusotoError<DescribeEventAggregatesError>>;
 
     /// Auto-paginating version of `describe_event_aggregates`
-    fn describe_event_aggregates_pages(
-        &self,
-        input: DescribeEventAggregatesRequest,
-    ) -> RusotoStream<EventAggregate, DescribeEventAggregatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_event_aggregates(state.clone())
-        })
+    fn describe_event_aggregates_pages<'a>(
+        &'a self,
+        mut input: DescribeEventAggregatesRequest,
+    ) -> RusotoStream<'a, EventAggregate, DescribeEventAggregatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_event_aggregates(input.clone())
+        }))
     }
 
     /// <p>Returns detailed information about one or more specified events. Information includes standard event data (Region, service, and so on, as returned by <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included. To retrieve those, use the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html">DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
@@ -1630,13 +1678,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventTypesResponse, RusotoError<DescribeEventTypesError>>;
 
     /// Auto-paginating version of `describe_event_types`
-    fn describe_event_types_pages(
-        &self,
-        input: DescribeEventTypesRequest,
-    ) -> RusotoStream<String, DescribeEventTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_event_types(state.clone())
-        })
+    fn describe_event_types_pages<'a>(
+        &'a self,
+        mut input: DescribeEventTypesRequest,
+    ) -> RusotoStream<'a, String, DescribeEventTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_event_types(input.clone())
+        }))
     }
 
     /// <p><p> Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetails.html">DescribeEventDetails</a> and <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntities.html">DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent event.</p> <note> <ul> <li> <p>When you call the <code>DescribeEvents</code> operation and specify an entity for the <code>entityValues</code> parameter, AWS Health might return public events that aren&#39;t specific to that resource. For example, if you call <code>DescribeEvents</code> and specify an ID for an Amazon Elastic Compute Cloud (Amazon EC2) instance, AWS Health might return events that aren&#39;t specific to that resource or service. To get events that are specific to a service, use the <code>services</code> parameter in the <code>filter</code> object. For more information, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a>.</p> </li> <li> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </li> </ul> </note></p>
@@ -1646,13 +1695,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsRequest,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p><p>Returns information about events across your organization in AWS Organizations. You can use the<code>filters</code> parameter to specify the events that you want to return. Events are returned in a summary form and don&#39;t include the affected accounts, detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the following operations:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedAccountsForOrganization.html">DescribeAffectedAccountsForOrganization</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html">DescribeEventDetailsForOrganization</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html">DescribeAffectedEntitiesForOrganization</a> </p> </li> </ul> <p>If you don&#39;t specify a <code>filter</code>, the <code>DescribeEventsForOrganizations</code> returns all events across your organization. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent event. </p> <p>For more information about the different types of AWS Health events, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a>.</p> <p>Before you can call this operation, you must first enable AWS Health to work with AWS Organizations. To do this, call the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EnableHealthServiceAccessForOrganization.html">EnableHealthServiceAccessForOrganization</a> operation from your organization&#39;s master AWS account.</p> <note> <p>This API operation uses pagination. Specify the <code>nextToken</code> parameter in the next request to return more results.</p> </note></p>
@@ -1665,13 +1715,14 @@ pub trait AWSHealth: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_events_for_organization`
-    fn describe_events_for_organization_pages(
-        &self,
-        input: DescribeEventsForOrganizationRequest,
-    ) -> RusotoStream<OrganizationEvent, DescribeEventsForOrganizationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events_for_organization(state.clone())
-        })
+    fn describe_events_for_organization_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsForOrganizationRequest,
+    ) -> RusotoStream<'a, OrganizationEvent, DescribeEventsForOrganizationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events_for_organization(input.clone())
+        }))
     }
 
     /// <p>This operation provides status information on enabling or disabling AWS Health to work with your organization. To call this operation, you must sign in as an IAM user, assume an IAM role, or sign in as the root user (not recommended) in the organization's master account.</p>

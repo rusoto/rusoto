@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1547,11 +1549,19 @@ pub struct DescribeAccessPointsInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeAccessPointsInput {
+impl Paged for DescribeAccessPointsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeAccessPointsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1591,27 +1601,25 @@ pub struct DescribeAccessPointsOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeAccessPointsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<LoadBalancerDescription>> {
-        Some(self.load_balancer_descriptions.as_ref()?.clone())
+impl Paged for DescribeAccessPointsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeAccessPointsOutput {
     type Item = LoadBalancerDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LoadBalancerDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.load_balancer_descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1657,11 +1665,19 @@ pub struct DescribeAccountLimitsInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeAccountLimitsInput {
+impl Paged for DescribeAccountLimitsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1693,27 +1709,25 @@ pub struct DescribeAccountLimitsOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeAccountLimitsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Limit>> {
-        Some(self.limits.as_ref()?.clone())
+impl Paged for DescribeAccountLimitsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeAccountLimitsOutput {
     type Item = Limit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Limit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.limits.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6241,13 +6255,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
     /// Auto-paginating version of `describe_account_limits`
-    fn describe_account_limits_pages(
-        &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoStream<Limit, DescribeAccountLimitsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_account_limits(state.clone())
-        })
+    fn describe_account_limits_pages<'a>(
+        &'a self,
+        mut input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<'a, Limit, DescribeAccountLimitsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_account_limits(input.clone())
+        }))
     }
 
     /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
@@ -6287,13 +6302,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAccessPointsOutput, RusotoError<DescribeLoadBalancersError>>;
 
     /// Auto-paginating version of `describe_load_balancers`
-    fn describe_load_balancers_pages(
-        &self,
-        input: DescribeAccessPointsInput,
-    ) -> RusotoStream<LoadBalancerDescription, DescribeLoadBalancersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_load_balancers(state.clone())
-        })
+    fn describe_load_balancers_pages<'a>(
+        &'a self,
+        mut input: DescribeAccessPointsInput,
+    ) -> RusotoStream<'a, LoadBalancerDescription, DescribeLoadBalancersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancers(input.clone())
+        }))
     }
 
     /// <p>Describes the tags associated with the specified load balancers.</p>

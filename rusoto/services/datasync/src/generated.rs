@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -923,11 +925,19 @@ pub struct ListAgentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAgentsRequest {
+impl Paged for ListAgentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAgentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -946,27 +956,25 @@ pub struct ListAgentsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAgentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AgentListEntry>> {
-        Some(self.agents.as_ref()?.clone())
+impl Paged for ListAgentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAgentsResponse {
     type Item = AgentListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AgentListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.agents.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -989,11 +997,19 @@ pub struct ListLocationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLocationsRequest {
+impl Paged for ListLocationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLocationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1012,27 +1028,25 @@ pub struct ListLocationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListLocationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LocationListEntry>> {
-        Some(self.locations.as_ref()?.clone())
+impl Paged for ListLocationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLocationsResponse {
     type Item = LocationListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LocationListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.locations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1054,11 +1068,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1077,27 +1099,25 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<TagListEntry>>,
 }
 
-impl ListTagsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TagListEntry>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResponse {
     type Item = TagListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TagListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1120,11 +1140,19 @@ pub struct ListTaskExecutionsRequest {
     pub task_arn: Option<String>,
 }
 
-impl PagedRequest for ListTaskExecutionsRequest {
+impl Paged for ListTaskExecutionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1143,27 +1171,25 @@ pub struct ListTaskExecutionsResponse {
     pub task_executions: Option<Vec<TaskExecutionListEntry>>,
 }
 
-impl ListTaskExecutionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TaskExecutionListEntry>> {
-        Some(self.task_executions.as_ref()?.clone())
+impl Paged for ListTaskExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTaskExecutionsResponse {
     type Item = TaskExecutionListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TaskExecutionListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.task_executions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1186,11 +1212,19 @@ pub struct ListTasksRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTasksRequest {
+impl Paged for ListTasksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1209,27 +1243,25 @@ pub struct ListTasksResponse {
     pub tasks: Option<Vec<TaskListEntry>>,
 }
 
-impl ListTasksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TaskListEntry>> {
-        Some(self.tasks.as_ref()?.clone())
+impl Paged for ListTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTasksResponse {
     type Item = TaskListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TaskListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tasks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2928,13 +2960,14 @@ pub trait DataSync: Clone + Sync + Send + 'static {
     ) -> Result<ListAgentsResponse, RusotoError<ListAgentsError>>;
 
     /// Auto-paginating version of `list_agents`
-    fn list_agents_pages(
-        &self,
-        input: ListAgentsRequest,
-    ) -> RusotoStream<AgentListEntry, ListAgentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_agents(state.clone())
-        })
+    fn list_agents_pages<'a>(
+        &'a self,
+        mut input: ListAgentsRequest,
+    ) -> RusotoStream<'a, AgentListEntry, ListAgentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_agents(input.clone())
+        }))
     }
 
     /// <p>Returns a list of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
@@ -2944,13 +2977,14 @@ pub trait DataSync: Clone + Sync + Send + 'static {
     ) -> Result<ListLocationsResponse, RusotoError<ListLocationsError>>;
 
     /// Auto-paginating version of `list_locations`
-    fn list_locations_pages(
-        &self,
-        input: ListLocationsRequest,
-    ) -> RusotoStream<LocationListEntry, ListLocationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_locations(state.clone())
-        })
+    fn list_locations_pages<'a>(
+        &'a self,
+        mut input: ListLocationsRequest,
+    ) -> RusotoStream<'a, LocationListEntry, ListLocationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_locations(input.clone())
+        }))
     }
 
     /// <p>Returns all the tags associated with a specified resource. </p>
@@ -2960,13 +2994,14 @@ pub trait DataSync: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<TagListEntry, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, TagListEntry, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Returns a list of executed tasks.</p>
@@ -2976,13 +3011,14 @@ pub trait DataSync: Clone + Sync + Send + 'static {
     ) -> Result<ListTaskExecutionsResponse, RusotoError<ListTaskExecutionsError>>;
 
     /// Auto-paginating version of `list_task_executions`
-    fn list_task_executions_pages(
-        &self,
-        input: ListTaskExecutionsRequest,
-    ) -> RusotoStream<TaskExecutionListEntry, ListTaskExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_task_executions(state.clone())
-        })
+    fn list_task_executions_pages<'a>(
+        &'a self,
+        mut input: ListTaskExecutionsRequest,
+    ) -> RusotoStream<'a, TaskExecutionListEntry, ListTaskExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_executions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of all the tasks.</p>
@@ -2992,13 +3028,14 @@ pub trait DataSync: Clone + Sync + Send + 'static {
     ) -> Result<ListTasksResponse, RusotoError<ListTasksError>>;
 
     /// Auto-paginating version of `list_tasks`
-    fn list_tasks_pages(
-        &self,
-        input: ListTasksRequest,
-    ) -> RusotoStream<TaskListEntry, ListTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tasks(state.clone())
-        })
+    fn list_tasks_pages<'a>(
+        &'a self,
+        mut input: ListTasksRequest,
+    ) -> RusotoStream<'a, TaskListEntry, ListTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tasks(input.clone())
+        }))
     }
 
     /// <p>Starts a specific invocation of a task. A <code>TaskExecution</code> value represents an individual run of a task. Each task can have at most one <code>TaskExecution</code> at a time.</p> <p> <code>TaskExecution</code> has the following transition phases: INITIALIZING | PREPARING | TRANSFERRING | VERIFYING | SUCCESS/FAILURE. </p> <p>For detailed information, see the Task Execution section in the Components and Terminology topic in the <i>AWS DataSync User Guide</i>.</p>

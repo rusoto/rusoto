@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1105,11 +1107,19 @@ pub struct ListAliasesRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListAliasesRequest {
+impl Paged for ListAliasesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1131,31 +1141,25 @@ pub struct ListAliasesResponse {
     pub truncated: Option<bool>,
 }
 
-impl ListAliasesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AliasListEntry>> {
-        Some(self.aliases.as_ref()?.clone())
+impl Paged for ListAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListAliasesResponse {
     type Item = AliasListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AliasListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.aliases.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.truncated.unwrap_or_default()
     }
 }
 
@@ -1176,11 +1180,19 @@ pub struct ListGrantsRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListGrantsRequest {
+impl Paged for ListGrantsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGrantsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1203,31 +1215,25 @@ pub struct ListGrantsResponse {
     pub truncated: Option<bool>,
 }
 
-impl ListGrantsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GrantListEntry>> {
-        Some(self.grants.as_ref()?.clone())
+impl Paged for ListGrantsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListGrantsResponse {
     type Item = GrantListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GrantListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.grants.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.truncated.unwrap_or_default()
     }
 }
 
@@ -1248,11 +1254,19 @@ pub struct ListKeyPoliciesRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListKeyPoliciesRequest {
+impl Paged for ListKeyPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListKeyPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1274,31 +1288,25 @@ pub struct ListKeyPoliciesResponse {
     pub truncated: Option<bool>,
 }
 
-impl ListKeyPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.policy_names.as_ref()?.clone())
+impl Paged for ListKeyPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListKeyPoliciesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.truncated.unwrap_or_default()
     }
 }
 
@@ -1316,11 +1324,19 @@ pub struct ListKeysRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListKeysRequest {
+impl Paged for ListKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1342,31 +1358,25 @@ pub struct ListKeysResponse {
     pub truncated: Option<bool>,
 }
 
-impl ListKeysResponse {
-    fn pagination_page_opt(self) -> Option<Vec<KeyListEntry>> {
-        Some(self.keys.as_ref()?.clone())
+impl Paged for ListKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListKeysResponse {
     type Item = KeyListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<KeyListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.keys.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.truncated.unwrap_or_default()
     }
 }
 
@@ -4989,13 +4999,14 @@ pub trait Kms: Clone + Sync + Send + 'static {
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
     /// Auto-paginating version of `list_aliases`
-    fn list_aliases_pages(
-        &self,
-        input: ListAliasesRequest,
-    ) -> RusotoStream<AliasListEntry, ListAliasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_aliases(state.clone())
-        })
+    fn list_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAliasesRequest,
+    ) -> RusotoStream<'a, AliasListEntry, ListAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aliases(input.clone())
+        }))
     }
 
     /// <p><p>Gets a list of all grants for the specified customer master key (CMK).</p> <note> <p>The <code>GranteePrincipal</code> field in the <code>ListGrants</code> response usually contains the user or role designated as the grantee principal in the grant. However, when the grantee principal in the grant is an AWS service, the <code>GranteePrincipal</code> field contains the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#principal-services">service principal</a>, which might represent several different grantee principals.</p> </note> <p> <b>Cross-account use</b>: Yes. To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the <code>KeyId</code> parameter.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListGrants</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>CreateGrant</a> </p> </li> <li> <p> <a>ListRetirableGrants</a> </p> </li> <li> <p> <a>RetireGrant</a> </p> </li> <li> <p> <a>RevokeGrant</a> </p> </li> </ul></p>
@@ -5005,13 +5016,14 @@ pub trait Kms: Clone + Sync + Send + 'static {
     ) -> Result<ListGrantsResponse, RusotoError<ListGrantsError>>;
 
     /// Auto-paginating version of `list_grants`
-    fn list_grants_pages(
-        &self,
-        input: ListGrantsRequest,
-    ) -> RusotoStream<GrantListEntry, ListGrantsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_grants(state.clone())
-        })
+    fn list_grants_pages<'a>(
+        &'a self,
+        mut input: ListGrantsRequest,
+    ) -> RusotoStream<'a, GrantListEntry, ListGrantsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_grants(input.clone())
+        }))
     }
 
     /// <p><p>Gets the names of the key policies that are attached to a customer master key (CMK). This operation is designed to get policy names that you can use in a <a>GetKeyPolicy</a> operation. However, the only valid policy name is <code>default</code>. </p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListKeyPolicies</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>GetKeyPolicy</a> </p> </li> <li> <p> <a>PutKeyPolicy</a> </p> </li> </ul></p>
@@ -5021,13 +5033,14 @@ pub trait Kms: Clone + Sync + Send + 'static {
     ) -> Result<ListKeyPoliciesResponse, RusotoError<ListKeyPoliciesError>>;
 
     /// Auto-paginating version of `list_key_policies`
-    fn list_key_policies_pages(
-        &self,
-        input: ListKeyPoliciesRequest,
-    ) -> RusotoStream<String, ListKeyPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_key_policies(state.clone())
-        })
+    fn list_key_policies_pages<'a>(
+        &'a self,
+        mut input: ListKeyPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListKeyPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_key_policies(input.clone())
+        }))
     }
 
     /// <p><p>Gets a list of all customer master keys (CMKs) in the caller&#39;s AWS account and Region.</p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListKeys</a> (IAM policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>CreateKey</a> </p> </li> <li> <p> <a>DescribeKey</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>ListResourceTags</a> </p> </li> </ul></p>
@@ -5037,10 +5050,14 @@ pub trait Kms: Clone + Sync + Send + 'static {
     ) -> Result<ListKeysResponse, RusotoError<ListKeysError>>;
 
     /// Auto-paginating version of `list_keys`
-    fn list_keys_pages(&self, input: ListKeysRequest) -> RusotoStream<KeyListEntry, ListKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_keys(state.clone())
-        })
+    fn list_keys_pages<'a>(
+        &'a self,
+        mut input: ListKeysRequest,
+    ) -> RusotoStream<'a, KeyListEntry, ListKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_keys(input.clone())
+        }))
     }
 
     /// <p><p>Returns all tags on the specified customer master key (CMK).</p> <p>For general information about tags, including the format and syntax, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>Amazon Web Services General Reference</i>. For information about using tags in AWS KMS, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/tagging-keys.html">Tagging keys</a>.</p> <p> <b>Cross-account use</b>: No. You cannot perform this operation on a CMK in a different AWS account.</p> <p> <b>Required permissions</b>: <a href="https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html">kms:ListResourceTags</a> (key policy)</p> <p> <b>Related operations:</b> </p> <ul> <li> <p> <a>TagResource</a> </p> </li> <li> <p> <a>UntagResource</a> </p> </li> </ul></p>

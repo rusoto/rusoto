@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -602,11 +604,19 @@ pub struct GetConnectorsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetConnectorsRequest {
+impl Paged for GetConnectorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetConnectorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -624,27 +634,25 @@ pub struct GetConnectorsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetConnectorsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Connector>> {
-        Some(self.connector_list.as_ref()?.clone())
+impl Paged for GetConnectorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetConnectorsResponse {
     type Item = Connector;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Connector> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.connector_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -666,11 +674,19 @@ pub struct GetReplicationJobsRequest {
     pub replication_job_id: Option<String>,
 }
 
-impl PagedRequest for GetReplicationJobsRequest {
+impl Paged for GetReplicationJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetReplicationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -688,27 +704,25 @@ pub struct GetReplicationJobsResponse {
     pub replication_job_list: Option<Vec<ReplicationJob>>,
 }
 
-impl GetReplicationJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationJob>> {
-        Some(self.replication_job_list.as_ref()?.clone())
+impl Paged for GetReplicationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetReplicationJobsResponse {
     type Item = ReplicationJob;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationJob> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_job_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -729,11 +743,19 @@ pub struct GetReplicationRunsRequest {
     pub replication_job_id: String,
 }
 
-impl PagedRequest for GetReplicationRunsRequest {
+impl Paged for GetReplicationRunsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetReplicationRunsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -755,27 +777,25 @@ pub struct GetReplicationRunsResponse {
     pub replication_run_list: Option<Vec<ReplicationRun>>,
 }
 
-impl GetReplicationRunsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationRun>> {
-        Some(self.replication_run_list.as_ref()?.clone())
+impl Paged for GetReplicationRunsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetReplicationRunsResponse {
     type Item = ReplicationRun;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationRun> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_run_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -797,11 +817,19 @@ pub struct GetServersRequest {
     pub vm_server_address_list: Option<Vec<VmServerAddress>>,
 }
 
-impl PagedRequest for GetServersRequest {
+impl Paged for GetServersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetServersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -827,27 +855,25 @@ pub struct GetServersResponse {
     pub server_list: Option<Vec<Server>>,
 }
 
-impl GetServersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Server>> {
-        Some(self.server_list.as_ref()?.clone())
+impl Paged for GetServersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetServersResponse {
     type Item = Server;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Server> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.server_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -927,11 +953,19 @@ pub struct ListAppsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAppsRequest {
+impl Paged for ListAppsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -949,27 +983,25 @@ pub struct ListAppsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAppsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AppSummary>> {
-        Some(self.apps.as_ref()?.clone())
+impl Paged for ListAppsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAppsResponse {
     type Item = AppSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AppSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.apps.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4136,13 +4168,14 @@ pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<GetConnectorsResponse, RusotoError<GetConnectorsError>>;
 
     /// Auto-paginating version of `get_connectors`
-    fn get_connectors_pages(
-        &self,
-        input: GetConnectorsRequest,
-    ) -> RusotoStream<Connector, GetConnectorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_connectors(state.clone())
-        })
+    fn get_connectors_pages<'a>(
+        &'a self,
+        mut input: GetConnectorsRequest,
+    ) -> RusotoStream<'a, Connector, GetConnectorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_connectors(input.clone())
+        }))
     }
 
     /// <p>Describes the specified replication job or all of your replication jobs.</p>
@@ -4152,13 +4185,14 @@ pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<GetReplicationJobsResponse, RusotoError<GetReplicationJobsError>>;
 
     /// Auto-paginating version of `get_replication_jobs`
-    fn get_replication_jobs_pages(
-        &self,
-        input: GetReplicationJobsRequest,
-    ) -> RusotoStream<ReplicationJob, GetReplicationJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_replication_jobs(state.clone())
-        })
+    fn get_replication_jobs_pages<'a>(
+        &'a self,
+        mut input: GetReplicationJobsRequest,
+    ) -> RusotoStream<'a, ReplicationJob, GetReplicationJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_replication_jobs(input.clone())
+        }))
     }
 
     /// <p>Describes the replication runs for the specified replication job.</p>
@@ -4168,13 +4202,14 @@ pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<GetReplicationRunsResponse, RusotoError<GetReplicationRunsError>>;
 
     /// Auto-paginating version of `get_replication_runs`
-    fn get_replication_runs_pages(
-        &self,
-        input: GetReplicationRunsRequest,
-    ) -> RusotoStream<ReplicationRun, GetReplicationRunsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_replication_runs(state.clone())
-        })
+    fn get_replication_runs_pages<'a>(
+        &'a self,
+        mut input: GetReplicationRunsRequest,
+    ) -> RusotoStream<'a, ReplicationRun, GetReplicationRunsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_replication_runs(input.clone())
+        }))
     }
 
     /// <p>Describes the servers in your server catalog.</p> <p>Before you can describe your servers, you must import them using <a>ImportServerCatalog</a>.</p>
@@ -4184,10 +4219,14 @@ pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<GetServersResponse, RusotoError<GetServersError>>;
 
     /// Auto-paginating version of `get_servers`
-    fn get_servers_pages(&self, input: GetServersRequest) -> RusotoStream<Server, GetServersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_servers(state.clone())
-        })
+    fn get_servers_pages<'a>(
+        &'a self,
+        mut input: GetServersRequest,
+    ) -> RusotoStream<'a, Server, GetServersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_servers(input.clone())
+        }))
     }
 
     /// <p>Allows application import from AWS Migration Hub.</p>
@@ -4214,10 +4253,14 @@ pub trait ServerMigrationService: Clone + Sync + Send + 'static {
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
 
     /// Auto-paginating version of `list_apps`
-    fn list_apps_pages(&self, input: ListAppsRequest) -> RusotoStream<AppSummary, ListAppsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_apps(state.clone())
-        })
+    fn list_apps_pages<'a>(
+        &'a self,
+        mut input: ListAppsRequest,
+    ) -> RusotoStream<'a, AppSummary, ListAppsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_apps(input.clone())
+        }))
     }
 
     /// <p>Provides information to AWS SMS about whether application validation is successful.</p>

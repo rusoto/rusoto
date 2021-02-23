@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -704,27 +706,25 @@ pub struct CacheClusterMessage {
     pub marker: Option<String>,
 }
 
-impl CacheClusterMessage {
-    fn pagination_page_opt(self) -> Option<Vec<CacheCluster>> {
-        Some(self.cache_clusters.as_ref()?.clone())
+impl Paged for CacheClusterMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheClusterMessage {
     type Item = CacheCluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CacheCluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cache_clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -841,27 +841,25 @@ pub struct CacheEngineVersionMessage {
     pub marker: Option<String>,
 }
 
-impl CacheEngineVersionMessage {
-    fn pagination_page_opt(self) -> Option<Vec<CacheEngineVersion>> {
-        Some(self.cache_engine_versions.as_ref()?.clone())
+impl Paged for CacheEngineVersionMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheEngineVersionMessage {
     type Item = CacheEngineVersion;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CacheEngineVersion> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cache_engine_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1352,27 +1350,25 @@ pub struct CacheParameterGroupDetails {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-impl CacheParameterGroupDetails {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.parameters.as_ref()?.clone())
+impl Paged for CacheParameterGroupDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheParameterGroupDetails {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1534,27 +1530,25 @@ pub struct CacheParameterGroupsMessage {
     pub marker: Option<String>,
 }
 
-impl CacheParameterGroupsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<CacheParameterGroup>> {
-        Some(self.cache_parameter_groups.as_ref()?.clone())
+impl Paged for CacheParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheParameterGroupsMessage {
     type Item = CacheParameterGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CacheParameterGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cache_parameter_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1712,27 +1706,25 @@ pub struct CacheSecurityGroupMessage {
     pub marker: Option<String>,
 }
 
-impl CacheSecurityGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<CacheSecurityGroup>> {
-        Some(self.cache_security_groups.as_ref()?.clone())
+impl Paged for CacheSecurityGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheSecurityGroupMessage {
     type Item = CacheSecurityGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CacheSecurityGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cache_security_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1866,27 +1858,25 @@ pub struct CacheSubnetGroupMessage {
     pub marker: Option<String>,
 }
 
-impl CacheSubnetGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<CacheSubnetGroup>> {
-        Some(self.cache_subnet_groups.as_ref()?.clone())
+impl Paged for CacheSubnetGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CacheSubnetGroupMessage {
     type Item = CacheSubnetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CacheSubnetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cache_subnet_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3653,11 +3643,19 @@ pub struct DescribeCacheClustersMessage {
     pub show_cache_node_info: Option<bool>,
 }
 
-impl PagedRequest for DescribeCacheClustersMessage {
+impl Paged for DescribeCacheClustersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheClustersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3710,11 +3708,19 @@ pub struct DescribeCacheEngineVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCacheEngineVersionsMessage {
+impl Paged for DescribeCacheEngineVersionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheEngineVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3764,11 +3770,19 @@ pub struct DescribeCacheParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCacheParameterGroupsMessage {
+impl Paged for DescribeCacheParameterGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheParameterGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3811,11 +3825,19 @@ pub struct DescribeCacheParametersMessage {
     pub source: Option<String>,
 }
 
-impl PagedRequest for DescribeCacheParametersMessage {
+impl Paged for DescribeCacheParametersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3857,11 +3879,19 @@ pub struct DescribeCacheSecurityGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCacheSecurityGroupsMessage {
+impl Paged for DescribeCacheSecurityGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheSecurityGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3902,11 +3932,19 @@ pub struct DescribeCacheSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCacheSubnetGroupsMessage {
+impl Paged for DescribeCacheSubnetGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCacheSubnetGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3947,11 +3985,19 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeEngineDefaultParametersMessage {
+impl Paged for DescribeEngineDefaultParametersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEngineDefaultParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3984,27 +4030,25 @@ pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
-impl DescribeEngineDefaultParametersResult {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.engine_defaults.as_ref()?.parameters.as_ref()?.clone())
+impl Paged for DescribeEngineDefaultParametersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.engine_defaults.as_ref()?.marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.engine_defaults.as_ref()?.marker.clone())())
     }
 }
 
 impl PagedOutput for DescribeEngineDefaultParametersResult {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.engine_defaults.as_ref()?.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.engine_defaults?.parameters)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4055,11 +4099,19 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsMessage {
+impl Paged for DescribeEventsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4110,11 +4162,19 @@ pub struct DescribeGlobalReplicationGroupsMessage {
     pub show_member_info: Option<bool>,
 }
 
-impl PagedRequest for DescribeGlobalReplicationGroupsMessage {
+impl Paged for DescribeGlobalReplicationGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeGlobalReplicationGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4155,27 +4215,25 @@ pub struct DescribeGlobalReplicationGroupsResult {
     pub marker: Option<String>,
 }
 
-impl DescribeGlobalReplicationGroupsResult {
-    fn pagination_page_opt(self) -> Option<Vec<GlobalReplicationGroup>> {
-        Some(self.global_replication_groups.as_ref()?.clone())
+impl Paged for DescribeGlobalReplicationGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeGlobalReplicationGroupsResult {
     type Item = GlobalReplicationGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GlobalReplicationGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.global_replication_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4223,11 +4281,19 @@ pub struct DescribeReplicationGroupsMessage {
     pub replication_group_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReplicationGroupsMessage {
+impl Paged for DescribeReplicationGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReplicationGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4275,11 +4341,19 @@ pub struct DescribeReservedCacheNodesMessage {
     pub reserved_cache_nodes_offering_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedCacheNodesMessage {
+impl Paged for DescribeReservedCacheNodesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedCacheNodesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4346,11 +4420,19 @@ pub struct DescribeReservedCacheNodesOfferingsMessage {
     pub reserved_cache_nodes_offering_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedCacheNodesOfferingsMessage {
+impl Paged for DescribeReservedCacheNodesOfferingsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedCacheNodesOfferingsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4408,11 +4490,19 @@ pub struct DescribeServiceUpdatesMessage {
     pub service_update_status: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeServiceUpdatesMessage {
+impl Paged for DescribeServiceUpdatesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeServiceUpdatesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4455,27 +4545,25 @@ pub struct DescribeSnapshotsListMessage {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
-impl DescribeSnapshotsListMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
-        Some(self.snapshots.as_ref()?.clone())
+impl Paged for DescribeSnapshotsListMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeSnapshotsListMessage {
     type Item = Snapshot;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Snapshot> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4528,11 +4616,19 @@ pub struct DescribeSnapshotsMessage {
     pub snapshot_source: Option<String>,
 }
 
-impl PagedRequest for DescribeSnapshotsMessage {
+impl Paged for DescribeSnapshotsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSnapshotsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4598,11 +4694,19 @@ pub struct DescribeUpdateActionsMessage {
     pub update_action_status: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeUpdateActionsMessage {
+impl Paged for DescribeUpdateActionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeUpdateActionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4683,11 +4787,19 @@ pub struct DescribeUserGroupsMessage {
     pub user_group_id: Option<String>,
 }
 
-impl PagedRequest for DescribeUserGroupsMessage {
+impl Paged for DescribeUserGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeUserGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4722,27 +4834,25 @@ pub struct DescribeUserGroupsResult {
     pub user_groups: Option<Vec<UserGroup>>,
 }
 
-impl DescribeUserGroupsResult {
-    fn pagination_page_opt(self) -> Option<Vec<UserGroup>> {
-        Some(self.user_groups.as_ref()?.clone())
+impl Paged for DescribeUserGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeUserGroupsResult {
     type Item = UserGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.user_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4790,11 +4900,19 @@ pub struct DescribeUsersMessage {
     pub user_id: Option<String>,
 }
 
-impl PagedRequest for DescribeUsersMessage {
+impl Paged for DescribeUsersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeUsersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4839,27 +4957,25 @@ pub struct DescribeUsersResult {
     pub users: Option<Vec<User>>,
 }
 
-impl DescribeUsersResult {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for DescribeUsersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeUsersResult {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5193,27 +5309,25 @@ pub struct EventsMessage {
     pub marker: Option<String>,
 }
 
-impl EventsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for EventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for EventsMessage {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -8284,27 +8398,25 @@ pub struct ReplicationGroupMessage {
     pub replication_groups: Option<Vec<ReplicationGroup>>,
 }
 
-impl ReplicationGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReplicationGroup>> {
-        Some(self.replication_groups.as_ref()?.clone())
+impl Paged for ReplicationGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ReplicationGroupMessage {
     type Item = ReplicationGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReplicationGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.replication_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -8560,27 +8672,25 @@ pub struct ReservedCacheNodeMessage {
     pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
 }
 
-impl ReservedCacheNodeMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedCacheNode>> {
-        Some(self.reserved_cache_nodes.as_ref()?.clone())
+impl Paged for ReservedCacheNodeMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ReservedCacheNodeMessage {
     type Item = ReservedCacheNode;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedCacheNode> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_cache_nodes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -8727,27 +8837,25 @@ pub struct ReservedCacheNodesOfferingMessage {
     pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
 }
 
-impl ReservedCacheNodesOfferingMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedCacheNodesOffering>> {
-        Some(self.reserved_cache_nodes_offerings.as_ref()?.clone())
+impl Paged for ReservedCacheNodesOfferingMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ReservedCacheNodesOfferingMessage {
     type Item = ReservedCacheNodesOffering;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedCacheNodesOffering> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_cache_nodes_offerings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9215,27 +9323,25 @@ pub struct ServiceUpdatesMessage {
     pub service_updates: Option<Vec<ServiceUpdate>>,
 }
 
-impl ServiceUpdatesMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceUpdate>> {
-        Some(self.service_updates.as_ref()?.clone())
+impl Paged for ServiceUpdatesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ServiceUpdatesMessage {
     type Item = ServiceUpdate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceUpdate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.service_updates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -10261,27 +10367,25 @@ pub struct UpdateActionsMessage {
     pub update_actions: Option<Vec<UpdateAction>>,
 }
 
-impl UpdateActionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<UpdateAction>> {
-        Some(self.update_actions.as_ref()?.clone())
+impl Paged for UpdateActionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for UpdateActionsMessage {
     type Item = UpdateAction;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UpdateAction> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.update_actions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -16183,13 +16287,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheClusterMessage, RusotoError<DescribeCacheClustersError>>;
 
     /// Auto-paginating version of `describe_cache_clusters`
-    fn describe_cache_clusters_pages(
-        &self,
-        input: DescribeCacheClustersMessage,
-    ) -> RusotoStream<CacheCluster, DescribeCacheClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_clusters(state.clone())
-        })
+    fn describe_cache_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheClustersMessage,
+    ) -> RusotoStream<'a, CacheCluster, DescribeCacheClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_clusters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the available cache engines and their versions.</p>
@@ -16199,13 +16304,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheEngineVersionMessage, RusotoError<DescribeCacheEngineVersionsError>>;
 
     /// Auto-paginating version of `describe_cache_engine_versions`
-    fn describe_cache_engine_versions_pages(
-        &self,
-        input: DescribeCacheEngineVersionsMessage,
-    ) -> RusotoStream<CacheEngineVersion, DescribeCacheEngineVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_engine_versions(state.clone())
-        })
+    fn describe_cache_engine_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheEngineVersionsMessage,
+    ) -> RusotoStream<'a, CacheEngineVersion, DescribeCacheEngineVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_engine_versions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
@@ -16215,13 +16321,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheParameterGroupsMessage, RusotoError<DescribeCacheParameterGroupsError>>;
 
     /// Auto-paginating version of `describe_cache_parameter_groups`
-    fn describe_cache_parameter_groups_pages(
-        &self,
-        input: DescribeCacheParameterGroupsMessage,
-    ) -> RusotoStream<CacheParameterGroup, DescribeCacheParameterGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_parameter_groups(state.clone())
-        })
+    fn describe_cache_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheParameterGroupsMessage,
+    ) -> RusotoStream<'a, CacheParameterGroup, DescribeCacheParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_parameter_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
@@ -16231,13 +16338,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheParameterGroupDetails, RusotoError<DescribeCacheParametersError>>;
 
     /// Auto-paginating version of `describe_cache_parameters`
-    fn describe_cache_parameters_pages(
-        &self,
-        input: DescribeCacheParametersMessage,
-    ) -> RusotoStream<Parameter, DescribeCacheParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_parameters(state.clone())
-        })
+    fn describe_cache_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeCacheParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group. This applicable only when you have ElastiCache in Classic setup </p>
@@ -16247,13 +16355,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheSecurityGroupMessage, RusotoError<DescribeCacheSecurityGroupsError>>;
 
     /// Auto-paginating version of `describe_cache_security_groups`
-    fn describe_cache_security_groups_pages(
-        &self,
-        input: DescribeCacheSecurityGroupsMessage,
-    ) -> RusotoStream<CacheSecurityGroup, DescribeCacheSecurityGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_security_groups(state.clone())
-        })
+    fn describe_cache_security_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheSecurityGroupsMessage,
+    ) -> RusotoStream<'a, CacheSecurityGroup, DescribeCacheSecurityGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_security_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group. This is applicable only when you have ElastiCache in VPC setup. All ElastiCache clusters now launch in VPC by default. </p>
@@ -16263,13 +16372,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<CacheSubnetGroupMessage, RusotoError<DescribeCacheSubnetGroupsError>>;
 
     /// Auto-paginating version of `describe_cache_subnet_groups`
-    fn describe_cache_subnet_groups_pages(
-        &self,
-        input: DescribeCacheSubnetGroupsMessage,
-    ) -> RusotoStream<CacheSubnetGroup, DescribeCacheSubnetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cache_subnet_groups(state.clone())
-        })
+    fn describe_cache_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeCacheSubnetGroupsMessage,
+    ) -> RusotoStream<'a, CacheSubnetGroup, DescribeCacheSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cache_subnet_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
@@ -16282,13 +16392,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_engine_default_parameters`
-    fn describe_engine_default_parameters_pages(
-        &self,
-        input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoStream<Parameter, DescribeEngineDefaultParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_engine_default_parameters(state.clone())
-        })
+    fn describe_engine_default_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeEngineDefaultParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeEngineDefaultParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_engine_default_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
@@ -16298,13 +16409,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Returns information about a particular global replication group. If no identifier is specified, returns information about all Global Datastores. </p>
@@ -16317,13 +16429,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_global_replication_groups`
-    fn describe_global_replication_groups_pages(
-        &self,
-        input: DescribeGlobalReplicationGroupsMessage,
-    ) -> RusotoStream<GlobalReplicationGroup, DescribeGlobalReplicationGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_global_replication_groups(state.clone())
-        })
+    fn describe_global_replication_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeGlobalReplicationGroupsMessage,
+    ) -> RusotoStream<'a, GlobalReplicationGroup, DescribeGlobalReplicationGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_global_replication_groups(input.clone())
+        }))
     }
 
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
@@ -16333,13 +16446,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<ReplicationGroupMessage, RusotoError<DescribeReplicationGroupsError>>;
 
     /// Auto-paginating version of `describe_replication_groups`
-    fn describe_replication_groups_pages(
-        &self,
-        input: DescribeReplicationGroupsMessage,
-    ) -> RusotoStream<ReplicationGroup, DescribeReplicationGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_replication_groups(state.clone())
-        })
+    fn describe_replication_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeReplicationGroupsMessage,
+    ) -> RusotoStream<'a, ReplicationGroup, DescribeReplicationGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_replication_groups(input.clone())
+        }))
     }
 
     /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
@@ -16349,13 +16463,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<ReservedCacheNodeMessage, RusotoError<DescribeReservedCacheNodesError>>;
 
     /// Auto-paginating version of `describe_reserved_cache_nodes`
-    fn describe_reserved_cache_nodes_pages(
-        &self,
-        input: DescribeReservedCacheNodesMessage,
-    ) -> RusotoStream<ReservedCacheNode, DescribeReservedCacheNodesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_cache_nodes(state.clone())
-        })
+    fn describe_reserved_cache_nodes_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedCacheNodesMessage,
+    ) -> RusotoStream<'a, ReservedCacheNode, DescribeReservedCacheNodesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_cache_nodes(input.clone())
+        }))
     }
 
     /// <p>Lists available reserved cache node offerings.</p>
@@ -16368,13 +16483,15 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_reserved_cache_nodes_offerings`
-    fn describe_reserved_cache_nodes_offerings_pages(
-        &self,
-        input: DescribeReservedCacheNodesOfferingsMessage,
-    ) -> RusotoStream<ReservedCacheNodesOffering, DescribeReservedCacheNodesOfferingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_cache_nodes_offerings(state.clone())
-        })
+    fn describe_reserved_cache_nodes_offerings_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedCacheNodesOfferingsMessage,
+    ) -> RusotoStream<'a, ReservedCacheNodesOffering, DescribeReservedCacheNodesOfferingsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_cache_nodes_offerings(input.clone())
+        }))
     }
 
     /// <p>Returns details of the service updates</p>
@@ -16384,13 +16501,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<ServiceUpdatesMessage, RusotoError<DescribeServiceUpdatesError>>;
 
     /// Auto-paginating version of `describe_service_updates`
-    fn describe_service_updates_pages(
-        &self,
-        input: DescribeServiceUpdatesMessage,
-    ) -> RusotoStream<ServiceUpdate, DescribeServiceUpdatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_service_updates(state.clone())
-        })
+    fn describe_service_updates_pages<'a>(
+        &'a self,
+        mut input: DescribeServiceUpdatesMessage,
+    ) -> RusotoStream<'a, ServiceUpdate, DescribeServiceUpdatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_service_updates(input.clone())
+        }))
     }
 
     /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
@@ -16400,13 +16518,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSnapshotsListMessage, RusotoError<DescribeSnapshotsError>>;
 
     /// Auto-paginating version of `describe_snapshots`
-    fn describe_snapshots_pages(
-        &self,
-        input: DescribeSnapshotsMessage,
-    ) -> RusotoStream<Snapshot, DescribeSnapshotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_snapshots(state.clone())
-        })
+    fn describe_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeSnapshotsMessage,
+    ) -> RusotoStream<'a, Snapshot, DescribeSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_snapshots(input.clone())
+        }))
     }
 
     /// <p>Returns details of the update actions </p>
@@ -16416,13 +16535,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<UpdateActionsMessage, RusotoError<DescribeUpdateActionsError>>;
 
     /// Auto-paginating version of `describe_update_actions`
-    fn describe_update_actions_pages(
-        &self,
-        input: DescribeUpdateActionsMessage,
-    ) -> RusotoStream<UpdateAction, DescribeUpdateActionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_update_actions(state.clone())
-        })
+    fn describe_update_actions_pages<'a>(
+        &'a self,
+        mut input: DescribeUpdateActionsMessage,
+    ) -> RusotoStream<'a, UpdateAction, DescribeUpdateActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_update_actions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of user groups.</p>
@@ -16432,13 +16552,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<DescribeUserGroupsResult, RusotoError<DescribeUserGroupsError>>;
 
     /// Auto-paginating version of `describe_user_groups`
-    fn describe_user_groups_pages(
-        &self,
-        input: DescribeUserGroupsMessage,
-    ) -> RusotoStream<UserGroup, DescribeUserGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_user_groups(state.clone())
-        })
+    fn describe_user_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeUserGroupsMessage,
+    ) -> RusotoStream<'a, UserGroup, DescribeUserGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_user_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of users.</p>
@@ -16448,13 +16569,14 @@ pub trait ElastiCache: Clone + Sync + Send + 'static {
     ) -> Result<DescribeUsersResult, RusotoError<DescribeUsersError>>;
 
     /// Auto-paginating version of `describe_users`
-    fn describe_users_pages(
-        &self,
-        input: DescribeUsersMessage,
-    ) -> RusotoStream<User, DescribeUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_users(state.clone())
-        })
+    fn describe_users_pages<'a>(
+        &'a self,
+        mut input: DescribeUsersMessage,
+    ) -> RusotoStream<'a, User, DescribeUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_users(input.clone())
+        }))
     }
 
     /// <p>Remove a secondary cluster from the Global Datastore using the Global Datastore name. The secondary cluster will no longer receive updates from the primary cluster, but will remain as a standalone cluster in that AWS region.</p>

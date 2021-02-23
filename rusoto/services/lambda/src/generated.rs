@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1529,11 +1531,19 @@ pub struct ListAliasesRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListAliasesRequest {
+impl Paged for ListAliasesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1551,27 +1561,25 @@ pub struct ListAliasesResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListAliasesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AliasConfiguration>> {
-        Some(self.aliases.as_ref()?.clone())
+impl Paged for ListAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListAliasesResponse {
     type Item = AliasConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AliasConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.aliases.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1589,11 +1597,19 @@ pub struct ListCodeSigningConfigsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListCodeSigningConfigsRequest {
+impl Paged for ListCodeSigningConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListCodeSigningConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1611,27 +1627,25 @@ pub struct ListCodeSigningConfigsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListCodeSigningConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<CodeSigningConfig>> {
-        Some(self.code_signing_configs.as_ref()?.clone())
+impl Paged for ListCodeSigningConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListCodeSigningConfigsResponse {
     type Item = CodeSigningConfig;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CodeSigningConfig> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.code_signing_configs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1657,11 +1671,19 @@ pub struct ListEventSourceMappingsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListEventSourceMappingsRequest {
+impl Paged for ListEventSourceMappingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListEventSourceMappingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1679,27 +1701,25 @@ pub struct ListEventSourceMappingsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListEventSourceMappingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EventSourceMappingConfiguration>> {
-        Some(self.event_source_mappings.as_ref()?.clone())
+impl Paged for ListEventSourceMappingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListEventSourceMappingsResponse {
     type Item = EventSourceMappingConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventSourceMappingConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_source_mappings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1720,11 +1740,19 @@ pub struct ListFunctionEventInvokeConfigsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListFunctionEventInvokeConfigsRequest {
+impl Paged for ListFunctionEventInvokeConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListFunctionEventInvokeConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1742,27 +1770,25 @@ pub struct ListFunctionEventInvokeConfigsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListFunctionEventInvokeConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FunctionEventInvokeConfig>> {
-        Some(self.function_event_invoke_configs.as_ref()?.clone())
+impl Paged for ListFunctionEventInvokeConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListFunctionEventInvokeConfigsResponse {
     type Item = FunctionEventInvokeConfig;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FunctionEventInvokeConfig> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.function_event_invoke_configs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1783,11 +1809,19 @@ pub struct ListFunctionsByCodeSigningConfigRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListFunctionsByCodeSigningConfigRequest {
+impl Paged for ListFunctionsByCodeSigningConfigRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListFunctionsByCodeSigningConfigRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1805,27 +1839,25 @@ pub struct ListFunctionsByCodeSigningConfigResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListFunctionsByCodeSigningConfigResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.function_arns.as_ref()?.clone())
+impl Paged for ListFunctionsByCodeSigningConfigResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListFunctionsByCodeSigningConfigResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.function_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1851,11 +1883,19 @@ pub struct ListFunctionsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListFunctionsRequest {
+impl Paged for ListFunctionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListFunctionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1874,27 +1914,25 @@ pub struct ListFunctionsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListFunctionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FunctionConfiguration>> {
-        Some(self.functions.as_ref()?.clone())
+impl Paged for ListFunctionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListFunctionsResponse {
     type Item = FunctionConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FunctionConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.functions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1919,11 +1957,19 @@ pub struct ListLayerVersionsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListLayerVersionsRequest {
+impl Paged for ListLayerVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListLayerVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1941,27 +1987,25 @@ pub struct ListLayerVersionsResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListLayerVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LayerVersionsListItem>> {
-        Some(self.layer_versions.as_ref()?.clone())
+impl Paged for ListLayerVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListLayerVersionsResponse {
     type Item = LayerVersionsListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LayerVersionsListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.layer_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1983,11 +2027,19 @@ pub struct ListLayersRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListLayersRequest {
+impl Paged for ListLayersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListLayersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2005,27 +2057,25 @@ pub struct ListLayersResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListLayersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LayersListItem>> {
-        Some(self.layers.as_ref()?.clone())
+impl Paged for ListLayersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListLayersResponse {
     type Item = LayersListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LayersListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.layers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2046,11 +2096,19 @@ pub struct ListProvisionedConcurrencyConfigsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListProvisionedConcurrencyConfigsRequest {
+impl Paged for ListProvisionedConcurrencyConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListProvisionedConcurrencyConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2068,27 +2126,25 @@ pub struct ListProvisionedConcurrencyConfigsResponse {
     pub provisioned_concurrency_configs: Option<Vec<ProvisionedConcurrencyConfigListItem>>,
 }
 
-impl ListProvisionedConcurrencyConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProvisionedConcurrencyConfigListItem>> {
-        Some(self.provisioned_concurrency_configs.as_ref()?.clone())
+impl Paged for ListProvisionedConcurrencyConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListProvisionedConcurrencyConfigsResponse {
     type Item = ProvisionedConcurrencyConfigListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProvisionedConcurrencyConfigListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.provisioned_concurrency_configs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2128,11 +2184,19 @@ pub struct ListVersionsByFunctionRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListVersionsByFunctionRequest {
+impl Paged for ListVersionsByFunctionRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVersionsByFunctionRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2150,27 +2214,25 @@ pub struct ListVersionsByFunctionResponse {
     pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
-impl ListVersionsByFunctionResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FunctionConfiguration>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListVersionsByFunctionResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListVersionsByFunctionResponse {
     type Item = FunctionConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FunctionConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6565,13 +6627,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
     /// Auto-paginating version of `list_aliases`
-    fn list_aliases_pages(
-        &self,
-        input: ListAliasesRequest,
-    ) -> RusotoStream<AliasConfiguration, ListAliasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_aliases(state.clone())
-        })
+    fn list_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAliasesRequest,
+    ) -> RusotoStream<'a, AliasConfiguration, ListAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aliases(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuring-codesigning.html">code signing configurations</a>. A request returns up to 10,000 configurations per call. You can use the <code>MaxItems</code> parameter to return fewer configurations per call. </p>
@@ -6581,13 +6644,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListCodeSigningConfigsResponse, RusotoError<ListCodeSigningConfigsError>>;
 
     /// Auto-paginating version of `list_code_signing_configs`
-    fn list_code_signing_configs_pages(
-        &self,
-        input: ListCodeSigningConfigsRequest,
-    ) -> RusotoStream<CodeSigningConfig, ListCodeSigningConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_code_signing_configs(state.clone())
-        })
+    fn list_code_signing_configs_pages<'a>(
+        &'a self,
+        mut input: ListCodeSigningConfigsRequest,
+    ) -> RusotoStream<'a, CodeSigningConfig, ListCodeSigningConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_code_signing_configs(input.clone())
+        }))
     }
 
     /// <p>Lists event source mappings. Specify an <code>EventSourceArn</code> to only show event source mappings for a single event source.</p>
@@ -6597,13 +6661,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListEventSourceMappingsResponse, RusotoError<ListEventSourceMappingsError>>;
 
     /// Auto-paginating version of `list_event_source_mappings`
-    fn list_event_source_mappings_pages(
-        &self,
-        input: ListEventSourceMappingsRequest,
-    ) -> RusotoStream<EventSourceMappingConfiguration, ListEventSourceMappingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_event_source_mappings(state.clone())
-        })
+    fn list_event_source_mappings_pages<'a>(
+        &'a self,
+        mut input: ListEventSourceMappingsRequest,
+    ) -> RusotoStream<'a, EventSourceMappingConfiguration, ListEventSourceMappingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_event_source_mappings(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of configurations for asynchronous invocation for a function.</p> <p>To configure options for asynchronous invocation, use <a>PutFunctionEventInvokeConfig</a>.</p>
@@ -6616,13 +6681,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_function_event_invoke_configs`
-    fn list_function_event_invoke_configs_pages(
-        &self,
-        input: ListFunctionEventInvokeConfigsRequest,
-    ) -> RusotoStream<FunctionEventInvokeConfig, ListFunctionEventInvokeConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_function_event_invoke_configs(state.clone())
-        })
+    fn list_function_event_invoke_configs_pages<'a>(
+        &'a self,
+        mut input: ListFunctionEventInvokeConfigsRequest,
+    ) -> RusotoStream<'a, FunctionEventInvokeConfig, ListFunctionEventInvokeConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_function_event_invoke_configs(input.clone())
+        }))
     }
 
     /// <p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
@@ -6632,13 +6698,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
 
     /// Auto-paginating version of `list_functions`
-    fn list_functions_pages(
-        &self,
-        input: ListFunctionsRequest,
-    ) -> RusotoStream<FunctionConfiguration, ListFunctionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_functions(state.clone())
-        })
+    fn list_functions_pages<'a>(
+        &'a self,
+        mut input: ListFunctionsRequest,
+    ) -> RusotoStream<'a, FunctionConfiguration, ListFunctionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_functions(input.clone())
+        }))
     }
 
     /// <p>List the functions that use the specified code signing configuration. You can use this method prior to deleting a code signing configuration, to verify that no functions are using it.</p>
@@ -6651,13 +6718,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_functions_by_code_signing_config`
-    fn list_functions_by_code_signing_config_pages(
-        &self,
-        input: ListFunctionsByCodeSigningConfigRequest,
-    ) -> RusotoStream<String, ListFunctionsByCodeSigningConfigError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_functions_by_code_signing_config(state.clone())
-        })
+    fn list_functions_by_code_signing_config_pages<'a>(
+        &'a self,
+        mut input: ListFunctionsByCodeSigningConfigRequest,
+    ) -> RusotoStream<'a, String, ListFunctionsByCodeSigningConfigError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_functions_by_code_signing_config(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Versions that have been deleted aren't listed. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only versions that indicate that they're compatible with that runtime.</p>
@@ -6667,13 +6735,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListLayerVersionsResponse, RusotoError<ListLayerVersionsError>>;
 
     /// Auto-paginating version of `list_layer_versions`
-    fn list_layer_versions_pages(
-        &self,
-        input: ListLayerVersionsRequest,
-    ) -> RusotoStream<LayerVersionsListItem, ListLayerVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_layer_versions(state.clone())
-        })
+    fn list_layer_versions_pages<'a>(
+        &'a self,
+        mut input: ListLayerVersionsRequest,
+    ) -> RusotoStream<'a, LayerVersionsListItem, ListLayerVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_layer_versions(input.clone())
+        }))
     }
 
     /// <p>Lists <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layers</a> and shows information about the latest version of each. Specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">runtime identifier</a> to list only layers that indicate that they're compatible with that runtime.</p>
@@ -6683,13 +6752,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListLayersResponse, RusotoError<ListLayersError>>;
 
     /// Auto-paginating version of `list_layers`
-    fn list_layers_pages(
-        &self,
-        input: ListLayersRequest,
-    ) -> RusotoStream<LayersListItem, ListLayersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_layers(state.clone())
-        })
+    fn list_layers_pages<'a>(
+        &'a self,
+        mut input: ListLayersRequest,
+    ) -> RusotoStream<'a, LayersListItem, ListLayersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_layers(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of provisioned concurrency configurations for a function.</p>
@@ -6702,14 +6772,18 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_provisioned_concurrency_configs`
-    fn list_provisioned_concurrency_configs_pages(
-        &self,
-        input: ListProvisionedConcurrencyConfigsRequest,
-    ) -> RusotoStream<ProvisionedConcurrencyConfigListItem, ListProvisionedConcurrencyConfigsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_provisioned_concurrency_configs(state.clone())
-        })
+    fn list_provisioned_concurrency_configs_pages<'a>(
+        &'a self,
+        mut input: ListProvisionedConcurrencyConfigsRequest,
+    ) -> RusotoStream<
+        'a,
+        ProvisionedConcurrencyConfigListItem,
+        ListProvisionedConcurrencyConfigsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_provisioned_concurrency_configs(input.clone())
+        }))
     }
 
     /// <p>Returns a function's <a href="https://docs.aws.amazon.com/lambda/latest/dg/tagging.html">tags</a>. You can also view tags with <a>GetFunction</a>.</p>
@@ -6725,13 +6799,14 @@ pub trait Lambda: Clone + Sync + Send + 'static {
     ) -> Result<ListVersionsByFunctionResponse, RusotoError<ListVersionsByFunctionError>>;
 
     /// Auto-paginating version of `list_versions_by_function`
-    fn list_versions_by_function_pages(
-        &self,
-        input: ListVersionsByFunctionRequest,
-    ) -> RusotoStream<FunctionConfiguration, ListVersionsByFunctionError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_versions_by_function(state.clone())
-        })
+    fn list_versions_by_function_pages<'a>(
+        &'a self,
+        mut input: ListVersionsByFunctionRequest,
+    ) -> RusotoStream<'a, FunctionConfiguration, ListVersionsByFunctionError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_versions_by_function(input.clone())
+        }))
     }
 
     /// <p>Creates an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a> from a ZIP archive. Each time you call <code>PublishLayerVersion</code> with the same layer name, a new version is created.</p> <p>Add layers to your function with <a>CreateFunction</a> or <a>UpdateFunctionConfiguration</a>.</p>

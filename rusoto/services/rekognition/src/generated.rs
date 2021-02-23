@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -600,11 +602,19 @@ pub struct DescribeProjectVersionsRequest {
     pub version_names: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeProjectVersionsRequest {
+impl Paged for DescribeProjectVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeProjectVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -622,27 +632,25 @@ pub struct DescribeProjectVersionsResponse {
     pub project_version_descriptions: Option<Vec<ProjectVersionDescription>>,
 }
 
-impl DescribeProjectVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProjectVersionDescription>> {
-        Some(self.project_version_descriptions.as_ref()?.clone())
+impl Paged for DescribeProjectVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeProjectVersionsResponse {
     type Item = ProjectVersionDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProjectVersionDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.project_version_descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -660,11 +668,19 @@ pub struct DescribeProjectsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeProjectsRequest {
+impl Paged for DescribeProjectsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -682,27 +698,25 @@ pub struct DescribeProjectsResponse {
     pub project_descriptions: Option<Vec<ProjectDescription>>,
 }
 
-impl DescribeProjectsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProjectDescription>> {
-        Some(self.project_descriptions.as_ref()?.clone())
+impl Paged for DescribeProjectsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeProjectsResponse {
     type Item = ProjectDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProjectDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.project_descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1870,11 +1884,19 @@ pub struct ListCollectionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCollectionsRequest {
+impl Paged for ListCollectionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCollectionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1896,23 +1918,25 @@ pub struct ListCollectionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListCollectionsResponse {}
+impl Paged for ListCollectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
 
 impl PagedOutput for ListCollectionsResponse {
     type Item = ListCollectionsResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListCollectionsResponse> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1933,11 +1957,19 @@ pub struct ListFacesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFacesRequest {
+impl Paged for ListFacesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1959,27 +1991,25 @@ pub struct ListFacesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFacesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Face>> {
-        Some(self.faces.as_ref()?.clone())
+impl Paged for ListFacesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFacesResponse {
     type Item = Face;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Face> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.faces.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1997,11 +2027,19 @@ pub struct ListStreamProcessorsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListStreamProcessorsRequest {
+impl Paged for ListStreamProcessorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStreamProcessorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2019,27 +2057,25 @@ pub struct ListStreamProcessorsResponse {
     pub stream_processors: Option<Vec<StreamProcessor>>,
 }
 
-impl ListStreamProcessorsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<StreamProcessor>> {
-        Some(self.stream_processors.as_ref()?.clone())
+impl Paged for ListStreamProcessorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStreamProcessorsResponse {
     type Item = StreamProcessor;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StreamProcessor> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stream_processors.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7032,13 +7068,14 @@ pub trait Rekognition: Clone + Sync + Send + 'static {
     ) -> Result<DescribeProjectVersionsResponse, RusotoError<DescribeProjectVersionsError>>;
 
     /// Auto-paginating version of `describe_project_versions`
-    fn describe_project_versions_pages(
-        &self,
-        input: DescribeProjectVersionsRequest,
-    ) -> RusotoStream<ProjectVersionDescription, DescribeProjectVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_project_versions(state.clone())
-        })
+    fn describe_project_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeProjectVersionsRequest,
+    ) -> RusotoStream<'a, ProjectVersionDescription, DescribeProjectVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_project_versions(input.clone())
+        }))
     }
 
     /// <p>Lists and gets information about your Amazon Rekognition Custom Labels projects.</p> <p>This operation requires permissions to perform the <code>rekognition:DescribeProjects</code> action.</p>
@@ -7048,13 +7085,14 @@ pub trait Rekognition: Clone + Sync + Send + 'static {
     ) -> Result<DescribeProjectsResponse, RusotoError<DescribeProjectsError>>;
 
     /// Auto-paginating version of `describe_projects`
-    fn describe_projects_pages(
-        &self,
-        input: DescribeProjectsRequest,
-    ) -> RusotoStream<ProjectDescription, DescribeProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_projects(state.clone())
-        })
+    fn describe_projects_pages<'a>(
+        &'a self,
+        mut input: DescribeProjectsRequest,
+    ) -> RusotoStream<'a, ProjectDescription, DescribeProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_projects(input.clone())
+        }))
     }
 
     /// <p>Provides information about a stream processor created by <a>CreateStreamProcessor</a>. You can get information about the input and output streams, the input parameters for the face recognition being performed, and the current status of the stream processor.</p>
@@ -7166,13 +7204,14 @@ pub trait Rekognition: Clone + Sync + Send + 'static {
     ) -> Result<ListCollectionsResponse, RusotoError<ListCollectionsError>>;
 
     /// Auto-paginating version of `list_collections`
-    fn list_collections_pages(
-        &self,
-        input: ListCollectionsRequest,
-    ) -> RusotoStream<ListCollectionsResponse, ListCollectionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_collections(state.clone())
-        })
+    fn list_collections_pages<'a>(
+        &'a self,
+        mut input: ListCollectionsRequest,
+    ) -> RusotoStream<'a, ListCollectionsResponse, ListCollectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_collections(input.clone())
+        }))
     }
 
     /// <p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see Listing Faces in a Collection in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>
@@ -7182,10 +7221,14 @@ pub trait Rekognition: Clone + Sync + Send + 'static {
     ) -> Result<ListFacesResponse, RusotoError<ListFacesError>>;
 
     /// Auto-paginating version of `list_faces`
-    fn list_faces_pages(&self, input: ListFacesRequest) -> RusotoStream<Face, ListFacesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_faces(state.clone())
-        })
+    fn list_faces_pages<'a>(
+        &'a self,
+        mut input: ListFacesRequest,
+    ) -> RusotoStream<'a, Face, ListFacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_faces(input.clone())
+        }))
     }
 
     /// <p>Gets a list of stream processors that you have created with <a>CreateStreamProcessor</a>. </p>
@@ -7195,13 +7238,14 @@ pub trait Rekognition: Clone + Sync + Send + 'static {
     ) -> Result<ListStreamProcessorsResponse, RusotoError<ListStreamProcessorsError>>;
 
     /// Auto-paginating version of `list_stream_processors`
-    fn list_stream_processors_pages(
-        &self,
-        input: ListStreamProcessorsRequest,
-    ) -> RusotoStream<StreamProcessor, ListStreamProcessorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stream_processors(state.clone())
-        })
+    fn list_stream_processors_pages<'a>(
+        &'a self,
+        mut input: ListStreamProcessorsRequest,
+    ) -> RusotoStream<'a, StreamProcessor, ListStreamProcessorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stream_processors(input.clone())
+        }))
     }
 
     /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>

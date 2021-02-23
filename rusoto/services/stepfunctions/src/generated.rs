@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -596,11 +598,19 @@ pub struct GetExecutionHistoryInput {
     pub reverse_order: Option<bool>,
 }
 
-impl PagedRequest for GetExecutionHistoryInput {
+impl Paged for GetExecutionHistoryInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetExecutionHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -617,27 +627,25 @@ pub struct GetExecutionHistoryOutput {
     pub next_token: Option<String>,
 }
 
-impl GetExecutionHistoryOutput {
-    fn pagination_page_opt(self) -> Option<Vec<HistoryEvent>> {
-        Some(self.events.clone())
+impl Paged for GetExecutionHistoryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetExecutionHistoryOutput {
     type Item = HistoryEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HistoryEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -888,11 +896,19 @@ pub struct ListActivitiesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListActivitiesInput {
+impl Paged for ListActivitiesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListActivitiesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -909,27 +925,25 @@ pub struct ListActivitiesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListActivitiesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ActivityListItem>> {
-        Some(self.activities.clone())
+impl Paged for ListActivitiesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListActivitiesOutput {
     type Item = ActivityListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActivityListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.activities
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -954,11 +968,19 @@ pub struct ListExecutionsInput {
     pub status_filter: Option<String>,
 }
 
-impl PagedRequest for ListExecutionsInput {
+impl Paged for ListExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -975,27 +997,25 @@ pub struct ListExecutionsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListExecutionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ExecutionListItem>> {
-        Some(self.executions.clone())
+impl Paged for ListExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListExecutionsOutput {
     type Item = ExecutionListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ExecutionListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.executions
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1013,11 +1033,19 @@ pub struct ListStateMachinesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListStateMachinesInput {
+impl Paged for ListStateMachinesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStateMachinesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1033,27 +1061,25 @@ pub struct ListStateMachinesOutput {
     pub state_machines: Vec<StateMachineListItem>,
 }
 
-impl ListStateMachinesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StateMachineListItem>> {
-        Some(self.state_machines.clone())
+impl Paged for ListStateMachinesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStateMachinesOutput {
     type Item = StateMachineListItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StateMachineListItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.state_machines
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2760,13 +2786,14 @@ pub trait StepFunctions: Clone + Sync + Send + 'static {
     ) -> Result<GetExecutionHistoryOutput, RusotoError<GetExecutionHistoryError>>;
 
     /// Auto-paginating version of `get_execution_history`
-    fn get_execution_history_pages(
-        &self,
-        input: GetExecutionHistoryInput,
-    ) -> RusotoStream<HistoryEvent, GetExecutionHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_execution_history(state.clone())
-        })
+    fn get_execution_history_pages<'a>(
+        &'a self,
+        mut input: GetExecutionHistoryInput,
+    ) -> RusotoStream<'a, HistoryEvent, GetExecutionHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_execution_history(input.clone())
+        }))
     }
 
     /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
@@ -2776,13 +2803,14 @@ pub trait StepFunctions: Clone + Sync + Send + 'static {
     ) -> Result<ListActivitiesOutput, RusotoError<ListActivitiesError>>;
 
     /// Auto-paginating version of `list_activities`
-    fn list_activities_pages(
-        &self,
-        input: ListActivitiesInput,
-    ) -> RusotoStream<ActivityListItem, ListActivitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_activities(state.clone())
-        })
+    fn list_activities_pages<'a>(
+        &'a self,
+        mut input: ListActivitiesInput,
+    ) -> RusotoStream<'a, ActivityListItem, ListActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_activities(input.clone())
+        }))
     }
 
     /// <p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <p>This API action is not supported by <code>EXPRESS</code> state machines.</p>
@@ -2792,13 +2820,14 @@ pub trait StepFunctions: Clone + Sync + Send + 'static {
     ) -> Result<ListExecutionsOutput, RusotoError<ListExecutionsError>>;
 
     /// Auto-paginating version of `list_executions`
-    fn list_executions_pages(
-        &self,
-        input: ListExecutionsInput,
-    ) -> RusotoStream<ExecutionListItem, ListExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_executions(state.clone())
-        })
+    fn list_executions_pages<'a>(
+        &'a self,
+        mut input: ListExecutionsInput,
+    ) -> RusotoStream<'a, ExecutionListItem, ListExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_executions(input.clone())
+        }))
     }
 
     /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
@@ -2808,13 +2837,14 @@ pub trait StepFunctions: Clone + Sync + Send + 'static {
     ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>;
 
     /// Auto-paginating version of `list_state_machines`
-    fn list_state_machines_pages(
-        &self,
-        input: ListStateMachinesInput,
-    ) -> RusotoStream<StateMachineListItem, ListStateMachinesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_state_machines(state.clone())
-        })
+    fn list_state_machines_pages<'a>(
+        &'a self,
+        mut input: ListStateMachinesInput,
+    ) -> RusotoStream<'a, StateMachineListItem, ListStateMachinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_state_machines(input.clone())
+        }))
     }
 
     /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>

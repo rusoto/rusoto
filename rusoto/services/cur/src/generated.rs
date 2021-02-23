@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -86,11 +88,19 @@ pub struct DescribeReportDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeReportDefinitionsRequest {
+impl Paged for DescribeReportDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeReportDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -108,27 +118,25 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-impl DescribeReportDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReportDefinition>> {
-        Some(self.report_definitions.as_ref()?.clone())
+impl Paged for DescribeReportDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeReportDefinitionsResponse {
     type Item = ReportDefinition;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReportDefinition> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.report_definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -355,13 +363,14 @@ pub trait CostAndUsageReport: Clone + Sync + Send + 'static {
     ) -> Result<DescribeReportDefinitionsResponse, RusotoError<DescribeReportDefinitionsError>>;
 
     /// Auto-paginating version of `describe_report_definitions`
-    fn describe_report_definitions_pages(
-        &self,
-        input: DescribeReportDefinitionsRequest,
-    ) -> RusotoStream<ReportDefinition, DescribeReportDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_report_definitions(state.clone())
-        })
+    fn describe_report_definitions_pages<'a>(
+        &'a self,
+        mut input: DescribeReportDefinitionsRequest,
+    ) -> RusotoStream<'a, ReportDefinition, DescribeReportDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_report_definitions(input.clone())
+        }))
     }
 
     /// <p>Allows you to programatically update your report preferences.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -376,11 +378,19 @@ pub struct DescribeBackupsRequest {
     pub server_name: Option<String>,
 }
 
-impl PagedRequest for DescribeBackupsRequest {
+impl Paged for DescribeBackupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBackupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -398,27 +408,25 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBackupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Backup>> {
-        Some(self.backups.as_ref()?.clone())
+impl Paged for DescribeBackupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBackupsResponse {
     type Item = Backup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Backup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.backups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -439,11 +447,19 @@ pub struct DescribeEventsRequest {
     pub server_name: String,
 }
 
-impl PagedRequest for DescribeEventsRequest {
+impl Paged for DescribeEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -461,27 +477,25 @@ pub struct DescribeEventsResponse {
     pub server_events: Option<Vec<ServerEvent>>,
 }
 
-impl DescribeEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServerEvent>> {
-        Some(self.server_events.as_ref()?.clone())
+impl Paged for DescribeEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventsResponse {
     type Item = ServerEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServerEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.server_events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -529,11 +543,19 @@ pub struct DescribeServersRequest {
     pub server_name: Option<String>,
 }
 
-impl PagedRequest for DescribeServersRequest {
+impl Paged for DescribeServersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeServersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -551,27 +573,25 @@ pub struct DescribeServersResponse {
     pub servers: Option<Vec<Server>>,
 }
 
-impl DescribeServersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Server>> {
-        Some(self.servers.as_ref()?.clone())
+impl Paged for DescribeServersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeServersResponse {
     type Item = Server;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Server> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.servers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -661,11 +681,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -683,27 +711,25 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1720,13 +1746,14 @@ pub trait OpsWorksCM: Clone + Sync + Send + 'static {
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>>;
 
     /// Auto-paginating version of `describe_backups`
-    fn describe_backups_pages(
-        &self,
-        input: DescribeBackupsRequest,
-    ) -> RusotoStream<Backup, DescribeBackupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_backups(state.clone())
-        })
+    fn describe_backups_pages<'a>(
+        &'a self,
+        mut input: DescribeBackupsRequest,
+    ) -> RusotoStream<'a, Backup, DescribeBackupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_backups(input.clone())
+        }))
     }
 
     /// <p> Describes events for a specified server. Results are ordered by time, with newest events first. </p> <p> This operation is synchronous. </p> <p> A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
@@ -1736,13 +1763,14 @@ pub trait OpsWorksCM: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoStream<ServerEvent, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsRequest,
+    ) -> RusotoStream<'a, ServerEvent, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p> Returns the current status of an existing association or disassociation request. </p> <p> A <code>ResourceNotFoundException</code> is thrown when no recent association or disassociation request with the specified token is found, or when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
@@ -1761,13 +1789,14 @@ pub trait OpsWorksCM: Clone + Sync + Send + 'static {
     ) -> Result<DescribeServersResponse, RusotoError<DescribeServersError>>;
 
     /// Auto-paginating version of `describe_servers`
-    fn describe_servers_pages(
-        &self,
-        input: DescribeServersRequest,
-    ) -> RusotoStream<Server, DescribeServersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_servers(state.clone())
-        })
+    fn describe_servers_pages<'a>(
+        &'a self,
+        mut input: DescribeServersRequest,
+    ) -> RusotoStream<'a, Server, DescribeServersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_servers(input.clone())
+        }))
     }
 
     /// <p> Disassociates a node from an AWS OpsWorks CM server, and removes the node from the server's managed nodes. After a node is disassociated, the node key pair is no longer valid for accessing the configuration manager's API. For more information about how to associate a node, see <a>AssociateNode</a>. </p> <p>A node can can only be disassociated from a server that is in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
@@ -1789,13 +1818,14 @@ pub trait OpsWorksCM: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p>Restoring from a backup is performed by creating a new EC2 instance. If restoration is successful, and the server is in a <code>HEALTHY</code> state, AWS OpsWorks CM switches traffic over to the new instance. After restoration is finished, the old EC2 instance is maintained in a <code>Running</code> or <code>Stopped</code> state, but is eventually terminated.</p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>

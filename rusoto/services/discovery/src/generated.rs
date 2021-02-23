@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -396,11 +398,19 @@ pub struct DescribeAgentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAgentsRequest {
+impl Paged for DescribeAgentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAgentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -418,27 +428,25 @@ pub struct DescribeAgentsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAgentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AgentInfo>> {
-        Some(self.agents_info.as_ref()?.clone())
+impl Paged for DescribeAgentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAgentsResponse {
     type Item = AgentInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AgentInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.agents_info.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -479,11 +487,19 @@ pub struct DescribeContinuousExportsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeContinuousExportsRequest {
+impl Paged for DescribeContinuousExportsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeContinuousExportsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -501,27 +517,25 @@ pub struct DescribeContinuousExportsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeContinuousExportsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ContinuousExportDescription>> {
-        Some(self.descriptions.as_ref()?.clone())
+impl Paged for DescribeContinuousExportsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeContinuousExportsResponse {
     type Item = ContinuousExportDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ContinuousExportDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -543,11 +557,19 @@ pub struct DescribeExportConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeExportConfigurationsRequest {
+impl Paged for DescribeExportConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeExportConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -565,27 +587,25 @@ pub struct DescribeExportConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeExportConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ExportInfo>> {
-        Some(self.exports_info.as_ref()?.clone())
+impl Paged for DescribeExportConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeExportConfigurationsResponse {
     type Item = ExportInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ExportInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.exports_info.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -611,11 +631,19 @@ pub struct DescribeExportTasksRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeExportTasksRequest {
+impl Paged for DescribeExportTasksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeExportTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -633,27 +661,25 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeExportTasksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ExportInfo>> {
-        Some(self.exports_info.as_ref()?.clone())
+impl Paged for DescribeExportTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeExportTasksResponse {
     type Item = ExportInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ExportInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.exports_info.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -707,11 +733,19 @@ pub struct DescribeTagsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeTagsRequest {
+impl Paged for DescribeTagsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -729,27 +763,25 @@ pub struct DescribeTagsResponse {
     pub tags: Option<Vec<ConfigurationTag>>,
 }
 
-impl DescribeTagsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ConfigurationTag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for DescribeTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeTagsResponse {
     type Item = ConfigurationTag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ConfigurationTag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -976,11 +1008,19 @@ pub struct ListConfigurationsRequest {
     pub order_by: Option<Vec<OrderByElement>>,
 }
 
-impl PagedRequest for ListConfigurationsRequest {
+impl Paged for ListConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -998,27 +1038,25 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<::std::collections::HashMap<String, String>>> {
-        Some(self.configurations.as_ref()?.clone())
+impl Paged for ListConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListConfigurationsResponse {
     type Item = ::std::collections::HashMap<String, String>;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, String>> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.configurations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3067,13 +3105,14 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>>;
 
     /// Auto-paginating version of `describe_agents`
-    fn describe_agents_pages(
-        &self,
-        input: DescribeAgentsRequest,
-    ) -> RusotoStream<AgentInfo, DescribeAgentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_agents(state.clone())
-        })
+    fn describe_agents_pages<'a>(
+        &'a self,
+        mut input: DescribeAgentsRequest,
+    ) -> RusotoStream<'a, AgentInfo, DescribeAgentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_agents(input.clone())
+        }))
     }
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
@@ -3089,13 +3128,14 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>;
 
     /// Auto-paginating version of `describe_continuous_exports`
-    fn describe_continuous_exports_pages(
-        &self,
-        input: DescribeContinuousExportsRequest,
-    ) -> RusotoStream<ContinuousExportDescription, DescribeContinuousExportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_continuous_exports(state.clone())
-        })
+    fn describe_continuous_exports_pages<'a>(
+        &'a self,
+        mut input: DescribeContinuousExportsRequest,
+    ) -> RusotoStream<'a, ContinuousExportDescription, DescribeContinuousExportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_continuous_exports(input.clone())
+        }))
     }
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
@@ -3105,13 +3145,14 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>;
 
     /// Auto-paginating version of `describe_export_configurations`
-    fn describe_export_configurations_pages(
-        &self,
-        input: DescribeExportConfigurationsRequest,
-    ) -> RusotoStream<ExportInfo, DescribeExportConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_export_configurations(state.clone())
-        })
+    fn describe_export_configurations_pages<'a>(
+        &'a self,
+        mut input: DescribeExportConfigurationsRequest,
+    ) -> RusotoStream<'a, ExportInfo, DescribeExportConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_export_configurations(input.clone())
+        }))
     }
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
@@ -3121,13 +3162,14 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
 
     /// Auto-paginating version of `describe_export_tasks`
-    fn describe_export_tasks_pages(
-        &self,
-        input: DescribeExportTasksRequest,
-    ) -> RusotoStream<ExportInfo, DescribeExportTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_export_tasks(state.clone())
-        })
+    fn describe_export_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeExportTasksRequest,
+    ) -> RusotoStream<'a, ExportInfo, DescribeExportTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_export_tasks(input.clone())
+        }))
     }
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
@@ -3143,13 +3185,14 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
 
     /// Auto-paginating version of `describe_tags`
-    fn describe_tags_pages(
-        &self,
-        input: DescribeTagsRequest,
-    ) -> RusotoStream<ConfigurationTag, DescribeTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tags(state.clone())
-        })
+    fn describe_tags_pages<'a>(
+        &'a self,
+        mut input: DescribeTagsRequest,
+    ) -> RusotoStream<'a, ConfigurationTag, DescribeTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tags(input.clone())
+        }))
     }
 
     /// <p>Disassociates one or more configuration items from an application.</p>
@@ -3178,13 +3221,15 @@ pub trait Discovery: Clone + Sync + Send + 'static {
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
     /// Auto-paginating version of `list_configurations`
-    fn list_configurations_pages(
-        &self,
-        input: ListConfigurationsRequest,
-    ) -> RusotoStream<::std::collections::HashMap<String, String>, ListConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_configurations(state.clone())
-        })
+    fn list_configurations_pages<'a>(
+        &'a self,
+        mut input: ListConfigurationsRequest,
+    ) -> RusotoStream<'a, ::std::collections::HashMap<String, String>, ListConfigurationsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_configurations(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>

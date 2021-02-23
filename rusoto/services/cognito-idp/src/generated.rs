@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -545,11 +547,19 @@ pub struct AdminListGroupsForUserRequest {
     pub username: String,
 }
 
-impl PagedRequest for AdminListGroupsForUserRequest {
+impl Paged for AdminListGroupsForUserRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for AdminListGroupsForUserRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -567,27 +577,25 @@ pub struct AdminListGroupsForUserResponse {
     pub next_token: Option<String>,
 }
 
-impl AdminListGroupsForUserResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GroupType>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for AdminListGroupsForUserResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for AdminListGroupsForUserResponse {
     type Item = GroupType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GroupType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -611,11 +619,19 @@ pub struct AdminListUserAuthEventsRequest {
     pub username: String,
 }
 
-impl PagedRequest for AdminListUserAuthEventsRequest {
+impl Paged for AdminListUserAuthEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for AdminListUserAuthEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -633,27 +649,25 @@ pub struct AdminListUserAuthEventsResponse {
     pub next_token: Option<String>,
 }
 
-impl AdminListUserAuthEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AuthEventType>> {
-        Some(self.auth_events.as_ref()?.clone())
+impl Paged for AdminListUserAuthEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for AdminListUserAuthEventsResponse {
     type Item = AuthEventType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AuthEventType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.auth_events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2619,11 +2633,19 @@ pub struct ListGroupsRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListGroupsRequest {
+impl Paged for ListGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2641,27 +2663,25 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GroupType>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupsResponse {
     type Item = GroupType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GroupType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2682,11 +2702,19 @@ pub struct ListIdentityProvidersRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListIdentityProvidersRequest {
+impl Paged for ListIdentityProvidersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIdentityProvidersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2703,27 +2731,25 @@ pub struct ListIdentityProvidersResponse {
     pub providers: Vec<ProviderDescription>,
 }
 
-impl ListIdentityProvidersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProviderDescription>> {
-        Some(self.providers.clone())
+impl Paged for ListIdentityProvidersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListIdentityProvidersResponse {
     type Item = ProviderDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProviderDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.providers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2744,11 +2770,19 @@ pub struct ListResourceServersRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListResourceServersRequest {
+impl Paged for ListResourceServersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceServersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2765,27 +2799,25 @@ pub struct ListResourceServersResponse {
     pub resource_servers: Vec<ResourceServerType>,
 }
 
-impl ListResourceServersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceServerType>> {
-        Some(self.resource_servers.clone())
+impl Paged for ListResourceServersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourceServersResponse {
     type Item = ResourceServerType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceServerType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_servers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2858,11 +2890,19 @@ pub struct ListUserPoolClientsRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListUserPoolClientsRequest {
+impl Paged for ListUserPoolClientsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUserPoolClientsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2881,27 +2921,25 @@ pub struct ListUserPoolClientsResponse {
     pub user_pool_clients: Option<Vec<UserPoolClientDescription>>,
 }
 
-impl ListUserPoolClientsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<UserPoolClientDescription>> {
-        Some(self.user_pool_clients.as_ref()?.clone())
+impl Paged for ListUserPoolClientsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUserPoolClientsResponse {
     type Item = UserPoolClientDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserPoolClientDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.user_pool_clients.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2919,11 +2957,19 @@ pub struct ListUserPoolsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListUserPoolsRequest {
+impl Paged for ListUserPoolsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUserPoolsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2942,27 +2988,25 @@ pub struct ListUserPoolsResponse {
     pub user_pools: Option<Vec<UserPoolDescriptionType>>,
 }
 
-impl ListUserPoolsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<UserPoolDescriptionType>> {
-        Some(self.user_pools.as_ref()?.clone())
+impl Paged for ListUserPoolsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUserPoolsResponse {
     type Item = UserPoolDescriptionType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserPoolDescriptionType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.user_pools.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2986,11 +3030,19 @@ pub struct ListUsersInGroupRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListUsersInGroupRequest {
+impl Paged for ListUsersInGroupRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUsersInGroupRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3008,27 +3060,25 @@ pub struct ListUsersInGroupResponse {
     pub users: Option<Vec<UserType>>,
 }
 
-impl ListUsersInGroupResponse {
-    fn pagination_page_opt(self) -> Option<Vec<UserType>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for ListUsersInGroupResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUsersInGroupResponse {
     type Item = UserType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3058,11 +3108,19 @@ pub struct ListUsersRequest {
     pub user_pool_id: String,
 }
 
-impl PagedRequest for ListUsersRequest {
+impl Paged for ListUsersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.pagination_token = key;
-        self
     }
 }
 
@@ -3081,27 +3139,25 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<UserType>>,
 }
 
-impl ListUsersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<UserType>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
     }
 }
 
 impl PagedOutput for ListUsersResponse {
     type Item = UserType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.pagination_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12791,13 +12847,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<AdminListGroupsForUserResponse, RusotoError<AdminListGroupsForUserError>>;
 
     /// Auto-paginating version of `admin_list_groups_for_user`
-    fn admin_list_groups_for_user_pages(
-        &self,
-        input: AdminListGroupsForUserRequest,
-    ) -> RusotoStream<GroupType, AdminListGroupsForUserError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.admin_list_groups_for_user(state.clone())
-        })
+    fn admin_list_groups_for_user_pages<'a>(
+        &'a self,
+        mut input: AdminListGroupsForUserRequest,
+    ) -> RusotoStream<'a, GroupType, AdminListGroupsForUserError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.admin_list_groups_for_user(input.clone())
+        }))
     }
 
     /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
@@ -12807,13 +12864,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<AdminListUserAuthEventsResponse, RusotoError<AdminListUserAuthEventsError>>;
 
     /// Auto-paginating version of `admin_list_user_auth_events`
-    fn admin_list_user_auth_events_pages(
-        &self,
-        input: AdminListUserAuthEventsRequest,
-    ) -> RusotoStream<AuthEventType, AdminListUserAuthEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.admin_list_user_auth_events(state.clone())
-        })
+    fn admin_list_user_auth_events_pages<'a>(
+        &'a self,
+        mut input: AdminListUserAuthEventsRequest,
+    ) -> RusotoStream<'a, AuthEventType, AdminListUserAuthEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.admin_list_user_auth_events(input.clone())
+        }))
     }
 
     /// <p>Removes the specified user from the specified group.</p> <p>Calling this action requires developer credentials.</p>
@@ -13135,13 +13193,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// Auto-paginating version of `list_groups`
-    fn list_groups_pages(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoStream<GroupType, ListGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups(state.clone())
-        })
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, GroupType, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
     }
 
     /// <p>Lists information about all identity providers for a user pool.</p>
@@ -13151,13 +13210,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListIdentityProvidersResponse, RusotoError<ListIdentityProvidersError>>;
 
     /// Auto-paginating version of `list_identity_providers`
-    fn list_identity_providers_pages(
-        &self,
-        input: ListIdentityProvidersRequest,
-    ) -> RusotoStream<ProviderDescription, ListIdentityProvidersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_identity_providers(state.clone())
-        })
+    fn list_identity_providers_pages<'a>(
+        &'a self,
+        mut input: ListIdentityProvidersRequest,
+    ) -> RusotoStream<'a, ProviderDescription, ListIdentityProvidersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_identity_providers(input.clone())
+        }))
     }
 
     /// <p>Lists the resource servers for a user pool.</p>
@@ -13167,13 +13227,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListResourceServersResponse, RusotoError<ListResourceServersError>>;
 
     /// Auto-paginating version of `list_resource_servers`
-    fn list_resource_servers_pages(
-        &self,
-        input: ListResourceServersRequest,
-    ) -> RusotoStream<ResourceServerType, ListResourceServersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_servers(state.clone())
-        })
+    fn list_resource_servers_pages<'a>(
+        &'a self,
+        mut input: ListResourceServersRequest,
+    ) -> RusotoStream<'a, ResourceServerType, ListResourceServersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_servers(input.clone())
+        }))
     }
 
     /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
@@ -13195,13 +13256,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListUserPoolClientsResponse, RusotoError<ListUserPoolClientsError>>;
 
     /// Auto-paginating version of `list_user_pool_clients`
-    fn list_user_pool_clients_pages(
-        &self,
-        input: ListUserPoolClientsRequest,
-    ) -> RusotoStream<UserPoolClientDescription, ListUserPoolClientsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_user_pool_clients(state.clone())
-        })
+    fn list_user_pool_clients_pages<'a>(
+        &'a self,
+        mut input: ListUserPoolClientsRequest,
+    ) -> RusotoStream<'a, UserPoolClientDescription, ListUserPoolClientsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_pool_clients(input.clone())
+        }))
     }
 
     /// <p>Lists the user pools associated with an AWS account.</p>
@@ -13211,13 +13273,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListUserPoolsResponse, RusotoError<ListUserPoolsError>>;
 
     /// Auto-paginating version of `list_user_pools`
-    fn list_user_pools_pages(
-        &self,
-        input: ListUserPoolsRequest,
-    ) -> RusotoStream<UserPoolDescriptionType, ListUserPoolsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_user_pools(state.clone())
-        })
+    fn list_user_pools_pages<'a>(
+        &'a self,
+        mut input: ListUserPoolsRequest,
+    ) -> RusotoStream<'a, UserPoolDescriptionType, ListUserPoolsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_pools(input.clone())
+        }))
     }
 
     /// <p>Lists the users in the Amazon Cognito user pool.</p>
@@ -13227,10 +13290,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// Auto-paginating version of `list_users`
-    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<UserType, ListUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_users(state.clone())
-        })
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, UserType, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
     }
 
     /// <p>Lists the users in the specified group.</p> <p>Calling this action requires developer credentials.</p>
@@ -13240,13 +13307,14 @@ pub trait CognitoIdentityProvider: Clone + Sync + Send + 'static {
     ) -> Result<ListUsersInGroupResponse, RusotoError<ListUsersInGroupError>>;
 
     /// Auto-paginating version of `list_users_in_group`
-    fn list_users_in_group_pages(
-        &self,
-        input: ListUsersInGroupRequest,
-    ) -> RusotoStream<UserType, ListUsersInGroupError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_users_in_group(state.clone())
-        })
+    fn list_users_in_group_pages<'a>(
+        &'a self,
+        mut input: ListUsersInGroupRequest,
+    ) -> RusotoStream<'a, UserType, ListUsersInGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users_in_group(input.clone())
+        }))
     }
 
     /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>

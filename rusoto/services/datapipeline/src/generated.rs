@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -178,11 +180,19 @@ pub struct DescribeObjectsInput {
     pub pipeline_id: String,
 }
 
-impl PagedRequest for DescribeObjectsInput {
+impl Paged for DescribeObjectsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeObjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -204,31 +214,25 @@ pub struct DescribeObjectsOutput {
     pub pipeline_objects: Vec<PipelineObject>,
 }
 
-impl DescribeObjectsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PipelineObject>> {
-        Some(self.pipeline_objects.clone())
+impl Paged for DescribeObjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.has_more_results.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeObjectsOutput {
     type Item = PipelineObject;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PipelineObject> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pipeline_objects
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.has_more_results.unwrap_or_default()
     }
 }
 
@@ -352,11 +356,19 @@ pub struct ListPipelinesInput {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListPipelinesInput {
+impl Paged for ListPipelinesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPipelinesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -378,31 +390,25 @@ pub struct ListPipelinesOutput {
     pub pipeline_id_list: Vec<PipelineIdName>,
 }
 
-impl ListPipelinesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PipelineIdName>> {
-        Some(self.pipeline_id_list.clone())
+impl Paged for ListPipelinesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.has_more_results.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListPipelinesOutput {
     type Item = PipelineIdName;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PipelineIdName> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pipeline_id_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.has_more_results.unwrap_or_default()
     }
 }
 
@@ -607,11 +613,19 @@ pub struct QueryObjectsInput {
     pub sphere: String,
 }
 
-impl PagedRequest for QueryObjectsInput {
+impl Paged for QueryObjectsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for QueryObjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -634,31 +648,25 @@ pub struct QueryObjectsOutput {
     pub marker: Option<String>,
 }
 
-impl QueryObjectsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.ids.as_ref()?.clone())
+impl Paged for QueryObjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.has_more_results.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for QueryObjectsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.has_more_results.unwrap_or_default()
     }
 }
 
@@ -1861,13 +1869,14 @@ pub trait DataPipeline: Clone + Sync + Send + 'static {
     ) -> Result<DescribeObjectsOutput, RusotoError<DescribeObjectsError>>;
 
     /// Auto-paginating version of `describe_objects`
-    fn describe_objects_pages(
-        &self,
-        input: DescribeObjectsInput,
-    ) -> RusotoStream<PipelineObject, DescribeObjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_objects(state.clone())
-        })
+    fn describe_objects_pages<'a>(
+        &'a self,
+        mut input: DescribeObjectsInput,
+    ) -> RusotoStream<'a, PipelineObject, DescribeObjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_objects(input.clone())
+        }))
     }
 
     /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
@@ -1895,13 +1904,14 @@ pub trait DataPipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
 
     /// Auto-paginating version of `list_pipelines`
-    fn list_pipelines_pages(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoStream<PipelineIdName, ListPipelinesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_pipelines(state.clone())
-        })
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesInput,
+    ) -> RusotoStream<'a, PipelineIdName, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
     }
 
     /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
@@ -1923,13 +1933,14 @@ pub trait DataPipeline: Clone + Sync + Send + 'static {
     ) -> Result<QueryObjectsOutput, RusotoError<QueryObjectsError>>;
 
     /// Auto-paginating version of `query_objects`
-    fn query_objects_pages(
-        &self,
-        input: QueryObjectsInput,
-    ) -> RusotoStream<String, QueryObjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.query_objects(state.clone())
-        })
+    fn query_objects_pages<'a>(
+        &'a self,
+        mut input: QueryObjectsInput,
+    ) -> RusotoStream<'a, String, QueryObjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.query_objects(input.clone())
+        }))
     }
 
     /// <p>Removes existing tags from the specified pipeline.</p>

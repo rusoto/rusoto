@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -147,27 +149,25 @@ pub struct ApiKeys {
     pub warnings: Option<Vec<String>>,
 }
 
-impl ApiKeys {
-    fn pagination_page_opt(self) -> Option<Vec<ApiKey>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for ApiKeys {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for ApiKeys {
     type Item = ApiKey;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApiKey> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -251,27 +251,25 @@ pub struct Authorizers {
     pub position: Option<String>,
 }
 
-impl Authorizers {
-    fn pagination_page_opt(self) -> Option<Vec<Authorizer>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for Authorizers {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for Authorizers {
     type Item = Authorizer;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Authorizer> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -310,27 +308,25 @@ pub struct BasePathMappings {
     pub position: Option<String>,
 }
 
-impl BasePathMappings {
-    fn pagination_page_opt(self) -> Option<Vec<BasePathMapping>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for BasePathMappings {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for BasePathMappings {
     type Item = BasePathMapping;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BasePathMapping> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -402,27 +398,25 @@ pub struct ClientCertificates {
     pub position: Option<String>,
 }
 
-impl ClientCertificates {
-    fn pagination_page_opt(self) -> Option<Vec<ClientCertificate>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for ClientCertificates {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for ClientCertificates {
     type Item = ClientCertificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClientCertificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1221,27 +1215,25 @@ pub struct Deployments {
     pub position: Option<String>,
 }
 
-impl Deployments {
-    fn pagination_page_opt(self) -> Option<Vec<Deployment>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for Deployments {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for Deployments {
     type Item = Deployment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Deployment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1319,27 +1311,25 @@ pub struct DocumentationParts {
     pub position: Option<String>,
 }
 
-impl DocumentationParts {
-    fn pagination_page_opt(self) -> Option<Vec<DocumentationPart>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for DocumentationParts {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for DocumentationParts {
     type Item = DocumentationPart;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DocumentationPart> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1378,27 +1368,25 @@ pub struct DocumentationVersions {
     pub position: Option<String>,
 }
 
-impl DocumentationVersions {
-    fn pagination_page_opt(self) -> Option<Vec<DocumentationVersion>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for DocumentationVersions {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for DocumentationVersions {
     type Item = DocumentationVersion;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DocumentationVersion> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1489,27 +1477,25 @@ pub struct DomainNames {
     pub position: Option<String>,
 }
 
-impl DomainNames {
-    fn pagination_page_opt(self) -> Option<Vec<DomainName>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for DomainNames {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for DomainNames {
     type Item = DomainName;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DomainName> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1607,27 +1593,25 @@ pub struct GatewayResponses {
     pub position: Option<String>,
 }
 
-impl GatewayResponses {
-    fn pagination_page_opt(self) -> Option<Vec<GatewayResponse>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for GatewayResponses {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for GatewayResponses {
     type Item = GatewayResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GatewayResponse> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1693,11 +1677,19 @@ pub struct GetApiKeysRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetApiKeysRequest {
+impl Paged for GetApiKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetApiKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1732,11 +1724,19 @@ pub struct GetAuthorizersRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetAuthorizersRequest {
+impl Paged for GetAuthorizersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetAuthorizersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1771,11 +1771,19 @@ pub struct GetBasePathMappingsRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetBasePathMappingsRequest {
+impl Paged for GetBasePathMappingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetBasePathMappingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1804,11 +1812,19 @@ pub struct GetClientCertificatesRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetClientCertificatesRequest {
+impl Paged for GetClientCertificatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetClientCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1847,11 +1863,19 @@ pub struct GetDeploymentsRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetDeploymentsRequest {
+impl Paged for GetDeploymentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDeploymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1902,11 +1926,19 @@ pub struct GetDocumentationPartsRequest {
     pub type_: Option<String>,
 }
 
-impl PagedRequest for GetDocumentationPartsRequest {
+impl Paged for GetDocumentationPartsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDocumentationPartsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1941,11 +1973,19 @@ pub struct GetDocumentationVersionsRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetDocumentationVersionsRequest {
+impl Paged for GetDocumentationVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDocumentationVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -1974,11 +2014,19 @@ pub struct GetDomainNamesRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetDomainNamesRequest {
+impl Paged for GetDomainNamesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetDomainNamesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2037,11 +2085,19 @@ pub struct GetGatewayResponsesRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetGatewayResponsesRequest {
+impl Paged for GetGatewayResponsesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetGatewayResponsesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2163,11 +2219,19 @@ pub struct GetModelsRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetModelsRequest {
+impl Paged for GetModelsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetModelsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2202,11 +2266,19 @@ pub struct GetRequestValidatorsRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetRequestValidatorsRequest {
+impl Paged for GetRequestValidatorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetRequestValidatorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2249,11 +2321,19 @@ pub struct GetResourcesRequest {
     pub rest_api_id: String,
 }
 
-impl PagedRequest for GetResourcesRequest {
+impl Paged for GetResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2282,11 +2362,19 @@ pub struct GetRestApisRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetRestApisRequest {
+impl Paged for GetRestApisRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetRestApisRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2335,11 +2423,19 @@ pub struct GetSdkTypesRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetSdkTypesRequest {
+impl Paged for GetSdkTypesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetSdkTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2423,11 +2519,19 @@ pub struct GetUsagePlanKeysRequest {
     pub usage_plan_id: String,
 }
 
-impl PagedRequest for GetUsagePlanKeysRequest {
+impl Paged for GetUsagePlanKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsagePlanKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2460,11 +2564,19 @@ pub struct GetUsagePlansRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetUsagePlansRequest {
+impl Paged for GetUsagePlansRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsagePlansRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2496,11 +2608,19 @@ pub struct GetUsageRequest {
     pub usage_plan_id: String,
 }
 
-impl PagedRequest for GetUsageRequest {
+impl Paged for GetUsageRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetUsageRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2529,11 +2649,19 @@ pub struct GetVpcLinksRequest {
     pub position: Option<String>,
 }
 
-impl PagedRequest for GetVpcLinksRequest {
+impl Paged for GetVpcLinksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
+    }
+}
+
+impl PagedRequest for GetVpcLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.position = key;
-        self
     }
 }
 
@@ -2883,27 +3011,25 @@ pub struct Models {
     pub position: Option<String>,
 }
 
-impl Models {
-    fn pagination_page_opt(self) -> Option<Vec<Model>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for Models {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for Models {
     type Item = Model;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Model> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3251,27 +3377,25 @@ pub struct RequestValidators {
     pub position: Option<String>,
 }
 
-impl RequestValidators {
-    fn pagination_page_opt(self) -> Option<Vec<RequestValidator>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for RequestValidators {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for RequestValidators {
     type Item = RequestValidator;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RequestValidator> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3318,27 +3442,25 @@ pub struct Resources {
     pub position: Option<String>,
 }
 
-impl Resources {
-    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for Resources {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for Resources {
     type Item = Resource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Resource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3419,27 +3541,25 @@ pub struct RestApis {
     pub position: Option<String>,
 }
 
-impl RestApis {
-    fn pagination_page_opt(self) -> Option<Vec<RestApi>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for RestApis {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for RestApis {
     type Item = RestApi;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RestApi> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3518,27 +3638,25 @@ pub struct SdkTypes {
     pub position: Option<String>,
 }
 
-impl SdkTypes {
-    fn pagination_page_opt(self) -> Option<Vec<SdkType>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for SdkTypes {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for SdkTypes {
     type Item = SdkType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SdkType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4250,29 +4368,25 @@ pub struct Usage {
     pub usage_plan_id: Option<String>,
 }
 
-impl Usage {
-    fn pagination_page_opt(
-        self,
-    ) -> Option<Vec<::std::collections::HashMap<String, Vec<Vec<i64>>>>> {
-        Some(self.items.as_ref()?.clone()).map(|x| vec![x])
+impl Paged for Usage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for Usage {
     type Item = ::std::collections::HashMap<String, Vec<Vec<i64>>>;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<::std::collections::HashMap<String, Vec<Vec<i64>>>> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.into_iter().collect()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4355,27 +4469,25 @@ pub struct UsagePlanKeys {
     pub position: Option<String>,
 }
 
-impl UsagePlanKeys {
-    fn pagination_page_opt(self) -> Option<Vec<UsagePlanKey>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for UsagePlanKeys {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for UsagePlanKeys {
     type Item = UsagePlanKey;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UsagePlanKey> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4393,27 +4505,25 @@ pub struct UsagePlans {
     pub position: Option<String>,
 }
 
-impl UsagePlans {
-    fn pagination_page_opt(self) -> Option<Vec<UsagePlan>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for UsagePlans {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for UsagePlans {
     type Item = UsagePlan;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UsagePlan> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4468,27 +4578,25 @@ pub struct VpcLinks {
     pub position: Option<String>,
 }
 
-impl VpcLinks {
-    fn pagination_page_opt(self) -> Option<Vec<VpcLink>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for VpcLinks {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.position.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.position)
     }
 }
 
 impl PagedOutput for VpcLinks {
     type Item = VpcLink;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.position.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VpcLink> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -10873,13 +10981,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<ApiKeys, RusotoError<GetApiKeysError>>;
 
     /// Auto-paginating version of `get_api_keys`
-    fn get_api_keys_pages(
-        &self,
-        input: GetApiKeysRequest,
-    ) -> RusotoStream<ApiKey, GetApiKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_api_keys(state.clone())
-        })
+    fn get_api_keys_pages<'a>(
+        &'a self,
+        mut input: GetApiKeysRequest,
+    ) -> RusotoStream<'a, ApiKey, GetApiKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_api_keys(input.clone())
+        }))
     }
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
@@ -10895,13 +11004,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<Authorizers, RusotoError<GetAuthorizersError>>;
 
     /// Auto-paginating version of `get_authorizers`
-    fn get_authorizers_pages(
-        &self,
-        input: GetAuthorizersRequest,
-    ) -> RusotoStream<Authorizer, GetAuthorizersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_authorizers(state.clone())
-        })
+    fn get_authorizers_pages<'a>(
+        &'a self,
+        mut input: GetAuthorizersRequest,
+    ) -> RusotoStream<'a, Authorizer, GetAuthorizersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_authorizers(input.clone())
+        }))
     }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
@@ -10917,13 +11027,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<BasePathMappings, RusotoError<GetBasePathMappingsError>>;
 
     /// Auto-paginating version of `get_base_path_mappings`
-    fn get_base_path_mappings_pages(
-        &self,
-        input: GetBasePathMappingsRequest,
-    ) -> RusotoStream<BasePathMapping, GetBasePathMappingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_base_path_mappings(state.clone())
-        })
+    fn get_base_path_mappings_pages<'a>(
+        &'a self,
+        mut input: GetBasePathMappingsRequest,
+    ) -> RusotoStream<'a, BasePathMapping, GetBasePathMappingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_base_path_mappings(input.clone())
+        }))
     }
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
@@ -10939,13 +11050,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<ClientCertificates, RusotoError<GetClientCertificatesError>>;
 
     /// Auto-paginating version of `get_client_certificates`
-    fn get_client_certificates_pages(
-        &self,
-        input: GetClientCertificatesRequest,
-    ) -> RusotoStream<ClientCertificate, GetClientCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_client_certificates(state.clone())
-        })
+    fn get_client_certificates_pages<'a>(
+        &'a self,
+        mut input: GetClientCertificatesRequest,
+    ) -> RusotoStream<'a, ClientCertificate, GetClientCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_client_certificates(input.clone())
+        }))
     }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
@@ -10961,13 +11073,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<Deployments, RusotoError<GetDeploymentsError>>;
 
     /// Auto-paginating version of `get_deployments`
-    fn get_deployments_pages(
-        &self,
-        input: GetDeploymentsRequest,
-    ) -> RusotoStream<Deployment, GetDeploymentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_deployments(state.clone())
-        })
+    fn get_deployments_pages<'a>(
+        &'a self,
+        mut input: GetDeploymentsRequest,
+    ) -> RusotoStream<'a, Deployment, GetDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_deployments(input.clone())
+        }))
     }
 
     async fn get_documentation_part(
@@ -10981,13 +11094,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<DocumentationParts, RusotoError<GetDocumentationPartsError>>;
 
     /// Auto-paginating version of `get_documentation_parts`
-    fn get_documentation_parts_pages(
-        &self,
-        input: GetDocumentationPartsRequest,
-    ) -> RusotoStream<DocumentationPart, GetDocumentationPartsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_documentation_parts(state.clone())
-        })
+    fn get_documentation_parts_pages<'a>(
+        &'a self,
+        mut input: GetDocumentationPartsRequest,
+    ) -> RusotoStream<'a, DocumentationPart, GetDocumentationPartsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_documentation_parts(input.clone())
+        }))
     }
 
     async fn get_documentation_version(
@@ -11001,13 +11115,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<DocumentationVersions, RusotoError<GetDocumentationVersionsError>>;
 
     /// Auto-paginating version of `get_documentation_versions`
-    fn get_documentation_versions_pages(
-        &self,
-        input: GetDocumentationVersionsRequest,
-    ) -> RusotoStream<DocumentationVersion, GetDocumentationVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_documentation_versions(state.clone())
-        })
+    fn get_documentation_versions_pages<'a>(
+        &'a self,
+        mut input: GetDocumentationVersionsRequest,
+    ) -> RusotoStream<'a, DocumentationVersion, GetDocumentationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_documentation_versions(input.clone())
+        }))
     }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
@@ -11023,13 +11138,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<DomainNames, RusotoError<GetDomainNamesError>>;
 
     /// Auto-paginating version of `get_domain_names`
-    fn get_domain_names_pages(
-        &self,
-        input: GetDomainNamesRequest,
-    ) -> RusotoStream<DomainName, GetDomainNamesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_domain_names(state.clone())
-        })
+    fn get_domain_names_pages<'a>(
+        &'a self,
+        mut input: GetDomainNamesRequest,
+    ) -> RusotoStream<'a, DomainName, GetDomainNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_domain_names(input.clone())
+        }))
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
@@ -11051,13 +11167,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<GatewayResponses, RusotoError<GetGatewayResponsesError>>;
 
     /// Auto-paginating version of `get_gateway_responses`
-    fn get_gateway_responses_pages(
-        &self,
-        input: GetGatewayResponsesRequest,
-    ) -> RusotoStream<GatewayResponse, GetGatewayResponsesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_gateway_responses(state.clone())
-        })
+    fn get_gateway_responses_pages<'a>(
+        &'a self,
+        mut input: GetGatewayResponsesRequest,
+    ) -> RusotoStream<'a, GatewayResponse, GetGatewayResponsesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_gateway_responses(input.clone())
+        }))
     }
 
     /// <p>Get the integration settings.</p>
@@ -11100,10 +11217,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<Models, RusotoError<GetModelsError>>;
 
     /// Auto-paginating version of `get_models`
-    fn get_models_pages(&self, input: GetModelsRequest) -> RusotoStream<Model, GetModelsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_models(state.clone())
-        })
+    fn get_models_pages<'a>(
+        &'a self,
+        mut input: GetModelsRequest,
+    ) -> RusotoStream<'a, Model, GetModelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_models(input.clone())
+        }))
     }
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
@@ -11119,13 +11240,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<RequestValidators, RusotoError<GetRequestValidatorsError>>;
 
     /// Auto-paginating version of `get_request_validators`
-    fn get_request_validators_pages(
-        &self,
-        input: GetRequestValidatorsRequest,
-    ) -> RusotoStream<RequestValidator, GetRequestValidatorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_request_validators(state.clone())
-        })
+    fn get_request_validators_pages<'a>(
+        &'a self,
+        mut input: GetRequestValidatorsRequest,
+    ) -> RusotoStream<'a, RequestValidator, GetRequestValidatorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_request_validators(input.clone())
+        }))
     }
 
     /// <p>Lists information about a resource.</p>
@@ -11141,13 +11263,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<Resources, RusotoError<GetResourcesError>>;
 
     /// Auto-paginating version of `get_resources`
-    fn get_resources_pages(
-        &self,
-        input: GetResourcesRequest,
-    ) -> RusotoStream<Resource, GetResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resources(state.clone())
-        })
+    fn get_resources_pages<'a>(
+        &'a self,
+        mut input: GetResourcesRequest,
+    ) -> RusotoStream<'a, Resource, GetResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resources(input.clone())
+        }))
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
@@ -11163,13 +11286,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<RestApis, RusotoError<GetRestApisError>>;
 
     /// Auto-paginating version of `get_rest_apis`
-    fn get_rest_apis_pages(
-        &self,
-        input: GetRestApisRequest,
-    ) -> RusotoStream<RestApi, GetRestApisError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_rest_apis(state.clone())
-        })
+    fn get_rest_apis_pages<'a>(
+        &'a self,
+        mut input: GetRestApisRequest,
+    ) -> RusotoStream<'a, RestApi, GetRestApisError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_rest_apis(input.clone())
+        }))
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
@@ -11186,13 +11310,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<SdkTypes, RusotoError<GetSdkTypesError>>;
 
     /// Auto-paginating version of `get_sdk_types`
-    fn get_sdk_types_pages(
-        &self,
-        input: GetSdkTypesRequest,
-    ) -> RusotoStream<SdkType, GetSdkTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_sdk_types(state.clone())
-        })
+    fn get_sdk_types_pages<'a>(
+        &'a self,
+        mut input: GetSdkTypesRequest,
+    ) -> RusotoStream<'a, SdkType, GetSdkTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sdk_types(input.clone())
+        }))
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
@@ -11211,13 +11336,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>>;
 
     /// Auto-paginating version of `get_usage`
-    fn get_usage_pages(
-        &self,
-        input: GetUsageRequest,
-    ) -> RusotoStream<::std::collections::HashMap<String, Vec<Vec<i64>>>, GetUsageError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_usage(state.clone())
-        })
+    fn get_usage_pages<'a>(
+        &'a self,
+        mut input: GetUsageRequest,
+    ) -> RusotoStream<'a, ::std::collections::HashMap<String, Vec<Vec<i64>>>, GetUsageError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage(input.clone())
+        }))
     }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
@@ -11239,13 +11365,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>>;
 
     /// Auto-paginating version of `get_usage_plan_keys`
-    fn get_usage_plan_keys_pages(
-        &self,
-        input: GetUsagePlanKeysRequest,
-    ) -> RusotoStream<UsagePlanKey, GetUsagePlanKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_usage_plan_keys(state.clone())
-        })
+    fn get_usage_plan_keys_pages<'a>(
+        &'a self,
+        mut input: GetUsagePlanKeysRequest,
+    ) -> RusotoStream<'a, UsagePlanKey, GetUsagePlanKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage_plan_keys(input.clone())
+        }))
     }
 
     /// <p>Gets all the usage plans of the caller's account.</p>
@@ -11255,13 +11382,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<UsagePlans, RusotoError<GetUsagePlansError>>;
 
     /// Auto-paginating version of `get_usage_plans`
-    fn get_usage_plans_pages(
-        &self,
-        input: GetUsagePlansRequest,
-    ) -> RusotoStream<UsagePlan, GetUsagePlansError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_usage_plans(state.clone())
-        })
+    fn get_usage_plans_pages<'a>(
+        &'a self,
+        mut input: GetUsagePlansRequest,
+    ) -> RusotoStream<'a, UsagePlan, GetUsagePlansError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_usage_plans(input.clone())
+        }))
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
@@ -11277,13 +11405,14 @@ pub trait ApiGateway: Clone + Sync + Send + 'static {
     ) -> Result<VpcLinks, RusotoError<GetVpcLinksError>>;
 
     /// Auto-paginating version of `get_vpc_links`
-    fn get_vpc_links_pages(
-        &self,
-        input: GetVpcLinksRequest,
-    ) -> RusotoStream<VpcLink, GetVpcLinksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_vpc_links(state.clone())
-        })
+    fn get_vpc_links_pages<'a>(
+        &'a self,
+        mut input: GetVpcLinksRequest,
+    ) -> RusotoStream<'a, VpcLink, GetVpcLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_vpc_links(input.clone())
+        }))
     }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1609,11 +1611,19 @@ pub struct DescribeTapeArchivesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeTapeArchivesInput {
+impl Paged for DescribeTapeArchivesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapeArchivesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1632,27 +1642,25 @@ pub struct DescribeTapeArchivesOutput {
     pub tape_archives: Option<Vec<TapeArchive>>,
 }
 
-impl DescribeTapeArchivesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TapeArchive>> {
-        Some(self.tape_archives.as_ref()?.clone())
+impl Paged for DescribeTapeArchivesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeTapeArchivesOutput {
     type Item = TapeArchive;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TapeArchive> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tape_archives.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1673,11 +1681,19 @@ pub struct DescribeTapeRecoveryPointsInput {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for DescribeTapeRecoveryPointsInput {
+impl Paged for DescribeTapeRecoveryPointsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapeRecoveryPointsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1699,27 +1715,25 @@ pub struct DescribeTapeRecoveryPointsOutput {
     pub tape_recovery_point_infos: Option<Vec<TapeRecoveryPointInfo>>,
 }
 
-impl DescribeTapeRecoveryPointsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TapeRecoveryPointInfo>> {
-        Some(self.tape_recovery_point_infos.as_ref()?.clone())
+impl Paged for DescribeTapeRecoveryPointsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeTapeRecoveryPointsOutput {
     type Item = TapeRecoveryPointInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TapeRecoveryPointInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tape_recovery_point_infos.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1744,11 +1758,19 @@ pub struct DescribeTapesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeTapesInput {
+impl Paged for DescribeTapesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTapesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1767,27 +1789,25 @@ pub struct DescribeTapesOutput {
     pub tapes: Option<Vec<Tape>>,
 }
 
-impl DescribeTapesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Tape>> {
-        Some(self.tapes.as_ref()?.clone())
+impl Paged for DescribeTapesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeTapesOutput {
     type Item = Tape;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tape> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tapes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1841,11 +1861,19 @@ pub struct DescribeVTLDevicesInput {
     pub vtl_device_ar_ns: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeVTLDevicesInput {
+impl Paged for DescribeVTLDevicesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeVTLDevicesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1867,27 +1895,25 @@ pub struct DescribeVTLDevicesOutput {
     pub vtl_devices: Option<Vec<VTLDevice>>,
 }
 
-impl DescribeVTLDevicesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VTLDevice>> {
-        Some(self.vtl_devices.as_ref()?.clone())
+impl Paged for DescribeVTLDevicesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeVTLDevicesOutput {
     type Item = VTLDevice;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VTLDevice> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.vtl_devices.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2164,11 +2190,19 @@ pub struct ListFileSharesInput {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListFileSharesInput {
+impl Paged for ListFileSharesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListFileSharesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2191,27 +2225,25 @@ pub struct ListFileSharesOutput {
     pub next_marker: Option<String>,
 }
 
-impl ListFileSharesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<FileShareInfo>> {
-        Some(self.file_share_info_list.as_ref()?.clone())
+impl Paged for ListFileSharesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListFileSharesOutput {
     type Item = FileShareInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FileShareInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.file_share_info_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2230,11 +2262,19 @@ pub struct ListGatewaysInput {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListGatewaysInput {
+impl Paged for ListGatewaysInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGatewaysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2252,27 +2292,25 @@ pub struct ListGatewaysOutput {
     pub marker: Option<String>,
 }
 
-impl ListGatewaysOutput {
-    fn pagination_page_opt(self) -> Option<Vec<GatewayInfo>> {
-        Some(self.gateways.as_ref()?.clone())
+impl Paged for ListGatewaysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListGatewaysOutput {
     type Item = GatewayInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GatewayInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.gateways.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2316,11 +2354,19 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceInput {
+impl Paged for ListTagsForResourceInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2343,27 +2389,25 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListTagsForResourceOutput {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2385,11 +2429,19 @@ pub struct ListTapePoolsInput {
     pub pool_ar_ns: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListTapePoolsInput {
+impl Paged for ListTapePoolsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTapePoolsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2407,27 +2459,25 @@ pub struct ListTapePoolsOutput {
     pub pool_infos: Option<Vec<PoolInfo>>,
 }
 
-impl ListTapePoolsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PoolInfo>> {
-        Some(self.pool_infos.as_ref()?.clone())
+impl Paged for ListTapePoolsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListTapePoolsOutput {
     type Item = PoolInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PoolInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pool_infos.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2449,11 +2499,19 @@ pub struct ListTapesInput {
     pub tape_ar_ns: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListTapesInput {
+impl Paged for ListTapesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListTapesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2471,27 +2529,25 @@ pub struct ListTapesOutput {
     pub tape_infos: Option<Vec<TapeInfo>>,
 }
 
-impl ListTapesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TapeInfo>> {
-        Some(self.tape_infos.as_ref()?.clone())
+impl Paged for ListTapesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListTapesOutput {
     type Item = TapeInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TapeInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tape_infos.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2555,11 +2611,19 @@ pub struct ListVolumesInput {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for ListVolumesInput {
+impl Paged for ListVolumesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVolumesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2581,27 +2645,25 @@ pub struct ListVolumesOutput {
     pub volume_infos: Option<Vec<VolumeInfo>>,
 }
 
-impl ListVolumesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VolumeInfo>> {
-        Some(self.volume_infos.as_ref()?.clone())
+impl Paged for ListVolumesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListVolumesOutput {
     type Item = VolumeInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VolumeInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.volume_infos.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7581,13 +7643,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTapeArchivesOutput, RusotoError<DescribeTapeArchivesError>>;
 
     /// Auto-paginating version of `describe_tape_archives`
-    fn describe_tape_archives_pages(
-        &self,
-        input: DescribeTapeArchivesInput,
-    ) -> RusotoStream<TapeArchive, DescribeTapeArchivesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tape_archives(state.clone())
-        })
+    fn describe_tape_archives_pages<'a>(
+        &'a self,
+        mut input: DescribeTapeArchivesInput,
+    ) -> RusotoStream<'a, TapeArchive, DescribeTapeArchivesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tape_archives(input.clone())
+        }))
     }
 
     /// <p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway type.</p>
@@ -7597,13 +7660,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTapeRecoveryPointsOutput, RusotoError<DescribeTapeRecoveryPointsError>>;
 
     /// Auto-paginating version of `describe_tape_recovery_points`
-    fn describe_tape_recovery_points_pages(
-        &self,
-        input: DescribeTapeRecoveryPointsInput,
-    ) -> RusotoStream<TapeRecoveryPointInfo, DescribeTapeRecoveryPointsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tape_recovery_points(state.clone())
-        })
+    fn describe_tape_recovery_points_pages<'a>(
+        &'a self,
+        mut input: DescribeTapeRecoveryPointsInput,
+    ) -> RusotoStream<'a, TapeRecoveryPointInfo, DescribeTapeRecoveryPointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tape_recovery_points(input.clone())
+        }))
     }
 
     /// <p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway type.</p>
@@ -7613,13 +7677,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTapesOutput, RusotoError<DescribeTapesError>>;
 
     /// Auto-paginating version of `describe_tapes`
-    fn describe_tapes_pages(
-        &self,
-        input: DescribeTapesInput,
-    ) -> RusotoStream<Tape, DescribeTapesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tapes(state.clone())
-        })
+    fn describe_tapes_pages<'a>(
+        &'a self,
+        mut input: DescribeTapesInput,
+    ) -> RusotoStream<'a, Tape, DescribeTapesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tapes(input.clone())
+        }))
     }
 
     /// <p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>
@@ -7635,13 +7700,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<DescribeVTLDevicesOutput, RusotoError<DescribeVTLDevicesError>>;
 
     /// Auto-paginating version of `describe_vtl_devices`
-    fn describe_vtl_devices_pages(
-        &self,
-        input: DescribeVTLDevicesInput,
-    ) -> RusotoStream<VTLDevice, DescribeVTLDevicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_vtl_devices(state.clone())
-        })
+    fn describe_vtl_devices_pages<'a>(
+        &'a self,
+        mut input: DescribeVTLDevicesInput,
+    ) -> RusotoStream<'a, VTLDevice, DescribeVTLDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_vtl_devices(input.clone())
+        }))
     }
 
     /// <p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway type. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>
@@ -7684,13 +7750,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>>;
 
     /// Auto-paginating version of `list_file_shares`
-    fn list_file_shares_pages(
-        &self,
-        input: ListFileSharesInput,
-    ) -> RusotoStream<FileShareInfo, ListFileSharesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_file_shares(state.clone())
-        })
+    fn list_file_shares_pages<'a>(
+        &'a self,
+        mut input: ListFileSharesInput,
+    ) -> RusotoStream<'a, FileShareInfo, ListFileSharesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_file_shares(input.clone())
+        }))
     }
 
     /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
@@ -7700,13 +7767,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListGatewaysOutput, RusotoError<ListGatewaysError>>;
 
     /// Auto-paginating version of `list_gateways`
-    fn list_gateways_pages(
-        &self,
-        input: ListGatewaysInput,
-    ) -> RusotoStream<GatewayInfo, ListGatewaysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_gateways(state.clone())
-        })
+    fn list_gateways_pages<'a>(
+        &'a self,
+        mut input: ListGatewaysInput,
+    ) -> RusotoStream<'a, GatewayInfo, ListGatewaysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_gateways(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>
@@ -7722,13 +7790,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Lists custom tape pools. You specify custom tape pools to list by specifying one or more custom tape pool Amazon Resource Names (ARNs). If you don't specify a custom tape pool ARN, the operation lists all custom tape pools.</p> <p>This operation supports pagination. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tape pools in the response. If the number of tape pools returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tape pools.</p>
@@ -7738,13 +7807,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListTapePoolsOutput, RusotoError<ListTapePoolsError>>;
 
     /// Auto-paginating version of `list_tape_pools`
-    fn list_tape_pools_pages(
-        &self,
-        input: ListTapePoolsInput,
-    ) -> RusotoStream<PoolInfo, ListTapePoolsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tape_pools(state.clone())
-        })
+    fn list_tape_pools_pages<'a>(
+        &'a self,
+        mut input: ListTapePoolsInput,
+    ) -> RusotoStream<'a, PoolInfo, ListTapePoolsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tape_pools(input.clone())
+        }))
     }
 
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
@@ -7754,10 +7824,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListTapesOutput, RusotoError<ListTapesError>>;
 
     /// Auto-paginating version of `list_tapes`
-    fn list_tapes_pages(&self, input: ListTapesInput) -> RusotoStream<TapeInfo, ListTapesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tapes(state.clone())
-        })
+    fn list_tapes_pages<'a>(
+        &'a self,
+        mut input: ListTapesInput,
+    ) -> RusotoStream<'a, TapeInfo, ListTapesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tapes(input.clone())
+        }))
     }
 
     /// <p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway types.</p>
@@ -7779,13 +7853,14 @@ pub trait StorageGateway: Clone + Sync + Send + 'static {
     ) -> Result<ListVolumesOutput, RusotoError<ListVolumesError>>;
 
     /// Auto-paginating version of `list_volumes`
-    fn list_volumes_pages(
-        &self,
-        input: ListVolumesInput,
-    ) -> RusotoStream<VolumeInfo, ListVolumesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_volumes(state.clone())
-        })
+    fn list_volumes_pages<'a>(
+        &'a self,
+        mut input: ListVolumesInput,
+    ) -> RusotoStream<'a, VolumeInfo, ListVolumesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_volumes(input.clone())
+        }))
     }
 
     /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification">Getting file upload notification</a> in the <i>AWS Storage Gateway User Guide</i>.</p>

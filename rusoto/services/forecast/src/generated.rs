@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1175,11 +1177,19 @@ pub struct ListDatasetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDatasetGroupsRequest {
+impl Paged for ListDatasetGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatasetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1197,27 +1207,25 @@ pub struct ListDatasetGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDatasetGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DatasetGroupSummary>> {
-        Some(self.dataset_groups.as_ref()?.clone())
+impl Paged for ListDatasetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDatasetGroupsResponse {
     type Item = DatasetGroupSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DatasetGroupSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dataset_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1239,11 +1247,19 @@ pub struct ListDatasetImportJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDatasetImportJobsRequest {
+impl Paged for ListDatasetImportJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatasetImportJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1261,27 +1277,25 @@ pub struct ListDatasetImportJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDatasetImportJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DatasetImportJobSummary>> {
-        Some(self.dataset_import_jobs.as_ref()?.clone())
+impl Paged for ListDatasetImportJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDatasetImportJobsResponse {
     type Item = DatasetImportJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DatasetImportJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dataset_import_jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1299,11 +1313,19 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDatasetsRequest {
+impl Paged for ListDatasetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatasetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1321,27 +1343,25 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDatasetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DatasetSummary>> {
-        Some(self.datasets.as_ref()?.clone())
+impl Paged for ListDatasetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDatasetsResponse {
     type Item = DatasetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DatasetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.datasets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1363,11 +1383,19 @@ pub struct ListForecastExportJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListForecastExportJobsRequest {
+impl Paged for ListForecastExportJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListForecastExportJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1385,27 +1413,25 @@ pub struct ListForecastExportJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListForecastExportJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ForecastExportJobSummary>> {
-        Some(self.forecast_export_jobs.as_ref()?.clone())
+impl Paged for ListForecastExportJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListForecastExportJobsResponse {
     type Item = ForecastExportJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ForecastExportJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.forecast_export_jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1427,11 +1453,19 @@ pub struct ListForecastsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListForecastsRequest {
+impl Paged for ListForecastsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListForecastsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1449,27 +1483,25 @@ pub struct ListForecastsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListForecastsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ForecastSummary>> {
-        Some(self.forecasts.as_ref()?.clone())
+impl Paged for ListForecastsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListForecastsResponse {
     type Item = ForecastSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ForecastSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.forecasts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1491,11 +1523,19 @@ pub struct ListPredictorBacktestExportJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPredictorBacktestExportJobsRequest {
+impl Paged for ListPredictorBacktestExportJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPredictorBacktestExportJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1513,27 +1553,25 @@ pub struct ListPredictorBacktestExportJobsResponse {
     pub predictor_backtest_export_jobs: Option<Vec<PredictorBacktestExportJobSummary>>,
 }
 
-impl ListPredictorBacktestExportJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PredictorBacktestExportJobSummary>> {
-        Some(self.predictor_backtest_export_jobs.as_ref()?.clone())
+impl Paged for ListPredictorBacktestExportJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPredictorBacktestExportJobsResponse {
     type Item = PredictorBacktestExportJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PredictorBacktestExportJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.predictor_backtest_export_jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1555,11 +1593,19 @@ pub struct ListPredictorsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPredictorsRequest {
+impl Paged for ListPredictorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPredictorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1577,27 +1623,25 @@ pub struct ListPredictorsResponse {
     pub predictors: Option<Vec<PredictorSummary>>,
 }
 
-impl ListPredictorsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PredictorSummary>> {
-        Some(self.predictors.as_ref()?.clone())
+impl Paged for ListPredictorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPredictorsResponse {
     type Item = PredictorSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PredictorSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.predictors.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3556,13 +3600,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListDatasetGroupsResponse, RusotoError<ListDatasetGroupsError>>;
 
     /// Auto-paginating version of `list_dataset_groups`
-    fn list_dataset_groups_pages(
-        &self,
-        input: ListDatasetGroupsRequest,
-    ) -> RusotoStream<DatasetGroupSummary, ListDatasetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dataset_groups(state.clone())
-        })
+    fn list_dataset_groups_pages<'a>(
+        &'a self,
+        mut input: ListDatasetGroupsRequest,
+    ) -> RusotoStream<'a, DatasetGroupSummary, ListDatasetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dataset_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of dataset import jobs created using the <a>CreateDatasetImportJob</a> operation. For each import job, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribeDatasetImportJob</a> operation. You can filter the list by providing an array of <a>Filter</a> objects.</p>
@@ -3572,13 +3617,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListDatasetImportJobsResponse, RusotoError<ListDatasetImportJobsError>>;
 
     /// Auto-paginating version of `list_dataset_import_jobs`
-    fn list_dataset_import_jobs_pages(
-        &self,
-        input: ListDatasetImportJobsRequest,
-    ) -> RusotoStream<DatasetImportJobSummary, ListDatasetImportJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dataset_import_jobs(state.clone())
-        })
+    fn list_dataset_import_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDatasetImportJobsRequest,
+    ) -> RusotoStream<'a, DatasetImportJobSummary, ListDatasetImportJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dataset_import_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns a list of datasets created using the <a>CreateDataset</a> operation. For each dataset, a summary of its properties, including its Amazon Resource Name (ARN), is returned. To retrieve the complete set of properties, use the ARN with the <a>DescribeDataset</a> operation.</p>
@@ -3588,13 +3634,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>>;
 
     /// Auto-paginating version of `list_datasets`
-    fn list_datasets_pages(
-        &self,
-        input: ListDatasetsRequest,
-    ) -> RusotoStream<DatasetSummary, ListDatasetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_datasets(state.clone())
-        })
+    fn list_datasets_pages<'a>(
+        &'a self,
+        mut input: ListDatasetsRequest,
+    ) -> RusotoStream<'a, DatasetSummary, ListDatasetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_datasets(input.clone())
+        }))
     }
 
     /// <p>Returns a list of forecast export jobs created using the <a>CreateForecastExportJob</a> operation. For each forecast export job, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). To retrieve the complete set of properties, use the ARN with the <a>DescribeForecastExportJob</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
@@ -3604,13 +3651,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListForecastExportJobsResponse, RusotoError<ListForecastExportJobsError>>;
 
     /// Auto-paginating version of `list_forecast_export_jobs`
-    fn list_forecast_export_jobs_pages(
-        &self,
-        input: ListForecastExportJobsRequest,
-    ) -> RusotoStream<ForecastExportJobSummary, ListForecastExportJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_forecast_export_jobs(state.clone())
-        })
+    fn list_forecast_export_jobs_pages<'a>(
+        &'a self,
+        mut input: ListForecastExportJobsRequest,
+    ) -> RusotoStream<'a, ForecastExportJobSummary, ListForecastExportJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_forecast_export_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns a list of forecasts created using the <a>CreateForecast</a> operation. For each forecast, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). To retrieve the complete set of properties, specify the ARN with the <a>DescribeForecast</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
@@ -3620,13 +3668,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListForecastsResponse, RusotoError<ListForecastsError>>;
 
     /// Auto-paginating version of `list_forecasts`
-    fn list_forecasts_pages(
-        &self,
-        input: ListForecastsRequest,
-    ) -> RusotoStream<ForecastSummary, ListForecastsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_forecasts(state.clone())
-        })
+    fn list_forecasts_pages<'a>(
+        &'a self,
+        mut input: ListForecastsRequest,
+    ) -> RusotoStream<'a, ForecastSummary, ListForecastsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_forecasts(input.clone())
+        }))
     }
 
     /// <p>Returns a list of predictor backtest export jobs created using the <a>CreatePredictorBacktestExportJob</a> operation. This operation returns a summary for each backtest export job. You can filter the list using an array of <a>Filter</a> objects.</p> <p>To retrieve the complete set of properties for a particular backtest export job, use the ARN with the <a>DescribePredictorBacktestExportJob</a> operation.</p>
@@ -3639,13 +3688,15 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_predictor_backtest_export_jobs`
-    fn list_predictor_backtest_export_jobs_pages(
-        &self,
-        input: ListPredictorBacktestExportJobsRequest,
-    ) -> RusotoStream<PredictorBacktestExportJobSummary, ListPredictorBacktestExportJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_predictor_backtest_export_jobs(state.clone())
-        })
+    fn list_predictor_backtest_export_jobs_pages<'a>(
+        &'a self,
+        mut input: ListPredictorBacktestExportJobsRequest,
+    ) -> RusotoStream<'a, PredictorBacktestExportJobSummary, ListPredictorBacktestExportJobsError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_predictor_backtest_export_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns a list of predictors created using the <a>CreatePredictor</a> operation. For each predictor, this operation returns a summary of its properties, including its Amazon Resource Name (ARN). You can retrieve the complete set of properties by using the ARN with the <a>DescribePredictor</a> operation. You can filter the list using an array of <a>Filter</a> objects.</p>
@@ -3655,13 +3706,14 @@ pub trait Forecast: Clone + Sync + Send + 'static {
     ) -> Result<ListPredictorsResponse, RusotoError<ListPredictorsError>>;
 
     /// Auto-paginating version of `list_predictors`
-    fn list_predictors_pages(
-        &self,
-        input: ListPredictorsRequest,
-    ) -> RusotoStream<PredictorSummary, ListPredictorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_predictors(state.clone())
-        })
+    fn list_predictors_pages<'a>(
+        &'a self,
+        mut input: ListPredictorsRequest,
+    ) -> RusotoStream<'a, PredictorSummary, ListPredictorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_predictors(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for an Amazon Forecast resource.</p>

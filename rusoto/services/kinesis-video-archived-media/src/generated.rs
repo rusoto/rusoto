@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -312,11 +314,19 @@ pub struct ListFragmentsInput {
     pub stream_name: String,
 }
 
-impl PagedRequest for ListFragmentsInput {
+impl Paged for ListFragmentsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFragmentsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -334,27 +344,25 @@ pub struct ListFragmentsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListFragmentsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Fragment>> {
-        Some(self.fragments.as_ref()?.clone())
+impl Paged for ListFragmentsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFragmentsOutput {
     type Item = Fragment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Fragment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.fragments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -780,13 +788,14 @@ pub trait KinesisVideoArchivedMedia: Clone + Sync + Send + 'static {
     ) -> Result<ListFragmentsOutput, RusotoError<ListFragmentsError>>;
 
     /// Auto-paginating version of `list_fragments`
-    fn list_fragments_pages(
-        &self,
-        input: ListFragmentsInput,
-    ) -> RusotoStream<Fragment, ListFragmentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_fragments(state.clone())
-        })
+    fn list_fragments_pages<'a>(
+        &'a self,
+        mut input: ListFragmentsInput,
+    ) -> RusotoStream<'a, Fragment, ListFragmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_fragments(input.clone())
+        }))
     }
 }
 /// A client for the Kinesis Video Archived Media API.

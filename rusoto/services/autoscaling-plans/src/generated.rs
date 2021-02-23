@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -185,11 +187,19 @@ pub struct DescribeScalingPlanResourcesRequest {
     pub scaling_plan_version: i64,
 }
 
-impl PagedRequest for DescribeScalingPlanResourcesRequest {
+impl Paged for DescribeScalingPlanResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingPlanResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -207,27 +217,25 @@ pub struct DescribeScalingPlanResourcesResponse {
     pub scaling_plan_resources: Option<Vec<ScalingPlanResource>>,
 }
 
-impl DescribeScalingPlanResourcesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScalingPlanResource>> {
-        Some(self.scaling_plan_resources.as_ref()?.clone())
+impl Paged for DescribeScalingPlanResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScalingPlanResourcesResponse {
     type Item = ScalingPlanResource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalingPlanResource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scaling_plan_resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -257,11 +265,19 @@ pub struct DescribeScalingPlansRequest {
     pub scaling_plan_version: Option<i64>,
 }
 
-impl PagedRequest for DescribeScalingPlansRequest {
+impl Paged for DescribeScalingPlansRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingPlansRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -279,27 +295,25 @@ pub struct DescribeScalingPlansResponse {
     pub scaling_plans: Option<Vec<ScalingPlan>>,
 }
 
-impl DescribeScalingPlansResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ScalingPlan>> {
-        Some(self.scaling_plans.as_ref()?.clone())
+impl Paged for DescribeScalingPlansResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeScalingPlansResponse {
     type Item = ScalingPlan;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalingPlan> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scaling_plans.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -869,13 +883,14 @@ pub trait AutoscalingPlans: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScalingPlanResourcesResponse, RusotoError<DescribeScalingPlanResourcesError>>;
 
     /// Auto-paginating version of `describe_scaling_plan_resources`
-    fn describe_scaling_plan_resources_pages(
-        &self,
-        input: DescribeScalingPlanResourcesRequest,
-    ) -> RusotoStream<ScalingPlanResource, DescribeScalingPlanResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scaling_plan_resources(state.clone())
-        })
+    fn describe_scaling_plan_resources_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingPlanResourcesRequest,
+    ) -> RusotoStream<'a, ScalingPlanResource, DescribeScalingPlanResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_plan_resources(input.clone())
+        }))
     }
 
     /// <p>Describes one or more of your scaling plans.</p>
@@ -885,13 +900,14 @@ pub trait AutoscalingPlans: Clone + Sync + Send + 'static {
     ) -> Result<DescribeScalingPlansResponse, RusotoError<DescribeScalingPlansError>>;
 
     /// Auto-paginating version of `describe_scaling_plans`
-    fn describe_scaling_plans_pages(
-        &self,
-        input: DescribeScalingPlansRequest,
-    ) -> RusotoStream<ScalingPlan, DescribeScalingPlansError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scaling_plans(state.clone())
-        })
+    fn describe_scaling_plans_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingPlansRequest,
+    ) -> RusotoStream<'a, ScalingPlan, DescribeScalingPlansError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_plans(input.clone())
+        }))
     }
 
     /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>

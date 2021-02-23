@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -344,11 +346,19 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeClustersRequest {
+impl Paged for DescribeClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -366,27 +376,25 @@ pub struct DescribeClustersResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeClustersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
-        Some(self.clusters.as_ref()?.clone())
+impl Paged for DescribeClustersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeClustersResponse {
     type Item = Cluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Cluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -404,11 +412,19 @@ pub struct DescribeDefaultParametersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeDefaultParametersRequest {
+impl Paged for DescribeDefaultParametersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDefaultParametersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -426,27 +442,25 @@ pub struct DescribeDefaultParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-impl DescribeDefaultParametersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.parameters.as_ref()?.clone())
+impl Paged for DescribeDefaultParametersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDefaultParametersResponse {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -484,11 +498,19 @@ pub struct DescribeEventsRequest {
     pub start_time: Option<f64>,
 }
 
-impl PagedRequest for DescribeEventsRequest {
+impl Paged for DescribeEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -506,27 +528,25 @@ pub struct DescribeEventsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for DescribeEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEventsResponse {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -548,11 +568,19 @@ pub struct DescribeParameterGroupsRequest {
     pub parameter_group_names: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeParameterGroupsRequest {
+impl Paged for DescribeParameterGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeParameterGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -570,27 +598,25 @@ pub struct DescribeParameterGroupsResponse {
     pub parameter_groups: Option<Vec<ParameterGroup>>,
 }
 
-impl DescribeParameterGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ParameterGroup>> {
-        Some(self.parameter_groups.as_ref()?.clone())
+impl Paged for DescribeParameterGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeParameterGroupsResponse {
     type Item = ParameterGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ParameterGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameter_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -615,11 +641,19 @@ pub struct DescribeParametersRequest {
     pub source: Option<String>,
 }
 
-impl PagedRequest for DescribeParametersRequest {
+impl Paged for DescribeParametersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeParametersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -637,27 +671,25 @@ pub struct DescribeParametersResponse {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-impl DescribeParametersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.parameters.as_ref()?.clone())
+impl Paged for DescribeParametersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeParametersResponse {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -679,11 +711,19 @@ pub struct DescribeSubnetGroupsRequest {
     pub subnet_group_names: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeSubnetGroupsRequest {
+impl Paged for DescribeSubnetGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSubnetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -701,27 +741,25 @@ pub struct DescribeSubnetGroupsResponse {
     pub subnet_groups: Option<Vec<SubnetGroup>>,
 }
 
-impl DescribeSubnetGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SubnetGroup>> {
-        Some(self.subnet_groups.as_ref()?.clone())
+impl Paged for DescribeSubnetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeSubnetGroupsResponse {
     type Item = SubnetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SubnetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subnet_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -800,11 +838,19 @@ pub struct ListTagsRequest {
     pub resource_name: String,
 }
 
-impl PagedRequest for ListTagsRequest {
+impl Paged for ListTagsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -822,27 +868,25 @@ pub struct ListTagsResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2778,13 +2822,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
 
     /// Auto-paginating version of `describe_clusters`
-    fn describe_clusters_pages(
-        &self,
-        input: DescribeClustersRequest,
-    ) -> RusotoStream<Cluster, DescribeClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_clusters(state.clone())
-        })
+    fn describe_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeClustersRequest,
+    ) -> RusotoStream<'a, Cluster, DescribeClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_clusters(input.clone())
+        }))
     }
 
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
@@ -2794,13 +2839,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDefaultParametersResponse, RusotoError<DescribeDefaultParametersError>>;
 
     /// Auto-paginating version of `describe_default_parameters`
-    fn describe_default_parameters_pages(
-        &self,
-        input: DescribeDefaultParametersRequest,
-    ) -> RusotoStream<Parameter, DescribeDefaultParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_default_parameters(state.clone())
-        })
+    fn describe_default_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeDefaultParametersRequest,
+    ) -> RusotoStream<'a, Parameter, DescribeDefaultParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_default_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last 24 hours are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
@@ -2810,13 +2856,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsRequest,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
@@ -2826,13 +2873,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeParameterGroupsResponse, RusotoError<DescribeParameterGroupsError>>;
 
     /// Auto-paginating version of `describe_parameter_groups`
-    fn describe_parameter_groups_pages(
-        &self,
-        input: DescribeParameterGroupsRequest,
-    ) -> RusotoStream<ParameterGroup, DescribeParameterGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_parameter_groups(state.clone())
-        })
+    fn describe_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeParameterGroupsRequest,
+    ) -> RusotoStream<'a, ParameterGroup, DescribeParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_parameter_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
@@ -2842,13 +2890,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeParametersResponse, RusotoError<DescribeParametersError>>;
 
     /// Auto-paginating version of `describe_parameters`
-    fn describe_parameters_pages(
-        &self,
-        input: DescribeParametersRequest,
-    ) -> RusotoStream<Parameter, DescribeParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_parameters(state.clone())
-        })
+    fn describe_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeParametersRequest,
+    ) -> RusotoStream<'a, Parameter, DescribeParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
@@ -2858,13 +2907,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSubnetGroupsResponse, RusotoError<DescribeSubnetGroupsError>>;
 
     /// Auto-paginating version of `describe_subnet_groups`
-    fn describe_subnet_groups_pages(
-        &self,
-        input: DescribeSubnetGroupsRequest,
-    ) -> RusotoStream<SubnetGroup, DescribeSubnetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_subnet_groups(state.clone())
-        })
+    fn describe_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeSubnetGroupsRequest,
+    ) -> RusotoStream<'a, SubnetGroup, DescribeSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_subnet_groups(input.clone())
+        }))
     }
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
@@ -2880,10 +2930,14 @@ pub trait DynamodbAccelerator: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// Auto-paginating version of `list_tags`
-    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<Tag, ListTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags(state.clone())
-        })
+    fn list_tags_pages<'a>(
+        &'a self,
+        mut input: ListTagsRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags(input.clone())
+        }))
     }
 
     /// <p><p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p> <note> <p> <code>RebootNode</code> restarts the DAX engine process and does not remove the contents of the cache. </p> </note></p>

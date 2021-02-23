@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -145,11 +147,19 @@ pub struct GetComplianceSummaryInput {
     pub target_id_filters: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetComplianceSummaryInput {
+impl Paged for GetComplianceSummaryInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetComplianceSummaryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.pagination_token = key;
-        self
     }
 }
 
@@ -167,27 +177,25 @@ pub struct GetComplianceSummaryOutput {
     pub summary_list: Option<Vec<Summary>>,
 }
 
-impl GetComplianceSummaryOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Summary>> {
-        Some(self.summary_list.as_ref()?.clone())
+impl Paged for GetComplianceSummaryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
     }
 }
 
 impl PagedOutput for GetComplianceSummaryOutput {
     type Item = Summary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.pagination_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Summary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summary_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -225,11 +233,19 @@ pub struct GetResourcesInput {
     pub tags_per_page: Option<i64>,
 }
 
-impl PagedRequest for GetResourcesInput {
+impl Paged for GetResourcesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetResourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.pagination_token = key;
-        self
     }
 }
 
@@ -247,27 +263,25 @@ pub struct GetResourcesOutput {
     pub resource_tag_mapping_list: Option<Vec<ResourceTagMapping>>,
 }
 
-impl GetResourcesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceTagMapping>> {
-        Some(self.resource_tag_mapping_list.as_ref()?.clone())
+impl Paged for GetResourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
     }
 }
 
 impl PagedOutput for GetResourcesOutput {
     type Item = ResourceTagMapping;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.pagination_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceTagMapping> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_tag_mapping_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -281,11 +295,19 @@ pub struct GetTagKeysInput {
     pub pagination_token: Option<String>,
 }
 
-impl PagedRequest for GetTagKeysInput {
+impl Paged for GetTagKeysInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetTagKeysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.pagination_token = key;
-        self
     }
 }
 
@@ -303,27 +325,25 @@ pub struct GetTagKeysOutput {
     pub tag_keys: Option<Vec<String>>,
 }
 
-impl GetTagKeysOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.tag_keys.as_ref()?.clone())
+impl Paged for GetTagKeysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
     }
 }
 
 impl PagedOutput for GetTagKeysOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.pagination_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tag_keys.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -340,11 +360,19 @@ pub struct GetTagValuesInput {
     pub pagination_token: Option<String>,
 }
 
-impl PagedRequest for GetTagValuesInput {
+impl Paged for GetTagValuesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
+    }
+}
+
+impl PagedRequest for GetTagValuesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.pagination_token = key;
-        self
     }
 }
 
@@ -362,27 +390,25 @@ pub struct GetTagValuesOutput {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl GetTagValuesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.tag_values.as_ref()?.clone())
+impl Paged for GetTagValuesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.pagination_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.pagination_token)
     }
 }
 
 impl PagedOutput for GetTagValuesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.pagination_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tag_values.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -929,13 +955,14 @@ pub trait ResourceGroupsTaggingApi: Clone + Sync + Send + 'static {
     ) -> Result<GetComplianceSummaryOutput, RusotoError<GetComplianceSummaryError>>;
 
     /// Auto-paginating version of `get_compliance_summary`
-    fn get_compliance_summary_pages(
-        &self,
-        input: GetComplianceSummaryInput,
-    ) -> RusotoStream<Summary, GetComplianceSummaryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_compliance_summary(state.clone())
-        })
+    fn get_compliance_summary_pages<'a>(
+        &'a self,
+        mut input: GetComplianceSummaryInput,
+    ) -> RusotoStream<'a, Summary, GetComplianceSummaryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_compliance_summary(input.clone())
+        }))
     }
 
     /// <p><p>Returns all the tagged or previously tagged resources that are located in the specified Region for the AWS account.</p> <p>Depending on what information you want returned, you can also specify the following:</p> <ul> <li> <p> <i>Filters</i> that specify what tags and resource types you want returned. The response includes all tags that are associated with the requested resources.</p> </li> <li> <p>Information about compliance with the account&#39;s effective tag policy. For more information on tag policies, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag Policies</a> in the <i>AWS Organizations User Guide.</i> </p> </li> </ul> <note> <p>You can check the <code>PaginationToken</code> response parameter to determine if a query is complete. Queries occasionally return fewer results on a page than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display. </p> </note></p>
@@ -945,13 +972,14 @@ pub trait ResourceGroupsTaggingApi: Clone + Sync + Send + 'static {
     ) -> Result<GetResourcesOutput, RusotoError<GetResourcesError>>;
 
     /// Auto-paginating version of `get_resources`
-    fn get_resources_pages(
-        &self,
-        input: GetResourcesInput,
-    ) -> RusotoStream<ResourceTagMapping, GetResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resources(state.clone())
-        })
+    fn get_resources_pages<'a>(
+        &'a self,
+        mut input: GetResourcesInput,
+    ) -> RusotoStream<'a, ResourceTagMapping, GetResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resources(input.clone())
+        }))
     }
 
     /// <p>Returns all tag keys in the specified Region for the AWS account.</p>
@@ -961,10 +989,14 @@ pub trait ResourceGroupsTaggingApi: Clone + Sync + Send + 'static {
     ) -> Result<GetTagKeysOutput, RusotoError<GetTagKeysError>>;
 
     /// Auto-paginating version of `get_tag_keys`
-    fn get_tag_keys_pages(&self, input: GetTagKeysInput) -> RusotoStream<String, GetTagKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_tag_keys(state.clone())
-        })
+    fn get_tag_keys_pages<'a>(
+        &'a self,
+        mut input: GetTagKeysInput,
+    ) -> RusotoStream<'a, String, GetTagKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_tag_keys(input.clone())
+        }))
     }
 
     /// <p>Returns all tag values for the specified key in the specified Region for the AWS account.</p>
@@ -974,13 +1006,14 @@ pub trait ResourceGroupsTaggingApi: Clone + Sync + Send + 'static {
     ) -> Result<GetTagValuesOutput, RusotoError<GetTagValuesError>>;
 
     /// Auto-paginating version of `get_tag_values`
-    fn get_tag_values_pages(
-        &self,
-        input: GetTagValuesInput,
-    ) -> RusotoStream<String, GetTagValuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_tag_values(state.clone())
-        })
+    fn get_tag_values_pages<'a>(
+        &'a self,
+        mut input: GetTagValuesInput,
+    ) -> RusotoStream<'a, String, GetTagValuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_tag_values(input.clone())
+        }))
     }
 
     /// <p>Generates a report that lists all tagged resources in accounts across your organization and tells whether each resource is compliant with the effective tag policy. Compliance data is refreshed daily. </p> <p>The generated report is saved to the following location:</p> <p> <code>s3://example-bucket/AwsTagPolicies/o-exampleorgid/YYYY-MM-ddTHH:mm:ssZ/report.csv</code> </p> <p>You can call this operation only from the organization's master account and from the us-east-1 Region.</p>

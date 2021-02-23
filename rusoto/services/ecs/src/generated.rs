@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1723,11 +1725,19 @@ pub struct ListAccountSettingsRequest {
     pub value: Option<String>,
 }
 
-impl PagedRequest for ListAccountSettingsRequest {
+impl Paged for ListAccountSettingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountSettingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1745,27 +1755,25 @@ pub struct ListAccountSettingsResponse {
     pub settings: Option<Vec<Setting>>,
 }
 
-impl ListAccountSettingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Setting>> {
-        Some(self.settings.as_ref()?.clone())
+impl Paged for ListAccountSettingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountSettingsResponse {
     type Item = Setting;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Setting> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.settings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1798,11 +1806,19 @@ pub struct ListAttributesRequest {
     pub target_type: String,
 }
 
-impl PagedRequest for ListAttributesRequest {
+impl Paged for ListAttributesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAttributesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1820,27 +1836,25 @@ pub struct ListAttributesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAttributesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Attribute>> {
-        Some(self.attributes.as_ref()?.clone())
+impl Paged for ListAttributesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAttributesResponse {
     type Item = Attribute;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Attribute> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attributes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1858,11 +1872,19 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListClustersRequest {
+impl Paged for ListClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1880,27 +1902,25 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListClustersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.cluster_arns.as_ref()?.clone())
+impl Paged for ListClustersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListClustersResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1930,11 +1950,19 @@ pub struct ListContainerInstancesRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListContainerInstancesRequest {
+impl Paged for ListContainerInstancesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListContainerInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1952,27 +1980,25 @@ pub struct ListContainerInstancesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListContainerInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.container_instance_arns.as_ref()?.clone())
+impl Paged for ListContainerInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListContainerInstancesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.container_instance_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2002,11 +2028,19 @@ pub struct ListServicesRequest {
     pub scheduling_strategy: Option<String>,
 }
 
-impl PagedRequest for ListServicesRequest {
+impl Paged for ListServicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2024,27 +2058,25 @@ pub struct ListServicesResponse {
     pub service_arns: Option<Vec<String>>,
 }
 
-impl ListServicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.service_arns.as_ref()?.clone())
+impl Paged for ListServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServicesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.service_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2089,11 +2121,19 @@ pub struct ListTaskDefinitionFamiliesRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListTaskDefinitionFamiliesRequest {
+impl Paged for ListTaskDefinitionFamiliesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskDefinitionFamiliesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2111,27 +2151,25 @@ pub struct ListTaskDefinitionFamiliesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListTaskDefinitionFamiliesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.families.as_ref()?.clone())
+impl Paged for ListTaskDefinitionFamiliesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTaskDefinitionFamiliesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.families.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2161,11 +2199,19 @@ pub struct ListTaskDefinitionsRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListTaskDefinitionsRequest {
+impl Paged for ListTaskDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTaskDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2183,27 +2229,25 @@ pub struct ListTaskDefinitionsResponse {
     pub task_definition_arns: Option<Vec<String>>,
 }
 
-impl ListTaskDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.task_definition_arns.as_ref()?.clone())
+impl Paged for ListTaskDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTaskDefinitionsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.task_definition_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2249,11 +2293,19 @@ pub struct ListTasksRequest {
     pub started_by: Option<String>,
 }
 
-impl PagedRequest for ListTasksRequest {
+impl Paged for ListTasksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2271,27 +2323,25 @@ pub struct ListTasksResponse {
     pub task_arns: Option<Vec<String>>,
 }
 
-impl ListTasksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.task_arns.as_ref()?.clone())
+impl Paged for ListTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTasksResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.task_arns.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6814,13 +6864,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountSettingsResponse, RusotoError<ListAccountSettingsError>>;
 
     /// Auto-paginating version of `list_account_settings`
-    fn list_account_settings_pages(
-        &self,
-        input: ListAccountSettingsRequest,
-    ) -> RusotoStream<Setting, ListAccountSettingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_account_settings(state.clone())
-        })
+    fn list_account_settings_pages<'a>(
+        &'a self,
+        mut input: ListAccountSettingsRequest,
+    ) -> RusotoStream<'a, Setting, ListAccountSettingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_account_settings(input.clone())
+        }))
     }
 
     /// <p>Lists the attributes for Amazon ECS resources within a specified target type and cluster. When you specify a target type and cluster, <code>ListAttributes</code> returns a list of attribute objects, one for each attribute on each resource. You can filter the list of results to a single attribute name to only return results that have that name. You can also filter the results by attribute name and value, for example, to see which container instances in a cluster are running a Linux AMI (<code>ecs.os-type=linux</code>). </p>
@@ -6830,13 +6881,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListAttributesResponse, RusotoError<ListAttributesError>>;
 
     /// Auto-paginating version of `list_attributes`
-    fn list_attributes_pages(
-        &self,
-        input: ListAttributesRequest,
-    ) -> RusotoStream<Attribute, ListAttributesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_attributes(state.clone())
-        })
+    fn list_attributes_pages<'a>(
+        &'a self,
+        mut input: ListAttributesRequest,
+    ) -> RusotoStream<'a, Attribute, ListAttributesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attributes(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing clusters.</p>
@@ -6846,13 +6898,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
 
     /// Auto-paginating version of `list_clusters`
-    fn list_clusters_pages(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoStream<String, ListClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_clusters(state.clone())
-        })
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersRequest,
+    ) -> RusotoStream<'a, String, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of container instances in a specified cluster. You can filter the results of a <code>ListContainerInstances</code> operation with cluster query language statements inside the <code>filter</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -6862,13 +6915,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListContainerInstancesResponse, RusotoError<ListContainerInstancesError>>;
 
     /// Auto-paginating version of `list_container_instances`
-    fn list_container_instances_pages(
-        &self,
-        input: ListContainerInstancesRequest,
-    ) -> RusotoStream<String, ListContainerInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_container_instances(state.clone())
-        })
+    fn list_container_instances_pages<'a>(
+        &'a self,
+        mut input: ListContainerInstancesRequest,
+    ) -> RusotoStream<'a, String, ListContainerInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_container_instances(input.clone())
+        }))
     }
 
     /// <p>Lists the services that are running in a specified cluster.</p>
@@ -6878,13 +6932,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
 
     /// Auto-paginating version of `list_services`
-    fn list_services_pages(
-        &self,
-        input: ListServicesRequest,
-    ) -> RusotoStream<String, ListServicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_services(state.clone())
-        })
+    fn list_services_pages<'a>(
+        &'a self,
+        mut input: ListServicesRequest,
+    ) -> RusotoStream<'a, String, ListServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_services(input.clone())
+        }))
     }
 
     /// <p>List the tags for an Amazon ECS resource.</p>
@@ -6900,13 +6955,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListTaskDefinitionFamiliesResponse, RusotoError<ListTaskDefinitionFamiliesError>>;
 
     /// Auto-paginating version of `list_task_definition_families`
-    fn list_task_definition_families_pages(
-        &self,
-        input: ListTaskDefinitionFamiliesRequest,
-    ) -> RusotoStream<String, ListTaskDefinitionFamiliesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_task_definition_families(state.clone())
-        })
+    fn list_task_definition_families_pages<'a>(
+        &'a self,
+        mut input: ListTaskDefinitionFamiliesRequest,
+    ) -> RusotoStream<'a, String, ListTaskDefinitionFamiliesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_definition_families(input.clone())
+        }))
     }
 
     /// <p>Returns a list of task definitions that are registered to your account. You can filter the results by family name with the <code>familyPrefix</code> parameter or by status with the <code>status</code> parameter.</p>
@@ -6916,13 +6972,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListTaskDefinitionsResponse, RusotoError<ListTaskDefinitionsError>>;
 
     /// Auto-paginating version of `list_task_definitions`
-    fn list_task_definitions_pages(
-        &self,
-        input: ListTaskDefinitionsRequest,
-    ) -> RusotoStream<String, ListTaskDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_task_definitions(state.clone())
-        })
+    fn list_task_definitions_pages<'a>(
+        &'a self,
+        mut input: ListTaskDefinitionsRequest,
+    ) -> RusotoStream<'a, String, ListTaskDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_task_definitions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of tasks for a specified cluster. You can filter the results by family name, by a particular container instance, or by the desired status of the task with the <code>family</code>, <code>containerInstance</code>, and <code>desiredStatus</code> parameters.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour. </p>
@@ -6932,10 +6989,14 @@ pub trait Ecs: Clone + Sync + Send + 'static {
     ) -> Result<ListTasksResponse, RusotoError<ListTasksError>>;
 
     /// Auto-paginating version of `list_tasks`
-    fn list_tasks_pages(&self, input: ListTasksRequest) -> RusotoStream<String, ListTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tasks(state.clone())
-        })
+    fn list_tasks_pages<'a>(
+        &'a self,
+        mut input: ListTasksRequest,
+    ) -> RusotoStream<'a, String, ListTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tasks(input.clone())
+        }))
     }
 
     /// <p>Modifies an account setting. Account settings are set on a per-Region basis.</p> <p>If you change the account setting for the root user, the default settings for all of the IAM users and roles for which no individual account setting has been specified are reset. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-account-settings.html">Account Settings</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>When <code>serviceLongArnFormat</code>, <code>taskLongArnFormat</code>, or <code>containerInstanceLongArnFormat</code> are specified, the Amazon Resource Name (ARN) and resource ID format of the resource type for a specified IAM user, IAM role, or the root user for an account is affected. The opt-in and opt-out account setting must be set for each Amazon ECS resource separately. The ARN and resource ID format of a resource will be defined by the opt-in status of the IAM user or role that created the resource. You must enable this setting to use Amazon ECS features such as resource tagging.</p> <p>When <code>awsvpcTrunking</code> is specified, the elastic network interface (ENI) limit for any new container instances that support the feature is changed. If <code>awsvpcTrunking</code> is enabled, any new container instances that support the feature are launched have the increased ENI limits available to them. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-eni.html">Elastic Network Interface Trunking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>When <code>containerInsights</code> is specified, the default setting indicating whether CloudWatch Container Insights is enabled for your clusters is changed. If <code>containerInsights</code> is enabled, any new clusters that are created will have Container Insights enabled unless you disable it during cluster creation. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-container-insights.html">CloudWatch Container Insights</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>

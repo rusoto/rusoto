@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -651,11 +653,19 @@ pub struct ListApplicationDependenciesRequest {
     pub semantic_version: Option<String>,
 }
 
-impl PagedRequest for ListApplicationDependenciesRequest {
+impl Paged for ListApplicationDependenciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationDependenciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -673,27 +683,25 @@ pub struct ListApplicationDependenciesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListApplicationDependenciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ApplicationDependencySummary>> {
-        Some(self.dependencies.as_ref()?.clone())
+impl Paged for ListApplicationDependenciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationDependenciesResponse {
     type Item = ApplicationDependencySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApplicationDependencySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dependencies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -714,11 +722,19 @@ pub struct ListApplicationVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationVersionsRequest {
+impl Paged for ListApplicationVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -736,27 +752,25 @@ pub struct ListApplicationVersionsResponse {
     pub versions: Option<Vec<VersionSummary>>,
 }
 
-impl ListApplicationVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionSummary>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListApplicationVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationVersionsResponse {
     type Item = VersionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -774,11 +788,19 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationsRequest {
+impl Paged for ListApplicationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -796,27 +818,25 @@ pub struct ListApplicationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListApplicationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ApplicationSummary>> {
-        Some(self.applications.as_ref()?.clone())
+impl Paged for ListApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationsResponse {
     type Item = ApplicationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApplicationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.applications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2054,13 +2074,14 @@ pub trait ServerlessRepo: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationDependenciesResponse, RusotoError<ListApplicationDependenciesError>>;
 
     /// Auto-paginating version of `list_application_dependencies`
-    fn list_application_dependencies_pages(
-        &self,
-        input: ListApplicationDependenciesRequest,
-    ) -> RusotoStream<ApplicationDependencySummary, ListApplicationDependenciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_application_dependencies(state.clone())
-        })
+    fn list_application_dependencies_pages<'a>(
+        &'a self,
+        mut input: ListApplicationDependenciesRequest,
+    ) -> RusotoStream<'a, ApplicationDependencySummary, ListApplicationDependenciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_dependencies(input.clone())
+        }))
     }
 
     /// <p>Lists versions for the specified application.</p>
@@ -2070,13 +2091,14 @@ pub trait ServerlessRepo: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationVersionsResponse, RusotoError<ListApplicationVersionsError>>;
 
     /// Auto-paginating version of `list_application_versions`
-    fn list_application_versions_pages(
-        &self,
-        input: ListApplicationVersionsRequest,
-    ) -> RusotoStream<VersionSummary, ListApplicationVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_application_versions(state.clone())
-        })
+    fn list_application_versions_pages<'a>(
+        &'a self,
+        mut input: ListApplicationVersionsRequest,
+    ) -> RusotoStream<'a, VersionSummary, ListApplicationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_versions(input.clone())
+        }))
     }
 
     /// <p>Lists applications owned by the requester.</p>
@@ -2086,13 +2108,14 @@ pub trait ServerlessRepo: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
 
     /// Auto-paginating version of `list_applications`
-    fn list_applications_pages(
-        &self,
-        input: ListApplicationsRequest,
-    ) -> RusotoStream<ApplicationSummary, ListApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_applications(state.clone())
-        })
+    fn list_applications_pages<'a>(
+        &'a self,
+        mut input: ListApplicationsRequest,
+    ) -> RusotoStream<'a, ApplicationSummary, ListApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_applications(input.clone())
+        }))
     }
 
     /// <p>Sets the permission policy for an application. For the list of actions supported for this operation, see

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -321,11 +323,19 @@ pub struct GetResourcePoliciesRequest {
     pub resource_arns: Vec<String>,
 }
 
-impl PagedRequest for GetResourcePoliciesRequest {
+impl Paged for GetResourcePoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetResourcePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -343,27 +353,25 @@ pub struct GetResourcePoliciesResponse {
     pub policies: Option<Vec<String>>,
 }
 
-impl GetResourcePoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.policies.as_ref()?.clone())
+impl Paged for GetResourcePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetResourcePoliciesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -400,11 +408,19 @@ pub struct GetResourceShareAssociationsRequest {
     pub resource_share_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetResourceShareAssociationsRequest {
+impl Paged for GetResourceShareAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetResourceShareAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -422,27 +438,25 @@ pub struct GetResourceShareAssociationsResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
-impl GetResourceShareAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceShareAssociation>> {
-        Some(self.resource_share_associations.as_ref()?.clone())
+impl Paged for GetResourceShareAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetResourceShareAssociationsResponse {
     type Item = ResourceShareAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceShareAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_share_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -468,11 +482,19 @@ pub struct GetResourceShareInvitationsRequest {
     pub resource_share_invitation_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetResourceShareInvitationsRequest {
+impl Paged for GetResourceShareInvitationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetResourceShareInvitationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -490,27 +512,25 @@ pub struct GetResourceShareInvitationsResponse {
     pub resource_share_invitations: Option<Vec<ResourceShareInvitation>>,
 }
 
-impl GetResourceShareInvitationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceShareInvitation>> {
-        Some(self.resource_share_invitations.as_ref()?.clone())
+impl Paged for GetResourceShareInvitationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetResourceShareInvitationsResponse {
     type Item = ResourceShareInvitation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceShareInvitation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_share_invitations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -547,11 +567,19 @@ pub struct GetResourceSharesRequest {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
-impl PagedRequest for GetResourceSharesRequest {
+impl Paged for GetResourceSharesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetResourceSharesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -569,27 +597,25 @@ pub struct GetResourceSharesResponse {
     pub resource_shares: Option<Vec<ResourceShare>>,
 }
 
-impl GetResourceSharesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceShare>> {
-        Some(self.resource_shares.as_ref()?.clone())
+impl Paged for GetResourceSharesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetResourceSharesResponse {
     type Item = ResourceShare;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceShare> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_shares.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -689,11 +715,19 @@ pub struct ListPrincipalsRequest {
     pub resource_type: Option<String>,
 }
 
-impl PagedRequest for ListPrincipalsRequest {
+impl Paged for ListPrincipalsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPrincipalsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -711,27 +745,25 @@ pub struct ListPrincipalsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
-impl ListPrincipalsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Principal>> {
-        Some(self.principals.as_ref()?.clone())
+impl Paged for ListPrincipalsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPrincipalsResponse {
     type Item = Principal;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Principal> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.principals.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -827,11 +859,19 @@ pub struct ListResourcesRequest {
     pub resource_type: Option<String>,
 }
 
-impl PagedRequest for ListResourcesRequest {
+impl Paged for ListResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -849,27 +889,25 @@ pub struct ListResourcesResponse {
     pub resources: Option<Vec<Resource>>,
 }
 
-impl ListResourcesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
-        Some(self.resources.as_ref()?.clone())
+impl Paged for ListResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourcesResponse {
     type Item = Resource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Resource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3410,13 +3448,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>>;
 
     /// Auto-paginating version of `get_resource_policies`
-    fn get_resource_policies_pages(
-        &self,
-        input: GetResourcePoliciesRequest,
-    ) -> RusotoStream<String, GetResourcePoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resource_policies(state.clone())
-        })
+    fn get_resource_policies_pages<'a>(
+        &'a self,
+        mut input: GetResourcePoliciesRequest,
+    ) -> RusotoStream<'a, String, GetResourcePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resource_policies(input.clone())
+        }))
     }
 
     /// <p>Gets the resources or principals for the resource shares that you own.</p>
@@ -3426,13 +3465,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>;
 
     /// Auto-paginating version of `get_resource_share_associations`
-    fn get_resource_share_associations_pages(
-        &self,
-        input: GetResourceShareAssociationsRequest,
-    ) -> RusotoStream<ResourceShareAssociation, GetResourceShareAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resource_share_associations(state.clone())
-        })
+    fn get_resource_share_associations_pages<'a>(
+        &'a self,
+        mut input: GetResourceShareAssociationsRequest,
+    ) -> RusotoStream<'a, ResourceShareAssociation, GetResourceShareAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resource_share_associations(input.clone())
+        }))
     }
 
     /// <p>Gets the invitations for resource sharing that you've received.</p>
@@ -3442,13 +3482,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<GetResourceShareInvitationsResponse, RusotoError<GetResourceShareInvitationsError>>;
 
     /// Auto-paginating version of `get_resource_share_invitations`
-    fn get_resource_share_invitations_pages(
-        &self,
-        input: GetResourceShareInvitationsRequest,
-    ) -> RusotoStream<ResourceShareInvitation, GetResourceShareInvitationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resource_share_invitations(state.clone())
-        })
+    fn get_resource_share_invitations_pages<'a>(
+        &'a self,
+        mut input: GetResourceShareInvitationsRequest,
+    ) -> RusotoStream<'a, ResourceShareInvitation, GetResourceShareInvitationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resource_share_invitations(input.clone())
+        }))
     }
 
     /// <p>Gets the resource shares that you own or the resource shares that are shared with you.</p>
@@ -3458,13 +3499,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<GetResourceSharesResponse, RusotoError<GetResourceSharesError>>;
 
     /// Auto-paginating version of `get_resource_shares`
-    fn get_resource_shares_pages(
-        &self,
-        input: GetResourceSharesRequest,
-    ) -> RusotoStream<ResourceShare, GetResourceSharesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_resource_shares(state.clone())
-        })
+    fn get_resource_shares_pages<'a>(
+        &'a self,
+        mut input: GetResourceSharesRequest,
+    ) -> RusotoStream<'a, ResourceShare, GetResourceSharesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_resource_shares(input.clone())
+        }))
     }
 
     /// <p>Lists the resources in a resource share that is shared with you but that the invitation is still pending for.</p>
@@ -3489,13 +3531,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<ListPrincipalsResponse, RusotoError<ListPrincipalsError>>;
 
     /// Auto-paginating version of `list_principals`
-    fn list_principals_pages(
-        &self,
-        input: ListPrincipalsRequest,
-    ) -> RusotoStream<Principal, ListPrincipalsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_principals(state.clone())
-        })
+    fn list_principals_pages<'a>(
+        &'a self,
+        mut input: ListPrincipalsRequest,
+    ) -> RusotoStream<'a, Principal, ListPrincipalsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_principals(input.clone())
+        }))
     }
 
     /// <p>Lists the AWS RAM permissions that are associated with a resource share.</p>
@@ -3517,13 +3560,14 @@ pub trait Ram: Clone + Sync + Send + 'static {
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
     /// Auto-paginating version of `list_resources`
-    fn list_resources_pages(
-        &self,
-        input: ListResourcesRequest,
-    ) -> RusotoStream<Resource, ListResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resources(state.clone())
-        })
+    fn list_resources_pages<'a>(
+        &'a self,
+        mut input: ListResourcesRequest,
+    ) -> RusotoStream<'a, Resource, ListResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resources(input.clone())
+        }))
     }
 
     /// <p><p>Resource shares that were created by attaching a policy to a resource are visible only to the resource share owner, and the resource share cannot be modified in AWS RAM.</p> <p>Use this API action to promote the resource share. When you promote the resource share, it becomes:</p> <ul> <li> <p>Visible to all principals that it is shared with.</p> </li> <li> <p>Modifiable in AWS RAM.</p> </li> </ul></p>

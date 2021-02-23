@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -90,27 +92,25 @@ pub struct ActivitiesType {
     pub next_token: Option<String>,
 }
 
-impl ActivitiesType {
-    fn pagination_page_opt(self) -> Option<Vec<Activity>> {
-        Some(self.activities.clone())
+impl Paged for ActivitiesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ActivitiesType {
     type Item = Activity;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Activity> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.activities
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -781,11 +781,19 @@ pub struct AutoScalingGroupNamesType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for AutoScalingGroupNamesType {
+impl Paged for AutoScalingGroupNamesType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for AutoScalingGroupNamesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -842,27 +850,25 @@ pub struct AutoScalingGroupsType {
     pub next_token: Option<String>,
 }
 
-impl AutoScalingGroupsType {
-    fn pagination_page_opt(self) -> Option<Vec<AutoScalingGroup>> {
-        Some(self.auto_scaling_groups.clone())
+impl Paged for AutoScalingGroupsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for AutoScalingGroupsType {
     type Item = AutoScalingGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AutoScalingGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.auto_scaling_groups
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1022,27 +1028,25 @@ pub struct AutoScalingInstancesType {
     pub next_token: Option<String>,
 }
 
-impl AutoScalingInstancesType {
-    fn pagination_page_opt(self) -> Option<Vec<AutoScalingInstanceDetails>> {
-        Some(self.auto_scaling_instances.as_ref()?.clone())
+impl Paged for AutoScalingInstancesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for AutoScalingInstancesType {
     type Item = AutoScalingInstanceDetails;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AutoScalingInstanceDetails> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.auto_scaling_instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2306,11 +2310,19 @@ pub struct DescribeAutoScalingInstancesType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAutoScalingInstancesType {
+impl Paged for DescribeAutoScalingInstancesType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAutoScalingInstancesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2571,11 +2583,19 @@ pub struct DescribeLoadBalancerTargetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeLoadBalancerTargetGroupsRequest {
+impl Paged for DescribeLoadBalancerTargetGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLoadBalancerTargetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2611,27 +2631,25 @@ pub struct DescribeLoadBalancerTargetGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeLoadBalancerTargetGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LoadBalancerTargetGroupState>> {
-        Some(self.load_balancer_target_groups.as_ref()?.clone())
+impl Paged for DescribeLoadBalancerTargetGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeLoadBalancerTargetGroupsResponse {
     type Item = LoadBalancerTargetGroupState;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LoadBalancerTargetGroupState> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.load_balancer_target_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2679,11 +2697,19 @@ pub struct DescribeLoadBalancersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeLoadBalancersRequest {
+impl Paged for DescribeLoadBalancersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLoadBalancersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2719,27 +2745,25 @@ pub struct DescribeLoadBalancersResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeLoadBalancersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LoadBalancerState>> {
-        Some(self.load_balancers.as_ref()?.clone())
+impl Paged for DescribeLoadBalancersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeLoadBalancersResponse {
     type Item = LoadBalancerState;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LoadBalancerState> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.load_balancers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2825,27 +2849,25 @@ pub struct DescribeNotificationConfigurationsAnswer {
     pub notification_configurations: Vec<NotificationConfiguration>,
 }
 
-impl DescribeNotificationConfigurationsAnswer {
-    fn pagination_page_opt(self) -> Option<Vec<NotificationConfiguration>> {
-        Some(self.notification_configurations.clone())
+impl Paged for DescribeNotificationConfigurationsAnswer {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeNotificationConfigurationsAnswer {
     type Item = NotificationConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<NotificationConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.notification_configurations
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2893,11 +2915,19 @@ pub struct DescribeNotificationConfigurationsType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeNotificationConfigurationsType {
+impl Paged for DescribeNotificationConfigurationsType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeNotificationConfigurationsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2942,11 +2972,19 @@ pub struct DescribePoliciesType {
     pub policy_types: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribePoliciesType {
+impl Paged for DescribePoliciesType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePoliciesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3002,11 +3040,19 @@ pub struct DescribeScalingActivitiesType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeScalingActivitiesType {
+impl Paged for DescribeScalingActivitiesType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScalingActivitiesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3059,11 +3105,19 @@ pub struct DescribeScheduledActionsType {
     pub start_time: Option<String>,
 }
 
-impl PagedRequest for DescribeScheduledActionsType {
+impl Paged for DescribeScheduledActionsType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeScheduledActionsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3116,11 +3170,19 @@ pub struct DescribeTagsType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeTagsType {
+impl Paged for DescribeTagsType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeTagsType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4643,11 +4705,19 @@ pub struct LaunchConfigurationNamesType {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for LaunchConfigurationNamesType {
+impl Paged for LaunchConfigurationNamesType {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for LaunchConfigurationNamesType {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4706,27 +4776,25 @@ pub struct LaunchConfigurationsType {
     pub next_token: Option<String>,
 }
 
-impl LaunchConfigurationsType {
-    fn pagination_page_opt(self) -> Option<Vec<LaunchConfiguration>> {
-        Some(self.launch_configurations.clone())
+impl Paged for LaunchConfigurationsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for LaunchConfigurationsType {
     type Item = LaunchConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LaunchConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.launch_configurations
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5888,27 +5956,25 @@ pub struct PoliciesType {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
-impl PoliciesType {
-    fn pagination_page_opt(self) -> Option<Vec<ScalingPolicy>> {
-        Some(self.scaling_policies.as_ref()?.clone())
+impl Paged for PoliciesType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for PoliciesType {
     type Item = ScalingPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScalingPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scaling_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6784,27 +6850,25 @@ pub struct ScheduledActionsType {
     pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
 }
 
-impl ScheduledActionsType {
-    fn pagination_page_opt(self) -> Option<Vec<ScheduledUpdateGroupAction>> {
-        Some(self.scheduled_update_group_actions.as_ref()?.clone())
+impl Paged for ScheduledActionsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ScheduledActionsType {
     type Item = ScheduledUpdateGroupAction;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScheduledUpdateGroupAction> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scheduled_update_group_actions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7574,27 +7638,25 @@ pub struct TagsType {
     pub tags: Option<Vec<TagDescription>>,
 }
 
-impl TagsType {
-    fn pagination_page_opt(self) -> Option<Vec<TagDescription>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for TagsType {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for TagsType {
     type Item = TagDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TagDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -11317,13 +11379,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>>;
 
     /// Auto-paginating version of `describe_auto_scaling_groups`
-    fn describe_auto_scaling_groups_pages(
-        &self,
-        input: AutoScalingGroupNamesType,
-    ) -> RusotoStream<AutoScalingGroup, DescribeAutoScalingGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_auto_scaling_groups(state.clone())
-        })
+    fn describe_auto_scaling_groups_pages<'a>(
+        &'a self,
+        mut input: AutoScalingGroupNamesType,
+    ) -> RusotoStream<'a, AutoScalingGroup, DescribeAutoScalingGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_auto_scaling_groups(input.clone())
+        }))
     }
 
     /// <p>Describes one or more Auto Scaling instances.</p>
@@ -11333,13 +11396,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<AutoScalingInstancesType, RusotoError<DescribeAutoScalingInstancesError>>;
 
     /// Auto-paginating version of `describe_auto_scaling_instances`
-    fn describe_auto_scaling_instances_pages(
-        &self,
-        input: DescribeAutoScalingInstancesType,
-    ) -> RusotoStream<AutoScalingInstanceDetails, DescribeAutoScalingInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_auto_scaling_instances(state.clone())
-        })
+    fn describe_auto_scaling_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeAutoScalingInstancesType,
+    ) -> RusotoStream<'a, AutoScalingInstanceDetails, DescribeAutoScalingInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_auto_scaling_instances(input.clone())
+        }))
     }
 
     /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
@@ -11363,13 +11427,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>>;
 
     /// Auto-paginating version of `describe_launch_configurations`
-    fn describe_launch_configurations_pages(
-        &self,
-        input: LaunchConfigurationNamesType,
-    ) -> RusotoStream<LaunchConfiguration, DescribeLaunchConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_launch_configurations(state.clone())
-        })
+    fn describe_launch_configurations_pages<'a>(
+        &'a self,
+        mut input: LaunchConfigurationNamesType,
+    ) -> RusotoStream<'a, LaunchConfiguration, DescribeLaunchConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_launch_configurations(input.clone())
+        }))
     }
 
     /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
@@ -11393,13 +11458,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_load_balancer_target_groups`
-    fn describe_load_balancer_target_groups_pages(
-        &self,
-        input: DescribeLoadBalancerTargetGroupsRequest,
-    ) -> RusotoStream<LoadBalancerTargetGroupState, DescribeLoadBalancerTargetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_load_balancer_target_groups(state.clone())
-        })
+    fn describe_load_balancer_target_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeLoadBalancerTargetGroupsRequest,
+    ) -> RusotoStream<'a, LoadBalancerTargetGroupState, DescribeLoadBalancerTargetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancer_target_groups(input.clone())
+        }))
     }
 
     /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>
@@ -11409,13 +11475,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<DescribeLoadBalancersResponse, RusotoError<DescribeLoadBalancersError>>;
 
     /// Auto-paginating version of `describe_load_balancers`
-    fn describe_load_balancers_pages(
-        &self,
-        input: DescribeLoadBalancersRequest,
-    ) -> RusotoStream<LoadBalancerState, DescribeLoadBalancersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_load_balancers(state.clone())
-        })
+    fn describe_load_balancers_pages<'a>(
+        &'a self,
+        mut input: DescribeLoadBalancersRequest,
+    ) -> RusotoStream<'a, LoadBalancerState, DescribeLoadBalancersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancers(input.clone())
+        }))
     }
 
     /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling the <a>EnableMetricsCollection</a> API.</p>
@@ -11433,13 +11500,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_notification_configurations`
-    fn describe_notification_configurations_pages(
-        &self,
-        input: DescribeNotificationConfigurationsType,
-    ) -> RusotoStream<NotificationConfiguration, DescribeNotificationConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_notification_configurations(state.clone())
-        })
+    fn describe_notification_configurations_pages<'a>(
+        &'a self,
+        mut input: DescribeNotificationConfigurationsType,
+    ) -> RusotoStream<'a, NotificationConfiguration, DescribeNotificationConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_notification_configurations(input.clone())
+        }))
     }
 
     /// <p>Describes the policies for the specified Auto Scaling group.</p>
@@ -11449,13 +11517,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>>;
 
     /// Auto-paginating version of `describe_policies`
-    fn describe_policies_pages(
-        &self,
-        input: DescribePoliciesType,
-    ) -> RusotoStream<ScalingPolicy, DescribePoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_policies(state.clone())
-        })
+    fn describe_policies_pages<'a>(
+        &'a self,
+        mut input: DescribePoliciesType,
+    ) -> RusotoStream<'a, ScalingPolicy, DescribePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_policies(input.clone())
+        }))
     }
 
     /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
@@ -11465,13 +11534,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<ActivitiesType, RusotoError<DescribeScalingActivitiesError>>;
 
     /// Auto-paginating version of `describe_scaling_activities`
-    fn describe_scaling_activities_pages(
-        &self,
-        input: DescribeScalingActivitiesType,
-    ) -> RusotoStream<Activity, DescribeScalingActivitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scaling_activities(state.clone())
-        })
+    fn describe_scaling_activities_pages<'a>(
+        &'a self,
+        mut input: DescribeScalingActivitiesType,
+    ) -> RusotoStream<'a, Activity, DescribeScalingActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scaling_activities(input.clone())
+        }))
     }
 
     /// <p>Describes the scaling process types for use with the <a>ResumeProcesses</a> and <a>SuspendProcesses</a> APIs.</p>
@@ -11486,13 +11556,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<ScheduledActionsType, RusotoError<DescribeScheduledActionsError>>;
 
     /// Auto-paginating version of `describe_scheduled_actions`
-    fn describe_scheduled_actions_pages(
-        &self,
-        input: DescribeScheduledActionsType,
-    ) -> RusotoStream<ScheduledUpdateGroupAction, DescribeScheduledActionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scheduled_actions(state.clone())
-        })
+    fn describe_scheduled_actions_pages<'a>(
+        &'a self,
+        mut input: DescribeScheduledActionsType,
+    ) -> RusotoStream<'a, ScheduledUpdateGroupAction, DescribeScheduledActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scheduled_actions(input.clone())
+        }))
     }
 
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling groups and instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
@@ -11502,13 +11573,14 @@ pub trait Autoscaling: Clone + Sync + Send + 'static {
     ) -> Result<TagsType, RusotoError<DescribeTagsError>>;
 
     /// Auto-paginating version of `describe_tags`
-    fn describe_tags_pages(
-        &self,
-        input: DescribeTagsType,
-    ) -> RusotoStream<TagDescription, DescribeTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tags(state.clone())
-        })
+    fn describe_tags_pages<'a>(
+        &'a self,
+        mut input: DescribeTagsType,
+    ) -> RusotoStream<'a, TagDescription, DescribeTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tags(input.clone())
+        }))
     }
 
     /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling which Auto Scaling instances terminate during scale in</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>

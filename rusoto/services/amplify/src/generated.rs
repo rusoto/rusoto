@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1031,11 +1033,19 @@ pub struct ListAppsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAppsRequest {
+impl Paged for ListAppsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAppsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1053,27 +1063,25 @@ pub struct ListAppsResult {
     pub next_token: Option<String>,
 }
 
-impl ListAppsResult {
-    fn pagination_page_opt(self) -> Option<Vec<App>> {
-        Some(self.apps.clone())
+impl Paged for ListAppsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAppsResult {
     type Item = App;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<App> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.apps
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1169,11 +1177,19 @@ pub struct ListBranchesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBranchesRequest {
+impl Paged for ListBranchesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBranchesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1191,27 +1207,25 @@ pub struct ListBranchesResult {
     pub next_token: Option<String>,
 }
 
-impl ListBranchesResult {
-    fn pagination_page_opt(self) -> Option<Vec<Branch>> {
-        Some(self.branches.clone())
+impl Paged for ListBranchesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBranchesResult {
     type Item = Branch;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Branch> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.branches
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1233,11 +1247,19 @@ pub struct ListDomainAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDomainAssociationsRequest {
+impl Paged for ListDomainAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDomainAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1255,27 +1277,25 @@ pub struct ListDomainAssociationsResult {
     pub next_token: Option<String>,
 }
 
-impl ListDomainAssociationsResult {
-    fn pagination_page_opt(self) -> Option<Vec<DomainAssociation>> {
-        Some(self.domain_associations.clone())
+impl Paged for ListDomainAssociationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDomainAssociationsResult {
     type Item = DomainAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DomainAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.domain_associations
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1300,11 +1320,19 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListJobsRequest {
+impl Paged for ListJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1322,27 +1350,25 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
-impl ListJobsResult {
-    fn pagination_page_opt(self) -> Option<Vec<JobSummary>> {
-        Some(self.job_summaries.clone())
+impl Paged for ListJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobsResult {
     type Item = JobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3958,10 +3984,14 @@ pub trait Amplify: Clone + Sync + Send + 'static {
     ) -> Result<ListAppsResult, RusotoError<ListAppsError>>;
 
     /// Auto-paginating version of `list_apps`
-    fn list_apps_pages(&self, input: ListAppsRequest) -> RusotoStream<App, ListAppsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_apps(state.clone())
-        })
+    fn list_apps_pages<'a>(
+        &'a self,
+        mut input: ListAppsRequest,
+    ) -> RusotoStream<'a, App, ListAppsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_apps(input.clone())
+        }))
     }
 
     /// <p> Returns a list of artifacts for a specified app, branch, and job. </p>
@@ -3983,13 +4013,14 @@ pub trait Amplify: Clone + Sync + Send + 'static {
     ) -> Result<ListBranchesResult, RusotoError<ListBranchesError>>;
 
     /// Auto-paginating version of `list_branches`
-    fn list_branches_pages(
-        &self,
-        input: ListBranchesRequest,
-    ) -> RusotoStream<Branch, ListBranchesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_branches(state.clone())
-        })
+    fn list_branches_pages<'a>(
+        &'a self,
+        mut input: ListBranchesRequest,
+    ) -> RusotoStream<'a, Branch, ListBranchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_branches(input.clone())
+        }))
     }
 
     /// <p> Returns the domain associations for an Amplify app. </p>
@@ -3999,13 +4030,14 @@ pub trait Amplify: Clone + Sync + Send + 'static {
     ) -> Result<ListDomainAssociationsResult, RusotoError<ListDomainAssociationsError>>;
 
     /// Auto-paginating version of `list_domain_associations`
-    fn list_domain_associations_pages(
-        &self,
-        input: ListDomainAssociationsRequest,
-    ) -> RusotoStream<DomainAssociation, ListDomainAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_domain_associations(state.clone())
-        })
+    fn list_domain_associations_pages<'a>(
+        &'a self,
+        mut input: ListDomainAssociationsRequest,
+    ) -> RusotoStream<'a, DomainAssociation, ListDomainAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domain_associations(input.clone())
+        }))
     }
 
     /// <p> Lists the jobs for a branch of an Amplify app. </p>
@@ -4015,10 +4047,14 @@ pub trait Amplify: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<JobSummary, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobSummary, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p> Returns a list of tags for a specified Amazon Resource Name (ARN). </p>

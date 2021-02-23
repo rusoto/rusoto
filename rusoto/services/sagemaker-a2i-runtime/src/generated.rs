@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -165,11 +167,19 @@ pub struct ListHumanLoopsRequest {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListHumanLoopsRequest {
+impl Paged for ListHumanLoopsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHumanLoopsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -186,27 +196,25 @@ pub struct ListHumanLoopsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHumanLoopsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HumanLoopSummary>> {
-        Some(self.human_loop_summaries.clone())
+impl Paged for ListHumanLoopsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHumanLoopsResponse {
     type Item = HumanLoopSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HumanLoopSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.human_loop_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -491,13 +499,14 @@ pub trait SagemakerA2iRuntime: Clone + Sync + Send + 'static {
     ) -> Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>>;
 
     /// Auto-paginating version of `list_human_loops`
-    fn list_human_loops_pages(
-        &self,
-        input: ListHumanLoopsRequest,
-    ) -> RusotoStream<HumanLoopSummary, ListHumanLoopsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_human_loops(state.clone())
-        })
+    fn list_human_loops_pages<'a>(
+        &'a self,
+        mut input: ListHumanLoopsRequest,
+    ) -> RusotoStream<'a, HumanLoopSummary, ListHumanLoopsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_human_loops(input.clone())
+        }))
     }
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>

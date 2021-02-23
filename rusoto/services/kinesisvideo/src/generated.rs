@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -297,11 +299,19 @@ pub struct ListSignalingChannelsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSignalingChannelsInput {
+impl Paged for ListSignalingChannelsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSignalingChannelsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -319,27 +329,25 @@ pub struct ListSignalingChannelsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListSignalingChannelsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ChannelInfo>> {
-        Some(self.channel_info_list.as_ref()?.clone())
+impl Paged for ListSignalingChannelsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSignalingChannelsOutput {
     type Item = ChannelInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ChannelInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.channel_info_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -361,11 +369,19 @@ pub struct ListStreamsInput {
     pub stream_name_condition: Option<StreamNameCondition>,
 }
 
-impl PagedRequest for ListStreamsInput {
+impl Paged for ListStreamsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStreamsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -383,27 +399,25 @@ pub struct ListStreamsOutput {
     pub stream_info_list: Option<Vec<StreamInfo>>,
 }
 
-impl ListStreamsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StreamInfo>> {
-        Some(self.stream_info_list.as_ref()?.clone())
+impl Paged for ListStreamsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStreamsOutput {
     type Item = StreamInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StreamInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stream_info_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1888,13 +1902,14 @@ pub trait KinesisVideo: Clone + Sync + Send + 'static {
     ) -> Result<ListSignalingChannelsOutput, RusotoError<ListSignalingChannelsError>>;
 
     /// Auto-paginating version of `list_signaling_channels`
-    fn list_signaling_channels_pages(
-        &self,
-        input: ListSignalingChannelsInput,
-    ) -> RusotoStream<ChannelInfo, ListSignalingChannelsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_signaling_channels(state.clone())
-        })
+    fn list_signaling_channels_pages<'a>(
+        &'a self,
+        mut input: ListSignalingChannelsInput,
+    ) -> RusotoStream<'a, ChannelInfo, ListSignalingChannelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signaling_channels(input.clone())
+        }))
     }
 
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
@@ -1904,13 +1919,14 @@ pub trait KinesisVideo: Clone + Sync + Send + 'static {
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
 
     /// Auto-paginating version of `list_streams`
-    fn list_streams_pages(
-        &self,
-        input: ListStreamsInput,
-    ) -> RusotoStream<StreamInfo, ListStreamsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_streams(state.clone())
-        })
+    fn list_streams_pages<'a>(
+        &'a self,
+        mut input: ListStreamsInput,
+    ) -> RusotoStream<'a, StreamInfo, ListStreamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_streams(input.clone())
+        }))
     }
 
     /// <p>Returns a list of tags associated with the specified signaling channel.</p>

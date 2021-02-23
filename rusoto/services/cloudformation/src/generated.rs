@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1634,11 +1636,19 @@ pub struct DescribeAccountLimitsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAccountLimitsInput {
+impl Paged for DescribeAccountLimitsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1668,27 +1678,25 @@ pub struct DescribeAccountLimitsOutput {
     pub next_token: Option<String>,
 }
 
-impl DescribeAccountLimitsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<AccountLimit>> {
-        Some(self.account_limits.as_ref()?.clone())
+impl Paged for DescribeAccountLimitsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAccountLimitsOutput {
     type Item = AccountLimit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AccountLimit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.account_limits.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1734,11 +1742,19 @@ pub struct DescribeChangeSetInput {
     pub stack_name: Option<String>,
 }
 
-impl PagedRequest for DescribeChangeSetInput {
+impl Paged for DescribeChangeSetInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeChangeSetInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1809,27 +1825,25 @@ pub struct DescribeChangeSetOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl DescribeChangeSetOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Change>> {
-        Some(self.changes.as_ref()?.clone())
+impl Paged for DescribeChangeSetOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeChangeSetOutput {
     type Item = Change;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Change> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.changes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2065,11 +2079,19 @@ pub struct DescribeStackEventsInput {
     pub stack_name: Option<String>,
 }
 
-impl PagedRequest for DescribeStackEventsInput {
+impl Paged for DescribeStackEventsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeStackEventsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2102,27 +2124,25 @@ pub struct DescribeStackEventsOutput {
     pub stack_events: Option<Vec<StackEvent>>,
 }
 
-impl DescribeStackEventsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackEvent>> {
-        Some(self.stack_events.as_ref()?.clone())
+impl Paged for DescribeStackEventsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeStackEventsOutput {
     type Item = StackEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stack_events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2562,11 +2582,19 @@ pub struct DescribeStacksInput {
     pub stack_name: Option<String>,
 }
 
-impl PagedRequest for DescribeStacksInput {
+impl Paged for DescribeStacksInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeStacksInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2599,27 +2627,25 @@ pub struct DescribeStacksOutput {
     pub stacks: Option<Vec<Stack>>,
 }
 
-impl DescribeStacksOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Stack>> {
-        Some(self.stacks.as_ref()?.clone())
+impl Paged for DescribeStacksOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeStacksOutput {
     type Item = Stack;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Stack> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stacks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3720,11 +3746,19 @@ pub struct ListChangeSetsInput {
     pub stack_name: String,
 }
 
-impl PagedRequest for ListChangeSetsInput {
+impl Paged for ListChangeSetsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListChangeSetsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3755,27 +3789,25 @@ pub struct ListChangeSetsOutput {
     pub summaries: Option<Vec<ChangeSetSummary>>,
 }
 
-impl ListChangeSetsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ChangeSetSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for ListChangeSetsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListChangeSetsOutput {
     type Item = ChangeSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ChangeSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3811,11 +3843,19 @@ pub struct ListExportsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListExportsInput {
+impl Paged for ListExportsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListExportsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3844,27 +3884,25 @@ pub struct ListExportsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListExportsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Export>> {
-        Some(self.exports.as_ref()?.clone())
+impl Paged for ListExportsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListExportsOutput {
     type Item = Export;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Export> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.exports.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3902,11 +3940,19 @@ pub struct ListImportsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListImportsInput {
+impl Paged for ListImportsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListImportsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3936,27 +3982,25 @@ pub struct ListImportsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListImportsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.imports.as_ref()?.clone())
+impl Paged for ListImportsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListImportsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.imports.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4002,11 +4046,19 @@ pub struct ListStackInstancesInput {
     pub stack_set_name: String,
 }
 
-impl PagedRequest for ListStackInstancesInput {
+impl Paged for ListStackInstancesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStackInstancesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4061,27 +4113,25 @@ pub struct ListStackInstancesOutput {
     pub summaries: Option<Vec<StackInstanceSummary>>,
 }
 
-impl ListStackInstancesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackInstanceSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for ListStackInstancesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStackInstancesOutput {
     type Item = StackInstanceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackInstanceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4125,11 +4175,19 @@ pub struct ListStackResourcesInput {
     pub stack_name: String,
 }
 
-impl PagedRequest for ListStackResourcesInput {
+impl Paged for ListStackResourcesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStackResourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4160,27 +4218,25 @@ pub struct ListStackResourcesOutput {
     pub stack_resource_summaries: Option<Vec<StackResourceSummary>>,
 }
 
-impl ListStackResourcesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackResourceSummary>> {
-        Some(self.stack_resource_summaries.as_ref()?.clone())
+impl Paged for ListStackResourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStackResourcesOutput {
     type Item = StackResourceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackResourceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stack_resource_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4230,11 +4286,19 @@ pub struct ListStackSetOperationResultsInput {
     pub stack_set_name: String,
 }
 
-impl PagedRequest for ListStackSetOperationResultsInput {
+impl Paged for ListStackSetOperationResultsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStackSetOperationResultsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4271,27 +4335,25 @@ pub struct ListStackSetOperationResultsOutput {
     pub summaries: Option<Vec<StackSetOperationResultSummary>>,
 }
 
-impl ListStackSetOperationResultsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackSetOperationResultSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for ListStackSetOperationResultsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStackSetOperationResultsOutput {
     type Item = StackSetOperationResultSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackSetOperationResultSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4339,11 +4401,19 @@ pub struct ListStackSetOperationsInput {
     pub stack_set_name: String,
 }
 
-impl PagedRequest for ListStackSetOperationsInput {
+impl Paged for ListStackSetOperationsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStackSetOperationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4379,27 +4449,25 @@ pub struct ListStackSetOperationsOutput {
     pub summaries: Option<Vec<StackSetOperationSummary>>,
 }
 
-impl ListStackSetOperationsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackSetOperationSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for ListStackSetOperationsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStackSetOperationsOutput {
     type Item = StackSetOperationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackSetOperationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4447,11 +4515,19 @@ pub struct ListStackSetsInput {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListStackSetsInput {
+impl Paged for ListStackSetsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStackSetsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4486,27 +4562,25 @@ pub struct ListStackSetsOutput {
     pub summaries: Option<Vec<StackSetSummary>>,
 }
 
-impl ListStackSetsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackSetSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for ListStackSetsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStackSetsOutput {
     type Item = StackSetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackSetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4545,11 +4619,19 @@ pub struct ListStacksInput {
     pub stack_status_filter: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListStacksInput {
+impl Paged for ListStacksInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStacksInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4586,27 +4668,25 @@ pub struct ListStacksOutput {
     pub stack_summaries: Option<Vec<StackSummary>>,
 }
 
-impl ListStacksOutput {
-    fn pagination_page_opt(self) -> Option<Vec<StackSummary>> {
-        Some(self.stack_summaries.as_ref()?.clone())
+impl Paged for ListStacksOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStacksOutput {
     type Item = StackSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StackSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stack_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12686,13 +12766,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
     /// Auto-paginating version of `describe_account_limits`
-    fn describe_account_limits_pages(
-        &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoStream<AccountLimit, DescribeAccountLimitsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_account_limits(state.clone())
-        })
+    fn describe_account_limits_pages<'a>(
+        &'a self,
+        mut input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<'a, AccountLimit, DescribeAccountLimitsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_account_limits(input.clone())
+        }))
     }
 
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
@@ -12702,13 +12783,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>>;
 
     /// Auto-paginating version of `describe_change_set`
-    fn describe_change_set_pages(
-        &self,
-        input: DescribeChangeSetInput,
-    ) -> RusotoStream<Change, DescribeChangeSetError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_change_set(state.clone())
-        })
+    fn describe_change_set_pages<'a>(
+        &'a self,
+        mut input: DescribeChangeSetInput,
+    ) -> RusotoStream<'a, Change, DescribeChangeSetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_change_set(input.clone())
+        }))
     }
 
     /// <p>Returns information about a stack drift detection operation. A stack drift detection operation detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted. For more information on stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <a>DetectStackDrift</a> to initiate a stack drift detection operation. <code>DetectStackDrift</code> returns a <code>StackDriftDetectionId</code> you can use to monitor the progress of the operation using <code>DescribeStackDriftDetectionStatus</code>. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p>
@@ -12727,13 +12809,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<DescribeStackEventsOutput, RusotoError<DescribeStackEventsError>>;
 
     /// Auto-paginating version of `describe_stack_events`
-    fn describe_stack_events_pages(
-        &self,
-        input: DescribeStackEventsInput,
-    ) -> RusotoStream<StackEvent, DescribeStackEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_stack_events(state.clone())
-        })
+    fn describe_stack_events_pages<'a>(
+        &'a self,
+        mut input: DescribeStackEventsInput,
+    ) -> RusotoStream<'a, StackEvent, DescribeStackEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_stack_events(input.clone())
+        }))
     }
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and Region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
@@ -12779,13 +12862,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<DescribeStacksOutput, RusotoError<DescribeStacksError>>;
 
     /// Auto-paginating version of `describe_stacks`
-    fn describe_stacks_pages(
-        &self,
-        input: DescribeStacksInput,
-    ) -> RusotoStream<Stack, DescribeStacksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_stacks(state.clone())
-        })
+    fn describe_stacks_pages<'a>(
+        &'a self,
+        mut input: DescribeStacksInput,
+    ) -> RusotoStream<'a, Stack, DescribeStacksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_stacks(input.clone())
+        }))
     }
 
     /// <p>Returns detailed information about a type that has been registered.</p> <p>If you specify a <code>VersionId</code>, <code>DescribeType</code> returns information about that specific type version. Otherwise, it returns information about the default type version.</p>
@@ -12855,13 +12939,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>>;
 
     /// Auto-paginating version of `list_change_sets`
-    fn list_change_sets_pages(
-        &self,
-        input: ListChangeSetsInput,
-    ) -> RusotoStream<ChangeSetSummary, ListChangeSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_change_sets(state.clone())
-        })
+    fn list_change_sets_pages<'a>(
+        &'a self,
+        mut input: ListChangeSetsInput,
+    ) -> RusotoStream<'a, ChangeSetSummary, ListChangeSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_change_sets(input.clone())
+        }))
     }
 
     /// <p>Lists all exported output values in the account and Region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
@@ -12871,13 +12956,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListExportsOutput, RusotoError<ListExportsError>>;
 
     /// Auto-paginating version of `list_exports`
-    fn list_exports_pages(
-        &self,
-        input: ListExportsInput,
-    ) -> RusotoStream<Export, ListExportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_exports(state.clone())
-        })
+    fn list_exports_pages<'a>(
+        &'a self,
+        mut input: ListExportsInput,
+    ) -> RusotoStream<'a, Export, ListExportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_exports(input.clone())
+        }))
     }
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
@@ -12887,13 +12973,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListImportsOutput, RusotoError<ListImportsError>>;
 
     /// Auto-paginating version of `list_imports`
-    fn list_imports_pages(
-        &self,
-        input: ListImportsInput,
-    ) -> RusotoStream<String, ListImportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_imports(state.clone())
-        })
+    fn list_imports_pages<'a>(
+        &'a self,
+        mut input: ListImportsInput,
+    ) -> RusotoStream<'a, String, ListImportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_imports(input.clone())
+        }))
     }
 
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region, or that have a specific status.</p>
@@ -12903,13 +12990,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>>;
 
     /// Auto-paginating version of `list_stack_instances`
-    fn list_stack_instances_pages(
-        &self,
-        input: ListStackInstancesInput,
-    ) -> RusotoStream<StackInstanceSummary, ListStackInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stack_instances(state.clone())
-        })
+    fn list_stack_instances_pages<'a>(
+        &'a self,
+        mut input: ListStackInstancesInput,
+    ) -> RusotoStream<'a, StackInstanceSummary, ListStackInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stack_instances(input.clone())
+        }))
     }
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
@@ -12919,13 +13007,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>>;
 
     /// Auto-paginating version of `list_stack_resources`
-    fn list_stack_resources_pages(
-        &self,
-        input: ListStackResourcesInput,
-    ) -> RusotoStream<StackResourceSummary, ListStackResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stack_resources(state.clone())
-        })
+    fn list_stack_resources_pages<'a>(
+        &'a self,
+        mut input: ListStackResourcesInput,
+    ) -> RusotoStream<'a, StackResourceSummary, ListStackResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stack_resources(input.clone())
+        }))
     }
 
     /// <p>Returns summary information about the results of a stack set operation. </p>
@@ -12935,13 +13024,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStackSetOperationResultsOutput, RusotoError<ListStackSetOperationResultsError>>;
 
     /// Auto-paginating version of `list_stack_set_operation_results`
-    fn list_stack_set_operation_results_pages(
-        &self,
-        input: ListStackSetOperationResultsInput,
-    ) -> RusotoStream<StackSetOperationResultSummary, ListStackSetOperationResultsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stack_set_operation_results(state.clone())
-        })
+    fn list_stack_set_operation_results_pages<'a>(
+        &'a self,
+        mut input: ListStackSetOperationResultsInput,
+    ) -> RusotoStream<'a, StackSetOperationResultSummary, ListStackSetOperationResultsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stack_set_operation_results(input.clone())
+        }))
     }
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
@@ -12951,13 +13041,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStackSetOperationsOutput, RusotoError<ListStackSetOperationsError>>;
 
     /// Auto-paginating version of `list_stack_set_operations`
-    fn list_stack_set_operations_pages(
-        &self,
-        input: ListStackSetOperationsInput,
-    ) -> RusotoStream<StackSetOperationSummary, ListStackSetOperationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stack_set_operations(state.clone())
-        })
+    fn list_stack_set_operations_pages<'a>(
+        &'a self,
+        mut input: ListStackSetOperationsInput,
+    ) -> RusotoStream<'a, StackSetOperationSummary, ListStackSetOperationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stack_set_operations(input.clone())
+        }))
     }
 
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
@@ -12967,13 +13058,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStackSetsOutput, RusotoError<ListStackSetsError>>;
 
     /// Auto-paginating version of `list_stack_sets`
-    fn list_stack_sets_pages(
-        &self,
-        input: ListStackSetsInput,
-    ) -> RusotoStream<StackSetSummary, ListStackSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stack_sets(state.clone())
-        })
+    fn list_stack_sets_pages<'a>(
+        &'a self,
+        mut input: ListStackSetsInput,
+    ) -> RusotoStream<'a, StackSetSummary, ListStackSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stack_sets(input.clone())
+        }))
     }
 
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
@@ -12983,13 +13075,14 @@ pub trait CloudFormation: Clone + Sync + Send + 'static {
     ) -> Result<ListStacksOutput, RusotoError<ListStacksError>>;
 
     /// Auto-paginating version of `list_stacks`
-    fn list_stacks_pages(
-        &self,
-        input: ListStacksInput,
-    ) -> RusotoStream<StackSummary, ListStacksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stacks(state.clone())
-        })
+    fn list_stacks_pages<'a>(
+        &'a self,
+        mut input: ListStacksInput,
+    ) -> RusotoStream<'a, StackSummary, ListStacksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stacks(input.clone())
+        }))
     }
 
     /// <p>Returns a list of registration tokens for the specified type(s).</p>

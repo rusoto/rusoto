@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -236,11 +238,19 @@ pub struct DescribeStreamInput {
     pub stream_name: String,
 }
 
-impl PagedRequest for DescribeStreamInput {
+impl Paged for DescribeStreamInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.exclusive_start_shard_id.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.exclusive_start_shard_id)
+    }
+}
+
+impl PagedRequest for DescribeStreamInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.exclusive_start_shard_id = key;
-        self
     }
 }
 
@@ -254,31 +264,27 @@ pub struct DescribeStreamOutput {
     pub stream_description: StreamDescription,
 }
 
-impl DescribeStreamOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Shard>> {
-        Some(self.stream_description.shards.clone())
+impl Paged for DescribeStreamOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        Some(self.stream_description.shards.last()?.shard_id.clone())
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.stream_description.has_more_shards.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
+            Some(self.stream_description.shards.last()?.shard_id.clone())
+        })())
     }
 }
 
 impl PagedOutput for DescribeStreamOutput {
     type Item = Shard;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.stream_description.shards.last()?.shard_id.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Shard> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stream_description.shards
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.stream_description.has_more_shards
     }
 }
 
@@ -576,11 +582,19 @@ pub struct ListShardsInput {
     pub stream_name: Option<String>,
 }
 
-impl PagedRequest for ListShardsInput {
+impl Paged for ListShardsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListShardsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -598,27 +612,25 @@ pub struct ListShardsOutput {
     pub shards: Option<Vec<Shard>>,
 }
 
-impl ListShardsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Shard>> {
-        Some(self.shards.as_ref()?.clone())
+impl Paged for ListShardsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListShardsOutput {
     type Item = Shard;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Shard> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.shards.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -643,11 +655,19 @@ pub struct ListStreamConsumersInput {
     pub stream_creation_timestamp: Option<f64>,
 }
 
-impl PagedRequest for ListStreamConsumersInput {
+impl Paged for ListStreamConsumersInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListStreamConsumersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -665,27 +685,25 @@ pub struct ListStreamConsumersOutput {
     pub next_token: Option<String>,
 }
 
-impl ListStreamConsumersOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Consumer>> {
-        Some(self.consumers.as_ref()?.clone())
+impl Paged for ListStreamConsumersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListStreamConsumersOutput {
     type Item = Consumer;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Consumer> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.consumers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -704,11 +722,19 @@ pub struct ListStreamsInput {
     pub limit: Option<i64>,
 }
 
-impl PagedRequest for ListStreamsInput {
+impl Paged for ListStreamsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.exclusive_start_stream_name.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.exclusive_start_stream_name)
+    }
+}
+
+impl PagedRequest for ListStreamsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.exclusive_start_stream_name = key;
-        self
     }
 }
 
@@ -725,31 +751,25 @@ pub struct ListStreamsOutput {
     pub stream_names: Vec<String>,
 }
 
-impl ListStreamsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.stream_names.clone())
+impl Paged for ListStreamsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        Some(self.stream_names.last()?.clone())
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.has_more_streams.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| Some(self.stream_names.last()?.clone()))())
     }
 }
 
 impl PagedOutput for ListStreamsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.stream_names.last()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.stream_names
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.has_more_streams
     }
 }
 
@@ -2888,13 +2908,14 @@ pub trait Kinesis: Clone + Sync + Send + 'static {
     ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>;
 
     /// Auto-paginating version of `describe_stream`
-    fn describe_stream_pages(
-        &self,
-        input: DescribeStreamInput,
-    ) -> RusotoStream<Shard, DescribeStreamError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_stream(state.clone())
-        })
+    fn describe_stream_pages<'a>(
+        &'a self,
+        mut input: DescribeStreamInput,
+    ) -> RusotoStream<'a, Shard, DescribeStreamError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_stream(input.clone())
+        }))
     }
 
     /// <p>To get the description of a registered consumer, provide the ARN of the consumer. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to describe, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream.</p> <p>This operation has a limit of 20 transactions per second per stream.</p>
@@ -2946,10 +2967,14 @@ pub trait Kinesis: Clone + Sync + Send + 'static {
     ) -> Result<ListShardsOutput, RusotoError<ListShardsError>>;
 
     /// Auto-paginating version of `list_shards`
-    fn list_shards_pages(&self, input: ListShardsInput) -> RusotoStream<Shard, ListShardsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_shards(state.clone())
-        })
+    fn list_shards_pages<'a>(
+        &'a self,
+        mut input: ListShardsInput,
+    ) -> RusotoStream<'a, Shard, ListShardsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_shards(input.clone())
+        }))
     }
 
     /// <p>Lists the consumers registered to receive data from a stream using enhanced fan-out, and provides information about each consumer.</p> <p>This operation has a limit of 5 transactions per second per stream.</p>
@@ -2959,13 +2984,14 @@ pub trait Kinesis: Clone + Sync + Send + 'static {
     ) -> Result<ListStreamConsumersOutput, RusotoError<ListStreamConsumersError>>;
 
     /// Auto-paginating version of `list_stream_consumers`
-    fn list_stream_consumers_pages(
-        &self,
-        input: ListStreamConsumersInput,
-    ) -> RusotoStream<Consumer, ListStreamConsumersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_stream_consumers(state.clone())
-        })
+    fn list_stream_consumers_pages<'a>(
+        &'a self,
+        mut input: ListStreamConsumersInput,
+    ) -> RusotoStream<'a, Consumer, ListStreamConsumersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_stream_consumers(input.clone())
+        }))
     }
 
     /// <p>Lists your Kinesis data streams.</p> <p>The number of streams may be too large to return from a single call to <code>ListStreams</code>. You can limit the number of returned streams using the <code>Limit</code> parameter. If you do not specify a value for the <code>Limit</code> parameter, Kinesis Data Streams uses the default limit, which is currently 10.</p> <p>You can detect if there are more streams available to list by using the <code>HasMoreStreams</code> flag from the returned output. If there are more streams available, you can request more streams by using the name of the last stream returned by the <code>ListStreams</code> request in the <code>ExclusiveStartStreamName</code> parameter in a subsequent request to <code>ListStreams</code>. The group of stream names returned by the subsequent request is then added to the list. You can continue this process until all the stream names have been collected in the list. </p> <p> <a>ListStreams</a> has a limit of five transactions per second per account.</p>
@@ -2975,13 +3001,14 @@ pub trait Kinesis: Clone + Sync + Send + 'static {
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
 
     /// Auto-paginating version of `list_streams`
-    fn list_streams_pages(
-        &self,
-        input: ListStreamsInput,
-    ) -> RusotoStream<String, ListStreamsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_streams(state.clone())
-        })
+    fn list_streams_pages<'a>(
+        &'a self,
+        mut input: ListStreamsInput,
+    ) -> RusotoStream<'a, String, ListStreamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_streams(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for the specified Kinesis data stream. This operation has a limit of five transactions per second per account.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -479,11 +481,19 @@ pub struct ListHapgsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHapgsRequest {
+impl Paged for ListHapgsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHapgsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -500,27 +510,25 @@ pub struct ListHapgsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHapgsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.hapg_list.clone())
+impl Paged for ListHapgsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHapgsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hapg_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -534,11 +542,19 @@ pub struct ListHsmsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHsmsRequest {
+impl Paged for ListHsmsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHsmsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -557,27 +573,25 @@ pub struct ListHsmsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHsmsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.hsm_list.as_ref()?.clone())
+impl Paged for ListHsmsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHsmsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hsm_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -591,11 +605,19 @@ pub struct ListLunaClientsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLunaClientsRequest {
+impl Paged for ListLunaClientsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLunaClientsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -612,27 +634,25 @@ pub struct ListLunaClientsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListLunaClientsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.client_list.clone())
+impl Paged for ListLunaClientsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLunaClientsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.client_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1693,10 +1713,14 @@ pub trait CloudHsm: Clone + Sync + Send + 'static {
     ) -> Result<ListHapgsResponse, RusotoError<ListHapgsError>>;
 
     /// Auto-paginating version of `list_hapgs`
-    fn list_hapgs_pages(&self, input: ListHapgsRequest) -> RusotoStream<String, ListHapgsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_hapgs(state.clone())
-        })
+    fn list_hapgs_pages<'a>(
+        &'a self,
+        mut input: ListHapgsRequest,
+    ) -> RusotoStream<'a, String, ListHapgsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hapgs(input.clone())
+        }))
     }
 
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> member. If more results are available, the <code>NextToken</code> member of the response contains a token that you pass in the next call to <code>ListHsms</code> to retrieve the next set of items.</p>
@@ -1706,10 +1730,14 @@ pub trait CloudHsm: Clone + Sync + Send + 'static {
     ) -> Result<ListHsmsResponse, RusotoError<ListHsmsError>>;
 
     /// Auto-paginating version of `list_hsms`
-    fn list_hsms_pages(&self, input: ListHsmsRequest) -> RusotoStream<String, ListHsmsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_hsms(state.clone())
-        })
+    fn list_hsms_pages<'a>(
+        &'a self,
+        mut input: ListHsmsRequest,
+    ) -> RusotoStream<'a, String, ListHsmsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hsms(input.clone())
+        }))
     }
 
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Lists all of the clients.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> member. If more results are available, the <code>NextToken</code> member of the response contains a token that you pass in the next call to <code>ListLunaClients</code> to retrieve the next set of items.</p>
@@ -1719,13 +1747,14 @@ pub trait CloudHsm: Clone + Sync + Send + 'static {
     ) -> Result<ListLunaClientsResponse, RusotoError<ListLunaClientsError>>;
 
     /// Auto-paginating version of `list_luna_clients`
-    fn list_luna_clients_pages(
-        &self,
-        input: ListLunaClientsRequest,
-    ) -> RusotoStream<String, ListLunaClientsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_luna_clients(state.clone())
-        })
+    fn list_luna_clients_pages<'a>(
+        &'a self,
+        mut input: ListLunaClientsRequest,
+    ) -> RusotoStream<'a, String, ListLunaClientsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_luna_clients(input.clone())
+        }))
     }
 
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Returns a list of all tags for the specified AWS CloudHSM resource.</p>

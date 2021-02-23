@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1106,11 +1108,19 @@ pub struct DescribeAlarmHistoryInput {
     pub start_date: Option<String>,
 }
 
-impl PagedRequest for DescribeAlarmHistoryInput {
+impl Paged for DescribeAlarmHistoryInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAlarmHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1164,27 +1174,25 @@ pub struct DescribeAlarmHistoryOutput {
     pub next_token: Option<String>,
 }
 
-impl DescribeAlarmHistoryOutput {
-    fn pagination_page_opt(self) -> Option<Vec<AlarmHistoryItem>> {
-        Some(self.alarm_history_items.as_ref()?.clone())
+impl Paged for DescribeAlarmHistoryOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAlarmHistoryOutput {
     type Item = AlarmHistoryItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AlarmHistoryItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.alarm_history_items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1327,11 +1335,19 @@ pub struct DescribeAlarmsInput {
     pub state_value: Option<String>,
 }
 
-impl PagedRequest for DescribeAlarmsInput {
+impl Paged for DescribeAlarmsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAlarmsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1397,23 +1413,25 @@ pub struct DescribeAlarmsOutput {
     pub next_token: Option<String>,
 }
 
-impl DescribeAlarmsOutput {}
+impl Paged for DescribeAlarmsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
 
 impl PagedOutput for DescribeAlarmsOutput {
     type Item = DescribeAlarmsOutput;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DescribeAlarmsOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2187,11 +2205,19 @@ pub struct GetMetricDataInput {
     pub start_time: String,
 }
 
-impl PagedRequest for GetMetricDataInput {
+impl Paged for GetMetricDataInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetMetricDataInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2235,23 +2261,25 @@ pub struct GetMetricDataOutput {
     pub next_token: Option<String>,
 }
 
-impl GetMetricDataOutput {}
+impl Paged for GetMetricDataOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
 
 impl PagedOutput for GetMetricDataOutput {
     type Item = GetMetricDataOutput;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GetMetricDataOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2919,11 +2947,19 @@ pub struct ListDashboardsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDashboardsInput {
+impl Paged for ListDashboardsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDashboardsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2958,27 +2994,25 @@ pub struct ListDashboardsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDashboardsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<DashboardEntry>> {
-        Some(self.dashboard_entries.as_ref()?.clone())
+impl Paged for ListDashboardsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDashboardsOutput {
     type Item = DashboardEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DashboardEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dashboard_entries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3022,11 +3056,19 @@ pub struct ListMetricsInput {
     pub recently_active: Option<String>,
 }
 
-impl PagedRequest for ListMetricsInput {
+impl Paged for ListMetricsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMetricsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3071,27 +3113,25 @@ pub struct ListMetricsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListMetricsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Metric>> {
-        Some(self.metrics.as_ref()?.clone())
+impl Paged for ListMetricsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMetricsOutput {
     type Item = Metric;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Metric> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.metrics.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6567,13 +6607,14 @@ pub trait CloudWatch: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAlarmHistoryOutput, RusotoError<DescribeAlarmHistoryError>>;
 
     /// Auto-paginating version of `describe_alarm_history`
-    fn describe_alarm_history_pages(
-        &self,
-        input: DescribeAlarmHistoryInput,
-    ) -> RusotoStream<AlarmHistoryItem, DescribeAlarmHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_alarm_history(state.clone())
-        })
+    fn describe_alarm_history_pages<'a>(
+        &'a self,
+        mut input: DescribeAlarmHistoryInput,
+    ) -> RusotoStream<'a, AlarmHistoryItem, DescribeAlarmHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_alarm_history(input.clone())
+        }))
     }
 
     /// <p>Retrieves the specified alarms. You can filter the results by specifying a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
@@ -6583,13 +6624,14 @@ pub trait CloudWatch: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAlarmsOutput, RusotoError<DescribeAlarmsError>>;
 
     /// Auto-paginating version of `describe_alarms`
-    fn describe_alarms_pages(
-        &self,
-        input: DescribeAlarmsInput,
-    ) -> RusotoStream<DescribeAlarmsOutput, DescribeAlarmsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_alarms(state.clone())
-        })
+    fn describe_alarms_pages<'a>(
+        &'a self,
+        mut input: DescribeAlarmsInput,
+    ) -> RusotoStream<'a, DescribeAlarmsOutput, DescribeAlarmsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_alarms(input.clone())
+        }))
     }
 
     /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p> <p>This operation retrieves only standard alarms that are based on the specified metric. It does not return alarms based on math expressions that use the specified metric, or composite alarms that use the specified metric.</p>
@@ -6653,13 +6695,14 @@ pub trait CloudWatch: Clone + Sync + Send + 'static {
     ) -> Result<GetMetricDataOutput, RusotoError<GetMetricDataError>>;
 
     /// Auto-paginating version of `get_metric_data`
-    fn get_metric_data_pages(
-        &self,
-        input: GetMetricDataInput,
-    ) -> RusotoStream<GetMetricDataOutput, GetMetricDataError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_metric_data(state.clone())
-        })
+    fn get_metric_data_pages<'a>(
+        &'a self,
+        mut input: GetMetricDataInput,
+    ) -> RusotoStream<'a, GetMetricDataOutput, GetMetricDataError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_metric_data(input.clone())
+        }))
     }
 
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
@@ -6681,13 +6724,14 @@ pub trait CloudWatch: Clone + Sync + Send + 'static {
     ) -> Result<ListDashboardsOutput, RusotoError<ListDashboardsError>>;
 
     /// Auto-paginating version of `list_dashboards`
-    fn list_dashboards_pages(
-        &self,
-        input: ListDashboardsInput,
-    ) -> RusotoStream<DashboardEntry, ListDashboardsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dashboards(state.clone())
-        })
+    fn list_dashboards_pages<'a>(
+        &'a self,
+        mut input: ListDashboardsInput,
+    ) -> RusotoStream<'a, DashboardEntry, ListDashboardsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dashboards(input.clone())
+        }))
     }
 
     /// <p>List the specified metrics. You can use the returned metrics with <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to 15 minutes before the metric appears. You can see statistics about the metric sooner by using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p> <p> <code>ListMetrics</code> doesn't return information about metrics if those metrics haven't reported data in the past two weeks. To retrieve those metrics, use <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p>
@@ -6697,13 +6741,14 @@ pub trait CloudWatch: Clone + Sync + Send + 'static {
     ) -> Result<ListMetricsOutput, RusotoError<ListMetricsError>>;
 
     /// Auto-paginating version of `list_metrics`
-    fn list_metrics_pages(
-        &self,
-        input: ListMetricsInput,
-    ) -> RusotoStream<Metric, ListMetricsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_metrics(state.clone())
-        })
+    fn list_metrics_pages<'a>(
+        &'a self,
+        mut input: ListMetricsInput,
+    ) -> RusotoStream<'a, Metric, ListMetricsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_metrics(input.clone())
+        }))
     }
 
     /// <p>Displays the tags associated with a CloudWatch resource. Currently, alarms and Contributor Insights rules support tagging.</p>

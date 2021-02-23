@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -310,11 +312,19 @@ pub struct ListApplicationStatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationStatesRequest {
+impl Paged for ListApplicationStatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationStatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -332,27 +342,25 @@ pub struct ListApplicationStatesResult {
     pub next_token: Option<String>,
 }
 
-impl ListApplicationStatesResult {
-    fn pagination_page_opt(self) -> Option<Vec<ApplicationState>> {
-        Some(self.application_state_list.as_ref()?.clone())
+impl Paged for ListApplicationStatesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationStatesResult {
     type Item = ApplicationState;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApplicationState> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.application_state_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -376,11 +384,19 @@ pub struct ListCreatedArtifactsRequest {
     pub progress_update_stream: String,
 }
 
-impl PagedRequest for ListCreatedArtifactsRequest {
+impl Paged for ListCreatedArtifactsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCreatedArtifactsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -398,27 +414,25 @@ pub struct ListCreatedArtifactsResult {
     pub next_token: Option<String>,
 }
 
-impl ListCreatedArtifactsResult {
-    fn pagination_page_opt(self) -> Option<Vec<CreatedArtifact>> {
-        Some(self.created_artifact_list.as_ref()?.clone())
+impl Paged for ListCreatedArtifactsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCreatedArtifactsResult {
     type Item = CreatedArtifact;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CreatedArtifact> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.created_artifact_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -442,11 +456,19 @@ pub struct ListDiscoveredResourcesRequest {
     pub progress_update_stream: String,
 }
 
-impl PagedRequest for ListDiscoveredResourcesRequest {
+impl Paged for ListDiscoveredResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDiscoveredResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -464,27 +486,25 @@ pub struct ListDiscoveredResourcesResult {
     pub next_token: Option<String>,
 }
 
-impl ListDiscoveredResourcesResult {
-    fn pagination_page_opt(self) -> Option<Vec<DiscoveredResource>> {
-        Some(self.discovered_resource_list.as_ref()?.clone())
+impl Paged for ListDiscoveredResourcesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDiscoveredResourcesResult {
     type Item = DiscoveredResource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DiscoveredResource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.discovered_resource_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -506,11 +526,19 @@ pub struct ListMigrationTasksRequest {
     pub resource_name: Option<String>,
 }
 
-impl PagedRequest for ListMigrationTasksRequest {
+impl Paged for ListMigrationTasksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMigrationTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -528,27 +556,25 @@ pub struct ListMigrationTasksResult {
     pub next_token: Option<String>,
 }
 
-impl ListMigrationTasksResult {
-    fn pagination_page_opt(self) -> Option<Vec<MigrationTaskSummary>> {
-        Some(self.migration_task_summary_list.as_ref()?.clone())
+impl Paged for ListMigrationTasksResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMigrationTasksResult {
     type Item = MigrationTaskSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MigrationTaskSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.migration_task_summary_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -566,11 +592,19 @@ pub struct ListProgressUpdateStreamsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListProgressUpdateStreamsRequest {
+impl Paged for ListProgressUpdateStreamsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProgressUpdateStreamsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -588,27 +622,25 @@ pub struct ListProgressUpdateStreamsResult {
     pub progress_update_stream_summary_list: Option<Vec<ProgressUpdateStreamSummary>>,
 }
 
-impl ListProgressUpdateStreamsResult {
-    fn pagination_page_opt(self) -> Option<Vec<ProgressUpdateStreamSummary>> {
-        Some(self.progress_update_stream_summary_list.as_ref()?.clone())
+impl Paged for ListProgressUpdateStreamsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProgressUpdateStreamsResult {
     type Item = ProgressUpdateStreamSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProgressUpdateStreamSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.progress_update_stream_summary_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2371,13 +2403,14 @@ pub trait MigrationHub: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationStatesResult, RusotoError<ListApplicationStatesError>>;
 
     /// Auto-paginating version of `list_application_states`
-    fn list_application_states_pages(
-        &self,
-        input: ListApplicationStatesRequest,
-    ) -> RusotoStream<ApplicationState, ListApplicationStatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_application_states(state.clone())
-        })
+    fn list_application_states_pages<'a>(
+        &'a self,
+        mut input: ListApplicationStatesRequest,
+    ) -> RusotoStream<'a, ApplicationState, ListApplicationStatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_states(input.clone())
+        }))
     }
 
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
@@ -2387,13 +2420,14 @@ pub trait MigrationHub: Clone + Sync + Send + 'static {
     ) -> Result<ListCreatedArtifactsResult, RusotoError<ListCreatedArtifactsError>>;
 
     /// Auto-paginating version of `list_created_artifacts`
-    fn list_created_artifacts_pages(
-        &self,
-        input: ListCreatedArtifactsRequest,
-    ) -> RusotoStream<CreatedArtifact, ListCreatedArtifactsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_created_artifacts(state.clone())
-        })
+    fn list_created_artifacts_pages<'a>(
+        &'a self,
+        mut input: ListCreatedArtifactsRequest,
+    ) -> RusotoStream<'a, CreatedArtifact, ListCreatedArtifactsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_created_artifacts(input.clone())
+        }))
     }
 
     /// <p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>
@@ -2403,13 +2437,14 @@ pub trait MigrationHub: Clone + Sync + Send + 'static {
     ) -> Result<ListDiscoveredResourcesResult, RusotoError<ListDiscoveredResourcesError>>;
 
     /// Auto-paginating version of `list_discovered_resources`
-    fn list_discovered_resources_pages(
-        &self,
-        input: ListDiscoveredResourcesRequest,
-    ) -> RusotoStream<DiscoveredResource, ListDiscoveredResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_discovered_resources(state.clone())
-        })
+    fn list_discovered_resources_pages<'a>(
+        &'a self,
+        mut input: ListDiscoveredResourcesRequest,
+    ) -> RusotoStream<'a, DiscoveredResource, ListDiscoveredResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_discovered_resources(input.clone())
+        }))
     }
 
     /// <p><p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul></p>
@@ -2419,13 +2454,14 @@ pub trait MigrationHub: Clone + Sync + Send + 'static {
     ) -> Result<ListMigrationTasksResult, RusotoError<ListMigrationTasksError>>;
 
     /// Auto-paginating version of `list_migration_tasks`
-    fn list_migration_tasks_pages(
-        &self,
-        input: ListMigrationTasksRequest,
-    ) -> RusotoStream<MigrationTaskSummary, ListMigrationTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_migration_tasks(state.clone())
-        })
+    fn list_migration_tasks_pages<'a>(
+        &'a self,
+        mut input: ListMigrationTasksRequest,
+    ) -> RusotoStream<'a, MigrationTaskSummary, ListMigrationTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_migration_tasks(input.clone())
+        }))
     }
 
     /// <p>Lists progress update streams associated with the user account making this call.</p>
@@ -2435,13 +2471,14 @@ pub trait MigrationHub: Clone + Sync + Send + 'static {
     ) -> Result<ListProgressUpdateStreamsResult, RusotoError<ListProgressUpdateStreamsError>>;
 
     /// Auto-paginating version of `list_progress_update_streams`
-    fn list_progress_update_streams_pages(
-        &self,
-        input: ListProgressUpdateStreamsRequest,
-    ) -> RusotoStream<ProgressUpdateStreamSummary, ListProgressUpdateStreamsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_progress_update_streams(state.clone())
-        })
+    fn list_progress_update_streams_pages<'a>(
+        &'a self,
+        mut input: ListProgressUpdateStreamsRequest,
+    ) -> RusotoStream<'a, ProgressUpdateStreamSummary, ListProgressUpdateStreamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_progress_update_streams(input.clone())
+        }))
     }
 
     /// <p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>

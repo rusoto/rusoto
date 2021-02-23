@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -464,11 +466,19 @@ pub struct ListRepositoryAssociationsRequest {
     pub states: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListRepositoryAssociationsRequest {
+impl Paged for ListRepositoryAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRepositoryAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -486,27 +496,25 @@ pub struct ListRepositoryAssociationsResponse {
     pub repository_association_summaries: Option<Vec<RepositoryAssociationSummary>>,
 }
 
-impl ListRepositoryAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RepositoryAssociationSummary>> {
-        Some(self.repository_association_summaries.as_ref()?.clone())
+impl Paged for ListRepositoryAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRepositoryAssociationsResponse {
     type Item = RepositoryAssociationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RepositoryAssociationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.repository_association_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1586,13 +1594,14 @@ pub trait CodeGuruReviewer: Clone + Sync + Send + 'static {
     ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>;
 
     /// Auto-paginating version of `list_repository_associations`
-    fn list_repository_associations_pages(
-        &self,
-        input: ListRepositoryAssociationsRequest,
-    ) -> RusotoStream<RepositoryAssociationSummary, ListRepositoryAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_repository_associations(state.clone())
-        })
+    fn list_repository_associations_pages<'a>(
+        &'a self,
+        mut input: ListRepositoryAssociationsRequest,
+    ) -> RusotoStream<'a, RepositoryAssociationSummary, ListRepositoryAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_repository_associations(input.clone())
+        }))
     }
 
     /// <p>Returns the list of tags associated with an associated repository resource.</p>

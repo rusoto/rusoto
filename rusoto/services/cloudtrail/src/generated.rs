@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -522,11 +524,19 @@ pub struct ListPublicKeysRequest {
     pub start_time: Option<f64>,
 }
 
-impl PagedRequest for ListPublicKeysRequest {
+impl Paged for ListPublicKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPublicKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -545,27 +555,25 @@ pub struct ListPublicKeysResponse {
     pub public_key_list: Option<Vec<PublicKey>>,
 }
 
-impl ListPublicKeysResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PublicKey>> {
-        Some(self.public_key_list.as_ref()?.clone())
+impl Paged for ListPublicKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPublicKeysResponse {
     type Item = PublicKey;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PublicKey> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.public_key_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -583,11 +591,19 @@ pub struct ListTagsRequest {
     pub resource_id_list: Vec<String>,
 }
 
-impl PagedRequest for ListTagsRequest {
+impl Paged for ListTagsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -606,27 +622,25 @@ pub struct ListTagsResponse {
     pub resource_tag_list: Option<Vec<ResourceTag>>,
 }
 
-impl ListTagsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceTag>> {
-        Some(self.resource_tag_list.as_ref()?.clone())
+impl Paged for ListTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsResponse {
     type Item = ResourceTag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceTag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_tag_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -640,11 +654,19 @@ pub struct ListTrailsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTrailsRequest {
+impl Paged for ListTrailsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTrailsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -662,27 +684,25 @@ pub struct ListTrailsResponse {
     pub trails: Option<Vec<TrailInfo>>,
 }
 
-impl ListTrailsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TrailInfo>> {
-        Some(self.trails.as_ref()?.clone())
+impl Paged for ListTrailsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTrailsResponse {
     type Item = TrailInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TrailInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.trails.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -729,11 +749,19 @@ pub struct LookupEventsRequest {
     pub start_time: Option<f64>,
 }
 
-impl PagedRequest for LookupEventsRequest {
+impl Paged for LookupEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for LookupEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -752,27 +780,25 @@ pub struct LookupEventsResponse {
     pub next_token: Option<String>,
 }
 
-impl LookupEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for LookupEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for LookupEventsResponse {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2675,13 +2701,14 @@ pub trait CloudTrail: Clone + Sync + Send + 'static {
     ) -> Result<ListPublicKeysResponse, RusotoError<ListPublicKeysError>>;
 
     /// Auto-paginating version of `list_public_keys`
-    fn list_public_keys_pages(
-        &self,
-        input: ListPublicKeysRequest,
-    ) -> RusotoStream<PublicKey, ListPublicKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_public_keys(state.clone())
-        })
+    fn list_public_keys_pages<'a>(
+        &'a self,
+        mut input: ListPublicKeysRequest,
+    ) -> RusotoStream<'a, PublicKey, ListPublicKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_public_keys(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for the trail in the current region.</p>
@@ -2691,10 +2718,14 @@ pub trait CloudTrail: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// Auto-paginating version of `list_tags`
-    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<ResourceTag, ListTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags(state.clone())
-        })
+    fn list_tags_pages<'a>(
+        &'a self,
+        mut input: ListTagsRequest,
+    ) -> RusotoStream<'a, ResourceTag, ListTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags(input.clone())
+        }))
     }
 
     /// <p>Lists trails that are in the current account.</p>
@@ -2704,13 +2735,14 @@ pub trait CloudTrail: Clone + Sync + Send + 'static {
     ) -> Result<ListTrailsResponse, RusotoError<ListTrailsError>>;
 
     /// Auto-paginating version of `list_trails`
-    fn list_trails_pages(
-        &self,
-        input: ListTrailsRequest,
-    ) -> RusotoStream<TrailInfo, ListTrailsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_trails(state.clone())
-        })
+    fn list_trails_pages<'a>(
+        &'a self,
+        mut input: ListTrailsRequest,
+    ) -> RusotoStream<'a, TrailInfo, ListTrailsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_trails(input.clone())
+        }))
     }
 
     /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> or <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events">CloudTrail Insights events</a> that are captured by CloudTrail. You can look up events that occurred in a region within the last 90 days. Lookup supports the following attributes for management events:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>Lookup supports the following attributes for Insights events:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to two per second, per account, per region. If this limit is exceeded, a throttling error occurs.</p> </important></p>
@@ -2720,13 +2752,14 @@ pub trait CloudTrail: Clone + Sync + Send + 'static {
     ) -> Result<LookupEventsResponse, RusotoError<LookupEventsError>>;
 
     /// Auto-paginating version of `lookup_events`
-    fn lookup_events_pages(
-        &self,
-        input: LookupEventsRequest,
-    ) -> RusotoStream<Event, LookupEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.lookup_events(state.clone())
-        })
+    fn lookup_events_pages<'a>(
+        &'a self,
+        mut input: LookupEventsRequest,
+    ) -> RusotoStream<'a, Event, LookupEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.lookup_events(input.clone())
+        }))
     }
 
     /// <p>Configures an event selector or advanced event selectors for your trail. Use event selectors or advanced event selectors to specify management and data event settings for your trail. By default, trails created without specific event selectors are configured to log all read and write management events, and no data events.</p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors or advanced event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event that doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> exception is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging data and management events for trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Quotas in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p> <p>You can add advanced event selectors, and conditions for your advanced event selectors, up to a maximum of 500 values for all conditions and selectors on a trail. You can use either <code>AdvancedEventSelectors</code> or <code>EventSelectors</code>, but not both. If you apply <code>AdvancedEventSelectors</code> to a trail, any existing <code>EventSelectors</code> are overwritten. For more information about advanced event selectors, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html">Logging data events for trails</a> in the <i>AWS CloudTrail User Guide</i>.</p>

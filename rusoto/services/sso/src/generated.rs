@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -89,11 +91,19 @@ pub struct ListAccountRolesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAccountRolesRequest {
+impl Paged for ListAccountRolesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountRolesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -111,27 +121,25 @@ pub struct ListAccountRolesResponse {
     pub role_list: Option<Vec<RoleInfo>>,
 }
 
-impl ListAccountRolesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RoleInfo>> {
-        Some(self.role_list.as_ref()?.clone())
+impl Paged for ListAccountRolesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountRolesResponse {
     type Item = RoleInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RoleInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.role_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -152,11 +160,19 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAccountsRequest {
+impl Paged for ListAccountsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -174,27 +190,25 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAccountsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AccountInfo>> {
-        Some(self.account_list.as_ref()?.clone())
+impl Paged for ListAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountsResponse {
     type Item = AccountInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AccountInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.account_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -445,13 +459,14 @@ pub trait Sso: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>>;
 
     /// Auto-paginating version of `list_account_roles`
-    fn list_account_roles_pages(
-        &self,
-        input: ListAccountRolesRequest,
-    ) -> RusotoStream<RoleInfo, ListAccountRolesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_account_roles(state.clone())
-        })
+    fn list_account_roles_pages<'a>(
+        &'a self,
+        mut input: ListAccountRolesRequest,
+    ) -> RusotoStream<'a, RoleInfo, ListAccountRolesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_account_roles(input.clone())
+        }))
     }
 
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
@@ -461,13 +476,14 @@ pub trait Sso: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
     /// Auto-paginating version of `list_accounts`
-    fn list_accounts_pages(
-        &self,
-        input: ListAccountsRequest,
-    ) -> RusotoStream<AccountInfo, ListAccountsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_accounts(state.clone())
-        })
+    fn list_accounts_pages<'a>(
+        &'a self,
+        mut input: ListAccountsRequest,
+    ) -> RusotoStream<'a, AccountInfo, ListAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_accounts(input.clone())
+        }))
     }
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>

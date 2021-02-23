@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -844,11 +846,19 @@ pub struct ListDataSetRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDataSetRevisionsRequest {
+impl Paged for ListDataSetRevisionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataSetRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -866,27 +876,25 @@ pub struct ListDataSetRevisionsResponse {
     pub revisions: Option<Vec<RevisionEntry>>,
 }
 
-impl ListDataSetRevisionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RevisionEntry>> {
-        Some(self.revisions.as_ref()?.clone())
+impl Paged for ListDataSetRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDataSetRevisionsResponse {
     type Item = RevisionEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RevisionEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.revisions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -908,11 +916,19 @@ pub struct ListDataSetsRequest {
     pub origin: Option<String>,
 }
 
-impl PagedRequest for ListDataSetsRequest {
+impl Paged for ListDataSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -930,27 +946,25 @@ pub struct ListDataSetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDataSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DataSetEntry>> {
-        Some(self.data_sets.as_ref()?.clone())
+impl Paged for ListDataSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDataSetsResponse {
     type Item = DataSetEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DataSetEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.data_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -976,11 +990,19 @@ pub struct ListJobsRequest {
     pub revision_id: Option<String>,
 }
 
-impl PagedRequest for ListJobsRequest {
+impl Paged for ListJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -998,27 +1020,25 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<JobEntry>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobsResponse {
     type Item = JobEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1042,11 +1062,19 @@ pub struct ListRevisionAssetsRequest {
     pub revision_id: String,
 }
 
-impl PagedRequest for ListRevisionAssetsRequest {
+impl Paged for ListRevisionAssetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRevisionAssetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1064,27 +1092,25 @@ pub struct ListRevisionAssetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListRevisionAssetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AssetEntry>> {
-        Some(self.assets.as_ref()?.clone())
+impl Paged for ListRevisionAssetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRevisionAssetsResponse {
     type Item = AssetEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AssetEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.assets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2468,13 +2494,14 @@ pub trait DataExchange: Clone + Sync + Send + 'static {
     ) -> Result<ListDataSetRevisionsResponse, RusotoError<ListDataSetRevisionsError>>;
 
     /// Auto-paginating version of `list_data_set_revisions`
-    fn list_data_set_revisions_pages(
-        &self,
-        input: ListDataSetRevisionsRequest,
-    ) -> RusotoStream<RevisionEntry, ListDataSetRevisionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_data_set_revisions(state.clone())
-        })
+    fn list_data_set_revisions_pages<'a>(
+        &'a self,
+        mut input: ListDataSetRevisionsRequest,
+    ) -> RusotoStream<'a, RevisionEntry, ListDataSetRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_set_revisions(input.clone())
+        }))
     }
 
     /// <p>This operation lists your data sets. When listing by origin OWNED, results are sorted by CreatedAt in descending order. When listing by origin ENTITLED, there is no order and the maxResults parameter is ignored.</p>
@@ -2484,13 +2511,14 @@ pub trait DataExchange: Clone + Sync + Send + 'static {
     ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>;
 
     /// Auto-paginating version of `list_data_sets`
-    fn list_data_sets_pages(
-        &self,
-        input: ListDataSetsRequest,
-    ) -> RusotoStream<DataSetEntry, ListDataSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_data_sets(state.clone())
-        })
+    fn list_data_sets_pages<'a>(
+        &'a self,
+        mut input: ListDataSetsRequest,
+    ) -> RusotoStream<'a, DataSetEntry, ListDataSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_sets(input.clone())
+        }))
     }
 
     /// <p>This operation lists your jobs sorted by CreatedAt in descending order.</p>
@@ -2500,10 +2528,14 @@ pub trait DataExchange: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<JobEntry, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobEntry, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p>This operation lists a revision's assets sorted alphabetically in descending order.</p>
@@ -2513,13 +2545,14 @@ pub trait DataExchange: Clone + Sync + Send + 'static {
     ) -> Result<ListRevisionAssetsResponse, RusotoError<ListRevisionAssetsError>>;
 
     /// Auto-paginating version of `list_revision_assets`
-    fn list_revision_assets_pages(
-        &self,
-        input: ListRevisionAssetsRequest,
-    ) -> RusotoStream<AssetEntry, ListRevisionAssetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_revision_assets(state.clone())
-        })
+    fn list_revision_assets_pages<'a>(
+        &'a self,
+        mut input: ListRevisionAssetsRequest,
+    ) -> RusotoStream<'a, AssetEntry, ListRevisionAssetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_revision_assets(input.clone())
+        }))
     }
 
     /// <p>This operation lists the tags on the resource.</p>

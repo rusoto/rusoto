@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -325,11 +327,19 @@ pub struct ListTerminologiesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTerminologiesRequest {
+impl Paged for ListTerminologiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTerminologiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -347,27 +357,25 @@ pub struct ListTerminologiesResponse {
     pub terminology_properties_list: Option<Vec<TerminologyProperties>>,
 }
 
-impl ListTerminologiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TerminologyProperties>> {
-        Some(self.terminology_properties_list.as_ref()?.clone())
+impl Paged for ListTerminologiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTerminologiesResponse {
     type Item = TerminologyProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TerminologyProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.terminology_properties_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1662,13 +1670,14 @@ pub trait Translate: Clone + Sync + Send + 'static {
     ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>;
 
     /// Auto-paginating version of `list_terminologies`
-    fn list_terminologies_pages(
-        &self,
-        input: ListTerminologiesRequest,
-    ) -> RusotoStream<TerminologyProperties, ListTerminologiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_terminologies(state.clone())
-        })
+    fn list_terminologies_pages<'a>(
+        &'a self,
+        mut input: ListTerminologiesRequest,
+    ) -> RusotoStream<'a, TerminologyProperties, ListTerminologiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_terminologies(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the batch translation jobs that you have submitted.</p>

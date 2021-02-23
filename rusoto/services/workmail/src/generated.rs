@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -983,11 +985,19 @@ pub struct ListAliasesRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListAliasesRequest {
+impl Paged for ListAliasesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1005,27 +1015,25 @@ pub struct ListAliasesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAliasesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.aliases.as_ref()?.clone())
+impl Paged for ListAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAliasesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.aliases.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1049,11 +1057,19 @@ pub struct ListGroupMembersRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListGroupMembersRequest {
+impl Paged for ListGroupMembersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1071,27 +1087,25 @@ pub struct ListGroupMembersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListGroupMembersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Member>> {
-        Some(self.members.as_ref()?.clone())
+impl Paged for ListGroupMembersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupMembersResponse {
     type Item = Member;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Member> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.members.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1112,11 +1126,19 @@ pub struct ListGroupsRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListGroupsRequest {
+impl Paged for ListGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1134,27 +1156,25 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Group>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupsResponse {
     type Item = Group;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Group> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1209,11 +1229,19 @@ pub struct ListMailboxPermissionsRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListMailboxPermissionsRequest {
+impl Paged for ListMailboxPermissionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMailboxPermissionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1231,27 +1259,25 @@ pub struct ListMailboxPermissionsResponse {
     pub permissions: Option<Vec<Permission>>,
 }
 
-impl ListMailboxPermissionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Permission>> {
-        Some(self.permissions.as_ref()?.clone())
+impl Paged for ListMailboxPermissionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMailboxPermissionsResponse {
     type Item = Permission;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Permission> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.permissions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1269,11 +1295,19 @@ pub struct ListOrganizationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListOrganizationsRequest {
+impl Paged for ListOrganizationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOrganizationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1291,27 +1325,25 @@ pub struct ListOrganizationsResponse {
     pub organization_summaries: Option<Vec<OrganizationSummary>>,
 }
 
-impl ListOrganizationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OrganizationSummary>> {
-        Some(self.organization_summaries.as_ref()?.clone())
+impl Paged for ListOrganizationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOrganizationsResponse {
     type Item = OrganizationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrganizationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.organization_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1335,11 +1367,19 @@ pub struct ListResourceDelegatesRequest {
     pub resource_id: String,
 }
 
-impl PagedRequest for ListResourceDelegatesRequest {
+impl Paged for ListResourceDelegatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceDelegatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1357,27 +1397,25 @@ pub struct ListResourceDelegatesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListResourceDelegatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Delegate>> {
-        Some(self.delegates.as_ref()?.clone())
+impl Paged for ListResourceDelegatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourceDelegatesResponse {
     type Item = Delegate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Delegate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.delegates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1398,11 +1436,19 @@ pub struct ListResourcesRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListResourcesRequest {
+impl Paged for ListResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1420,27 +1466,25 @@ pub struct ListResourcesResponse {
     pub resources: Option<Vec<Resource>>,
 }
 
-impl ListResourcesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
-        Some(self.resources.as_ref()?.clone())
+impl Paged for ListResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourcesResponse {
     type Item = Resource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Resource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1480,11 +1524,19 @@ pub struct ListUsersRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for ListUsersRequest {
+impl Paged for ListUsersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1502,27 +1554,25 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
-impl ListUsersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUsersResponse {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5109,13 +5159,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListAliasesResponse, RusotoError<ListAliasesError>>;
 
     /// Auto-paginating version of `list_aliases`
-    fn list_aliases_pages(
-        &self,
-        input: ListAliasesRequest,
-    ) -> RusotoStream<String, ListAliasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_aliases(state.clone())
-        })
+    fn list_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAliasesRequest,
+    ) -> RusotoStream<'a, String, ListAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aliases(input.clone())
+        }))
     }
 
     /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
@@ -5125,13 +5176,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupMembersResponse, RusotoError<ListGroupMembersError>>;
 
     /// Auto-paginating version of `list_group_members`
-    fn list_group_members_pages(
-        &self,
-        input: ListGroupMembersRequest,
-    ) -> RusotoStream<Member, ListGroupMembersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_group_members(state.clone())
-        })
+    fn list_group_members_pages<'a>(
+        &'a self,
+        mut input: ListGroupMembersRequest,
+    ) -> RusotoStream<'a, Member, ListGroupMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_members(input.clone())
+        }))
     }
 
     /// <p>Returns summaries of the organization's groups.</p>
@@ -5141,10 +5193,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// Auto-paginating version of `list_groups`
-    fn list_groups_pages(&self, input: ListGroupsRequest) -> RusotoStream<Group, ListGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups(state.clone())
-        })
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
     }
 
     /// <p>Lists the mailbox export jobs started for the specified organization within the last seven days.</p>
@@ -5160,13 +5216,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>>;
 
     /// Auto-paginating version of `list_mailbox_permissions`
-    fn list_mailbox_permissions_pages(
-        &self,
-        input: ListMailboxPermissionsRequest,
-    ) -> RusotoStream<Permission, ListMailboxPermissionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_mailbox_permissions(state.clone())
-        })
+    fn list_mailbox_permissions_pages<'a>(
+        &'a self,
+        mut input: ListMailboxPermissionsRequest,
+    ) -> RusotoStream<'a, Permission, ListMailboxPermissionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_mailbox_permissions(input.clone())
+        }))
     }
 
     /// <p>Returns summaries of the customer's organizations.</p>
@@ -5176,13 +5233,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListOrganizationsResponse, RusotoError<ListOrganizationsError>>;
 
     /// Auto-paginating version of `list_organizations`
-    fn list_organizations_pages(
-        &self,
-        input: ListOrganizationsRequest,
-    ) -> RusotoStream<OrganizationSummary, ListOrganizationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_organizations(state.clone())
-        })
+    fn list_organizations_pages<'a>(
+        &'a self,
+        mut input: ListOrganizationsRequest,
+    ) -> RusotoStream<'a, OrganizationSummary, ListOrganizationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_organizations(input.clone())
+        }))
     }
 
     /// <p>Lists the delegates associated with a resource. Users and groups can be resource delegates and answer requests on behalf of the resource.</p>
@@ -5192,13 +5250,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListResourceDelegatesResponse, RusotoError<ListResourceDelegatesError>>;
 
     /// Auto-paginating version of `list_resource_delegates`
-    fn list_resource_delegates_pages(
-        &self,
-        input: ListResourceDelegatesRequest,
-    ) -> RusotoStream<Delegate, ListResourceDelegatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_delegates(state.clone())
-        })
+    fn list_resource_delegates_pages<'a>(
+        &'a self,
+        mut input: ListResourceDelegatesRequest,
+    ) -> RusotoStream<'a, Delegate, ListResourceDelegatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_delegates(input.clone())
+        }))
     }
 
     /// <p>Returns summaries of the organization's resources.</p>
@@ -5208,13 +5267,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
     /// Auto-paginating version of `list_resources`
-    fn list_resources_pages(
-        &self,
-        input: ListResourcesRequest,
-    ) -> RusotoStream<Resource, ListResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resources(state.clone())
-        })
+    fn list_resources_pages<'a>(
+        &'a self,
+        mut input: ListResourcesRequest,
+    ) -> RusotoStream<'a, Resource, ListResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resources(input.clone())
+        }))
     }
 
     /// <p>Lists the tags applied to an Amazon WorkMail organization resource.</p>
@@ -5230,10 +5290,14 @@ pub trait Workmail: Clone + Sync + Send + 'static {
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// Auto-paginating version of `list_users`
-    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<User, ListUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_users(state.clone())
-        })
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, User, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
     }
 
     /// <p>Adds a new access control rule for the specified organization. The rule allows or denies access to the organization for the specified IPv4 addresses, access protocol actions, and user IDs. Adding a new rule with the same name as an existing rule replaces the older rule.</p>

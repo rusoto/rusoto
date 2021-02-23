@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -481,11 +483,19 @@ pub struct ListEntitlementsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListEntitlementsRequest {
+impl Paged for ListEntitlementsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntitlementsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -503,27 +513,25 @@ pub struct ListEntitlementsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListEntitlementsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ListedEntitlement>> {
-        Some(self.entitlements.as_ref()?.clone())
+impl Paged for ListEntitlementsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEntitlementsResponse {
     type Item = ListedEntitlement;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListedEntitlement> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entitlements.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -541,11 +549,19 @@ pub struct ListFlowsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFlowsRequest {
+impl Paged for ListFlowsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFlowsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -563,27 +579,25 @@ pub struct ListFlowsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFlowsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ListedFlow>> {
-        Some(self.flows.as_ref()?.clone())
+impl Paged for ListFlowsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFlowsResponse {
     type Item = ListedFlow;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListedFlow> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.flows.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -601,11 +615,19 @@ pub struct ListOfferingsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListOfferingsRequest {
+impl Paged for ListOfferingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOfferingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -623,27 +645,25 @@ pub struct ListOfferingsResponse {
     pub offerings: Option<Vec<Offering>>,
 }
 
-impl ListOfferingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Offering>> {
-        Some(self.offerings.as_ref()?.clone())
+impl Paged for ListOfferingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOfferingsResponse {
     type Item = Offering;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Offering> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.offerings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -661,11 +681,19 @@ pub struct ListReservationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListReservationsRequest {
+impl Paged for ListReservationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReservationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -683,27 +711,25 @@ pub struct ListReservationsResponse {
     pub reservations: Option<Vec<Reservation>>,
 }
 
-impl ListReservationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Reservation>> {
-        Some(self.reservations.as_ref()?.clone())
+impl Paged for ListReservationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReservationsResponse {
     type Item = Reservation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Reservation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reservations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3190,13 +3216,14 @@ pub trait MediaConnect: Clone + Sync + Send + 'static {
     ) -> Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>>;
 
     /// Auto-paginating version of `list_entitlements`
-    fn list_entitlements_pages(
-        &self,
-        input: ListEntitlementsRequest,
-    ) -> RusotoStream<ListedEntitlement, ListEntitlementsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_entitlements(state.clone())
-        })
+    fn list_entitlements_pages<'a>(
+        &'a self,
+        mut input: ListEntitlementsRequest,
+    ) -> RusotoStream<'a, ListedEntitlement, ListEntitlementsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entitlements(input.clone())
+        }))
     }
 
     /// <p>Displays a list of flows that are associated with this account. This request returns a paginated result.</p>
@@ -3206,13 +3233,14 @@ pub trait MediaConnect: Clone + Sync + Send + 'static {
     ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>>;
 
     /// Auto-paginating version of `list_flows`
-    fn list_flows_pages(
-        &self,
-        input: ListFlowsRequest,
-    ) -> RusotoStream<ListedFlow, ListFlowsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_flows(state.clone())
-        })
+    fn list_flows_pages<'a>(
+        &'a self,
+        mut input: ListFlowsRequest,
+    ) -> RusotoStream<'a, ListedFlow, ListFlowsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_flows(input.clone())
+        }))
     }
 
     /// <p>Displays a list of all offerings that are available to this account in the current AWS Region. If you have an active reservation (which means you&#39;ve purchased an offering that has already started and hasn&#39;t expired yet), your account isn&#39;t eligible for other offerings.</p>
@@ -3222,13 +3250,14 @@ pub trait MediaConnect: Clone + Sync + Send + 'static {
     ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>;
 
     /// Auto-paginating version of `list_offerings`
-    fn list_offerings_pages(
-        &self,
-        input: ListOfferingsRequest,
-    ) -> RusotoStream<Offering, ListOfferingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_offerings(state.clone())
-        })
+    fn list_offerings_pages<'a>(
+        &'a self,
+        mut input: ListOfferingsRequest,
+    ) -> RusotoStream<'a, Offering, ListOfferingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_offerings(input.clone())
+        }))
     }
 
     /// <p>Displays a list of all reservations that have been purchased by this account in the current AWS Region. This list includes all reservations in all states (such as active and expired).</p>
@@ -3238,13 +3267,14 @@ pub trait MediaConnect: Clone + Sync + Send + 'static {
     ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>>;
 
     /// Auto-paginating version of `list_reservations`
-    fn list_reservations_pages(
-        &self,
-        input: ListReservationsRequest,
-    ) -> RusotoStream<Reservation, ListReservationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_reservations(state.clone())
-        })
+    fn list_reservations_pages<'a>(
+        &'a self,
+        mut input: ListReservationsRequest,
+    ) -> RusotoStream<'a, Reservation, ListReservationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_reservations(input.clone())
+        }))
     }
 
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>

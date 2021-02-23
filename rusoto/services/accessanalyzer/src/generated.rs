@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -520,11 +522,19 @@ pub struct ListAnalyzedResourcesRequest {
     pub resource_type: Option<String>,
 }
 
-impl PagedRequest for ListAnalyzedResourcesRequest {
+impl Paged for ListAnalyzedResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAnalyzedResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -542,27 +552,25 @@ pub struct ListAnalyzedResourcesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAnalyzedResourcesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AnalyzedResourceSummary>> {
-        Some(self.analyzed_resources.clone())
+impl Paged for ListAnalyzedResourcesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAnalyzedResourcesResponse {
     type Item = AnalyzedResourceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AnalyzedResourceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.analyzed_resources
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -585,11 +593,19 @@ pub struct ListAnalyzersRequest {
     pub type_: Option<String>,
 }
 
-impl PagedRequest for ListAnalyzersRequest {
+impl Paged for ListAnalyzersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAnalyzersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -607,27 +623,25 @@ pub struct ListAnalyzersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAnalyzersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AnalyzerSummary>> {
-        Some(self.analyzers.clone())
+impl Paged for ListAnalyzersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAnalyzersResponse {
     type Item = AnalyzerSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AnalyzerSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.analyzers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -649,11 +663,19 @@ pub struct ListArchiveRulesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListArchiveRulesRequest {
+impl Paged for ListArchiveRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListArchiveRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -671,27 +693,25 @@ pub struct ListArchiveRulesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListArchiveRulesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ArchiveRuleSummary>> {
-        Some(self.archive_rules.clone())
+impl Paged for ListArchiveRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListArchiveRulesResponse {
     type Item = ArchiveRuleSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ArchiveRuleSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.archive_rules
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -721,11 +741,19 @@ pub struct ListFindingsRequest {
     pub sort: Option<SortCriteria>,
 }
 
-impl PagedRequest for ListFindingsRequest {
+impl Paged for ListFindingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -743,27 +771,25 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFindingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FindingSummary>> {
-        Some(self.findings.clone())
+impl Paged for ListFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFindingsResponse {
     type Item = FindingSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FindingSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.findings
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1908,13 +1934,14 @@ pub trait AccessAnalyzer: Clone + Sync + Send + 'static {
     ) -> Result<ListAnalyzedResourcesResponse, RusotoError<ListAnalyzedResourcesError>>;
 
     /// Auto-paginating version of `list_analyzed_resources`
-    fn list_analyzed_resources_pages(
-        &self,
-        input: ListAnalyzedResourcesRequest,
-    ) -> RusotoStream<AnalyzedResourceSummary, ListAnalyzedResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_analyzed_resources(state.clone())
-        })
+    fn list_analyzed_resources_pages<'a>(
+        &'a self,
+        mut input: ListAnalyzedResourcesRequest,
+    ) -> RusotoStream<'a, AnalyzedResourceSummary, ListAnalyzedResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_analyzed_resources(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of analyzers.</p>
@@ -1924,13 +1951,14 @@ pub trait AccessAnalyzer: Clone + Sync + Send + 'static {
     ) -> Result<ListAnalyzersResponse, RusotoError<ListAnalyzersError>>;
 
     /// Auto-paginating version of `list_analyzers`
-    fn list_analyzers_pages(
-        &self,
-        input: ListAnalyzersRequest,
-    ) -> RusotoStream<AnalyzerSummary, ListAnalyzersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_analyzers(state.clone())
-        })
+    fn list_analyzers_pages<'a>(
+        &'a self,
+        mut input: ListAnalyzersRequest,
+    ) -> RusotoStream<'a, AnalyzerSummary, ListAnalyzersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_analyzers(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of archive rules created for the specified analyzer.</p>
@@ -1940,13 +1968,14 @@ pub trait AccessAnalyzer: Clone + Sync + Send + 'static {
     ) -> Result<ListArchiveRulesResponse, RusotoError<ListArchiveRulesError>>;
 
     /// Auto-paginating version of `list_archive_rules`
-    fn list_archive_rules_pages(
-        &self,
-        input: ListArchiveRulesRequest,
-    ) -> RusotoStream<ArchiveRuleSummary, ListArchiveRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_archive_rules(state.clone())
-        })
+    fn list_archive_rules_pages<'a>(
+        &'a self,
+        mut input: ListArchiveRulesRequest,
+    ) -> RusotoStream<'a, ArchiveRuleSummary, ListArchiveRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_archive_rules(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of findings generated by the specified analyzer.</p> <p>To learn about filter keys that you can use to create an archive rule, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-filter-keys.html">Access Analyzer filter keys</a> in the <b>IAM User Guide</b>.</p>
@@ -1956,13 +1985,14 @@ pub trait AccessAnalyzer: Clone + Sync + Send + 'static {
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>>;
 
     /// Auto-paginating version of `list_findings`
-    fn list_findings_pages(
-        &self,
-        input: ListFindingsRequest,
-    ) -> RusotoStream<FindingSummary, ListFindingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_findings(state.clone())
-        })
+    fn list_findings_pages<'a>(
+        &'a self,
+        mut input: ListFindingsRequest,
+    ) -> RusotoStream<'a, FindingSummary, ListFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_findings(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of tags applied to the specified resource.</p>

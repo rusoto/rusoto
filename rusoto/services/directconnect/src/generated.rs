@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -978,11 +980,19 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
-impl PagedRequest for DescribeDirectConnectGatewayAssociationsRequest {
+impl Paged for DescribeDirectConnectGatewayAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDirectConnectGatewayAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1000,27 +1010,25 @@ pub struct DescribeDirectConnectGatewayAssociationsResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeDirectConnectGatewayAssociationsResult {
-    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGatewayAssociation>> {
-        Some(self.direct_connect_gateway_associations.as_ref()?.clone())
+impl Paged for DescribeDirectConnectGatewayAssociationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDirectConnectGatewayAssociationsResult {
     type Item = DirectConnectGatewayAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DirectConnectGatewayAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.direct_connect_gateway_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1046,11 +1054,19 @@ pub struct DescribeDirectConnectGatewayAttachmentsRequest {
     pub virtual_interface_id: Option<String>,
 }
 
-impl PagedRequest for DescribeDirectConnectGatewayAttachmentsRequest {
+impl Paged for DescribeDirectConnectGatewayAttachmentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDirectConnectGatewayAttachmentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1068,27 +1084,25 @@ pub struct DescribeDirectConnectGatewayAttachmentsResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeDirectConnectGatewayAttachmentsResult {
-    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGatewayAttachment>> {
-        Some(self.direct_connect_gateway_attachments.as_ref()?.clone())
+impl Paged for DescribeDirectConnectGatewayAttachmentsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDirectConnectGatewayAttachmentsResult {
     type Item = DirectConnectGatewayAttachment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DirectConnectGatewayAttachment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.direct_connect_gateway_attachments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1110,11 +1124,19 @@ pub struct DescribeDirectConnectGatewaysRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeDirectConnectGatewaysRequest {
+impl Paged for DescribeDirectConnectGatewaysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDirectConnectGatewaysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1132,27 +1154,25 @@ pub struct DescribeDirectConnectGatewaysResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeDirectConnectGatewaysResult {
-    fn pagination_page_opt(self) -> Option<Vec<DirectConnectGateway>> {
-        Some(self.direct_connect_gateways.as_ref()?.clone())
+impl Paged for DescribeDirectConnectGatewaysResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDirectConnectGatewaysResult {
     type Item = DirectConnectGateway;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DirectConnectGateway> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.direct_connect_gateways.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5123,14 +5143,18 @@ pub trait DirectConnect: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_direct_connect_gateway_associations`
-    fn describe_direct_connect_gateway_associations_pages(
-        &self,
-        input: DescribeDirectConnectGatewayAssociationsRequest,
-    ) -> RusotoStream<DirectConnectGatewayAssociation, DescribeDirectConnectGatewayAssociationsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_direct_connect_gateway_associations(state.clone())
-        })
+    fn describe_direct_connect_gateway_associations_pages<'a>(
+        &'a self,
+        mut input: DescribeDirectConnectGatewayAssociationsRequest,
+    ) -> RusotoStream<
+        'a,
+        DirectConnectGatewayAssociation,
+        DescribeDirectConnectGatewayAssociationsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_direct_connect_gateway_associations(input.clone())
+        }))
     }
 
     /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
@@ -5143,14 +5167,18 @@ pub trait DirectConnect: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_direct_connect_gateway_attachments`
-    fn describe_direct_connect_gateway_attachments_pages(
-        &self,
-        input: DescribeDirectConnectGatewayAttachmentsRequest,
-    ) -> RusotoStream<DirectConnectGatewayAttachment, DescribeDirectConnectGatewayAttachmentsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_direct_connect_gateway_attachments(state.clone())
-        })
+    fn describe_direct_connect_gateway_attachments_pages<'a>(
+        &'a self,
+        mut input: DescribeDirectConnectGatewayAttachmentsRequest,
+    ) -> RusotoStream<
+        'a,
+        DirectConnectGatewayAttachment,
+        DescribeDirectConnectGatewayAttachmentsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_direct_connect_gateway_attachments(input.clone())
+        }))
     }
 
     /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
@@ -5160,13 +5188,14 @@ pub trait DirectConnect: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDirectConnectGatewaysResult, RusotoError<DescribeDirectConnectGatewaysError>>;
 
     /// Auto-paginating version of `describe_direct_connect_gateways`
-    fn describe_direct_connect_gateways_pages(
-        &self,
-        input: DescribeDirectConnectGatewaysRequest,
-    ) -> RusotoStream<DirectConnectGateway, DescribeDirectConnectGatewaysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_direct_connect_gateways(state.clone())
-        })
+    fn describe_direct_connect_gateways_pages<'a>(
+        &'a self,
+        mut input: DescribeDirectConnectGatewaysRequest,
+    ) -> RusotoStream<'a, DirectConnectGateway, DescribeDirectConnectGatewaysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_direct_connect_gateways(input.clone())
+        }))
     }
 
     /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect Partners only.</p> </note></p>

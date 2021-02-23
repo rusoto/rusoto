@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1164,11 +1166,19 @@ pub struct DescribeEcsClustersRequest {
     pub stack_id: Option<String>,
 }
 
-impl PagedRequest for DescribeEcsClustersRequest {
+impl Paged for DescribeEcsClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEcsClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1187,27 +1197,25 @@ pub struct DescribeEcsClustersResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeEcsClustersResult {
-    fn pagination_page_opt(self) -> Option<Vec<EcsCluster>> {
-        Some(self.ecs_clusters.as_ref()?.clone())
+impl Paged for DescribeEcsClustersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEcsClustersResult {
     type Item = EcsCluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EcsCluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ecs_clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5897,13 +5905,14 @@ pub trait OpsWorks: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEcsClustersResult, RusotoError<DescribeEcsClustersError>>;
 
     /// Auto-paginating version of `describe_ecs_clusters`
-    fn describe_ecs_clusters_pages(
-        &self,
-        input: DescribeEcsClustersRequest,
-    ) -> RusotoStream<EcsCluster, DescribeEcsClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_ecs_clusters(state.clone())
-        })
+    fn describe_ecs_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeEcsClustersRequest,
+    ) -> RusotoStream<'a, EcsCluster, DescribeEcsClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ecs_clusters(input.clone())
+        }))
     }
 
     /// <p>Describes <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>

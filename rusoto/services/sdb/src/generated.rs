@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -637,11 +639,19 @@ pub struct ListDomainsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDomainsRequest {
+impl Paged for ListDomainsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDomainsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -673,27 +683,25 @@ pub struct ListDomainsResult {
     pub next_token: Option<String>,
 }
 
-impl ListDomainsResult {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.domain_names.as_ref()?.clone())
+impl Paged for ListDomainsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDomainsResult {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.domain_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -860,11 +868,19 @@ pub struct SelectRequest {
     pub select_expression: String,
 }
 
-impl PagedRequest for SelectRequest {
+impl Paged for SelectRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SelectRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -900,27 +916,25 @@ pub struct SelectResult {
     pub next_token: Option<String>,
 }
 
-impl SelectResult {
-    fn pagination_page_opt(self) -> Option<Vec<Item>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for SelectResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SelectResult {
     type Item = Item;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Item> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1739,13 +1753,14 @@ pub trait SimpleDb: Clone + Sync + Send + 'static {
     ) -> Result<ListDomainsResult, RusotoError<ListDomainsError>>;
 
     /// Auto-paginating version of `list_domains`
-    fn list_domains_pages(
-        &self,
-        input: ListDomainsRequest,
-    ) -> RusotoStream<String, ListDomainsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_domains(state.clone())
-        })
+    fn list_domains_pages<'a>(
+        &'a self,
+        mut input: ListDomainsRequest,
+    ) -> RusotoStream<'a, String, ListDomainsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domains(input.clone())
+        }))
     }
 
     /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
@@ -1758,10 +1773,11 @@ pub trait SimpleDb: Clone + Sync + Send + 'static {
     async fn select(&self, input: SelectRequest) -> Result<SelectResult, RusotoError<SelectError>>;
 
     /// Auto-paginating version of `select`
-    fn select_pages(&self, input: SelectRequest) -> RusotoStream<Item, SelectError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.select(state.clone())
-        })
+    fn select_pages<'a>(&'a self, mut input: SelectRequest) -> RusotoStream<'a, Item, SelectError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.select(input.clone())
+        }))
     }
 }
 /// A client for the Amazon SimpleDB API.

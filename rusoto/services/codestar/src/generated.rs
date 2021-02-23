@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -424,11 +426,19 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListProjectsRequest {
+impl Paged for ListProjectsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -445,27 +455,25 @@ pub struct ListProjectsResult {
     pub projects: Vec<ProjectSummary>,
 }
 
-impl ListProjectsResult {
-    fn pagination_page_opt(self) -> Option<Vec<ProjectSummary>> {
-        Some(self.projects.clone())
+impl Paged for ListProjectsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProjectsResult {
     type Item = ProjectSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProjectSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.projects
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -486,11 +494,19 @@ pub struct ListResourcesRequest {
     pub project_id: String,
 }
 
-impl PagedRequest for ListResourcesRequest {
+impl Paged for ListResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -508,27 +524,25 @@ pub struct ListResourcesResult {
     pub resources: Option<Vec<Resource>>,
 }
 
-impl ListResourcesResult {
-    fn pagination_page_opt(self) -> Option<Vec<Resource>> {
-        Some(self.resources.as_ref()?.clone())
+impl Paged for ListResourcesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourcesResult {
     type Item = Resource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Resource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -580,11 +594,19 @@ pub struct ListTeamMembersRequest {
     pub project_id: String,
 }
 
-impl PagedRequest for ListTeamMembersRequest {
+impl Paged for ListTeamMembersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTeamMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -601,27 +623,25 @@ pub struct ListTeamMembersResult {
     pub team_members: Vec<TeamMember>,
 }
 
-impl ListTeamMembersResult {
-    fn pagination_page_opt(self) -> Option<Vec<TeamMember>> {
-        Some(self.team_members.clone())
+impl Paged for ListTeamMembersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTeamMembersResult {
     type Item = TeamMember;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TeamMember> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.team_members
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -639,11 +659,19 @@ pub struct ListUserProfilesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListUserProfilesRequest {
+impl Paged for ListUserProfilesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUserProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -660,27 +688,25 @@ pub struct ListUserProfilesResult {
     pub user_profiles: Vec<UserProfileSummary>,
 }
 
-impl ListUserProfilesResult {
-    fn pagination_page_opt(self) -> Option<Vec<UserProfileSummary>> {
-        Some(self.user_profiles.clone())
+impl Paged for ListUserProfilesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUserProfilesResult {
     type Item = UserProfileSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UserProfileSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.user_profiles
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1741,13 +1767,14 @@ pub trait CodeStar: Clone + Sync + Send + 'static {
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
 
     /// Auto-paginating version of `list_projects`
-    fn list_projects_pages(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoStream<ProjectSummary, ListProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_projects(state.clone())
-        })
+    fn list_projects_pages<'a>(
+        &'a self,
+        mut input: ListProjectsRequest,
+    ) -> RusotoStream<'a, ProjectSummary, ListProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_projects(input.clone())
+        }))
     }
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
@@ -1757,13 +1784,14 @@ pub trait CodeStar: Clone + Sync + Send + 'static {
     ) -> Result<ListResourcesResult, RusotoError<ListResourcesError>>;
 
     /// Auto-paginating version of `list_resources`
-    fn list_resources_pages(
-        &self,
-        input: ListResourcesRequest,
-    ) -> RusotoStream<Resource, ListResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resources(state.clone())
-        })
+    fn list_resources_pages<'a>(
+        &'a self,
+        mut input: ListResourcesRequest,
+    ) -> RusotoStream<'a, Resource, ListResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resources(input.clone())
+        }))
     }
 
     /// <p>Gets the tags for a project.</p>
@@ -1779,13 +1807,14 @@ pub trait CodeStar: Clone + Sync + Send + 'static {
     ) -> Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>>;
 
     /// Auto-paginating version of `list_team_members`
-    fn list_team_members_pages(
-        &self,
-        input: ListTeamMembersRequest,
-    ) -> RusotoStream<TeamMember, ListTeamMembersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_team_members(state.clone())
-        })
+    fn list_team_members_pages<'a>(
+        &'a self,
+        mut input: ListTeamMembersRequest,
+    ) -> RusotoStream<'a, TeamMember, ListTeamMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_team_members(input.clone())
+        }))
     }
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
@@ -1795,13 +1824,14 @@ pub trait CodeStar: Clone + Sync + Send + 'static {
     ) -> Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>>;
 
     /// Auto-paginating version of `list_user_profiles`
-    fn list_user_profiles_pages(
-        &self,
-        input: ListUserProfilesRequest,
-    ) -> RusotoStream<UserProfileSummary, ListUserProfilesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_user_profiles(state.clone())
-        })
+    fn list_user_profiles_pages<'a>(
+        &'a self,
+        mut input: ListUserProfilesRequest,
+    ) -> RusotoStream<'a, UserProfileSummary, ListUserProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_profiles(input.clone())
+        }))
     }
 
     /// <p>Adds tags to a project.</p>

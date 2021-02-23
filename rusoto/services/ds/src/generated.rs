@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -766,11 +768,19 @@ pub struct DescribeDirectoriesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeDirectoriesRequest {
+impl Paged for DescribeDirectoriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDirectoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -789,27 +799,25 @@ pub struct DescribeDirectoriesResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeDirectoriesResult {
-    fn pagination_page_opt(self) -> Option<Vec<DirectoryDescription>> {
-        Some(self.directory_descriptions.as_ref()?.clone())
+impl Paged for DescribeDirectoriesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDirectoriesResult {
     type Item = DirectoryDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DirectoryDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.directory_descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -834,11 +842,19 @@ pub struct DescribeDomainControllersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeDomainControllersRequest {
+impl Paged for DescribeDomainControllersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDomainControllersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -856,27 +872,25 @@ pub struct DescribeDomainControllersResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeDomainControllersResult {
-    fn pagination_page_opt(self) -> Option<Vec<DomainController>> {
-        Some(self.domain_controllers.as_ref()?.clone())
+impl Paged for DescribeDomainControllersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDomainControllersResult {
     type Item = DomainController;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DomainController> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.domain_controllers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -993,11 +1007,19 @@ pub struct DescribeSharedDirectoriesRequest {
     pub shared_directory_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeSharedDirectoriesRequest {
+impl Paged for DescribeSharedDirectoriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSharedDirectoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1015,27 +1037,25 @@ pub struct DescribeSharedDirectoriesResult {
     pub shared_directories: Option<Vec<SharedDirectory>>,
 }
 
-impl DescribeSharedDirectoriesResult {
-    fn pagination_page_opt(self) -> Option<Vec<SharedDirectory>> {
-        Some(self.shared_directories.as_ref()?.clone())
+impl Paged for DescribeSharedDirectoriesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeSharedDirectoriesResult {
     type Item = SharedDirectory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SharedDirectory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.shared_directories.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1062,11 +1082,19 @@ pub struct DescribeSnapshotsRequest {
     pub snapshot_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeSnapshotsRequest {
+impl Paged for DescribeSnapshotsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSnapshotsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1085,27 +1113,25 @@ pub struct DescribeSnapshotsResult {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
-impl DescribeSnapshotsResult {
-    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
-        Some(self.snapshots.as_ref()?.clone())
+impl Paged for DescribeSnapshotsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeSnapshotsResult {
     type Item = Snapshot;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Snapshot> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1132,11 +1158,19 @@ pub struct DescribeTrustsRequest {
     pub trust_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeTrustsRequest {
+impl Paged for DescribeTrustsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeTrustsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1155,27 +1189,25 @@ pub struct DescribeTrustsResult {
     pub trusts: Option<Vec<Trust>>,
 }
 
-impl DescribeTrustsResult {
-    fn pagination_page_opt(self) -> Option<Vec<Trust>> {
-        Some(self.trusts.as_ref()?.clone())
+impl Paged for DescribeTrustsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeTrustsResult {
     type Item = Trust;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Trust> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.trusts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1779,11 +1811,19 @@ pub struct ListIpRoutesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListIpRoutesRequest {
+impl Paged for ListIpRoutesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIpRoutesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1801,27 +1841,25 @@ pub struct ListIpRoutesResult {
     pub next_token: Option<String>,
 }
 
-impl ListIpRoutesResult {
-    fn pagination_page_opt(self) -> Option<Vec<IpRouteInfo>> {
-        Some(self.ip_routes_info.as_ref()?.clone())
+impl Paged for ListIpRoutesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListIpRoutesResult {
     type Item = IpRouteInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<IpRouteInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ip_routes_info.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1843,11 +1881,19 @@ pub struct ListLogSubscriptionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLogSubscriptionsRequest {
+impl Paged for ListLogSubscriptionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLogSubscriptionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1865,27 +1911,25 @@ pub struct ListLogSubscriptionsResult {
     pub next_token: Option<String>,
 }
 
-impl ListLogSubscriptionsResult {
-    fn pagination_page_opt(self) -> Option<Vec<LogSubscription>> {
-        Some(self.log_subscriptions.as_ref()?.clone())
+impl Paged for ListLogSubscriptionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLogSubscriptionsResult {
     type Item = LogSubscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LogSubscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.log_subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1906,11 +1950,19 @@ pub struct ListSchemaExtensionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSchemaExtensionsRequest {
+impl Paged for ListSchemaExtensionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSchemaExtensionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1928,27 +1980,25 @@ pub struct ListSchemaExtensionsResult {
     pub schema_extensions_info: Option<Vec<SchemaExtensionInfo>>,
 }
 
-impl ListSchemaExtensionsResult {
-    fn pagination_page_opt(self) -> Option<Vec<SchemaExtensionInfo>> {
-        Some(self.schema_extensions_info.as_ref()?.clone())
+impl Paged for ListSchemaExtensionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSchemaExtensionsResult {
     type Item = SchemaExtensionInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SchemaExtensionInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.schema_extensions_info.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1969,11 +2019,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1991,27 +2049,25 @@ pub struct ListTagsForResourceResult {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceResult {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResult {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6668,13 +6724,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDirectoriesResult, RusotoError<DescribeDirectoriesError>>;
 
     /// Auto-paginating version of `describe_directories`
-    fn describe_directories_pages(
-        &self,
-        input: DescribeDirectoriesRequest,
-    ) -> RusotoStream<DirectoryDescription, DescribeDirectoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_directories(state.clone())
-        })
+    fn describe_directories_pages<'a>(
+        &'a self,
+        mut input: DescribeDirectoriesRequest,
+    ) -> RusotoStream<'a, DirectoryDescription, DescribeDirectoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_directories(input.clone())
+        }))
     }
 
     /// <p>Provides information about any domain controllers in your directory.</p>
@@ -6684,13 +6741,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDomainControllersResult, RusotoError<DescribeDomainControllersError>>;
 
     /// Auto-paginating version of `describe_domain_controllers`
-    fn describe_domain_controllers_pages(
-        &self,
-        input: DescribeDomainControllersRequest,
-    ) -> RusotoStream<DomainController, DescribeDomainControllersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_domain_controllers(state.clone())
-        })
+    fn describe_domain_controllers_pages<'a>(
+        &'a self,
+        mut input: DescribeDomainControllersRequest,
+    ) -> RusotoStream<'a, DomainController, DescribeDomainControllersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_domain_controllers(input.clone())
+        }))
     }
 
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
@@ -6718,13 +6776,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSharedDirectoriesResult, RusotoError<DescribeSharedDirectoriesError>>;
 
     /// Auto-paginating version of `describe_shared_directories`
-    fn describe_shared_directories_pages(
-        &self,
-        input: DescribeSharedDirectoriesRequest,
-    ) -> RusotoStream<SharedDirectory, DescribeSharedDirectoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_shared_directories(state.clone())
-        })
+    fn describe_shared_directories_pages<'a>(
+        &'a self,
+        mut input: DescribeSharedDirectoriesRequest,
+    ) -> RusotoStream<'a, SharedDirectory, DescribeSharedDirectoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_shared_directories(input.clone())
+        }))
     }
 
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
@@ -6734,13 +6793,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSnapshotsResult, RusotoError<DescribeSnapshotsError>>;
 
     /// Auto-paginating version of `describe_snapshots`
-    fn describe_snapshots_pages(
-        &self,
-        input: DescribeSnapshotsRequest,
-    ) -> RusotoStream<Snapshot, DescribeSnapshotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_snapshots(state.clone())
-        })
+    fn describe_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeSnapshotsRequest,
+    ) -> RusotoStream<'a, Snapshot, DescribeSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_snapshots(input.clone())
+        }))
     }
 
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
@@ -6750,13 +6810,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTrustsResult, RusotoError<DescribeTrustsError>>;
 
     /// Auto-paginating version of `describe_trusts`
-    fn describe_trusts_pages(
-        &self,
-        input: DescribeTrustsRequest,
-    ) -> RusotoStream<Trust, DescribeTrustsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_trusts(state.clone())
-        })
+    fn describe_trusts_pages<'a>(
+        &'a self,
+        mut input: DescribeTrustsRequest,
+    ) -> RusotoStream<'a, Trust, DescribeTrustsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_trusts(input.clone())
+        }))
     }
 
     /// <p>Disables alternative client authentication methods for the specified directory. </p>
@@ -6831,13 +6892,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<ListIpRoutesResult, RusotoError<ListIpRoutesError>>;
 
     /// Auto-paginating version of `list_ip_routes`
-    fn list_ip_routes_pages(
-        &self,
-        input: ListIpRoutesRequest,
-    ) -> RusotoStream<IpRouteInfo, ListIpRoutesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_ip_routes(state.clone())
-        })
+    fn list_ip_routes_pages<'a>(
+        &'a self,
+        mut input: ListIpRoutesRequest,
+    ) -> RusotoStream<'a, IpRouteInfo, ListIpRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ip_routes(input.clone())
+        }))
     }
 
     /// <p>Lists the active log subscriptions for the AWS account.</p>
@@ -6847,13 +6909,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<ListLogSubscriptionsResult, RusotoError<ListLogSubscriptionsError>>;
 
     /// Auto-paginating version of `list_log_subscriptions`
-    fn list_log_subscriptions_pages(
-        &self,
-        input: ListLogSubscriptionsRequest,
-    ) -> RusotoStream<LogSubscription, ListLogSubscriptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_log_subscriptions(state.clone())
-        })
+    fn list_log_subscriptions_pages<'a>(
+        &'a self,
+        mut input: ListLogSubscriptionsRequest,
+    ) -> RusotoStream<'a, LogSubscription, ListLogSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_log_subscriptions(input.clone())
+        }))
     }
 
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
@@ -6863,13 +6926,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<ListSchemaExtensionsResult, RusotoError<ListSchemaExtensionsError>>;
 
     /// Auto-paginating version of `list_schema_extensions`
-    fn list_schema_extensions_pages(
-        &self,
-        input: ListSchemaExtensionsRequest,
-    ) -> RusotoStream<SchemaExtensionInfo, ListSchemaExtensionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_schema_extensions(state.clone())
-        })
+    fn list_schema_extensions_pages<'a>(
+        &'a self,
+        mut input: ListSchemaExtensionsRequest,
+    ) -> RusotoStream<'a, SchemaExtensionInfo, ListSchemaExtensionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_schema_extensions(input.clone())
+        }))
     }
 
     /// <p>Lists all tags on a directory.</p>
@@ -6879,13 +6943,14 @@ pub trait DirectoryService: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Registers a certificate for a secure LDAP or client certificate authentication.</p>

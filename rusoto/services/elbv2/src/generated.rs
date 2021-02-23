@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1918,11 +1920,19 @@ pub struct DescribeAccountLimitsInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeAccountLimitsInput {
+impl Paged for DescribeAccountLimitsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeAccountLimitsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1954,27 +1964,25 @@ pub struct DescribeAccountLimitsOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeAccountLimitsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Limit>> {
-        Some(self.limits.as_ref()?.clone())
+impl Paged for DescribeAccountLimitsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeAccountLimitsOutput {
     type Item = Limit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Limit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.limits.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2019,11 +2027,19 @@ pub struct DescribeListenerCertificatesInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeListenerCertificatesInput {
+impl Paged for DescribeListenerCertificatesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeListenerCertificatesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2056,27 +2072,25 @@ pub struct DescribeListenerCertificatesOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeListenerCertificatesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
-        Some(self.certificates.as_ref()?.clone())
+impl Paged for DescribeListenerCertificatesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeListenerCertificatesOutput {
     type Item = Certificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Certificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.certificates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2123,11 +2137,19 @@ pub struct DescribeListenersInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeListenersInput {
+impl Paged for DescribeListenersInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeListenersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2169,27 +2191,25 @@ pub struct DescribeListenersOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeListenersOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Listener>> {
-        Some(self.listeners.as_ref()?.clone())
+impl Paged for DescribeListenersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeListenersOutput {
     type Item = Listener;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Listener> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.listeners.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2293,11 +2313,19 @@ pub struct DescribeLoadBalancersInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeLoadBalancersInput {
+impl Paged for DescribeLoadBalancersInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeLoadBalancersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2343,27 +2371,25 @@ pub struct DescribeLoadBalancersOutput {
     pub next_marker: Option<String>,
 }
 
-impl DescribeLoadBalancersOutput {
-    fn pagination_page_opt(self) -> Option<Vec<LoadBalancer>> {
-        Some(self.load_balancers.as_ref()?.clone())
+impl Paged for DescribeLoadBalancersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeLoadBalancersOutput {
     type Item = LoadBalancer;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LoadBalancer> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.load_balancers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2410,11 +2436,19 @@ pub struct DescribeRulesInput {
     pub rule_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeRulesInput {
+impl Paged for DescribeRulesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeRulesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2456,27 +2490,25 @@ pub struct DescribeRulesOutput {
     pub rules: Option<Vec<Rule>>,
 }
 
-impl DescribeRulesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Rule>> {
-        Some(self.rules.as_ref()?.clone())
+impl Paged for DescribeRulesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeRulesOutput {
     type Item = Rule;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Rule> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2516,11 +2548,19 @@ pub struct DescribeSSLPoliciesInput {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for DescribeSSLPoliciesInput {
+impl Paged for DescribeSSLPoliciesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSSLPoliciesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2559,27 +2599,25 @@ pub struct DescribeSSLPoliciesOutput {
     pub ssl_policies: Option<Vec<SslPolicy>>,
 }
 
-impl DescribeSSLPoliciesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<SslPolicy>> {
-        Some(self.ssl_policies.as_ref()?.clone())
+impl Paged for DescribeSSLPoliciesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeSSLPoliciesOutput {
     type Item = SslPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SslPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ssl_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2739,11 +2777,19 @@ pub struct DescribeTargetGroupsInput {
     pub target_group_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeTargetGroupsInput {
+impl Paged for DescribeTargetGroupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTargetGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -2792,27 +2838,25 @@ pub struct DescribeTargetGroupsOutput {
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
-impl DescribeTargetGroupsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TargetGroup>> {
-        Some(self.target_groups.as_ref()?.clone())
+impl Paged for DescribeTargetGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeTargetGroupsOutput {
     type Item = TargetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TargetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.target_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9282,13 +9326,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
     /// Auto-paginating version of `describe_account_limits`
-    fn describe_account_limits_pages(
-        &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoStream<Limit, DescribeAccountLimitsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_account_limits(state.clone())
-        })
+    fn describe_account_limits_pages<'a>(
+        &'a self,
+        mut input: DescribeAccountLimitsInput,
+    ) -> RusotoStream<'a, Limit, DescribeAccountLimitsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_account_limits(input.clone())
+        }))
     }
 
     /// <p>Describes the default certificate and the certificate list for the specified HTTPS or TLS listener.</p> <p>If the default certificate is also in the certificate list, it appears twice in the results (once with <code>IsDefault</code> set to true and once with <code>IsDefault</code> set to false).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL certificates</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#tls-listener-certificate">Server certificates</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -9298,13 +9343,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>;
 
     /// Auto-paginating version of `describe_listener_certificates`
-    fn describe_listener_certificates_pages(
-        &self,
-        input: DescribeListenerCertificatesInput,
-    ) -> RusotoStream<Certificate, DescribeListenerCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_listener_certificates(state.clone())
-        })
+    fn describe_listener_certificates_pages<'a>(
+        &'a self,
+        mut input: DescribeListenerCertificatesInput,
+    ) -> RusotoStream<'a, Certificate, DescribeListenerCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_listener_certificates(input.clone())
+        }))
     }
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer. You must specify either a load balancer or one or more listeners.</p>
@@ -9314,13 +9360,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>>;
 
     /// Auto-paginating version of `describe_listeners`
-    fn describe_listeners_pages(
-        &self,
-        input: DescribeListenersInput,
-    ) -> RusotoStream<Listener, DescribeListenersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_listeners(state.clone())
-        })
+    fn describe_listeners_pages<'a>(
+        &'a self,
+        mut input: DescribeListenersInput,
+    ) -> RusotoStream<'a, Listener, DescribeListenersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_listeners(input.clone())
+        }))
     }
 
     /// <p><p>Describes the attributes for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer.</p> <p>For more information, see the following:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Application Load Balancers Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Network Load Balancers Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/gateway-load-balancers.html#load-balancer-attributes">Load balancer attributes</a> in the <i>Gateway Load Balancers Guide</i> </p> </li> </ul></p>
@@ -9339,13 +9386,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>>;
 
     /// Auto-paginating version of `describe_load_balancers`
-    fn describe_load_balancers_pages(
-        &self,
-        input: DescribeLoadBalancersInput,
-    ) -> RusotoStream<LoadBalancer, DescribeLoadBalancersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_load_balancers(state.clone())
-        })
+    fn describe_load_balancers_pages<'a>(
+        &'a self,
+        mut input: DescribeLoadBalancersInput,
+    ) -> RusotoStream<'a, LoadBalancer, DescribeLoadBalancersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_load_balancers(input.clone())
+        }))
     }
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
@@ -9355,13 +9403,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>>;
 
     /// Auto-paginating version of `describe_rules`
-    fn describe_rules_pages(
-        &self,
-        input: DescribeRulesInput,
-    ) -> RusotoStream<Rule, DescribeRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_rules(state.clone())
-        })
+    fn describe_rules_pages<'a>(
+        &'a self,
+        mut input: DescribeRulesInput,
+    ) -> RusotoStream<'a, Rule, DescribeRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_rules(input.clone())
+        }))
     }
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security policies</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies">Security policies</a> in the <i>Network Load Balancers Guide</i>.</p>
@@ -9371,13 +9420,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>>;
 
     /// Auto-paginating version of `describe_ssl_policies`
-    fn describe_ssl_policies_pages(
-        &self,
-        input: DescribeSSLPoliciesInput,
-    ) -> RusotoStream<SslPolicy, DescribeSSLPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_ssl_policies(state.clone())
-        })
+    fn describe_ssl_policies_pages<'a>(
+        &'a self,
+        mut input: DescribeSSLPoliciesInput,
+    ) -> RusotoStream<'a, SslPolicy, DescribeSSLPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ssl_policies(input.clone())
+        }))
     }
 
     /// <p>Describes the tags for the specified Elastic Load Balancing resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, Gateway Load Balancers, target groups, listeners, or rules.</p>
@@ -9399,13 +9449,14 @@ pub trait Elb: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>>;
 
     /// Auto-paginating version of `describe_target_groups`
-    fn describe_target_groups_pages(
-        &self,
-        input: DescribeTargetGroupsInput,
-    ) -> RusotoStream<TargetGroup, DescribeTargetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_target_groups(state.clone())
-        })
+    fn describe_target_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeTargetGroupsInput,
+    ) -> RusotoStream<'a, TargetGroup, DescribeTargetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_target_groups(input.clone())
+        }))
     }
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>

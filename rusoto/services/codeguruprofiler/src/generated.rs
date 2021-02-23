@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -577,11 +579,19 @@ pub struct ListProfileTimesRequest {
     pub start_time: f64,
 }
 
-impl PagedRequest for ListProfileTimesRequest {
+impl Paged for ListProfileTimesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProfileTimesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -599,27 +609,25 @@ pub struct ListProfileTimesResponse {
     pub profile_times: Vec<ProfileTime>,
 }
 
-impl ListProfileTimesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProfileTime>> {
-        Some(self.profile_times.clone())
+impl Paged for ListProfileTimesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProfileTimesResponse {
     type Item = ProfileTime;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProfileTime> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.profile_times
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2169,13 +2177,14 @@ pub trait CodeGuruProfiler: Clone + Sync + Send + 'static {
     ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>;
 
     /// Auto-paginating version of `list_profile_times`
-    fn list_profile_times_pages(
-        &self,
-        input: ListProfileTimesRequest,
-    ) -> RusotoStream<ProfileTime, ListProfileTimesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_profile_times(state.clone())
-        })
+    fn list_profile_times_pages<'a>(
+        &'a self,
+        mut input: ListProfileTimesRequest,
+    ) -> RusotoStream<'a, ProfileTime, ListProfileTimesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_profile_times(input.clone())
+        }))
     }
 
     /// <p> Returns a list of profiling groups. The profiling groups are returned as <a href="https://docs.aws.amazon.com/codeguru/latest/profiler-api/API_ProfilingGroupDescription.html"> <code>ProfilingGroupDescription</code> </a> objects. </p>

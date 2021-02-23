@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -898,11 +900,19 @@ pub struct ListDeadLetterSourceQueuesRequest {
     pub queue_url: String,
 }
 
-impl PagedRequest for ListDeadLetterSourceQueuesRequest {
+impl Paged for ListDeadLetterSourceQueuesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeadLetterSourceQueuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -936,27 +946,25 @@ pub struct ListDeadLetterSourceQueuesResult {
     pub queue_urls: Vec<String>,
 }
 
-impl ListDeadLetterSourceQueuesResult {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.queue_urls.clone())
+impl Paged for ListDeadLetterSourceQueuesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeadLetterSourceQueuesResult {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.queue_urls
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1048,11 +1056,19 @@ pub struct ListQueuesRequest {
     pub queue_name_prefix: Option<String>,
 }
 
-impl PagedRequest for ListQueuesRequest {
+impl Paged for ListQueuesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQueuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1088,27 +1104,25 @@ pub struct ListQueuesResult {
     pub queue_urls: Option<Vec<String>>,
 }
 
-impl ListQueuesResult {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.queue_urls.as_ref()?.clone())
+impl Paged for ListQueuesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQueuesResult {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.queue_urls.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3282,13 +3296,14 @@ pub trait Sqs: Clone + Sync + Send + 'static {
     ) -> Result<ListDeadLetterSourceQueuesResult, RusotoError<ListDeadLetterSourceQueuesError>>;
 
     /// Auto-paginating version of `list_dead_letter_source_queues`
-    fn list_dead_letter_source_queues_pages(
-        &self,
-        input: ListDeadLetterSourceQueuesRequest,
-    ) -> RusotoStream<String, ListDeadLetterSourceQueuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dead_letter_source_queues(state.clone())
-        })
+    fn list_dead_letter_source_queues_pages<'a>(
+        &'a self,
+        mut input: ListDeadLetterSourceQueuesRequest,
+    ) -> RusotoStream<'a, String, ListDeadLetterSourceQueuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dead_letter_source_queues(input.clone())
+        }))
     }
 
     /// <p><p>List all cost allocation tags added to the specified Amazon SQS queue. For an overview, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-tags.html">Tagging Your Amazon SQS Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant cross-account permissions to a role and a user name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
@@ -3304,10 +3319,14 @@ pub trait Sqs: Clone + Sync + Send + 'static {
     ) -> Result<ListQueuesResult, RusotoError<ListQueuesError>>;
 
     /// Auto-paginating version of `list_queues`
-    fn list_queues_pages(&self, input: ListQueuesRequest) -> RusotoStream<String, ListQueuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_queues(state.clone())
-        })
+    fn list_queues_pages<'a>(
+        &'a self,
+        mut input: ListQueuesRequest,
+    ) -> RusotoStream<'a, String, ListQueuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_queues(input.clone())
+        }))
     }
 
     /// <p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve any messages deleted from a queue.</p> <p>The message deletion process takes up to 60 seconds. We recommend waiting for 60 seconds regardless of your queue's size. </p> </important> <p>Messages sent to the queue <i>before</i> you call <code>PurgeQueue</code> might be received but are deleted within the next minute.</p> <p>Messages sent to the queue <i>after</i> you call <code>PurgeQueue</code> might be deleted while the queue is being purged.</p>

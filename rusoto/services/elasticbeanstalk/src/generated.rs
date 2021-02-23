@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -661,27 +663,25 @@ pub struct ApplicationVersionDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
-impl ApplicationVersionDescriptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ApplicationVersionDescription>> {
-        Some(self.application_versions.as_ref()?.clone())
+impl Paged for ApplicationVersionDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ApplicationVersionDescriptionsMessage {
     type Item = ApplicationVersionDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApplicationVersionDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.application_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2666,11 +2666,19 @@ pub struct DescribeApplicationVersionsMessage {
     pub version_labels: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeApplicationVersionsMessage {
+impl Paged for DescribeApplicationVersionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeApplicationVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2954,11 +2962,19 @@ pub struct DescribeEnvironmentManagedActionHistoryRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEnvironmentManagedActionHistoryRequest {
+impl Paged for DescribeEnvironmentManagedActionHistoryRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEnvironmentManagedActionHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3001,27 +3017,25 @@ pub struct DescribeEnvironmentManagedActionHistoryResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeEnvironmentManagedActionHistoryResult {
-    fn pagination_page_opt(self) -> Option<Vec<ManagedActionHistoryItem>> {
-        Some(self.managed_action_history_items.as_ref()?.clone())
+impl Paged for DescribeEnvironmentManagedActionHistoryResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEnvironmentManagedActionHistoryResult {
     type Item = ManagedActionHistoryItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ManagedActionHistoryItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.managed_action_history_items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3176,11 +3190,19 @@ pub struct DescribeEnvironmentsMessage {
     pub version_label: Option<String>,
 }
 
-impl PagedRequest for DescribeEnvironmentsMessage {
+impl Paged for DescribeEnvironmentsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEnvironmentsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3262,11 +3284,19 @@ pub struct DescribeEventsMessage {
     pub version_label: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsMessage {
+impl Paged for DescribeEventsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3732,27 +3762,25 @@ pub struct EnvironmentDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
-impl EnvironmentDescriptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<EnvironmentDescription>> {
-        Some(self.environments.as_ref()?.clone())
+impl Paged for EnvironmentDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for EnvironmentDescriptionsMessage {
     type Item = EnvironmentDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EnvironmentDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.environments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4332,27 +4360,25 @@ pub struct EventDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
-impl EventDescriptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<EventDescription>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for EventDescriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for EventDescriptionsMessage {
     type Item = EventDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4879,11 +4905,19 @@ pub struct ListPlatformVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPlatformVersionsRequest {
+impl Paged for ListPlatformVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlatformVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -4922,27 +4956,25 @@ pub struct ListPlatformVersionsResult {
     pub platform_summary_list: Option<Vec<PlatformSummary>>,
 }
 
-impl ListPlatformVersionsResult {
-    fn pagination_page_opt(self) -> Option<Vec<PlatformSummary>> {
-        Some(self.platform_summary_list.as_ref()?.clone())
+impl Paged for ListPlatformVersionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPlatformVersionsResult {
     type Item = PlatformSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PlatformSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.platform_summary_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -10425,13 +10457,14 @@ pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     ) -> Result<ApplicationVersionDescriptionsMessage, RusotoError<DescribeApplicationVersionsError>>;
 
     /// Auto-paginating version of `describe_application_versions`
-    fn describe_application_versions_pages(
-        &self,
-        input: DescribeApplicationVersionsMessage,
-    ) -> RusotoStream<ApplicationVersionDescription, DescribeApplicationVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_application_versions(state.clone())
-        })
+    fn describe_application_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeApplicationVersionsMessage,
+    ) -> RusotoStream<'a, ApplicationVersionDescription, DescribeApplicationVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_application_versions(input.clone())
+        }))
     }
 
     /// <p>Returns the descriptions of existing applications.</p>
@@ -10468,13 +10501,15 @@ pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_environment_managed_action_history`
-    fn describe_environment_managed_action_history_pages(
-        &self,
-        input: DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> RusotoStream<ManagedActionHistoryItem, DescribeEnvironmentManagedActionHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_environment_managed_action_history(state.clone())
-        })
+    fn describe_environment_managed_action_history_pages<'a>(
+        &'a self,
+        mut input: DescribeEnvironmentManagedActionHistoryRequest,
+    ) -> RusotoStream<'a, ManagedActionHistoryItem, DescribeEnvironmentManagedActionHistoryError>
+    {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_environment_managed_action_history(input.clone())
+        }))
     }
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
@@ -10502,13 +10537,14 @@ pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     ) -> Result<EnvironmentDescriptionsMessage, RusotoError<DescribeEnvironmentsError>>;
 
     /// Auto-paginating version of `describe_environments`
-    fn describe_environments_pages(
-        &self,
-        input: DescribeEnvironmentsMessage,
-    ) -> RusotoStream<EnvironmentDescription, DescribeEnvironmentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_environments(state.clone())
-        })
+    fn describe_environments_pages<'a>(
+        &'a self,
+        mut input: DescribeEnvironmentsMessage,
+    ) -> RusotoStream<'a, EnvironmentDescription, DescribeEnvironmentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_environments(input.clone())
+        }))
     }
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
@@ -10518,13 +10554,14 @@ pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     ) -> Result<EventDescriptionsMessage, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoStream<EventDescription, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, EventDescription, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
@@ -10566,13 +10603,14 @@ pub trait ElasticBeanstalk: Clone + Sync + Send + 'static {
     ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>>;
 
     /// Auto-paginating version of `list_platform_versions`
-    fn list_platform_versions_pages(
-        &self,
-        input: ListPlatformVersionsRequest,
-    ) -> RusotoStream<PlatformSummary, ListPlatformVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_platform_versions(state.clone())
-        })
+    fn list_platform_versions_pages<'a>(
+        &'a self,
+        mut input: ListPlatformVersionsRequest,
+    ) -> RusotoStream<'a, PlatformSummary, ListPlatformVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_platform_versions(input.clone())
+        }))
     }
 
     /// <p>Return the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p>

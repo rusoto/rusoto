@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -326,11 +328,19 @@ pub struct DescribeFileSystemsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for DescribeFileSystemsRequest {
+impl Paged for DescribeFileSystemsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeFileSystemsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -352,27 +362,25 @@ pub struct DescribeFileSystemsResponse {
     pub next_marker: Option<String>,
 }
 
-impl DescribeFileSystemsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FileSystemDescription>> {
-        Some(self.file_systems.as_ref()?.clone())
+impl Paged for DescribeFileSystemsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeFileSystemsResponse {
     type Item = FileSystemDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FileSystemDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.file_systems.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -431,11 +439,19 @@ pub struct DescribeMountTargetsRequest {
     pub mount_target_id: Option<String>,
 }
 
-impl PagedRequest for DescribeMountTargetsRequest {
+impl Paged for DescribeMountTargetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeMountTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -458,27 +474,25 @@ pub struct DescribeMountTargetsResponse {
     pub next_marker: Option<String>,
 }
 
-impl DescribeMountTargetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<MountTargetDescription>> {
-        Some(self.mount_targets.as_ref()?.clone())
+impl Paged for DescribeMountTargetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeMountTargetsResponse {
     type Item = MountTargetDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MountTargetDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.mount_targets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -500,11 +514,19 @@ pub struct DescribeTagsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for DescribeTagsRequest {
+impl Paged for DescribeTagsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -526,27 +548,25 @@ pub struct DescribeTagsResponse {
     pub tags: Vec<Tag>,
 }
 
-impl DescribeTagsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.clone())
+impl Paged for DescribeTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for DescribeTagsResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2397,13 +2417,14 @@ pub trait Efs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeFileSystemsResponse, RusotoError<DescribeFileSystemsError>>;
 
     /// Auto-paginating version of `describe_file_systems`
-    fn describe_file_systems_pages(
-        &self,
-        input: DescribeFileSystemsRequest,
-    ) -> RusotoStream<FileSystemDescription, DescribeFileSystemsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_file_systems(state.clone())
-        })
+    fn describe_file_systems_pages<'a>(
+        &'a self,
+        mut input: DescribeFileSystemsRequest,
+    ) -> RusotoStream<'a, FileSystemDescription, DescribeFileSystemsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_file_systems(input.clone())
+        }))
     }
 
     /// <p>Returns the current <code>LifecycleConfiguration</code> object for the specified Amazon EFS file system. EFS lifecycle management uses the <code>LifecycleConfiguration</code> object to identify which files to move to the EFS Infrequent Access (IA) storage class. For a file system without a <code>LifecycleConfiguration</code> object, the call returns an empty array in the response.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeLifecycleConfiguration</code> operation.</p>
@@ -2428,13 +2449,14 @@ pub trait Efs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeMountTargetsResponse, RusotoError<DescribeMountTargetsError>>;
 
     /// Auto-paginating version of `describe_mount_targets`
-    fn describe_mount_targets_pages(
-        &self,
-        input: DescribeMountTargetsRequest,
-    ) -> RusotoStream<MountTargetDescription, DescribeMountTargetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_mount_targets(state.clone())
-        })
+    fn describe_mount_targets_pages<'a>(
+        &'a self,
+        mut input: DescribeMountTargetsRequest,
+    ) -> RusotoStream<'a, MountTargetDescription, DescribeMountTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_mount_targets(input.clone())
+        }))
     }
 
     /// <p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multiple-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>
@@ -2444,13 +2466,14 @@ pub trait Efs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
 
     /// Auto-paginating version of `describe_tags`
-    fn describe_tags_pages(
-        &self,
-        input: DescribeTagsRequest,
-    ) -> RusotoStream<Tag, DescribeTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tags(state.clone())
-        })
+    fn describe_tags_pages<'a>(
+        &'a self,
+        mut input: DescribeTagsRequest,
+    ) -> RusotoStream<'a, Tag, DescribeTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tags(input.clone())
+        }))
     }
 
     /// <p>Lists all tags for a top-level EFS resource. You must provide the ID of the resource that you want to retrieve the tags for.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeAccessPoints</code> action.</p>

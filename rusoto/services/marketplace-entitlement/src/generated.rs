@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -124,11 +126,19 @@ pub struct GetEntitlementsRequest {
     pub product_code: String,
 }
 
-impl PagedRequest for GetEntitlementsRequest {
+impl Paged for GetEntitlementsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetEntitlementsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -147,27 +157,25 @@ pub struct GetEntitlementsResult {
     pub next_token: Option<String>,
 }
 
-impl GetEntitlementsResult {
-    fn pagination_page_opt(self) -> Option<Vec<Entitlement>> {
-        Some(self.entitlements.as_ref()?.clone())
+impl Paged for GetEntitlementsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetEntitlementsResult {
     type Item = Entitlement;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Entitlement> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entitlements.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -225,13 +233,14 @@ pub trait MarketplaceEntitlement: Clone + Sync + Send + 'static {
     ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>>;
 
     /// Auto-paginating version of `get_entitlements`
-    fn get_entitlements_pages(
-        &self,
-        input: GetEntitlementsRequest,
-    ) -> RusotoStream<Entitlement, GetEntitlementsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_entitlements(state.clone())
-        })
+    fn get_entitlements_pages<'a>(
+        &'a self,
+        mut input: GetEntitlementsRequest,
+    ) -> RusotoStream<'a, Entitlement, GetEntitlementsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_entitlements(input.clone())
+        }))
     }
 }
 /// A client for the AWS Marketplace Entitlement Service API.

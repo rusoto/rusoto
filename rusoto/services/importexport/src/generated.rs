@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -647,11 +649,19 @@ pub struct ListJobsInput {
     pub max_jobs: Option<i64>,
 }
 
-impl PagedRequest for ListJobsInput {
+impl Paged for ListJobsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListJobsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -685,31 +695,25 @@ pub struct ListJobsOutput {
     pub jobs: Option<Vec<Job>>,
 }
 
-impl ListJobsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Job>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListJobsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.jobs.as_ref()?.last()?.job_id.clone()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.jobs.as_ref()?.last()?.job_id.clone())())
     }
 }
 
 impl PagedOutput for ListJobsOutput {
     type Item = Job;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.jobs.as_ref()?.last()?.job_id.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Job> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -1595,10 +1599,14 @@ pub trait ImportExport: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsOutput, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsInput) -> RusotoStream<Job, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsInput,
+    ) -> RusotoStream<'a, Job, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>

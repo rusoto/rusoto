@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -600,11 +602,19 @@ pub struct ListAssetsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-impl PagedRequest for ListAssetsRequest {
+impl Paged for ListAssetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -622,27 +632,25 @@ pub struct ListAssetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAssetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AssetShallow>> {
-        Some(self.assets.as_ref()?.clone())
+impl Paged for ListAssetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAssetsResponse {
     type Item = AssetShallow;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AssetShallow> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.assets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -664,11 +672,19 @@ pub struct ListPackagingConfigurationsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-impl PagedRequest for ListPackagingConfigurationsRequest {
+impl Paged for ListPackagingConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPackagingConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -686,27 +702,25 @@ pub struct ListPackagingConfigurationsResponse {
     pub packaging_configurations: Option<Vec<PackagingConfiguration>>,
 }
 
-impl ListPackagingConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PackagingConfiguration>> {
-        Some(self.packaging_configurations.as_ref()?.clone())
+impl Paged for ListPackagingConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPackagingConfigurationsResponse {
     type Item = PackagingConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PackagingConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.packaging_configurations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -724,11 +738,19 @@ pub struct ListPackagingGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPackagingGroupsRequest {
+impl Paged for ListPackagingGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPackagingGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -746,27 +768,25 @@ pub struct ListPackagingGroupsResponse {
     pub packaging_groups: Option<Vec<PackagingGroup>>,
 }
 
-impl ListPackagingGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PackagingGroup>> {
-        Some(self.packaging_groups.as_ref()?.clone())
+impl Paged for ListPackagingGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPackagingGroupsResponse {
     type Item = PackagingGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PackagingGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.packaging_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2006,13 +2026,14 @@ pub trait MediaPackageVod: Clone + Sync + Send + 'static {
     ) -> Result<ListAssetsResponse, RusotoError<ListAssetsError>>;
 
     /// Auto-paginating version of `list_assets`
-    fn list_assets_pages(
-        &self,
-        input: ListAssetsRequest,
-    ) -> RusotoStream<AssetShallow, ListAssetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_assets(state.clone())
-        })
+    fn list_assets_pages<'a>(
+        &'a self,
+        mut input: ListAssetsRequest,
+    ) -> RusotoStream<'a, AssetShallow, ListAssetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_assets(input.clone())
+        }))
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
@@ -2022,13 +2043,14 @@ pub trait MediaPackageVod: Clone + Sync + Send + 'static {
     ) -> Result<ListPackagingConfigurationsResponse, RusotoError<ListPackagingConfigurationsError>>;
 
     /// Auto-paginating version of `list_packaging_configurations`
-    fn list_packaging_configurations_pages(
-        &self,
-        input: ListPackagingConfigurationsRequest,
-    ) -> RusotoStream<PackagingConfiguration, ListPackagingConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_packaging_configurations(state.clone())
-        })
+    fn list_packaging_configurations_pages<'a>(
+        &'a self,
+        mut input: ListPackagingConfigurationsRequest,
+    ) -> RusotoStream<'a, PackagingConfiguration, ListPackagingConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_packaging_configurations(input.clone())
+        }))
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
@@ -2038,13 +2060,14 @@ pub trait MediaPackageVod: Clone + Sync + Send + 'static {
     ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>>;
 
     /// Auto-paginating version of `list_packaging_groups`
-    fn list_packaging_groups_pages(
-        &self,
-        input: ListPackagingGroupsRequest,
-    ) -> RusotoStream<PackagingGroup, ListPackagingGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_packaging_groups(state.clone())
-        })
+    fn list_packaging_groups_pages<'a>(
+        &'a self,
+        mut input: ListPackagingGroupsRequest,
+    ) -> RusotoStream<'a, PackagingGroup, ListPackagingGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_packaging_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>

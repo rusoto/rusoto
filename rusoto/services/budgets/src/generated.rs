@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -513,11 +515,19 @@ pub struct DescribeBudgetActionHistoriesRequest {
     pub time_period: Option<TimePeriod>,
 }
 
-impl PagedRequest for DescribeBudgetActionHistoriesRequest {
+impl Paged for DescribeBudgetActionHistoriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBudgetActionHistoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -533,27 +543,25 @@ pub struct DescribeBudgetActionHistoriesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBudgetActionHistoriesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ActionHistory>> {
-        Some(self.action_histories.clone())
+impl Paged for DescribeBudgetActionHistoriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBudgetActionHistoriesResponse {
     type Item = ActionHistory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActionHistory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.action_histories
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -597,11 +605,19 @@ pub struct DescribeBudgetActionsForAccountRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeBudgetActionsForAccountRequest {
+impl Paged for DescribeBudgetActionsForAccountRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBudgetActionsForAccountRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -617,27 +633,25 @@ pub struct DescribeBudgetActionsForAccountResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBudgetActionsForAccountResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Action>> {
-        Some(self.actions.clone())
+impl Paged for DescribeBudgetActionsForAccountResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBudgetActionsForAccountResponse {
     type Item = Action;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Action> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.actions
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -657,11 +671,19 @@ pub struct DescribeBudgetActionsForBudgetRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeBudgetActionsForBudgetRequest {
+impl Paged for DescribeBudgetActionsForBudgetRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBudgetActionsForBudgetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -677,27 +699,25 @@ pub struct DescribeBudgetActionsForBudgetResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBudgetActionsForBudgetResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Action>> {
-        Some(self.actions.clone())
+impl Paged for DescribeBudgetActionsForBudgetResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBudgetActionsForBudgetResponse {
     type Item = Action;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Action> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.actions
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -721,11 +741,19 @@ pub struct DescribeBudgetPerformanceHistoryRequest {
     pub time_period: Option<TimePeriod>,
 }
 
-impl PagedRequest for DescribeBudgetPerformanceHistoryRequest {
+impl Paged for DescribeBudgetPerformanceHistoryRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBudgetPerformanceHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -742,27 +770,25 @@ pub struct DescribeBudgetPerformanceHistoryResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBudgetPerformanceHistoryResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BudgetPerformanceHistory>> {
-        Some(self.budget_performance_history.as_ref()?.clone()).map(|x| vec![x])
+impl Paged for DescribeBudgetPerformanceHistoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBudgetPerformanceHistoryResponse {
     type Item = BudgetPerformanceHistory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BudgetPerformanceHistory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.budget_performance_history.into_iter().collect()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -808,11 +834,19 @@ pub struct DescribeBudgetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeBudgetsRequest {
+impl Paged for DescribeBudgetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBudgetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -831,27 +865,25 @@ pub struct DescribeBudgetsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBudgetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Budget>> {
-        Some(self.budgets.as_ref()?.clone())
+impl Paged for DescribeBudgetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBudgetsResponse {
     type Item = Budget;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Budget> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.budgets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -876,11 +908,19 @@ pub struct DescribeNotificationsForBudgetRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeNotificationsForBudgetRequest {
+impl Paged for DescribeNotificationsForBudgetRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeNotificationsForBudgetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -899,27 +939,25 @@ pub struct DescribeNotificationsForBudgetResponse {
     pub notifications: Option<Vec<Notification>>,
 }
 
-impl DescribeNotificationsForBudgetResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Notification>> {
-        Some(self.notifications.as_ref()?.clone())
+impl Paged for DescribeNotificationsForBudgetResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeNotificationsForBudgetResponse {
     type Item = Notification;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Notification> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.notifications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -947,11 +985,19 @@ pub struct DescribeSubscribersForNotificationRequest {
     pub notification: Notification,
 }
 
-impl PagedRequest for DescribeSubscribersForNotificationRequest {
+impl Paged for DescribeSubscribersForNotificationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSubscribersForNotificationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -970,27 +1016,25 @@ pub struct DescribeSubscribersForNotificationResponse {
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
-impl DescribeSubscribersForNotificationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Subscriber>> {
-        Some(self.subscribers.as_ref()?.clone())
+impl Paged for DescribeSubscribersForNotificationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeSubscribersForNotificationResponse {
     type Item = Subscriber;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Subscriber> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subscribers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2648,13 +2692,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_budget_action_histories`
-    fn describe_budget_action_histories_pages(
-        &self,
-        input: DescribeBudgetActionHistoriesRequest,
-    ) -> RusotoStream<ActionHistory, DescribeBudgetActionHistoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_budget_action_histories(state.clone())
-        })
+    fn describe_budget_action_histories_pages<'a>(
+        &'a self,
+        mut input: DescribeBudgetActionHistoriesRequest,
+    ) -> RusotoStream<'a, ActionHistory, DescribeBudgetActionHistoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_budget_action_histories(input.clone())
+        }))
     }
 
     /// <p> Describes all of the budget actions for an account. </p>
@@ -2667,13 +2712,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_budget_actions_for_account`
-    fn describe_budget_actions_for_account_pages(
-        &self,
-        input: DescribeBudgetActionsForAccountRequest,
-    ) -> RusotoStream<Action, DescribeBudgetActionsForAccountError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_budget_actions_for_account(state.clone())
-        })
+    fn describe_budget_actions_for_account_pages<'a>(
+        &'a self,
+        mut input: DescribeBudgetActionsForAccountRequest,
+    ) -> RusotoStream<'a, Action, DescribeBudgetActionsForAccountError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_budget_actions_for_account(input.clone())
+        }))
     }
 
     /// <p> Describes all of the budget actions for a budget. </p>
@@ -2686,13 +2732,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_budget_actions_for_budget`
-    fn describe_budget_actions_for_budget_pages(
-        &self,
-        input: DescribeBudgetActionsForBudgetRequest,
-    ) -> RusotoStream<Action, DescribeBudgetActionsForBudgetError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_budget_actions_for_budget(state.clone())
-        })
+    fn describe_budget_actions_for_budget_pages<'a>(
+        &'a self,
+        mut input: DescribeBudgetActionsForBudgetRequest,
+    ) -> RusotoStream<'a, Action, DescribeBudgetActionsForBudgetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_budget_actions_for_budget(input.clone())
+        }))
     }
 
     /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
@@ -2705,13 +2752,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_budget_performance_history`
-    fn describe_budget_performance_history_pages(
-        &self,
-        input: DescribeBudgetPerformanceHistoryRequest,
-    ) -> RusotoStream<BudgetPerformanceHistory, DescribeBudgetPerformanceHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_budget_performance_history(state.clone())
-        })
+    fn describe_budget_performance_history_pages<'a>(
+        &'a self,
+        mut input: DescribeBudgetPerformanceHistoryRequest,
+    ) -> RusotoStream<'a, BudgetPerformanceHistory, DescribeBudgetPerformanceHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_budget_performance_history(input.clone())
+        }))
     }
 
     /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
@@ -2721,13 +2769,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     ) -> Result<DescribeBudgetsResponse, RusotoError<DescribeBudgetsError>>;
 
     /// Auto-paginating version of `describe_budgets`
-    fn describe_budgets_pages(
-        &self,
-        input: DescribeBudgetsRequest,
-    ) -> RusotoStream<Budget, DescribeBudgetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_budgets(state.clone())
-        })
+    fn describe_budgets_pages<'a>(
+        &'a self,
+        mut input: DescribeBudgetsRequest,
+    ) -> RusotoStream<'a, Budget, DescribeBudgetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_budgets(input.clone())
+        }))
     }
 
     /// <p>Lists the notifications that are associated with a budget.</p>
@@ -2740,13 +2789,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_notifications_for_budget`
-    fn describe_notifications_for_budget_pages(
-        &self,
-        input: DescribeNotificationsForBudgetRequest,
-    ) -> RusotoStream<Notification, DescribeNotificationsForBudgetError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_notifications_for_budget(state.clone())
-        })
+    fn describe_notifications_for_budget_pages<'a>(
+        &'a self,
+        mut input: DescribeNotificationsForBudgetRequest,
+    ) -> RusotoStream<'a, Notification, DescribeNotificationsForBudgetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_notifications_for_budget(input.clone())
+        }))
     }
 
     /// <p>Lists the subscribers that are associated with a notification.</p>
@@ -2759,13 +2809,14 @@ pub trait Budgets: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_subscribers_for_notification`
-    fn describe_subscribers_for_notification_pages(
-        &self,
-        input: DescribeSubscribersForNotificationRequest,
-    ) -> RusotoStream<Subscriber, DescribeSubscribersForNotificationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_subscribers_for_notification(state.clone())
-        })
+    fn describe_subscribers_for_notification_pages<'a>(
+        &'a self,
+        mut input: DescribeSubscribersForNotificationRequest,
+    ) -> RusotoStream<'a, Subscriber, DescribeSubscribersForNotificationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_subscribers_for_notification(input.clone())
+        }))
     }
 
     /// <p> Executes a budget action. </p>

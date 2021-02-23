@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -864,11 +866,19 @@ pub struct ListEndpointsByPlatformApplicationInput {
     pub platform_application_arn: String,
 }
 
-impl PagedRequest for ListEndpointsByPlatformApplicationInput {
+impl Paged for ListEndpointsByPlatformApplicationInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEndpointsByPlatformApplicationInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -902,27 +912,25 @@ pub struct ListEndpointsByPlatformApplicationResponse {
     pub next_token: Option<String>,
 }
 
-impl ListEndpointsByPlatformApplicationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.endpoints.as_ref()?.clone())
+impl Paged for ListEndpointsByPlatformApplicationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEndpointsByPlatformApplicationResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.endpoints.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1001,11 +1009,19 @@ pub struct ListPhoneNumbersOptedOutInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPhoneNumbersOptedOutInput {
+impl Paged for ListPhoneNumbersOptedOutInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPhoneNumbersOptedOutInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1035,27 +1051,25 @@ pub struct ListPhoneNumbersOptedOutResponse {
     pub phone_numbers: Option<Vec<String>>,
 }
 
-impl ListPhoneNumbersOptedOutResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.phone_numbers.as_ref()?.clone())
+impl Paged for ListPhoneNumbersOptedOutResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPhoneNumbersOptedOutResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.phone_numbers.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1096,11 +1110,19 @@ pub struct ListPlatformApplicationsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPlatformApplicationsInput {
+impl Paged for ListPlatformApplicationsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlatformApplicationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1130,27 +1152,25 @@ pub struct ListPlatformApplicationsResponse {
     pub platform_applications: Option<Vec<PlatformApplication>>,
 }
 
-impl ListPlatformApplicationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PlatformApplication>> {
-        Some(self.platform_applications.as_ref()?.clone())
+impl Paged for ListPlatformApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPlatformApplicationsResponse {
     type Item = PlatformApplication;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PlatformApplication> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.platform_applications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1208,11 +1228,19 @@ pub struct ListSubscriptionsByTopicInput {
     pub topic_arn: String,
 }
 
-impl PagedRequest for ListSubscriptionsByTopicInput {
+impl Paged for ListSubscriptionsByTopicInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionsByTopicInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1243,27 +1271,25 @@ pub struct ListSubscriptionsByTopicResponse {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-impl ListSubscriptionsByTopicResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Subscription>> {
-        Some(self.subscriptions.as_ref()?.clone())
+impl Paged for ListSubscriptionsByTopicResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSubscriptionsByTopicResponse {
     type Item = Subscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Subscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1305,11 +1331,19 @@ pub struct ListSubscriptionsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSubscriptionsInput {
+impl Paged for ListSubscriptionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1339,27 +1373,25 @@ pub struct ListSubscriptionsResponse {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-impl ListSubscriptionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Subscription>> {
-        Some(self.subscriptions.as_ref()?.clone())
+impl Paged for ListSubscriptionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSubscriptionsResponse {
     type Item = Subscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Subscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1454,11 +1486,19 @@ pub struct ListTopicsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTopicsInput {
+impl Paged for ListTopicsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTopicsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1488,27 +1528,25 @@ pub struct ListTopicsResponse {
     pub topics: Option<Vec<Topic>>,
 }
 
-impl ListTopicsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Topic>> {
-        Some(self.topics.as_ref()?.clone())
+impl Paged for ListTopicsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTopicsResponse {
     type Item = Topic;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Topic> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.topics.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5221,13 +5259,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_endpoints_by_platform_application`
-    fn list_endpoints_by_platform_application_pages(
-        &self,
-        input: ListEndpointsByPlatformApplicationInput,
-    ) -> RusotoStream<String, ListEndpointsByPlatformApplicationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_endpoints_by_platform_application(state.clone())
-        })
+    fn list_endpoints_by_platform_application_pages<'a>(
+        &'a self,
+        mut input: ListEndpointsByPlatformApplicationInput,
+    ) -> RusotoStream<'a, String, ListEndpointsByPlatformApplicationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_endpoints_by_platform_application(input.clone())
+        }))
     }
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
@@ -5237,13 +5276,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     ) -> Result<ListPhoneNumbersOptedOutResponse, RusotoError<ListPhoneNumbersOptedOutError>>;
 
     /// Auto-paginating version of `list_phone_numbers_opted_out`
-    fn list_phone_numbers_opted_out_pages(
-        &self,
-        input: ListPhoneNumbersOptedOutInput,
-    ) -> RusotoStream<String, ListPhoneNumbersOptedOutError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_phone_numbers_opted_out(state.clone())
-        })
+    fn list_phone_numbers_opted_out_pages<'a>(
+        &'a self,
+        mut input: ListPhoneNumbersOptedOutInput,
+    ) -> RusotoStream<'a, String, ListPhoneNumbersOptedOutError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_phone_numbers_opted_out(input.clone())
+        }))
     }
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM (Firebase Cloud Messaging). The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>This action is throttled at 15 transactions per second (TPS).</p>
@@ -5253,13 +5293,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>>;
 
     /// Auto-paginating version of `list_platform_applications`
-    fn list_platform_applications_pages(
-        &self,
-        input: ListPlatformApplicationsInput,
-    ) -> RusotoStream<PlatformApplication, ListPlatformApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_platform_applications(state.clone())
-        })
+    fn list_platform_applications_pages<'a>(
+        &'a self,
+        mut input: ListPlatformApplicationsInput,
+    ) -> RusotoStream<'a, PlatformApplication, ListPlatformApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_platform_applications(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
@@ -5269,13 +5310,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     ) -> Result<ListSubscriptionsResponse, RusotoError<ListSubscriptionsError>>;
 
     /// Auto-paginating version of `list_subscriptions`
-    fn list_subscriptions_pages(
-        &self,
-        input: ListSubscriptionsInput,
-    ) -> RusotoStream<Subscription, ListSubscriptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_subscriptions(state.clone())
-        })
+    fn list_subscriptions_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionsInput,
+    ) -> RusotoStream<'a, Subscription, ListSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscriptions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
@@ -5285,13 +5327,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     ) -> Result<ListSubscriptionsByTopicResponse, RusotoError<ListSubscriptionsByTopicError>>;
 
     /// Auto-paginating version of `list_subscriptions_by_topic`
-    fn list_subscriptions_by_topic_pages(
-        &self,
-        input: ListSubscriptionsByTopicInput,
-    ) -> RusotoStream<Subscription, ListSubscriptionsByTopicError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_subscriptions_by_topic(state.clone())
-        })
+    fn list_subscriptions_by_topic_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionsByTopicInput,
+    ) -> RusotoStream<'a, Subscription, ListSubscriptionsByTopicError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscriptions_by_topic(input.clone())
+        }))
     }
 
     /// <p>List all tags added to the specified Amazon SNS topic. For an overview, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-tags.html">Amazon SNS Tags</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
@@ -5307,10 +5350,14 @@ pub trait Sns: Clone + Sync + Send + 'static {
     ) -> Result<ListTopicsResponse, RusotoError<ListTopicsError>>;
 
     /// Auto-paginating version of `list_topics`
-    fn list_topics_pages(&self, input: ListTopicsInput) -> RusotoStream<Topic, ListTopicsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_topics(state.clone())
-        })
+    fn list_topics_pages<'a>(
+        &'a self,
+        mut input: ListTopicsInput,
+    ) -> RusotoStream<'a, Topic, ListTopicsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_topics(input.clone())
+        }))
     }
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>

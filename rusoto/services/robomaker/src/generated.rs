@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1869,11 +1871,19 @@ pub struct ListDeploymentJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentJobsRequest {
+impl Paged for ListDeploymentJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1891,27 +1901,25 @@ pub struct ListDeploymentJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DeploymentJob>> {
-        Some(self.deployment_jobs.as_ref()?.clone())
+impl Paged for ListDeploymentJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentJobsResponse {
     type Item = DeploymentJob;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DeploymentJob> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployment_jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1933,11 +1941,19 @@ pub struct ListFleetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFleetsRequest {
+impl Paged for ListFleetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFleetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1955,27 +1971,25 @@ pub struct ListFleetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFleetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Fleet>> {
-        Some(self.fleet_details.as_ref()?.clone())
+impl Paged for ListFleetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFleetsResponse {
     type Item = Fleet;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Fleet> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.fleet_details.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2001,11 +2015,19 @@ pub struct ListRobotApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
-impl PagedRequest for ListRobotApplicationsRequest {
+impl Paged for ListRobotApplicationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRobotApplicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2023,27 +2045,25 @@ pub struct ListRobotApplicationsResponse {
     pub robot_application_summaries: Option<Vec<RobotApplicationSummary>>,
 }
 
-impl ListRobotApplicationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RobotApplicationSummary>> {
-        Some(self.robot_application_summaries.as_ref()?.clone())
+impl Paged for ListRobotApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRobotApplicationsResponse {
     type Item = RobotApplicationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RobotApplicationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.robot_application_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2065,11 +2085,19 @@ pub struct ListRobotsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListRobotsRequest {
+impl Paged for ListRobotsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRobotsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2087,27 +2115,25 @@ pub struct ListRobotsResponse {
     pub robots: Option<Vec<Robot>>,
 }
 
-impl ListRobotsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Robot>> {
-        Some(self.robots.as_ref()?.clone())
+impl Paged for ListRobotsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRobotsResponse {
     type Item = Robot;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Robot> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.robots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2133,11 +2159,19 @@ pub struct ListSimulationApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
-impl PagedRequest for ListSimulationApplicationsRequest {
+impl Paged for ListSimulationApplicationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSimulationApplicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2155,27 +2189,25 @@ pub struct ListSimulationApplicationsResponse {
     pub simulation_application_summaries: Option<Vec<SimulationApplicationSummary>>,
 }
 
-impl ListSimulationApplicationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SimulationApplicationSummary>> {
-        Some(self.simulation_application_summaries.as_ref()?.clone())
+impl Paged for ListSimulationApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSimulationApplicationsResponse {
     type Item = SimulationApplicationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SimulationApplicationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.simulation_application_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2197,11 +2229,19 @@ pub struct ListSimulationJobBatchesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSimulationJobBatchesRequest {
+impl Paged for ListSimulationJobBatchesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSimulationJobBatchesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2219,27 +2259,25 @@ pub struct ListSimulationJobBatchesResponse {
     pub simulation_job_batch_summaries: Option<Vec<SimulationJobBatchSummary>>,
 }
 
-impl ListSimulationJobBatchesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SimulationJobBatchSummary>> {
-        Some(self.simulation_job_batch_summaries.as_ref()?.clone())
+impl Paged for ListSimulationJobBatchesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSimulationJobBatchesResponse {
     type Item = SimulationJobBatchSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SimulationJobBatchSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.simulation_job_batch_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2261,11 +2299,19 @@ pub struct ListSimulationJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSimulationJobsRequest {
+impl Paged for ListSimulationJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSimulationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2282,27 +2328,25 @@ pub struct ListSimulationJobsResponse {
     pub simulation_job_summaries: Vec<SimulationJobSummary>,
 }
 
-impl ListSimulationJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SimulationJobSummary>> {
-        Some(self.simulation_job_summaries.clone())
+impl Paged for ListSimulationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSimulationJobsResponse {
     type Item = SimulationJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SimulationJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.simulation_job_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2343,11 +2387,19 @@ pub struct ListWorldExportJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWorldExportJobsRequest {
+impl Paged for ListWorldExportJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorldExportJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2364,27 +2416,25 @@ pub struct ListWorldExportJobsResponse {
     pub world_export_job_summaries: Vec<WorldExportJobSummary>,
 }
 
-impl ListWorldExportJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<WorldExportJobSummary>> {
-        Some(self.world_export_job_summaries.clone())
+impl Paged for ListWorldExportJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorldExportJobsResponse {
     type Item = WorldExportJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorldExportJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.world_export_job_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2406,11 +2456,19 @@ pub struct ListWorldGenerationJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWorldGenerationJobsRequest {
+impl Paged for ListWorldGenerationJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorldGenerationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2427,27 +2485,25 @@ pub struct ListWorldGenerationJobsResponse {
     pub world_generation_job_summaries: Vec<WorldGenerationJobSummary>,
 }
 
-impl ListWorldGenerationJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<WorldGenerationJobSummary>> {
-        Some(self.world_generation_job_summaries.clone())
+impl Paged for ListWorldGenerationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorldGenerationJobsResponse {
     type Item = WorldGenerationJobSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorldGenerationJobSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.world_generation_job_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2465,11 +2521,19 @@ pub struct ListWorldTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWorldTemplatesRequest {
+impl Paged for ListWorldTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorldTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2487,27 +2551,25 @@ pub struct ListWorldTemplatesResponse {
     pub template_summaries: Option<Vec<TemplateSummary>>,
 }
 
-impl ListWorldTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TemplateSummary>> {
-        Some(self.template_summaries.as_ref()?.clone())
+impl Paged for ListWorldTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorldTemplatesResponse {
     type Item = TemplateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TemplateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.template_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2529,11 +2591,19 @@ pub struct ListWorldsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWorldsRequest {
+impl Paged for ListWorldsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWorldsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2551,27 +2621,25 @@ pub struct ListWorldsResponse {
     pub world_summaries: Option<Vec<WorldSummary>>,
 }
 
-impl ListWorldsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<WorldSummary>> {
-        Some(self.world_summaries.as_ref()?.clone())
+impl Paged for ListWorldsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWorldsResponse {
     type Item = WorldSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorldSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.world_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7045,13 +7113,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentJobsResponse, RusotoError<ListDeploymentJobsError>>;
 
     /// Auto-paginating version of `list_deployment_jobs`
-    fn list_deployment_jobs_pages(
-        &self,
-        input: ListDeploymentJobsRequest,
-    ) -> RusotoStream<DeploymentJob, ListDeploymentJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployment_jobs(state.clone())
-        })
+    fn list_deployment_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentJobsRequest,
+    ) -> RusotoStream<'a, DeploymentJob, ListDeploymentJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployment_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
@@ -7061,10 +7130,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
 
     /// Auto-paginating version of `list_fleets`
-    fn list_fleets_pages(&self, input: ListFleetsRequest) -> RusotoStream<Fleet, ListFleetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_fleets(state.clone())
-        })
+    fn list_fleets_pages<'a>(
+        &'a self,
+        mut input: ListFleetsRequest,
+    ) -> RusotoStream<'a, Fleet, ListFleetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_fleets(input.clone())
+        }))
     }
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
@@ -7074,13 +7147,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListRobotApplicationsResponse, RusotoError<ListRobotApplicationsError>>;
 
     /// Auto-paginating version of `list_robot_applications`
-    fn list_robot_applications_pages(
-        &self,
-        input: ListRobotApplicationsRequest,
-    ) -> RusotoStream<RobotApplicationSummary, ListRobotApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_robot_applications(state.clone())
-        })
+    fn list_robot_applications_pages<'a>(
+        &'a self,
+        mut input: ListRobotApplicationsRequest,
+    ) -> RusotoStream<'a, RobotApplicationSummary, ListRobotApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_robot_applications(input.clone())
+        }))
     }
 
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
@@ -7090,10 +7164,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListRobotsResponse, RusotoError<ListRobotsError>>;
 
     /// Auto-paginating version of `list_robots`
-    fn list_robots_pages(&self, input: ListRobotsRequest) -> RusotoStream<Robot, ListRobotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_robots(state.clone())
-        })
+    fn list_robots_pages<'a>(
+        &'a self,
+        mut input: ListRobotsRequest,
+    ) -> RusotoStream<'a, Robot, ListRobotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_robots(input.clone())
+        }))
     }
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
@@ -7103,13 +7181,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>;
 
     /// Auto-paginating version of `list_simulation_applications`
-    fn list_simulation_applications_pages(
-        &self,
-        input: ListSimulationApplicationsRequest,
-    ) -> RusotoStream<SimulationApplicationSummary, ListSimulationApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_simulation_applications(state.clone())
-        })
+    fn list_simulation_applications_pages<'a>(
+        &'a self,
+        mut input: ListSimulationApplicationsRequest,
+    ) -> RusotoStream<'a, SimulationApplicationSummary, ListSimulationApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_simulation_applications(input.clone())
+        }))
     }
 
     /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
@@ -7119,13 +7198,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListSimulationJobBatchesResponse, RusotoError<ListSimulationJobBatchesError>>;
 
     /// Auto-paginating version of `list_simulation_job_batches`
-    fn list_simulation_job_batches_pages(
-        &self,
-        input: ListSimulationJobBatchesRequest,
-    ) -> RusotoStream<SimulationJobBatchSummary, ListSimulationJobBatchesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_simulation_job_batches(state.clone())
-        })
+    fn list_simulation_job_batches_pages<'a>(
+        &'a self,
+        mut input: ListSimulationJobBatchesRequest,
+    ) -> RusotoStream<'a, SimulationJobBatchSummary, ListSimulationJobBatchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_simulation_job_batches(input.clone())
+        }))
     }
 
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
@@ -7135,13 +7215,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListSimulationJobsResponse, RusotoError<ListSimulationJobsError>>;
 
     /// Auto-paginating version of `list_simulation_jobs`
-    fn list_simulation_jobs_pages(
-        &self,
-        input: ListSimulationJobsRequest,
-    ) -> RusotoStream<SimulationJobSummary, ListSimulationJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_simulation_jobs(state.clone())
-        })
+    fn list_simulation_jobs_pages<'a>(
+        &'a self,
+        mut input: ListSimulationJobsRequest,
+    ) -> RusotoStream<'a, SimulationJobSummary, ListSimulationJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_simulation_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
@@ -7157,13 +7238,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListWorldExportJobsResponse, RusotoError<ListWorldExportJobsError>>;
 
     /// Auto-paginating version of `list_world_export_jobs`
-    fn list_world_export_jobs_pages(
-        &self,
-        input: ListWorldExportJobsRequest,
-    ) -> RusotoStream<WorldExportJobSummary, ListWorldExportJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_world_export_jobs(state.clone())
-        })
+    fn list_world_export_jobs_pages<'a>(
+        &'a self,
+        mut input: ListWorldExportJobsRequest,
+    ) -> RusotoStream<'a, WorldExportJobSummary, ListWorldExportJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_world_export_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists world generator jobs.</p>
@@ -7173,13 +7255,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListWorldGenerationJobsResponse, RusotoError<ListWorldGenerationJobsError>>;
 
     /// Auto-paginating version of `list_world_generation_jobs`
-    fn list_world_generation_jobs_pages(
-        &self,
-        input: ListWorldGenerationJobsRequest,
-    ) -> RusotoStream<WorldGenerationJobSummary, ListWorldGenerationJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_world_generation_jobs(state.clone())
-        })
+    fn list_world_generation_jobs_pages<'a>(
+        &'a self,
+        mut input: ListWorldGenerationJobsRequest,
+    ) -> RusotoStream<'a, WorldGenerationJobSummary, ListWorldGenerationJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_world_generation_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists world templates.</p>
@@ -7189,13 +7272,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListWorldTemplatesResponse, RusotoError<ListWorldTemplatesError>>;
 
     /// Auto-paginating version of `list_world_templates`
-    fn list_world_templates_pages(
-        &self,
-        input: ListWorldTemplatesRequest,
-    ) -> RusotoStream<TemplateSummary, ListWorldTemplatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_world_templates(state.clone())
-        })
+    fn list_world_templates_pages<'a>(
+        &'a self,
+        mut input: ListWorldTemplatesRequest,
+    ) -> RusotoStream<'a, TemplateSummary, ListWorldTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_world_templates(input.clone())
+        }))
     }
 
     /// <p>Lists worlds.</p>
@@ -7205,13 +7289,14 @@ pub trait Robomaker: Clone + Sync + Send + 'static {
     ) -> Result<ListWorldsResponse, RusotoError<ListWorldsError>>;
 
     /// Auto-paginating version of `list_worlds`
-    fn list_worlds_pages(
-        &self,
-        input: ListWorldsRequest,
-    ) -> RusotoStream<WorldSummary, ListWorldsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_worlds(state.clone())
-        })
+    fn list_worlds_pages<'a>(
+        &'a self,
+        mut input: ListWorldsRequest,
+    ) -> RusotoStream<'a, WorldSummary, ListWorldsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_worlds(input.clone())
+        }))
     }
 
     /// <p>Registers a robot with a fleet.</p>

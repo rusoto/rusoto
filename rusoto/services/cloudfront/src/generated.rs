@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -6415,11 +6417,19 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListCloudFrontOriginAccessIdentitiesRequest {
+impl Paged for ListCloudFrontOriginAccessIdentitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListCloudFrontOriginAccessIdentitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6432,48 +6442,40 @@ pub struct ListCloudFrontOriginAccessIdentitiesResult {
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
 }
 
-impl ListCloudFrontOriginAccessIdentitiesResult {
-    fn pagination_page_opt(self) -> Option<Vec<CloudFrontOriginAccessIdentitySummary>> {
-        Some(
-            self.cloud_front_origin_access_identity_list
-                .as_ref()?
-                .items
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListCloudFrontOriginAccessIdentitiesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.cloud_front_origin_access_identity_list
+            .as_ref()?
+            .next_marker
+            .clone()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
             self.cloud_front_origin_access_identity_list
                 .as_ref()?
-                .is_truncated
-                .clone(),
-        )
+                .next_marker
+                .clone()
+        })())
     }
 }
 
 impl PagedOutput for ListCloudFrontOriginAccessIdentitiesResult {
     type Item = CloudFrontOriginAccessIdentitySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(
-            self.cloud_front_origin_access_identity_list
-                .as_ref()?
-                .next_marker
-                .as_ref()?
-                .clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<CloudFrontOriginAccessIdentitySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.cloud_front_origin_access_identity_list?.items)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        (|| {
+            Some(
+                self.cloud_front_origin_access_identity_list
+                    .as_ref()?
+                    .is_truncated,
+            )
+        })()
+        .unwrap_or_default()
     }
 }
 
@@ -6722,11 +6724,19 @@ pub struct ListDistributionsRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListDistributionsRequest {
+impl Paged for ListDistributionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListDistributionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6739,37 +6749,25 @@ pub struct ListDistributionsResult {
     pub distribution_list: Option<DistributionList>,
 }
 
-impl ListDistributionsResult {
-    fn pagination_page_opt(self) -> Option<Vec<DistributionSummary>> {
-        Some(self.distribution_list.as_ref()?.items.as_ref()?.clone())
+impl Paged for ListDistributionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.distribution_list.as_ref()?.next_marker.clone()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.distribution_list.as_ref()?.is_truncated.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.distribution_list.as_ref()?.next_marker.clone())())
     }
 }
 
 impl PagedOutput for ListDistributionsResult {
     type Item = DistributionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(
-            self.distribution_list
-                .as_ref()?
-                .next_marker
-                .as_ref()?
-                .clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<DistributionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.distribution_list?.items)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        (|| Some(self.distribution_list.as_ref()?.is_truncated))().unwrap_or_default()
     }
 }
 
@@ -6875,11 +6873,19 @@ pub struct ListInvalidationsRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListInvalidationsRequest {
+impl Paged for ListInvalidationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInvalidationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6892,37 +6898,25 @@ pub struct ListInvalidationsResult {
     pub invalidation_list: Option<InvalidationList>,
 }
 
-impl ListInvalidationsResult {
-    fn pagination_page_opt(self) -> Option<Vec<InvalidationSummary>> {
-        Some(self.invalidation_list.as_ref()?.items.as_ref()?.clone())
+impl Paged for ListInvalidationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.invalidation_list.as_ref()?.next_marker.clone()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.invalidation_list.as_ref()?.is_truncated.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| self.invalidation_list.as_ref()?.next_marker.clone())())
     }
 }
 
 impl PagedOutput for ListInvalidationsResult {
     type Item = InvalidationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(
-            self.invalidation_list
-                .as_ref()?
-                .next_marker
-                .as_ref()?
-                .clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<InvalidationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.invalidation_list?.items)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        (|| Some(self.invalidation_list.as_ref()?.is_truncated))().unwrap_or_default()
     }
 }
 
@@ -7096,11 +7090,19 @@ pub struct ListStreamingDistributionsRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListStreamingDistributionsRequest {
+impl Paged for ListStreamingDistributionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListStreamingDistributionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7113,48 +7115,33 @@ pub struct ListStreamingDistributionsResult {
     pub streaming_distribution_list: Option<StreamingDistributionList>,
 }
 
-impl ListStreamingDistributionsResult {
-    fn pagination_page_opt(self) -> Option<Vec<StreamingDistributionSummary>> {
-        Some(
-            self.streaming_distribution_list
-                .as_ref()?
-                .items
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListStreamingDistributionsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.streaming_distribution_list
+            .as_ref()?
+            .next_marker
+            .clone()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
             self.streaming_distribution_list
                 .as_ref()?
-                .is_truncated
-                .clone(),
-        )
+                .next_marker
+                .clone()
+        })())
     }
 }
 
 impl PagedOutput for ListStreamingDistributionsResult {
     type Item = StreamingDistributionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(
-            self.streaming_distribution_list
-                .as_ref()?
-                .next_marker
-                .as_ref()?
-                .clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<StreamingDistributionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.streaming_distribution_list?.items)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        (|| Some(self.streaming_distribution_list.as_ref()?.is_truncated))().unwrap_or_default()
     }
 }
 
@@ -17619,16 +17606,18 @@ pub trait CloudFront: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_cloud_front_origin_access_identities`
-    fn list_cloud_front_origin_access_identities_pages(
-        &self,
-        input: ListCloudFrontOriginAccessIdentitiesRequest,
+    fn list_cloud_front_origin_access_identities_pages<'a>(
+        &'a self,
+        mut input: ListCloudFrontOriginAccessIdentitiesRequest,
     ) -> RusotoStream<
+        'a,
         CloudFrontOriginAccessIdentitySummary,
         ListCloudFrontOriginAccessIdentitiesError,
     > {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_cloud_front_origin_access_identities(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_cloud_front_origin_access_identities(input.clone())
+        }))
     }
 
     /// <p>List CloudFront distributions.</p>
@@ -17638,13 +17627,14 @@ pub trait CloudFront: Clone + Sync + Send + 'static {
     ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>>;
 
     /// Auto-paginating version of `list_distributions`
-    fn list_distributions_pages(
-        &self,
-        input: ListDistributionsRequest,
-    ) -> RusotoStream<DistributionSummary, ListDistributionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_distributions(state.clone())
-        })
+    fn list_distributions_pages<'a>(
+        &'a self,
+        mut input: ListDistributionsRequest,
+    ) -> RusotoStream<'a, DistributionSummary, ListDistributionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_distributions(input.clone())
+        }))
     }
 
     /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified cache policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
@@ -17711,13 +17701,14 @@ pub trait CloudFront: Clone + Sync + Send + 'static {
     ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>>;
 
     /// Auto-paginating version of `list_invalidations`
-    fn list_invalidations_pages(
-        &self,
-        input: ListInvalidationsRequest,
-    ) -> RusotoStream<InvalidationSummary, ListInvalidationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_invalidations(state.clone())
-        })
+    fn list_invalidations_pages<'a>(
+        &'a self,
+        mut input: ListInvalidationsRequest,
+    ) -> RusotoStream<'a, InvalidationSummary, ListInvalidationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_invalidations(input.clone())
+        }))
     }
 
     /// <p>Gets a list of key groups.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
@@ -17751,13 +17742,14 @@ pub trait CloudFront: Clone + Sync + Send + 'static {
     ) -> Result<ListStreamingDistributionsResult, RusotoError<ListStreamingDistributionsError>>;
 
     /// Auto-paginating version of `list_streaming_distributions`
-    fn list_streaming_distributions_pages(
-        &self,
-        input: ListStreamingDistributionsRequest,
-    ) -> RusotoStream<StreamingDistributionSummary, ListStreamingDistributionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_streaming_distributions(state.clone())
-        })
+    fn list_streaming_distributions_pages<'a>(
+        &'a self,
+        mut input: ListStreamingDistributionsRequest,
+    ) -> RusotoStream<'a, StreamingDistributionSummary, ListStreamingDistributionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_streaming_distributions(input.clone())
+        }))
     }
 
     /// <p>List tags for a CloudFront resource.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -3437,11 +3439,19 @@ pub struct ListConfigurationSetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListConfigurationSetsRequest {
+impl Paged for ListConfigurationSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConfigurationSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3474,27 +3484,25 @@ pub struct ListConfigurationSetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListConfigurationSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ConfigurationSet>> {
-        Some(self.configuration_sets.as_ref()?.clone())
+impl Paged for ListConfigurationSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListConfigurationSetsResponse {
     type Item = ConfigurationSet;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ConfigurationSet> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.configuration_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3538,11 +3546,19 @@ pub struct ListCustomVerificationEmailTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCustomVerificationEmailTemplatesRequest {
+impl Paged for ListCustomVerificationEmailTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCustomVerificationEmailTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3579,27 +3595,25 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListCustomVerificationEmailTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<CustomVerificationEmailTemplate>> {
-        Some(self.custom_verification_email_templates.as_ref()?.clone())
+impl Paged for ListCustomVerificationEmailTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCustomVerificationEmailTemplatesResponse {
     type Item = CustomVerificationEmailTemplate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CustomVerificationEmailTemplate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.custom_verification_email_templates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3648,11 +3662,19 @@ pub struct ListIdentitiesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListIdentitiesRequest {
+impl Paged for ListIdentitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListIdentitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3688,27 +3710,25 @@ pub struct ListIdentitiesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListIdentitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.identities.clone())
+impl Paged for ListIdentitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListIdentitiesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.identities
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3853,11 +3873,19 @@ pub struct ListReceiptRuleSetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListReceiptRuleSetsRequest {
+impl Paged for ListReceiptRuleSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReceiptRuleSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3887,27 +3915,25 @@ pub struct ListReceiptRuleSetsResponse {
     pub rule_sets: Option<Vec<ReceiptRuleSetMetadata>>,
 }
 
-impl ListReceiptRuleSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReceiptRuleSetMetadata>> {
-        Some(self.rule_sets.as_ref()?.clone())
+impl Paged for ListReceiptRuleSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReceiptRuleSetsResponse {
     type Item = ReceiptRuleSetMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReceiptRuleSetMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rule_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3950,11 +3976,19 @@ pub struct ListTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTemplatesRequest {
+impl Paged for ListTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3986,27 +4020,25 @@ pub struct ListTemplatesResponse {
     pub templates_metadata: Option<Vec<TemplateMetadata>>,
 }
 
-impl ListTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TemplateMetadata>> {
-        Some(self.templates_metadata.as_ref()?.clone())
+impl Paged for ListTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTemplatesResponse {
     type Item = TemplateMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TemplateMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.templates_metadata.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -11048,13 +11080,14 @@ pub trait Ses: Clone + Sync + Send + 'static {
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
 
     /// Auto-paginating version of `list_configuration_sets`
-    fn list_configuration_sets_pages(
-        &self,
-        input: ListConfigurationSetsRequest,
-    ) -> RusotoStream<ConfigurationSet, ListConfigurationSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_configuration_sets(state.clone())
-        })
+    fn list_configuration_sets_pages<'a>(
+        &'a self,
+        mut input: ListConfigurationSetsRequest,
+    ) -> RusotoStream<'a, ConfigurationSet, ListConfigurationSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_configuration_sets(input.clone())
+        }))
     }
 
     /// <p>Lists the existing custom verification email templates for your account in the current AWS Region.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11067,14 +11100,15 @@ pub trait Ses: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_custom_verification_email_templates`
-    fn list_custom_verification_email_templates_pages(
-        &self,
-        input: ListCustomVerificationEmailTemplatesRequest,
-    ) -> RusotoStream<CustomVerificationEmailTemplate, ListCustomVerificationEmailTemplatesError>
+    fn list_custom_verification_email_templates_pages<'a>(
+        &'a self,
+        mut input: ListCustomVerificationEmailTemplatesRequest,
+    ) -> RusotoStream<'a, CustomVerificationEmailTemplate, ListCustomVerificationEmailTemplatesError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_custom_verification_email_templates(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_custom_verification_email_templates(input.clone())
+        }))
     }
 
     /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account in the current AWS Region, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11084,13 +11118,14 @@ pub trait Ses: Clone + Sync + Send + 'static {
     ) -> Result<ListIdentitiesResponse, RusotoError<ListIdentitiesError>>;
 
     /// Auto-paginating version of `list_identities`
-    fn list_identities_pages(
-        &self,
-        input: ListIdentitiesRequest,
-    ) -> RusotoStream<String, ListIdentitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_identities(state.clone())
-        })
+    fn list_identities_pages<'a>(
+        &'a self,
+        mut input: ListIdentitiesRequest,
+    ) -> RusotoStream<'a, String, ListIdentitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_identities(input.clone())
+        }))
     }
 
     /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11112,13 +11147,14 @@ pub trait Ses: Clone + Sync + Send + 'static {
     ) -> Result<ListReceiptRuleSetsResponse, RusotoError<ListReceiptRuleSetsError>>;
 
     /// Auto-paginating version of `list_receipt_rule_sets`
-    fn list_receipt_rule_sets_pages(
-        &self,
-        input: ListReceiptRuleSetsRequest,
-    ) -> RusotoStream<ReceiptRuleSetMetadata, ListReceiptRuleSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_receipt_rule_sets(state.clone())
-        })
+    fn list_receipt_rule_sets_pages<'a>(
+        &'a self,
+        mut input: ListReceiptRuleSetsRequest,
+    ) -> RusotoStream<'a, ReceiptRuleSetMetadata, ListReceiptRuleSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_receipt_rule_sets(input.clone())
+        }))
     }
 
     /// <p>Lists the email templates present in your Amazon SES account in the current AWS Region.</p> <p>You can execute this operation no more than once per second.</p>
@@ -11128,13 +11164,14 @@ pub trait Ses: Clone + Sync + Send + 'static {
     ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>;
 
     /// Auto-paginating version of `list_templates`
-    fn list_templates_pages(
-        &self,
-        input: ListTemplatesRequest,
-    ) -> RusotoStream<TemplateMetadata, ListTemplatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_templates(state.clone())
-        })
+    fn list_templates_pages<'a>(
+        &'a self,
+        mut input: ListTemplatesRequest,
+    ) -> RusotoStream<'a, TemplateMetadata, ListTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_templates(input.clone())
+        }))
     }
 
     /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -619,11 +621,19 @@ pub struct ListAttacksRequest {
     pub start_time: Option<TimeRange>,
 }
 
-impl PagedRequest for ListAttacksRequest {
+impl Paged for ListAttacksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAttacksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -641,27 +651,25 @@ pub struct ListAttacksResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAttacksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AttackSummary>> {
-        Some(self.attack_summaries.as_ref()?.clone())
+impl Paged for ListAttacksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAttacksResponse {
     type Item = AttackSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AttackSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attack_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -706,11 +714,19 @@ pub struct ListProtectionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListProtectionsRequest {
+impl Paged for ListProtectionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProtectionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -728,27 +744,25 @@ pub struct ListProtectionsResponse {
     pub protections: Option<Vec<Protection>>,
 }
 
-impl ListProtectionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Protection>> {
-        Some(self.protections.as_ref()?.clone())
+impl Paged for ListProtectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProtectionsResponse {
     type Item = Protection;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Protection> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.protections.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2773,13 +2787,14 @@ pub trait Shield: Clone + Sync + Send + 'static {
     ) -> Result<ListAttacksResponse, RusotoError<ListAttacksError>>;
 
     /// Auto-paginating version of `list_attacks`
-    fn list_attacks_pages(
-        &self,
-        input: ListAttacksRequest,
-    ) -> RusotoStream<AttackSummary, ListAttacksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_attacks(state.clone())
-        })
+    fn list_attacks_pages<'a>(
+        &'a self,
+        mut input: ListAttacksRequest,
+    ) -> RusotoStream<'a, AttackSummary, ListAttacksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attacks(input.clone())
+        }))
     }
 
     /// <p>Retrieves the <a>ProtectionGroup</a> objects for the account.</p>
@@ -2795,13 +2810,14 @@ pub trait Shield: Clone + Sync + Send + 'static {
     ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>>;
 
     /// Auto-paginating version of `list_protections`
-    fn list_protections_pages(
-        &self,
-        input: ListProtectionsRequest,
-    ) -> RusotoStream<Protection, ListProtectionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_protections(state.clone())
-        })
+    fn list_protections_pages<'a>(
+        &'a self,
+        mut input: ListProtectionsRequest,
+    ) -> RusotoStream<'a, Protection, ListProtectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_protections(input.clone())
+        }))
     }
 
     /// <p>Retrieves the resources that are included in the protection group. </p>

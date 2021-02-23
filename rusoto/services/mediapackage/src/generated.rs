@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1003,11 +1005,19 @@ pub struct ListChannelsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListChannelsRequest {
+impl Paged for ListChannelsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListChannelsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1025,27 +1035,25 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListChannelsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Channel>> {
-        Some(self.channels.as_ref()?.clone())
+impl Paged for ListChannelsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListChannelsResponse {
     type Item = Channel;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Channel> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.channels.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1071,11 +1079,19 @@ pub struct ListHarvestJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHarvestJobsRequest {
+impl Paged for ListHarvestJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHarvestJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1093,27 +1109,25 @@ pub struct ListHarvestJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHarvestJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HarvestJob>> {
-        Some(self.harvest_jobs.as_ref()?.clone())
+impl Paged for ListHarvestJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHarvestJobsResponse {
     type Item = HarvestJob;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HarvestJob> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.harvest_jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1135,11 +1149,19 @@ pub struct ListOriginEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListOriginEndpointsRequest {
+impl Paged for ListOriginEndpointsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOriginEndpointsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1157,27 +1179,25 @@ pub struct ListOriginEndpointsResponse {
     pub origin_endpoints: Option<Vec<OriginEndpoint>>,
 }
 
-impl ListOriginEndpointsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OriginEndpoint>> {
-        Some(self.origin_endpoints.as_ref()?.clone())
+impl Paged for ListOriginEndpointsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOriginEndpointsResponse {
     type Item = OriginEndpoint;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OriginEndpoint> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.origin_endpoints.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2782,13 +2802,14 @@ pub trait MediaPackage: Clone + Sync + Send + 'static {
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
 
     /// Auto-paginating version of `list_channels`
-    fn list_channels_pages(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoStream<Channel, ListChannelsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_channels(state.clone())
-        })
+    fn list_channels_pages<'a>(
+        &'a self,
+        mut input: ListChannelsRequest,
+    ) -> RusotoStream<'a, Channel, ListChannelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_channels(input.clone())
+        }))
     }
 
     /// <p>Returns a collection of HarvestJob records.</p>
@@ -2798,13 +2819,14 @@ pub trait MediaPackage: Clone + Sync + Send + 'static {
     ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>;
 
     /// Auto-paginating version of `list_harvest_jobs`
-    fn list_harvest_jobs_pages(
-        &self,
-        input: ListHarvestJobsRequest,
-    ) -> RusotoStream<HarvestJob, ListHarvestJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_harvest_jobs(state.clone())
-        })
+    fn list_harvest_jobs_pages<'a>(
+        &'a self,
+        mut input: ListHarvestJobsRequest,
+    ) -> RusotoStream<'a, HarvestJob, ListHarvestJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_harvest_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
@@ -2814,13 +2836,14 @@ pub trait MediaPackage: Clone + Sync + Send + 'static {
     ) -> Result<ListOriginEndpointsResponse, RusotoError<ListOriginEndpointsError>>;
 
     /// Auto-paginating version of `list_origin_endpoints`
-    fn list_origin_endpoints_pages(
-        &self,
-        input: ListOriginEndpointsRequest,
-    ) -> RusotoStream<OriginEndpoint, ListOriginEndpointsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_origin_endpoints(state.clone())
-        })
+    fn list_origin_endpoints_pages<'a>(
+        &'a self,
+        mut input: ListOriginEndpointsRequest,
+    ) -> RusotoStream<'a, OriginEndpoint, ListOriginEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_origin_endpoints(input.clone())
+        }))
     }
 
     async fn list_tags_for_resource(

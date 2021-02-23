@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -466,11 +468,19 @@ pub struct GetQueryResultsInput {
     pub query_execution_id: String,
 }
 
-impl PagedRequest for GetQueryResultsInput {
+impl Paged for GetQueryResultsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetQueryResultsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -492,27 +502,25 @@ pub struct GetQueryResultsOutput {
     pub update_count: Option<i64>,
 }
 
-impl GetQueryResultsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Row>> {
-        Some(self.result_set.as_ref()?.rows.as_ref()?.clone())
+impl Paged for GetQueryResultsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetQueryResultsOutput {
     type Item = Row;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Row> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.result_set?.rows)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -574,11 +582,19 @@ pub struct ListDataCatalogsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDataCatalogsInput {
+impl Paged for ListDataCatalogsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDataCatalogsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -596,27 +612,25 @@ pub struct ListDataCatalogsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDataCatalogsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<DataCatalogSummary>> {
-        Some(self.data_catalogs_summary.as_ref()?.clone())
+impl Paged for ListDataCatalogsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDataCatalogsOutput {
     type Item = DataCatalogSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DataCatalogSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.data_catalogs_summary.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -637,11 +651,19 @@ pub struct ListDatabasesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDatabasesInput {
+impl Paged for ListDatabasesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDatabasesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -659,27 +681,25 @@ pub struct ListDatabasesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDatabasesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Database>> {
-        Some(self.database_list.as_ref()?.clone())
+impl Paged for ListDatabasesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDatabasesOutput {
     type Item = Database;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Database> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.database_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -701,11 +721,19 @@ pub struct ListNamedQueriesInput {
     pub work_group: Option<String>,
 }
 
-impl PagedRequest for ListNamedQueriesInput {
+impl Paged for ListNamedQueriesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNamedQueriesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -723,27 +751,25 @@ pub struct ListNamedQueriesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListNamedQueriesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.named_query_ids.as_ref()?.clone())
+impl Paged for ListNamedQueriesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListNamedQueriesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.named_query_ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -765,11 +791,19 @@ pub struct ListQueryExecutionsInput {
     pub work_group: Option<String>,
 }
 
-impl PagedRequest for ListQueryExecutionsInput {
+impl Paged for ListQueryExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQueryExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -787,27 +821,25 @@ pub struct ListQueryExecutionsOutput {
     pub query_execution_ids: Option<Vec<String>>,
 }
 
-impl ListQueryExecutionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.query_execution_ids.as_ref()?.clone())
+impl Paged for ListQueryExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQueryExecutionsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.query_execution_ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -835,11 +867,19 @@ pub struct ListTableMetadataInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTableMetadataInput {
+impl Paged for ListTableMetadataInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTableMetadataInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -857,27 +897,25 @@ pub struct ListTableMetadataOutput {
     pub table_metadata_list: Option<Vec<TableMetadata>>,
 }
 
-impl ListTableMetadataOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TableMetadata>> {
-        Some(self.table_metadata_list.as_ref()?.clone())
+impl Paged for ListTableMetadataOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTableMetadataOutput {
     type Item = TableMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TableMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.table_metadata_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -898,11 +936,19 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceInput {
+impl Paged for ListTagsForResourceInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -920,27 +966,25 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceOutput {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2637,13 +2681,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>;
 
     /// Auto-paginating version of `get_query_results`
-    fn get_query_results_pages(
-        &self,
-        input: GetQueryResultsInput,
-    ) -> RusotoStream<Row, GetQueryResultsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_query_results(state.clone())
-        })
+    fn get_query_results_pages<'a>(
+        &'a self,
+        mut input: GetQueryResultsInput,
+    ) -> RusotoStream<'a, Row, GetQueryResultsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_query_results(input.clone())
+        }))
     }
 
     /// <p>Returns table metadata for the specified catalog, database, and table.</p>
@@ -2665,13 +2710,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListDataCatalogsOutput, RusotoError<ListDataCatalogsError>>;
 
     /// Auto-paginating version of `list_data_catalogs`
-    fn list_data_catalogs_pages(
-        &self,
-        input: ListDataCatalogsInput,
-    ) -> RusotoStream<DataCatalogSummary, ListDataCatalogsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_data_catalogs(state.clone())
-        })
+    fn list_data_catalogs_pages<'a>(
+        &'a self,
+        mut input: ListDataCatalogsInput,
+    ) -> RusotoStream<'a, DataCatalogSummary, ListDataCatalogsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_data_catalogs(input.clone())
+        }))
     }
 
     /// <p>Lists the databases in the specified data catalog.</p>
@@ -2681,13 +2727,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListDatabasesOutput, RusotoError<ListDatabasesError>>;
 
     /// Auto-paginating version of `list_databases`
-    fn list_databases_pages(
-        &self,
-        input: ListDatabasesInput,
-    ) -> RusotoStream<Database, ListDatabasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_databases(state.clone())
-        })
+    fn list_databases_pages<'a>(
+        &'a self,
+        mut input: ListDatabasesInput,
+    ) -> RusotoStream<'a, Database, ListDatabasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_databases(input.clone())
+        }))
     }
 
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
@@ -2697,13 +2744,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>;
 
     /// Auto-paginating version of `list_named_queries`
-    fn list_named_queries_pages(
-        &self,
-        input: ListNamedQueriesInput,
-    ) -> RusotoStream<String, ListNamedQueriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_named_queries(state.clone())
-        })
+    fn list_named_queries_pages<'a>(
+        &'a self,
+        mut input: ListNamedQueriesInput,
+    ) -> RusotoStream<'a, String, ListNamedQueriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_named_queries(input.clone())
+        }))
     }
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
@@ -2713,13 +2761,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListQueryExecutionsOutput, RusotoError<ListQueryExecutionsError>>;
 
     /// Auto-paginating version of `list_query_executions`
-    fn list_query_executions_pages(
-        &self,
-        input: ListQueryExecutionsInput,
-    ) -> RusotoStream<String, ListQueryExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_query_executions(state.clone())
-        })
+    fn list_query_executions_pages<'a>(
+        &'a self,
+        mut input: ListQueryExecutionsInput,
+    ) -> RusotoStream<'a, String, ListQueryExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_query_executions(input.clone())
+        }))
     }
 
     /// <p>Lists the metadata for the tables in the specified data catalog database.</p>
@@ -2729,13 +2778,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListTableMetadataOutput, RusotoError<ListTableMetadataError>>;
 
     /// Auto-paginating version of `list_table_metadata`
-    fn list_table_metadata_pages(
-        &self,
-        input: ListTableMetadataInput,
-    ) -> RusotoStream<TableMetadata, ListTableMetadataError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_table_metadata(state.clone())
-        })
+    fn list_table_metadata_pages<'a>(
+        &'a self,
+        mut input: ListTableMetadataInput,
+    ) -> RusotoStream<'a, TableMetadata, ListTableMetadataError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_table_metadata(input.clone())
+        }))
     }
 
     /// <p>Lists the tags associated with an Athena workgroup or data catalog resource.</p>
@@ -2745,13 +2795,14 @@ pub trait Athena: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Lists available workgroups for the account.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -463,11 +465,19 @@ pub struct DescribeAddressesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAddressesRequest {
+impl Paged for DescribeAddressesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAddressesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -485,27 +495,25 @@ pub struct DescribeAddressesResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeAddressesResult {
-    fn pagination_page_opt(self) -> Option<Vec<Address>> {
-        Some(self.addresses.as_ref()?.clone())
+impl Paged for DescribeAddressesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAddressesResult {
     type Item = Address;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Address> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.addresses.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -883,11 +891,19 @@ pub struct ListClusterJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListClusterJobsRequest {
+impl Paged for ListClusterJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClusterJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -905,27 +921,25 @@ pub struct ListClusterJobsResult {
     pub next_token: Option<String>,
 }
 
-impl ListClusterJobsResult {
-    fn pagination_page_opt(self) -> Option<Vec<JobListEntry>> {
-        Some(self.job_list_entries.as_ref()?.clone())
+impl Paged for ListClusterJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListClusterJobsResult {
     type Item = JobListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_list_entries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -943,11 +957,19 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListClustersRequest {
+impl Paged for ListClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -965,27 +987,25 @@ pub struct ListClustersResult {
     pub next_token: Option<String>,
 }
 
-impl ListClustersResult {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterListEntry>> {
-        Some(self.cluster_list_entries.as_ref()?.clone())
+impl Paged for ListClustersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListClustersResult {
     type Item = ClusterListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_list_entries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1003,11 +1023,19 @@ pub struct ListCompatibleImagesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCompatibleImagesRequest {
+impl Paged for ListCompatibleImagesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCompatibleImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1025,27 +1053,25 @@ pub struct ListCompatibleImagesResult {
     pub next_token: Option<String>,
 }
 
-impl ListCompatibleImagesResult {
-    fn pagination_page_opt(self) -> Option<Vec<CompatibleImage>> {
-        Some(self.compatible_images.as_ref()?.clone())
+impl Paged for ListCompatibleImagesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCompatibleImagesResult {
     type Item = CompatibleImage;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CompatibleImage> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.compatible_images.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1063,11 +1089,19 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListJobsRequest {
+impl Paged for ListJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1085,27 +1119,25 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
-impl ListJobsResult {
-    fn pagination_page_opt(self) -> Option<Vec<JobListEntry>> {
-        Some(self.job_list_entries.as_ref()?.clone())
+impl Paged for ListJobsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobsResult {
     type Item = JobListEntry;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobListEntry> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_list_entries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2242,13 +2274,14 @@ pub trait Snowball: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAddressesResult, RusotoError<DescribeAddressesError>>;
 
     /// Auto-paginating version of `describe_addresses`
-    fn describe_addresses_pages(
-        &self,
-        input: DescribeAddressesRequest,
-    ) -> RusotoStream<Address, DescribeAddressesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_addresses(state.clone())
-        })
+    fn describe_addresses_pages<'a>(
+        &'a self,
+        mut input: DescribeAddressesRequest,
+    ) -> RusotoStream<'a, Address, DescribeAddressesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_addresses(input.clone())
+        }))
     }
 
     /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
@@ -2299,13 +2332,14 @@ pub trait Snowball: Clone + Sync + Send + 'static {
     ) -> Result<ListClusterJobsResult, RusotoError<ListClusterJobsError>>;
 
     /// Auto-paginating version of `list_cluster_jobs`
-    fn list_cluster_jobs_pages(
-        &self,
-        input: ListClusterJobsRequest,
-    ) -> RusotoStream<JobListEntry, ListClusterJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_cluster_jobs(state.clone())
-        })
+    fn list_cluster_jobs_pages<'a>(
+        &'a self,
+        mut input: ListClusterJobsRequest,
+    ) -> RusotoStream<'a, JobListEntry, ListClusterJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_cluster_jobs(input.clone())
+        }))
     }
 
     /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
@@ -2315,13 +2349,14 @@ pub trait Snowball: Clone + Sync + Send + 'static {
     ) -> Result<ListClustersResult, RusotoError<ListClustersError>>;
 
     /// Auto-paginating version of `list_clusters`
-    fn list_clusters_pages(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoStream<ClusterListEntry, ListClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_clusters(state.clone())
-        })
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersRequest,
+    ) -> RusotoStream<'a, ClusterListEntry, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
     }
 
     /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snow device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
@@ -2331,13 +2366,14 @@ pub trait Snowball: Clone + Sync + Send + 'static {
     ) -> Result<ListCompatibleImagesResult, RusotoError<ListCompatibleImagesError>>;
 
     /// Auto-paginating version of `list_compatible_images`
-    fn list_compatible_images_pages(
-        &self,
-        input: ListCompatibleImagesRequest,
-    ) -> RusotoStream<CompatibleImage, ListCompatibleImagesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_compatible_images(state.clone())
-        })
+    fn list_compatible_images_pages<'a>(
+        &'a self,
+        mut input: ListCompatibleImagesRequest,
+    ) -> RusotoStream<'a, CompatibleImage, ListCompatibleImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compatible_images(input.clone())
+        }))
     }
 
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
@@ -2347,10 +2383,14 @@ pub trait Snowball: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<JobListEntry, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, JobListEntry, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>

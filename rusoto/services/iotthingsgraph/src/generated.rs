@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -558,11 +560,19 @@ pub struct GetFlowTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetFlowTemplateRevisionsRequest {
+impl Paged for GetFlowTemplateRevisionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetFlowTemplateRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -580,27 +590,25 @@ pub struct GetFlowTemplateRevisionsResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-impl GetFlowTemplateRevisionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FlowTemplateSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for GetFlowTemplateRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetFlowTemplateRevisionsResponse {
     type Item = FlowTemplateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FlowTemplateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -694,11 +702,19 @@ pub struct GetSystemTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetSystemTemplateRevisionsRequest {
+impl Paged for GetSystemTemplateRevisionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSystemTemplateRevisionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -716,27 +732,25 @@ pub struct GetSystemTemplateRevisionsResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-impl GetSystemTemplateRevisionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SystemTemplateSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for GetSystemTemplateRevisionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetSystemTemplateRevisionsResponse {
     type Item = SystemTemplateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SystemTemplateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -797,11 +811,19 @@ pub struct ListFlowExecutionMessagesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFlowExecutionMessagesRequest {
+impl Paged for ListFlowExecutionMessagesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFlowExecutionMessagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -819,27 +841,25 @@ pub struct ListFlowExecutionMessagesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFlowExecutionMessagesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FlowExecutionMessage>> {
-        Some(self.messages.as_ref()?.clone())
+impl Paged for ListFlowExecutionMessagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFlowExecutionMessagesResponse {
     type Item = FlowExecutionMessage;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FlowExecutionMessage> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.messages.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -860,11 +880,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -882,27 +910,25 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -944,11 +970,19 @@ pub struct SearchEntitiesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for SearchEntitiesRequest {
+impl Paged for SearchEntitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchEntitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -966,27 +1000,25 @@ pub struct SearchEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-impl SearchEntitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EntityDescription>> {
-        Some(self.descriptions.as_ref()?.clone())
+impl Paged for SearchEntitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchEntitiesResponse {
     type Item = EntityDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EntityDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.descriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1019,11 +1051,19 @@ pub struct SearchFlowExecutionsRequest {
     pub system_instance_id: String,
 }
 
-impl PagedRequest for SearchFlowExecutionsRequest {
+impl Paged for SearchFlowExecutionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchFlowExecutionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1041,27 +1081,25 @@ pub struct SearchFlowExecutionsResponse {
     pub summaries: Option<Vec<FlowExecutionSummary>>,
 }
 
-impl SearchFlowExecutionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FlowExecutionSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for SearchFlowExecutionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchFlowExecutionsResponse {
     type Item = FlowExecutionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FlowExecutionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1083,11 +1121,19 @@ pub struct SearchFlowTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for SearchFlowTemplatesRequest {
+impl Paged for SearchFlowTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchFlowTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1105,27 +1151,25 @@ pub struct SearchFlowTemplatesResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-impl SearchFlowTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FlowTemplateSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for SearchFlowTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchFlowTemplatesResponse {
     type Item = FlowTemplateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FlowTemplateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1147,11 +1191,19 @@ pub struct SearchSystemInstancesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for SearchSystemInstancesRequest {
+impl Paged for SearchSystemInstancesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSystemInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1169,27 +1221,25 @@ pub struct SearchSystemInstancesResponse {
     pub summaries: Option<Vec<SystemInstanceSummary>>,
 }
 
-impl SearchSystemInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SystemInstanceSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for SearchSystemInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchSystemInstancesResponse {
     type Item = SystemInstanceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SystemInstanceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1211,11 +1261,19 @@ pub struct SearchSystemTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for SearchSystemTemplatesRequest {
+impl Paged for SearchSystemTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchSystemTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1233,27 +1291,25 @@ pub struct SearchSystemTemplatesResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-impl SearchSystemTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SystemTemplateSummary>> {
-        Some(self.summaries.as_ref()?.clone())
+impl Paged for SearchSystemTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchSystemTemplatesResponse {
     type Item = SystemTemplateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SystemTemplateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1278,11 +1334,19 @@ pub struct SearchThingsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for SearchThingsRequest {
+impl Paged for SearchThingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for SearchThingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1300,27 +1364,25 @@ pub struct SearchThingsResponse {
     pub things: Option<Vec<Thing>>,
 }
 
-impl SearchThingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Thing>> {
-        Some(self.things.as_ref()?.clone())
+impl Paged for SearchThingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for SearchThingsResponse {
     type Item = Thing;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Thing> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.things.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3483,13 +3545,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<GetFlowTemplateRevisionsResponse, RusotoError<GetFlowTemplateRevisionsError>>;
 
     /// Auto-paginating version of `get_flow_template_revisions`
-    fn get_flow_template_revisions_pages(
-        &self,
-        input: GetFlowTemplateRevisionsRequest,
-    ) -> RusotoStream<FlowTemplateSummary, GetFlowTemplateRevisionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_flow_template_revisions(state.clone())
-        })
+    fn get_flow_template_revisions_pages<'a>(
+        &'a self,
+        mut input: GetFlowTemplateRevisionsRequest,
+    ) -> RusotoStream<'a, FlowTemplateSummary, GetFlowTemplateRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_flow_template_revisions(input.clone())
+        }))
     }
 
     /// <p>Gets the status of a namespace deletion task.</p>
@@ -3516,13 +3579,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<GetSystemTemplateRevisionsResponse, RusotoError<GetSystemTemplateRevisionsError>>;
 
     /// Auto-paginating version of `get_system_template_revisions`
-    fn get_system_template_revisions_pages(
-        &self,
-        input: GetSystemTemplateRevisionsRequest,
-    ) -> RusotoStream<SystemTemplateSummary, GetSystemTemplateRevisionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_system_template_revisions(state.clone())
-        })
+    fn get_system_template_revisions_pages<'a>(
+        &'a self,
+        mut input: GetSystemTemplateRevisionsRequest,
+    ) -> RusotoStream<'a, SystemTemplateSummary, GetSystemTemplateRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_system_template_revisions(input.clone())
+        }))
     }
 
     /// <p>Gets the status of the specified upload.</p>
@@ -3538,13 +3602,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<ListFlowExecutionMessagesResponse, RusotoError<ListFlowExecutionMessagesError>>;
 
     /// Auto-paginating version of `list_flow_execution_messages`
-    fn list_flow_execution_messages_pages(
-        &self,
-        input: ListFlowExecutionMessagesRequest,
-    ) -> RusotoStream<FlowExecutionMessage, ListFlowExecutionMessagesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_flow_execution_messages(state.clone())
-        })
+    fn list_flow_execution_messages_pages<'a>(
+        &'a self,
+        mut input: ListFlowExecutionMessagesRequest,
+    ) -> RusotoStream<'a, FlowExecutionMessage, ListFlowExecutionMessagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_flow_execution_messages(input.clone())
+        }))
     }
 
     /// <p>Lists all tags on an AWS IoT Things Graph resource.</p>
@@ -3554,13 +3619,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Searches for entities of the specified type. You can search for entities in your namespace and the public namespace that you're tracking.</p>
@@ -3570,13 +3636,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>>;
 
     /// Auto-paginating version of `search_entities`
-    fn search_entities_pages(
-        &self,
-        input: SearchEntitiesRequest,
-    ) -> RusotoStream<EntityDescription, SearchEntitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_entities(state.clone())
-        })
+    fn search_entities_pages<'a>(
+        &'a self,
+        mut input: SearchEntitiesRequest,
+    ) -> RusotoStream<'a, EntityDescription, SearchEntitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_entities(input.clone())
+        }))
     }
 
     /// <p>Searches for AWS IoT Things Graph workflow execution instances.</p>
@@ -3586,13 +3653,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchFlowExecutionsResponse, RusotoError<SearchFlowExecutionsError>>;
 
     /// Auto-paginating version of `search_flow_executions`
-    fn search_flow_executions_pages(
-        &self,
-        input: SearchFlowExecutionsRequest,
-    ) -> RusotoStream<FlowExecutionSummary, SearchFlowExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_flow_executions(state.clone())
-        })
+    fn search_flow_executions_pages<'a>(
+        &'a self,
+        mut input: SearchFlowExecutionsRequest,
+    ) -> RusotoStream<'a, FlowExecutionSummary, SearchFlowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_flow_executions(input.clone())
+        }))
     }
 
     /// <p>Searches for summary information about workflows.</p>
@@ -3602,13 +3670,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchFlowTemplatesResponse, RusotoError<SearchFlowTemplatesError>>;
 
     /// Auto-paginating version of `search_flow_templates`
-    fn search_flow_templates_pages(
-        &self,
-        input: SearchFlowTemplatesRequest,
-    ) -> RusotoStream<FlowTemplateSummary, SearchFlowTemplatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_flow_templates(state.clone())
-        })
+    fn search_flow_templates_pages<'a>(
+        &'a self,
+        mut input: SearchFlowTemplatesRequest,
+    ) -> RusotoStream<'a, FlowTemplateSummary, SearchFlowTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_flow_templates(input.clone())
+        }))
     }
 
     /// <p>Searches for system instances in the user's account.</p>
@@ -3618,13 +3687,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchSystemInstancesResponse, RusotoError<SearchSystemInstancesError>>;
 
     /// Auto-paginating version of `search_system_instances`
-    fn search_system_instances_pages(
-        &self,
-        input: SearchSystemInstancesRequest,
-    ) -> RusotoStream<SystemInstanceSummary, SearchSystemInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_system_instances(state.clone())
-        })
+    fn search_system_instances_pages<'a>(
+        &'a self,
+        mut input: SearchSystemInstancesRequest,
+    ) -> RusotoStream<'a, SystemInstanceSummary, SearchSystemInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_system_instances(input.clone())
+        }))
     }
 
     /// <p>Searches for summary information about systems in the user's account. You can filter by the ID of a workflow to return only systems that use the specified workflow.</p>
@@ -3634,13 +3704,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchSystemTemplatesResponse, RusotoError<SearchSystemTemplatesError>>;
 
     /// Auto-paginating version of `search_system_templates`
-    fn search_system_templates_pages(
-        &self,
-        input: SearchSystemTemplatesRequest,
-    ) -> RusotoStream<SystemTemplateSummary, SearchSystemTemplatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_system_templates(state.clone())
-        })
+    fn search_system_templates_pages<'a>(
+        &'a self,
+        mut input: SearchSystemTemplatesRequest,
+    ) -> RusotoStream<'a, SystemTemplateSummary, SearchSystemTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_system_templates(input.clone())
+        }))
     }
 
     /// <p>Searches for things associated with the specified entity. You can search by both device and device model.</p> <p>For example, if two different devices, camera1 and camera2, implement the camera device model, the user can associate thing1 to camera1 and thing2 to camera2. <code>SearchThings(camera2)</code> will return only thing2, but <code>SearchThings(camera)</code> will return both thing1 and thing2.</p> <p>This action searches for exact matches and doesn't perform partial text matching.</p>
@@ -3650,13 +3721,14 @@ pub trait IotThingsGraph: Clone + Sync + Send + 'static {
     ) -> Result<SearchThingsResponse, RusotoError<SearchThingsError>>;
 
     /// Auto-paginating version of `search_things`
-    fn search_things_pages(
-        &self,
-        input: SearchThingsRequest,
-    ) -> RusotoStream<Thing, SearchThingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.search_things(state.clone())
-        })
+    fn search_things_pages<'a>(
+        &'a self,
+        mut input: SearchThingsRequest,
+    ) -> RusotoStream<'a, Thing, SearchThingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.search_things(input.clone())
+        }))
     }
 
     /// <p>Creates a tag for the specified resource.</p>

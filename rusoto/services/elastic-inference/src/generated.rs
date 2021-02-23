@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -123,11 +125,19 @@ pub struct DescribeAcceleratorsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAcceleratorsRequest {
+impl Paged for DescribeAcceleratorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAcceleratorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -145,27 +155,25 @@ pub struct DescribeAcceleratorsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAcceleratorsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ElasticInferenceAccelerator>> {
-        Some(self.accelerator_set.as_ref()?.clone())
+impl Paged for DescribeAcceleratorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAcceleratorsResponse {
     type Item = ElasticInferenceAccelerator;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ElasticInferenceAccelerator> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.accelerator_set.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -573,13 +581,14 @@ pub trait ElasticInference: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAcceleratorsResponse, RusotoError<DescribeAcceleratorsError>>;
 
     /// Auto-paginating version of `describe_accelerators`
-    fn describe_accelerators_pages(
-        &self,
-        input: DescribeAcceleratorsRequest,
-    ) -> RusotoStream<ElasticInferenceAccelerator, DescribeAcceleratorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_accelerators(state.clone())
-        })
+    fn describe_accelerators_pages<'a>(
+        &'a self,
+        mut input: DescribeAcceleratorsRequest,
+    ) -> RusotoStream<'a, ElasticInferenceAccelerator, DescribeAcceleratorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_accelerators(input.clone())
+        }))
     }
 
     /// <p> Returns all tags of an Elastic Inference Accelerator. </p>

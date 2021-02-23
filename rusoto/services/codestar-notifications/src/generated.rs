@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -216,11 +218,19 @@ pub struct ListEventTypesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListEventTypesRequest {
+impl Paged for ListEventTypesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEventTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -238,27 +248,25 @@ pub struct ListEventTypesResult {
     pub next_token: Option<String>,
 }
 
-impl ListEventTypesResult {
-    fn pagination_page_opt(self) -> Option<Vec<EventTypeSummary>> {
-        Some(self.event_types.as_ref()?.clone())
+impl Paged for ListEventTypesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEventTypesResult {
     type Item = EventTypeSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventTypeSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_types.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -292,11 +300,19 @@ pub struct ListNotificationRulesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListNotificationRulesRequest {
+impl Paged for ListNotificationRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNotificationRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -314,27 +330,25 @@ pub struct ListNotificationRulesResult {
     pub notification_rules: Option<Vec<NotificationRuleSummary>>,
 }
 
-impl ListNotificationRulesResult {
-    fn pagination_page_opt(self) -> Option<Vec<NotificationRuleSummary>> {
-        Some(self.notification_rules.as_ref()?.clone())
+impl Paged for ListNotificationRulesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListNotificationRulesResult {
     type Item = NotificationRuleSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<NotificationRuleSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.notification_rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -387,11 +401,19 @@ pub struct ListTargetsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTargetsRequest {
+impl Paged for ListTargetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTargetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -409,27 +431,25 @@ pub struct ListTargetsResult {
     pub targets: Option<Vec<TargetSummary>>,
 }
 
-impl ListTargetsResult {
-    fn pagination_page_opt(self) -> Option<Vec<TargetSummary>> {
-        Some(self.targets.as_ref()?.clone())
+impl Paged for ListTargetsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTargetsResult {
     type Item = TargetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TargetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.targets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1074,13 +1094,14 @@ pub trait CodeStarNotifications: Clone + Sync + Send + 'static {
     ) -> Result<ListEventTypesResult, RusotoError<ListEventTypesError>>;
 
     /// Auto-paginating version of `list_event_types`
-    fn list_event_types_pages(
-        &self,
-        input: ListEventTypesRequest,
-    ) -> RusotoStream<EventTypeSummary, ListEventTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_event_types(state.clone())
-        })
+    fn list_event_types_pages<'a>(
+        &'a self,
+        mut input: ListEventTypesRequest,
+    ) -> RusotoStream<'a, EventTypeSummary, ListEventTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_event_types(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the notification rules for an AWS account.</p>
@@ -1090,13 +1111,14 @@ pub trait CodeStarNotifications: Clone + Sync + Send + 'static {
     ) -> Result<ListNotificationRulesResult, RusotoError<ListNotificationRulesError>>;
 
     /// Auto-paginating version of `list_notification_rules`
-    fn list_notification_rules_pages(
-        &self,
-        input: ListNotificationRulesRequest,
-    ) -> RusotoStream<NotificationRuleSummary, ListNotificationRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_notification_rules(state.clone())
-        })
+    fn list_notification_rules_pages<'a>(
+        &'a self,
+        mut input: ListNotificationRulesRequest,
+    ) -> RusotoStream<'a, NotificationRuleSummary, ListNotificationRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_notification_rules(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags associated with a notification rule.</p>
@@ -1112,13 +1134,14 @@ pub trait CodeStarNotifications: Clone + Sync + Send + 'static {
     ) -> Result<ListTargetsResult, RusotoError<ListTargetsError>>;
 
     /// Auto-paginating version of `list_targets`
-    fn list_targets_pages(
-        &self,
-        input: ListTargetsRequest,
-    ) -> RusotoStream<TargetSummary, ListTargetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_targets(state.clone())
-        })
+    fn list_targets_pages<'a>(
+        &'a self,
+        mut input: ListTargetsRequest,
+    ) -> RusotoStream<'a, TargetSummary, ListTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_targets(input.clone())
+        }))
     }
 
     /// <p>Creates an association between a notification rule and an SNS topic so that the associated target can receive notifications when the events described in the rule are triggered.</p>

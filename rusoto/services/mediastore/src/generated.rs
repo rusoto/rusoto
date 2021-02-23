@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -303,11 +305,19 @@ pub struct ListContainersInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListContainersInput {
+impl Paged for ListContainersInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListContainersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -324,27 +334,25 @@ pub struct ListContainersOutput {
     pub next_token: Option<String>,
 }
 
-impl ListContainersOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Container>> {
-        Some(self.containers.clone())
+impl Paged for ListContainersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListContainersOutput {
     type Item = Container;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Container> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.containers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1570,13 +1578,14 @@ pub trait MediaStore: Clone + Sync + Send + 'static {
     ) -> Result<ListContainersOutput, RusotoError<ListContainersError>>;
 
     /// Auto-paginating version of `list_containers`
-    fn list_containers_pages(
-        &self,
-        input: ListContainersInput,
-    ) -> RusotoStream<Container, ListContainersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_containers(state.clone())
-        })
+    fn list_containers_pages<'a>(
+        &'a self,
+        mut input: ListContainersInput,
+    ) -> RusotoStream<'a, Container, ListContainersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_containers(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags assigned to the specified container. </p>

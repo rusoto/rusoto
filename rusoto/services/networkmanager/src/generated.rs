@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -551,11 +553,19 @@ pub struct DescribeGlobalNetworksRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeGlobalNetworksRequest {
+impl Paged for DescribeGlobalNetworksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeGlobalNetworksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -573,27 +583,25 @@ pub struct DescribeGlobalNetworksResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeGlobalNetworksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GlobalNetwork>> {
-        Some(self.global_networks.as_ref()?.clone())
+impl Paged for DescribeGlobalNetworksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeGlobalNetworksResponse {
     type Item = GlobalNetwork;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GlobalNetwork> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.global_networks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -753,11 +761,19 @@ pub struct GetConnectionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetConnectionsRequest {
+impl Paged for GetConnectionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetConnectionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -775,27 +791,25 @@ pub struct GetConnectionsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetConnectionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Connection>> {
-        Some(self.connections.as_ref()?.clone())
+impl Paged for GetConnectionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetConnectionsResponse {
     type Item = Connection;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Connection> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.connections.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -820,11 +834,19 @@ pub struct GetCustomerGatewayAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetCustomerGatewayAssociationsRequest {
+impl Paged for GetCustomerGatewayAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCustomerGatewayAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -842,27 +864,25 @@ pub struct GetCustomerGatewayAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetCustomerGatewayAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<CustomerGatewayAssociation>> {
-        Some(self.customer_gateway_associations.as_ref()?.clone())
+impl Paged for GetCustomerGatewayAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetCustomerGatewayAssociationsResponse {
     type Item = CustomerGatewayAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CustomerGatewayAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.customer_gateway_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -891,11 +911,19 @@ pub struct GetDevicesRequest {
     pub site_id: Option<String>,
 }
 
-impl PagedRequest for GetDevicesRequest {
+impl Paged for GetDevicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -913,27 +941,25 @@ pub struct GetDevicesResponse {
     pub next_token: Option<String>,
 }
 
-impl GetDevicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Device>> {
-        Some(self.devices.as_ref()?.clone())
+impl Paged for GetDevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetDevicesResponse {
     type Item = Device;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Device> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.devices.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -962,11 +988,19 @@ pub struct GetLinkAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetLinkAssociationsRequest {
+impl Paged for GetLinkAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLinkAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -984,27 +1018,25 @@ pub struct GetLinkAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetLinkAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LinkAssociation>> {
-        Some(self.link_associations.as_ref()?.clone())
+impl Paged for GetLinkAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetLinkAssociationsResponse {
     type Item = LinkAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LinkAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.link_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1041,11 +1073,19 @@ pub struct GetLinksRequest {
     pub type_: Option<String>,
 }
 
-impl PagedRequest for GetLinksRequest {
+impl Paged for GetLinksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLinksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1063,27 +1103,25 @@ pub struct GetLinksResponse {
     pub next_token: Option<String>,
 }
 
-impl GetLinksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Link>> {
-        Some(self.links.as_ref()?.clone())
+impl Paged for GetLinksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetLinksResponse {
     type Item = Link;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Link> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.links.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1108,11 +1146,19 @@ pub struct GetSitesRequest {
     pub site_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetSitesRequest {
+impl Paged for GetSitesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSitesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1130,27 +1176,25 @@ pub struct GetSitesResponse {
     pub sites: Option<Vec<Site>>,
 }
 
-impl GetSitesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Site>> {
-        Some(self.sites.as_ref()?.clone())
+impl Paged for GetSitesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetSitesResponse {
     type Item = Site;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Site> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.sites.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1175,11 +1219,19 @@ pub struct GetTransitGatewayConnectPeerAssociationsRequest {
     pub transit_gateway_connect_peer_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetTransitGatewayConnectPeerAssociationsRequest {
+impl Paged for GetTransitGatewayConnectPeerAssociationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTransitGatewayConnectPeerAssociationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1198,31 +1250,26 @@ pub struct GetTransitGatewayConnectPeerAssociationsResponse {
         Option<Vec<TransitGatewayConnectPeerAssociation>>,
 }
 
-impl GetTransitGatewayConnectPeerAssociationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TransitGatewayConnectPeerAssociation>> {
-        Some(
-            self.transit_gateway_connect_peer_associations
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for GetTransitGatewayConnectPeerAssociationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetTransitGatewayConnectPeerAssociationsResponse {
     type Item = TransitGatewayConnectPeerAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TransitGatewayConnectPeerAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.transit_gateway_connect_peer_associations
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1247,11 +1294,19 @@ pub struct GetTransitGatewayRegistrationsRequest {
     pub transit_gateway_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetTransitGatewayRegistrationsRequest {
+impl Paged for GetTransitGatewayRegistrationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTransitGatewayRegistrationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1269,27 +1324,25 @@ pub struct GetTransitGatewayRegistrationsResponse {
     pub transit_gateway_registrations: Option<Vec<TransitGatewayRegistration>>,
 }
 
-impl GetTransitGatewayRegistrationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TransitGatewayRegistration>> {
-        Some(self.transit_gateway_registrations.as_ref()?.clone())
+impl Paged for GetTransitGatewayRegistrationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetTransitGatewayRegistrationsResponse {
     type Item = TransitGatewayRegistration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TransitGatewayRegistration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.transit_gateway_registrations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3916,13 +3969,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<DescribeGlobalNetworksResponse, RusotoError<DescribeGlobalNetworksError>>;
 
     /// Auto-paginating version of `describe_global_networks`
-    fn describe_global_networks_pages(
-        &self,
-        input: DescribeGlobalNetworksRequest,
-    ) -> RusotoStream<GlobalNetwork, DescribeGlobalNetworksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_global_networks(state.clone())
-        })
+    fn describe_global_networks_pages<'a>(
+        &'a self,
+        mut input: DescribeGlobalNetworksRequest,
+    ) -> RusotoStream<'a, GlobalNetwork, DescribeGlobalNetworksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_global_networks(input.clone())
+        }))
     }
 
     /// <p>Disassociates a customer gateway from a device and a link.</p>
@@ -3953,13 +4007,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>>;
 
     /// Auto-paginating version of `get_connections`
-    fn get_connections_pages(
-        &self,
-        input: GetConnectionsRequest,
-    ) -> RusotoStream<Connection, GetConnectionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_connections(state.clone())
-        })
+    fn get_connections_pages<'a>(
+        &'a self,
+        mut input: GetConnectionsRequest,
+    ) -> RusotoStream<'a, Connection, GetConnectionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_connections(input.clone())
+        }))
     }
 
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
@@ -3972,13 +4027,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_customer_gateway_associations`
-    fn get_customer_gateway_associations_pages(
-        &self,
-        input: GetCustomerGatewayAssociationsRequest,
-    ) -> RusotoStream<CustomerGatewayAssociation, GetCustomerGatewayAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_customer_gateway_associations(state.clone())
-        })
+    fn get_customer_gateway_associations_pages<'a>(
+        &'a self,
+        mut input: GetCustomerGatewayAssociationsRequest,
+    ) -> RusotoStream<'a, CustomerGatewayAssociation, GetCustomerGatewayAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_customer_gateway_associations(input.clone())
+        }))
     }
 
     /// <p>Gets information about one or more of your devices in a global network.</p>
@@ -3988,10 +4044,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<GetDevicesResponse, RusotoError<GetDevicesError>>;
 
     /// Auto-paginating version of `get_devices`
-    fn get_devices_pages(&self, input: GetDevicesRequest) -> RusotoStream<Device, GetDevicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_devices(state.clone())
-        })
+    fn get_devices_pages<'a>(
+        &'a self,
+        mut input: GetDevicesRequest,
+    ) -> RusotoStream<'a, Device, GetDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_devices(input.clone())
+        }))
     }
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
@@ -4001,13 +4061,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<GetLinkAssociationsResponse, RusotoError<GetLinkAssociationsError>>;
 
     /// Auto-paginating version of `get_link_associations`
-    fn get_link_associations_pages(
-        &self,
-        input: GetLinkAssociationsRequest,
-    ) -> RusotoStream<LinkAssociation, GetLinkAssociationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_link_associations(state.clone())
-        })
+    fn get_link_associations_pages<'a>(
+        &'a self,
+        mut input: GetLinkAssociationsRequest,
+    ) -> RusotoStream<'a, LinkAssociation, GetLinkAssociationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_link_associations(input.clone())
+        }))
     }
 
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
@@ -4017,10 +4078,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<GetLinksResponse, RusotoError<GetLinksError>>;
 
     /// Auto-paginating version of `get_links`
-    fn get_links_pages(&self, input: GetLinksRequest) -> RusotoStream<Link, GetLinksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_links(state.clone())
-        })
+    fn get_links_pages<'a>(
+        &'a self,
+        mut input: GetLinksRequest,
+    ) -> RusotoStream<'a, Link, GetLinksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_links(input.clone())
+        }))
     }
 
     /// <p>Gets information about one or more of your sites in a global network.</p>
@@ -4030,10 +4095,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     ) -> Result<GetSitesResponse, RusotoError<GetSitesError>>;
 
     /// Auto-paginating version of `get_sites`
-    fn get_sites_pages(&self, input: GetSitesRequest) -> RusotoStream<Site, GetSitesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_sites(state.clone())
-        })
+    fn get_sites_pages<'a>(
+        &'a self,
+        mut input: GetSitesRequest,
+    ) -> RusotoStream<'a, Site, GetSitesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sites(input.clone())
+        }))
     }
 
     /// <p>Gets information about one or more of your transit gateway Connect peer associations in a global network.</p>
@@ -4046,16 +4115,18 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_transit_gateway_connect_peer_associations`
-    fn get_transit_gateway_connect_peer_associations_pages(
-        &self,
-        input: GetTransitGatewayConnectPeerAssociationsRequest,
+    fn get_transit_gateway_connect_peer_associations_pages<'a>(
+        &'a self,
+        mut input: GetTransitGatewayConnectPeerAssociationsRequest,
     ) -> RusotoStream<
+        'a,
         TransitGatewayConnectPeerAssociation,
         GetTransitGatewayConnectPeerAssociationsError,
     > {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_transit_gateway_connect_peer_associations(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_transit_gateway_connect_peer_associations(input.clone())
+        }))
     }
 
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
@@ -4068,13 +4139,14 @@ pub trait NetworkManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_transit_gateway_registrations`
-    fn get_transit_gateway_registrations_pages(
-        &self,
-        input: GetTransitGatewayRegistrationsRequest,
-    ) -> RusotoStream<TransitGatewayRegistration, GetTransitGatewayRegistrationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_transit_gateway_registrations(state.clone())
-        })
+    fn get_transit_gateway_registrations_pages<'a>(
+        &'a self,
+        mut input: GetTransitGatewayRegistrationsRequest,
+    ) -> RusotoStream<'a, TransitGatewayRegistration, GetTransitGatewayRegistrationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_transit_gateway_registrations(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for a specified resource.</p>

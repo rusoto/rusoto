@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -996,11 +998,19 @@ pub struct ListRuleNamesByTargetRequest {
     pub target_arn: String,
 }
 
-impl PagedRequest for ListRuleNamesByTargetRequest {
+impl Paged for ListRuleNamesByTargetRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRuleNamesByTargetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1018,27 +1028,25 @@ pub struct ListRuleNamesByTargetResponse {
     pub rule_names: Option<Vec<String>>,
 }
 
-impl ListRuleNamesByTargetResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.rule_names.as_ref()?.clone())
+impl Paged for ListRuleNamesByTargetResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRuleNamesByTargetResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rule_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1064,11 +1072,19 @@ pub struct ListRulesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListRulesRequest {
+impl Paged for ListRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1086,27 +1102,25 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<Rule>>,
 }
 
-impl ListRulesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Rule>> {
-        Some(self.rules.as_ref()?.clone())
+impl Paged for ListRulesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRulesResponse {
     type Item = Rule;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Rule> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.rules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1150,11 +1164,19 @@ pub struct ListTargetsByRuleRequest {
     pub rule: String,
 }
 
-impl PagedRequest for ListTargetsByRuleRequest {
+impl Paged for ListTargetsByRuleRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTargetsByRuleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1172,27 +1194,25 @@ pub struct ListTargetsByRuleResponse {
     pub targets: Option<Vec<Target>>,
 }
 
-impl ListTargetsByRuleResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Target>> {
-        Some(self.targets.as_ref()?.clone())
+impl Paged for ListTargetsByRuleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTargetsByRuleResponse {
     type Item = Target;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Target> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.targets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3955,13 +3975,14 @@ pub trait EventBridge: Clone + Sync + Send + 'static {
     ) -> Result<ListRuleNamesByTargetResponse, RusotoError<ListRuleNamesByTargetError>>;
 
     /// Auto-paginating version of `list_rule_names_by_target`
-    fn list_rule_names_by_target_pages(
-        &self,
-        input: ListRuleNamesByTargetRequest,
-    ) -> RusotoStream<String, ListRuleNamesByTargetError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_rule_names_by_target(state.clone())
-        })
+    fn list_rule_names_by_target_pages<'a>(
+        &'a self,
+        mut input: ListRuleNamesByTargetRequest,
+    ) -> RusotoStream<'a, String, ListRuleNamesByTargetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rule_names_by_target(input.clone())
+        }))
     }
 
     /// <p>Lists your Amazon EventBridge rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p> <p>ListRules does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
@@ -3971,10 +3992,14 @@ pub trait EventBridge: Clone + Sync + Send + 'static {
     ) -> Result<ListRulesResponse, RusotoError<ListRulesError>>;
 
     /// Auto-paginating version of `list_rules`
-    fn list_rules_pages(&self, input: ListRulesRequest) -> RusotoStream<Rule, ListRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_rules(state.clone())
-        })
+    fn list_rules_pages<'a>(
+        &'a self,
+        mut input: ListRulesRequest,
+    ) -> RusotoStream<'a, Rule, ListRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_rules(input.clone())
+        }))
     }
 
     /// <p>Displays the tags associated with an EventBridge resource. In EventBridge, rules and event buses can be tagged.</p>
@@ -3990,13 +4015,14 @@ pub trait EventBridge: Clone + Sync + Send + 'static {
     ) -> Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>>;
 
     /// Auto-paginating version of `list_targets_by_rule`
-    fn list_targets_by_rule_pages(
-        &self,
-        input: ListTargetsByRuleRequest,
-    ) -> RusotoStream<Target, ListTargetsByRuleError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_targets_by_rule(state.clone())
-        })
+    fn list_targets_by_rule_pages<'a>(
+        &'a self,
+        mut input: ListTargetsByRuleRequest,
+    ) -> RusotoStream<'a, Target, ListTargetsByRuleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_targets_by_rule(input.clone())
+        }))
     }
 
     /// <p>Sends custom events to Amazon EventBridge so that they can be matched to rules.</p>

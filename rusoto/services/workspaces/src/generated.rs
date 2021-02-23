@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -470,11 +472,19 @@ pub struct DescribeAccountModificationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAccountModificationsRequest {
+impl Paged for DescribeAccountModificationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAccountModificationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -492,27 +502,25 @@ pub struct DescribeAccountModificationsResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeAccountModificationsResult {
-    fn pagination_page_opt(self) -> Option<Vec<AccountModification>> {
-        Some(self.account_modifications.as_ref()?.clone())
+impl Paged for DescribeAccountModificationsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAccountModificationsResult {
     type Item = AccountModification;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AccountModification> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.account_modifications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -643,11 +651,19 @@ pub struct DescribeIpGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeIpGroupsRequest {
+impl Paged for DescribeIpGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeIpGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -665,27 +681,25 @@ pub struct DescribeIpGroupsResult {
     pub result: Option<Vec<WorkspacesIpGroup>>,
 }
 
-impl DescribeIpGroupsResult {
-    fn pagination_page_opt(self) -> Option<Vec<WorkspacesIpGroup>> {
-        Some(self.result.as_ref()?.clone())
+impl Paged for DescribeIpGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeIpGroupsResult {
     type Item = WorkspacesIpGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkspacesIpGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.result.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -726,11 +740,19 @@ pub struct DescribeWorkspaceBundlesRequest {
     pub owner: Option<String>,
 }
 
-impl PagedRequest for DescribeWorkspaceBundlesRequest {
+impl Paged for DescribeWorkspaceBundlesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceBundlesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -748,27 +770,25 @@ pub struct DescribeWorkspaceBundlesResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeWorkspaceBundlesResult {
-    fn pagination_page_opt(self) -> Option<Vec<WorkspaceBundle>> {
-        Some(self.bundles.as_ref()?.clone())
+impl Paged for DescribeWorkspaceBundlesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeWorkspaceBundlesResult {
     type Item = WorkspaceBundle;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkspaceBundle> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.bundles.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -790,11 +810,19 @@ pub struct DescribeWorkspaceDirectoriesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeWorkspaceDirectoriesRequest {
+impl Paged for DescribeWorkspaceDirectoriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceDirectoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -812,27 +840,25 @@ pub struct DescribeWorkspaceDirectoriesResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeWorkspaceDirectoriesResult {
-    fn pagination_page_opt(self) -> Option<Vec<WorkspaceDirectory>> {
-        Some(self.directories.as_ref()?.clone())
+impl Paged for DescribeWorkspaceDirectoriesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeWorkspaceDirectoriesResult {
     type Item = WorkspaceDirectory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkspaceDirectory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.directories.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -893,11 +919,19 @@ pub struct DescribeWorkspaceImagesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeWorkspaceImagesRequest {
+impl Paged for DescribeWorkspaceImagesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspaceImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -915,27 +949,25 @@ pub struct DescribeWorkspaceImagesResult {
     pub next_token: Option<String>,
 }
 
-impl DescribeWorkspaceImagesResult {
-    fn pagination_page_opt(self) -> Option<Vec<WorkspaceImage>> {
-        Some(self.images.as_ref()?.clone())
+impl Paged for DescribeWorkspaceImagesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeWorkspaceImagesResult {
     type Item = WorkspaceImage;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkspaceImage> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.images.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -976,11 +1008,19 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeWorkspacesConnectionStatusRequest {
+impl Paged for DescribeWorkspacesConnectionStatusRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspacesConnectionStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -998,27 +1038,25 @@ pub struct DescribeWorkspacesConnectionStatusResult {
     pub workspaces_connection_status: Option<Vec<WorkspaceConnectionStatus>>,
 }
 
-impl DescribeWorkspacesConnectionStatusResult {
-    fn pagination_page_opt(self) -> Option<Vec<WorkspaceConnectionStatus>> {
-        Some(self.workspaces_connection_status.as_ref()?.clone())
+impl Paged for DescribeWorkspacesConnectionStatusResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeWorkspacesConnectionStatusResult {
     type Item = WorkspaceConnectionStatus;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkspaceConnectionStatus> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.workspaces_connection_status.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1052,11 +1090,19 @@ pub struct DescribeWorkspacesRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeWorkspacesRequest {
+impl Paged for DescribeWorkspacesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeWorkspacesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1074,27 +1120,25 @@ pub struct DescribeWorkspacesResult {
     pub workspaces: Option<Vec<Workspace>>,
 }
 
-impl DescribeWorkspacesResult {
-    fn pagination_page_opt(self) -> Option<Vec<Workspace>> {
-        Some(self.workspaces.as_ref()?.clone())
+impl Paged for DescribeWorkspacesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeWorkspacesResult {
     type Item = Workspace;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Workspace> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.workspaces.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1241,11 +1285,19 @@ pub struct ListAvailableManagementCidrRangesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAvailableManagementCidrRangesRequest {
+impl Paged for ListAvailableManagementCidrRangesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAvailableManagementCidrRangesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1263,27 +1315,25 @@ pub struct ListAvailableManagementCidrRangesResult {
     pub next_token: Option<String>,
 }
 
-impl ListAvailableManagementCidrRangesResult {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.management_cidr_ranges.as_ref()?.clone())
+impl Paged for ListAvailableManagementCidrRangesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAvailableManagementCidrRangesResult {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.management_cidr_ranges.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4874,13 +4924,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAccountModificationsResult, RusotoError<DescribeAccountModificationsError>>;
 
     /// Auto-paginating version of `describe_account_modifications`
-    fn describe_account_modifications_pages(
-        &self,
-        input: DescribeAccountModificationsRequest,
-    ) -> RusotoStream<AccountModification, DescribeAccountModificationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_account_modifications(state.clone())
-        })
+    fn describe_account_modifications_pages<'a>(
+        &'a self,
+        mut input: DescribeAccountModificationsRequest,
+    ) -> RusotoStream<'a, AccountModification, DescribeAccountModificationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_account_modifications(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
@@ -4911,13 +4962,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeIpGroupsResult, RusotoError<DescribeIpGroupsError>>;
 
     /// Auto-paginating version of `describe_ip_groups`
-    fn describe_ip_groups_pages(
-        &self,
-        input: DescribeIpGroupsRequest,
-    ) -> RusotoStream<WorkspacesIpGroup, DescribeIpGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_ip_groups(state.clone())
-        })
+    fn describe_ip_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeIpGroupsRequest,
+    ) -> RusotoStream<'a, WorkspacesIpGroup, DescribeIpGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ip_groups(input.clone())
+        }))
     }
 
     /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
@@ -4933,13 +4985,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>>;
 
     /// Auto-paginating version of `describe_workspace_bundles`
-    fn describe_workspace_bundles_pages(
-        &self,
-        input: DescribeWorkspaceBundlesRequest,
-    ) -> RusotoStream<WorkspaceBundle, DescribeWorkspaceBundlesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_workspace_bundles(state.clone())
-        })
+    fn describe_workspace_bundles_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceBundlesRequest,
+    ) -> RusotoStream<'a, WorkspaceBundle, DescribeWorkspaceBundlesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_bundles(input.clone())
+        }))
     }
 
     /// <p>Describes the available directories that are registered with Amazon WorkSpaces.</p>
@@ -4949,13 +5002,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>;
 
     /// Auto-paginating version of `describe_workspace_directories`
-    fn describe_workspace_directories_pages(
-        &self,
-        input: DescribeWorkspaceDirectoriesRequest,
-    ) -> RusotoStream<WorkspaceDirectory, DescribeWorkspaceDirectoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_workspace_directories(state.clone())
-        })
+    fn describe_workspace_directories_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceDirectoriesRequest,
+    ) -> RusotoStream<'a, WorkspaceDirectory, DescribeWorkspaceDirectoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_directories(input.clone())
+        }))
     }
 
     /// <p>Describes the permissions that the owner of an image has granted to other AWS accounts for an image.</p>
@@ -4974,13 +5028,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>>;
 
     /// Auto-paginating version of `describe_workspace_images`
-    fn describe_workspace_images_pages(
-        &self,
-        input: DescribeWorkspaceImagesRequest,
-    ) -> RusotoStream<WorkspaceImage, DescribeWorkspaceImagesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_workspace_images(state.clone())
-        })
+    fn describe_workspace_images_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspaceImagesRequest,
+    ) -> RusotoStream<'a, WorkspaceImage, DescribeWorkspaceImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspace_images(input.clone())
+        }))
     }
 
     /// <p>Describes the snapshots for the specified WorkSpace.</p>
@@ -4996,13 +5051,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     ) -> Result<DescribeWorkspacesResult, RusotoError<DescribeWorkspacesError>>;
 
     /// Auto-paginating version of `describe_workspaces`
-    fn describe_workspaces_pages(
-        &self,
-        input: DescribeWorkspacesRequest,
-    ) -> RusotoStream<Workspace, DescribeWorkspacesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_workspaces(state.clone())
-        })
+    fn describe_workspaces_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspacesRequest,
+    ) -> RusotoStream<'a, Workspace, DescribeWorkspacesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspaces(input.clone())
+        }))
     }
 
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
@@ -5015,13 +5071,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_workspaces_connection_status`
-    fn describe_workspaces_connection_status_pages(
-        &self,
-        input: DescribeWorkspacesConnectionStatusRequest,
-    ) -> RusotoStream<WorkspaceConnectionStatus, DescribeWorkspacesConnectionStatusError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_workspaces_connection_status(state.clone())
-        })
+    fn describe_workspaces_connection_status_pages<'a>(
+        &'a self,
+        mut input: DescribeWorkspacesConnectionStatusRequest,
+    ) -> RusotoStream<'a, WorkspaceConnectionStatus, DescribeWorkspacesConnectionStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_workspaces_connection_status(input.clone())
+        }))
     }
 
     /// <p><p>Disassociates a connection alias from a directory. Disassociating a connection alias disables cross-Region redirection between two directories in different AWS Regions. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html"> Cross-Region Redirection for Amazon WorkSpaces</a>.</p> <note> <p>Before performing this operation, call <a href="https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeConnectionAliases.html"> DescribeConnectionAliases</a> to make sure that the current state of the connection alias is <code>CREATED</code>.</p> </note></p>
@@ -5052,13 +5109,14 @@ pub trait Workspaces: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_available_management_cidr_ranges`
-    fn list_available_management_cidr_ranges_pages(
-        &self,
-        input: ListAvailableManagementCidrRangesRequest,
-    ) -> RusotoStream<String, ListAvailableManagementCidrRangesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_available_management_cidr_ranges(state.clone())
-        })
+    fn list_available_management_cidr_ranges_pages<'a>(
+        &'a self,
+        mut input: ListAvailableManagementCidrRangesRequest,
+    ) -> RusotoStream<'a, String, ListAvailableManagementCidrRangesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_available_management_cidr_ranges(input.clone())
+        }))
     }
 
     /// <p>Migrates a WorkSpace from one operating system or bundle type to another, while retaining the data on the user volume.</p> <p>The migration process recreates the WorkSpace by using a new root volume from the target bundle image and the user volume from the last available snapshot of the original WorkSpace. During migration, the original <code>D:\Users\%USERNAME%</code> user profile folder is renamed to <code>D:\Users\%USERNAME%MMddyyTHHmmss%.NotMigrated</code>. A new <code>D:\Users\%USERNAME%\</code> folder is generated by the new OS. Certain files in the old user profile are moved to the new user profile.</p> <p>For available migration scenarios, details about what happens during migration, and best practices, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/migrate-workspaces.html">Migrate a WorkSpace</a>.</p>

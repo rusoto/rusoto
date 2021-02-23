@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -384,11 +386,19 @@ pub struct DescribeBackupsRequest {
     pub sort_ascending: Option<bool>,
 }
 
-impl PagedRequest for DescribeBackupsRequest {
+impl Paged for DescribeBackupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBackupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -406,27 +416,25 @@ pub struct DescribeBackupsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeBackupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Backup>> {
-        Some(self.backups.as_ref()?.clone())
+impl Paged for DescribeBackupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBackupsResponse {
     type Item = Backup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Backup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.backups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -448,11 +456,19 @@ pub struct DescribeClustersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeClustersRequest {
+impl Paged for DescribeClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -470,27 +486,25 @@ pub struct DescribeClustersResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeClustersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
-        Some(self.clusters.as_ref()?.clone())
+impl Paged for DescribeClustersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeClustersResponse {
     type Item = Cluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Cluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -599,11 +613,19 @@ pub struct ListTagsRequest {
     pub resource_id: String,
 }
 
-impl PagedRequest for ListTagsRequest {
+impl Paged for ListTagsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -620,27 +642,25 @@ pub struct ListTagsResponse {
     pub tag_list: Vec<Tag>,
 }
 
-impl ListTagsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tag_list.clone())
+impl Paged for ListTagsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tag_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1730,13 +1750,14 @@ pub trait CloudHsmv2: Clone + Sync + Send + 'static {
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>>;
 
     /// Auto-paginating version of `describe_backups`
-    fn describe_backups_pages(
-        &self,
-        input: DescribeBackupsRequest,
-    ) -> RusotoStream<Backup, DescribeBackupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_backups(state.clone())
-        })
+    fn describe_backups_pages<'a>(
+        &'a self,
+        mut input: DescribeBackupsRequest,
+    ) -> RusotoStream<'a, Backup, DescribeBackupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_backups(input.clone())
+        }))
     }
 
     /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
@@ -1746,13 +1767,14 @@ pub trait CloudHsmv2: Clone + Sync + Send + 'static {
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
 
     /// Auto-paginating version of `describe_clusters`
-    fn describe_clusters_pages(
-        &self,
-        input: DescribeClustersRequest,
-    ) -> RusotoStream<Cluster, DescribeClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_clusters(state.clone())
-        })
+    fn describe_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeClustersRequest,
+    ) -> RusotoStream<'a, Cluster, DescribeClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_clusters(input.clone())
+        }))
     }
 
     /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
@@ -1768,10 +1790,14 @@ pub trait CloudHsmv2: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// Auto-paginating version of `list_tags`
-    fn list_tags_pages(&self, input: ListTagsRequest) -> RusotoStream<Tag, ListTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags(state.clone())
-        })
+    fn list_tags_pages<'a>(
+        &'a self,
+        mut input: ListTagsRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags(input.clone())
+        }))
     }
 
     /// <p>Modifies attributes for AWS CloudHSM backup.</p>

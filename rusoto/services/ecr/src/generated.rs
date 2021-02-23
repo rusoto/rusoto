@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -390,11 +392,19 @@ pub struct DescribeImageScanFindingsRequest {
     pub repository_name: String,
 }
 
-impl PagedRequest for DescribeImageScanFindingsRequest {
+impl Paged for DescribeImageScanFindingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeImageScanFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -427,33 +437,25 @@ pub struct DescribeImageScanFindingsResponse {
     pub repository_name: Option<String>,
 }
 
-impl DescribeImageScanFindingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ImageScanFinding>> {
-        Some(
-            self.image_scan_findings
-                .as_ref()?
-                .findings
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for DescribeImageScanFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeImageScanFindingsResponse {
     type Item = ImageScanFinding;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ImageScanFinding> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.image_scan_findings?.findings)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -496,11 +498,19 @@ pub struct DescribeImagesRequest {
     pub repository_name: String,
 }
 
-impl PagedRequest for DescribeImagesRequest {
+impl Paged for DescribeImagesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -518,27 +528,25 @@ pub struct DescribeImagesResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeImagesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ImageDetail>> {
-        Some(self.image_details.as_ref()?.clone())
+impl Paged for DescribeImagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeImagesResponse {
     type Item = ImageDetail;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ImageDetail> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.image_details.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -583,11 +591,19 @@ pub struct DescribeRepositoriesRequest {
     pub repository_names: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeRepositoriesRequest {
+impl Paged for DescribeRepositoriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeRepositoriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -605,27 +621,25 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
-impl DescribeRepositoriesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Repository>> {
-        Some(self.repositories.as_ref()?.clone())
+impl Paged for DescribeRepositoriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeRepositoriesResponse {
     type Item = Repository;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Repository> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.repositories.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -715,11 +729,19 @@ pub struct GetLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
-impl PagedRequest for GetLifecyclePolicyPreviewRequest {
+impl Paged for GetLifecyclePolicyPreviewRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetLifecyclePolicyPreviewRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -757,27 +779,25 @@ pub struct GetLifecyclePolicyPreviewResponse {
     pub summary: Option<LifecyclePolicyPreviewSummary>,
 }
 
-impl GetLifecyclePolicyPreviewResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LifecyclePolicyPreviewResult>> {
-        Some(self.preview_results.as_ref()?.clone())
+impl Paged for GetLifecyclePolicyPreviewResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetLifecyclePolicyPreviewResponse {
     type Item = LifecyclePolicyPreviewResult;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LifecyclePolicyPreviewResult> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.preview_results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1216,11 +1236,19 @@ pub struct ListImagesRequest {
     pub repository_name: String,
 }
 
-impl PagedRequest for ListImagesRequest {
+impl Paged for ListImagesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListImagesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1238,27 +1266,25 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListImagesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ImageIdentifier>> {
-        Some(self.image_ids.as_ref()?.clone())
+impl Paged for ListImagesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListImagesResponse {
     type Item = ImageIdentifier;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ImageIdentifier> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.image_ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3584,13 +3610,14 @@ pub trait Ecr: Clone + Sync + Send + 'static {
     ) -> Result<DescribeImageScanFindingsResponse, RusotoError<DescribeImageScanFindingsError>>;
 
     /// Auto-paginating version of `describe_image_scan_findings`
-    fn describe_image_scan_findings_pages(
-        &self,
-        input: DescribeImageScanFindingsRequest,
-    ) -> RusotoStream<ImageScanFinding, DescribeImageScanFindingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_image_scan_findings(state.clone())
-        })
+    fn describe_image_scan_findings_pages<'a>(
+        &'a self,
+        mut input: DescribeImageScanFindingsRequest,
+    ) -> RusotoStream<'a, ImageScanFinding, DescribeImageScanFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_image_scan_findings(input.clone())
+        }))
     }
 
     /// <p><p>Returns metadata about the images in a repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
@@ -3600,13 +3627,14 @@ pub trait Ecr: Clone + Sync + Send + 'static {
     ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>>;
 
     /// Auto-paginating version of `describe_images`
-    fn describe_images_pages(
-        &self,
-        input: DescribeImagesRequest,
-    ) -> RusotoStream<ImageDetail, DescribeImagesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_images(state.clone())
-        })
+    fn describe_images_pages<'a>(
+        &'a self,
+        mut input: DescribeImagesRequest,
+    ) -> RusotoStream<'a, ImageDetail, DescribeImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_images(input.clone())
+        }))
     }
 
     /// <p>Describes the settings for a registry. The replication configuration for a repository can be created or updated with the <a>PutReplicationConfiguration</a> API action.</p>
@@ -3621,13 +3649,14 @@ pub trait Ecr: Clone + Sync + Send + 'static {
     ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>>;
 
     /// Auto-paginating version of `describe_repositories`
-    fn describe_repositories_pages(
-        &self,
-        input: DescribeRepositoriesRequest,
-    ) -> RusotoStream<Repository, DescribeRepositoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_repositories(state.clone())
-        })
+    fn describe_repositories_pages<'a>(
+        &'a self,
+        mut input: DescribeRepositoriesRequest,
+    ) -> RusotoStream<'a, Repository, DescribeRepositoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_repositories(input.clone())
+        }))
     }
 
     /// <p>Retrieves an authorization token. An authorization token represents your IAM authentication credentials and can be used to access any Amazon ECR registry that your IAM principal has access to. The authorization token is valid for 12 hours.</p> <p>The <code>authorizationToken</code> returned is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>get-login-password</code> command that simplifies the login process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth">Registry Authentication</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3655,13 +3684,14 @@ pub trait Ecr: Clone + Sync + Send + 'static {
     ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>;
 
     /// Auto-paginating version of `get_lifecycle_policy_preview`
-    fn get_lifecycle_policy_preview_pages(
-        &self,
-        input: GetLifecyclePolicyPreviewRequest,
-    ) -> RusotoStream<LifecyclePolicyPreviewResult, GetLifecyclePolicyPreviewError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_lifecycle_policy_preview(state.clone())
-        })
+    fn get_lifecycle_policy_preview_pages<'a>(
+        &'a self,
+        mut input: GetLifecyclePolicyPreviewRequest,
+    ) -> RusotoStream<'a, LifecyclePolicyPreviewResult, GetLifecyclePolicyPreviewError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_lifecycle_policy_preview(input.clone())
+        }))
     }
 
     /// <p>Retrieves the permissions policy for a registry.</p>
@@ -3688,13 +3718,14 @@ pub trait Ecr: Clone + Sync + Send + 'static {
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
 
     /// Auto-paginating version of `list_images`
-    fn list_images_pages(
-        &self,
-        input: ListImagesRequest,
-    ) -> RusotoStream<ImageIdentifier, ListImagesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_images(state.clone())
-        })
+    fn list_images_pages<'a>(
+        &'a self,
+        mut input: ListImagesRequest,
+    ) -> RusotoStream<'a, ImageIdentifier, ListImagesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_images(input.clone())
+        }))
     }
 
     /// <p>List the tags for an Amazon ECR resource.</p>

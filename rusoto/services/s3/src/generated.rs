@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -7774,30 +7776,31 @@ pub struct ListMultipartUploadsOutput {
     pub uploads: Option<Vec<MultipartUpload>>,
 }
 
-impl ListMultipartUploadsOutput {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for ListMultipartUploadsOutput {
+    type Token = (Option<String>, Option<String>);
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>) {
+        (
+            self.next_key_marker.take(),
+            self.next_upload_id_marker.take(),
+        )
+    }
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>)> {
+        Cow::Owned((
+            self.next_key_marker.clone(),
+            self.next_upload_id_marker.clone(),
+        ))
     }
 }
 
 impl PagedOutput for ListMultipartUploadsOutput {
     type Item = ListMultipartUploadsOutput;
-    type Token = (Option<String>, Option<String>);
-    fn pagination_token(&self) -> (Option<String>, Option<String>) {
-        (
-            self.next_key_marker.clone(),
-            self.next_upload_id_marker.clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<ListMultipartUploadsOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7899,12 +7902,20 @@ pub struct ListMultipartUploadsRequest {
     pub upload_id_marker: Option<String>,
 }
 
-impl PagedRequest for ListMultipartUploadsRequest {
+impl Paged for ListMultipartUploadsRequest {
     type Token = (Option<String>, Option<String>);
-    fn with_pagination_token(mut self, key: (Option<String>, Option<String>)) -> Self {
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>) {
+        (self.key_marker.take(), self.upload_id_marker.take())
+    }
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>)> {
+        Cow::Owned((self.key_marker.clone(), self.upload_id_marker.clone()))
+    }
+}
+
+impl PagedRequest for ListMultipartUploadsRequest {
+    fn set_pagination_token(&mut self, key: (Option<String>, Option<String>)) {
         self.key_marker = key.0;
         self.upload_id_marker = key.1;
-        self
     }
 }
 
@@ -7940,30 +7951,31 @@ pub struct ListObjectVersionsOutput {
     pub versions: Option<Vec<ObjectVersion>>,
 }
 
-impl ListObjectVersionsOutput {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for ListObjectVersionsOutput {
+    type Token = (Option<String>, Option<String>);
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>) {
+        (
+            self.next_key_marker.take(),
+            self.next_version_id_marker.take(),
+        )
+    }
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>)> {
+        Cow::Owned((
+            self.next_key_marker.clone(),
+            self.next_version_id_marker.clone(),
+        ))
     }
 }
 
 impl PagedOutput for ListObjectVersionsOutput {
     type Item = ListObjectVersionsOutput;
-    type Token = (Option<String>, Option<String>);
-    fn pagination_token(&self) -> (Option<String>, Option<String>) {
-        (
-            self.next_key_marker.clone(),
-            self.next_version_id_marker.clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<ListObjectVersionsOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -8069,12 +8081,20 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<String>,
 }
 
-impl PagedRequest for ListObjectVersionsRequest {
+impl Paged for ListObjectVersionsRequest {
     type Token = (Option<String>, Option<String>);
-    fn with_pagination_token(mut self, key: (Option<String>, Option<String>)) -> Self {
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>) {
+        (self.key_marker.take(), self.version_id_marker.take())
+    }
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>)> {
+        Cow::Owned((self.key_marker.clone(), self.version_id_marker.clone()))
+    }
+}
+
+impl PagedRequest for ListObjectVersionsRequest {
+    fn set_pagination_token(&mut self, key: (Option<String>, Option<String>)) {
         self.key_marker = key.0;
         self.version_id_marker = key.1;
-        self
     }
 }
 
@@ -8104,28 +8124,29 @@ pub struct ListObjectsOutput {
     pub prefix: Option<String>,
 }
 
-impl ListObjectsOutput {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for ListObjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        (self.next_marker.take()).or_else(|| self.contents.as_ref()?.last()?.key.clone())
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned(
+            (self.next_marker.as_ref())
+                .or_else(|| self.contents.as_ref()?.last()?.key.as_ref())
+                .cloned(),
+        )
     }
 }
 
 impl PagedOutput for ListObjectsOutput {
     type Item = ListObjectsOutput;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-            .or(Some(self.contents.as_ref()?.last()?.key.as_ref()?.clone()))
-    }
 
     fn into_pagination_page(self) -> Vec<ListObjectsOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -8205,11 +8226,19 @@ pub struct ListObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-impl PagedRequest for ListObjectsRequest {
+impl Paged for ListObjectsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListObjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -8243,27 +8272,25 @@ pub struct ListObjectsV2Output {
     pub start_after: Option<String>,
 }
 
-impl ListObjectsV2Output {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for ListObjectsV2Output {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_continuation_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_continuation_token)
     }
 }
 
 impl PagedOutput for ListObjectsV2Output {
     type Item = ListObjectsV2Output;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_continuation_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListObjectsV2Output> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -8358,11 +8385,19 @@ pub struct ListObjectsV2Request {
     pub start_after: Option<String>,
 }
 
-impl PagedRequest for ListObjectsV2Request {
+impl Paged for ListObjectsV2Request {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.continuation_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.continuation_token)
+    }
+}
+
+impl PagedRequest for ListObjectsV2Request {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.continuation_token = key;
-        self
     }
 }
 
@@ -8399,31 +8434,25 @@ pub struct ListPartsOutput {
     pub upload_id: Option<String>,
 }
 
-impl ListPartsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Part>> {
-        Some(self.parts.as_ref()?.clone())
+impl Paged for ListPartsOutput {
+    type Token = Option<i64>;
+    fn take_pagination_token(&mut self) -> Option<i64> {
+        self.next_part_number_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<i64>> {
+        Cow::Borrowed(&self.next_part_number_marker)
     }
 }
 
 impl PagedOutput for ListPartsOutput {
     type Item = Part;
-    type Token = Option<i64>;
-    fn pagination_token(&self) -> Option<i64> {
-        Some(self.next_part_number_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Part> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -8510,11 +8539,19 @@ pub struct ListPartsRequest {
     pub upload_id: String,
 }
 
-impl PagedRequest for ListPartsRequest {
+impl Paged for ListPartsRequest {
     type Token = Option<i64>;
-    fn with_pagination_token(mut self, key: Option<i64>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<i64> {
+        self.part_number_marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<i64>> {
+        Cow::Borrowed(&self.part_number_marker)
+    }
+}
+
+impl PagedRequest for ListPartsRequest {
+    fn set_pagination_token(&mut self, key: Option<i64>) {
         self.part_number_marker = key;
-        self
     }
 }
 
@@ -19324,13 +19361,14 @@ pub trait S3: Clone + Sync + Send + 'static {
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>>;
 
     /// Auto-paginating version of `list_multipart_uploads`
-    fn list_multipart_uploads_pages(
-        &self,
-        input: ListMultipartUploadsRequest,
-    ) -> RusotoStream<ListMultipartUploadsOutput, ListMultipartUploadsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_multipart_uploads(state.clone())
-        })
+    fn list_multipart_uploads_pages<'a>(
+        &'a self,
+        mut input: ListMultipartUploadsRequest,
+    ) -> RusotoStream<'a, ListMultipartUploadsOutput, ListMultipartUploadsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_multipart_uploads(input.clone())
+        }))
     }
 
     /// <p><p>Returns metadata about all versions of the objects in a bucket. You can also use request parameters as selection criteria to return metadata about a subset of all the object versions. </p> <note> <p> A 200 OK response can contain valid or invalid XML. Make sure to design your application to parse the contents of the response and handle it appropriately.</p> </note> <p>To use this operation, you must have READ access to the bucket.</p> <p>This action is not supported by Amazon S3 on Outposts.</p> <p>The following operations are related to <code>ListObjectVersions</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html">DeleteObject</a> </p> </li> </ul></p>
@@ -19340,13 +19378,14 @@ pub trait S3: Clone + Sync + Send + 'static {
     ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>>;
 
     /// Auto-paginating version of `list_object_versions`
-    fn list_object_versions_pages(
-        &self,
-        input: ListObjectVersionsRequest,
-    ) -> RusotoStream<ListObjectVersionsOutput, ListObjectVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_object_versions(state.clone())
-        })
+    fn list_object_versions_pages<'a>(
+        &'a self,
+        mut input: ListObjectVersionsRequest,
+    ) -> RusotoStream<'a, ListObjectVersionsOutput, ListObjectVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_object_versions(input.clone())
+        }))
     }
 
     /// <p><p>Returns some or all (up to 1,000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. A 200 OK response can contain valid or invalid XML. Be sure to design your application to parse the contents of the response and handle it appropriately.</p> <important> <p>This API has been revised. We recommend that you use the newer version, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a>, when developing applications. For backward compatibility, Amazon S3 continues to support <code>ListObjects</code>.</p> </important> <p>The following operations are related to <code>ListObjects</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html">ListObjectsV2</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html">ListBuckets</a> </p> </li> </ul></p>
@@ -19356,13 +19395,14 @@ pub trait S3: Clone + Sync + Send + 'static {
     ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>>;
 
     /// Auto-paginating version of `list_objects`
-    fn list_objects_pages(
-        &self,
-        input: ListObjectsRequest,
-    ) -> RusotoStream<ListObjectsOutput, ListObjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_objects(state.clone())
-        })
+    fn list_objects_pages<'a>(
+        &'a self,
+        mut input: ListObjectsRequest,
+    ) -> RusotoStream<'a, ListObjectsOutput, ListObjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_objects(input.clone())
+        }))
     }
 
     /// <p><p>Returns some or all (up to 1,000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. A <code>200 OK</code> response can contain valid or invalid XML. Make sure to design your application to parse the contents of the response and handle it appropriately.</p> <p>To use this operation, you must have READ access to the bucket.</p> <p>To use this operation in an AWS Identity and Access Management (IAM) policy, you must have permissions to perform the <code>s3:ListBucket</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <important> <p>This section describes the latest revision of the API. We recommend that you use this revised API for application development. For backward compatibility, Amazon S3 continues to support the prior version of this API, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html">ListObjects</a>.</p> </important> <p>To get a list of your buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html">ListBuckets</a>.</p> <p>The following operations are related to <code>ListObjectsV2</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html">PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> </ul></p>
@@ -19372,13 +19412,14 @@ pub trait S3: Clone + Sync + Send + 'static {
     ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>>;
 
     /// Auto-paginating version of `list_objects_v2`
-    fn list_objects_v2_pages(
-        &self,
-        input: ListObjectsV2Request,
-    ) -> RusotoStream<ListObjectsV2Output, ListObjectsV2Error> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_objects_v2(state.clone())
-        })
+    fn list_objects_v2_pages<'a>(
+        &'a self,
+        mut input: ListObjectsV2Request,
+    ) -> RusotoStream<'a, ListObjectsV2Output, ListObjectsV2Error> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_objects_v2(input.clone())
+        }))
     }
 
     /// <p><p>Lists the parts that have been uploaded for a specific multipart upload. This operation must include the upload ID, which you obtain by sending the initiate multipart upload request (see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a>). This request returns a maximum of 1,000 uploaded parts. The default number of parts returned is 1,000 parts. You can restrict the number of parts returned by specifying the <code>max-parts</code> request parameter. If your multipart upload consists of more than 1,000 parts, the response returns an <code>IsTruncated</code> field with the value of true, and a <code>NextPartNumberMarker</code> element. In subsequent <code>ListParts</code> requests you can include the part-number-marker query string parameter and set its value to the <code>NextPartNumberMarker</code> field value from the previous response.</p> <p>For more information on multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>The following operations are related to <code>ListParts</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html">CompleteMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html">AbortMultipartUpload</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html">ListMultipartUploads</a> </p> </li> </ul></p>
@@ -19388,10 +19429,14 @@ pub trait S3: Clone + Sync + Send + 'static {
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>>;
 
     /// Auto-paginating version of `list_parts`
-    fn list_parts_pages(&self, input: ListPartsRequest) -> RusotoStream<Part, ListPartsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_parts(state.clone())
-        })
+    fn list_parts_pages<'a>(
+        &'a self,
+        mut input: ListPartsRequest,
+    ) -> RusotoStream<'a, Part, ListPartsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_parts(input.clone())
+        }))
     }
 
     /// <p><p>Sets the accelerate configuration of an existing bucket. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to Amazon S3.</p> <p> To use this operation, you must have permission to perform the s3:PutAccelerateConfiguration action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> The Transfer Acceleration state of a bucket can be set to one of the following two values:</p> <ul> <li> <p> Enabled – Enables accelerated data transfers to the bucket.</p> </li> <li> <p> Suspended – Disables accelerated data transfers to the bucket.</p> </li> </ul> <p>The <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> operation returns the transfer acceleration state of a bucket.</p> <p>After setting the Transfer Acceleration state of a bucket to Enabled, it might take up to thirty minutes before the data transfer rates to the bucket increase.</p> <p> The name of the bucket used for Transfer Acceleration must be DNS-compliant and must not contain periods (&quot;.&quot;).</p> <p> For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> <p>The following operations are related to <code>PutBucketAccelerateConfiguration</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a> </p> </li> </ul></p>

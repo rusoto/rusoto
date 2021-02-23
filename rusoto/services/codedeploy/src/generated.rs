@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1658,11 +1660,19 @@ pub struct ListApplicationRevisionsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListApplicationRevisionsInput {
+impl Paged for ListApplicationRevisionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationRevisionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1681,27 +1691,25 @@ pub struct ListApplicationRevisionsOutput {
     pub revisions: Option<Vec<RevisionLocation>>,
 }
 
-impl ListApplicationRevisionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<RevisionLocation>> {
-        Some(self.revisions.as_ref()?.clone())
+impl Paged for ListApplicationRevisionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationRevisionsOutput {
     type Item = RevisionLocation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RevisionLocation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.revisions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1716,11 +1724,19 @@ pub struct ListApplicationsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationsInput {
+impl Paged for ListApplicationsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1739,27 +1755,25 @@ pub struct ListApplicationsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListApplicationsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.applications.as_ref()?.clone())
+impl Paged for ListApplicationsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.applications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1774,11 +1788,19 @@ pub struct ListDeploymentConfigsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentConfigsInput {
+impl Paged for ListDeploymentConfigsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentConfigsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1797,27 +1819,25 @@ pub struct ListDeploymentConfigsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentConfigsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.deployment_configs_list.as_ref()?.clone())
+impl Paged for ListDeploymentConfigsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentConfigsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployment_configs_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1835,11 +1855,19 @@ pub struct ListDeploymentGroupsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentGroupsInput {
+impl Paged for ListDeploymentGroupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1862,27 +1890,25 @@ pub struct ListDeploymentGroupsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentGroupsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.deployment_groups.as_ref()?.clone())
+impl Paged for ListDeploymentGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentGroupsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployment_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1908,11 +1934,19 @@ pub struct ListDeploymentInstancesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentInstancesInput {
+impl Paged for ListDeploymentInstancesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentInstancesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1931,27 +1965,25 @@ pub struct ListDeploymentInstancesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentInstancesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.instances_list.as_ref()?.clone())
+impl Paged for ListDeploymentInstancesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentInstancesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.instances_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1973,11 +2005,19 @@ pub struct ListDeploymentTargetsInput {
     pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-impl PagedRequest for ListDeploymentTargetsInput {
+impl Paged for ListDeploymentTargetsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentTargetsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1995,27 +2035,25 @@ pub struct ListDeploymentTargetsOutput {
     pub target_ids: Option<Vec<String>>,
 }
 
-impl ListDeploymentTargetsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.target_ids.as_ref()?.clone())
+impl Paged for ListDeploymentTargetsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentTargetsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.target_ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2050,11 +2088,19 @@ pub struct ListDeploymentsInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentsInput {
+impl Paged for ListDeploymentsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2073,27 +2119,25 @@ pub struct ListDeploymentsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.deployments.as_ref()?.clone())
+impl Paged for ListDeploymentsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2108,11 +2152,19 @@ pub struct ListGitHubAccountTokenNamesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListGitHubAccountTokenNamesInput {
+impl Paged for ListGitHubAccountTokenNamesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGitHubAccountTokenNamesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2131,27 +2183,25 @@ pub struct ListGitHubAccountTokenNamesOutput {
     pub token_name_list: Option<Vec<String>>,
 }
 
-impl ListGitHubAccountTokenNamesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.token_name_list.as_ref()?.clone())
+impl Paged for ListGitHubAccountTokenNamesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGitHubAccountTokenNamesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.token_name_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2174,11 +2224,19 @@ pub struct ListOnPremisesInstancesInput {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
-impl PagedRequest for ListOnPremisesInstancesInput {
+impl Paged for ListOnPremisesInstancesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOnPremisesInstancesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2197,27 +2255,25 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListOnPremisesInstancesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.instance_names.as_ref()?.clone())
+impl Paged for ListOnPremisesInstancesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOnPremisesInstancesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.instance_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6972,13 +7028,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationRevisionsOutput, RusotoError<ListApplicationRevisionsError>>;
 
     /// Auto-paginating version of `list_application_revisions`
-    fn list_application_revisions_pages(
-        &self,
-        input: ListApplicationRevisionsInput,
-    ) -> RusotoStream<RevisionLocation, ListApplicationRevisionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_application_revisions(state.clone())
-        })
+    fn list_application_revisions_pages<'a>(
+        &'a self,
+        mut input: ListApplicationRevisionsInput,
+    ) -> RusotoStream<'a, RevisionLocation, ListApplicationRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_revisions(input.clone())
+        }))
     }
 
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
@@ -6988,13 +7045,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationsOutput, RusotoError<ListApplicationsError>>;
 
     /// Auto-paginating version of `list_applications`
-    fn list_applications_pages(
-        &self,
-        input: ListApplicationsInput,
-    ) -> RusotoStream<String, ListApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_applications(state.clone())
-        })
+    fn list_applications_pages<'a>(
+        &'a self,
+        mut input: ListApplicationsInput,
+    ) -> RusotoStream<'a, String, ListApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_applications(input.clone())
+        }))
     }
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
@@ -7004,13 +7062,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentConfigsOutput, RusotoError<ListDeploymentConfigsError>>;
 
     /// Auto-paginating version of `list_deployment_configs`
-    fn list_deployment_configs_pages(
-        &self,
-        input: ListDeploymentConfigsInput,
-    ) -> RusotoStream<String, ListDeploymentConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployment_configs(state.clone())
-        })
+    fn list_deployment_configs_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentConfigsInput,
+    ) -> RusotoStream<'a, String, ListDeploymentConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployment_configs(input.clone())
+        }))
     }
 
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
@@ -7020,13 +7079,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>>;
 
     /// Auto-paginating version of `list_deployment_groups`
-    fn list_deployment_groups_pages(
-        &self,
-        input: ListDeploymentGroupsInput,
-    ) -> RusotoStream<String, ListDeploymentGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployment_groups(state.clone())
-        })
+    fn list_deployment_groups_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentGroupsInput,
+    ) -> RusotoStream<'a, String, ListDeploymentGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployment_groups(input.clone())
+        }))
     }
 
     /// <p><note> <p> The newer <code>BatchGetDeploymentTargets</code> should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
@@ -7036,13 +7096,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentInstancesOutput, RusotoError<ListDeploymentInstancesError>>;
 
     /// Auto-paginating version of `list_deployment_instances`
-    fn list_deployment_instances_pages(
-        &self,
-        input: ListDeploymentInstancesInput,
-    ) -> RusotoStream<String, ListDeploymentInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployment_instances(state.clone())
-        })
+    fn list_deployment_instances_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentInstancesInput,
+    ) -> RusotoStream<'a, String, ListDeploymentInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployment_instances(input.clone())
+        }))
     }
 
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
@@ -7052,13 +7113,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentTargetsOutput, RusotoError<ListDeploymentTargetsError>>;
 
     /// Auto-paginating version of `list_deployment_targets`
-    fn list_deployment_targets_pages(
-        &self,
-        input: ListDeploymentTargetsInput,
-    ) -> RusotoStream<String, ListDeploymentTargetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployment_targets(state.clone())
-        })
+    fn list_deployment_targets_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentTargetsInput,
+    ) -> RusotoStream<'a, String, ListDeploymentTargetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployment_targets(input.clone())
+        }))
     }
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
@@ -7068,13 +7130,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentsOutput, RusotoError<ListDeploymentsError>>;
 
     /// Auto-paginating version of `list_deployments`
-    fn list_deployments_pages(
-        &self,
-        input: ListDeploymentsInput,
-    ) -> RusotoStream<String, ListDeploymentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployments(state.clone())
-        })
+    fn list_deployments_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentsInput,
+    ) -> RusotoStream<'a, String, ListDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployments(input.clone())
+        }))
     }
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
@@ -7084,13 +7147,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListGitHubAccountTokenNamesOutput, RusotoError<ListGitHubAccountTokenNamesError>>;
 
     /// Auto-paginating version of `list_git_hub_account_token_names`
-    fn list_git_hub_account_token_names_pages(
-        &self,
-        input: ListGitHubAccountTokenNamesInput,
-    ) -> RusotoStream<String, ListGitHubAccountTokenNamesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_git_hub_account_token_names(state.clone())
-        })
+    fn list_git_hub_account_token_names_pages<'a>(
+        &'a self,
+        mut input: ListGitHubAccountTokenNamesInput,
+    ) -> RusotoStream<'a, String, ListGitHubAccountTokenNamesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_git_hub_account_token_names(input.clone())
+        }))
     }
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
@@ -7100,13 +7164,14 @@ pub trait CodeDeploy: Clone + Sync + Send + 'static {
     ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>>;
 
     /// Auto-paginating version of `list_on_premises_instances`
-    fn list_on_premises_instances_pages(
-        &self,
-        input: ListOnPremisesInstancesInput,
-    ) -> RusotoStream<String, ListOnPremisesInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_on_premises_instances(state.clone())
-        })
+    fn list_on_premises_instances_pages<'a>(
+        &'a self,
+        mut input: ListOnPremisesInstancesInput,
+    ) -> RusotoStream<'a, String, ListOnPremisesInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_on_premises_instances(input.clone())
+        }))
     }
 
     /// <p> Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources. </p>

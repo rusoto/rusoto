@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1042,11 +1044,19 @@ pub struct DescribeCodeCoveragesInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for DescribeCodeCoveragesInput {
+impl Paged for DescribeCodeCoveragesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeCodeCoveragesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1064,27 +1074,25 @@ pub struct DescribeCodeCoveragesOutput {
     pub next_token: Option<String>,
 }
 
-impl DescribeCodeCoveragesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<CodeCoverage>> {
-        Some(self.code_coverages.as_ref()?.clone())
+impl Paged for DescribeCodeCoveragesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeCodeCoveragesOutput {
     type Item = CodeCoverage;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CodeCoverage> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.code_coverages.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1109,11 +1117,19 @@ pub struct DescribeTestCasesInput {
     pub report_arn: String,
 }
 
-impl PagedRequest for DescribeTestCasesInput {
+impl Paged for DescribeTestCasesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeTestCasesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1131,27 +1147,25 @@ pub struct DescribeTestCasesOutput {
     pub test_cases: Option<Vec<TestCase>>,
 }
 
-impl DescribeTestCasesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TestCase>> {
-        Some(self.test_cases.as_ref()?.clone())
+impl Paged for DescribeTestCasesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeTestCasesOutput {
     type Item = TestCase;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TestCase> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.test_cases.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1355,11 +1369,19 @@ pub struct ListBuildBatchesForProjectInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListBuildBatchesForProjectInput {
+impl Paged for ListBuildBatchesForProjectInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBuildBatchesForProjectInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1377,27 +1399,25 @@ pub struct ListBuildBatchesForProjectOutput {
     pub next_token: Option<String>,
 }
 
-impl ListBuildBatchesForProjectOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.ids.as_ref()?.clone())
+impl Paged for ListBuildBatchesForProjectOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBuildBatchesForProjectOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1423,11 +1443,19 @@ pub struct ListBuildBatchesInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListBuildBatchesInput {
+impl Paged for ListBuildBatchesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBuildBatchesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1445,27 +1473,25 @@ pub struct ListBuildBatchesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListBuildBatchesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.ids.as_ref()?.clone())
+impl Paged for ListBuildBatchesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBuildBatchesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1486,11 +1512,19 @@ pub struct ListBuildsForProjectInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListBuildsForProjectInput {
+impl Paged for ListBuildsForProjectInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBuildsForProjectInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1508,27 +1542,25 @@ pub struct ListBuildsForProjectOutput {
     pub next_token: Option<String>,
 }
 
-impl ListBuildsForProjectOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.ids.as_ref()?.clone())
+impl Paged for ListBuildsForProjectOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBuildsForProjectOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1546,11 +1578,19 @@ pub struct ListBuildsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListBuildsInput {
+impl Paged for ListBuildsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBuildsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1568,27 +1608,25 @@ pub struct ListBuildsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListBuildsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.ids.as_ref()?.clone())
+impl Paged for ListBuildsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBuildsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1625,11 +1663,19 @@ pub struct ListProjectsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListProjectsInput {
+impl Paged for ListProjectsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1647,27 +1693,25 @@ pub struct ListProjectsOutput {
     pub projects: Option<Vec<String>>,
 }
 
-impl ListProjectsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.projects.as_ref()?.clone())
+impl Paged for ListProjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProjectsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.projects.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1693,11 +1737,19 @@ pub struct ListReportGroupsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListReportGroupsInput {
+impl Paged for ListReportGroupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReportGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1715,27 +1767,25 @@ pub struct ListReportGroupsOutput {
     pub report_groups: Option<Vec<String>>,
 }
 
-impl ListReportGroupsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.report_groups.as_ref()?.clone())
+impl Paged for ListReportGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReportGroupsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.report_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1764,11 +1814,19 @@ pub struct ListReportsForReportGroupInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListReportsForReportGroupInput {
+impl Paged for ListReportsForReportGroupInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReportsForReportGroupInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1786,27 +1844,25 @@ pub struct ListReportsForReportGroupOutput {
     pub reports: Option<Vec<String>>,
 }
 
-impl ListReportsForReportGroupOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.reports.as_ref()?.clone())
+impl Paged for ListReportsForReportGroupOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReportsForReportGroupOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reports.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1832,11 +1888,19 @@ pub struct ListReportsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListReportsInput {
+impl Paged for ListReportsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListReportsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1854,27 +1918,25 @@ pub struct ListReportsOutput {
     pub reports: Option<Vec<String>>,
 }
 
-impl ListReportsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.reports.as_ref()?.clone())
+impl Paged for ListReportsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListReportsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reports.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1900,11 +1962,19 @@ pub struct ListSharedProjectsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListSharedProjectsInput {
+impl Paged for ListSharedProjectsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSharedProjectsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1922,27 +1992,25 @@ pub struct ListSharedProjectsOutput {
     pub projects: Option<Vec<String>>,
 }
 
-impl ListSharedProjectsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.projects.as_ref()?.clone())
+impl Paged for ListSharedProjectsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSharedProjectsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.projects.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1968,11 +2036,19 @@ pub struct ListSharedReportGroupsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for ListSharedReportGroupsInput {
+impl Paged for ListSharedReportGroupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSharedReportGroupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1990,27 +2066,25 @@ pub struct ListSharedReportGroupsOutput {
     pub report_groups: Option<Vec<String>>,
 }
 
-impl ListSharedReportGroupsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.report_groups.as_ref()?.clone())
+impl Paged for ListSharedReportGroupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSharedReportGroupsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.report_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4983,13 +5057,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<DescribeCodeCoveragesOutput, RusotoError<DescribeCodeCoveragesError>>;
 
     /// Auto-paginating version of `describe_code_coverages`
-    fn describe_code_coverages_pages(
-        &self,
-        input: DescribeCodeCoveragesInput,
-    ) -> RusotoStream<CodeCoverage, DescribeCodeCoveragesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_code_coverages(state.clone())
-        })
+    fn describe_code_coverages_pages<'a>(
+        &'a self,
+        mut input: DescribeCodeCoveragesInput,
+    ) -> RusotoStream<'a, CodeCoverage, DescribeCodeCoveragesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_code_coverages(input.clone())
+        }))
     }
 
     /// <p> Returns a list of details about test cases for a report. </p>
@@ -4999,13 +5074,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>;
 
     /// Auto-paginating version of `describe_test_cases`
-    fn describe_test_cases_pages(
-        &self,
-        input: DescribeTestCasesInput,
-    ) -> RusotoStream<TestCase, DescribeTestCasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_test_cases(state.clone())
-        })
+    fn describe_test_cases_pages<'a>(
+        &'a self,
+        mut input: DescribeTestCasesInput,
+    ) -> RusotoStream<'a, TestCase, DescribeTestCasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_test_cases(input.clone())
+        }))
     }
 
     async fn get_report_group_trend(
@@ -5038,13 +5114,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListBuildBatchesOutput, RusotoError<ListBuildBatchesError>>;
 
     /// Auto-paginating version of `list_build_batches`
-    fn list_build_batches_pages(
-        &self,
-        input: ListBuildBatchesInput,
-    ) -> RusotoStream<String, ListBuildBatchesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_build_batches(state.clone())
-        })
+    fn list_build_batches_pages<'a>(
+        &'a self,
+        mut input: ListBuildBatchesInput,
+    ) -> RusotoStream<'a, String, ListBuildBatchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_build_batches(input.clone())
+        }))
     }
 
     /// <p>Retrieves the identifiers of the build batches for a specific project.</p>
@@ -5054,13 +5131,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListBuildBatchesForProjectOutput, RusotoError<ListBuildBatchesForProjectError>>;
 
     /// Auto-paginating version of `list_build_batches_for_project`
-    fn list_build_batches_for_project_pages(
-        &self,
-        input: ListBuildBatchesForProjectInput,
-    ) -> RusotoStream<String, ListBuildBatchesForProjectError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_build_batches_for_project(state.clone())
-        })
+    fn list_build_batches_for_project_pages<'a>(
+        &'a self,
+        mut input: ListBuildBatchesForProjectInput,
+    ) -> RusotoStream<'a, String, ListBuildBatchesForProjectError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_build_batches_for_project(input.clone())
+        }))
     }
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
@@ -5070,10 +5148,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListBuildsOutput, RusotoError<ListBuildsError>>;
 
     /// Auto-paginating version of `list_builds`
-    fn list_builds_pages(&self, input: ListBuildsInput) -> RusotoStream<String, ListBuildsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_builds(state.clone())
-        })
+    fn list_builds_pages<'a>(
+        &'a self,
+        mut input: ListBuildsInput,
+    ) -> RusotoStream<'a, String, ListBuildsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_builds(input.clone())
+        }))
     }
 
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
@@ -5083,13 +5165,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListBuildsForProjectOutput, RusotoError<ListBuildsForProjectError>>;
 
     /// Auto-paginating version of `list_builds_for_project`
-    fn list_builds_for_project_pages(
-        &self,
-        input: ListBuildsForProjectInput,
-    ) -> RusotoStream<String, ListBuildsForProjectError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_builds_for_project(state.clone())
-        })
+    fn list_builds_for_project_pages<'a>(
+        &'a self,
+        mut input: ListBuildsForProjectInput,
+    ) -> RusotoStream<'a, String, ListBuildsForProjectError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_builds_for_project(input.clone())
+        }))
     }
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
@@ -5104,13 +5187,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>>;
 
     /// Auto-paginating version of `list_projects`
-    fn list_projects_pages(
-        &self,
-        input: ListProjectsInput,
-    ) -> RusotoStream<String, ListProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_projects(state.clone())
-        })
+    fn list_projects_pages<'a>(
+        &'a self,
+        mut input: ListProjectsInput,
+    ) -> RusotoStream<'a, String, ListProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_projects(input.clone())
+        }))
     }
 
     /// <p> Gets a list ARNs for the report groups in the current AWS account. </p>
@@ -5120,13 +5204,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>>;
 
     /// Auto-paginating version of `list_report_groups`
-    fn list_report_groups_pages(
-        &self,
-        input: ListReportGroupsInput,
-    ) -> RusotoStream<String, ListReportGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_report_groups(state.clone())
-        })
+    fn list_report_groups_pages<'a>(
+        &'a self,
+        mut input: ListReportGroupsInput,
+    ) -> RusotoStream<'a, String, ListReportGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_report_groups(input.clone())
+        }))
     }
 
     /// <p> Returns a list of ARNs for the reports in the current AWS account. </p>
@@ -5136,13 +5221,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListReportsOutput, RusotoError<ListReportsError>>;
 
     /// Auto-paginating version of `list_reports`
-    fn list_reports_pages(
-        &self,
-        input: ListReportsInput,
-    ) -> RusotoStream<String, ListReportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_reports(state.clone())
-        })
+    fn list_reports_pages<'a>(
+        &'a self,
+        mut input: ListReportsInput,
+    ) -> RusotoStream<'a, String, ListReportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_reports(input.clone())
+        }))
     }
 
     /// <p> Returns a list of ARNs for the reports that belong to a <code>ReportGroup</code>. </p>
@@ -5152,13 +5238,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListReportsForReportGroupOutput, RusotoError<ListReportsForReportGroupError>>;
 
     /// Auto-paginating version of `list_reports_for_report_group`
-    fn list_reports_for_report_group_pages(
-        &self,
-        input: ListReportsForReportGroupInput,
-    ) -> RusotoStream<String, ListReportsForReportGroupError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_reports_for_report_group(state.clone())
-        })
+    fn list_reports_for_report_group_pages<'a>(
+        &'a self,
+        mut input: ListReportsForReportGroupInput,
+    ) -> RusotoStream<'a, String, ListReportsForReportGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_reports_for_report_group(input.clone())
+        }))
     }
 
     /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
@@ -5168,13 +5255,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>;
 
     /// Auto-paginating version of `list_shared_projects`
-    fn list_shared_projects_pages(
-        &self,
-        input: ListSharedProjectsInput,
-    ) -> RusotoStream<String, ListSharedProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_shared_projects(state.clone())
-        })
+    fn list_shared_projects_pages<'a>(
+        &'a self,
+        mut input: ListSharedProjectsInput,
+    ) -> RusotoStream<'a, String, ListSharedProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_shared_projects(input.clone())
+        }))
     }
 
     /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
@@ -5184,13 +5272,14 @@ pub trait CodeBuild: Clone + Sync + Send + 'static {
     ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>>;
 
     /// Auto-paginating version of `list_shared_report_groups`
-    fn list_shared_report_groups_pages(
-        &self,
-        input: ListSharedReportGroupsInput,
-    ) -> RusotoStream<String, ListSharedReportGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_shared_report_groups(state.clone())
-        })
+    fn list_shared_report_groups_pages<'a>(
+        &'a self,
+        mut input: ListSharedReportGroupsInput,
+    ) -> RusotoStream<'a, String, ListSharedReportGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_shared_report_groups(input.clone())
+        }))
     }
 
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -1324,27 +1326,25 @@ pub struct ClusterDbRevisionsMessage {
     pub marker: Option<String>,
 }
 
-impl ClusterDbRevisionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterDbRevision>> {
-        Some(self.cluster_db_revisions.as_ref()?.clone())
+impl Paged for ClusterDbRevisionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterDbRevisionsMessage {
     type Item = ClusterDbRevision;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterDbRevision> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_db_revisions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1568,27 +1568,25 @@ pub struct ClusterParameterGroupDetails {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-impl ClusterParameterGroupDetails {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.parameters.as_ref()?.clone())
+impl Paged for ClusterParameterGroupDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterParameterGroupDetails {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1748,27 +1746,25 @@ pub struct ClusterParameterGroupsMessage {
     pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
 }
 
-impl ClusterParameterGroupsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterParameterGroup>> {
-        Some(self.parameter_groups.as_ref()?.clone())
+impl Paged for ClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterParameterGroupsMessage {
     type Item = ClusterParameterGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterParameterGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameter_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1991,27 +1987,25 @@ pub struct ClusterSecurityGroupMessage {
     pub marker: Option<String>,
 }
 
-impl ClusterSecurityGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterSecurityGroup>> {
-        Some(self.cluster_security_groups.as_ref()?.clone())
+impl Paged for ClusterSecurityGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterSecurityGroupMessage {
     type Item = ClusterSecurityGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterSecurityGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_security_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2205,27 +2199,25 @@ pub struct ClusterSubnetGroupMessage {
     pub marker: Option<String>,
 }
 
-impl ClusterSubnetGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterSubnetGroup>> {
-        Some(self.cluster_subnet_groups.as_ref()?.clone())
+impl Paged for ClusterSubnetGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterSubnetGroupMessage {
     type Item = ClusterSubnetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterSubnetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_subnet_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2354,27 +2346,25 @@ pub struct ClusterVersionsMessage {
     pub marker: Option<String>,
 }
 
-impl ClusterVersionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ClusterVersion>> {
-        Some(self.cluster_versions.as_ref()?.clone())
+impl Paged for ClusterVersionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClusterVersionsMessage {
     type Item = ClusterVersion;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ClusterVersion> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.cluster_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2413,27 +2403,25 @@ pub struct ClustersMessage {
     pub marker: Option<String>,
 }
 
-impl ClustersMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Cluster>> {
-        Some(self.clusters.as_ref()?.clone())
+impl Paged for ClustersMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ClustersMessage {
     type Item = Cluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Cluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4278,11 +4266,19 @@ pub struct DescribeClusterDbRevisionsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeClusterDbRevisionsMessage {
+impl Paged for DescribeClusterDbRevisionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterDbRevisionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4324,11 +4320,19 @@ pub struct DescribeClusterParameterGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeClusterParameterGroupsMessage {
+impl Paged for DescribeClusterParameterGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterParameterGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4382,11 +4386,19 @@ pub struct DescribeClusterParametersMessage {
     pub source: Option<String>,
 }
 
-impl PagedRequest for DescribeClusterParametersMessage {
+impl Paged for DescribeClusterParametersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4432,11 +4444,19 @@ pub struct DescribeClusterSecurityGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeClusterSecurityGroupsMessage {
+impl Paged for DescribeClusterSecurityGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterSecurityGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4509,11 +4529,19 @@ pub struct DescribeClusterSnapshotsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeClusterSnapshotsMessage {
+impl Paged for DescribeClusterSnapshotsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterSnapshotsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4594,11 +4622,19 @@ pub struct DescribeClusterSubnetGroupsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeClusterSubnetGroupsMessage {
+impl Paged for DescribeClusterSubnetGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterSubnetGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4652,11 +4688,19 @@ pub struct DescribeClusterTracksMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeClusterTracksMessage {
+impl Paged for DescribeClusterTracksMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterTracksMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4699,11 +4743,19 @@ pub struct DescribeClusterVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeClusterVersionsMessage {
+impl Paged for DescribeClusterVersionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClusterVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4751,11 +4803,19 @@ pub struct DescribeClustersMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeClustersMessage {
+impl Paged for DescribeClustersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeClustersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4807,11 +4867,19 @@ pub struct DescribeDefaultClusterParametersMessage {
     pub parameter_group_family: String,
 }
 
-impl PagedRequest for DescribeDefaultClusterParametersMessage {
+impl Paged for DescribeDefaultClusterParametersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDefaultClusterParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4844,39 +4912,27 @@ pub struct DescribeDefaultClusterParametersResult {
     pub default_cluster_parameters: Option<DefaultClusterParameters>,
 }
 
-impl DescribeDefaultClusterParametersResult {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(
-            self.default_cluster_parameters
-                .as_ref()?
-                .parameters
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for DescribeDefaultClusterParametersResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.default_cluster_parameters.as_ref()?.marker.clone()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Owned((|| {
+            self.default_cluster_parameters.as_ref()?.marker.clone()
+        })())
     }
 }
 
 impl PagedOutput for DescribeDefaultClusterParametersResult {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(
-            self.default_cluster_parameters
-                .as_ref()?
-                .marker
-                .as_ref()?
-                .clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        (move || self.default_cluster_parameters?.parameters)().unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4948,11 +5004,19 @@ pub struct DescribeEventSubscriptionsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeEventSubscriptionsMessage {
+impl Paged for DescribeEventSubscriptionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventSubscriptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5012,11 +5076,19 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsMessage {
+impl Paged for DescribeEventsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5070,11 +5142,19 @@ pub struct DescribeHsmClientCertificatesMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeHsmClientCertificatesMessage {
+impl Paged for DescribeHsmClientCertificatesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeHsmClientCertificatesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5133,11 +5213,19 @@ pub struct DescribeHsmConfigurationsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeHsmConfigurationsMessage {
+impl Paged for DescribeHsmConfigurationsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeHsmConfigurationsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5224,11 +5312,19 @@ pub struct DescribeNodeConfigurationOptionsMessage {
     pub snapshot_identifier: Option<String>,
 }
 
-impl PagedRequest for DescribeNodeConfigurationOptionsMessage {
+impl Paged for DescribeNodeConfigurationOptionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeNodeConfigurationOptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5282,11 +5378,19 @@ pub struct DescribeOrderableClusterOptionsMessage {
     pub node_type: Option<String>,
 }
 
-impl PagedRequest for DescribeOrderableClusterOptionsMessage {
+impl Paged for DescribeOrderableClusterOptionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOrderableClusterOptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5327,11 +5431,19 @@ pub struct DescribeReservedNodeOfferingsMessage {
     pub reserved_node_offering_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedNodeOfferingsMessage {
+impl Paged for DescribeReservedNodeOfferingsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedNodeOfferingsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5372,11 +5484,19 @@ pub struct DescribeReservedNodesMessage {
     pub reserved_node_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedNodesMessage {
+impl Paged for DescribeReservedNodesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeReservedNodesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5448,11 +5568,19 @@ pub struct DescribeScheduledActionsMessage {
     pub target_action_type: Option<String>,
 }
 
-impl PagedRequest for DescribeScheduledActionsMessage {
+impl Paged for DescribeScheduledActionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeScheduledActionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5516,11 +5644,19 @@ pub struct DescribeSnapshotCopyGrantsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeSnapshotCopyGrantsMessage {
+impl Paged for DescribeSnapshotCopyGrantsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSnapshotCopyGrantsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5580,11 +5716,19 @@ pub struct DescribeSnapshotSchedulesMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeSnapshotSchedulesMessage {
+impl Paged for DescribeSnapshotSchedulesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeSnapshotSchedulesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5636,27 +5780,25 @@ pub struct DescribeSnapshotSchedulesOutputMessage {
     pub snapshot_schedules: Option<Vec<SnapshotSchedule>>,
 }
 
-impl DescribeSnapshotSchedulesOutputMessage {
-    fn pagination_page_opt(self) -> Option<Vec<SnapshotSchedule>> {
-        Some(self.snapshot_schedules.as_ref()?.clone())
+impl Paged for DescribeSnapshotSchedulesOutputMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeSnapshotSchedulesOutputMessage {
     type Item = SnapshotSchedule;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SnapshotSchedule> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshot_schedules.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5706,11 +5848,19 @@ pub struct DescribeTableRestoreStatusMessage {
     pub table_restore_request_id: Option<String>,
 }
 
-impl PagedRequest for DescribeTableRestoreStatusMessage {
+impl Paged for DescribeTableRestoreStatusMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTableRestoreStatusMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5760,11 +5910,19 @@ pub struct DescribeTagsMessage {
     pub tag_values: Option<Vec<String>>,
 }
 
-impl PagedRequest for DescribeTagsMessage {
+impl Paged for DescribeTagsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeTagsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5826,11 +5984,19 @@ pub struct DescribeUsageLimitsMessage {
     pub usage_limit_id: Option<String>,
 }
 
-impl PagedRequest for DescribeUsageLimitsMessage {
+impl Paged for DescribeUsageLimitsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeUsageLimitsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6632,27 +6798,25 @@ pub struct EventSubscriptionsMessage {
     pub marker: Option<String>,
 }
 
-impl EventSubscriptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<EventSubscription>> {
-        Some(self.event_subscriptions_list.as_ref()?.clone())
+impl Paged for EventSubscriptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for EventSubscriptionsMessage {
     type Item = EventSubscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EventSubscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.event_subscriptions_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6698,27 +6862,25 @@ pub struct EventsMessage {
     pub marker: Option<String>,
 }
 
-impl EventsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for EventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for EventsMessage {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6811,11 +6973,19 @@ pub struct GetReservedNodeExchangeOfferingsInputMessage {
     pub reserved_node_id: String,
 }
 
-impl PagedRequest for GetReservedNodeExchangeOfferingsInputMessage {
+impl Paged for GetReservedNodeExchangeOfferingsInputMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for GetReservedNodeExchangeOfferingsInputMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6855,27 +7025,25 @@ pub struct GetReservedNodeExchangeOfferingsOutputMessage {
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
 }
 
-impl GetReservedNodeExchangeOfferingsOutputMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedNodeOffering>> {
-        Some(self.reserved_node_offerings.as_ref()?.clone())
+impl Paged for GetReservedNodeExchangeOfferingsOutputMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for GetReservedNodeExchangeOfferingsOutputMessage {
     type Item = ReservedNodeOffering;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedNodeOffering> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_node_offerings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6987,27 +7155,25 @@ pub struct HsmClientCertificateMessage {
     pub marker: Option<String>,
 }
 
-impl HsmClientCertificateMessage {
-    fn pagination_page_opt(self) -> Option<Vec<HsmClientCertificate>> {
-        Some(self.hsm_client_certificates.as_ref()?.clone())
+impl Paged for HsmClientCertificateMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for HsmClientCertificateMessage {
     type Item = HsmClientCertificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HsmClientCertificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hsm_client_certificates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7128,27 +7294,25 @@ pub struct HsmConfigurationMessage {
     pub marker: Option<String>,
 }
 
-impl HsmConfigurationMessage {
-    fn pagination_page_opt(self) -> Option<Vec<HsmConfiguration>> {
-        Some(self.hsm_configurations.as_ref()?.clone())
+impl Paged for HsmConfigurationMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for HsmConfigurationMessage {
     type Item = HsmConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HsmConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hsm_configurations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -8562,27 +8726,25 @@ pub struct NodeConfigurationOptionsMessage {
     pub node_configuration_option_list: Option<Vec<NodeConfigurationOption>>,
 }
 
-impl NodeConfigurationOptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<NodeConfigurationOption>> {
-        Some(self.node_configuration_option_list.as_ref()?.clone())
+impl Paged for NodeConfigurationOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for NodeConfigurationOptionsMessage {
     type Item = NodeConfigurationOption;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<NodeConfigurationOption> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.node_configuration_option_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -8694,27 +8856,25 @@ pub struct OrderableClusterOptionsMessage {
     pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
 }
 
-impl OrderableClusterOptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<OrderableClusterOption>> {
-        Some(self.orderable_cluster_options.as_ref()?.clone())
+impl Paged for OrderableClusterOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for OrderableClusterOptionsMessage {
     type Item = OrderableClusterOption;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrderableClusterOption> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.orderable_cluster_options.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9530,27 +9690,25 @@ pub struct ReservedNodeOfferingsMessage {
     pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
 }
 
-impl ReservedNodeOfferingsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedNodeOffering>> {
-        Some(self.reserved_node_offerings.as_ref()?.clone())
+impl Paged for ReservedNodeOfferingsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ReservedNodeOfferingsMessage {
     type Item = ReservedNodeOffering;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedNodeOffering> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_node_offerings.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9596,27 +9754,25 @@ pub struct ReservedNodesMessage {
     pub reserved_nodes: Option<Vec<ReservedNode>>,
 }
 
-impl ReservedNodesMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedNode>> {
-        Some(self.reserved_nodes.as_ref()?.clone())
+impl Paged for ReservedNodesMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ReservedNodesMessage {
     type Item = ReservedNode;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedNode> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_nodes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -11026,27 +11182,25 @@ pub struct ScheduledActionsMessage {
     pub scheduled_actions: Option<Vec<ScheduledAction>>,
 }
 
-impl ScheduledActionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ScheduledAction>> {
-        Some(self.scheduled_actions.as_ref()?.clone())
+impl Paged for ScheduledActionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ScheduledActionsMessage {
     type Item = ScheduledAction;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScheduledAction> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.scheduled_actions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -11439,27 +11593,25 @@ pub struct SnapshotCopyGrantMessage {
     pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
 }
 
-impl SnapshotCopyGrantMessage {
-    fn pagination_page_opt(self) -> Option<Vec<SnapshotCopyGrant>> {
-        Some(self.snapshot_copy_grants.as_ref()?.clone())
+impl Paged for SnapshotCopyGrantMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for SnapshotCopyGrantMessage {
     type Item = SnapshotCopyGrant;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SnapshotCopyGrant> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshot_copy_grants.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -11602,27 +11754,25 @@ pub struct SnapshotMessage {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
-impl SnapshotMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Snapshot>> {
-        Some(self.snapshots.as_ref()?.clone())
+impl Paged for SnapshotMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for SnapshotMessage {
     type Item = Snapshot;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Snapshot> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12211,27 +12361,25 @@ pub struct TableRestoreStatusMessage {
     pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
 }
 
-impl TableRestoreStatusMessage {
-    fn pagination_page_opt(self) -> Option<Vec<TableRestoreStatus>> {
-        Some(self.table_restore_status_details.as_ref()?.clone())
+impl Paged for TableRestoreStatusMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for TableRestoreStatusMessage {
     type Item = TableRestoreStatus;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TableRestoreStatus> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.table_restore_status_details.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12446,27 +12594,25 @@ pub struct TaggedResourceListMessage {
     pub tagged_resources: Option<Vec<TaggedResource>>,
 }
 
-impl TaggedResourceListMessage {
-    fn pagination_page_opt(self) -> Option<Vec<TaggedResource>> {
-        Some(self.tagged_resources.as_ref()?.clone())
+impl Paged for TaggedResourceListMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for TaggedResourceListMessage {
     type Item = TaggedResource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TaggedResource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tagged_resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12529,27 +12675,25 @@ pub struct TrackListMessage {
     pub marker: Option<String>,
 }
 
-impl TrackListMessage {
-    fn pagination_page_opt(self) -> Option<Vec<MaintenanceTrack>> {
-        Some(self.maintenance_tracks.as_ref()?.clone())
+impl Paged for TrackListMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for TrackListMessage {
     type Item = MaintenanceTrack;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MaintenanceTrack> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.maintenance_tracks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -12734,27 +12878,25 @@ pub struct UsageLimitList {
     pub usage_limits: Option<Vec<UsageLimit>>,
 }
 
-impl UsageLimitList {
-    fn pagination_page_opt(self) -> Option<Vec<UsageLimit>> {
-        Some(self.usage_limits.as_ref()?.clone())
+impl Paged for UsageLimitList {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for UsageLimitList {
     type Item = UsageLimit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UsageLimit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.usage_limits.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -20092,13 +20234,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterDbRevisionsMessage, RusotoError<DescribeClusterDbRevisionsError>>;
 
     /// Auto-paginating version of `describe_cluster_db_revisions`
-    fn describe_cluster_db_revisions_pages(
-        &self,
-        input: DescribeClusterDbRevisionsMessage,
-    ) -> RusotoStream<ClusterDbRevision, DescribeClusterDbRevisionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_db_revisions(state.clone())
-        })
+    fn describe_cluster_db_revisions_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterDbRevisionsMessage,
+    ) -> RusotoStream<'a, ClusterDbRevision, DescribeClusterDbRevisionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_db_revisions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20108,13 +20251,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterParameterGroupsMessage, RusotoError<DescribeClusterParameterGroupsError>>;
 
     /// Auto-paginating version of `describe_cluster_parameter_groups`
-    fn describe_cluster_parameter_groups_pages(
-        &self,
-        input: DescribeClusterParameterGroupsMessage,
-    ) -> RusotoStream<ClusterParameterGroup, DescribeClusterParameterGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_parameter_groups(state.clone())
-        })
+    fn describe_cluster_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterParameterGroupsMessage,
+    ) -> RusotoStream<'a, ClusterParameterGroup, DescribeClusterParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_parameter_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -20124,13 +20268,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterParameterGroupDetails, RusotoError<DescribeClusterParametersError>>;
 
     /// Auto-paginating version of `describe_cluster_parameters`
-    fn describe_cluster_parameters_pages(
-        &self,
-        input: DescribeClusterParametersMessage,
-    ) -> RusotoStream<Parameter, DescribeClusterParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_parameters(state.clone())
-        })
+    fn describe_cluster_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeClusterParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20140,13 +20285,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterSecurityGroupMessage, RusotoError<DescribeClusterSecurityGroupsError>>;
 
     /// Auto-paginating version of `describe_cluster_security_groups`
-    fn describe_cluster_security_groups_pages(
-        &self,
-        input: DescribeClusterSecurityGroupsMessage,
-    ) -> RusotoStream<ClusterSecurityGroup, DescribeClusterSecurityGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_security_groups(state.clone())
-        })
+    fn describe_cluster_security_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterSecurityGroupsMessage,
+    ) -> RusotoStream<'a, ClusterSecurityGroup, DescribeClusterSecurityGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_security_groups(input.clone())
+        }))
     }
 
     /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20156,13 +20302,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<SnapshotMessage, RusotoError<DescribeClusterSnapshotsError>>;
 
     /// Auto-paginating version of `describe_cluster_snapshots`
-    fn describe_cluster_snapshots_pages(
-        &self,
-        input: DescribeClusterSnapshotsMessage,
-    ) -> RusotoStream<Snapshot, DescribeClusterSnapshotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_snapshots(state.clone())
-        })
+    fn describe_cluster_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterSnapshotsMessage,
+    ) -> RusotoStream<'a, Snapshot, DescribeClusterSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_snapshots(input.clone())
+        }))
     }
 
     /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20172,13 +20319,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterSubnetGroupMessage, RusotoError<DescribeClusterSubnetGroupsError>>;
 
     /// Auto-paginating version of `describe_cluster_subnet_groups`
-    fn describe_cluster_subnet_groups_pages(
-        &self,
-        input: DescribeClusterSubnetGroupsMessage,
-    ) -> RusotoStream<ClusterSubnetGroup, DescribeClusterSubnetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_subnet_groups(state.clone())
-        })
+    fn describe_cluster_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterSubnetGroupsMessage,
+    ) -> RusotoStream<'a, ClusterSubnetGroup, DescribeClusterSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_subnet_groups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of all the available maintenance tracks.</p>
@@ -20188,13 +20336,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<TrackListMessage, RusotoError<DescribeClusterTracksError>>;
 
     /// Auto-paginating version of `describe_cluster_tracks`
-    fn describe_cluster_tracks_pages(
-        &self,
-        input: DescribeClusterTracksMessage,
-    ) -> RusotoStream<MaintenanceTrack, DescribeClusterTracksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_tracks(state.clone())
-        })
+    fn describe_cluster_tracks_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterTracksMessage,
+    ) -> RusotoStream<'a, MaintenanceTrack, DescribeClusterTracksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_tracks(input.clone())
+        }))
     }
 
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -20204,13 +20353,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClusterVersionsMessage, RusotoError<DescribeClusterVersionsError>>;
 
     /// Auto-paginating version of `describe_cluster_versions`
-    fn describe_cluster_versions_pages(
-        &self,
-        input: DescribeClusterVersionsMessage,
-    ) -> RusotoStream<ClusterVersion, DescribeClusterVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_cluster_versions(state.clone())
-        })
+    fn describe_cluster_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeClusterVersionsMessage,
+    ) -> RusotoStream<'a, ClusterVersion, DescribeClusterVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_cluster_versions(input.clone())
+        }))
     }
 
     /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20220,13 +20370,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ClustersMessage, RusotoError<DescribeClustersError>>;
 
     /// Auto-paginating version of `describe_clusters`
-    fn describe_clusters_pages(
-        &self,
-        input: DescribeClustersMessage,
-    ) -> RusotoStream<Cluster, DescribeClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_clusters(state.clone())
-        })
+    fn describe_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeClustersMessage,
+    ) -> RusotoStream<'a, Cluster, DescribeClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_clusters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -20239,13 +20390,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_default_cluster_parameters`
-    fn describe_default_cluster_parameters_pages(
-        &self,
-        input: DescribeDefaultClusterParametersMessage,
-    ) -> RusotoStream<Parameter, DescribeDefaultClusterParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_default_cluster_parameters(state.clone())
-        })
+    fn describe_default_cluster_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeDefaultClusterParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeDefaultClusterParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_default_cluster_parameters(input.clone())
+        }))
     }
 
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
@@ -20261,13 +20413,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
 
     /// Auto-paginating version of `describe_event_subscriptions`
-    fn describe_event_subscriptions_pages(
-        &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoStream<EventSubscription, DescribeEventSubscriptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_event_subscriptions(state.clone())
-        })
+    fn describe_event_subscriptions_pages<'a>(
+        &'a self,
+        mut input: DescribeEventSubscriptionsMessage,
+    ) -> RusotoStream<'a, EventSubscription, DescribeEventSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_event_subscriptions(input.clone())
+        }))
     }
 
     /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
@@ -20277,13 +20430,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20293,13 +20447,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<HsmClientCertificateMessage, RusotoError<DescribeHsmClientCertificatesError>>;
 
     /// Auto-paginating version of `describe_hsm_client_certificates`
-    fn describe_hsm_client_certificates_pages(
-        &self,
-        input: DescribeHsmClientCertificatesMessage,
-    ) -> RusotoStream<HsmClientCertificate, DescribeHsmClientCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_hsm_client_certificates(state.clone())
-        })
+    fn describe_hsm_client_certificates_pages<'a>(
+        &'a self,
+        mut input: DescribeHsmClientCertificatesMessage,
+    ) -> RusotoStream<'a, HsmClientCertificate, DescribeHsmClientCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_hsm_client_certificates(input.clone())
+        }))
     }
 
     /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20309,13 +20464,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<HsmConfigurationMessage, RusotoError<DescribeHsmConfigurationsError>>;
 
     /// Auto-paginating version of `describe_hsm_configurations`
-    fn describe_hsm_configurations_pages(
-        &self,
-        input: DescribeHsmConfigurationsMessage,
-    ) -> RusotoStream<HsmConfiguration, DescribeHsmConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_hsm_configurations(state.clone())
-        })
+    fn describe_hsm_configurations_pages<'a>(
+        &'a self,
+        mut input: DescribeHsmConfigurationsMessage,
+    ) -> RusotoStream<'a, HsmConfiguration, DescribeHsmConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_hsm_configurations(input.clone())
+        }))
     }
 
     /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
@@ -20331,13 +20487,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<NodeConfigurationOptionsMessage, RusotoError<DescribeNodeConfigurationOptionsError>>;
 
     /// Auto-paginating version of `describe_node_configuration_options`
-    fn describe_node_configuration_options_pages(
-        &self,
-        input: DescribeNodeConfigurationOptionsMessage,
-    ) -> RusotoStream<NodeConfigurationOption, DescribeNodeConfigurationOptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_node_configuration_options(state.clone())
-        })
+    fn describe_node_configuration_options_pages<'a>(
+        &'a self,
+        mut input: DescribeNodeConfigurationOptionsMessage,
+    ) -> RusotoStream<'a, NodeConfigurationOption, DescribeNodeConfigurationOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_node_configuration_options(input.clone())
+        }))
     }
 
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -20347,13 +20504,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<OrderableClusterOptionsMessage, RusotoError<DescribeOrderableClusterOptionsError>>;
 
     /// Auto-paginating version of `describe_orderable_cluster_options`
-    fn describe_orderable_cluster_options_pages(
-        &self,
-        input: DescribeOrderableClusterOptionsMessage,
-    ) -> RusotoStream<OrderableClusterOption, DescribeOrderableClusterOptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_orderable_cluster_options(state.clone())
-        })
+    fn describe_orderable_cluster_options_pages<'a>(
+        &'a self,
+        mut input: DescribeOrderableClusterOptionsMessage,
+    ) -> RusotoStream<'a, OrderableClusterOption, DescribeOrderableClusterOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_orderable_cluster_options(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -20363,13 +20521,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ReservedNodeOfferingsMessage, RusotoError<DescribeReservedNodeOfferingsError>>;
 
     /// Auto-paginating version of `describe_reserved_node_offerings`
-    fn describe_reserved_node_offerings_pages(
-        &self,
-        input: DescribeReservedNodeOfferingsMessage,
-    ) -> RusotoStream<ReservedNodeOffering, DescribeReservedNodeOfferingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_node_offerings(state.clone())
-        })
+    fn describe_reserved_node_offerings_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedNodeOfferingsMessage,
+    ) -> RusotoStream<'a, ReservedNodeOffering, DescribeReservedNodeOfferingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_node_offerings(input.clone())
+        }))
     }
 
     /// <p>Returns the descriptions of the reserved nodes.</p>
@@ -20379,13 +20538,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ReservedNodesMessage, RusotoError<DescribeReservedNodesError>>;
 
     /// Auto-paginating version of `describe_reserved_nodes`
-    fn describe_reserved_nodes_pages(
-        &self,
-        input: DescribeReservedNodesMessage,
-    ) -> RusotoStream<ReservedNode, DescribeReservedNodesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_nodes(state.clone())
-        })
+    fn describe_reserved_nodes_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedNodesMessage,
+    ) -> RusotoStream<'a, ReservedNode, DescribeReservedNodesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_nodes(input.clone())
+        }))
     }
 
     /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
@@ -20401,13 +20561,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<ScheduledActionsMessage, RusotoError<DescribeScheduledActionsError>>;
 
     /// Auto-paginating version of `describe_scheduled_actions`
-    fn describe_scheduled_actions_pages(
-        &self,
-        input: DescribeScheduledActionsMessage,
-    ) -> RusotoStream<ScheduledAction, DescribeScheduledActionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_scheduled_actions(state.clone())
-        })
+    fn describe_scheduled_actions_pages<'a>(
+        &'a self,
+        mut input: DescribeScheduledActionsMessage,
+    ) -> RusotoStream<'a, ScheduledAction, DescribeScheduledActionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_scheduled_actions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
@@ -20417,13 +20578,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<SnapshotCopyGrantMessage, RusotoError<DescribeSnapshotCopyGrantsError>>;
 
     /// Auto-paginating version of `describe_snapshot_copy_grants`
-    fn describe_snapshot_copy_grants_pages(
-        &self,
-        input: DescribeSnapshotCopyGrantsMessage,
-    ) -> RusotoStream<SnapshotCopyGrant, DescribeSnapshotCopyGrantsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_snapshot_copy_grants(state.clone())
-        })
+    fn describe_snapshot_copy_grants_pages<'a>(
+        &'a self,
+        mut input: DescribeSnapshotCopyGrantsMessage,
+    ) -> RusotoStream<'a, SnapshotCopyGrant, DescribeSnapshotCopyGrantsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_snapshot_copy_grants(input.clone())
+        }))
     }
 
     /// <p>Returns a list of snapshot schedules. </p>
@@ -20433,13 +20595,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSnapshotSchedulesOutputMessage, RusotoError<DescribeSnapshotSchedulesError>>;
 
     /// Auto-paginating version of `describe_snapshot_schedules`
-    fn describe_snapshot_schedules_pages(
-        &self,
-        input: DescribeSnapshotSchedulesMessage,
-    ) -> RusotoStream<SnapshotSchedule, DescribeSnapshotSchedulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_snapshot_schedules(state.clone())
-        })
+    fn describe_snapshot_schedules_pages<'a>(
+        &'a self,
+        mut input: DescribeSnapshotSchedulesMessage,
+    ) -> RusotoStream<'a, SnapshotSchedule, DescribeSnapshotSchedulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_snapshot_schedules(input.clone())
+        }))
     }
 
     /// <p>Returns account level backups storage size and provisional storage.</p>
@@ -20454,13 +20617,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<TableRestoreStatusMessage, RusotoError<DescribeTableRestoreStatusError>>;
 
     /// Auto-paginating version of `describe_table_restore_status`
-    fn describe_table_restore_status_pages(
-        &self,
-        input: DescribeTableRestoreStatusMessage,
-    ) -> RusotoStream<TableRestoreStatus, DescribeTableRestoreStatusError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_table_restore_status(state.clone())
-        })
+    fn describe_table_restore_status_pages<'a>(
+        &'a self,
+        mut input: DescribeTableRestoreStatusMessage,
+    ) -> RusotoStream<'a, TableRestoreStatus, DescribeTableRestoreStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_table_restore_status(input.clone())
+        }))
     }
 
     /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
@@ -20470,13 +20634,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<TaggedResourceListMessage, RusotoError<DescribeTagsError>>;
 
     /// Auto-paginating version of `describe_tags`
-    fn describe_tags_pages(
-        &self,
-        input: DescribeTagsMessage,
-    ) -> RusotoStream<TaggedResource, DescribeTagsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_tags(state.clone())
-        })
+    fn describe_tags_pages<'a>(
+        &'a self,
+        mut input: DescribeTagsMessage,
+    ) -> RusotoStream<'a, TaggedResource, DescribeTagsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_tags(input.clone())
+        }))
     }
 
     /// <p><p>Shows usage limits on a cluster. Results are filtered based on the combination of input usage limit identifier, cluster identifier, and feature type parameters:</p> <ul> <li> <p>If usage limit identifier, cluster identifier, and feature type are not provided, then all usage limit objects for the current account in the current region are returned.</p> </li> <li> <p>If usage limit identifier is provided, then the corresponding usage limit object is returned.</p> </li> <li> <p>If cluster identifier is provided, then all usage limit objects for the specified cluster are returned.</p> </li> <li> <p>If cluster identifier and feature type are provided, then all usage limit objects for the combination of cluster and feature are returned.</p> </li> </ul></p>
@@ -20486,13 +20651,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     ) -> Result<UsageLimitList, RusotoError<DescribeUsageLimitsError>>;
 
     /// Auto-paginating version of `describe_usage_limits`
-    fn describe_usage_limits_pages(
-        &self,
-        input: DescribeUsageLimitsMessage,
-    ) -> RusotoStream<UsageLimit, DescribeUsageLimitsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_usage_limits(state.clone())
-        })
+    fn describe_usage_limits_pages<'a>(
+        &'a self,
+        mut input: DescribeUsageLimitsMessage,
+    ) -> RusotoStream<'a, UsageLimit, DescribeUsageLimitsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_usage_limits(input.clone())
+        }))
     }
 
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
@@ -20535,13 +20701,14 @@ pub trait Redshift: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_reserved_node_exchange_offerings`
-    fn get_reserved_node_exchange_offerings_pages(
-        &self,
-        input: GetReservedNodeExchangeOfferingsInputMessage,
-    ) -> RusotoStream<ReservedNodeOffering, GetReservedNodeExchangeOfferingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_reserved_node_exchange_offerings(state.clone())
-        })
+    fn get_reserved_node_exchange_offerings_pages<'a>(
+        &'a self,
+        mut input: GetReservedNodeExchangeOfferingsInputMessage,
+    ) -> RusotoStream<'a, ReservedNodeOffering, GetReservedNodeExchangeOfferingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_reserved_node_exchange_offerings(input.clone())
+        }))
     }
 
     /// <p>Modifies the settings for a cluster.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p> <p>You can add another security or parameter group, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>

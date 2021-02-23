@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -810,11 +812,19 @@ pub struct ListAWSServiceAccessForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAWSServiceAccessForOrganizationRequest {
+impl Paged for ListAWSServiceAccessForOrganizationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAWSServiceAccessForOrganizationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -832,27 +842,25 @@ pub struct ListAWSServiceAccessForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAWSServiceAccessForOrganizationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EnabledServicePrincipal>> {
-        Some(self.enabled_service_principals.as_ref()?.clone())
+impl Paged for ListAWSServiceAccessForOrganizationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAWSServiceAccessForOrganizationResponse {
     type Item = EnabledServicePrincipal;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EnabledServicePrincipal> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.enabled_service_principals.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -873,11 +881,19 @@ pub struct ListAccountsForParentRequest {
     pub parent_id: String,
 }
 
-impl PagedRequest for ListAccountsForParentRequest {
+impl Paged for ListAccountsForParentRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountsForParentRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -895,27 +911,25 @@ pub struct ListAccountsForParentResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAccountsForParentResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Account>> {
-        Some(self.accounts.as_ref()?.clone())
+impl Paged for ListAccountsForParentResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountsForParentResponse {
     type Item = Account;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Account> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -933,11 +947,19 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAccountsRequest {
+impl Paged for ListAccountsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -955,27 +977,25 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAccountsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Account>> {
-        Some(self.accounts.as_ref()?.clone())
+impl Paged for ListAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountsResponse {
     type Item = Account;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Account> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -999,11 +1019,19 @@ pub struct ListChildrenRequest {
     pub parent_id: String,
 }
 
-impl PagedRequest for ListChildrenRequest {
+impl Paged for ListChildrenRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListChildrenRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1021,27 +1049,25 @@ pub struct ListChildrenResponse {
     pub next_token: Option<String>,
 }
 
-impl ListChildrenResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Child>> {
-        Some(self.children.as_ref()?.clone())
+impl Paged for ListChildrenResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListChildrenResponse {
     type Item = Child;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Child> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.children.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1063,11 +1089,19 @@ pub struct ListCreateAccountStatusRequest {
     pub states: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListCreateAccountStatusRequest {
+impl Paged for ListCreateAccountStatusRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCreateAccountStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1085,27 +1119,25 @@ pub struct ListCreateAccountStatusResponse {
     pub next_token: Option<String>,
 }
 
-impl ListCreateAccountStatusResponse {
-    fn pagination_page_opt(self) -> Option<Vec<CreateAccountStatus>> {
-        Some(self.create_account_statuses.as_ref()?.clone())
+impl Paged for ListCreateAccountStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCreateAccountStatusResponse {
     type Item = CreateAccountStatus;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CreateAccountStatus> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.create_account_statuses.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1127,11 +1159,19 @@ pub struct ListDelegatedAdministratorsRequest {
     pub service_principal: Option<String>,
 }
 
-impl PagedRequest for ListDelegatedAdministratorsRequest {
+impl Paged for ListDelegatedAdministratorsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDelegatedAdministratorsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1149,27 +1189,25 @@ pub struct ListDelegatedAdministratorsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDelegatedAdministratorsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DelegatedAdministrator>> {
-        Some(self.delegated_administrators.as_ref()?.clone())
+impl Paged for ListDelegatedAdministratorsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDelegatedAdministratorsResponse {
     type Item = DelegatedAdministrator;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DelegatedAdministrator> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.delegated_administrators.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1190,11 +1228,19 @@ pub struct ListDelegatedServicesForAccountRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDelegatedServicesForAccountRequest {
+impl Paged for ListDelegatedServicesForAccountRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDelegatedServicesForAccountRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1212,27 +1258,25 @@ pub struct ListDelegatedServicesForAccountResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDelegatedServicesForAccountResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DelegatedService>> {
-        Some(self.delegated_services.as_ref()?.clone())
+impl Paged for ListDelegatedServicesForAccountResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDelegatedServicesForAccountResponse {
     type Item = DelegatedService;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DelegatedService> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.delegated_services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1254,11 +1298,19 @@ pub struct ListHandshakesForAccountRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHandshakesForAccountRequest {
+impl Paged for ListHandshakesForAccountRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHandshakesForAccountRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1276,27 +1328,25 @@ pub struct ListHandshakesForAccountResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHandshakesForAccountResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Handshake>> {
-        Some(self.handshakes.as_ref()?.clone())
+impl Paged for ListHandshakesForAccountResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHandshakesForAccountResponse {
     type Item = Handshake;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Handshake> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.handshakes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1318,11 +1368,19 @@ pub struct ListHandshakesForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListHandshakesForOrganizationRequest {
+impl Paged for ListHandshakesForOrganizationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListHandshakesForOrganizationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1340,27 +1398,25 @@ pub struct ListHandshakesForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-impl ListHandshakesForOrganizationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Handshake>> {
-        Some(self.handshakes.as_ref()?.clone())
+impl Paged for ListHandshakesForOrganizationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListHandshakesForOrganizationResponse {
     type Item = Handshake;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Handshake> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.handshakes.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1381,11 +1437,19 @@ pub struct ListOrganizationalUnitsForParentRequest {
     pub parent_id: String,
 }
 
-impl PagedRequest for ListOrganizationalUnitsForParentRequest {
+impl Paged for ListOrganizationalUnitsForParentRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListOrganizationalUnitsForParentRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1403,27 +1467,25 @@ pub struct ListOrganizationalUnitsForParentResponse {
     pub organizational_units: Option<Vec<OrganizationalUnit>>,
 }
 
-impl ListOrganizationalUnitsForParentResponse {
-    fn pagination_page_opt(self) -> Option<Vec<OrganizationalUnit>> {
-        Some(self.organizational_units.as_ref()?.clone())
+impl Paged for ListOrganizationalUnitsForParentResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListOrganizationalUnitsForParentResponse {
     type Item = OrganizationalUnit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrganizationalUnit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.organizational_units.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1444,11 +1506,19 @@ pub struct ListParentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListParentsRequest {
+impl Paged for ListParentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListParentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1466,27 +1536,25 @@ pub struct ListParentsResponse {
     pub parents: Option<Vec<Parent>>,
 }
 
-impl ListParentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Parent>> {
-        Some(self.parents.as_ref()?.clone())
+impl Paged for ListParentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListParentsResponse {
     type Item = Parent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parents.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1510,11 +1578,19 @@ pub struct ListPoliciesForTargetRequest {
     pub target_id: String,
 }
 
-impl PagedRequest for ListPoliciesForTargetRequest {
+impl Paged for ListPoliciesForTargetRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPoliciesForTargetRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1532,27 +1608,25 @@ pub struct ListPoliciesForTargetResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-impl ListPoliciesForTargetResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicySummary>> {
-        Some(self.policies.as_ref()?.clone())
+impl Paged for ListPoliciesForTargetResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPoliciesForTargetResponse {
     type Item = PolicySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1573,11 +1647,19 @@ pub struct ListPoliciesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPoliciesRequest {
+impl Paged for ListPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1595,27 +1677,25 @@ pub struct ListPoliciesResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-impl ListPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicySummary>> {
-        Some(self.policies.as_ref()?.clone())
+impl Paged for ListPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPoliciesResponse {
     type Item = PolicySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1633,11 +1713,19 @@ pub struct ListRootsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListRootsRequest {
+impl Paged for ListRootsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRootsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1655,27 +1743,25 @@ pub struct ListRootsResponse {
     pub roots: Option<Vec<Root>>,
 }
 
-impl ListRootsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Root>> {
-        Some(self.roots.as_ref()?.clone())
+impl Paged for ListRootsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRootsResponse {
     type Item = Root;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Root> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.roots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1692,11 +1778,19 @@ pub struct ListTagsForResourceRequest {
     pub resource_id: String,
 }
 
-impl PagedRequest for ListTagsForResourceRequest {
+impl Paged for ListTagsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1714,27 +1808,25 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceResponse {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1755,11 +1847,19 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_id: String,
 }
 
-impl PagedRequest for ListTargetsForPolicyRequest {
+impl Paged for ListTargetsForPolicyRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTargetsForPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1777,27 +1877,25 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<PolicyTargetSummary>>,
 }
 
-impl ListTargetsForPolicyResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicyTargetSummary>> {
-        Some(self.targets.as_ref()?.clone())
+impl Paged for ListTargetsForPolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTargetsForPolicyResponse {
     type Item = PolicyTargetSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicyTargetSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.targets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6591,13 +6689,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_aws_service_access_for_organization`
-    fn list_aws_service_access_for_organization_pages(
-        &self,
-        input: ListAWSServiceAccessForOrganizationRequest,
-    ) -> RusotoStream<EnabledServicePrincipal, ListAWSServiceAccessForOrganizationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_aws_service_access_for_organization(state.clone())
-        })
+    fn list_aws_service_access_for_organization_pages<'a>(
+        &'a self,
+        mut input: ListAWSServiceAccessForOrganizationRequest,
+    ) -> RusotoStream<'a, EnabledServicePrincipal, ListAWSServiceAccessForOrganizationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aws_service_access_for_organization(input.clone())
+        }))
     }
 
     /// <p>Lists all the accounts in the organization. To request only the accounts in a specified root or organizational unit (OU), use the <a>ListAccountsForParent</a> operation instead.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6607,13 +6706,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
     /// Auto-paginating version of `list_accounts`
-    fn list_accounts_pages(
-        &self,
-        input: ListAccountsRequest,
-    ) -> RusotoStream<Account, ListAccountsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_accounts(state.clone())
-        })
+    fn list_accounts_pages<'a>(
+        &'a self,
+        mut input: ListAccountsRequest,
+    ) -> RusotoStream<'a, Account, ListAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_accounts(input.clone())
+        }))
     }
 
     /// <p>Lists the accounts in an organization that are contained by the specified target root or organizational unit (OU). If you specify the root, you get a list of all the accounts that aren't in any OU. If you specify an OU, you get a list of all the accounts in only that OU and not in any child OUs. To get a list of all accounts in the organization, use the <a>ListAccounts</a> operation.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6623,13 +6723,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountsForParentResponse, RusotoError<ListAccountsForParentError>>;
 
     /// Auto-paginating version of `list_accounts_for_parent`
-    fn list_accounts_for_parent_pages(
-        &self,
-        input: ListAccountsForParentRequest,
-    ) -> RusotoStream<Account, ListAccountsForParentError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_accounts_for_parent(state.clone())
-        })
+    fn list_accounts_for_parent_pages<'a>(
+        &'a self,
+        mut input: ListAccountsForParentRequest,
+    ) -> RusotoStream<'a, Account, ListAccountsForParentError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_accounts_for_parent(input.clone())
+        }))
     }
 
     /// <p>Lists all of the organizational units (OUs) or accounts that are contained in the specified parent OU or root. This operation, along with <a>ListParents</a> enables you to traverse the tree structure that makes up this root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6639,13 +6740,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListChildrenResponse, RusotoError<ListChildrenError>>;
 
     /// Auto-paginating version of `list_children`
-    fn list_children_pages(
-        &self,
-        input: ListChildrenRequest,
-    ) -> RusotoStream<Child, ListChildrenError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_children(state.clone())
-        })
+    fn list_children_pages<'a>(
+        &'a self,
+        mut input: ListChildrenRequest,
+    ) -> RusotoStream<'a, Child, ListChildrenError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_children(input.clone())
+        }))
     }
 
     /// <p>Lists the account creation requests that match the specified status that is currently being tracked for the organization.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6655,13 +6757,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListCreateAccountStatusResponse, RusotoError<ListCreateAccountStatusError>>;
 
     /// Auto-paginating version of `list_create_account_status`
-    fn list_create_account_status_pages(
-        &self,
-        input: ListCreateAccountStatusRequest,
-    ) -> RusotoStream<CreateAccountStatus, ListCreateAccountStatusError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_create_account_status(state.clone())
-        })
+    fn list_create_account_status_pages<'a>(
+        &'a self,
+        mut input: ListCreateAccountStatusRequest,
+    ) -> RusotoStream<'a, CreateAccountStatus, ListCreateAccountStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_create_account_status(input.clone())
+        }))
     }
 
     /// <p>Lists the AWS accounts that are designated as delegated administrators in this organization.</p> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6671,13 +6774,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListDelegatedAdministratorsResponse, RusotoError<ListDelegatedAdministratorsError>>;
 
     /// Auto-paginating version of `list_delegated_administrators`
-    fn list_delegated_administrators_pages(
-        &self,
-        input: ListDelegatedAdministratorsRequest,
-    ) -> RusotoStream<DelegatedAdministrator, ListDelegatedAdministratorsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_delegated_administrators(state.clone())
-        })
+    fn list_delegated_administrators_pages<'a>(
+        &'a self,
+        mut input: ListDelegatedAdministratorsRequest,
+    ) -> RusotoStream<'a, DelegatedAdministrator, ListDelegatedAdministratorsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_delegated_administrators(input.clone())
+        }))
     }
 
     /// <p>List the AWS services for which the specified account is a delegated administrator.</p> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6690,13 +6794,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_delegated_services_for_account`
-    fn list_delegated_services_for_account_pages(
-        &self,
-        input: ListDelegatedServicesForAccountRequest,
-    ) -> RusotoStream<DelegatedService, ListDelegatedServicesForAccountError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_delegated_services_for_account(state.clone())
-        })
+    fn list_delegated_services_for_account_pages<'a>(
+        &'a self,
+        mut input: ListDelegatedServicesForAccountRequest,
+    ) -> RusotoStream<'a, DelegatedService, ListDelegatedServicesForAccountError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_delegated_services_for_account(input.clone())
+        }))
     }
 
     /// <p>Lists the current handshakes that are associated with the account of the requesting user.</p> <p>Handshakes that are <code>ACCEPTED</code>, <code>DECLINED</code>, or <code>CANCELED</code> appear in the results of this API for only 30 days after changing to that state. After that, they're deleted and no longer accessible.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called from any account in the organization.</p>
@@ -6706,13 +6811,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListHandshakesForAccountResponse, RusotoError<ListHandshakesForAccountError>>;
 
     /// Auto-paginating version of `list_handshakes_for_account`
-    fn list_handshakes_for_account_pages(
-        &self,
-        input: ListHandshakesForAccountRequest,
-    ) -> RusotoStream<Handshake, ListHandshakesForAccountError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_handshakes_for_account(state.clone())
-        })
+    fn list_handshakes_for_account_pages<'a>(
+        &'a self,
+        mut input: ListHandshakesForAccountRequest,
+    ) -> RusotoStream<'a, Handshake, ListHandshakesForAccountError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_handshakes_for_account(input.clone())
+        }))
     }
 
     /// <p>Lists the handshakes that are associated with the organization that the requesting user is part of. The <code>ListHandshakesForOrganization</code> operation returns a list of handshake structures. Each structure contains details and status about a handshake.</p> <p>Handshakes that are <code>ACCEPTED</code>, <code>DECLINED</code>, or <code>CANCELED</code> appear in the results of this API for only 30 days after changing to that state. After that, they're deleted and no longer accessible.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6725,13 +6831,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_handshakes_for_organization`
-    fn list_handshakes_for_organization_pages(
-        &self,
-        input: ListHandshakesForOrganizationRequest,
-    ) -> RusotoStream<Handshake, ListHandshakesForOrganizationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_handshakes_for_organization(state.clone())
-        })
+    fn list_handshakes_for_organization_pages<'a>(
+        &'a self,
+        mut input: ListHandshakesForOrganizationRequest,
+    ) -> RusotoStream<'a, Handshake, ListHandshakesForOrganizationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_handshakes_for_organization(input.clone())
+        }))
     }
 
     /// <p>Lists the organizational units (OUs) in a parent organizational unit or root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6744,13 +6851,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_organizational_units_for_parent`
-    fn list_organizational_units_for_parent_pages(
-        &self,
-        input: ListOrganizationalUnitsForParentRequest,
-    ) -> RusotoStream<OrganizationalUnit, ListOrganizationalUnitsForParentError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_organizational_units_for_parent(state.clone())
-        })
+    fn list_organizational_units_for_parent_pages<'a>(
+        &'a self,
+        mut input: ListOrganizationalUnitsForParentRequest,
+    ) -> RusotoStream<'a, OrganizationalUnit, ListOrganizationalUnitsForParentError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_organizational_units_for_parent(input.clone())
+        }))
     }
 
     /// <p><p>Lists the root or organizational units (OUs) that serve as the immediate parent of the specified child OU or account. This operation, along with <a>ListChildren</a> enables you to traverse the tree structure that makes up this root.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization&#39;s management account or by a member account that is a delegated administrator for an AWS service.</p> <note> <p>In the current release, a child can have only a single parent.</p> </note></p>
@@ -6760,13 +6868,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListParentsResponse, RusotoError<ListParentsError>>;
 
     /// Auto-paginating version of `list_parents`
-    fn list_parents_pages(
-        &self,
-        input: ListParentsRequest,
-    ) -> RusotoStream<Parent, ListParentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_parents(state.clone())
-        })
+    fn list_parents_pages<'a>(
+        &'a self,
+        mut input: ListParentsRequest,
+    ) -> RusotoStream<'a, Parent, ListParentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_parents(input.clone())
+        }))
     }
 
     /// <p>Retrieves the list of all policies in an organization of a specified type.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6776,13 +6885,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
     /// Auto-paginating version of `list_policies`
-    fn list_policies_pages(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoStream<PolicySummary, ListPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_policies(state.clone())
-        })
+    fn list_policies_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesRequest,
+    ) -> RusotoStream<'a, PolicySummary, ListPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies(input.clone())
+        }))
     }
 
     /// <p>Lists the policies that are directly attached to the specified target root, organizational unit (OU), or account. You must specify the policy type that you want included in the returned list.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6792,13 +6902,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListPoliciesForTargetResponse, RusotoError<ListPoliciesForTargetError>>;
 
     /// Auto-paginating version of `list_policies_for_target`
-    fn list_policies_for_target_pages(
-        &self,
-        input: ListPoliciesForTargetRequest,
-    ) -> RusotoStream<PolicySummary, ListPoliciesForTargetError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_policies_for_target(state.clone())
-        })
+    fn list_policies_for_target_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesForTargetRequest,
+    ) -> RusotoStream<'a, PolicySummary, ListPoliciesForTargetError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies_for_target(input.clone())
+        }))
     }
 
     /// <p><p>Lists the roots that are defined in the current organization.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization&#39;s management account or by a member account that is a delegated administrator for an AWS service.</p> <note> <p>Policy types can be enabled and disabled in roots. This is distinct from whether they&#39;re available in the organization. When you enable all features, you make policy types available for use in that organization. Individual policy types can then be enabled and disabled in a root. To see the availability of a policy type in an organization, use <a>DescribeOrganization</a>.</p> </note></p>
@@ -6808,10 +6919,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListRootsResponse, RusotoError<ListRootsError>>;
 
     /// Auto-paginating version of `list_roots`
-    fn list_roots_pages(&self, input: ListRootsRequest) -> RusotoStream<Root, ListRootsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_roots(state.clone())
-        })
+    fn list_roots_pages<'a>(
+        &'a self,
+        mut input: ListRootsRequest,
+    ) -> RusotoStream<'a, Root, ListRootsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_roots(input.clone())
+        }))
     }
 
     /// <p>Lists tags that are attached to the specified resource.</p> <p>You can attach tags to the following resources in AWS Organizations.</p> <ul> <li> <p>AWS account</p> </li> <li> <p>Organization root</p> </li> <li> <p>Organizational unit (OU)</p> </li> <li> <p>Policy (any type)</p> </li> </ul> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6821,13 +6936,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceRequest,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Lists all the roots, organizational units (OUs), and accounts that the specified policy is attached to.</p> <note> <p>Always check the <code>NextToken</code> response parameter for a <code>null</code> value when calling a <code>List*</code> operation. These operations can occasionally return an empty set of results even when there are more results available. The <code>NextToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display.</p> </note> <p>This operation can be called only from the organization's management account or by a member account that is a delegated administrator for an AWS service.</p>
@@ -6837,13 +6953,14 @@ pub trait Organizations: Clone + Sync + Send + 'static {
     ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>>;
 
     /// Auto-paginating version of `list_targets_for_policy`
-    fn list_targets_for_policy_pages(
-        &self,
-        input: ListTargetsForPolicyRequest,
-    ) -> RusotoStream<PolicyTargetSummary, ListTargetsForPolicyError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_targets_for_policy(state.clone())
-        })
+    fn list_targets_for_policy_pages<'a>(
+        &'a self,
+        mut input: ListTargetsForPolicyRequest,
+    ) -> RusotoStream<'a, PolicyTargetSummary, ListTargetsForPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_targets_for_policy(input.clone())
+        }))
     }
 
     /// <p>Moves an account from its current source parent root or organizational unit (OU) to the specified destination parent root or OU.</p> <p>This operation can be called only from the organization's management account.</p>

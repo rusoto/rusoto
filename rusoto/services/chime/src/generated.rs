@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -2873,11 +2875,19 @@ pub struct ListAccountsRequest {
     pub user_email: Option<String>,
 }
 
-impl PagedRequest for ListAccountsRequest {
+impl Paged for ListAccountsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2895,27 +2905,25 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAccountsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Account>> {
-        Some(self.accounts.as_ref()?.clone())
+impl Paged for ListAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAccountsResponse {
     type Item = Account;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Account> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3683,11 +3691,19 @@ pub struct ListUsersRequest {
     pub user_type: Option<String>,
 }
 
-impl PagedRequest for ListUsersRequest {
+impl Paged for ListUsersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3705,27 +3721,25 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
-impl ListUsersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUsersResponse {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -20234,13 +20248,14 @@ pub trait Chime: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
     /// Auto-paginating version of `list_accounts`
-    fn list_accounts_pages(
-        &self,
-        input: ListAccountsRequest,
-    ) -> RusotoStream<Account, ListAccountsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_accounts(state.clone())
-        })
+    fn list_accounts_pages<'a>(
+        &'a self,
+        mut input: ListAccountsRequest,
+    ) -> RusotoStream<'a, Account, ListAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_accounts(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the administrators in the app instance.</p>
@@ -20394,10 +20409,14 @@ pub trait Chime: Clone + Sync + Send + 'static {
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// Auto-paginating version of `list_users`
-    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<User, ListUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_users(state.clone())
-        })
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, User, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
     }
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>

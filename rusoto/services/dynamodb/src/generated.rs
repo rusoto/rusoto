@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1866,11 +1868,19 @@ pub struct ListBackupsInput {
     pub time_range_upper_bound: Option<f64>,
 }
 
-impl PagedRequest for ListBackupsInput {
+impl Paged for ListBackupsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.exclusive_start_backup_arn.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.exclusive_start_backup_arn)
+    }
+}
+
+impl PagedRequest for ListBackupsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.exclusive_start_backup_arn = key;
-        self
     }
 }
 
@@ -1888,27 +1898,25 @@ pub struct ListBackupsOutput {
     pub last_evaluated_backup_arn: Option<String>,
 }
 
-impl ListBackupsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<BackupSummary>> {
-        Some(self.backup_summaries.as_ref()?.clone())
+impl Paged for ListBackupsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.last_evaluated_backup_arn.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.last_evaluated_backup_arn)
     }
 }
 
 impl PagedOutput for ListBackupsOutput {
     type Item = BackupSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.last_evaluated_backup_arn.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BackupSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.backup_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2023,11 +2031,19 @@ pub struct ListTablesInput {
     pub limit: Option<i64>,
 }
 
-impl PagedRequest for ListTablesInput {
+impl Paged for ListTablesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.exclusive_start_table_name.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.exclusive_start_table_name)
+    }
+}
+
+impl PagedRequest for ListTablesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.exclusive_start_table_name = key;
-        self
     }
 }
 
@@ -2046,27 +2062,25 @@ pub struct ListTablesOutput {
     pub table_names: Option<Vec<String>>,
 }
 
-impl ListTablesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.table_names.as_ref()?.clone())
+impl Paged for ListTablesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.last_evaluated_table_name.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.last_evaluated_table_name)
     }
 }
 
 impl PagedOutput for ListTablesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.last_evaluated_table_name.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.table_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2083,11 +2097,19 @@ pub struct ListTagsOfResourceInput {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsOfResourceInput {
+impl Paged for ListTagsOfResourceInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsOfResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2105,27 +2127,25 @@ pub struct ListTagsOfResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsOfResourceOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsOfResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsOfResourceOutput {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2463,14 +2483,24 @@ pub struct QueryInput {
     pub table_name: String,
 }
 
-impl PagedRequest for QueryInput {
+impl Paged for QueryInput {
     type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
-    fn with_pagination_token(
-        mut self,
+    fn take_pagination_token(
+        &mut self,
+    ) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        self.exclusive_start_key.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<::std::collections::HashMap<String, AttributeValue>>> {
+        Cow::Borrowed(&self.exclusive_start_key)
+    }
+}
+
+impl PagedRequest for QueryInput {
+    fn set_pagination_token(
+        &mut self,
         key: Option<::std::collections::HashMap<String, AttributeValue>>,
-    ) -> Self {
+    ) {
         self.exclusive_start_key = key;
-        self
     }
 }
 
@@ -2501,23 +2531,27 @@ pub struct QueryOutput {
     pub scanned_count: Option<i64>,
 }
 
-impl QueryOutput {}
+impl Paged for QueryOutput {
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn take_pagination_token(
+        &mut self,
+    ) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        self.last_evaluated_key.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<::std::collections::HashMap<String, AttributeValue>>> {
+        Cow::Borrowed(&self.last_evaluated_key)
+    }
+}
 
 impl PagedOutput for QueryOutput {
     type Item = QueryOutput;
-    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
-    fn pagination_token(&self) -> Option<::std::collections::HashMap<String, AttributeValue>> {
-        Some(self.last_evaluated_key.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<QueryOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3038,14 +3072,24 @@ pub struct ScanInput {
     pub total_segments: Option<i64>,
 }
 
-impl PagedRequest for ScanInput {
+impl Paged for ScanInput {
     type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
-    fn with_pagination_token(
-        mut self,
+    fn take_pagination_token(
+        &mut self,
+    ) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        self.exclusive_start_key.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<::std::collections::HashMap<String, AttributeValue>>> {
+        Cow::Borrowed(&self.exclusive_start_key)
+    }
+}
+
+impl PagedRequest for ScanInput {
+    fn set_pagination_token(
+        &mut self,
         key: Option<::std::collections::HashMap<String, AttributeValue>>,
-    ) -> Self {
+    ) {
         self.exclusive_start_key = key;
-        self
     }
 }
 
@@ -3076,23 +3120,27 @@ pub struct ScanOutput {
     pub scanned_count: Option<i64>,
 }
 
-impl ScanOutput {}
+impl Paged for ScanOutput {
+    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
+    fn take_pagination_token(
+        &mut self,
+    ) -> Option<::std::collections::HashMap<String, AttributeValue>> {
+        self.last_evaluated_key.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<::std::collections::HashMap<String, AttributeValue>>> {
+        Cow::Borrowed(&self.last_evaluated_key)
+    }
+}
 
 impl PagedOutput for ScanOutput {
     type Item = ScanOutput;
-    type Token = Option<::std::collections::HashMap<String, AttributeValue>>;
-    fn pagination_token(&self) -> Option<::std::collections::HashMap<String, AttributeValue>> {
-        Some(self.last_evaluated_key.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ScanOutput> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6577,13 +6625,14 @@ pub trait DynamoDb: Clone + Sync + Send + 'static {
     ) -> Result<ListBackupsOutput, RusotoError<ListBackupsError>>;
 
     /// Auto-paginating version of `list_backups`
-    fn list_backups_pages(
-        &self,
-        input: ListBackupsInput,
-    ) -> RusotoStream<BackupSummary, ListBackupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_backups(state.clone())
-        })
+    fn list_backups_pages<'a>(
+        &'a self,
+        mut input: ListBackupsInput,
+    ) -> RusotoStream<'a, BackupSummary, ListBackupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_backups(input.clone())
+        }))
     }
 
     /// <p>Returns a list of ContributorInsightsSummary for a table and all its global secondary indexes.</p>
@@ -6611,10 +6660,14 @@ pub trait DynamoDb: Clone + Sync + Send + 'static {
     ) -> Result<ListTablesOutput, RusotoError<ListTablesError>>;
 
     /// Auto-paginating version of `list_tables`
-    fn list_tables_pages(&self, input: ListTablesInput) -> RusotoStream<String, ListTablesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tables(state.clone())
-        })
+    fn list_tables_pages<'a>(
+        &'a self,
+        mut input: ListTablesInput,
+    ) -> RusotoStream<'a, String, ListTablesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tables(input.clone())
+        }))
     }
 
     /// <p>List all tags on an Amazon DynamoDB resource. You can call ListTagsOfResource up to 10 times per second, per account.</p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -6624,13 +6677,14 @@ pub trait DynamoDb: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsOfResourceOutput, RusotoError<ListTagsOfResourceError>>;
 
     /// Auto-paginating version of `list_tags_of_resource`
-    fn list_tags_of_resource_pages(
-        &self,
-        input: ListTagsOfResourceInput,
-    ) -> RusotoStream<Tag, ListTagsOfResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_of_resource(state.clone())
-        })
+    fn list_tags_of_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsOfResourceInput,
+    ) -> RusotoStream<'a, Tag, ListTagsOfResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_of_resource(input.clone())
+        }))
     }
 
     /// <p>Creates a new item, or replaces an old item with a new item. If an item that has the same primary key as the new item already exists in the specified table, the new item completely replaces the existing item. You can perform a conditional put operation (add a new item if one with the specified primary key doesn't exist), or replace an existing item if it has certain attribute values. You can return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <important> <p>This topic provides general information about the <code>PutItem</code> API.</p> <p>For information on how to call the <code>PutItem</code> API using the AWS SDK in specific languages, see the following:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/goto/aws-cli/dynamodb-2012-08-10/PutItem"> PutItem in the AWS Command Line Interface</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/DotNetSDKV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for .NET</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForCpp/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for C++</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForGoV1/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Go</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForJava/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Java</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/AWSJavaScriptSDK/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for JavaScript</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForPHPV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for PHP V3</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/boto3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Python</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForRubyV2/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Ruby V2</a> </p> </li> </ul> </important> <p>When you add an item, the primary key attributes are the only required attributes. Attribute values cannot be null.</p> <p>Empty String and Binary attribute values are allowed. Attribute values of type String and Binary must have a length greater than zero if the attribute is used as a key attribute for a table or index. Set type attributes cannot be empty. </p> <p>Invalid Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p> <note> <p>To prevent a new item from replacing an existing item, use a conditional expression that contains the <code>attribute_not_exists</code> function with the name of the attribute being used as the partition key for the table. Since every record must contain that attribute, the <code>attribute_not_exists</code> function will only succeed if no matching item exists.</p> </note> <p>For more information about <code>PutItem</code>, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html">Working with Items</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -6643,10 +6697,14 @@ pub trait DynamoDb: Clone + Sync + Send + 'static {
     async fn query(&self, input: QueryInput) -> Result<QueryOutput, RusotoError<QueryError>>;
 
     /// Auto-paginating version of `query`
-    fn query_pages(&self, input: QueryInput) -> RusotoStream<QueryOutput, QueryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.query(state.clone())
-        })
+    fn query_pages<'a>(
+        &'a self,
+        mut input: QueryInput,
+    ) -> RusotoStream<'a, QueryOutput, QueryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.query(input.clone())
+        }))
     }
 
     /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Amazon CloudWatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
@@ -6665,10 +6723,11 @@ pub trait DynamoDb: Clone + Sync + Send + 'static {
     async fn scan(&self, input: ScanInput) -> Result<ScanOutput, RusotoError<ScanError>>;
 
     /// Auto-paginating version of `scan`
-    fn scan_pages(&self, input: ScanInput) -> RusotoStream<ScanOutput, ScanError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.scan(state.clone())
-        })
+    fn scan_pages<'a>(&'a self, mut input: ScanInput) -> RusotoStream<'a, ScanOutput, ScanError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.scan(input.clone())
+        }))
     }
 
     /// <p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to five times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>

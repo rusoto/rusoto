@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -3005,11 +3007,19 @@ pub struct GetAccountAuthorizationDetailsRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for GetAccountAuthorizationDetailsRequest {
+impl Paged for GetAccountAuthorizationDetailsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for GetAccountAuthorizationDetailsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3057,27 +3067,25 @@ pub struct GetAccountAuthorizationDetailsResponse {
     pub user_detail_list: Option<Vec<UserDetail>>,
 }
 
-impl GetAccountAuthorizationDetailsResponse {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for GetAccountAuthorizationDetailsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for GetAccountAuthorizationDetailsResponse {
     type Item = GetAccountAuthorizationDetailsResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GetAccountAuthorizationDetailsResponse> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -3419,11 +3427,19 @@ pub struct GetGroupRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for GetGroupRequest {
+impl Paged for GetGroupRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for GetGroupRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3461,31 +3477,25 @@ pub struct GetGroupResponse {
     pub users: Vec<User>,
 }
 
-impl GetGroupResponse {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.clone())
+impl Paged for GetGroupResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for GetGroupResponse {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -4956,11 +4966,19 @@ pub struct ListAccessKeysRequest {
     pub user_name: Option<String>,
 }
 
-impl PagedRequest for ListAccessKeysRequest {
+impl Paged for ListAccessKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAccessKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4998,31 +5016,25 @@ pub struct ListAccessKeysResponse {
     pub marker: Option<String>,
 }
 
-impl ListAccessKeysResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AccessKeyMetadata>> {
-        Some(self.access_key_metadata.clone())
+impl Paged for ListAccessKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListAccessKeysResponse {
     type Item = AccessKeyMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AccessKeyMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.access_key_metadata
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5069,11 +5081,19 @@ pub struct ListAccountAliasesRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListAccountAliasesRequest {
+impl Paged for ListAccountAliasesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAccountAliasesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5108,31 +5128,25 @@ pub struct ListAccountAliasesResponse {
     pub marker: Option<String>,
 }
 
-impl ListAccountAliasesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.account_aliases.clone())
+impl Paged for ListAccountAliasesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListAccountAliasesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.account_aliases
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5186,11 +5200,19 @@ pub struct ListAttachedGroupPoliciesRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListAttachedGroupPoliciesRequest {
+impl Paged for ListAttachedGroupPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedGroupPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5229,31 +5251,25 @@ pub struct ListAttachedGroupPoliciesResponse {
     pub marker: Option<String>,
 }
 
-impl ListAttachedGroupPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AttachedPolicy>> {
-        Some(self.attached_policies.as_ref()?.clone())
+impl Paged for ListAttachedGroupPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListAttachedGroupPoliciesResponse {
     type Item = AttachedPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AttachedPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attached_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5308,11 +5324,19 @@ pub struct ListAttachedRolePoliciesRequest {
     pub role_name: String,
 }
 
-impl PagedRequest for ListAttachedRolePoliciesRequest {
+impl Paged for ListAttachedRolePoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedRolePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5351,31 +5375,25 @@ pub struct ListAttachedRolePoliciesResponse {
     pub marker: Option<String>,
 }
 
-impl ListAttachedRolePoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AttachedPolicy>> {
-        Some(self.attached_policies.as_ref()?.clone())
+impl Paged for ListAttachedRolePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListAttachedRolePoliciesResponse {
     type Item = AttachedPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AttachedPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attached_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5430,11 +5448,19 @@ pub struct ListAttachedUserPoliciesRequest {
     pub user_name: String,
 }
 
-impl PagedRequest for ListAttachedUserPoliciesRequest {
+impl Paged for ListAttachedUserPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListAttachedUserPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5473,31 +5499,25 @@ pub struct ListAttachedUserPoliciesResponse {
     pub marker: Option<String>,
 }
 
-impl ListAttachedUserPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AttachedPolicy>> {
-        Some(self.attached_policies.as_ref()?.clone())
+impl Paged for ListAttachedUserPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListAttachedUserPoliciesResponse {
     type Item = AttachedPolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AttachedPolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attached_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5556,11 +5576,19 @@ pub struct ListEntitiesForPolicyRequest {
     pub policy_usage_filter: Option<String>,
 }
 
-impl PagedRequest for ListEntitiesForPolicyRequest {
+impl Paged for ListEntitiesForPolicyRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListEntitiesForPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5609,27 +5637,25 @@ pub struct ListEntitiesForPolicyResponse {
     pub policy_users: Option<Vec<PolicyUser>>,
 }
 
-impl ListEntitiesForPolicyResponse {
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+impl Paged for ListEntitiesForPolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListEntitiesForPolicyResponse {
     type Item = ListEntitiesForPolicyResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListEntitiesForPolicyResponse> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5689,11 +5715,19 @@ pub struct ListGroupPoliciesRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListGroupPoliciesRequest {
+impl Paged for ListGroupPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5729,31 +5763,25 @@ pub struct ListGroupPoliciesResponse {
     pub policy_names: Vec<String>,
 }
 
-impl ListGroupPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.policy_names.clone())
+impl Paged for ListGroupPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListGroupPoliciesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_names
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5805,11 +5833,19 @@ pub struct ListGroupsForUserRequest {
     pub user_name: String,
 }
 
-impl PagedRequest for ListGroupsForUserRequest {
+impl Paged for ListGroupsForUserRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupsForUserRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5845,31 +5881,25 @@ pub struct ListGroupsForUserResponse {
     pub marker: Option<String>,
 }
 
-impl ListGroupsForUserResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Group>> {
-        Some(self.groups.clone())
+impl Paged for ListGroupsForUserResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListGroupsForUserResponse {
     type Item = Group;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Group> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -5918,11 +5948,19 @@ pub struct ListGroupsRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListGroupsRequest {
+impl Paged for ListGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -5960,31 +5998,25 @@ pub struct ListGroupsResponse {
     pub marker: Option<String>,
 }
 
-impl ListGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Group>> {
-        Some(self.groups.clone())
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListGroupsResponse {
     type Item = Group;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Group> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6029,11 +6061,19 @@ pub struct ListInstanceProfilesForRoleRequest {
     pub role_name: String,
 }
 
-impl PagedRequest for ListInstanceProfilesForRoleRequest {
+impl Paged for ListInstanceProfilesForRoleRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceProfilesForRoleRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6069,31 +6109,25 @@ pub struct ListInstanceProfilesForRoleResponse {
     pub marker: Option<String>,
 }
 
-impl ListInstanceProfilesForRoleResponse {
-    fn pagination_page_opt(self) -> Option<Vec<InstanceProfile>> {
-        Some(self.instance_profiles.clone())
+impl Paged for ListInstanceProfilesForRoleResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListInstanceProfilesForRoleResponse {
     type Item = InstanceProfile;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<InstanceProfile> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.instance_profiles
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6146,11 +6180,19 @@ pub struct ListInstanceProfilesRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListInstanceProfilesRequest {
+impl Paged for ListInstanceProfilesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListInstanceProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6188,31 +6230,25 @@ pub struct ListInstanceProfilesResponse {
     pub marker: Option<String>,
 }
 
-impl ListInstanceProfilesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<InstanceProfile>> {
-        Some(self.instance_profiles.clone())
+impl Paged for ListInstanceProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListInstanceProfilesResponse {
     type Item = InstanceProfile;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<InstanceProfile> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.instance_profiles
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6265,11 +6301,19 @@ pub struct ListMFADevicesRequest {
     pub user_name: Option<String>,
 }
 
-impl PagedRequest for ListMFADevicesRequest {
+impl Paged for ListMFADevicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListMFADevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6307,31 +6351,25 @@ pub struct ListMFADevicesResponse {
     pub marker: Option<String>,
 }
 
-impl ListMFADevicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<MFADevice>> {
-        Some(self.mfa_devices.clone())
+impl Paged for ListMFADevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListMFADevicesResponse {
     type Item = MFADevice;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MFADevice> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.mfa_devices
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6559,11 +6597,19 @@ pub struct ListPoliciesRequest {
     pub scope: Option<String>,
 }
 
-impl PagedRequest for ListPoliciesRequest {
+impl Paged for ListPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6610,31 +6656,25 @@ pub struct ListPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
-impl ListPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Policy>> {
-        Some(self.policies.as_ref()?.clone())
+impl Paged for ListPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListPoliciesResponse {
     type Item = Policy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Policy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6702,11 +6742,19 @@ pub struct ListPolicyVersionsRequest {
     pub policy_arn: String,
 }
 
-impl PagedRequest for ListPolicyVersionsRequest {
+impl Paged for ListPolicyVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListPolicyVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6742,31 +6790,25 @@ pub struct ListPolicyVersionsResponse {
     pub versions: Option<Vec<PolicyVersion>>,
 }
 
-impl ListPolicyVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicyVersion>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListPolicyVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListPolicyVersionsResponse {
     type Item = PolicyVersion;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicyVersion> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -6818,11 +6860,19 @@ pub struct ListRolePoliciesRequest {
     pub role_name: String,
 }
 
-impl PagedRequest for ListRolePoliciesRequest {
+impl Paged for ListRolePoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListRolePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -6858,31 +6908,25 @@ pub struct ListRolePoliciesResponse {
     pub policy_names: Vec<String>,
 }
 
-impl ListRolePoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.policy_names.clone())
+impl Paged for ListRolePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListRolePoliciesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_names
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7006,11 +7050,19 @@ pub struct ListRolesRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListRolesRequest {
+impl Paged for ListRolesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListRolesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7048,31 +7100,25 @@ pub struct ListRolesResponse {
     pub roles: Vec<Role>,
 }
 
-impl ListRolesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Role>> {
-        Some(self.roles.clone())
+impl Paged for ListRolesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListRolesResponse {
     type Item = Role;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Role> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.roles
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7170,11 +7216,19 @@ pub struct ListSSHPublicKeysRequest {
     pub user_name: Option<String>,
 }
 
-impl PagedRequest for ListSSHPublicKeysRequest {
+impl Paged for ListSSHPublicKeysRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListSSHPublicKeysRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7212,31 +7266,25 @@ pub struct ListSSHPublicKeysResponse {
     pub ssh_public_keys: Option<Vec<SSHPublicKeyMetadata>>,
 }
 
-impl ListSSHPublicKeysResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SSHPublicKeyMetadata>> {
-        Some(self.ssh_public_keys.as_ref()?.clone())
+impl Paged for ListSSHPublicKeysResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListSSHPublicKeysResponse {
     type Item = SSHPublicKeyMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SSHPublicKeyMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.ssh_public_keys.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7286,11 +7334,19 @@ pub struct ListServerCertificatesRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListServerCertificatesRequest {
+impl Paged for ListServerCertificatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListServerCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7328,31 +7384,25 @@ pub struct ListServerCertificatesResponse {
     pub server_certificate_metadata_list: Vec<ServerCertificateMetadata>,
 }
 
-impl ListServerCertificatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServerCertificateMetadata>> {
-        Some(self.server_certificate_metadata_list.clone())
+impl Paged for ListServerCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListServerCertificatesResponse {
     type Item = ServerCertificateMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServerCertificateMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.server_certificate_metadata_list
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7469,11 +7519,19 @@ pub struct ListSigningCertificatesRequest {
     pub user_name: Option<String>,
 }
 
-impl PagedRequest for ListSigningCertificatesRequest {
+impl Paged for ListSigningCertificatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListSigningCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7511,31 +7569,25 @@ pub struct ListSigningCertificatesResponse {
     pub marker: Option<String>,
 }
 
-impl ListSigningCertificatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SigningCertificate>> {
-        Some(self.certificates.clone())
+impl Paged for ListSigningCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListSigningCertificatesResponse {
     type Item = SigningCertificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SigningCertificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.certificates
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7587,11 +7639,19 @@ pub struct ListUserPoliciesRequest {
     pub user_name: String,
 }
 
-impl PagedRequest for ListUserPoliciesRequest {
+impl Paged for ListUserPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListUserPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7627,31 +7687,25 @@ pub struct ListUserPoliciesResponse {
     pub policy_names: Vec<String>,
 }
 
-impl ListUserPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.policy_names.clone())
+impl Paged for ListUserPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListUserPoliciesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_names
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7775,11 +7829,19 @@ pub struct ListUsersRequest {
     pub path_prefix: Option<String>,
 }
 
-impl PagedRequest for ListUsersRequest {
+impl Paged for ListUsersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7817,31 +7879,25 @@ pub struct ListUsersResponse {
     pub users: Vec<User>,
 }
 
-impl ListUsersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.clone())
+impl Paged for ListUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListUsersResponse {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -7886,11 +7942,19 @@ pub struct ListVirtualMFADevicesRequest {
     pub max_items: Option<i64>,
 }
 
-impl PagedRequest for ListVirtualMFADevicesRequest {
+impl Paged for ListVirtualMFADevicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListVirtualMFADevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -7928,31 +7992,25 @@ pub struct ListVirtualMFADevicesResponse {
     pub virtual_mfa_devices: Vec<VirtualMFADevice>,
 }
 
-impl ListVirtualMFADevicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VirtualMFADevice>> {
-        Some(self.virtual_mfa_devices.clone())
+impl Paged for ListVirtualMFADevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for ListVirtualMFADevicesResponse {
     type Item = VirtualMFADevice;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VirtualMFADevice> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.virtual_mfa_devices
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -10715,11 +10773,19 @@ pub struct SimulateCustomPolicyRequest {
     pub resource_policy: Option<String>,
 }
 
-impl PagedRequest for SimulateCustomPolicyRequest {
+impl Paged for SimulateCustomPolicyRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for SimulateCustomPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -10801,31 +10867,25 @@ pub struct SimulatePolicyResponse {
     pub marker: Option<String>,
 }
 
-impl SimulatePolicyResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EvaluationResult>> {
-        Some(self.evaluation_results.as_ref()?.clone())
+impl Paged for SimulatePolicyResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.as_ref()?.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for SimulatePolicyResponse {
     type Item = EvaluationResult;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EvaluationResult> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.evaluation_results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated.unwrap_or_default()
     }
 }
 
@@ -10892,11 +10952,19 @@ pub struct SimulatePrincipalPolicyRequest {
     pub resource_policy: Option<String>,
 }
 
-impl PagedRequest for SimulatePrincipalPolicyRequest {
+impl Paged for SimulatePrincipalPolicyRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for SimulatePrincipalPolicyRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -21526,14 +21594,15 @@ pub trait Iam: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_account_authorization_details`
-    fn get_account_authorization_details_pages(
-        &self,
-        input: GetAccountAuthorizationDetailsRequest,
-    ) -> RusotoStream<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>
+    fn get_account_authorization_details_pages<'a>(
+        &'a self,
+        mut input: GetAccountAuthorizationDetailsRequest,
+    ) -> RusotoStream<'a, GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_account_authorization_details(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_account_authorization_details(input.clone())
+        }))
     }
 
     /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
@@ -21570,10 +21639,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<GetGroupResponse, RusotoError<GetGroupError>>;
 
     /// Auto-paginating version of `get_group`
-    fn get_group_pages(&self, input: GetGroupRequest) -> RusotoStream<User, GetGroupError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_group(state.clone())
-        })
+    fn get_group_pages<'a>(
+        &'a self,
+        mut input: GetGroupRequest,
+    ) -> RusotoStream<'a, User, GetGroupError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_group(input.clone())
+        }))
     }
 
     /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -21694,13 +21767,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListAccessKeysResponse, RusotoError<ListAccessKeysError>>;
 
     /// Auto-paginating version of `list_access_keys`
-    fn list_access_keys_pages(
-        &self,
-        input: ListAccessKeysRequest,
-    ) -> RusotoStream<AccessKeyMetadata, ListAccessKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_access_keys(state.clone())
-        })
+    fn list_access_keys_pages<'a>(
+        &'a self,
+        mut input: ListAccessKeysRequest,
+    ) -> RusotoStream<'a, AccessKeyMetadata, ListAccessKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_access_keys(input.clone())
+        }))
     }
 
     /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
@@ -21710,13 +21784,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListAccountAliasesResponse, RusotoError<ListAccountAliasesError>>;
 
     /// Auto-paginating version of `list_account_aliases`
-    fn list_account_aliases_pages(
-        &self,
-        input: ListAccountAliasesRequest,
-    ) -> RusotoStream<String, ListAccountAliasesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_account_aliases(state.clone())
-        })
+    fn list_account_aliases_pages<'a>(
+        &'a self,
+        mut input: ListAccountAliasesRequest,
+    ) -> RusotoStream<'a, String, ListAccountAliasesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_account_aliases(input.clone())
+        }))
     }
 
     /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
@@ -21726,13 +21801,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListAttachedGroupPoliciesResponse, RusotoError<ListAttachedGroupPoliciesError>>;
 
     /// Auto-paginating version of `list_attached_group_policies`
-    fn list_attached_group_policies_pages(
-        &self,
-        input: ListAttachedGroupPoliciesRequest,
-    ) -> RusotoStream<AttachedPolicy, ListAttachedGroupPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_attached_group_policies(state.clone())
-        })
+    fn list_attached_group_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedGroupPoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedGroupPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_group_policies(input.clone())
+        }))
     }
 
     /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the operation returns an empty list.</p>
@@ -21742,13 +21818,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListAttachedRolePoliciesResponse, RusotoError<ListAttachedRolePoliciesError>>;
 
     /// Auto-paginating version of `list_attached_role_policies`
-    fn list_attached_role_policies_pages(
-        &self,
-        input: ListAttachedRolePoliciesRequest,
-    ) -> RusotoStream<AttachedPolicy, ListAttachedRolePoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_attached_role_policies(state.clone())
-        })
+    fn list_attached_role_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedRolePoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedRolePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_role_policies(input.clone())
+        }))
     }
 
     /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
@@ -21758,13 +21835,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListAttachedUserPoliciesResponse, RusotoError<ListAttachedUserPoliciesError>>;
 
     /// Auto-paginating version of `list_attached_user_policies`
-    fn list_attached_user_policies_pages(
-        &self,
-        input: ListAttachedUserPoliciesRequest,
-    ) -> RusotoStream<AttachedPolicy, ListAttachedUserPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_attached_user_policies(state.clone())
-        })
+    fn list_attached_user_policies_pages<'a>(
+        &'a self,
+        mut input: ListAttachedUserPoliciesRequest,
+    ) -> RusotoStream<'a, AttachedPolicy, ListAttachedUserPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_attached_user_policies(input.clone())
+        }))
     }
 
     /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21774,13 +21852,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListEntitiesForPolicyResponse, RusotoError<ListEntitiesForPolicyError>>;
 
     /// Auto-paginating version of `list_entities_for_policy`
-    fn list_entities_for_policy_pages(
-        &self,
-        input: ListEntitiesForPolicyRequest,
-    ) -> RusotoStream<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_entities_for_policy(state.clone())
-        })
+    fn list_entities_for_policy_pages<'a>(
+        &'a self,
+        mut input: ListEntitiesForPolicyRequest,
+    ) -> RusotoStream<'a, ListEntitiesForPolicyResponse, ListEntitiesForPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entities_for_policy(input.clone())
+        }))
     }
 
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the operation returns an empty list.</p>
@@ -21790,13 +21869,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupPoliciesResponse, RusotoError<ListGroupPoliciesError>>;
 
     /// Auto-paginating version of `list_group_policies`
-    fn list_group_policies_pages(
-        &self,
-        input: ListGroupPoliciesRequest,
-    ) -> RusotoStream<String, ListGroupPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_group_policies(state.clone())
-        })
+    fn list_group_policies_pages<'a>(
+        &'a self,
+        mut input: ListGroupPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListGroupPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_policies(input.clone())
+        }))
     }
 
     /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21806,10 +21886,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// Auto-paginating version of `list_groups`
-    fn list_groups_pages(&self, input: ListGroupsRequest) -> RusotoStream<Group, ListGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups(state.clone())
-        })
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
     }
 
     /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21819,13 +21903,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsForUserResponse, RusotoError<ListGroupsForUserError>>;
 
     /// Auto-paginating version of `list_groups_for_user`
-    fn list_groups_for_user_pages(
-        &self,
-        input: ListGroupsForUserRequest,
-    ) -> RusotoStream<Group, ListGroupsForUserError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups_for_user(state.clone())
-        })
+    fn list_groups_for_user_pages<'a>(
+        &'a self,
+        mut input: ListGroupsForUserRequest,
+    ) -> RusotoStream<'a, Group, ListGroupsForUserError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups_for_user(input.clone())
+        }))
     }
 
     /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21835,13 +21920,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListInstanceProfilesResponse, RusotoError<ListInstanceProfilesError>>;
 
     /// Auto-paginating version of `list_instance_profiles`
-    fn list_instance_profiles_pages(
-        &self,
-        input: ListInstanceProfilesRequest,
-    ) -> RusotoStream<InstanceProfile, ListInstanceProfilesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_instance_profiles(state.clone())
-        })
+    fn list_instance_profiles_pages<'a>(
+        &'a self,
+        mut input: ListInstanceProfilesRequest,
+    ) -> RusotoStream<'a, InstanceProfile, ListInstanceProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_profiles(input.clone())
+        }))
     }
 
     /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21851,13 +21937,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListInstanceProfilesForRoleResponse, RusotoError<ListInstanceProfilesForRoleError>>;
 
     /// Auto-paginating version of `list_instance_profiles_for_role`
-    fn list_instance_profiles_for_role_pages(
-        &self,
-        input: ListInstanceProfilesForRoleRequest,
-    ) -> RusotoStream<InstanceProfile, ListInstanceProfilesForRoleError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_instance_profiles_for_role(state.clone())
-        })
+    fn list_instance_profiles_for_role_pages<'a>(
+        &'a self,
+        mut input: ListInstanceProfilesForRoleRequest,
+    ) -> RusotoStream<'a, InstanceProfile, ListInstanceProfilesForRoleError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_instance_profiles_for_role(input.clone())
+        }))
     }
 
     /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this operation lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -21867,13 +21954,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListMFADevicesResponse, RusotoError<ListMFADevicesError>>;
 
     /// Auto-paginating version of `list_mfa_devices`
-    fn list_mfa_devices_pages(
-        &self,
-        input: ListMFADevicesRequest,
-    ) -> RusotoStream<MFADevice, ListMFADevicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_mfa_devices(state.clone())
-        })
+    fn list_mfa_devices_pages<'a>(
+        &'a self,
+        mut input: ListMFADevicesRequest,
+    ) -> RusotoStream<'a, MFADevice, ListMFADevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_mfa_devices(input.clone())
+        }))
     }
 
     /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
@@ -21889,13 +21977,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
     /// Auto-paginating version of `list_policies`
-    fn list_policies_pages(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoStream<Policy, ListPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_policies(state.clone())
-        })
+    fn list_policies_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesRequest,
+    ) -> RusotoStream<'a, Policy, ListPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
@@ -21914,13 +22003,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>>;
 
     /// Auto-paginating version of `list_policy_versions`
-    fn list_policy_versions_pages(
-        &self,
-        input: ListPolicyVersionsRequest,
-    ) -> RusotoStream<PolicyVersion, ListPolicyVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_policy_versions(state.clone())
-        })
+    fn list_policy_versions_pages<'a>(
+        &'a self,
+        mut input: ListPolicyVersionsRequest,
+    ) -> RusotoStream<'a, PolicyVersion, ListPolicyVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policy_versions(input.clone())
+        }))
     }
 
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the operation returns an empty list.</p>
@@ -21930,13 +22020,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListRolePoliciesResponse, RusotoError<ListRolePoliciesError>>;
 
     /// Auto-paginating version of `list_role_policies`
-    fn list_role_policies_pages(
-        &self,
-        input: ListRolePoliciesRequest,
-    ) -> RusotoStream<String, ListRolePoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_role_policies(state.clone())
-        })
+    fn list_role_policies_pages<'a>(
+        &'a self,
+        mut input: ListRolePoliciesRequest,
+    ) -> RusotoStream<'a, String, ListRolePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_role_policies(input.clone())
+        }))
     }
 
     /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -21952,10 +22043,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListRolesResponse, RusotoError<ListRolesError>>;
 
     /// Auto-paginating version of `list_roles`
-    fn list_roles_pages(&self, input: ListRolesRequest) -> RusotoStream<Role, ListRolesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_roles(state.clone())
-        })
+    fn list_roles_pages<'a>(
+        &'a self,
+        mut input: ListRolesRequest,
+    ) -> RusotoStream<'a, Role, ListRolesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_roles(input.clone())
+        }))
     }
 
     /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
@@ -21971,13 +22066,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListSSHPublicKeysResponse, RusotoError<ListSSHPublicKeysError>>;
 
     /// Auto-paginating version of `list_ssh_public_keys`
-    fn list_ssh_public_keys_pages(
-        &self,
-        input: ListSSHPublicKeysRequest,
-    ) -> RusotoStream<SSHPublicKeyMetadata, ListSSHPublicKeysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_ssh_public_keys(state.clone())
-        })
+    fn list_ssh_public_keys_pages<'a>(
+        &'a self,
+        mut input: ListSSHPublicKeysRequest,
+    ) -> RusotoStream<'a, SSHPublicKeyMetadata, ListSSHPublicKeysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_ssh_public_keys(input.clone())
+        }))
     }
 
     /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the operation returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
@@ -21987,13 +22083,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListServerCertificatesResponse, RusotoError<ListServerCertificatesError>>;
 
     /// Auto-paginating version of `list_server_certificates`
-    fn list_server_certificates_pages(
-        &self,
-        input: ListServerCertificatesRequest,
-    ) -> RusotoStream<ServerCertificateMetadata, ListServerCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_server_certificates(state.clone())
-        })
+    fn list_server_certificates_pages<'a>(
+        &'a self,
+        mut input: ListServerCertificatesRequest,
+    ) -> RusotoStream<'a, ServerCertificateMetadata, ListServerCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_server_certificates(input.clone())
+        }))
     }
 
     /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
@@ -22012,13 +22109,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListSigningCertificatesResponse, RusotoError<ListSigningCertificatesError>>;
 
     /// Auto-paginating version of `list_signing_certificates`
-    fn list_signing_certificates_pages(
-        &self,
-        input: ListSigningCertificatesRequest,
-    ) -> RusotoStream<SigningCertificate, ListSigningCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_signing_certificates(state.clone())
-        })
+    fn list_signing_certificates_pages<'a>(
+        &'a self,
+        mut input: ListSigningCertificatesRequest,
+    ) -> RusotoStream<'a, SigningCertificate, ListSigningCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_certificates(input.clone())
+        }))
     }
 
     /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the operation returns an empty list.</p>
@@ -22028,13 +22126,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListUserPoliciesResponse, RusotoError<ListUserPoliciesError>>;
 
     /// Auto-paginating version of `list_user_policies`
-    fn list_user_policies_pages(
-        &self,
-        input: ListUserPoliciesRequest,
-    ) -> RusotoStream<String, ListUserPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_user_policies(state.clone())
-        })
+    fn list_user_policies_pages<'a>(
+        &'a self,
+        mut input: ListUserPoliciesRequest,
+    ) -> RusotoStream<'a, String, ListUserPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_user_policies(input.clone())
+        }))
     }
 
     /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -22050,10 +22149,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
     /// Auto-paginating version of `list_users`
-    fn list_users_pages(&self, input: ListUsersRequest) -> RusotoStream<User, ListUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_users(state.clone())
-        })
+    fn list_users_pages<'a>(
+        &'a self,
+        mut input: ListUsersRequest,
+    ) -> RusotoStream<'a, User, ListUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_users(input.clone())
+        }))
     }
 
     /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the operation returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
@@ -22063,13 +22166,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<ListVirtualMFADevicesResponse, RusotoError<ListVirtualMFADevicesError>>;
 
     /// Auto-paginating version of `list_virtual_mfa_devices`
-    fn list_virtual_mfa_devices_pages(
-        &self,
-        input: ListVirtualMFADevicesRequest,
-    ) -> RusotoStream<VirtualMFADevice, ListVirtualMFADevicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_virtual_mfa_devices(state.clone())
-        })
+    fn list_virtual_mfa_devices_pages<'a>(
+        &'a self,
+        mut input: ListVirtualMFADevicesRequest,
+    ) -> RusotoStream<'a, VirtualMFADevice, ListVirtualMFADevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_mfa_devices(input.clone())
+        }))
     }
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
@@ -22154,13 +22258,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulateCustomPolicyError>>;
 
     /// Auto-paginating version of `simulate_custom_policy`
-    fn simulate_custom_policy_pages(
-        &self,
-        input: SimulateCustomPolicyRequest,
-    ) -> RusotoStream<EvaluationResult, SimulateCustomPolicyError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.simulate_custom_policy(state.clone())
-        })
+    fn simulate_custom_policy_pages<'a>(
+        &'a self,
+        mut input: SimulateCustomPolicyRequest,
+    ) -> RusotoStream<'a, EvaluationResult, SimulateCustomPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.simulate_custom_policy(input.clone())
+        }))
     }
 
     /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API operations and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to.</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
@@ -22170,13 +22275,14 @@ pub trait Iam: Clone + Sync + Send + 'static {
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulatePrincipalPolicyError>>;
 
     /// Auto-paginating version of `simulate_principal_policy`
-    fn simulate_principal_policy_pages(
-        &self,
-        input: SimulatePrincipalPolicyRequest,
-    ) -> RusotoStream<EvaluationResult, SimulatePrincipalPolicyError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.simulate_principal_policy(state.clone())
-        })
+    fn simulate_principal_policy_pages<'a>(
+        &'a self,
+        mut input: SimulatePrincipalPolicyRequest,
+    ) -> RusotoStream<'a, EvaluationResult, SimulatePrincipalPolicyError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.simulate_principal_policy(input.clone())
+        }))
     }
 
     /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>

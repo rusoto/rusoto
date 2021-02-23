@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -271,11 +273,19 @@ pub struct ListDeviceEventsRequest {
     pub to_time_stamp: f64,
 }
 
-impl PagedRequest for ListDeviceEventsRequest {
+impl Paged for ListDeviceEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeviceEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -294,27 +304,25 @@ pub struct ListDeviceEventsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDeviceEventsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DeviceEvent>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for ListDeviceEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeviceEventsResponse {
     type Item = DeviceEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DeviceEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -337,11 +345,19 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDevicesRequest {
+impl Paged for ListDevicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDevicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -359,27 +375,25 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDevicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DeviceDescription>> {
-        Some(self.devices.as_ref()?.clone())
+impl Paged for ListDevicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDevicesResponse {
     type Item = DeviceDescription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DeviceDescription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.devices.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1123,13 +1137,14 @@ pub trait Iot1ClickDevices: Clone + Sync + Send + 'static {
     ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>>;
 
     /// Auto-paginating version of `list_device_events`
-    fn list_device_events_pages(
-        &self,
-        input: ListDeviceEventsRequest,
-    ) -> RusotoStream<DeviceEvent, ListDeviceEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_device_events(state.clone())
-        })
+    fn list_device_events_pages<'a>(
+        &'a self,
+        mut input: ListDeviceEventsRequest,
+    ) -> RusotoStream<'a, DeviceEvent, ListDeviceEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_device_events(input.clone())
+        }))
     }
 
     /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
@@ -1139,13 +1154,14 @@ pub trait Iot1ClickDevices: Clone + Sync + Send + 'static {
     ) -> Result<ListDevicesResponse, RusotoError<ListDevicesError>>;
 
     /// Auto-paginating version of `list_devices`
-    fn list_devices_pages(
-        &self,
-        input: ListDevicesRequest,
-    ) -> RusotoStream<DeviceDescription, ListDevicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_devices(state.clone())
-        })
+    fn list_devices_pages<'a>(
+        &'a self,
+        mut input: ListDevicesRequest,
+    ) -> RusotoStream<'a, DeviceDescription, ListDevicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_devices(input.clone())
+        }))
     }
 
     /// <p>Lists the tags associated with the specified resource ARN.</p>

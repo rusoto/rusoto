@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1222,11 +1224,19 @@ pub struct ListGatewayRoutesInput {
     pub virtual_gateway_name: String,
 }
 
-impl PagedRequest for ListGatewayRoutesInput {
+impl Paged for ListGatewayRoutesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGatewayRoutesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1243,27 +1253,25 @@ pub struct ListGatewayRoutesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListGatewayRoutesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<GatewayRouteRef>> {
-        Some(self.gateway_routes.clone())
+impl Paged for ListGatewayRoutesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGatewayRoutesOutput {
     type Item = GatewayRouteRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GatewayRouteRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.gateway_routes
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1282,11 +1290,19 @@ pub struct ListMeshesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListMeshesInput {
+impl Paged for ListMeshesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMeshesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1304,27 +1320,25 @@ pub struct ListMeshesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListMeshesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<MeshRef>> {
-        Some(self.meshes.clone())
+impl Paged for ListMeshesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMeshesOutput {
     type Item = MeshRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MeshRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.meshes
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1353,11 +1367,19 @@ pub struct ListRoutesInput {
     pub virtual_router_name: String,
 }
 
-impl PagedRequest for ListRoutesInput {
+impl Paged for ListRoutesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRoutesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1375,27 +1397,25 @@ pub struct ListRoutesOutput {
     pub routes: Vec<RouteRef>,
 }
 
-impl ListRoutesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<RouteRef>> {
-        Some(self.routes.clone())
+impl Paged for ListRoutesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRoutesOutput {
     type Item = RouteRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RouteRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.routes
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1417,11 +1437,19 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceInput {
+impl Paged for ListTagsForResourceInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1439,27 +1467,25 @@ pub struct ListTagsForResourceOutput {
     pub tags: Vec<TagRef>,
 }
 
-impl ListTagsForResourceOutput {
-    fn pagination_page_opt(self) -> Option<Vec<TagRef>> {
-        Some(self.tags.clone())
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceOutput {
     type Item = TagRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TagRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1484,11 +1510,19 @@ pub struct ListVirtualGatewaysInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListVirtualGatewaysInput {
+impl Paged for ListVirtualGatewaysInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualGatewaysInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1505,27 +1539,25 @@ pub struct ListVirtualGatewaysOutput {
     pub virtual_gateways: Vec<VirtualGatewayRef>,
 }
 
-impl ListVirtualGatewaysOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VirtualGatewayRef>> {
-        Some(self.virtual_gateways.clone())
+impl Paged for ListVirtualGatewaysOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListVirtualGatewaysOutput {
     type Item = VirtualGatewayRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VirtualGatewayRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.virtual_gateways
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1551,11 +1583,19 @@ pub struct ListVirtualNodesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListVirtualNodesInput {
+impl Paged for ListVirtualNodesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualNodesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1573,27 +1613,25 @@ pub struct ListVirtualNodesOutput {
     pub virtual_nodes: Vec<VirtualNodeRef>,
 }
 
-impl ListVirtualNodesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VirtualNodeRef>> {
-        Some(self.virtual_nodes.clone())
+impl Paged for ListVirtualNodesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListVirtualNodesOutput {
     type Item = VirtualNodeRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VirtualNodeRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.virtual_nodes
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1619,11 +1657,19 @@ pub struct ListVirtualRoutersInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListVirtualRoutersInput {
+impl Paged for ListVirtualRoutersInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualRoutersInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1641,27 +1687,25 @@ pub struct ListVirtualRoutersOutput {
     pub virtual_routers: Vec<VirtualRouterRef>,
 }
 
-impl ListVirtualRoutersOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VirtualRouterRef>> {
-        Some(self.virtual_routers.clone())
+impl Paged for ListVirtualRoutersOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListVirtualRoutersOutput {
     type Item = VirtualRouterRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VirtualRouterRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.virtual_routers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1687,11 +1731,19 @@ pub struct ListVirtualServicesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListVirtualServicesInput {
+impl Paged for ListVirtualServicesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVirtualServicesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1709,27 +1761,25 @@ pub struct ListVirtualServicesOutput {
     pub virtual_services: Vec<VirtualServiceRef>,
 }
 
-impl ListVirtualServicesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<VirtualServiceRef>> {
-        Some(self.virtual_services.clone())
+impl Paged for ListVirtualServicesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListVirtualServicesOutput {
     type Item = VirtualServiceRef;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VirtualServiceRef> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.virtual_services
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5819,13 +5869,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListGatewayRoutesOutput, RusotoError<ListGatewayRoutesError>>;
 
     /// Auto-paginating version of `list_gateway_routes`
-    fn list_gateway_routes_pages(
-        &self,
-        input: ListGatewayRoutesInput,
-    ) -> RusotoStream<GatewayRouteRef, ListGatewayRoutesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_gateway_routes(state.clone())
-        })
+    fn list_gateway_routes_pages<'a>(
+        &'a self,
+        mut input: ListGatewayRoutesInput,
+    ) -> RusotoStream<'a, GatewayRouteRef, ListGatewayRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_gateway_routes(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing service meshes.</p>
@@ -5835,10 +5886,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListMeshesOutput, RusotoError<ListMeshesError>>;
 
     /// Auto-paginating version of `list_meshes`
-    fn list_meshes_pages(&self, input: ListMeshesInput) -> RusotoStream<MeshRef, ListMeshesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_meshes(state.clone())
-        })
+    fn list_meshes_pages<'a>(
+        &'a self,
+        mut input: ListMeshesInput,
+    ) -> RusotoStream<'a, MeshRef, ListMeshesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_meshes(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing routes in a service mesh.</p>
@@ -5848,10 +5903,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListRoutesOutput, RusotoError<ListRoutesError>>;
 
     /// Auto-paginating version of `list_routes`
-    fn list_routes_pages(&self, input: ListRoutesInput) -> RusotoStream<RouteRef, ListRoutesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_routes(state.clone())
-        })
+    fn list_routes_pages<'a>(
+        &'a self,
+        mut input: ListRoutesInput,
+    ) -> RusotoStream<'a, RouteRef, ListRoutesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_routes(input.clone())
+        }))
     }
 
     /// <p>List the tags for an App Mesh resource.</p>
@@ -5861,13 +5920,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoStream<TagRef, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, TagRef, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing virtual gateways in a service mesh.</p>
@@ -5877,13 +5937,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListVirtualGatewaysOutput, RusotoError<ListVirtualGatewaysError>>;
 
     /// Auto-paginating version of `list_virtual_gateways`
-    fn list_virtual_gateways_pages(
-        &self,
-        input: ListVirtualGatewaysInput,
-    ) -> RusotoStream<VirtualGatewayRef, ListVirtualGatewaysError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_virtual_gateways(state.clone())
-        })
+    fn list_virtual_gateways_pages<'a>(
+        &'a self,
+        mut input: ListVirtualGatewaysInput,
+    ) -> RusotoStream<'a, VirtualGatewayRef, ListVirtualGatewaysError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_gateways(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing virtual nodes.</p>
@@ -5893,13 +5954,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>>;
 
     /// Auto-paginating version of `list_virtual_nodes`
-    fn list_virtual_nodes_pages(
-        &self,
-        input: ListVirtualNodesInput,
-    ) -> RusotoStream<VirtualNodeRef, ListVirtualNodesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_virtual_nodes(state.clone())
-        })
+    fn list_virtual_nodes_pages<'a>(
+        &'a self,
+        mut input: ListVirtualNodesInput,
+    ) -> RusotoStream<'a, VirtualNodeRef, ListVirtualNodesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_nodes(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing virtual routers in a service mesh.</p>
@@ -5909,13 +5971,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>>;
 
     /// Auto-paginating version of `list_virtual_routers`
-    fn list_virtual_routers_pages(
-        &self,
-        input: ListVirtualRoutersInput,
-    ) -> RusotoStream<VirtualRouterRef, ListVirtualRoutersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_virtual_routers(state.clone())
-        })
+    fn list_virtual_routers_pages<'a>(
+        &'a self,
+        mut input: ListVirtualRoutersInput,
+    ) -> RusotoStream<'a, VirtualRouterRef, ListVirtualRoutersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_routers(input.clone())
+        }))
     }
 
     /// <p>Returns a list of existing virtual services in a service mesh.</p>
@@ -5925,13 +5988,14 @@ pub trait AppMesh: Clone + Sync + Send + 'static {
     ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>>;
 
     /// Auto-paginating version of `list_virtual_services`
-    fn list_virtual_services_pages(
-        &self,
-        input: ListVirtualServicesInput,
-    ) -> RusotoStream<VirtualServiceRef, ListVirtualServicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_virtual_services(state.clone())
-        })
+    fn list_virtual_services_pages<'a>(
+        &'a self,
+        mut input: ListVirtualServicesInput,
+    ) -> RusotoStream<'a, VirtualServiceRef, ListVirtualServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_virtual_services(input.clone())
+        }))
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource aren't specified in the request parameters, they aren't changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>

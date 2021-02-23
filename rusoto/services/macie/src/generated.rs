@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -173,11 +175,19 @@ pub struct ListMemberAccountsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListMemberAccountsRequest {
+impl Paged for ListMemberAccountsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMemberAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -195,27 +205,25 @@ pub struct ListMemberAccountsResult {
     pub next_token: Option<String>,
 }
 
-impl ListMemberAccountsResult {
-    fn pagination_page_opt(self) -> Option<Vec<MemberAccount>> {
-        Some(self.member_accounts.as_ref()?.clone())
+impl Paged for ListMemberAccountsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMemberAccountsResult {
     type Item = MemberAccount;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MemberAccount> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.member_accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -237,11 +245,19 @@ pub struct ListS3ResourcesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListS3ResourcesRequest {
+impl Paged for ListS3ResourcesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListS3ResourcesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -259,27 +275,25 @@ pub struct ListS3ResourcesResult {
     pub s_3_resources: Option<Vec<S3ResourceClassification>>,
 }
 
-impl ListS3ResourcesResult {
-    fn pagination_page_opt(self) -> Option<Vec<S3ResourceClassification>> {
-        Some(self.s_3_resources.as_ref()?.clone())
+impl Paged for ListS3ResourcesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListS3ResourcesResult {
     type Item = S3ResourceClassification;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<S3ResourceClassification> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.s_3_resources.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -689,13 +703,14 @@ pub trait Macie: Clone + Sync + Send + 'static {
     ) -> Result<ListMemberAccountsResult, RusotoError<ListMemberAccountsError>>;
 
     /// Auto-paginating version of `list_member_accounts`
-    fn list_member_accounts_pages(
-        &self,
-        input: ListMemberAccountsRequest,
-    ) -> RusotoStream<MemberAccount, ListMemberAccountsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_member_accounts(state.clone())
-        })
+    fn list_member_accounts_pages<'a>(
+        &'a self,
+        mut input: ListMemberAccountsRequest,
+    ) -> RusotoStream<'a, MemberAccount, ListMemberAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_member_accounts(input.clone())
+        }))
     }
 
     /// <p>Lists all the S3 resources associated with Amazon Macie Classic. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie Classic for the specified member account. </p>
@@ -705,13 +720,14 @@ pub trait Macie: Clone + Sync + Send + 'static {
     ) -> Result<ListS3ResourcesResult, RusotoError<ListS3ResourcesError>>;
 
     /// Auto-paginating version of `list_s3_resources`
-    fn list_s3_resources_pages(
-        &self,
-        input: ListS3ResourcesRequest,
-    ) -> RusotoStream<S3ResourceClassification, ListS3ResourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_s3_resources(state.clone())
-        })
+    fn list_s3_resources_pages<'a>(
+        &'a self,
+        mut input: ListS3ResourcesRequest,
+    ) -> RusotoStream<'a, S3ResourceClassification, ListS3ResourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_s3_resources(input.clone())
+        }))
     }
 
     /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the specified member account. </p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -579,11 +581,19 @@ pub struct DescribeAddonVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeAddonVersionsRequest {
+impl Paged for DescribeAddonVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeAddonVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -601,27 +611,25 @@ pub struct DescribeAddonVersionsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeAddonVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AddonInfo>> {
-        Some(self.addons.as_ref()?.clone())
+impl Paged for DescribeAddonVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeAddonVersionsResponse {
     type Item = AddonInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AddonInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.addons.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -886,11 +894,19 @@ pub struct ListAddonsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAddonsRequest {
+impl Paged for ListAddonsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAddonsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -908,27 +924,25 @@ pub struct ListAddonsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAddonsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.addons.as_ref()?.clone())
+impl Paged for ListAddonsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAddonsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.addons.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -946,11 +960,19 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListClustersRequest {
+impl Paged for ListClustersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListClustersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -968,27 +990,25 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListClustersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.clusters.as_ref()?.clone())
+impl Paged for ListClustersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListClustersResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1009,11 +1029,19 @@ pub struct ListFargateProfilesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFargateProfilesRequest {
+impl Paged for ListFargateProfilesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFargateProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1031,27 +1059,25 @@ pub struct ListFargateProfilesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFargateProfilesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.fargate_profile_names.as_ref()?.clone())
+impl Paged for ListFargateProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFargateProfilesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.fargate_profile_names.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1072,11 +1098,19 @@ pub struct ListNodegroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListNodegroupsRequest {
+impl Paged for ListNodegroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListNodegroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1094,27 +1128,25 @@ pub struct ListNodegroupsResponse {
     pub nodegroups: Option<Vec<String>>,
 }
 
-impl ListNodegroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.nodegroups.as_ref()?.clone())
+impl Paged for ListNodegroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListNodegroupsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.nodegroups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1162,11 +1194,19 @@ pub struct ListUpdatesRequest {
     pub nodegroup_name: Option<String>,
 }
 
-impl PagedRequest for ListUpdatesRequest {
+impl Paged for ListUpdatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUpdatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1184,27 +1224,25 @@ pub struct ListUpdatesResponse {
     pub update_ids: Option<Vec<String>>,
 }
 
-impl ListUpdatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.update_ids.as_ref()?.clone())
+impl Paged for ListUpdatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUpdatesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.update_ids.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3245,13 +3283,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<DescribeAddonVersionsResponse, RusotoError<DescribeAddonVersionsError>>;
 
     /// Auto-paginating version of `describe_addon_versions`
-    fn describe_addon_versions_pages(
-        &self,
-        input: DescribeAddonVersionsRequest,
-    ) -> RusotoStream<AddonInfo, DescribeAddonVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_addon_versions(state.clone())
-        })
+    fn describe_addon_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeAddonVersionsRequest,
+    ) -> RusotoStream<'a, AddonInfo, DescribeAddonVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_addon_versions(input.clone())
+        }))
     }
 
     /// <p><p>Returns descriptive information about an Amazon EKS cluster.</p> <p>The API server endpoint and certificate authority data returned by this operation are required for <code>kubelet</code> and <code>kubectl</code> to communicate with your Kubernetes API server. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html">Create a kubeconfig for Amazon EKS</a>.</p> <note> <p>The API server endpoint and certificate authority data aren&#39;t available until the cluster reaches the <code>ACTIVE</code> state.</p> </note></p>
@@ -3285,10 +3324,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<ListAddonsResponse, RusotoError<ListAddonsError>>;
 
     /// Auto-paginating version of `list_addons`
-    fn list_addons_pages(&self, input: ListAddonsRequest) -> RusotoStream<String, ListAddonsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_addons(state.clone())
-        })
+    fn list_addons_pages<'a>(
+        &'a self,
+        mut input: ListAddonsRequest,
+    ) -> RusotoStream<'a, String, ListAddonsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_addons(input.clone())
+        }))
     }
 
     /// <p>Lists the Amazon EKS clusters in your AWS account in the specified Region.</p>
@@ -3298,13 +3341,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<ListClustersResponse, RusotoError<ListClustersError>>;
 
     /// Auto-paginating version of `list_clusters`
-    fn list_clusters_pages(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoStream<String, ListClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_clusters(state.clone())
-        })
+    fn list_clusters_pages<'a>(
+        &'a self,
+        mut input: ListClustersRequest,
+    ) -> RusotoStream<'a, String, ListClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_clusters(input.clone())
+        }))
     }
 
     /// <p>Lists the AWS Fargate profiles associated with the specified cluster in your AWS account in the specified Region.</p>
@@ -3314,13 +3358,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<ListFargateProfilesResponse, RusotoError<ListFargateProfilesError>>;
 
     /// Auto-paginating version of `list_fargate_profiles`
-    fn list_fargate_profiles_pages(
-        &self,
-        input: ListFargateProfilesRequest,
-    ) -> RusotoStream<String, ListFargateProfilesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_fargate_profiles(state.clone())
-        })
+    fn list_fargate_profiles_pages<'a>(
+        &'a self,
+        mut input: ListFargateProfilesRequest,
+    ) -> RusotoStream<'a, String, ListFargateProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_fargate_profiles(input.clone())
+        }))
     }
 
     /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
@@ -3330,13 +3375,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<ListNodegroupsResponse, RusotoError<ListNodegroupsError>>;
 
     /// Auto-paginating version of `list_nodegroups`
-    fn list_nodegroups_pages(
-        &self,
-        input: ListNodegroupsRequest,
-    ) -> RusotoStream<String, ListNodegroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_nodegroups(state.clone())
-        })
+    fn list_nodegroups_pages<'a>(
+        &'a self,
+        mut input: ListNodegroupsRequest,
+    ) -> RusotoStream<'a, String, ListNodegroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_nodegroups(input.clone())
+        }))
     }
 
     /// <p>List the tags for an Amazon EKS resource.</p>
@@ -3352,13 +3398,14 @@ pub trait Eks: Clone + Sync + Send + 'static {
     ) -> Result<ListUpdatesResponse, RusotoError<ListUpdatesError>>;
 
     /// Auto-paginating version of `list_updates`
-    fn list_updates_pages(
-        &self,
-        input: ListUpdatesRequest,
-    ) -> RusotoStream<String, ListUpdatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_updates(state.clone())
-        })
+    fn list_updates_pages<'a>(
+        &'a self,
+        mut input: ListUpdatesRequest,
+    ) -> RusotoStream<'a, String, ListUpdatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_updates(input.clone())
+        }))
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and worker nodes associated with the cluster.</p>

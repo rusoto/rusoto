@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1392,11 +1394,19 @@ pub struct ListAssociationsForLicenseConfigurationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListAssociationsForLicenseConfigurationRequest {
+impl Paged for ListAssociationsForLicenseConfigurationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAssociationsForLicenseConfigurationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1414,27 +1424,25 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
     pub next_token: Option<String>,
 }
 
-impl ListAssociationsForLicenseConfigurationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LicenseConfigurationAssociation>> {
-        Some(self.license_configuration_associations.as_ref()?.clone())
+impl Paged for ListAssociationsForLicenseConfigurationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAssociationsForLicenseConfigurationResponse {
     type Item = LicenseConfigurationAssociation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LicenseConfigurationAssociation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.license_configuration_associations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1527,11 +1535,19 @@ pub struct ListLicenseConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLicenseConfigurationsRequest {
+impl Paged for ListLicenseConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLicenseConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1549,27 +1565,25 @@ pub struct ListLicenseConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListLicenseConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LicenseConfiguration>> {
-        Some(self.license_configurations.as_ref()?.clone())
+impl Paged for ListLicenseConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLicenseConfigurationsResponse {
     type Item = LicenseConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LicenseConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.license_configurations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1590,11 +1604,19 @@ pub struct ListLicenseSpecificationsForResourceRequest {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListLicenseSpecificationsForResourceRequest {
+impl Paged for ListLicenseSpecificationsForResourceRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLicenseSpecificationsForResourceRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1612,27 +1634,25 @@ pub struct ListLicenseSpecificationsForResourceResponse {
     pub next_token: Option<String>,
 }
 
-impl ListLicenseSpecificationsForResourceResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LicenseSpecification>> {
-        Some(self.license_specifications.as_ref()?.clone())
+impl Paged for ListLicenseSpecificationsForResourceResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLicenseSpecificationsForResourceResponse {
     type Item = LicenseSpecification;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LicenseSpecification> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.license_specifications.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1793,11 +1813,19 @@ pub struct ListResourceInventoryRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResourceInventoryRequest {
+impl Paged for ListResourceInventoryRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceInventoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1815,27 +1843,25 @@ pub struct ListResourceInventoryResponse {
     pub resource_inventory_list: Option<Vec<ResourceInventory>>,
 }
 
-impl ListResourceInventoryResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceInventory>> {
-        Some(self.resource_inventory_list.as_ref()?.clone())
+impl Paged for ListResourceInventoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourceInventoryResponse {
     type Item = ResourceInventory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceInventory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_inventory_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1915,11 +1941,19 @@ pub struct ListUsageForLicenseConfigurationRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListUsageForLicenseConfigurationRequest {
+impl Paged for ListUsageForLicenseConfigurationRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListUsageForLicenseConfigurationRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1937,27 +1971,25 @@ pub struct ListUsageForLicenseConfigurationResponse {
     pub next_token: Option<String>,
 }
 
-impl ListUsageForLicenseConfigurationResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LicenseConfigurationUsage>> {
-        Some(self.license_configuration_usage_list.as_ref()?.clone())
+impl Paged for ListUsageForLicenseConfigurationResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListUsageForLicenseConfigurationResponse {
     type Item = LicenseConfigurationUsage;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LicenseConfigurationUsage> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.license_configuration_usage_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5068,14 +5100,18 @@ pub trait LicenseManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_associations_for_license_configuration`
-    fn list_associations_for_license_configuration_pages(
-        &self,
-        input: ListAssociationsForLicenseConfigurationRequest,
-    ) -> RusotoStream<LicenseConfigurationAssociation, ListAssociationsForLicenseConfigurationError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_associations_for_license_configuration(state.clone())
-        })
+    fn list_associations_for_license_configuration_pages<'a>(
+        &'a self,
+        mut input: ListAssociationsForLicenseConfigurationRequest,
+    ) -> RusotoStream<
+        'a,
+        LicenseConfigurationAssociation,
+        ListAssociationsForLicenseConfigurationError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_associations_for_license_configuration(input.clone())
+        }))
     }
 
     /// <p>Lists the grants distributed for the specified license.</p>
@@ -5100,13 +5136,14 @@ pub trait LicenseManager: Clone + Sync + Send + 'static {
     ) -> Result<ListLicenseConfigurationsResponse, RusotoError<ListLicenseConfigurationsError>>;
 
     /// Auto-paginating version of `list_license_configurations`
-    fn list_license_configurations_pages(
-        &self,
-        input: ListLicenseConfigurationsRequest,
-    ) -> RusotoStream<LicenseConfiguration, ListLicenseConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_license_configurations(state.clone())
-        })
+    fn list_license_configurations_pages<'a>(
+        &'a self,
+        mut input: ListLicenseConfigurationsRequest,
+    ) -> RusotoStream<'a, LicenseConfiguration, ListLicenseConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_license_configurations(input.clone())
+        }))
     }
 
     /// <p>Describes the license configurations for the specified resource.</p>
@@ -5119,13 +5156,14 @@ pub trait LicenseManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_license_specifications_for_resource`
-    fn list_license_specifications_for_resource_pages(
-        &self,
-        input: ListLicenseSpecificationsForResourceRequest,
-    ) -> RusotoStream<LicenseSpecification, ListLicenseSpecificationsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_license_specifications_for_resource(state.clone())
-        })
+    fn list_license_specifications_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListLicenseSpecificationsForResourceRequest,
+    ) -> RusotoStream<'a, LicenseSpecification, ListLicenseSpecificationsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_license_specifications_for_resource(input.clone())
+        }))
     }
 
     /// <p>Lists all versions of the specified license.</p>
@@ -5159,13 +5197,14 @@ pub trait LicenseManager: Clone + Sync + Send + 'static {
     ) -> Result<ListResourceInventoryResponse, RusotoError<ListResourceInventoryError>>;
 
     /// Auto-paginating version of `list_resource_inventory`
-    fn list_resource_inventory_pages(
-        &self,
-        input: ListResourceInventoryRequest,
-    ) -> RusotoStream<ResourceInventory, ListResourceInventoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_inventory(state.clone())
-        })
+    fn list_resource_inventory_pages<'a>(
+        &'a self,
+        mut input: ListResourceInventoryRequest,
+    ) -> RusotoStream<'a, ResourceInventory, ListResourceInventoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_inventory(input.clone())
+        }))
     }
 
     /// <p>Lists the tags for the specified license configuration.</p>
@@ -5190,13 +5229,14 @@ pub trait LicenseManager: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_usage_for_license_configuration`
-    fn list_usage_for_license_configuration_pages(
-        &self,
-        input: ListUsageForLicenseConfigurationRequest,
-    ) -> RusotoStream<LicenseConfigurationUsage, ListUsageForLicenseConfigurationError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_usage_for_license_configuration(state.clone())
-        })
+    fn list_usage_for_license_configuration_pages<'a>(
+        &'a self,
+        mut input: ListUsageForLicenseConfigurationRequest,
+    ) -> RusotoStream<'a, LicenseConfigurationUsage, ListUsageForLicenseConfigurationError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_usage_for_license_configuration(input.clone())
+        }))
     }
 
     /// <p>Rejects the specified grant.</p>

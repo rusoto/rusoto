@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -124,11 +126,19 @@ pub struct BatchGetTracesRequest {
     pub trace_ids: Vec<String>,
 }
 
-impl PagedRequest for BatchGetTracesRequest {
+impl Paged for BatchGetTracesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for BatchGetTracesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -150,27 +160,25 @@ pub struct BatchGetTracesResult {
     pub unprocessed_trace_ids: Option<Vec<String>>,
 }
 
-impl BatchGetTracesResult {
-    fn pagination_page_opt(self) -> Option<Vec<Trace>> {
-        Some(self.traces.as_ref()?.clone())
+impl Paged for BatchGetTracesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for BatchGetTracesResult {
     type Item = Trace;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Trace> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.traces.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -564,11 +572,19 @@ pub struct GetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetGroupsRequest {
+impl Paged for GetGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -586,27 +602,25 @@ pub struct GetGroupsResult {
     pub next_token: Option<String>,
 }
 
-impl GetGroupsResult {
-    fn pagination_page_opt(self) -> Option<Vec<GroupSummary>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for GetGroupsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetGroupsResult {
     type Item = GroupSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GroupSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -769,11 +783,19 @@ pub struct GetSamplingRulesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetSamplingRulesRequest {
+impl Paged for GetSamplingRulesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSamplingRulesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -791,27 +813,25 @@ pub struct GetSamplingRulesResult {
     pub sampling_rule_records: Option<Vec<SamplingRuleRecord>>,
 }
 
-impl GetSamplingRulesResult {
-    fn pagination_page_opt(self) -> Option<Vec<SamplingRuleRecord>> {
-        Some(self.sampling_rule_records.as_ref()?.clone())
+impl Paged for GetSamplingRulesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetSamplingRulesResult {
     type Item = SamplingRuleRecord;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SamplingRuleRecord> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.sampling_rule_records.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -825,11 +845,19 @@ pub struct GetSamplingStatisticSummariesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetSamplingStatisticSummariesRequest {
+impl Paged for GetSamplingStatisticSummariesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetSamplingStatisticSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -847,27 +875,25 @@ pub struct GetSamplingStatisticSummariesResult {
     pub sampling_statistic_summaries: Option<Vec<SamplingStatisticSummary>>,
 }
 
-impl GetSamplingStatisticSummariesResult {
-    fn pagination_page_opt(self) -> Option<Vec<SamplingStatisticSummary>> {
-        Some(self.sampling_statistic_summaries.as_ref()?.clone())
+impl Paged for GetSamplingStatisticSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetSamplingStatisticSummariesResult {
     type Item = SamplingStatisticSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SamplingStatisticSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.sampling_statistic_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -922,11 +948,19 @@ pub struct GetServiceGraphRequest {
     pub start_time: f64,
 }
 
-impl PagedRequest for GetServiceGraphRequest {
+impl Paged for GetServiceGraphRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetServiceGraphRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -956,27 +990,25 @@ pub struct GetServiceGraphResult {
     pub start_time: Option<f64>,
 }
 
-impl GetServiceGraphResult {
-    fn pagination_page_opt(self) -> Option<Vec<Service>> {
-        Some(self.services.as_ref()?.clone())
+impl Paged for GetServiceGraphResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetServiceGraphResult {
     type Item = Service;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Service> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1016,11 +1048,19 @@ pub struct GetTimeSeriesServiceStatisticsRequest {
     pub start_time: f64,
 }
 
-impl PagedRequest for GetTimeSeriesServiceStatisticsRequest {
+impl Paged for GetTimeSeriesServiceStatisticsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTimeSeriesServiceStatisticsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1042,27 +1082,25 @@ pub struct GetTimeSeriesServiceStatisticsResult {
     pub time_series_service_statistics: Option<Vec<TimeSeriesServiceStatistics>>,
 }
 
-impl GetTimeSeriesServiceStatisticsResult {
-    fn pagination_page_opt(self) -> Option<Vec<TimeSeriesServiceStatistics>> {
-        Some(self.time_series_service_statistics.as_ref()?.clone())
+impl Paged for GetTimeSeriesServiceStatisticsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetTimeSeriesServiceStatisticsResult {
     type Item = TimeSeriesServiceStatistics;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TimeSeriesServiceStatistics> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.time_series_service_statistics.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1079,11 +1117,19 @@ pub struct GetTraceGraphRequest {
     pub trace_ids: Vec<String>,
 }
 
-impl PagedRequest for GetTraceGraphRequest {
+impl Paged for GetTraceGraphRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTraceGraphRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1101,27 +1147,25 @@ pub struct GetTraceGraphResult {
     pub services: Option<Vec<Service>>,
 }
 
-impl GetTraceGraphResult {
-    fn pagination_page_opt(self) -> Option<Vec<Service>> {
-        Some(self.services.as_ref()?.clone())
+impl Paged for GetTraceGraphResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetTraceGraphResult {
     type Item = Service;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Service> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1157,11 +1201,19 @@ pub struct GetTraceSummariesRequest {
     pub time_range_type: Option<String>,
 }
 
-impl PagedRequest for GetTraceSummariesRequest {
+impl Paged for GetTraceSummariesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetTraceSummariesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1187,27 +1239,25 @@ pub struct GetTraceSummariesResult {
     pub traces_processed_count: Option<i64>,
 }
 
-impl GetTraceSummariesResult {
-    fn pagination_page_opt(self) -> Option<Vec<TraceSummary>> {
-        Some(self.trace_summaries.as_ref()?.clone())
+impl Paged for GetTraceSummariesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetTraceSummariesResult {
     type Item = TraceSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TraceSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.trace_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3376,13 +3426,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<BatchGetTracesResult, RusotoError<BatchGetTracesError>>;
 
     /// Auto-paginating version of `batch_get_traces`
-    fn batch_get_traces_pages(
-        &self,
-        input: BatchGetTracesRequest,
-    ) -> RusotoStream<Trace, BatchGetTracesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.batch_get_traces(state.clone())
-        })
+    fn batch_get_traces_pages<'a>(
+        &'a self,
+        mut input: BatchGetTracesRequest,
+    ) -> RusotoStream<'a, Trace, BatchGetTracesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.batch_get_traces(input.clone())
+        }))
     }
 
     /// <p>Creates a group resource with a name and a filter expression. </p>
@@ -3427,13 +3478,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetGroupsResult, RusotoError<GetGroupsError>>;
 
     /// Auto-paginating version of `get_groups`
-    fn get_groups_pages(
-        &self,
-        input: GetGroupsRequest,
-    ) -> RusotoStream<GroupSummary, GetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_groups(state.clone())
-        })
+    fn get_groups_pages<'a>(
+        &'a self,
+        mut input: GetGroupsRequest,
+    ) -> RusotoStream<'a, GroupSummary, GetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_groups(input.clone())
+        }))
     }
 
     /// <p>Retrieves the summary information of an insight. This includes impact to clients and root cause services, the top anomalous services, the category, the state of the insight, and the start and end time of the insight.</p>
@@ -3467,13 +3519,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetSamplingRulesResult, RusotoError<GetSamplingRulesError>>;
 
     /// Auto-paginating version of `get_sampling_rules`
-    fn get_sampling_rules_pages(
-        &self,
-        input: GetSamplingRulesRequest,
-    ) -> RusotoStream<SamplingRuleRecord, GetSamplingRulesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_sampling_rules(state.clone())
-        })
+    fn get_sampling_rules_pages<'a>(
+        &'a self,
+        mut input: GetSamplingRulesRequest,
+    ) -> RusotoStream<'a, SamplingRuleRecord, GetSamplingRulesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sampling_rules(input.clone())
+        }))
     }
 
     /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
@@ -3483,13 +3536,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetSamplingStatisticSummariesResult, RusotoError<GetSamplingStatisticSummariesError>>;
 
     /// Auto-paginating version of `get_sampling_statistic_summaries`
-    fn get_sampling_statistic_summaries_pages(
-        &self,
-        input: GetSamplingStatisticSummariesRequest,
-    ) -> RusotoStream<SamplingStatisticSummary, GetSamplingStatisticSummariesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_sampling_statistic_summaries(state.clone())
-        })
+    fn get_sampling_statistic_summaries_pages<'a>(
+        &'a self,
+        mut input: GetSamplingStatisticSummariesRequest,
+    ) -> RusotoStream<'a, SamplingStatisticSummary, GetSamplingStatisticSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_sampling_statistic_summaries(input.clone())
+        }))
     }
 
     /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
@@ -3505,13 +3559,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetServiceGraphResult, RusotoError<GetServiceGraphError>>;
 
     /// Auto-paginating version of `get_service_graph`
-    fn get_service_graph_pages(
-        &self,
-        input: GetServiceGraphRequest,
-    ) -> RusotoStream<Service, GetServiceGraphError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_service_graph(state.clone())
-        })
+    fn get_service_graph_pages<'a>(
+        &'a self,
+        mut input: GetServiceGraphRequest,
+    ) -> RusotoStream<'a, Service, GetServiceGraphError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_service_graph(input.clone())
+        }))
     }
 
     /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
@@ -3524,13 +3579,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `get_time_series_service_statistics`
-    fn get_time_series_service_statistics_pages(
-        &self,
-        input: GetTimeSeriesServiceStatisticsRequest,
-    ) -> RusotoStream<TimeSeriesServiceStatistics, GetTimeSeriesServiceStatisticsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_time_series_service_statistics(state.clone())
-        })
+    fn get_time_series_service_statistics_pages<'a>(
+        &'a self,
+        mut input: GetTimeSeriesServiceStatisticsRequest,
+    ) -> RusotoStream<'a, TimeSeriesServiceStatistics, GetTimeSeriesServiceStatisticsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_time_series_service_statistics(input.clone())
+        }))
     }
 
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
@@ -3540,13 +3596,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetTraceGraphResult, RusotoError<GetTraceGraphError>>;
 
     /// Auto-paginating version of `get_trace_graph`
-    fn get_trace_graph_pages(
-        &self,
-        input: GetTraceGraphRequest,
-    ) -> RusotoStream<Service, GetTraceGraphError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_trace_graph(state.clone())
-        })
+    fn get_trace_graph_pages<'a>(
+        &'a self,
+        mut input: GetTraceGraphRequest,
+    ) -> RusotoStream<'a, Service, GetTraceGraphError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_trace_graph(input.clone())
+        }))
     }
 
     /// <p>Retrieves IDs and annotations for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
@@ -3556,13 +3613,14 @@ pub trait XRay: Clone + Sync + Send + 'static {
     ) -> Result<GetTraceSummariesResult, RusotoError<GetTraceSummariesError>>;
 
     /// Auto-paginating version of `get_trace_summaries`
-    fn get_trace_summaries_pages(
-        &self,
-        input: GetTraceSummariesRequest,
-    ) -> RusotoStream<TraceSummary, GetTraceSummariesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_trace_summaries(state.clone())
-        })
+    fn get_trace_summaries_pages<'a>(
+        &'a self,
+        mut input: GetTraceSummariesRequest,
+    ) -> RusotoStream<'a, TraceSummary, GetTraceSummariesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_trace_summaries(input.clone())
+        }))
     }
 
     /// <p>Returns a list of tags that are applied to the specified AWS X-Ray group or sampling rule.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -252,11 +254,19 @@ pub struct DescribeDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeDestinationsRequest {
+impl Paged for DescribeDestinationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDestinationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -273,27 +283,25 @@ pub struct DescribeDestinationsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeDestinationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Destination>> {
-        Some(self.destinations.as_ref()?.clone())
+impl Paged for DescribeDestinationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDestinationsResponse {
     type Item = Destination;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Destination> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.destinations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -319,11 +327,19 @@ pub struct DescribeExportTasksRequest {
     pub task_id: Option<String>,
 }
 
-impl PagedRequest for DescribeExportTasksRequest {
+impl Paged for DescribeExportTasksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeExportTasksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -340,27 +356,25 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeExportTasksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ExportTask>> {
-        Some(self.export_tasks.as_ref()?.clone())
+impl Paged for DescribeExportTasksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeExportTasksResponse {
     type Item = ExportTask;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ExportTask> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.export_tasks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -382,11 +396,19 @@ pub struct DescribeLogGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeLogGroupsRequest {
+impl Paged for DescribeLogGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLogGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -403,27 +425,25 @@ pub struct DescribeLogGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeLogGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LogGroup>> {
-        Some(self.log_groups.as_ref()?.clone())
+impl Paged for DescribeLogGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeLogGroupsResponse {
     type Item = LogGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LogGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.log_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -456,11 +476,19 @@ pub struct DescribeLogStreamsRequest {
     pub order_by: Option<String>,
 }
 
-impl PagedRequest for DescribeLogStreamsRequest {
+impl Paged for DescribeLogStreamsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeLogStreamsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -477,27 +505,25 @@ pub struct DescribeLogStreamsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeLogStreamsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<LogStream>> {
-        Some(self.log_streams.as_ref()?.clone())
+impl Paged for DescribeLogStreamsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeLogStreamsResponse {
     type Item = LogStream;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<LogStream> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.log_streams.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -531,11 +557,19 @@ pub struct DescribeMetricFiltersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeMetricFiltersRequest {
+impl Paged for DescribeMetricFiltersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMetricFiltersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -552,27 +586,25 @@ pub struct DescribeMetricFiltersResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeMetricFiltersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<MetricFilter>> {
-        Some(self.metric_filters.as_ref()?.clone())
+impl Paged for DescribeMetricFiltersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeMetricFiltersResponse {
     type Item = MetricFilter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MetricFilter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.metric_filters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -597,11 +629,19 @@ pub struct DescribeQueriesRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for DescribeQueriesRequest {
+impl Paged for DescribeQueriesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeQueriesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -618,27 +658,25 @@ pub struct DescribeQueriesResponse {
     pub queries: Option<Vec<QueryInfo>>,
 }
 
-impl DescribeQueriesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<QueryInfo>> {
-        Some(self.queries.as_ref()?.clone())
+impl Paged for DescribeQueriesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeQueriesResponse {
     type Item = QueryInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<QueryInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.queries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -685,11 +723,19 @@ pub struct DescribeResourcePoliciesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeResourcePoliciesRequest {
+impl Paged for DescribeResourcePoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeResourcePoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -706,27 +752,25 @@ pub struct DescribeResourcePoliciesResponse {
     pub resource_policies: Option<Vec<ResourcePolicy>>,
 }
 
-impl DescribeResourcePoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourcePolicy>> {
-        Some(self.resource_policies.as_ref()?.clone())
+impl Paged for DescribeResourcePoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeResourcePoliciesResponse {
     type Item = ResourcePolicy;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourcePolicy> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_policies.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -751,11 +795,19 @@ pub struct DescribeSubscriptionFiltersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeSubscriptionFiltersRequest {
+impl Paged for DescribeSubscriptionFiltersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeSubscriptionFiltersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -772,27 +824,25 @@ pub struct DescribeSubscriptionFiltersResponse {
     pub subscription_filters: Option<Vec<SubscriptionFilter>>,
 }
 
-impl DescribeSubscriptionFiltersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SubscriptionFilter>> {
-        Some(self.subscription_filters.as_ref()?.clone())
+impl Paged for DescribeSubscriptionFiltersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeSubscriptionFiltersResponse {
     type Item = SubscriptionFilter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SubscriptionFilter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subscription_filters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -942,11 +992,19 @@ pub struct FilterLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
-impl PagedRequest for FilterLogEventsRequest {
+impl Paged for FilterLogEventsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for FilterLogEventsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -968,23 +1026,25 @@ pub struct FilterLogEventsResponse {
     pub searched_log_streams: Option<Vec<SearchedLogStream>>,
 }
 
-impl FilterLogEventsResponse {}
+impl Paged for FilterLogEventsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
 
 impl PagedOutput for FilterLogEventsResponse {
     type Item = FilterLogEventsResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FilterLogEventsResponse> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3840,13 +3900,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDestinationsResponse, RusotoError<DescribeDestinationsError>>;
 
     /// Auto-paginating version of `describe_destinations`
-    fn describe_destinations_pages(
-        &self,
-        input: DescribeDestinationsRequest,
-    ) -> RusotoStream<Destination, DescribeDestinationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_destinations(state.clone())
-        })
+    fn describe_destinations_pages<'a>(
+        &'a self,
+        mut input: DescribeDestinationsRequest,
+    ) -> RusotoStream<'a, Destination, DescribeDestinationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_destinations(input.clone())
+        }))
     }
 
     /// <p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>
@@ -3856,13 +3917,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
 
     /// Auto-paginating version of `describe_export_tasks`
-    fn describe_export_tasks_pages(
-        &self,
-        input: DescribeExportTasksRequest,
-    ) -> RusotoStream<ExportTask, DescribeExportTasksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_export_tasks(state.clone())
-        })
+    fn describe_export_tasks_pages<'a>(
+        &'a self,
+        mut input: DescribeExportTasksRequest,
+    ) -> RusotoStream<'a, ExportTask, DescribeExportTasksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_export_tasks(input.clone())
+        }))
     }
 
     /// <p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>
@@ -3872,13 +3934,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeLogGroupsResponse, RusotoError<DescribeLogGroupsError>>;
 
     /// Auto-paginating version of `describe_log_groups`
-    fn describe_log_groups_pages(
-        &self,
-        input: DescribeLogGroupsRequest,
-    ) -> RusotoStream<LogGroup, DescribeLogGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_log_groups(state.clone())
-        })
+    fn describe_log_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeLogGroupsRequest,
+    ) -> RusotoStream<'a, LogGroup, DescribeLogGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_log_groups(input.clone())
+        }))
     }
 
     /// <p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>
@@ -3888,13 +3951,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeLogStreamsResponse, RusotoError<DescribeLogStreamsError>>;
 
     /// Auto-paginating version of `describe_log_streams`
-    fn describe_log_streams_pages(
-        &self,
-        input: DescribeLogStreamsRequest,
-    ) -> RusotoStream<LogStream, DescribeLogStreamsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_log_streams(state.clone())
-        })
+    fn describe_log_streams_pages<'a>(
+        &'a self,
+        mut input: DescribeLogStreamsRequest,
+    ) -> RusotoStream<'a, LogStream, DescribeLogStreamsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_log_streams(input.clone())
+        }))
     }
 
     /// <p>Lists the specified metric filters. You can list all of the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
@@ -3904,13 +3968,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeMetricFiltersResponse, RusotoError<DescribeMetricFiltersError>>;
 
     /// Auto-paginating version of `describe_metric_filters`
-    fn describe_metric_filters_pages(
-        &self,
-        input: DescribeMetricFiltersRequest,
-    ) -> RusotoStream<MetricFilter, DescribeMetricFiltersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_metric_filters(state.clone())
-        })
+    fn describe_metric_filters_pages<'a>(
+        &'a self,
+        mut input: DescribeMetricFiltersRequest,
+    ) -> RusotoStream<'a, MetricFilter, DescribeMetricFiltersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_metric_filters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries or limit it to queries of a specific log group or queries with a certain status.</p>
@@ -3920,13 +3985,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeQueriesResponse, RusotoError<DescribeQueriesError>>;
 
     /// Auto-paginating version of `describe_queries`
-    fn describe_queries_pages(
-        &self,
-        input: DescribeQueriesRequest,
-    ) -> RusotoStream<QueryInfo, DescribeQueriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_queries(state.clone())
-        })
+    fn describe_queries_pages<'a>(
+        &'a self,
+        mut input: DescribeQueriesRequest,
+    ) -> RusotoStream<'a, QueryInfo, DescribeQueriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_queries(input.clone())
+        }))
     }
 
     /// <p>This operation returns a paginated list of your saved CloudWatch Logs Insights query definitions.</p> <p>You can use the <code>queryDefinitionNamePrefix</code> parameter to limit the results to only the query definitions that have names that start with a certain string.</p>
@@ -3942,13 +4008,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeResourcePoliciesResponse, RusotoError<DescribeResourcePoliciesError>>;
 
     /// Auto-paginating version of `describe_resource_policies`
-    fn describe_resource_policies_pages(
-        &self,
-        input: DescribeResourcePoliciesRequest,
-    ) -> RusotoStream<ResourcePolicy, DescribeResourcePoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_resource_policies(state.clone())
-        })
+    fn describe_resource_policies_pages<'a>(
+        &'a self,
+        mut input: DescribeResourcePoliciesRequest,
+    ) -> RusotoStream<'a, ResourcePolicy, DescribeResourcePoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_resource_policies(input.clone())
+        }))
     }
 
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
@@ -3958,13 +4025,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeSubscriptionFiltersResponse, RusotoError<DescribeSubscriptionFiltersError>>;
 
     /// Auto-paginating version of `describe_subscription_filters`
-    fn describe_subscription_filters_pages(
-        &self,
-        input: DescribeSubscriptionFiltersRequest,
-    ) -> RusotoStream<SubscriptionFilter, DescribeSubscriptionFiltersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_subscription_filters(state.clone())
-        })
+    fn describe_subscription_filters_pages<'a>(
+        &'a self,
+        mut input: DescribeSubscriptionFiltersRequest,
+    ) -> RusotoStream<'a, SubscriptionFilter, DescribeSubscriptionFiltersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_subscription_filters(input.clone())
+        }))
     }
 
     /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
@@ -3980,13 +4048,14 @@ pub trait CloudWatchLogs: Clone + Sync + Send + 'static {
     ) -> Result<FilterLogEventsResponse, RusotoError<FilterLogEventsError>>;
 
     /// Auto-paginating version of `filter_log_events`
-    fn filter_log_events_pages(
-        &self,
-        input: FilterLogEventsRequest,
-    ) -> RusotoStream<FilterLogEventsResponse, FilterLogEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.filter_log_events(state.clone())
-        })
+    fn filter_log_events_pages<'a>(
+        &'a self,
+        mut input: FilterLogEventsRequest,
+    ) -> RusotoStream<'a, FilterLogEventsResponse, FilterLogEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.filter_log_events(input.clone())
+        }))
     }
 
     /// <p>Lists log events from the specified log stream. You can list all of the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call. This operation can return empty results while there are more log events available through the token.</p>

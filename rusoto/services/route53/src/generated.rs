@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -4628,11 +4630,19 @@ pub struct ListHealthChecksRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListHealthChecksRequest {
+impl Paged for ListHealthChecksRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListHealthChecksRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4653,31 +4663,25 @@ pub struct ListHealthChecksResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListHealthChecksResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HealthCheck>> {
-        Some(self.health_checks.clone())
+impl Paged for ListHealthChecksResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListHealthChecksResponse {
     type Item = HealthCheck;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HealthCheck> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.health_checks
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated
     }
 }
 
@@ -4881,11 +4885,19 @@ pub struct ListHostedZonesRequest {
     pub max_items: Option<String>,
 }
 
-impl PagedRequest for ListHostedZonesRequest {
+impl Paged for ListHostedZonesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for ListHostedZonesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4905,31 +4917,25 @@ pub struct ListHostedZonesResponse {
     pub next_marker: Option<String>,
 }
 
-impl ListHostedZonesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<HostedZone>> {
-        Some(self.hosted_zones.clone())
+impl Paged for ListHostedZonesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_marker.take()
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.clone())
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_marker)
     }
 }
 
 impl PagedOutput for ListHostedZonesResponse {
     type Item = HostedZone;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HostedZone> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.hosted_zones
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated
     }
 }
 
@@ -4983,11 +4989,19 @@ pub struct ListQueryLoggingConfigsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListQueryLoggingConfigsRequest {
+impl Paged for ListQueryLoggingConfigsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQueryLoggingConfigsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5001,27 +5015,25 @@ pub struct ListQueryLoggingConfigsResponse {
     pub query_logging_configs: Vec<QueryLoggingConfig>,
 }
 
-impl ListQueryLoggingConfigsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<QueryLoggingConfig>> {
-        Some(self.query_logging_configs.clone())
+impl Paged for ListQueryLoggingConfigsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQueryLoggingConfigsResponse {
     type Item = QueryLoggingConfig;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<QueryLoggingConfig> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.query_logging_configs
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5076,16 +5088,29 @@ pub struct ListResourceRecordSetsRequest {
     pub start_record_type: Option<String>,
 }
 
-impl PagedRequest for ListResourceRecordSetsRequest {
+impl Paged for ListResourceRecordSetsRequest {
     type Token = (Option<String>, Option<String>, Option<String>);
-    fn with_pagination_token(
-        mut self,
-        key: (Option<String>, Option<String>, Option<String>),
-    ) -> Self {
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>, Option<String>) {
+        (
+            self.start_record_name.take(),
+            self.start_record_type.take(),
+            self.start_record_identifier.take(),
+        )
+    }
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>, Option<String>)> {
+        Cow::Owned((
+            self.start_record_name.clone(),
+            self.start_record_type.clone(),
+            self.start_record_identifier.clone(),
+        ))
+    }
+}
+
+impl PagedRequest for ListResourceRecordSetsRequest {
+    fn set_pagination_token(&mut self, key: (Option<String>, Option<String>, Option<String>)) {
         self.start_record_name = key.0;
         self.start_record_type = key.1;
         self.start_record_identifier = key.2;
-        self
     }
 }
 
@@ -5108,35 +5133,33 @@ pub struct ListResourceRecordSetsResponse {
     pub resource_record_sets: Vec<ResourceRecordSet>,
 }
 
-impl ListResourceRecordSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ResourceRecordSet>> {
-        Some(self.resource_record_sets.clone())
+impl Paged for ListResourceRecordSetsResponse {
+    type Token = (Option<String>, Option<String>, Option<String>);
+    fn take_pagination_token(&mut self) -> (Option<String>, Option<String>, Option<String>) {
+        (
+            self.next_record_name.take(),
+            self.next_record_type.take(),
+            self.next_record_identifier.take(),
+        )
     }
-
-    fn has_another_page_opt(&self) -> Option<bool> {
-        Some(self.is_truncated.clone())
+    fn pagination_token(&self) -> Cow<(Option<String>, Option<String>, Option<String>)> {
+        Cow::Owned((
+            self.next_record_name.clone(),
+            self.next_record_type.clone(),
+            self.next_record_identifier.clone(),
+        ))
     }
 }
 
 impl PagedOutput for ListResourceRecordSetsResponse {
     type Item = ResourceRecordSet;
-    type Token = (Option<String>, Option<String>, Option<String>);
-    fn pagination_token(&self) -> (Option<String>, Option<String>, Option<String>) {
-        (
-            self.next_record_name.clone(),
-            self.next_record_type.clone(),
-            self.next_record_identifier.clone(),
-        )
-    }
 
     fn into_pagination_page(self) -> Vec<ResourceRecordSet> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.resource_record_sets
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.has_another_page_opt().unwrap_or(false)
-        }
+        self.is_truncated
     }
 }
 
@@ -5779,11 +5802,19 @@ pub struct ListVPCAssociationAuthorizationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListVPCAssociationAuthorizationsRequest {
+impl Paged for ListVPCAssociationAuthorizationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListVPCAssociationAuthorizationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5800,27 +5831,25 @@ pub struct ListVPCAssociationAuthorizationsResponse {
     pub vp_cs: Vec<VPC>,
 }
 
-impl ListVPCAssociationAuthorizationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VPC>> {
-        Some(self.vp_cs.clone())
+impl Paged for ListVPCAssociationAuthorizationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListVPCAssociationAuthorizationsResponse {
     type Item = VPC;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VPC> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.vp_cs
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -13018,13 +13047,14 @@ pub trait Route53: Clone + Sync + Send + 'static {
     ) -> Result<ListHealthChecksResponse, RusotoError<ListHealthChecksError>>;
 
     /// Auto-paginating version of `list_health_checks`
-    fn list_health_checks_pages(
-        &self,
-        input: ListHealthChecksRequest,
-    ) -> RusotoStream<HealthCheck, ListHealthChecksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_health_checks(state.clone())
-        })
+    fn list_health_checks_pages<'a>(
+        &'a self,
+        mut input: ListHealthChecksRequest,
+    ) -> RusotoStream<'a, HealthCheck, ListHealthChecksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_health_checks(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>
@@ -13034,13 +13064,14 @@ pub trait Route53: Clone + Sync + Send + 'static {
     ) -> Result<ListHostedZonesResponse, RusotoError<ListHostedZonesError>>;
 
     /// Auto-paginating version of `list_hosted_zones`
-    fn list_hosted_zones_pages(
-        &self,
-        input: ListHostedZonesRequest,
-    ) -> RusotoStream<HostedZone, ListHostedZonesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_hosted_zones(state.clone())
-        })
+    fn list_hosted_zones_pages<'a>(
+        &'a self,
+        mut input: ListHostedZonesRequest,
+    ) -> RusotoStream<'a, HostedZone, ListHostedZonesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_hosted_zones(input.clone())
+        }))
     }
 
     /// <p><p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul></p>
@@ -13062,13 +13093,14 @@ pub trait Route53: Clone + Sync + Send + 'static {
     ) -> Result<ListQueryLoggingConfigsResponse, RusotoError<ListQueryLoggingConfigsError>>;
 
     /// Auto-paginating version of `list_query_logging_configs`
-    fn list_query_logging_configs_pages(
-        &self,
-        input: ListQueryLoggingConfigsRequest,
-    ) -> RusotoStream<QueryLoggingConfig, ListQueryLoggingConfigsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_query_logging_configs(state.clone())
-        })
+    fn list_query_logging_configs_pages<'a>(
+        &'a self,
+        mut input: ListQueryLoggingConfigsRequest,
+    ) -> RusotoStream<'a, QueryLoggingConfig, ListQueryLoggingConfigsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_query_logging_configs(input.clone())
+        }))
     }
 
     /// <p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements.</p> <p> <b>Sort order</b> </p> <p> <code>ListResourceRecordSets</code> sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order when the record name contains characters that appear before <code>.</code> (decimal 46) in the ASCII table. These characters include the following: <code>! " # $ % &amp; ' ( ) * + , -</code> </p> <p>When multiple records have the same DNS name, <code>ListResourceRecordSets</code> sorts results by the record type.</p> <p> <b>Specifying where to start listing records</b> </p> <p>You can use the name and type elements to specify the resource record set that the list begins with:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p> <b>Resource record sets that are PENDING</b> </p> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Route 53 DNS servers.</p> <p> <b>Changing resource record sets</b> </p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p> <p> <b>Displaying the next page of results</b> </p> <p>If a <code>ListResourceRecordSets</code> command returns more than one page of results, the value of <code>IsTruncated</code> is <code>true</code>. To display the next page of results, get the values of <code>NextRecordName</code>, <code>NextRecordType</code>, and <code>NextRecordIdentifier</code> (if any) from the response. Then submit another <code>ListResourceRecordSets</code> request, and specify those values for <code>StartRecordName</code>, <code>StartRecordType</code>, and <code>StartRecordIdentifier</code>.</p>
@@ -13078,13 +13110,14 @@ pub trait Route53: Clone + Sync + Send + 'static {
     ) -> Result<ListResourceRecordSetsResponse, RusotoError<ListResourceRecordSetsError>>;
 
     /// Auto-paginating version of `list_resource_record_sets`
-    fn list_resource_record_sets_pages(
-        &self,
-        input: ListResourceRecordSetsRequest,
-    ) -> RusotoStream<ResourceRecordSet, ListResourceRecordSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_record_sets(state.clone())
-        })
+    fn list_resource_record_sets_pages<'a>(
+        &'a self,
+        mut input: ListResourceRecordSetsRequest,
+    ) -> RusotoStream<'a, ResourceRecordSet, ListResourceRecordSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_record_sets(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>
@@ -13151,13 +13184,14 @@ pub trait Route53: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_vpc_association_authorizations`
-    fn list_vpc_association_authorizations_pages(
-        &self,
-        input: ListVPCAssociationAuthorizationsRequest,
-    ) -> RusotoStream<VPC, ListVPCAssociationAuthorizationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_vpc_association_authorizations(state.clone())
-        })
+    fn list_vpc_association_authorizations_pages<'a>(
+        &'a self,
+        mut input: ListVPCAssociationAuthorizationsRequest,
+    ) -> RusotoStream<'a, VPC, ListVPCAssociationAuthorizationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_vpc_association_authorizations(input.clone())
+        }))
     }
 
     /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>

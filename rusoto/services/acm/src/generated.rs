@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -437,11 +439,19 @@ pub struct ListCertificatesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCertificatesRequest {
+impl Paged for ListCertificatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCertificatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -459,27 +469,25 @@ pub struct ListCertificatesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListCertificatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<CertificateSummary>> {
-        Some(self.certificate_summary_list.as_ref()?.clone())
+impl Paged for ListCertificatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCertificatesResponse {
     type Item = CertificateSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CertificateSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.certificate_summary_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1321,13 +1329,14 @@ pub trait Acm: Clone + Sync + Send + 'static {
     ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>;
 
     /// Auto-paginating version of `list_certificates`
-    fn list_certificates_pages(
-        &self,
-        input: ListCertificatesRequest,
-    ) -> RusotoStream<CertificateSummary, ListCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_certificates(state.clone())
-        })
+    fn list_certificates_pages<'a>(
+        &'a self,
+        mut input: ListCertificatesRequest,
+    ) -> RusotoStream<'a, CertificateSummary, ListCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_certificates(input.clone())
+        }))
     }
 
     /// <p>Lists the tags that have been applied to the ACM certificate. Use the certificate's Amazon Resource Name (ARN) to specify the certificate. To add a tag to an ACM certificate, use the <a>AddTagsToCertificate</a> action. To delete a tag, use the <a>RemoveTagsFromCertificate</a> action. </p>

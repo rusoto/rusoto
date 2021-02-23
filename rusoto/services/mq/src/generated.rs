@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -944,11 +946,19 @@ pub struct ListBrokersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBrokersRequest {
+impl Paged for ListBrokersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBrokersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -966,27 +976,25 @@ pub struct ListBrokersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListBrokersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BrokerSummary>> {
-        Some(self.broker_summaries.as_ref()?.clone())
+impl Paged for ListBrokersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBrokersResponse {
     type Item = BrokerSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BrokerSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.broker_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2639,13 +2647,14 @@ pub trait MQ: Clone + Sync + Send + 'static {
     ) -> Result<ListBrokersResponse, RusotoError<ListBrokersError>>;
 
     /// Auto-paginating version of `list_brokers`
-    fn list_brokers_pages(
-        &self,
-        input: ListBrokersRequest,
-    ) -> RusotoStream<BrokerSummary, ListBrokersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_brokers(state.clone())
-        })
+    fn list_brokers_pages<'a>(
+        &'a self,
+        mut input: ListBrokersRequest,
+    ) -> RusotoStream<'a, BrokerSummary, ListBrokersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_brokers(input.clone())
+        }))
     }
 
     /// <p>Returns a list of all revisions for the specified configuration.</p>

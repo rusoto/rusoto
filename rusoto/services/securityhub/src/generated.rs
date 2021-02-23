@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -5450,11 +5452,19 @@ pub struct GetEnabledStandardsRequest {
     pub standards_subscription_arns: Option<Vec<String>>,
 }
 
-impl PagedRequest for GetEnabledStandardsRequest {
+impl Paged for GetEnabledStandardsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetEnabledStandardsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5472,27 +5482,25 @@ pub struct GetEnabledStandardsResponse {
     pub standards_subscriptions: Option<Vec<StandardsSubscription>>,
 }
 
-impl GetEnabledStandardsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<StandardsSubscription>> {
-        Some(self.standards_subscriptions.as_ref()?.clone())
+impl Paged for GetEnabledStandardsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetEnabledStandardsResponse {
     type Item = StandardsSubscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<StandardsSubscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.standards_subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5518,11 +5526,19 @@ pub struct GetFindingsRequest {
     pub sort_criteria: Option<Vec<SortCriterion>>,
 }
 
-impl PagedRequest for GetFindingsRequest {
+impl Paged for GetFindingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetFindingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5539,27 +5555,25 @@ pub struct GetFindingsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetFindingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AwsSecurityFinding>> {
-        Some(self.findings.clone())
+impl Paged for GetFindingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetFindingsResponse {
     type Item = AwsSecurityFinding;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AwsSecurityFinding> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.findings
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5599,11 +5613,19 @@ pub struct GetInsightsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetInsightsRequest {
+impl Paged for GetInsightsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetInsightsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5620,27 +5642,25 @@ pub struct GetInsightsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetInsightsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Insight>> {
-        Some(self.insights.clone())
+impl Paged for GetInsightsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetInsightsResponse {
     type Item = Insight;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Insight> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.insights
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5847,11 +5867,19 @@ pub struct ListEnabledProductsForImportRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListEnabledProductsForImportRequest {
+impl Paged for ListEnabledProductsForImportRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEnabledProductsForImportRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5869,27 +5897,25 @@ pub struct ListEnabledProductsForImportResponse {
     pub product_subscriptions: Option<Vec<String>>,
 }
 
-impl ListEnabledProductsForImportResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.product_subscriptions.as_ref()?.clone())
+impl Paged for ListEnabledProductsForImportResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEnabledProductsForImportResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.product_subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5907,11 +5933,19 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListInvitationsRequest {
+impl Paged for ListInvitationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListInvitationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5929,27 +5963,25 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListInvitationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Invitation>> {
-        Some(self.invitations.as_ref()?.clone())
+impl Paged for ListInvitationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListInvitationsResponse {
     type Item = Invitation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Invitation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.invitations.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5971,11 +6003,19 @@ pub struct ListMembersRequest {
     pub only_associated: Option<bool>,
 }
 
-impl PagedRequest for ListMembersRequest {
+impl Paged for ListMembersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMembersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -5993,27 +6033,25 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListMembersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Member>> {
-        Some(self.members.as_ref()?.clone())
+impl Paged for ListMembersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMembersResponse {
     type Item = Member;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Member> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.members.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9884,13 +9922,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<GetEnabledStandardsResponse, RusotoError<GetEnabledStandardsError>>;
 
     /// Auto-paginating version of `get_enabled_standards`
-    fn get_enabled_standards_pages(
-        &self,
-        input: GetEnabledStandardsRequest,
-    ) -> RusotoStream<StandardsSubscription, GetEnabledStandardsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_enabled_standards(state.clone())
-        })
+    fn get_enabled_standards_pages<'a>(
+        &'a self,
+        mut input: GetEnabledStandardsRequest,
+    ) -> RusotoStream<'a, StandardsSubscription, GetEnabledStandardsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_enabled_standards(input.clone())
+        }))
     }
 
     /// <p>Returns a list of findings that match the specified criteria.</p>
@@ -9900,13 +9939,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>>;
 
     /// Auto-paginating version of `get_findings`
-    fn get_findings_pages(
-        &self,
-        input: GetFindingsRequest,
-    ) -> RusotoStream<AwsSecurityFinding, GetFindingsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_findings(state.clone())
-        })
+    fn get_findings_pages<'a>(
+        &'a self,
+        mut input: GetFindingsRequest,
+    ) -> RusotoStream<'a, AwsSecurityFinding, GetFindingsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_findings(input.clone())
+        }))
     }
 
     /// <p>Lists the results of the Security Hub insight specified by the insight ARN.</p>
@@ -9922,13 +9962,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<GetInsightsResponse, RusotoError<GetInsightsError>>;
 
     /// Auto-paginating version of `get_insights`
-    fn get_insights_pages(
-        &self,
-        input: GetInsightsRequest,
-    ) -> RusotoStream<Insight, GetInsightsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_insights(state.clone())
-        })
+    fn get_insights_pages<'a>(
+        &'a self,
+        mut input: GetInsightsRequest,
+    ) -> RusotoStream<'a, Insight, GetInsightsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_insights(input.clone())
+        }))
     }
 
     /// <p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>
@@ -9960,13 +10001,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<ListEnabledProductsForImportResponse, RusotoError<ListEnabledProductsForImportError>>;
 
     /// Auto-paginating version of `list_enabled_products_for_import`
-    fn list_enabled_products_for_import_pages(
-        &self,
-        input: ListEnabledProductsForImportRequest,
-    ) -> RusotoStream<String, ListEnabledProductsForImportError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_enabled_products_for_import(state.clone())
-        })
+    fn list_enabled_products_for_import_pages<'a>(
+        &'a self,
+        mut input: ListEnabledProductsForImportRequest,
+    ) -> RusotoStream<'a, String, ListEnabledProductsForImportError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_enabled_products_for_import(input.clone())
+        }))
     }
 
     /// <p>Lists all Security Hub membership invitations that were sent to the current AWS account.</p> <p>This operation is only used by accounts that do not belong to an organization. Organization accounts do not receive invitations.</p>
@@ -9976,13 +10018,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
     /// Auto-paginating version of `list_invitations`
-    fn list_invitations_pages(
-        &self,
-        input: ListInvitationsRequest,
-    ) -> RusotoStream<Invitation, ListInvitationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_invitations(state.clone())
-        })
+    fn list_invitations_pages<'a>(
+        &'a self,
+        mut input: ListInvitationsRequest,
+    ) -> RusotoStream<'a, Invitation, ListInvitationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_invitations(input.clone())
+        }))
     }
 
     /// <p>Lists details about all member accounts for the current Security Hub master account.</p> <p>The results include both member accounts that belong to an organization and member accounts that were invited manually.</p>
@@ -9992,13 +10035,14 @@ pub trait SecurityHub: Clone + Sync + Send + 'static {
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
 
     /// Auto-paginating version of `list_members`
-    fn list_members_pages(
-        &self,
-        input: ListMembersRequest,
-    ) -> RusotoStream<Member, ListMembersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_members(state.clone())
-        })
+    fn list_members_pages<'a>(
+        &'a self,
+        mut input: ListMembersRequest,
+    ) -> RusotoStream<'a, Member, ListMembersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_members(input.clone())
+        }))
     }
 
     /// <p>Lists the Security Hub administrator accounts. Can only be called by the organization management account.</p>

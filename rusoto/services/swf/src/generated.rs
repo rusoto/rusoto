@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -325,27 +327,25 @@ pub struct ActivityTypeInfos {
     pub type_infos: Vec<ActivityTypeInfo>,
 }
 
-impl ActivityTypeInfos {
-    fn pagination_page_opt(self) -> Option<Vec<ActivityTypeInfo>> {
-        Some(self.type_infos.clone())
+impl Paged for ActivityTypeInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for ActivityTypeInfos {
     type Item = ActivityTypeInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActivityTypeInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.type_infos
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -785,27 +785,25 @@ pub struct DecisionTask {
     pub workflow_type: WorkflowType,
 }
 
-impl DecisionTask {
-    fn pagination_page_opt(self) -> Option<Vec<HistoryEvent>> {
-        Some(self.events.clone())
+impl Paged for DecisionTask {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for DecisionTask {
     type Item = HistoryEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HistoryEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1004,27 +1002,25 @@ pub struct DomainInfos {
     pub next_page_token: Option<String>,
 }
 
-impl DomainInfos {
-    fn pagination_page_opt(self) -> Option<Vec<DomainInfo>> {
-        Some(self.domain_infos.clone())
+impl Paged for DomainInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for DomainInfos {
     type Item = DomainInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DomainInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.domain_infos
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1115,11 +1111,19 @@ pub struct GetWorkflowExecutionHistoryInput {
     pub reverse_order: Option<bool>,
 }
 
-impl PagedRequest for GetWorkflowExecutionHistoryInput {
+impl Paged for GetWorkflowExecutionHistoryInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for GetWorkflowExecutionHistoryInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1137,27 +1141,25 @@ pub struct History {
     pub next_page_token: Option<String>,
 }
 
-impl History {
-    fn pagination_page_opt(self) -> Option<Vec<HistoryEvent>> {
-        Some(self.events.clone())
+impl Paged for History {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for History {
     type Item = HistoryEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<HistoryEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1539,11 +1541,19 @@ pub struct ListActivityTypesInput {
     pub reverse_order: Option<bool>,
 }
 
-impl PagedRequest for ListActivityTypesInput {
+impl Paged for ListActivityTypesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListActivityTypesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1592,11 +1602,19 @@ pub struct ListClosedWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-impl PagedRequest for ListClosedWorkflowExecutionsInput {
+impl Paged for ListClosedWorkflowExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListClosedWorkflowExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1621,11 +1639,19 @@ pub struct ListDomainsInput {
     pub reverse_order: Option<bool>,
 }
 
-impl PagedRequest for ListDomainsInput {
+impl Paged for ListDomainsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListDomainsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1665,11 +1691,19 @@ pub struct ListOpenWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-impl PagedRequest for ListOpenWorkflowExecutionsInput {
+impl Paged for ListOpenWorkflowExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListOpenWorkflowExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1720,11 +1754,19 @@ pub struct ListWorkflowTypesInput {
     pub reverse_order: Option<bool>,
 }
 
-impl PagedRequest for ListWorkflowTypesInput {
+impl Paged for ListWorkflowTypesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for ListWorkflowTypesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -1803,11 +1845,19 @@ pub struct PollForDecisionTaskInput {
     pub task_list: TaskList,
 }
 
-impl PagedRequest for PollForDecisionTaskInput {
+impl Paged for PollForDecisionTaskInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
+    }
+}
+
+impl PagedRequest for PollForDecisionTaskInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_page_token = key;
-        self
     }
 }
 
@@ -2959,27 +3009,25 @@ pub struct WorkflowExecutionInfos {
     pub next_page_token: Option<String>,
 }
 
-impl WorkflowExecutionInfos {
-    fn pagination_page_opt(self) -> Option<Vec<WorkflowExecutionInfo>> {
-        Some(self.execution_infos.clone())
+impl Paged for WorkflowExecutionInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for WorkflowExecutionInfos {
     type Item = WorkflowExecutionInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkflowExecutionInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.execution_infos
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3214,27 +3262,25 @@ pub struct WorkflowTypeInfos {
     pub type_infos: Vec<WorkflowTypeInfo>,
 }
 
-impl WorkflowTypeInfos {
-    fn pagination_page_opt(self) -> Option<Vec<WorkflowTypeInfo>> {
-        Some(self.type_infos.clone())
+impl Paged for WorkflowTypeInfos {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_page_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_page_token)
     }
 }
 
 impl PagedOutput for WorkflowTypeInfos {
     type Item = WorkflowTypeInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_page_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<WorkflowTypeInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.type_infos
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5060,13 +5106,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<History, RusotoError<GetWorkflowExecutionHistoryError>>;
 
     /// Auto-paginating version of `get_workflow_execution_history`
-    fn get_workflow_execution_history_pages(
-        &self,
-        input: GetWorkflowExecutionHistoryInput,
-    ) -> RusotoStream<HistoryEvent, GetWorkflowExecutionHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_workflow_execution_history(state.clone())
-        })
+    fn get_workflow_execution_history_pages<'a>(
+        &'a self,
+        mut input: GetWorkflowExecutionHistoryInput,
+    ) -> RusotoStream<'a, HistoryEvent, GetWorkflowExecutionHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_workflow_execution_history(input.clone())
+        }))
     }
 
     /// <p>Returns information about all activities registered in the specified domain that match the specified name and registration status. The result includes information like creation date, current status of the activity, etc. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextPageToken</code> returned by the initial call.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -5076,13 +5123,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<ActivityTypeInfos, RusotoError<ListActivityTypesError>>;
 
     /// Auto-paginating version of `list_activity_types`
-    fn list_activity_types_pages(
-        &self,
-        input: ListActivityTypesInput,
-    ) -> RusotoStream<ActivityTypeInfo, ListActivityTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_activity_types(state.clone())
-        })
+    fn list_activity_types_pages<'a>(
+        &'a self,
+        mut input: ListActivityTypesInput,
+    ) -> RusotoStream<'a, ActivityTypeInfo, ListActivityTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_activity_types(input.clone())
+        }))
     }
 
     /// <p>Returns a list of closed workflow executions in the specified domain that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -5092,13 +5140,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<WorkflowExecutionInfos, RusotoError<ListClosedWorkflowExecutionsError>>;
 
     /// Auto-paginating version of `list_closed_workflow_executions`
-    fn list_closed_workflow_executions_pages(
-        &self,
-        input: ListClosedWorkflowExecutionsInput,
-    ) -> RusotoStream<WorkflowExecutionInfo, ListClosedWorkflowExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_closed_workflow_executions(state.clone())
-        })
+    fn list_closed_workflow_executions_pages<'a>(
+        &'a self,
+        mut input: ListClosedWorkflowExecutionsInput,
+    ) -> RusotoStream<'a, WorkflowExecutionInfo, ListClosedWorkflowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_closed_workflow_executions(input.clone())
+        }))
     }
 
     /// <p>Returns the list of domains registered in the account. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains. The element must be set to <code>arn:aws:swf::AccountID:domain/*</code>, where <i>AccountID</i> is the account ID, with no dashes.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -5108,13 +5157,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<DomainInfos, RusotoError<ListDomainsError>>;
 
     /// Auto-paginating version of `list_domains`
-    fn list_domains_pages(
-        &self,
-        input: ListDomainsInput,
-    ) -> RusotoStream<DomainInfo, ListDomainsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_domains(state.clone())
-        })
+    fn list_domains_pages<'a>(
+        &'a self,
+        mut input: ListDomainsInput,
+    ) -> RusotoStream<'a, DomainInfo, ListDomainsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_domains(input.clone())
+        }))
     }
 
     /// <p>Returns a list of open workflow executions in the specified domain that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagFilter.tag</code>: String constraint. The key is <code>swf:tagFilter.tag</code>.</p> </li> <li> <p> <code>typeFilter.name</code>: String constraint. The key is <code>swf:typeFilter.name</code>.</p> </li> <li> <p> <code>typeFilter.version</code>: String constraint. The key is <code>swf:typeFilter.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -5124,13 +5174,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<WorkflowExecutionInfos, RusotoError<ListOpenWorkflowExecutionsError>>;
 
     /// Auto-paginating version of `list_open_workflow_executions`
-    fn list_open_workflow_executions_pages(
-        &self,
-        input: ListOpenWorkflowExecutionsInput,
-    ) -> RusotoStream<WorkflowExecutionInfo, ListOpenWorkflowExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_open_workflow_executions(state.clone())
-        })
+    fn list_open_workflow_executions_pages<'a>(
+        &'a self,
+        mut input: ListOpenWorkflowExecutionsInput,
+    ) -> RusotoStream<'a, WorkflowExecutionInfo, ListOpenWorkflowExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_open_workflow_executions(input.clone())
+        }))
     }
 
     /// <p>List tags for a given domain.</p>
@@ -5146,13 +5197,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<WorkflowTypeInfos, RusotoError<ListWorkflowTypesError>>;
 
     /// Auto-paginating version of `list_workflow_types`
-    fn list_workflow_types_pages(
-        &self,
-        input: ListWorkflowTypesInput,
-    ) -> RusotoStream<WorkflowTypeInfo, ListWorkflowTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_workflow_types(state.clone())
-        })
+    fn list_workflow_types_pages<'a>(
+        &'a self,
+        mut input: ListWorkflowTypesInput,
+    ) -> RusotoStream<'a, WorkflowTypeInfo, ListWorkflowTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_workflow_types(input.clone())
+        }))
     }
 
     /// <p>Used by workers to get an <a>ActivityTask</a> from the specified activity <code>taskList</code>. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available. The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns an empty result. An empty result, in this context, means that an ActivityTask is returned, but that the value of taskToken is an empty string. If a task is returned, the worker should use its type to identify and process it correctly.</p> <important> <p>Workers should set their client side socket timeout to at least 70 seconds (10 seconds higher than the maximum time service may hold the poll request).</p> </important> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the <code>taskList.name</code> parameter by using a <code>Condition</code> element with the <code>swf:taskList.name</code> key to allow the action to access only certain task lists.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
@@ -5168,13 +5220,14 @@ pub trait Swf: Clone + Sync + Send + 'static {
     ) -> Result<DecisionTask, RusotoError<PollForDecisionTaskError>>;
 
     /// Auto-paginating version of `poll_for_decision_task`
-    fn poll_for_decision_task_pages(
-        &self,
-        input: PollForDecisionTaskInput,
-    ) -> RusotoStream<HistoryEvent, PollForDecisionTaskError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.poll_for_decision_task(state.clone())
-        })
+    fn poll_for_decision_task_pages<'a>(
+        &'a self,
+        mut input: PollForDecisionTaskInput,
+    ) -> RusotoStream<'a, HistoryEvent, PollForDecisionTaskError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.poll_for_decision_task(input.clone())
+        }))
     }
 
     /// <p>Used by activity workers to report to the service that the <a>ActivityTask</a> represented by the specified <code>taskToken</code> is still making progress. The worker can also specify details of the progress, for example percent complete, using the <code>details</code> parameter. This action can also be used by the worker as a mechanism to check if cancellation is being requested for the activity task. If a cancellation is being attempted for the specified task, then the boolean <code>cancelRequested</code> flag returned by the service is set to <code>true</code>.</p> <p>This action resets the <code>taskHeartbeatTimeout</code> clock. The <code>taskHeartbeatTimeout</code> is specified in <a>RegisterActivityType</a>.</p> <p>This action doesn't in itself create an event in the workflow execution history. However, if the task times out, the workflow execution history contains a <code>ActivityTaskTimedOut</code> event that contains the information from the last heartbeat generated by the activity worker.</p> <note> <p>The <code>taskStartToCloseTimeout</code> of an activity type is the maximum duration of an activity task, regardless of the number of <a>RecordActivityTaskHeartbeat</a> requests received. The <code>taskStartToCloseTimeout</code> is also specified in <a>RegisterActivityType</a>.</p> </note> <note> <p>This operation is only useful for long-lived activities to report liveliness of the task and to determine if a cancellation is being attempted.</p> </note> <important> <p>If the <code>cancelRequested</code> flag returns <code>true</code>, a cancellation is being attempted. If the worker can cancel the activity, it should respond with <a>RespondActivityTaskCanceled</a>. Otherwise, it should ignore the cancellation request.</p> </important> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>

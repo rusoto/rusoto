@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -2532,11 +2534,19 @@ pub struct ListBulkDeploymentDetailedReportsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBulkDeploymentDetailedReportsRequest {
+impl Paged for ListBulkDeploymentDetailedReportsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBulkDeploymentDetailedReportsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2554,27 +2564,25 @@ pub struct ListBulkDeploymentDetailedReportsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListBulkDeploymentDetailedReportsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BulkDeploymentResult>> {
-        Some(self.deployments.as_ref()?.clone())
+impl Paged for ListBulkDeploymentDetailedReportsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBulkDeploymentDetailedReportsResponse {
     type Item = BulkDeploymentResult;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BulkDeploymentResult> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2592,11 +2600,19 @@ pub struct ListBulkDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBulkDeploymentsRequest {
+impl Paged for ListBulkDeploymentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBulkDeploymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2614,27 +2630,25 @@ pub struct ListBulkDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListBulkDeploymentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<BulkDeployment>> {
-        Some(self.bulk_deployments.as_ref()?.clone())
+impl Paged for ListBulkDeploymentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBulkDeploymentsResponse {
     type Item = BulkDeployment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BulkDeployment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.bulk_deployments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2655,11 +2669,19 @@ pub struct ListConnectorDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListConnectorDefinitionVersionsRequest {
+impl Paged for ListConnectorDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConnectorDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2677,27 +2699,25 @@ pub struct ListConnectorDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListConnectorDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListConnectorDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListConnectorDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2715,11 +2735,19 @@ pub struct ListConnectorDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListConnectorDefinitionsRequest {
+impl Paged for ListConnectorDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConnectorDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2737,27 +2765,25 @@ pub struct ListConnectorDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListConnectorDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListConnectorDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListConnectorDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2778,11 +2804,19 @@ pub struct ListCoreDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCoreDefinitionVersionsRequest {
+impl Paged for ListCoreDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCoreDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2800,27 +2834,25 @@ pub struct ListCoreDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListCoreDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListCoreDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCoreDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2838,11 +2870,19 @@ pub struct ListCoreDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListCoreDefinitionsRequest {
+impl Paged for ListCoreDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListCoreDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2860,27 +2900,25 @@ pub struct ListCoreDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListCoreDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListCoreDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListCoreDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2901,11 +2939,19 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeploymentsRequest {
+impl Paged for ListDeploymentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeploymentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2923,27 +2969,25 @@ pub struct ListDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDeploymentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Deployment>> {
-        Some(self.deployments.as_ref()?.clone())
+impl Paged for ListDeploymentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeploymentsResponse {
     type Item = Deployment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Deployment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deployments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2964,11 +3008,19 @@ pub struct ListDeviceDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeviceDefinitionVersionsRequest {
+impl Paged for ListDeviceDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeviceDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2986,27 +3038,25 @@ pub struct ListDeviceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListDeviceDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListDeviceDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeviceDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3024,11 +3074,19 @@ pub struct ListDeviceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDeviceDefinitionsRequest {
+impl Paged for ListDeviceDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeviceDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3046,27 +3104,25 @@ pub struct ListDeviceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDeviceDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListDeviceDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeviceDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3087,11 +3143,19 @@ pub struct ListFunctionDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFunctionDefinitionVersionsRequest {
+impl Paged for ListFunctionDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFunctionDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3109,27 +3173,25 @@ pub struct ListFunctionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListFunctionDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListFunctionDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFunctionDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3147,11 +3209,19 @@ pub struct ListFunctionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListFunctionDefinitionsRequest {
+impl Paged for ListFunctionDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListFunctionDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3169,27 +3239,25 @@ pub struct ListFunctionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListFunctionDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListFunctionDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListFunctionDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3229,11 +3297,19 @@ pub struct ListGroupVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListGroupVersionsRequest {
+impl Paged for ListGroupVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3251,27 +3327,25 @@ pub struct ListGroupVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListGroupVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListGroupVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3289,11 +3363,19 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListGroupsRequest {
+impl Paged for ListGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3311,27 +3393,25 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GroupInformation>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for ListGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListGroupsResponse {
     type Item = GroupInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GroupInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3352,11 +3432,19 @@ pub struct ListLoggerDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLoggerDefinitionVersionsRequest {
+impl Paged for ListLoggerDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLoggerDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3374,27 +3462,25 @@ pub struct ListLoggerDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListLoggerDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListLoggerDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLoggerDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3412,11 +3498,19 @@ pub struct ListLoggerDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListLoggerDefinitionsRequest {
+impl Paged for ListLoggerDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListLoggerDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3434,27 +3528,25 @@ pub struct ListLoggerDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListLoggerDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListLoggerDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListLoggerDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3475,11 +3567,19 @@ pub struct ListResourceDefinitionVersionsRequest {
     pub resource_definition_id: String,
 }
 
-impl PagedRequest for ListResourceDefinitionVersionsRequest {
+impl Paged for ListResourceDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3497,27 +3597,25 @@ pub struct ListResourceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListResourceDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListResourceDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourceDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3535,11 +3633,19 @@ pub struct ListResourceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListResourceDefinitionsRequest {
+impl Paged for ListResourceDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListResourceDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3557,27 +3663,25 @@ pub struct ListResourceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListResourceDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListResourceDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListResourceDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3598,11 +3702,19 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
     pub subscription_definition_id: String,
 }
 
-impl PagedRequest for ListSubscriptionDefinitionVersionsRequest {
+impl Paged for ListSubscriptionDefinitionVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionDefinitionVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3620,27 +3732,25 @@ pub struct ListSubscriptionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-impl ListSubscriptionDefinitionVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<VersionInformation>> {
-        Some(self.versions.as_ref()?.clone())
+impl Paged for ListSubscriptionDefinitionVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSubscriptionDefinitionVersionsResponse {
     type Item = VersionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<VersionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3658,11 +3768,19 @@ pub struct ListSubscriptionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSubscriptionDefinitionsRequest {
+impl Paged for ListSubscriptionDefinitionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSubscriptionDefinitionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3680,27 +3798,25 @@ pub struct ListSubscriptionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListSubscriptionDefinitionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DefinitionInformation>> {
-        Some(self.definitions.as_ref()?.clone())
+impl Paged for ListSubscriptionDefinitionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSubscriptionDefinitionsResponse {
     type Item = DefinitionInformation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DefinitionInformation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.definitions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7662,13 +7778,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_bulk_deployment_detailed_reports`
-    fn list_bulk_deployment_detailed_reports_pages(
-        &self,
-        input: ListBulkDeploymentDetailedReportsRequest,
-    ) -> RusotoStream<BulkDeploymentResult, ListBulkDeploymentDetailedReportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_bulk_deployment_detailed_reports(state.clone())
-        })
+    fn list_bulk_deployment_detailed_reports_pages<'a>(
+        &'a self,
+        mut input: ListBulkDeploymentDetailedReportsRequest,
+    ) -> RusotoStream<'a, BulkDeploymentResult, ListBulkDeploymentDetailedReportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bulk_deployment_detailed_reports(input.clone())
+        }))
     }
 
     /// <p>Returns a list of bulk deployments.</p>
@@ -7678,13 +7795,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListBulkDeploymentsResponse, RusotoError<ListBulkDeploymentsError>>;
 
     /// Auto-paginating version of `list_bulk_deployments`
-    fn list_bulk_deployments_pages(
-        &self,
-        input: ListBulkDeploymentsRequest,
-    ) -> RusotoStream<BulkDeployment, ListBulkDeploymentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_bulk_deployments(state.clone())
-        })
+    fn list_bulk_deployments_pages<'a>(
+        &'a self,
+        mut input: ListBulkDeploymentsRequest,
+    ) -> RusotoStream<'a, BulkDeployment, ListBulkDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bulk_deployments(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
@@ -7697,13 +7815,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_connector_definition_versions`
-    fn list_connector_definition_versions_pages(
-        &self,
-        input: ListConnectorDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListConnectorDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_connector_definition_versions(state.clone())
-        })
+    fn list_connector_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListConnectorDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListConnectorDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_connector_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of connector definitions.</p>
@@ -7713,13 +7832,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListConnectorDefinitionsResponse, RusotoError<ListConnectorDefinitionsError>>;
 
     /// Auto-paginating version of `list_connector_definitions`
-    fn list_connector_definitions_pages(
-        &self,
-        input: ListConnectorDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListConnectorDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_connector_definitions(state.clone())
-        })
+    fn list_connector_definitions_pages<'a>(
+        &'a self,
+        mut input: ListConnectorDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListConnectorDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_connector_definitions(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a core definition.</p>
@@ -7729,13 +7849,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListCoreDefinitionVersionsResponse, RusotoError<ListCoreDefinitionVersionsError>>;
 
     /// Auto-paginating version of `list_core_definition_versions`
-    fn list_core_definition_versions_pages(
-        &self,
-        input: ListCoreDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListCoreDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_core_definition_versions(state.clone())
-        })
+    fn list_core_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListCoreDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListCoreDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_core_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of core definitions.</p>
@@ -7745,13 +7866,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListCoreDefinitionsResponse, RusotoError<ListCoreDefinitionsError>>;
 
     /// Auto-paginating version of `list_core_definitions`
-    fn list_core_definitions_pages(
-        &self,
-        input: ListCoreDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListCoreDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_core_definitions(state.clone())
-        })
+    fn list_core_definitions_pages<'a>(
+        &'a self,
+        mut input: ListCoreDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListCoreDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_core_definitions(input.clone())
+        }))
     }
 
     /// <p>Returns a history of deployments for the group.</p>
@@ -7761,13 +7883,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListDeploymentsResponse, RusotoError<ListDeploymentsError>>;
 
     /// Auto-paginating version of `list_deployments`
-    fn list_deployments_pages(
-        &self,
-        input: ListDeploymentsRequest,
-    ) -> RusotoStream<Deployment, ListDeploymentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deployments(state.clone())
-        })
+    fn list_deployments_pages<'a>(
+        &'a self,
+        mut input: ListDeploymentsRequest,
+    ) -> RusotoStream<'a, Deployment, ListDeploymentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deployments(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a device definition.</p>
@@ -7777,13 +7900,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListDeviceDefinitionVersionsResponse, RusotoError<ListDeviceDefinitionVersionsError>>;
 
     /// Auto-paginating version of `list_device_definition_versions`
-    fn list_device_definition_versions_pages(
-        &self,
-        input: ListDeviceDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListDeviceDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_device_definition_versions(state.clone())
-        })
+    fn list_device_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListDeviceDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListDeviceDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_device_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of device definitions.</p>
@@ -7793,13 +7917,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListDeviceDefinitionsResponse, RusotoError<ListDeviceDefinitionsError>>;
 
     /// Auto-paginating version of `list_device_definitions`
-    fn list_device_definitions_pages(
-        &self,
-        input: ListDeviceDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListDeviceDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_device_definitions(state.clone())
-        })
+    fn list_device_definitions_pages<'a>(
+        &'a self,
+        mut input: ListDeviceDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListDeviceDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_device_definitions(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a Lambda function definition.</p>
@@ -7812,13 +7937,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_function_definition_versions`
-    fn list_function_definition_versions_pages(
-        &self,
-        input: ListFunctionDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListFunctionDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_function_definition_versions(state.clone())
-        })
+    fn list_function_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListFunctionDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListFunctionDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_function_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
@@ -7828,13 +7954,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListFunctionDefinitionsResponse, RusotoError<ListFunctionDefinitionsError>>;
 
     /// Auto-paginating version of `list_function_definitions`
-    fn list_function_definitions_pages(
-        &self,
-        input: ListFunctionDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListFunctionDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_function_definitions(state.clone())
-        })
+    fn list_function_definitions_pages<'a>(
+        &'a self,
+        mut input: ListFunctionDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListFunctionDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_function_definitions(input.clone())
+        }))
     }
 
     /// <p>Retrieves the current CAs for a group.</p>
@@ -7853,13 +7980,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupVersionsResponse, RusotoError<ListGroupVersionsError>>;
 
     /// Auto-paginating version of `list_group_versions`
-    fn list_group_versions_pages(
-        &self,
-        input: ListGroupVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListGroupVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_group_versions(state.clone())
-        })
+    fn list_group_versions_pages<'a>(
+        &'a self,
+        mut input: ListGroupVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListGroupVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_group_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of groups.</p>
@@ -7869,13 +7997,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
 
     /// Auto-paginating version of `list_groups`
-    fn list_groups_pages(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoStream<GroupInformation, ListGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_groups(state.clone())
-        })
+    fn list_groups_pages<'a>(
+        &'a self,
+        mut input: ListGroupsRequest,
+    ) -> RusotoStream<'a, GroupInformation, ListGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_groups(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a logger definition.</p>
@@ -7885,13 +8014,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListLoggerDefinitionVersionsResponse, RusotoError<ListLoggerDefinitionVersionsError>>;
 
     /// Auto-paginating version of `list_logger_definition_versions`
-    fn list_logger_definition_versions_pages(
-        &self,
-        input: ListLoggerDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListLoggerDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_logger_definition_versions(state.clone())
-        })
+    fn list_logger_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListLoggerDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListLoggerDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_logger_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of logger definitions.</p>
@@ -7901,13 +8031,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListLoggerDefinitionsResponse, RusotoError<ListLoggerDefinitionsError>>;
 
     /// Auto-paginating version of `list_logger_definitions`
-    fn list_logger_definitions_pages(
-        &self,
-        input: ListLoggerDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListLoggerDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_logger_definitions(state.clone())
-        })
+    fn list_logger_definitions_pages<'a>(
+        &'a self,
+        mut input: ListLoggerDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListLoggerDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_logger_definitions(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a resource definition.</p>
@@ -7920,13 +8051,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_resource_definition_versions`
-    fn list_resource_definition_versions_pages(
-        &self,
-        input: ListResourceDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListResourceDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_definition_versions(state.clone())
-        })
+    fn list_resource_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListResourceDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListResourceDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of resource definitions.</p>
@@ -7936,13 +8068,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListResourceDefinitionsResponse, RusotoError<ListResourceDefinitionsError>>;
 
     /// Auto-paginating version of `list_resource_definitions`
-    fn list_resource_definitions_pages(
-        &self,
-        input: ListResourceDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListResourceDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_resource_definitions(state.clone())
-        })
+    fn list_resource_definitions_pages<'a>(
+        &'a self,
+        mut input: ListResourceDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListResourceDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_resource_definitions(input.clone())
+        }))
     }
 
     /// <p>Lists the versions of a subscription definition.</p>
@@ -7955,13 +8088,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_subscription_definition_versions`
-    fn list_subscription_definition_versions_pages(
-        &self,
-        input: ListSubscriptionDefinitionVersionsRequest,
-    ) -> RusotoStream<VersionInformation, ListSubscriptionDefinitionVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_subscription_definition_versions(state.clone())
-        })
+    fn list_subscription_definition_versions_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionDefinitionVersionsRequest,
+    ) -> RusotoStream<'a, VersionInformation, ListSubscriptionDefinitionVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscription_definition_versions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of subscription definitions.</p>
@@ -7971,13 +8105,14 @@ pub trait GreenGrass: Clone + Sync + Send + 'static {
     ) -> Result<ListSubscriptionDefinitionsResponse, RusotoError<ListSubscriptionDefinitionsError>>;
 
     /// Auto-paginating version of `list_subscription_definitions`
-    fn list_subscription_definitions_pages(
-        &self,
-        input: ListSubscriptionDefinitionsRequest,
-    ) -> RusotoStream<DefinitionInformation, ListSubscriptionDefinitionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_subscription_definitions(state.clone())
-        })
+    fn list_subscription_definitions_pages<'a>(
+        &'a self,
+        mut input: ListSubscriptionDefinitionsRequest,
+    ) -> RusotoStream<'a, DefinitionInformation, ListSubscriptionDefinitionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_subscription_definitions(input.clone())
+        }))
     }
 
     /// <p>Retrieves a list of resource tags for a resource arn.</p>

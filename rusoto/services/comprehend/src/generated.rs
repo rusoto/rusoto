@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1761,11 +1763,19 @@ pub struct ListDocumentClassificationJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDocumentClassificationJobsRequest {
+impl Paged for ListDocumentClassificationJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentClassificationJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1784,31 +1794,26 @@ pub struct ListDocumentClassificationJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDocumentClassificationJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DocumentClassificationJobProperties>> {
-        Some(
-            self.document_classification_job_properties_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListDocumentClassificationJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDocumentClassificationJobsResponse {
     type Item = DocumentClassificationJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DocumentClassificationJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.document_classification_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1830,11 +1835,19 @@ pub struct ListDocumentClassifiersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDocumentClassifiersRequest {
+impl Paged for ListDocumentClassifiersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDocumentClassifiersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1852,27 +1865,25 @@ pub struct ListDocumentClassifiersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDocumentClassifiersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DocumentClassifierProperties>> {
-        Some(self.document_classifier_properties_list.as_ref()?.clone())
+impl Paged for ListDocumentClassifiersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDocumentClassifiersResponse {
     type Item = DocumentClassifierProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DocumentClassifierProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.document_classifier_properties_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1894,11 +1905,19 @@ pub struct ListDominantLanguageDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListDominantLanguageDetectionJobsRequest {
+impl Paged for ListDominantLanguageDetectionJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDominantLanguageDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1917,31 +1936,26 @@ pub struct ListDominantLanguageDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDominantLanguageDetectionJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DominantLanguageDetectionJobProperties>> {
-        Some(
-            self.dominant_language_detection_job_properties_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListDominantLanguageDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDominantLanguageDetectionJobsResponse {
     type Item = DominantLanguageDetectionJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DominantLanguageDetectionJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dominant_language_detection_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1995,11 +2009,19 @@ pub struct ListEntitiesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListEntitiesDetectionJobsRequest {
+impl Paged for ListEntitiesDetectionJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntitiesDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2017,31 +2039,26 @@ pub struct ListEntitiesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListEntitiesDetectionJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EntitiesDetectionJobProperties>> {
-        Some(
-            self.entities_detection_job_properties_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListEntitiesDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEntitiesDetectionJobsResponse {
     type Item = EntitiesDetectionJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EntitiesDetectionJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entities_detection_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2063,11 +2080,19 @@ pub struct ListEntityRecognizersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListEntityRecognizersRequest {
+impl Paged for ListEntityRecognizersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEntityRecognizersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2085,27 +2110,25 @@ pub struct ListEntityRecognizersResponse {
     pub next_token: Option<String>,
 }
 
-impl ListEntityRecognizersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<EntityRecognizerProperties>> {
-        Some(self.entity_recognizer_properties_list.as_ref()?.clone())
+impl Paged for ListEntityRecognizersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEntityRecognizersResponse {
     type Item = EntityRecognizerProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<EntityRecognizerProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.entity_recognizer_properties_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2159,11 +2182,19 @@ pub struct ListKeyPhrasesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListKeyPhrasesDetectionJobsRequest {
+impl Paged for ListKeyPhrasesDetectionJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListKeyPhrasesDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2181,31 +2212,26 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListKeyPhrasesDetectionJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<KeyPhrasesDetectionJobProperties>> {
-        Some(
-            self.key_phrases_detection_job_properties_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListKeyPhrasesDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListKeyPhrasesDetectionJobsResponse {
     type Item = KeyPhrasesDetectionJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<KeyPhrasesDetectionJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.key_phrases_detection_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2259,11 +2285,19 @@ pub struct ListSentimentDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListSentimentDetectionJobsRequest {
+impl Paged for ListSentimentDetectionJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSentimentDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2281,31 +2315,26 @@ pub struct ListSentimentDetectionJobsResponse {
     pub sentiment_detection_job_properties_list: Option<Vec<SentimentDetectionJobProperties>>,
 }
 
-impl ListSentimentDetectionJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SentimentDetectionJobProperties>> {
-        Some(
-            self.sentiment_detection_job_properties_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListSentimentDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSentimentDetectionJobsResponse {
     type Item = SentimentDetectionJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SentimentDetectionJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.sentiment_detection_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2350,11 +2379,19 @@ pub struct ListTopicsDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListTopicsDetectionJobsRequest {
+impl Paged for ListTopicsDetectionJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTopicsDetectionJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2372,27 +2409,26 @@ pub struct ListTopicsDetectionJobsResponse {
     pub topics_detection_job_properties_list: Option<Vec<TopicsDetectionJobProperties>>,
 }
 
-impl ListTopicsDetectionJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<TopicsDetectionJobProperties>> {
-        Some(self.topics_detection_job_properties_list.as_ref()?.clone())
+impl Paged for ListTopicsDetectionJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTopicsDetectionJobsResponse {
     type Item = TopicsDetectionJobProperties;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<TopicsDetectionJobProperties> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.topics_detection_job_properties_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -7122,14 +7158,15 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_document_classification_jobs`
-    fn list_document_classification_jobs_pages(
-        &self,
-        input: ListDocumentClassificationJobsRequest,
-    ) -> RusotoStream<DocumentClassificationJobProperties, ListDocumentClassificationJobsError>
+    fn list_document_classification_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDocumentClassificationJobsRequest,
+    ) -> RusotoStream<'a, DocumentClassificationJobProperties, ListDocumentClassificationJobsError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_document_classification_jobs(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_document_classification_jobs(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the document classifiers that you have created.</p>
@@ -7139,13 +7176,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListDocumentClassifiersResponse, RusotoError<ListDocumentClassifiersError>>;
 
     /// Auto-paginating version of `list_document_classifiers`
-    fn list_document_classifiers_pages(
-        &self,
-        input: ListDocumentClassifiersRequest,
-    ) -> RusotoStream<DocumentClassifierProperties, ListDocumentClassifiersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_document_classifiers(state.clone())
-        })
+    fn list_document_classifiers_pages<'a>(
+        &'a self,
+        mut input: ListDocumentClassifiersRequest,
+    ) -> RusotoStream<'a, DocumentClassifierProperties, ListDocumentClassifiersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_document_classifiers(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
@@ -7158,14 +7196,18 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_dominant_language_detection_jobs`
-    fn list_dominant_language_detection_jobs_pages(
-        &self,
-        input: ListDominantLanguageDetectionJobsRequest,
-    ) -> RusotoStream<DominantLanguageDetectionJobProperties, ListDominantLanguageDetectionJobsError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dominant_language_detection_jobs(state.clone())
-        })
+    fn list_dominant_language_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListDominantLanguageDetectionJobsRequest,
+    ) -> RusotoStream<
+        'a,
+        DominantLanguageDetectionJobProperties,
+        ListDominantLanguageDetectionJobsError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dominant_language_detection_jobs(input.clone())
+        }))
     }
 
     /// <p>Gets a list of all existing endpoints that you've created.</p>
@@ -7181,13 +7223,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListEntitiesDetectionJobsResponse, RusotoError<ListEntitiesDetectionJobsError>>;
 
     /// Auto-paginating version of `list_entities_detection_jobs`
-    fn list_entities_detection_jobs_pages(
-        &self,
-        input: ListEntitiesDetectionJobsRequest,
-    ) -> RusotoStream<EntitiesDetectionJobProperties, ListEntitiesDetectionJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_entities_detection_jobs(state.clone())
-        })
+    fn list_entities_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListEntitiesDetectionJobsRequest,
+    ) -> RusotoStream<'a, EntitiesDetectionJobProperties, ListEntitiesDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entities_detection_jobs(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
@@ -7197,13 +7240,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>>;
 
     /// Auto-paginating version of `list_entity_recognizers`
-    fn list_entity_recognizers_pages(
-        &self,
-        input: ListEntityRecognizersRequest,
-    ) -> RusotoStream<EntityRecognizerProperties, ListEntityRecognizersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_entity_recognizers(state.clone())
-        })
+    fn list_entity_recognizers_pages<'a>(
+        &'a self,
+        mut input: ListEntityRecognizersRequest,
+    ) -> RusotoStream<'a, EntityRecognizerProperties, ListEntityRecognizersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_entity_recognizers(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the events detection jobs that you have submitted.</p>
@@ -7219,13 +7263,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>;
 
     /// Auto-paginating version of `list_key_phrases_detection_jobs`
-    fn list_key_phrases_detection_jobs_pages(
-        &self,
-        input: ListKeyPhrasesDetectionJobsRequest,
-    ) -> RusotoStream<KeyPhrasesDetectionJobProperties, ListKeyPhrasesDetectionJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_key_phrases_detection_jobs(state.clone())
-        })
+    fn list_key_phrases_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListKeyPhrasesDetectionJobsRequest,
+    ) -> RusotoStream<'a, KeyPhrasesDetectionJobProperties, ListKeyPhrasesDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_key_phrases_detection_jobs(input.clone())
+        }))
     }
 
     /// <p>Gets a list of the PII entity detection jobs that you have submitted.</p>
@@ -7241,13 +7286,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListSentimentDetectionJobsResponse, RusotoError<ListSentimentDetectionJobsError>>;
 
     /// Auto-paginating version of `list_sentiment_detection_jobs`
-    fn list_sentiment_detection_jobs_pages(
-        &self,
-        input: ListSentimentDetectionJobsRequest,
-    ) -> RusotoStream<SentimentDetectionJobProperties, ListSentimentDetectionJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_sentiment_detection_jobs(state.clone())
-        })
+    fn list_sentiment_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListSentimentDetectionJobsRequest,
+    ) -> RusotoStream<'a, SentimentDetectionJobProperties, ListSentimentDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_sentiment_detection_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
@@ -7263,13 +7309,14 @@ pub trait Comprehend: Clone + Sync + Send + 'static {
     ) -> Result<ListTopicsDetectionJobsResponse, RusotoError<ListTopicsDetectionJobsError>>;
 
     /// Auto-paginating version of `list_topics_detection_jobs`
-    fn list_topics_detection_jobs_pages(
-        &self,
-        input: ListTopicsDetectionJobsRequest,
-    ) -> RusotoStream<TopicsDetectionJobProperties, ListTopicsDetectionJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_topics_detection_jobs(state.clone())
-        })
+    fn list_topics_detection_jobs_pages<'a>(
+        &'a self,
+        mut input: ListTopicsDetectionJobsRequest,
+    ) -> RusotoStream<'a, TopicsDetectionJobProperties, ListTopicsDetectionJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_topics_detection_jobs(input.clone())
+        }))
     }
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>

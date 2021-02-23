@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -228,11 +230,19 @@ pub struct ListPlaybackConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPlaybackConfigurationsRequest {
+impl Paged for ListPlaybackConfigurationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlaybackConfigurationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -250,27 +260,25 @@ pub struct ListPlaybackConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListPlaybackConfigurationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PlaybackConfiguration>> {
-        Some(self.items.as_ref()?.clone())
+impl Paged for ListPlaybackConfigurationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPlaybackConfigurationsResponse {
     type Item = PlaybackConfiguration;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PlaybackConfiguration> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.items.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -754,13 +762,14 @@ pub trait MediaTailor: Clone + Sync + Send + 'static {
     ) -> Result<ListPlaybackConfigurationsResponse, RusotoError<ListPlaybackConfigurationsError>>;
 
     /// Auto-paginating version of `list_playback_configurations`
-    fn list_playback_configurations_pages(
-        &self,
-        input: ListPlaybackConfigurationsRequest,
-    ) -> RusotoStream<PlaybackConfiguration, ListPlaybackConfigurationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_playback_configurations(state.clone())
-        })
+    fn list_playback_configurations_pages<'a>(
+        &'a self,
+        mut input: ListPlaybackConfigurationsRequest,
+    ) -> RusotoStream<'a, PlaybackConfiguration, ListPlaybackConfigurationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_playback_configurations(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>

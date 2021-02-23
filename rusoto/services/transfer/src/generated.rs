@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -506,11 +508,19 @@ pub struct ListServersRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListServersRequest {
+impl Paged for ListServersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -527,27 +537,25 @@ pub struct ListServersResponse {
     pub servers: Vec<ListedServer>,
 }
 
-impl ListServersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ListedServer>> {
-        Some(self.servers.clone())
+impl Paged for ListServersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServersResponse {
     type Item = ListedServer;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListedServer> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.servers
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2042,13 +2050,14 @@ pub trait Transfer: Clone + Sync + Send + 'static {
     ) -> Result<ListServersResponse, RusotoError<ListServersError>>;
 
     /// Auto-paginating version of `list_servers`
-    fn list_servers_pages(
-        &self,
-        input: ListServersRequest,
-    ) -> RusotoStream<ListedServer, ListServersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_servers(state.clone())
-        })
+    fn list_servers_pages<'a>(
+        &'a self,
+        mut input: ListServersRequest,
+    ) -> RusotoStream<'a, ListedServer, ListServersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_servers(input.clone())
+        }))
     }
 
     /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>

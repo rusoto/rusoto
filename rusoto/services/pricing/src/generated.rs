@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -85,11 +87,19 @@ pub struct DescribeServicesRequest {
     pub service_code: Option<String>,
 }
 
-impl PagedRequest for DescribeServicesRequest {
+impl Paged for DescribeServicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -111,27 +121,25 @@ pub struct DescribeServicesResponse {
     pub services: Option<Vec<Service>>,
 }
 
-impl DescribeServicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Service>> {
-        Some(self.services.as_ref()?.clone())
+impl Paged for DescribeServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeServicesResponse {
     type Item = Service;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Service> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -170,11 +178,19 @@ pub struct GetAttributeValuesRequest {
     pub service_code: String,
 }
 
-impl PagedRequest for GetAttributeValuesRequest {
+impl Paged for GetAttributeValuesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetAttributeValuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -192,27 +208,25 @@ pub struct GetAttributeValuesResponse {
     pub next_token: Option<String>,
 }
 
-impl GetAttributeValuesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<AttributeValue>> {
-        Some(self.attribute_values.as_ref()?.clone())
+impl Paged for GetAttributeValuesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetAttributeValuesResponse {
     type Item = AttributeValue;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<AttributeValue> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.attribute_values.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -242,11 +256,19 @@ pub struct GetProductsRequest {
     pub service_code: Option<String>,
 }
 
-impl PagedRequest for GetProductsRequest {
+impl Paged for GetProductsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetProductsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -268,27 +290,25 @@ pub struct GetProductsResponse {
     pub price_list: Option<Vec<String>>,
 }
 
-impl GetProductsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.price_list.as_ref()?.clone())
+impl Paged for GetProductsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetProductsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.price_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -478,13 +498,14 @@ pub trait Pricing: Clone + Sync + Send + 'static {
     ) -> Result<DescribeServicesResponse, RusotoError<DescribeServicesError>>;
 
     /// Auto-paginating version of `describe_services`
-    fn describe_services_pages(
-        &self,
-        input: DescribeServicesRequest,
-    ) -> RusotoStream<Service, DescribeServicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_services(state.clone())
-        })
+    fn describe_services_pages<'a>(
+        &'a self,
+        mut input: DescribeServicesRequest,
+    ) -> RusotoStream<'a, Service, DescribeServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_services(input.clone())
+        }))
     }
 
     /// <p>Returns a list of attribute values. Attibutes are similar to the details in a Price List API offer file. For a list of available attributes, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html#pps-defs">Offer File Definitions</a> in the <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html">AWS Billing and Cost Management User Guide</a>.</p>
@@ -494,13 +515,14 @@ pub trait Pricing: Clone + Sync + Send + 'static {
     ) -> Result<GetAttributeValuesResponse, RusotoError<GetAttributeValuesError>>;
 
     /// Auto-paginating version of `get_attribute_values`
-    fn get_attribute_values_pages(
-        &self,
-        input: GetAttributeValuesRequest,
-    ) -> RusotoStream<AttributeValue, GetAttributeValuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_attribute_values(state.clone())
-        })
+    fn get_attribute_values_pages<'a>(
+        &'a self,
+        mut input: GetAttributeValuesRequest,
+    ) -> RusotoStream<'a, AttributeValue, GetAttributeValuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_attribute_values(input.clone())
+        }))
     }
 
     /// <p>Returns a list of all products that match the filter criteria.</p>
@@ -510,13 +532,14 @@ pub trait Pricing: Clone + Sync + Send + 'static {
     ) -> Result<GetProductsResponse, RusotoError<GetProductsError>>;
 
     /// Auto-paginating version of `get_products`
-    fn get_products_pages(
-        &self,
-        input: GetProductsRequest,
-    ) -> RusotoStream<String, GetProductsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_products(state.clone())
-        })
+    fn get_products_pages<'a>(
+        &'a self,
+        mut input: GetProductsRequest,
+    ) -> RusotoStream<'a, String, GetProductsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_products(input.clone())
+        }))
     }
 }
 /// A client for the AWS Pricing API.

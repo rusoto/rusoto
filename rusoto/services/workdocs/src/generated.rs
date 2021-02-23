@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -597,11 +599,19 @@ pub struct DescribeActivitiesRequest {
     pub user_id: Option<String>,
 }
 
-impl PagedRequest for DescribeActivitiesRequest {
+impl Paged for DescribeActivitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeActivitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -619,27 +629,25 @@ pub struct DescribeActivitiesResponse {
     pub user_activities: Option<Vec<Activity>>,
 }
 
-impl DescribeActivitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Activity>> {
-        Some(self.user_activities.as_ref()?.clone())
+impl Paged for DescribeActivitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeActivitiesResponse {
     type Item = Activity;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Activity> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.user_activities.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -667,11 +675,19 @@ pub struct DescribeCommentsRequest {
     pub version_id: String,
 }
 
-impl PagedRequest for DescribeCommentsRequest {
+impl Paged for DescribeCommentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCommentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -689,27 +705,25 @@ pub struct DescribeCommentsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeCommentsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Comment>> {
-        Some(self.comments.as_ref()?.clone())
+impl Paged for DescribeCommentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeCommentsResponse {
     type Item = Comment;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Comment> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.comments.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -742,11 +756,19 @@ pub struct DescribeDocumentVersionsRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for DescribeDocumentVersionsRequest {
+impl Paged for DescribeDocumentVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDocumentVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -764,27 +786,25 @@ pub struct DescribeDocumentVersionsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeDocumentVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DocumentVersionMetadata>> {
-        Some(self.document_versions.as_ref()?.clone())
+impl Paged for DescribeDocumentVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeDocumentVersionsResponse {
     type Item = DocumentVersionMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DocumentVersionMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.document_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -825,11 +845,19 @@ pub struct DescribeFolderContentsRequest {
     pub type_: Option<String>,
 }
 
-impl PagedRequest for DescribeFolderContentsRequest {
+impl Paged for DescribeFolderContentsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeFolderContentsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -851,23 +879,25 @@ pub struct DescribeFolderContentsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeFolderContentsResponse {}
+impl Paged for DescribeFolderContentsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
 
 impl PagedOutput for DescribeFolderContentsResponse {
     type Item = DescribeFolderContentsResponse;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DescribeFolderContentsResponse> {
         vec![self]
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -896,11 +926,19 @@ pub struct DescribeGroupsRequest {
     pub search_query: String,
 }
 
-impl PagedRequest for DescribeGroupsRequest {
+impl Paged for DescribeGroupsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeGroupsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -918,27 +956,25 @@ pub struct DescribeGroupsResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeGroupsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<GroupMetadata>> {
-        Some(self.groups.as_ref()?.clone())
+impl Paged for DescribeGroupsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeGroupsResponse {
     type Item = GroupMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<GroupMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -959,11 +995,19 @@ pub struct DescribeNotificationSubscriptionsRequest {
     pub organization_id: String,
 }
 
-impl PagedRequest for DescribeNotificationSubscriptionsRequest {
+impl Paged for DescribeNotificationSubscriptionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeNotificationSubscriptionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -981,27 +1025,25 @@ pub struct DescribeNotificationSubscriptionsResponse {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-impl DescribeNotificationSubscriptionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Subscription>> {
-        Some(self.subscriptions.as_ref()?.clone())
+impl Paged for DescribeNotificationSubscriptionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeNotificationSubscriptionsResponse {
     type Item = Subscription;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Subscription> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.subscriptions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1030,11 +1072,19 @@ pub struct DescribeResourcePermissionsRequest {
     pub resource_id: String,
 }
 
-impl PagedRequest for DescribeResourcePermissionsRequest {
+impl Paged for DescribeResourcePermissionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeResourcePermissionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1052,27 +1102,25 @@ pub struct DescribeResourcePermissionsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
-impl DescribeResourcePermissionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Principal>> {
-        Some(self.principals.as_ref()?.clone())
+impl Paged for DescribeResourcePermissionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeResourcePermissionsResponse {
     type Item = Principal;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Principal> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.principals.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1093,11 +1141,19 @@ pub struct DescribeRootFoldersRequest {
     pub marker: Option<String>,
 }
 
-impl PagedRequest for DescribeRootFoldersRequest {
+impl Paged for DescribeRootFoldersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeRootFoldersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1115,27 +1171,25 @@ pub struct DescribeRootFoldersResponse {
     pub marker: Option<String>,
 }
 
-impl DescribeRootFoldersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<FolderMetadata>> {
-        Some(self.folders.as_ref()?.clone())
+impl Paged for DescribeRootFoldersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeRootFoldersResponse {
     type Item = FolderMetadata;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<FolderMetadata> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.folders.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1185,11 +1239,19 @@ pub struct DescribeUsersRequest {
     pub user_ids: Option<String>,
 }
 
-impl PagedRequest for DescribeUsersRequest {
+impl Paged for DescribeUsersRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeUsersRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -1207,27 +1269,25 @@ pub struct DescribeUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
-impl DescribeUsersResponse {
-    fn pagination_page_opt(self) -> Option<Vec<User>> {
-        Some(self.users.as_ref()?.clone())
+impl Paged for DescribeUsersResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DescribeUsersResponse {
     type Item = User;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<User> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.users.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5120,13 +5180,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeActivitiesResponse, RusotoError<DescribeActivitiesError>>;
 
     /// Auto-paginating version of `describe_activities`
-    fn describe_activities_pages(
-        &self,
-        input: DescribeActivitiesRequest,
-    ) -> RusotoStream<Activity, DescribeActivitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_activities(state.clone())
-        })
+    fn describe_activities_pages<'a>(
+        &'a self,
+        mut input: DescribeActivitiesRequest,
+    ) -> RusotoStream<'a, Activity, DescribeActivitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_activities(input.clone())
+        }))
     }
 
     /// <p>List all the comments for the specified document version.</p>
@@ -5136,13 +5197,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>>;
 
     /// Auto-paginating version of `describe_comments`
-    fn describe_comments_pages(
-        &self,
-        input: DescribeCommentsRequest,
-    ) -> RusotoStream<Comment, DescribeCommentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_comments(state.clone())
-        })
+    fn describe_comments_pages<'a>(
+        &'a self,
+        mut input: DescribeCommentsRequest,
+    ) -> RusotoStream<'a, Comment, DescribeCommentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_comments(input.clone())
+        }))
     }
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
@@ -5152,13 +5214,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDocumentVersionsResponse, RusotoError<DescribeDocumentVersionsError>>;
 
     /// Auto-paginating version of `describe_document_versions`
-    fn describe_document_versions_pages(
-        &self,
-        input: DescribeDocumentVersionsRequest,
-    ) -> RusotoStream<DocumentVersionMetadata, DescribeDocumentVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_document_versions(state.clone())
-        })
+    fn describe_document_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeDocumentVersionsRequest,
+    ) -> RusotoStream<'a, DocumentVersionMetadata, DescribeDocumentVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_document_versions(input.clone())
+        }))
     }
 
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
@@ -5168,13 +5231,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeFolderContentsResponse, RusotoError<DescribeFolderContentsError>>;
 
     /// Auto-paginating version of `describe_folder_contents`
-    fn describe_folder_contents_pages(
-        &self,
-        input: DescribeFolderContentsRequest,
-    ) -> RusotoStream<DescribeFolderContentsResponse, DescribeFolderContentsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_folder_contents(state.clone())
-        })
+    fn describe_folder_contents_pages<'a>(
+        &'a self,
+        mut input: DescribeFolderContentsRequest,
+    ) -> RusotoStream<'a, DescribeFolderContentsResponse, DescribeFolderContentsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_folder_contents(input.clone())
+        }))
     }
 
     /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
@@ -5184,13 +5248,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>>;
 
     /// Auto-paginating version of `describe_groups`
-    fn describe_groups_pages(
-        &self,
-        input: DescribeGroupsRequest,
-    ) -> RusotoStream<GroupMetadata, DescribeGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_groups(state.clone())
-        })
+    fn describe_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeGroupsRequest,
+    ) -> RusotoStream<'a, GroupMetadata, DescribeGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_groups(input.clone())
+        }))
     }
 
     /// <p>Lists the specified notification subscriptions.</p>
@@ -5203,13 +5268,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_notification_subscriptions`
-    fn describe_notification_subscriptions_pages(
-        &self,
-        input: DescribeNotificationSubscriptionsRequest,
-    ) -> RusotoStream<Subscription, DescribeNotificationSubscriptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_notification_subscriptions(state.clone())
-        })
+    fn describe_notification_subscriptions_pages<'a>(
+        &'a self,
+        mut input: DescribeNotificationSubscriptionsRequest,
+    ) -> RusotoStream<'a, Subscription, DescribeNotificationSubscriptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_notification_subscriptions(input.clone())
+        }))
     }
 
     /// <p>Describes the permissions of a specified resource.</p>
@@ -5219,13 +5285,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeResourcePermissionsResponse, RusotoError<DescribeResourcePermissionsError>>;
 
     /// Auto-paginating version of `describe_resource_permissions`
-    fn describe_resource_permissions_pages(
-        &self,
-        input: DescribeResourcePermissionsRequest,
-    ) -> RusotoStream<Principal, DescribeResourcePermissionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_resource_permissions(state.clone())
-        })
+    fn describe_resource_permissions_pages<'a>(
+        &'a self,
+        mut input: DescribeResourcePermissionsRequest,
+    ) -> RusotoStream<'a, Principal, DescribeResourcePermissionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_resource_permissions(input.clone())
+        }))
     }
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
@@ -5235,13 +5302,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeRootFoldersResponse, RusotoError<DescribeRootFoldersError>>;
 
     /// Auto-paginating version of `describe_root_folders`
-    fn describe_root_folders_pages(
-        &self,
-        input: DescribeRootFoldersRequest,
-    ) -> RusotoStream<FolderMetadata, DescribeRootFoldersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_root_folders(state.clone())
-        })
+    fn describe_root_folders_pages<'a>(
+        &'a self,
+        mut input: DescribeRootFoldersRequest,
+    ) -> RusotoStream<'a, FolderMetadata, DescribeRootFoldersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_root_folders(input.clone())
+        }))
     }
 
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
@@ -5251,13 +5319,14 @@ pub trait Workdocs: Clone + Sync + Send + 'static {
     ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>;
 
     /// Auto-paginating version of `describe_users`
-    fn describe_users_pages(
-        &self,
-        input: DescribeUsersRequest,
-    ) -> RusotoStream<User, DescribeUsersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_users(state.clone())
-        })
+    fn describe_users_pages<'a>(
+        &'a self,
+        mut input: DescribeUsersRequest,
+    ) -> RusotoStream<'a, User, DescribeUsersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_users(input.clone())
+        }))
     }
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>

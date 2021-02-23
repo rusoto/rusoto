@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -519,11 +521,19 @@ pub struct ListComplianceStatusRequest {
     pub policy_id: String,
 }
 
-impl PagedRequest for ListComplianceStatusRequest {
+impl Paged for ListComplianceStatusRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListComplianceStatusRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -541,27 +551,25 @@ pub struct ListComplianceStatusResponse {
     pub policy_compliance_status_list: Option<Vec<PolicyComplianceStatus>>,
 }
 
-impl ListComplianceStatusResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicyComplianceStatus>> {
-        Some(self.policy_compliance_status_list.as_ref()?.clone())
+impl Paged for ListComplianceStatusResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListComplianceStatusResponse {
     type Item = PolicyComplianceStatus;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicyComplianceStatus> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_compliance_status_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -579,11 +587,19 @@ pub struct ListMemberAccountsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListMemberAccountsRequest {
+impl Paged for ListMemberAccountsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListMemberAccountsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -601,27 +617,25 @@ pub struct ListMemberAccountsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListMemberAccountsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.member_accounts.as_ref()?.clone())
+impl Paged for ListMemberAccountsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListMemberAccountsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.member_accounts.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -639,11 +653,19 @@ pub struct ListPoliciesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPoliciesRequest {
+impl Paged for ListPoliciesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPoliciesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -661,27 +683,25 @@ pub struct ListPoliciesResponse {
     pub policy_list: Option<Vec<PolicySummary>>,
 }
 
-impl ListPoliciesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PolicySummary>> {
-        Some(self.policy_list.as_ref()?.clone())
+impl Paged for ListPoliciesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPoliciesResponse {
     type Item = PolicySummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PolicySummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.policy_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2699,13 +2719,14 @@ pub trait Fms: Clone + Sync + Send + 'static {
     ) -> Result<ListComplianceStatusResponse, RusotoError<ListComplianceStatusError>>;
 
     /// Auto-paginating version of `list_compliance_status`
-    fn list_compliance_status_pages(
-        &self,
-        input: ListComplianceStatusRequest,
-    ) -> RusotoStream<PolicyComplianceStatus, ListComplianceStatusError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_compliance_status(state.clone())
-        })
+    fn list_compliance_status_pages<'a>(
+        &'a self,
+        mut input: ListComplianceStatusRequest,
+    ) -> RusotoStream<'a, PolicyComplianceStatus, ListComplianceStatusError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_compliance_status(input.clone())
+        }))
     }
 
     /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
@@ -2715,13 +2736,14 @@ pub trait Fms: Clone + Sync + Send + 'static {
     ) -> Result<ListMemberAccountsResponse, RusotoError<ListMemberAccountsError>>;
 
     /// Auto-paginating version of `list_member_accounts`
-    fn list_member_accounts_pages(
-        &self,
-        input: ListMemberAccountsRequest,
-    ) -> RusotoStream<String, ListMemberAccountsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_member_accounts(state.clone())
-        })
+    fn list_member_accounts_pages<'a>(
+        &'a self,
+        mut input: ListMemberAccountsRequest,
+    ) -> RusotoStream<'a, String, ListMemberAccountsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_member_accounts(input.clone())
+        }))
     }
 
     /// <p>Returns an array of <code>PolicySummary</code> objects.</p>
@@ -2731,13 +2753,14 @@ pub trait Fms: Clone + Sync + Send + 'static {
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
     /// Auto-paginating version of `list_policies`
-    fn list_policies_pages(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoStream<PolicySummary, ListPoliciesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_policies(state.clone())
-        })
+    fn list_policies_pages<'a>(
+        &'a self,
+        mut input: ListPoliciesRequest,
+    ) -> RusotoStream<'a, PolicySummary, ListPoliciesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_policies(input.clone())
+        }))
     }
 
     /// <p>Returns an array of <code>ProtocolsListDataSummary</code> objects.</p>

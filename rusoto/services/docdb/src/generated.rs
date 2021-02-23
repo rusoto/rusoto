@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -369,27 +371,25 @@ pub struct CertificateMessage {
     pub marker: Option<String>,
 }
 
-impl CertificateMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Certificate>> {
-        Some(self.certificates.as_ref()?.clone())
+impl Paged for CertificateMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for CertificateMessage {
     type Item = Certificate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Certificate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.certificates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1415,27 +1415,25 @@ pub struct DBClusterMessage {
     pub marker: Option<String>,
 }
 
-impl DBClusterMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBCluster>> {
-        Some(self.db_clusters.as_ref()?.clone())
+impl Paged for DBClusterMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBClusterMessage {
     type Item = DBCluster;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBCluster> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_clusters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1529,27 +1527,25 @@ pub struct DBClusterParameterGroupDetails {
     pub parameters: Option<Vec<Parameter>>,
 }
 
-impl DBClusterParameterGroupDetails {
-    fn pagination_page_opt(self) -> Option<Vec<Parameter>> {
-        Some(self.parameters.as_ref()?.clone())
+impl Paged for DBClusterParameterGroupDetails {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBClusterParameterGroupDetails {
     type Item = Parameter;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Parameter> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.parameters.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1648,27 +1644,25 @@ pub struct DBClusterParameterGroupsMessage {
     pub marker: Option<String>,
 }
 
-impl DBClusterParameterGroupsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBClusterParameterGroup>> {
-        Some(self.db_cluster_parameter_groups.as_ref()?.clone())
+impl Paged for DBClusterParameterGroupsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBClusterParameterGroupsMessage {
     type Item = DBClusterParameterGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBClusterParameterGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_cluster_parameter_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2022,27 +2016,25 @@ pub struct DBClusterSnapshotMessage {
     pub marker: Option<String>,
 }
 
-impl DBClusterSnapshotMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBClusterSnapshot>> {
-        Some(self.db_cluster_snapshots.as_ref()?.clone())
+impl Paged for DBClusterSnapshotMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBClusterSnapshotMessage {
     type Item = DBClusterSnapshot;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBClusterSnapshot> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_cluster_snapshots.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2192,27 +2184,25 @@ pub struct DBEngineVersionMessage {
     pub marker: Option<String>,
 }
 
-impl DBEngineVersionMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBEngineVersion>> {
-        Some(self.db_engine_versions.as_ref()?.clone())
+impl Paged for DBEngineVersionMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBEngineVersionMessage {
     type Item = DBEngineVersion;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBEngineVersion> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_engine_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2480,27 +2470,25 @@ pub struct DBInstanceMessage {
     pub marker: Option<String>,
 }
 
-impl DBInstanceMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBInstance>> {
-        Some(self.db_instances.as_ref()?.clone())
+impl Paged for DBInstanceMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBInstanceMessage {
     type Item = DBInstance;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBInstance> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2662,27 +2650,25 @@ pub struct DBSubnetGroupMessage {
     pub marker: Option<String>,
 }
 
-impl DBSubnetGroupMessage {
-    fn pagination_page_opt(self) -> Option<Vec<DBSubnetGroup>> {
-        Some(self.db_subnet_groups.as_ref()?.clone())
+impl Paged for DBSubnetGroupMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for DBSubnetGroupMessage {
     type Item = DBSubnetGroup;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DBSubnetGroup> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.db_subnet_groups.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2969,11 +2955,19 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeCertificatesMessage {
+impl Paged for DescribeCertificatesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeCertificatesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3023,11 +3017,19 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeDBClusterParameterGroupsMessage {
+impl Paged for DescribeDBClusterParameterGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterParameterGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3079,11 +3081,19 @@ pub struct DescribeDBClusterParametersMessage {
     pub source: Option<String>,
 }
 
-impl PagedRequest for DescribeDBClusterParametersMessage {
+impl Paged for DescribeDBClusterParametersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterParametersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3205,11 +3215,19 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub snapshot_type: Option<String>,
 }
 
-impl PagedRequest for DescribeDBClusterSnapshotsMessage {
+impl Paged for DescribeDBClusterSnapshotsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClusterSnapshotsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3274,11 +3292,19 @@ pub struct DescribeDBClustersMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeDBClustersMessage {
+impl Paged for DescribeDBClustersMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBClustersMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3338,11 +3364,19 @@ pub struct DescribeDBEngineVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeDBEngineVersionsMessage {
+impl Paged for DescribeDBEngineVersionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBEngineVersionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3413,11 +3447,19 @@ pub struct DescribeDBInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeDBInstancesMessage {
+impl Paged for DescribeDBInstancesMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBInstancesMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3467,11 +3509,19 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-impl PagedRequest for DescribeDBSubnetGroupsMessage {
+impl Paged for DescribeDBSubnetGroupsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeDBSubnetGroupsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3642,11 +3692,19 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-impl PagedRequest for DescribeEventsMessage {
+impl Paged for DescribeEventsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeEventsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3720,11 +3778,19 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub vpc: Option<bool>,
 }
 
-impl PagedRequest for DescribeOrderableDBInstanceOptionsMessage {
+impl Paged for DescribeOrderableDBInstanceOptionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribeOrderableDBInstanceOptionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -3781,11 +3847,19 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub resource_identifier: Option<String>,
 }
 
-impl PagedRequest for DescribePendingMaintenanceActionsMessage {
+impl Paged for DescribePendingMaintenanceActionsMessage {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
+    }
+}
+
+impl PagedRequest for DescribePendingMaintenanceActionsMessage {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.marker = key;
-        self
     }
 }
 
@@ -4097,27 +4171,25 @@ pub struct EventsMessage {
     pub marker: Option<String>,
 }
 
-impl EventsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<Event>> {
-        Some(self.events.as_ref()?.clone())
+impl Paged for EventsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for EventsMessage {
     type Item = Event;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Event> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.events.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4867,27 +4939,25 @@ pub struct OrderableDBInstanceOptionsMessage {
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
 }
 
-impl OrderableDBInstanceOptionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<OrderableDBInstanceOption>> {
-        Some(self.orderable_db_instance_options.as_ref()?.clone())
+impl Paged for OrderableDBInstanceOptionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for OrderableDBInstanceOptionsMessage {
     type Item = OrderableDBInstanceOption;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<OrderableDBInstanceOption> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.orderable_db_instance_options.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -5235,27 +5305,25 @@ pub struct PendingMaintenanceActionsMessage {
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
 }
 
-impl PendingMaintenanceActionsMessage {
-    fn pagination_page_opt(self) -> Option<Vec<ResourcePendingMaintenanceActions>> {
-        Some(self.pending_maintenance_actions.as_ref()?.clone())
+impl Paged for PendingMaintenanceActionsMessage {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.marker.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.marker)
     }
 }
 
 impl PagedOutput for PendingMaintenanceActionsMessage {
     type Item = ResourcePendingMaintenanceActions;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.marker.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ResourcePendingMaintenanceActions> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pending_maintenance_actions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -9614,13 +9682,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>>;
 
     /// Auto-paginating version of `describe_certificates`
-    fn describe_certificates_pages(
-        &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoStream<Certificate, DescribeCertificatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_certificates(state.clone())
-        })
+    fn describe_certificates_pages<'a>(
+        &'a self,
+        mut input: DescribeCertificatesMessage,
+    ) -> RusotoStream<'a, Certificate, DescribeCertificatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_certificates(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified cluster parameter group. </p>
@@ -9630,13 +9699,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>;
 
     /// Auto-paginating version of `describe_db_cluster_parameter_groups`
-    fn describe_db_cluster_parameter_groups_pages(
-        &self,
-        input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoStream<DBClusterParameterGroup, DescribeDBClusterParameterGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_cluster_parameter_groups(state.clone())
-        })
+    fn describe_db_cluster_parameter_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterParameterGroupsMessage,
+    ) -> RusotoStream<'a, DBClusterParameterGroup, DescribeDBClusterParameterGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_parameter_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the detailed parameter list for a particular cluster parameter group.</p>
@@ -9646,13 +9716,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
 
     /// Auto-paginating version of `describe_db_cluster_parameters`
-    fn describe_db_cluster_parameters_pages(
-        &self,
-        input: DescribeDBClusterParametersMessage,
-    ) -> RusotoStream<Parameter, DescribeDBClusterParametersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_cluster_parameters(state.clone())
-        })
+    fn describe_db_cluster_parameters_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterParametersMessage,
+    ) -> RusotoStream<'a, Parameter, DescribeDBClusterParametersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_parameters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
@@ -9671,13 +9742,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
     /// Auto-paginating version of `describe_db_cluster_snapshots`
-    fn describe_db_cluster_snapshots_pages(
-        &self,
-        input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoStream<DBClusterSnapshot, DescribeDBClusterSnapshotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_cluster_snapshots(state.clone())
-        })
+    fn describe_db_cluster_snapshots_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClusterSnapshotsMessage,
+    ) -> RusotoStream<'a, DBClusterSnapshot, DescribeDBClusterSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_cluster_snapshots(input.clone())
+        }))
     }
 
     /// <p>Returns information about provisioned Amazon DocumentDB clusters. This API operation supports pagination. For certain management features such as cluster and instance lifecycle management, Amazon DocumentDB leverages operational technology that is shared with Amazon RDS and Amazon Neptune. Use the <code>filterName=engine,Values=docdb</code> filter parameter to return only Amazon DocumentDB clusters.</p>
@@ -9687,13 +9759,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>>;
 
     /// Auto-paginating version of `describe_db_clusters`
-    fn describe_db_clusters_pages(
-        &self,
-        input: DescribeDBClustersMessage,
-    ) -> RusotoStream<DBCluster, DescribeDBClustersError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_clusters(state.clone())
-        })
+    fn describe_db_clusters_pages<'a>(
+        &'a self,
+        mut input: DescribeDBClustersMessage,
+    ) -> RusotoStream<'a, DBCluster, DescribeDBClustersError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_clusters(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the available engines.</p>
@@ -9703,13 +9776,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
 
     /// Auto-paginating version of `describe_db_engine_versions`
-    fn describe_db_engine_versions_pages(
-        &self,
-        input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoStream<DBEngineVersion, DescribeDBEngineVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_engine_versions(state.clone())
-        })
+    fn describe_db_engine_versions_pages<'a>(
+        &'a self,
+        mut input: DescribeDBEngineVersionsMessage,
+    ) -> RusotoStream<'a, DBEngineVersion, DescribeDBEngineVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_engine_versions(input.clone())
+        }))
     }
 
     /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
@@ -9719,13 +9793,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>>;
 
     /// Auto-paginating version of `describe_db_instances`
-    fn describe_db_instances_pages(
-        &self,
-        input: DescribeDBInstancesMessage,
-    ) -> RusotoStream<DBInstance, DescribeDBInstancesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_instances(state.clone())
-        })
+    fn describe_db_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeDBInstancesMessage,
+    ) -> RusotoStream<'a, DBInstance, DescribeDBInstancesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_instances(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
@@ -9735,13 +9810,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>>;
 
     /// Auto-paginating version of `describe_db_subnet_groups`
-    fn describe_db_subnet_groups_pages(
-        &self,
-        input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoStream<DBSubnetGroup, DescribeDBSubnetGroupsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_db_subnet_groups(state.clone())
-        })
+    fn describe_db_subnet_groups_pages<'a>(
+        &'a self,
+        mut input: DescribeDBSubnetGroupsMessage,
+    ) -> RusotoStream<'a, DBSubnetGroup, DescribeDBSubnetGroupsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_db_subnet_groups(input.clone())
+        }))
     }
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
@@ -9766,13 +9842,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
     /// Auto-paginating version of `describe_events`
-    fn describe_events_pages(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoStream<Event, DescribeEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_events(state.clone())
-        })
+    fn describe_events_pages<'a>(
+        &'a self,
+        mut input: DescribeEventsMessage,
+    ) -> RusotoStream<'a, Event, DescribeEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_events(input.clone())
+        }))
     }
 
     /// <p>Returns a list of orderable instance options for the specified engine.</p>
@@ -9785,13 +9862,14 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_orderable_db_instance_options`
-    fn describe_orderable_db_instance_options_pages(
-        &self,
-        input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoStream<OrderableDBInstanceOption, DescribeOrderableDBInstanceOptionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_orderable_db_instance_options(state.clone())
-        })
+    fn describe_orderable_db_instance_options_pages<'a>(
+        &'a self,
+        mut input: DescribeOrderableDBInstanceOptionsMessage,
+    ) -> RusotoStream<'a, OrderableDBInstanceOption, DescribeOrderableDBInstanceOptionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_orderable_db_instance_options(input.clone())
+        }))
     }
 
     /// <p>Returns a list of resources (for example, instances) that have at least one pending maintenance action.</p>
@@ -9801,14 +9879,15 @@ pub trait Docdb: Clone + Sync + Send + 'static {
     ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>;
 
     /// Auto-paginating version of `describe_pending_maintenance_actions`
-    fn describe_pending_maintenance_actions_pages(
-        &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoStream<ResourcePendingMaintenanceActions, DescribePendingMaintenanceActionsError>
+    fn describe_pending_maintenance_actions_pages<'a>(
+        &'a self,
+        mut input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoStream<'a, ResourcePendingMaintenanceActions, DescribePendingMaintenanceActionsError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_pending_maintenance_actions(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_pending_maintenance_actions(input.clone())
+        }))
     }
 
     /// <p>Forces a failover for a cluster.</p> <p>A failover for a cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>

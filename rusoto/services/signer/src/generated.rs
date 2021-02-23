@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -398,11 +400,19 @@ pub struct ListSigningJobsRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListSigningJobsRequest {
+impl Paged for ListSigningJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -420,27 +430,25 @@ pub struct ListSigningJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListSigningJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SigningJob>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListSigningJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSigningJobsResponse {
     type Item = SigningJob;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SigningJob> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -470,11 +478,19 @@ pub struct ListSigningPlatformsRequest {
     pub target: Option<String>,
 }
 
-impl PagedRequest for ListSigningPlatformsRequest {
+impl Paged for ListSigningPlatformsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningPlatformsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -492,27 +508,25 @@ pub struct ListSigningPlatformsResponse {
     pub platforms: Option<Vec<SigningPlatform>>,
 }
 
-impl ListSigningPlatformsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SigningPlatform>> {
-        Some(self.platforms.as_ref()?.clone())
+impl Paged for ListSigningPlatformsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSigningPlatformsResponse {
     type Item = SigningPlatform;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SigningPlatform> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.platforms.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -542,11 +556,19 @@ pub struct ListSigningProfilesRequest {
     pub statuses: Option<Vec<String>>,
 }
 
-impl PagedRequest for ListSigningProfilesRequest {
+impl Paged for ListSigningProfilesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListSigningProfilesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -564,27 +586,25 @@ pub struct ListSigningProfilesResponse {
     pub profiles: Option<Vec<SigningProfile>>,
 }
 
-impl ListSigningProfilesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SigningProfile>> {
-        Some(self.profiles.as_ref()?.clone())
+impl Paged for ListSigningProfilesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListSigningProfilesResponse {
     type Item = SigningProfile;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SigningProfile> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.profiles.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2053,13 +2073,14 @@ pub trait Signer: Clone + Sync + Send + 'static {
     ) -> Result<ListSigningJobsResponse, RusotoError<ListSigningJobsError>>;
 
     /// Auto-paginating version of `list_signing_jobs`
-    fn list_signing_jobs_pages(
-        &self,
-        input: ListSigningJobsRequest,
-    ) -> RusotoStream<SigningJob, ListSigningJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_signing_jobs(state.clone())
-        })
+    fn list_signing_jobs_pages<'a>(
+        &'a self,
+        mut input: ListSigningJobsRequest,
+    ) -> RusotoStream<'a, SigningJob, ListSigningJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_jobs(input.clone())
+        }))
     }
 
     /// <p>Lists all signing platforms available in code signing that match the request parameters. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
@@ -2069,13 +2090,14 @@ pub trait Signer: Clone + Sync + Send + 'static {
     ) -> Result<ListSigningPlatformsResponse, RusotoError<ListSigningPlatformsError>>;
 
     /// Auto-paginating version of `list_signing_platforms`
-    fn list_signing_platforms_pages(
-        &self,
-        input: ListSigningPlatformsRequest,
-    ) -> RusotoStream<SigningPlatform, ListSigningPlatformsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_signing_platforms(state.clone())
-        })
+    fn list_signing_platforms_pages<'a>(
+        &'a self,
+        mut input: ListSigningPlatformsRequest,
+    ) -> RusotoStream<'a, SigningPlatform, ListSigningPlatformsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_platforms(input.clone())
+        }))
     }
 
     /// <p>Lists all available signing profiles in your AWS account. Returns only profiles with an <code>ACTIVE</code> status unless the <code>includeCanceled</code> request field is set to <code>true</code>. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
@@ -2085,13 +2107,14 @@ pub trait Signer: Clone + Sync + Send + 'static {
     ) -> Result<ListSigningProfilesResponse, RusotoError<ListSigningProfilesError>>;
 
     /// Auto-paginating version of `list_signing_profiles`
-    fn list_signing_profiles_pages(
-        &self,
-        input: ListSigningProfilesRequest,
-    ) -> RusotoStream<SigningProfile, ListSigningProfilesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_signing_profiles(state.clone())
-        })
+    fn list_signing_profiles_pages<'a>(
+        &'a self,
+        mut input: ListSigningProfilesRequest,
+    ) -> RusotoStream<'a, SigningProfile, ListSigningProfilesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_signing_profiles(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags associated with a signing profile resource.</p>

@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1110,11 +1112,19 @@ pub struct ListActionExecutionsInput {
     pub pipeline_name: String,
 }
 
-impl PagedRequest for ListActionExecutionsInput {
+impl Paged for ListActionExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListActionExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1132,27 +1142,25 @@ pub struct ListActionExecutionsOutput {
     pub next_token: Option<String>,
 }
 
-impl ListActionExecutionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ActionExecutionDetail>> {
-        Some(self.action_execution_details.as_ref()?.clone())
+impl Paged for ListActionExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListActionExecutionsOutput {
     type Item = ActionExecutionDetail;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActionExecutionDetail> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.action_execution_details.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1171,11 +1179,19 @@ pub struct ListActionTypesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListActionTypesInput {
+impl Paged for ListActionTypesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListActionTypesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1193,27 +1209,25 @@ pub struct ListActionTypesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListActionTypesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ActionType>> {
-        Some(self.action_types.clone())
+impl Paged for ListActionTypesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListActionTypesOutput {
     type Item = ActionType;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ActionType> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.action_types
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1235,11 +1249,19 @@ pub struct ListPipelineExecutionsInput {
     pub pipeline_name: String,
 }
 
-impl PagedRequest for ListPipelineExecutionsInput {
+impl Paged for ListPipelineExecutionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelineExecutionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1258,27 +1280,25 @@ pub struct ListPipelineExecutionsOutput {
     pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
 }
 
-impl ListPipelineExecutionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PipelineExecutionSummary>> {
-        Some(self.pipeline_execution_summaries.as_ref()?.clone())
+impl Paged for ListPipelineExecutionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPipelineExecutionsOutput {
     type Item = PipelineExecutionSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PipelineExecutionSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pipeline_execution_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1293,11 +1313,19 @@ pub struct ListPipelinesInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListPipelinesInput {
+impl Paged for ListPipelinesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPipelinesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1316,27 +1344,25 @@ pub struct ListPipelinesOutput {
     pub pipelines: Option<Vec<PipelineSummary>>,
 }
 
-impl ListPipelinesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PipelineSummary>> {
-        Some(self.pipelines.as_ref()?.clone())
+impl Paged for ListPipelinesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPipelinesOutput {
     type Item = PipelineSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PipelineSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pipelines.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1357,11 +1383,19 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-impl PagedRequest for ListTagsForResourceInput {
+impl Paged for ListTagsForResourceInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListTagsForResourceInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1379,27 +1413,25 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-impl ListTagsForResourceOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Tag>> {
-        Some(self.tags.as_ref()?.clone())
+impl Paged for ListTagsForResourceOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListTagsForResourceOutput {
     type Item = Tag;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Tag> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.tags.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1449,11 +1481,19 @@ pub struct ListWebhooksInput {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListWebhooksInput {
+impl Paged for ListWebhooksInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListWebhooksInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1471,27 +1511,25 @@ pub struct ListWebhooksOutput {
     pub webhooks: Option<Vec<ListWebhookItem>>,
 }
 
-impl ListWebhooksOutput {
-    fn pagination_page_opt(self) -> Option<Vec<ListWebhookItem>> {
-        Some(self.webhooks.as_ref()?.clone())
+impl Paged for ListWebhooksOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListWebhooksOutput {
     type Item = ListWebhookItem;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ListWebhookItem> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.webhooks.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4031,13 +4069,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListActionExecutionsOutput, RusotoError<ListActionExecutionsError>>;
 
     /// Auto-paginating version of `list_action_executions`
-    fn list_action_executions_pages(
-        &self,
-        input: ListActionExecutionsInput,
-    ) -> RusotoStream<ActionExecutionDetail, ListActionExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_action_executions(state.clone())
-        })
+    fn list_action_executions_pages<'a>(
+        &'a self,
+        mut input: ListActionExecutionsInput,
+    ) -> RusotoStream<'a, ActionExecutionDetail, ListActionExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_action_executions(input.clone())
+        }))
     }
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
@@ -4047,13 +4086,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListActionTypesOutput, RusotoError<ListActionTypesError>>;
 
     /// Auto-paginating version of `list_action_types`
-    fn list_action_types_pages(
-        &self,
-        input: ListActionTypesInput,
-    ) -> RusotoStream<ActionType, ListActionTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_action_types(state.clone())
-        })
+    fn list_action_types_pages<'a>(
+        &'a self,
+        mut input: ListActionTypesInput,
+    ) -> RusotoStream<'a, ActionType, ListActionTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_action_types(input.clone())
+        }))
     }
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
@@ -4063,13 +4103,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListPipelineExecutionsOutput, RusotoError<ListPipelineExecutionsError>>;
 
     /// Auto-paginating version of `list_pipeline_executions`
-    fn list_pipeline_executions_pages(
-        &self,
-        input: ListPipelineExecutionsInput,
-    ) -> RusotoStream<PipelineExecutionSummary, ListPipelineExecutionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_pipeline_executions(state.clone())
-        })
+    fn list_pipeline_executions_pages<'a>(
+        &'a self,
+        mut input: ListPipelineExecutionsInput,
+    ) -> RusotoStream<'a, PipelineExecutionSummary, ListPipelineExecutionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipeline_executions(input.clone())
+        }))
     }
 
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
@@ -4079,13 +4120,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
 
     /// Auto-paginating version of `list_pipelines`
-    fn list_pipelines_pages(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoStream<PipelineSummary, ListPipelinesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_pipelines(state.clone())
-        })
+    fn list_pipelines_pages<'a>(
+        &'a self,
+        mut input: ListPipelinesInput,
+    ) -> RusotoStream<'a, PipelineSummary, ListPipelinesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pipelines(input.clone())
+        }))
     }
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
@@ -4095,13 +4137,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// Auto-paginating version of `list_tags_for_resource`
-    fn list_tags_for_resource_pages(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoStream<Tag, ListTagsForResourceError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_tags_for_resource(state.clone())
-        })
+    fn list_tags_for_resource_pages<'a>(
+        &'a self,
+        mut input: ListTagsForResourceInput,
+    ) -> RusotoStream<'a, Tag, ListTagsForResourceError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_tags_for_resource(input.clone())
+        }))
     }
 
     /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
@@ -4111,13 +4154,14 @@ pub trait CodePipeline: Clone + Sync + Send + 'static {
     ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>>;
 
     /// Auto-paginating version of `list_webhooks`
-    fn list_webhooks_pages(
-        &self,
-        input: ListWebhooksInput,
-    ) -> RusotoStream<ListWebhookItem, ListWebhooksError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_webhooks(state.clone())
-        })
+    fn list_webhooks_pages<'a>(
+        &'a self,
+        mut input: ListWebhooksInput,
+    ) -> RusotoStream<'a, ListWebhookItem, ListWebhooksError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_webhooks(input.clone())
+        }))
     }
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>

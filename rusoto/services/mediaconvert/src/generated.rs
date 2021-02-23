@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -1301,11 +1303,19 @@ pub struct DescribeEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for DescribeEndpointsRequest {
+impl Paged for DescribeEndpointsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEndpointsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1323,27 +1333,25 @@ pub struct DescribeEndpointsResponse {
     pub next_token: Option<String>,
 }
 
-impl DescribeEndpointsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Endpoint>> {
-        Some(self.endpoints.as_ref()?.clone())
+impl Paged for DescribeEndpointsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEndpointsResponse {
     type Item = Endpoint;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Endpoint> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.endpoints.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3107,11 +3115,19 @@ pub struct ListJobTemplatesRequest {
     pub order: Option<String>,
 }
 
-impl PagedRequest for ListJobTemplatesRequest {
+impl Paged for ListJobTemplatesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobTemplatesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3129,27 +3145,25 @@ pub struct ListJobTemplatesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListJobTemplatesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<JobTemplate>> {
-        Some(self.job_templates.as_ref()?.clone())
+impl Paged for ListJobTemplatesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobTemplatesResponse {
     type Item = JobTemplate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<JobTemplate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.job_templates.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3179,11 +3193,19 @@ pub struct ListJobsRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListJobsRequest {
+impl Paged for ListJobsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListJobsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3201,27 +3223,25 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListJobsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Job>> {
-        Some(self.jobs.as_ref()?.clone())
+impl Paged for ListJobsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListJobsResponse {
     type Item = Job;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Job> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.jobs.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3251,11 +3271,19 @@ pub struct ListPresetsRequest {
     pub order: Option<String>,
 }
 
-impl PagedRequest for ListPresetsRequest {
+impl Paged for ListPresetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPresetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3273,27 +3301,25 @@ pub struct ListPresetsResponse {
     pub presets: Option<Vec<Preset>>,
 }
 
-impl ListPresetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Preset>> {
-        Some(self.presets.as_ref()?.clone())
+impl Paged for ListPresetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPresetsResponse {
     type Item = Preset;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Preset> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.presets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3319,11 +3345,19 @@ pub struct ListQueuesRequest {
     pub order: Option<String>,
 }
 
-impl PagedRequest for ListQueuesRequest {
+impl Paged for ListQueuesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListQueuesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -3341,27 +3375,25 @@ pub struct ListQueuesResponse {
     pub queues: Option<Vec<Queue>>,
 }
 
-impl ListQueuesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<Queue>> {
-        Some(self.queues.as_ref()?.clone())
+impl Paged for ListQueuesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListQueuesResponse {
     type Item = Queue;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Queue> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.queues.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -6900,13 +6932,14 @@ pub trait MediaConvert: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
     /// Auto-paginating version of `describe_endpoints`
-    fn describe_endpoints_pages(
-        &self,
-        input: DescribeEndpointsRequest,
-    ) -> RusotoStream<Endpoint, DescribeEndpointsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_endpoints(state.clone())
-        })
+    fn describe_endpoints_pages<'a>(
+        &'a self,
+        mut input: DescribeEndpointsRequest,
+    ) -> RusotoStream<'a, Endpoint, DescribeEndpointsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_endpoints(input.clone())
+        }))
     }
 
     /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
@@ -6946,13 +6979,14 @@ pub trait MediaConvert: Clone + Sync + Send + 'static {
     ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>;
 
     /// Auto-paginating version of `list_job_templates`
-    fn list_job_templates_pages(
-        &self,
-        input: ListJobTemplatesRequest,
-    ) -> RusotoStream<JobTemplate, ListJobTemplatesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_job_templates(state.clone())
-        })
+    fn list_job_templates_pages<'a>(
+        &'a self,
+        mut input: ListJobTemplatesRequest,
+    ) -> RusotoStream<'a, JobTemplate, ListJobTemplatesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_job_templates(input.clone())
+        }))
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.</p>
@@ -6962,10 +6996,14 @@ pub trait MediaConvert: Clone + Sync + Send + 'static {
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
     /// Auto-paginating version of `list_jobs`
-    fn list_jobs_pages(&self, input: ListJobsRequest) -> RusotoStream<Job, ListJobsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_jobs(state.clone())
-        })
+    fn list_jobs_pages<'a>(
+        &'a self,
+        mut input: ListJobsRequest,
+    ) -> RusotoStream<'a, Job, ListJobsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_jobs(input.clone())
+        }))
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.</p>
@@ -6975,13 +7013,14 @@ pub trait MediaConvert: Clone + Sync + Send + 'static {
     ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
 
     /// Auto-paginating version of `list_presets`
-    fn list_presets_pages(
-        &self,
-        input: ListPresetsRequest,
-    ) -> RusotoStream<Preset, ListPresetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_presets(state.clone())
-        })
+    fn list_presets_pages<'a>(
+        &'a self,
+        mut input: ListPresetsRequest,
+    ) -> RusotoStream<'a, Preset, ListPresetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_presets(input.clone())
+        }))
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.</p>
@@ -6991,10 +7030,14 @@ pub trait MediaConvert: Clone + Sync + Send + 'static {
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
 
     /// Auto-paginating version of `list_queues`
-    fn list_queues_pages(&self, input: ListQueuesRequest) -> RusotoStream<Queue, ListQueuesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_queues(state.clone())
-        })
+    fn list_queues_pages<'a>(
+        &'a self,
+        mut input: ListQueuesRequest,
+    ) -> RusotoStream<'a, Queue, ListQueuesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_queues(input.clone())
+        }))
     }
 
     /// <p>Retrieve the tags for a MediaConvert resource.</p>

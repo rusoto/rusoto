@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -693,11 +695,19 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsRequest {
     pub reserved_elasticsearch_instance_offering_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedElasticsearchInstanceOfferingsRequest {
+impl Paged for DescribeReservedElasticsearchInstanceOfferingsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeReservedElasticsearchInstanceOfferingsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -717,31 +727,26 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsResponse {
         Option<Vec<ReservedElasticsearchInstanceOffering>>,
 }
 
-impl DescribeReservedElasticsearchInstanceOfferingsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedElasticsearchInstanceOffering>> {
-        Some(
-            self.reserved_elasticsearch_instance_offerings
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for DescribeReservedElasticsearchInstanceOfferingsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeReservedElasticsearchInstanceOfferingsResponse {
     type Item = ReservedElasticsearchInstanceOffering;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedElasticsearchInstanceOffering> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_elasticsearch_instance_offerings
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -764,11 +769,19 @@ pub struct DescribeReservedElasticsearchInstancesRequest {
     pub reserved_elasticsearch_instance_id: Option<String>,
 }
 
-impl PagedRequest for DescribeReservedElasticsearchInstancesRequest {
+impl Paged for DescribeReservedElasticsearchInstancesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeReservedElasticsearchInstancesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -787,27 +800,25 @@ pub struct DescribeReservedElasticsearchInstancesResponse {
     pub reserved_elasticsearch_instances: Option<Vec<ReservedElasticsearchInstance>>,
 }
 
-impl DescribeReservedElasticsearchInstancesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ReservedElasticsearchInstance>> {
-        Some(self.reserved_elasticsearch_instances.as_ref()?.clone())
+impl Paged for DescribeReservedElasticsearchInstancesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeReservedElasticsearchInstancesResponse {
     type Item = ReservedElasticsearchInstance;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ReservedElasticsearchInstance> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.reserved_elasticsearch_instances.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1308,11 +1319,19 @@ pub struct GetUpgradeHistoryRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for GetUpgradeHistoryRequest {
+impl Paged for GetUpgradeHistoryRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetUpgradeHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1331,27 +1350,25 @@ pub struct GetUpgradeHistoryResponse {
     pub upgrade_histories: Option<Vec<UpgradeHistory>>,
 }
 
-impl GetUpgradeHistoryResponse {
-    fn pagination_page_opt(self) -> Option<Vec<UpgradeHistory>> {
-        Some(self.upgrade_histories.as_ref()?.clone())
+impl Paged for GetUpgradeHistoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetUpgradeHistoryResponse {
     type Item = UpgradeHistory;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<UpgradeHistory> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.upgrade_histories.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1522,11 +1539,19 @@ pub struct ListElasticsearchInstanceTypesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListElasticsearchInstanceTypesRequest {
+impl Paged for ListElasticsearchInstanceTypesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListElasticsearchInstanceTypesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1545,27 +1570,25 @@ pub struct ListElasticsearchInstanceTypesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListElasticsearchInstanceTypesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.elasticsearch_instance_types.as_ref()?.clone())
+impl Paged for ListElasticsearchInstanceTypesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListElasticsearchInstanceTypesResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.elasticsearch_instance_types.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1583,11 +1606,19 @@ pub struct ListElasticsearchVersionsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListElasticsearchVersionsRequest {
+impl Paged for ListElasticsearchVersionsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListElasticsearchVersionsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1604,27 +1635,25 @@ pub struct ListElasticsearchVersionsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListElasticsearchVersionsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.elasticsearch_versions.as_ref()?.clone())
+impl Paged for ListElasticsearchVersionsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListElasticsearchVersionsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.elasticsearch_versions.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4664,16 +4693,18 @@ pub trait Es: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_reserved_elasticsearch_instance_offerings`
-    fn describe_reserved_elasticsearch_instance_offerings_pages(
-        &self,
-        input: DescribeReservedElasticsearchInstanceOfferingsRequest,
+    fn describe_reserved_elasticsearch_instance_offerings_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedElasticsearchInstanceOfferingsRequest,
     ) -> RusotoStream<
+        'a,
         ReservedElasticsearchInstanceOffering,
         DescribeReservedElasticsearchInstanceOfferingsError,
     > {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_elasticsearch_instance_offerings(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_elasticsearch_instance_offerings(input.clone())
+        }))
     }
 
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
@@ -4686,14 +4717,15 @@ pub trait Es: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `describe_reserved_elasticsearch_instances`
-    fn describe_reserved_elasticsearch_instances_pages(
-        &self,
-        input: DescribeReservedElasticsearchInstancesRequest,
-    ) -> RusotoStream<ReservedElasticsearchInstance, DescribeReservedElasticsearchInstancesError>
+    fn describe_reserved_elasticsearch_instances_pages<'a>(
+        &'a self,
+        mut input: DescribeReservedElasticsearchInstancesRequest,
+    ) -> RusotoStream<'a, ReservedElasticsearchInstance, DescribeReservedElasticsearchInstancesError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_reserved_elasticsearch_instances(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_reserved_elasticsearch_instances(input.clone())
+        }))
     }
 
     /// <p>Dissociates a package from the Amazon ES domain.</p>
@@ -4724,13 +4756,14 @@ pub trait Es: Clone + Sync + Send + 'static {
     ) -> Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>>;
 
     /// Auto-paginating version of `get_upgrade_history`
-    fn get_upgrade_history_pages(
-        &self,
-        input: GetUpgradeHistoryRequest,
-    ) -> RusotoStream<UpgradeHistory, GetUpgradeHistoryError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_upgrade_history(state.clone())
-        })
+    fn get_upgrade_history_pages<'a>(
+        &'a self,
+        mut input: GetUpgradeHistoryRequest,
+    ) -> RusotoStream<'a, UpgradeHistory, GetUpgradeHistoryError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_upgrade_history(input.clone())
+        }))
     }
 
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
@@ -4760,13 +4793,14 @@ pub trait Es: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_elasticsearch_instance_types`
-    fn list_elasticsearch_instance_types_pages(
-        &self,
-        input: ListElasticsearchInstanceTypesRequest,
-    ) -> RusotoStream<String, ListElasticsearchInstanceTypesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_elasticsearch_instance_types(state.clone())
-        })
+    fn list_elasticsearch_instance_types_pages<'a>(
+        &'a self,
+        mut input: ListElasticsearchInstanceTypesRequest,
+    ) -> RusotoStream<'a, String, ListElasticsearchInstanceTypesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_elasticsearch_instance_types(input.clone())
+        }))
     }
 
     /// <p>List all supported Elasticsearch versions</p>
@@ -4776,13 +4810,14 @@ pub trait Es: Clone + Sync + Send + 'static {
     ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>;
 
     /// Auto-paginating version of `list_elasticsearch_versions`
-    fn list_elasticsearch_versions_pages(
-        &self,
-        input: ListElasticsearchVersionsRequest,
-    ) -> RusotoStream<String, ListElasticsearchVersionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_elasticsearch_versions(state.clone())
-        })
+    fn list_elasticsearch_versions_pages<'a>(
+        &'a self,
+        mut input: ListElasticsearchVersionsRequest,
+    ) -> RusotoStream<'a, String, ListElasticsearchVersionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_elasticsearch_versions(input.clone())
+        }))
     }
 
     /// <p>Lists all packages associated with the Amazon ES domain.</p>

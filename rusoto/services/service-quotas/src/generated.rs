@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -227,11 +229,19 @@ pub struct ListAWSDefaultServiceQuotasRequest {
     pub service_code: String,
 }
 
-impl PagedRequest for ListAWSDefaultServiceQuotasRequest {
+impl Paged for ListAWSDefaultServiceQuotasRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListAWSDefaultServiceQuotasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -249,27 +259,25 @@ pub struct ListAWSDefaultServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
-impl ListAWSDefaultServiceQuotasResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceQuota>> {
-        Some(self.quotas.as_ref()?.clone())
+impl Paged for ListAWSDefaultServiceQuotasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListAWSDefaultServiceQuotasResponse {
     type Item = ServiceQuota;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceQuota> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.quotas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -297,11 +305,19 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
+impl Paged for ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -319,27 +335,25 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
-impl ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RequestedServiceQuotaChange>> {
-        Some(self.requested_quotas.as_ref()?.clone())
+impl Paged for ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
     type Item = RequestedServiceQuotaChange;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RequestedServiceQuotaChange> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.requested_quotas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -365,11 +379,19 @@ pub struct ListRequestedServiceQuotaChangeHistoryRequest {
     pub status: Option<String>,
 }
 
-impl PagedRequest for ListRequestedServiceQuotaChangeHistoryRequest {
+impl Paged for ListRequestedServiceQuotaChangeHistoryRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRequestedServiceQuotaChangeHistoryRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -387,27 +409,25 @@ pub struct ListRequestedServiceQuotaChangeHistoryResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
-impl ListRequestedServiceQuotaChangeHistoryResponse {
-    fn pagination_page_opt(self) -> Option<Vec<RequestedServiceQuotaChange>> {
-        Some(self.requested_quotas.as_ref()?.clone())
+impl Paged for ListRequestedServiceQuotaChangeHistoryResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRequestedServiceQuotaChangeHistoryResponse {
     type Item = RequestedServiceQuotaChange;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RequestedServiceQuotaChange> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.requested_quotas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -433,11 +453,19 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
     pub service_code: Option<String>,
 }
 
-impl PagedRequest for ListServiceQuotaIncreaseRequestsInTemplateRequest {
+impl Paged for ListServiceQuotaIncreaseRequestsInTemplateRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServiceQuotaIncreaseRequestsInTemplateRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -456,31 +484,26 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
         Option<Vec<ServiceQuotaIncreaseRequestInTemplate>>,
 }
 
-impl ListServiceQuotaIncreaseRequestsInTemplateResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceQuotaIncreaseRequestInTemplate>> {
-        Some(
-            self.service_quota_increase_request_in_template_list
-                .as_ref()?
-                .clone(),
-        )
+impl Paged for ListServiceQuotaIncreaseRequestsInTemplateResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServiceQuotaIncreaseRequestsInTemplateResponse {
     type Item = ServiceQuotaIncreaseRequestInTemplate;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceQuotaIncreaseRequestInTemplate> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.service_quota_increase_request_in_template_list
+            .unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -501,11 +524,19 @@ pub struct ListServiceQuotasRequest {
     pub service_code: String,
 }
 
-impl PagedRequest for ListServiceQuotasRequest {
+impl Paged for ListServiceQuotasRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServiceQuotasRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -523,27 +554,25 @@ pub struct ListServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
-impl ListServiceQuotasResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceQuota>> {
-        Some(self.quotas.as_ref()?.clone())
+impl Paged for ListServiceQuotasResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServiceQuotasResponse {
     type Item = ServiceQuota;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceQuota> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.quotas.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -561,11 +590,19 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListServicesRequest {
+impl Paged for ListServicesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListServicesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -583,27 +620,25 @@ pub struct ListServicesResponse {
     pub services: Option<Vec<ServiceInfo>>,
 }
 
-impl ListServicesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ServiceInfo>> {
-        Some(self.services.as_ref()?.clone())
+impl Paged for ListServicesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListServicesResponse {
     type Item = ServiceInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ServiceInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.services.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2607,13 +2642,14 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>;
 
     /// Auto-paginating version of `list_aws_default_service_quotas`
-    fn list_aws_default_service_quotas_pages(
-        &self,
-        input: ListAWSDefaultServiceQuotasRequest,
-    ) -> RusotoStream<ServiceQuota, ListAWSDefaultServiceQuotasError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_aws_default_service_quotas(state.clone())
-        })
+    fn list_aws_default_service_quotas_pages<'a>(
+        &'a self,
+        mut input: ListAWSDefaultServiceQuotasRequest,
+    ) -> RusotoStream<'a, ServiceQuota, ListAWSDefaultServiceQuotasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_aws_default_service_quotas(input.clone())
+        }))
     }
 
     /// <p>Retrieves the quota increase requests for the specified service.</p>
@@ -2626,14 +2662,15 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_requested_service_quota_change_history`
-    fn list_requested_service_quota_change_history_pages(
-        &self,
-        input: ListRequestedServiceQuotaChangeHistoryRequest,
-    ) -> RusotoStream<RequestedServiceQuotaChange, ListRequestedServiceQuotaChangeHistoryError>
+    fn list_requested_service_quota_change_history_pages<'a>(
+        &'a self,
+        mut input: ListRequestedServiceQuotaChangeHistoryRequest,
+    ) -> RusotoStream<'a, RequestedServiceQuotaChange, ListRequestedServiceQuotaChangeHistoryError>
     {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_requested_service_quota_change_history(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_requested_service_quota_change_history(input.clone())
+        }))
     }
 
     /// <p>Retrieves the quota increase requests for the specified quota.</p>
@@ -2646,14 +2683,18 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_requested_service_quota_change_history_by_quota`
-    fn list_requested_service_quota_change_history_by_quota_pages(
-        &self,
-        input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
-    ) -> RusotoStream<RequestedServiceQuotaChange, ListRequestedServiceQuotaChangeHistoryByQuotaError>
-    {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_requested_service_quota_change_history_by_quota(state.clone())
-        })
+    fn list_requested_service_quota_change_history_by_quota_pages<'a>(
+        &'a self,
+        mut input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
+    ) -> RusotoStream<
+        'a,
+        RequestedServiceQuotaChange,
+        ListRequestedServiceQuotaChangeHistoryByQuotaError,
+    > {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_requested_service_quota_change_history_by_quota(input.clone())
+        }))
     }
 
     /// <p>Lists the quota increase requests in the specified quota request template.</p>
@@ -2666,16 +2707,18 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_service_quota_increase_requests_in_template`
-    fn list_service_quota_increase_requests_in_template_pages(
-        &self,
-        input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
+    fn list_service_quota_increase_requests_in_template_pages<'a>(
+        &'a self,
+        mut input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
     ) -> RusotoStream<
+        'a,
         ServiceQuotaIncreaseRequestInTemplate,
         ListServiceQuotaIncreaseRequestsInTemplateError,
     > {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_service_quota_increase_requests_in_template(state.clone())
-        })
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_service_quota_increase_requests_in_template(input.clone())
+        }))
     }
 
     /// <p>Lists the applied quota values for the specified AWS service. For some quotas, only the default values are available. If the applied quota value is not available for a quota, the quota is not retrieved.</p>
@@ -2685,13 +2728,14 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>;
 
     /// Auto-paginating version of `list_service_quotas`
-    fn list_service_quotas_pages(
-        &self,
-        input: ListServiceQuotasRequest,
-    ) -> RusotoStream<ServiceQuota, ListServiceQuotasError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_service_quotas(state.clone())
-        })
+    fn list_service_quotas_pages<'a>(
+        &'a self,
+        mut input: ListServiceQuotasRequest,
+    ) -> RusotoStream<'a, ServiceQuota, ListServiceQuotasError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_service_quotas(input.clone())
+        }))
     }
 
     /// <p>Lists the names and codes for the services integrated with Service Quotas.</p>
@@ -2701,13 +2745,14 @@ pub trait ServiceQuotas: Clone + Sync + Send + 'static {
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
 
     /// Auto-paginating version of `list_services`
-    fn list_services_pages(
-        &self,
-        input: ListServicesRequest,
-    ) -> RusotoStream<ServiceInfo, ListServicesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_services(state.clone())
-        })
+    fn list_services_pages<'a>(
+        &'a self,
+        mut input: ListServicesRequest,
+    ) -> RusotoStream<'a, ServiceInfo, ListServicesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_services(input.clone())
+        }))
     }
 
     /// <p>Returns a list of the tags assigned to the specified applied quota.</p>

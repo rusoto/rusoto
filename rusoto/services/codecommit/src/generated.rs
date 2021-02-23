@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1204,11 +1206,19 @@ pub struct DescribePullRequestEventsInput {
     pub pull_request_id: String,
 }
 
-impl PagedRequest for DescribePullRequestEventsInput {
+impl Paged for DescribePullRequestEventsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribePullRequestEventsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1225,27 +1235,25 @@ pub struct DescribePullRequestEventsOutput {
     pub pull_request_events: Vec<PullRequestEvent>,
 }
 
-impl DescribePullRequestEventsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<PullRequestEvent>> {
-        Some(self.pull_request_events.clone())
+impl Paged for DescribePullRequestEventsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribePullRequestEventsOutput {
     type Item = PullRequestEvent;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PullRequestEvent> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pull_request_events
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1565,11 +1573,19 @@ pub struct GetCommentsForComparedCommitInput {
     pub repository_name: String,
 }
 
-impl PagedRequest for GetCommentsForComparedCommitInput {
+impl Paged for GetCommentsForComparedCommitInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCommentsForComparedCommitInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1587,27 +1603,25 @@ pub struct GetCommentsForComparedCommitOutput {
     pub next_token: Option<String>,
 }
 
-impl GetCommentsForComparedCommitOutput {
-    fn pagination_page_opt(self) -> Option<Vec<CommentsForComparedCommit>> {
-        Some(self.comments_for_compared_commit_data.as_ref()?.clone())
+impl Paged for GetCommentsForComparedCommitOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetCommentsForComparedCommitOutput {
     type Item = CommentsForComparedCommit;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CommentsForComparedCommit> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.comments_for_compared_commit_data.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1640,11 +1654,19 @@ pub struct GetCommentsForPullRequestInput {
     pub repository_name: Option<String>,
 }
 
-impl PagedRequest for GetCommentsForPullRequestInput {
+impl Paged for GetCommentsForPullRequestInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetCommentsForPullRequestInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1662,27 +1684,25 @@ pub struct GetCommentsForPullRequestOutput {
     pub next_token: Option<String>,
 }
 
-impl GetCommentsForPullRequestOutput {
-    fn pagination_page_opt(self) -> Option<Vec<CommentsForPullRequest>> {
-        Some(self.comments_for_pull_request_data.as_ref()?.clone())
+impl Paged for GetCommentsForPullRequestOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetCommentsForPullRequestOutput {
     type Item = CommentsForPullRequest;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<CommentsForPullRequest> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.comments_for_pull_request_data.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1741,11 +1761,19 @@ pub struct GetDifferencesInput {
     pub repository_name: String,
 }
 
-impl PagedRequest for GetDifferencesInput {
+impl Paged for GetDifferencesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDifferencesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1763,27 +1791,25 @@ pub struct GetDifferencesOutput {
     pub differences: Option<Vec<Difference>>,
 }
 
-impl GetDifferencesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Difference>> {
-        Some(self.differences.as_ref()?.clone())
+impl Paged for GetDifferencesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetDifferencesOutput {
     type Item = Difference;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Difference> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.differences.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2229,11 +2255,19 @@ pub struct ListBranchesInput {
     pub repository_name: String,
 }
 
-impl PagedRequest for ListBranchesInput {
+impl Paged for ListBranchesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBranchesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2252,27 +2286,25 @@ pub struct ListBranchesOutput {
     pub next_token: Option<String>,
 }
 
-impl ListBranchesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.branches.as_ref()?.clone())
+impl Paged for ListBranchesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBranchesOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.branches.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2301,11 +2333,19 @@ pub struct ListPullRequestsInput {
     pub repository_name: String,
 }
 
-impl PagedRequest for ListPullRequestsInput {
+impl Paged for ListPullRequestsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPullRequestsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2322,27 +2362,25 @@ pub struct ListPullRequestsOutput {
     pub pull_request_ids: Vec<String>,
 }
 
-impl ListPullRequestsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.pull_request_ids.clone())
+impl Paged for ListPullRequestsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPullRequestsOutput {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.pull_request_ids
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -2396,11 +2434,19 @@ pub struct ListRepositoriesInput {
     pub sort_by: Option<String>,
 }
 
-impl PagedRequest for ListRepositoriesInput {
+impl Paged for ListRepositoriesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListRepositoriesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -2419,27 +2465,25 @@ pub struct ListRepositoriesOutput {
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
 }
 
-impl ListRepositoriesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<RepositoryNameIdPair>> {
-        Some(self.repositories.as_ref()?.clone())
+impl Paged for ListRepositoriesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListRepositoriesOutput {
     type Item = RepositoryNameIdPair;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<RepositoryNameIdPair> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.repositories.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -15015,13 +15059,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<DescribePullRequestEventsOutput, RusotoError<DescribePullRequestEventsError>>;
 
     /// Auto-paginating version of `describe_pull_request_events`
-    fn describe_pull_request_events_pages(
-        &self,
-        input: DescribePullRequestEventsInput,
-    ) -> RusotoStream<PullRequestEvent, DescribePullRequestEventsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_pull_request_events(state.clone())
-        })
+    fn describe_pull_request_events_pages<'a>(
+        &'a self,
+        mut input: DescribePullRequestEventsInput,
+    ) -> RusotoStream<'a, PullRequestEvent, DescribePullRequestEventsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_pull_request_events(input.clone())
+        }))
     }
 
     /// <p>Removes the association between a template and a repository so that approval rules based on the template are not automatically created when pull requests are created in the specified repository. This does not delete any approval rules previously created for pull requests through the template association.</p>
@@ -15076,13 +15121,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>;
 
     /// Auto-paginating version of `get_comments_for_compared_commit`
-    fn get_comments_for_compared_commit_pages(
-        &self,
-        input: GetCommentsForComparedCommitInput,
-    ) -> RusotoStream<CommentsForComparedCommit, GetCommentsForComparedCommitError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_comments_for_compared_commit(state.clone())
-        })
+    fn get_comments_for_compared_commit_pages<'a>(
+        &'a self,
+        mut input: GetCommentsForComparedCommitInput,
+    ) -> RusotoStream<'a, CommentsForComparedCommit, GetCommentsForComparedCommitError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_comments_for_compared_commit(input.clone())
+        }))
     }
 
     /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
@@ -15092,13 +15138,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<GetCommentsForPullRequestOutput, RusotoError<GetCommentsForPullRequestError>>;
 
     /// Auto-paginating version of `get_comments_for_pull_request`
-    fn get_comments_for_pull_request_pages(
-        &self,
-        input: GetCommentsForPullRequestInput,
-    ) -> RusotoStream<CommentsForPullRequest, GetCommentsForPullRequestError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_comments_for_pull_request(state.clone())
-        })
+    fn get_comments_for_pull_request_pages<'a>(
+        &'a self,
+        mut input: GetCommentsForPullRequestInput,
+    ) -> RusotoStream<'a, CommentsForPullRequest, GetCommentsForPullRequestError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_comments_for_pull_request(input.clone())
+        }))
     }
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
@@ -15114,13 +15161,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<GetDifferencesOutput, RusotoError<GetDifferencesError>>;
 
     /// Auto-paginating version of `get_differences`
-    fn get_differences_pages(
-        &self,
-        input: GetDifferencesInput,
-    ) -> RusotoStream<Difference, GetDifferencesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_differences(state.clone())
-        })
+    fn get_differences_pages<'a>(
+        &'a self,
+        mut input: GetDifferencesInput,
+    ) -> RusotoStream<'a, Difference, GetDifferencesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_differences(input.clone())
+        }))
     }
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
@@ -15205,13 +15253,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<ListBranchesOutput, RusotoError<ListBranchesError>>;
 
     /// Auto-paginating version of `list_branches`
-    fn list_branches_pages(
-        &self,
-        input: ListBranchesInput,
-    ) -> RusotoStream<String, ListBranchesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_branches(state.clone())
-        })
+    fn list_branches_pages<'a>(
+        &'a self,
+        mut input: ListBranchesInput,
+    ) -> RusotoStream<'a, String, ListBranchesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_branches(input.clone())
+        }))
     }
 
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
@@ -15221,13 +15270,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<ListPullRequestsOutput, RusotoError<ListPullRequestsError>>;
 
     /// Auto-paginating version of `list_pull_requests`
-    fn list_pull_requests_pages(
-        &self,
-        input: ListPullRequestsInput,
-    ) -> RusotoStream<String, ListPullRequestsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_pull_requests(state.clone())
-        })
+    fn list_pull_requests_pages<'a>(
+        &'a self,
+        mut input: ListPullRequestsInput,
+    ) -> RusotoStream<'a, String, ListPullRequestsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_pull_requests(input.clone())
+        }))
     }
 
     /// <p>Gets information about one or more repositories.</p>
@@ -15237,13 +15287,14 @@ pub trait CodeCommit: Clone + Sync + Send + 'static {
     ) -> Result<ListRepositoriesOutput, RusotoError<ListRepositoriesError>>;
 
     /// Auto-paginating version of `list_repositories`
-    fn list_repositories_pages(
-        &self,
-        input: ListRepositoriesInput,
-    ) -> RusotoStream<RepositoryNameIdPair, ListRepositoriesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_repositories(state.clone())
-        })
+    fn list_repositories_pages<'a>(
+        &'a self,
+        mut input: ListRepositoriesInput,
+    ) -> RusotoStream<'a, RepositoryNameIdPair, ListRepositoriesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_repositories(input.clone())
+        }))
     }
 
     /// <p>Lists all repositories associated with the specified approval rule template.</p>

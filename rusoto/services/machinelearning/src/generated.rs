@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -632,11 +634,19 @@ pub struct DescribeBatchPredictionsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for DescribeBatchPredictionsInput {
+impl Paged for DescribeBatchPredictionsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeBatchPredictionsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -655,27 +665,25 @@ pub struct DescribeBatchPredictionsOutput {
     pub results: Option<Vec<BatchPrediction>>,
 }
 
-impl DescribeBatchPredictionsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<BatchPrediction>> {
-        Some(self.results.as_ref()?.clone())
+impl Paged for DescribeBatchPredictionsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeBatchPredictionsOutput {
     type Item = BatchPrediction;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BatchPrediction> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -729,11 +737,19 @@ pub struct DescribeDataSourcesInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for DescribeDataSourcesInput {
+impl Paged for DescribeDataSourcesInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeDataSourcesInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -752,27 +768,25 @@ pub struct DescribeDataSourcesOutput {
     pub results: Option<Vec<DataSource>>,
 }
 
-impl DescribeDataSourcesOutput {
-    fn pagination_page_opt(self) -> Option<Vec<DataSource>> {
-        Some(self.results.as_ref()?.clone())
+impl Paged for DescribeDataSourcesOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeDataSourcesOutput {
     type Item = DataSource;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DataSource> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -826,11 +840,19 @@ pub struct DescribeEvaluationsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for DescribeEvaluationsInput {
+impl Paged for DescribeEvaluationsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeEvaluationsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -849,27 +871,25 @@ pub struct DescribeEvaluationsOutput {
     pub results: Option<Vec<Evaluation>>,
 }
 
-impl DescribeEvaluationsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<Evaluation>> {
-        Some(self.results.as_ref()?.clone())
+impl Paged for DescribeEvaluationsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeEvaluationsOutput {
     type Item = Evaluation;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<Evaluation> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -923,11 +943,19 @@ pub struct DescribeMLModelsInput {
     pub sort_order: Option<String>,
 }
 
-impl PagedRequest for DescribeMLModelsInput {
+impl Paged for DescribeMLModelsInput {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for DescribeMLModelsInput {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -946,27 +974,25 @@ pub struct DescribeMLModelsOutput {
     pub results: Option<Vec<MLModel>>,
 }
 
-impl DescribeMLModelsOutput {
-    fn pagination_page_opt(self) -> Option<Vec<MLModel>> {
-        Some(self.results.as_ref()?.clone())
+impl Paged for DescribeMLModelsOutput {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for DescribeMLModelsOutput {
     type Item = MLModel;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<MLModel> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.results.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -3187,13 +3213,14 @@ pub trait MachineLearning: Clone + Sync + Send + 'static {
     ) -> Result<DescribeBatchPredictionsOutput, RusotoError<DescribeBatchPredictionsError>>;
 
     /// Auto-paginating version of `describe_batch_predictions`
-    fn describe_batch_predictions_pages(
-        &self,
-        input: DescribeBatchPredictionsInput,
-    ) -> RusotoStream<BatchPrediction, DescribeBatchPredictionsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_batch_predictions(state.clone())
-        })
+    fn describe_batch_predictions_pages<'a>(
+        &'a self,
+        mut input: DescribeBatchPredictionsInput,
+    ) -> RusotoStream<'a, BatchPrediction, DescribeBatchPredictionsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_batch_predictions(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
@@ -3203,13 +3230,14 @@ pub trait MachineLearning: Clone + Sync + Send + 'static {
     ) -> Result<DescribeDataSourcesOutput, RusotoError<DescribeDataSourcesError>>;
 
     /// Auto-paginating version of `describe_data_sources`
-    fn describe_data_sources_pages(
-        &self,
-        input: DescribeDataSourcesInput,
-    ) -> RusotoStream<DataSource, DescribeDataSourcesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_data_sources(state.clone())
-        })
+    fn describe_data_sources_pages<'a>(
+        &'a self,
+        mut input: DescribeDataSourcesInput,
+    ) -> RusotoStream<'a, DataSource, DescribeDataSourcesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_data_sources(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
@@ -3219,13 +3247,14 @@ pub trait MachineLearning: Clone + Sync + Send + 'static {
     ) -> Result<DescribeEvaluationsOutput, RusotoError<DescribeEvaluationsError>>;
 
     /// Auto-paginating version of `describe_evaluations`
-    fn describe_evaluations_pages(
-        &self,
-        input: DescribeEvaluationsInput,
-    ) -> RusotoStream<Evaluation, DescribeEvaluationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_evaluations(state.clone())
-        })
+    fn describe_evaluations_pages<'a>(
+        &'a self,
+        mut input: DescribeEvaluationsInput,
+    ) -> RusotoStream<'a, Evaluation, DescribeEvaluationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_evaluations(input.clone())
+        }))
     }
 
     /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
@@ -3235,13 +3264,14 @@ pub trait MachineLearning: Clone + Sync + Send + 'static {
     ) -> Result<DescribeMLModelsOutput, RusotoError<DescribeMLModelsError>>;
 
     /// Auto-paginating version of `describe_ml_models`
-    fn describe_ml_models_pages(
-        &self,
-        input: DescribeMLModelsInput,
-    ) -> RusotoStream<MLModel, DescribeMLModelsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.describe_ml_models(state.clone())
-        })
+    fn describe_ml_models_pages<'a>(
+        &'a self,
+        mut input: DescribeMLModelsInput,
+    ) -> RusotoStream<'a, MLModel, DescribeMLModelsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.describe_ml_models(input.clone())
+        }))
     }
 
     /// <p>Describes one or more of the tags for your Amazon ML object.</p>

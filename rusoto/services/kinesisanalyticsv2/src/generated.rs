@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::proto;
 use rusoto_core::request::HttpResponse;
@@ -1530,11 +1532,19 @@ pub struct ListApplicationSnapshotsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationSnapshotsRequest {
+impl Paged for ListApplicationSnapshotsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationSnapshotsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1552,27 +1562,25 @@ pub struct ListApplicationSnapshotsResponse {
     pub snapshot_summaries: Option<Vec<SnapshotDetails>>,
 }
 
-impl ListApplicationSnapshotsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<SnapshotDetails>> {
-        Some(self.snapshot_summaries.as_ref()?.clone())
+impl Paged for ListApplicationSnapshotsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationSnapshotsResponse {
     type Item = SnapshotDetails;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<SnapshotDetails> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.snapshot_summaries.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1590,11 +1598,19 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListApplicationsRequest {
+impl Paged for ListApplicationsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListApplicationsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1611,27 +1627,25 @@ pub struct ListApplicationsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListApplicationsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ApplicationSummary>> {
-        Some(self.application_summaries.clone())
+impl Paged for ListApplicationsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListApplicationsResponse {
     type Item = ApplicationSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ApplicationSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.application_summaries
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4285,13 +4299,14 @@ pub trait KinesisAnalyticsV2: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>>;
 
     /// Auto-paginating version of `list_application_snapshots`
-    fn list_application_snapshots_pages(
-        &self,
-        input: ListApplicationSnapshotsRequest,
-    ) -> RusotoStream<SnapshotDetails, ListApplicationSnapshotsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_application_snapshots(state.clone())
-        })
+    fn list_application_snapshots_pages<'a>(
+        &'a self,
+        mut input: ListApplicationSnapshotsRequest,
+    ) -> RusotoStream<'a, SnapshotDetails, ListApplicationSnapshotsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_application_snapshots(input.clone())
+        }))
     }
 
     /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
@@ -4301,13 +4316,14 @@ pub trait KinesisAnalyticsV2: Clone + Sync + Send + 'static {
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
 
     /// Auto-paginating version of `list_applications`
-    fn list_applications_pages(
-        &self,
-        input: ListApplicationsRequest,
-    ) -> RusotoStream<ApplicationSummary, ListApplicationsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_applications(state.clone())
-        })
+    fn list_applications_pages<'a>(
+        &'a self,
+        mut input: ListApplicationsRequest,
+    ) -> RusotoStream<'a, ApplicationSummary, ListApplicationsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_applications(input.clone())
+        }))
     }
 
     /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>

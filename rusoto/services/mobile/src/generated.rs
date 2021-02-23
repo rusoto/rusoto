@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -232,11 +234,19 @@ pub struct ListBundlesRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListBundlesRequest {
+impl Paged for ListBundlesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListBundlesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -255,27 +265,25 @@ pub struct ListBundlesResult {
     pub next_token: Option<String>,
 }
 
-impl ListBundlesResult {
-    fn pagination_page_opt(self) -> Option<Vec<BundleDetails>> {
-        Some(self.bundle_list.as_ref()?.clone())
+impl Paged for ListBundlesResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListBundlesResult {
     type Item = BundleDetails;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<BundleDetails> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.bundle_list.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -294,11 +302,19 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListProjectsRequest {
+impl Paged for ListProjectsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -315,27 +331,25 @@ pub struct ListProjectsResult {
     pub projects: Option<Vec<ProjectSummary>>,
 }
 
-impl ListProjectsResult {
-    fn pagination_page_opt(self) -> Option<Vec<ProjectSummary>> {
-        Some(self.projects.as_ref()?.clone())
+impl Paged for ListProjectsResult {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProjectsResult {
     type Item = ProjectSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProjectSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.projects.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1023,13 +1037,14 @@ pub trait Mobile: Clone + Sync + Send + 'static {
     ) -> Result<ListBundlesResult, RusotoError<ListBundlesError>>;
 
     /// Auto-paginating version of `list_bundles`
-    fn list_bundles_pages(
-        &self,
-        input: ListBundlesRequest,
-    ) -> RusotoStream<BundleDetails, ListBundlesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_bundles(state.clone())
-        })
+    fn list_bundles_pages<'a>(
+        &'a self,
+        mut input: ListBundlesRequest,
+    ) -> RusotoStream<'a, BundleDetails, ListBundlesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_bundles(input.clone())
+        }))
     }
 
     /// <p> Lists projects in AWS Mobile Hub. </p>
@@ -1039,13 +1054,14 @@ pub trait Mobile: Clone + Sync + Send + 'static {
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
 
     /// Auto-paginating version of `list_projects`
-    fn list_projects_pages(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoStream<ProjectSummary, ListProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_projects(state.clone())
-        })
+    fn list_projects_pages<'a>(
+        &'a self,
+        mut input: ListProjectsRequest,
+    ) -> RusotoStream<'a, ProjectSummary, ListProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_projects(input.clone())
+        }))
     }
 
     /// <p> Update an existing project. </p>

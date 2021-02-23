@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -238,11 +240,19 @@ pub struct ListPlacementsRequest {
     pub project_name: String,
 }
 
-impl PagedRequest for ListPlacementsRequest {
+impl Paged for ListPlacementsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListPlacementsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -259,27 +269,25 @@ pub struct ListPlacementsResponse {
     pub placements: Vec<PlacementSummary>,
 }
 
-impl ListPlacementsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<PlacementSummary>> {
-        Some(self.placements.clone())
+impl Paged for ListPlacementsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListPlacementsResponse {
     type Item = PlacementSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<PlacementSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.placements
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -297,11 +305,19 @@ pub struct ListProjectsRequest {
     pub next_token: Option<String>,
 }
 
-impl PagedRequest for ListProjectsRequest {
+impl Paged for ListProjectsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListProjectsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -318,27 +334,25 @@ pub struct ListProjectsResponse {
     pub projects: Vec<ProjectSummary>,
 }
 
-impl ListProjectsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<ProjectSummary>> {
-        Some(self.projects.clone())
+impl Paged for ListProjectsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListProjectsResponse {
     type Item = ProjectSummary;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<ProjectSummary> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.projects
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1359,13 +1373,14 @@ pub trait Iot1ClickProjects: Clone + Sync + Send + 'static {
     ) -> Result<ListPlacementsResponse, RusotoError<ListPlacementsError>>;
 
     /// Auto-paginating version of `list_placements`
-    fn list_placements_pages(
-        &self,
-        input: ListPlacementsRequest,
-    ) -> RusotoStream<PlacementSummary, ListPlacementsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_placements(state.clone())
-        })
+    fn list_placements_pages<'a>(
+        &'a self,
+        mut input: ListPlacementsRequest,
+    ) -> RusotoStream<'a, PlacementSummary, ListPlacementsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_placements(input.clone())
+        }))
     }
 
     /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
@@ -1375,13 +1390,14 @@ pub trait Iot1ClickProjects: Clone + Sync + Send + 'static {
     ) -> Result<ListProjectsResponse, RusotoError<ListProjectsError>>;
 
     /// Auto-paginating version of `list_projects`
-    fn list_projects_pages(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoStream<ProjectSummary, ListProjectsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_projects(state.clone())
-        })
+    fn list_projects_pages<'a>(
+        &'a self,
+        mut input: ListProjectsRequest,
+    ) -> RusotoStream<'a, ProjectSummary, ListProjectsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_projects(input.clone())
+        }))
     }
 
     /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>

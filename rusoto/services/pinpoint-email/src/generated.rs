@@ -16,10 +16,12 @@ use std::fmt;
 use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 #[allow(unused_imports)]
-use rusoto_core::pagination::{all_pages, PagedOutput, PagedRequest, RusotoStream};
+use rusoto_core::pagination::{aws_stream, Paged, PagedOutput, PagedRequest, RusotoStream};
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
+#[allow(unused_imports)]
+use std::borrow::Cow;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -762,11 +764,19 @@ pub struct GetDedicatedIpsRequest {
     pub pool_name: Option<String>,
 }
 
-impl PagedRequest for GetDedicatedIpsRequest {
+impl Paged for GetDedicatedIpsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for GetDedicatedIpsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -785,27 +795,25 @@ pub struct GetDedicatedIpsResponse {
     pub next_token: Option<String>,
 }
 
-impl GetDedicatedIpsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DedicatedIp>> {
-        Some(self.dedicated_ips.as_ref()?.clone())
+impl Paged for GetDedicatedIpsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for GetDedicatedIpsResponse {
     type Item = DedicatedIp;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DedicatedIp> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dedicated_ips.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1036,11 +1044,19 @@ pub struct ListConfigurationSetsRequest {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for ListConfigurationSetsRequest {
+impl Paged for ListConfigurationSetsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListConfigurationSetsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1059,27 +1075,25 @@ pub struct ListConfigurationSetsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListConfigurationSetsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.configuration_sets.as_ref()?.clone())
+impl Paged for ListConfigurationSetsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListConfigurationSetsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.configuration_sets.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1098,11 +1112,19 @@ pub struct ListDedicatedIpPoolsRequest {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for ListDedicatedIpPoolsRequest {
+impl Paged for ListDedicatedIpPoolsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDedicatedIpPoolsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1121,27 +1143,25 @@ pub struct ListDedicatedIpPoolsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDedicatedIpPoolsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<String>> {
-        Some(self.dedicated_ip_pools.as_ref()?.clone())
+impl Paged for ListDedicatedIpPoolsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDedicatedIpPoolsResponse {
     type Item = String;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<String> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.dedicated_ip_pools.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1160,11 +1180,19 @@ pub struct ListDeliverabilityTestReportsRequest {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for ListDeliverabilityTestReportsRequest {
+impl Paged for ListDeliverabilityTestReportsRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListDeliverabilityTestReportsRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1182,27 +1210,25 @@ pub struct ListDeliverabilityTestReportsResponse {
     pub next_token: Option<String>,
 }
 
-impl ListDeliverabilityTestReportsResponse {
-    fn pagination_page_opt(self) -> Option<Vec<DeliverabilityTestReport>> {
-        Some(self.deliverability_test_reports.clone())
+impl Paged for ListDeliverabilityTestReportsResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListDeliverabilityTestReportsResponse {
     type Item = DeliverabilityTestReport;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<DeliverabilityTestReport> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.deliverability_test_reports
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -1259,11 +1285,19 @@ pub struct ListEmailIdentitiesRequest {
     pub page_size: Option<i64>,
 }
 
-impl PagedRequest for ListEmailIdentitiesRequest {
+impl Paged for ListEmailIdentitiesRequest {
     type Token = Option<String>;
-    fn with_pagination_token(mut self, key: Option<String>) -> Self {
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
+    }
+}
+
+impl PagedRequest for ListEmailIdentitiesRequest {
+    fn set_pagination_token(&mut self, key: Option<String>) {
         self.next_token = key;
-        self
     }
 }
 
@@ -1282,27 +1316,25 @@ pub struct ListEmailIdentitiesResponse {
     pub next_token: Option<String>,
 }
 
-impl ListEmailIdentitiesResponse {
-    fn pagination_page_opt(self) -> Option<Vec<IdentityInfo>> {
-        Some(self.email_identities.as_ref()?.clone())
+impl Paged for ListEmailIdentitiesResponse {
+    type Token = Option<String>;
+    fn take_pagination_token(&mut self) -> Option<String> {
+        self.next_token.take()
+    }
+    fn pagination_token(&self) -> Cow<Option<String>> {
+        Cow::Borrowed(&self.next_token)
     }
 }
 
 impl PagedOutput for ListEmailIdentitiesResponse {
     type Item = IdentityInfo;
-    type Token = Option<String>;
-    fn pagination_token(&self) -> Option<String> {
-        Some(self.next_token.as_ref()?.clone())
-    }
 
     fn into_pagination_page(self) -> Vec<IdentityInfo> {
-        self.pagination_page_opt().unwrap_or_default()
+        self.email_identities.unwrap_or_default()
     }
 
     fn has_another_page(&self) -> bool {
-        {
-            self.pagination_token().is_some()
-        }
+        self.pagination_token().is_some()
     }
 }
 
@@ -4169,13 +4201,14 @@ pub trait PinpointEmail: Clone + Sync + Send + 'static {
     ) -> Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>>;
 
     /// Auto-paginating version of `get_dedicated_ips`
-    fn get_dedicated_ips_pages(
-        &self,
-        input: GetDedicatedIpsRequest,
-    ) -> RusotoStream<DedicatedIp, GetDedicatedIpsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.get_dedicated_ips(state.clone())
-        })
+    fn get_dedicated_ips_pages<'a>(
+        &'a self,
+        mut input: GetDedicatedIpsRequest,
+    ) -> RusotoStream<'a, DedicatedIp, GetDedicatedIpsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.get_dedicated_ips(input.clone())
+        }))
     }
 
     /// <p>Retrieve information about the status of the Deliverability dashboard for your Amazon Pinpoint account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
@@ -4220,13 +4253,14 @@ pub trait PinpointEmail: Clone + Sync + Send + 'static {
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
 
     /// Auto-paginating version of `list_configuration_sets`
-    fn list_configuration_sets_pages(
-        &self,
-        input: ListConfigurationSetsRequest,
-    ) -> RusotoStream<String, ListConfigurationSetsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_configuration_sets(state.clone())
-        })
+    fn list_configuration_sets_pages<'a>(
+        &'a self,
+        mut input: ListConfigurationSetsRequest,
+    ) -> RusotoStream<'a, String, ListConfigurationSetsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_configuration_sets(input.clone())
+        }))
     }
 
     /// <p>List all of the dedicated IP pools that exist in your Amazon Pinpoint account in the current AWS Region.</p>
@@ -4236,13 +4270,14 @@ pub trait PinpointEmail: Clone + Sync + Send + 'static {
     ) -> Result<ListDedicatedIpPoolsResponse, RusotoError<ListDedicatedIpPoolsError>>;
 
     /// Auto-paginating version of `list_dedicated_ip_pools`
-    fn list_dedicated_ip_pools_pages(
-        &self,
-        input: ListDedicatedIpPoolsRequest,
-    ) -> RusotoStream<String, ListDedicatedIpPoolsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_dedicated_ip_pools(state.clone())
-        })
+    fn list_dedicated_ip_pools_pages<'a>(
+        &'a self,
+        mut input: ListDedicatedIpPoolsRequest,
+    ) -> RusotoStream<'a, String, ListDedicatedIpPoolsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_dedicated_ip_pools(input.clone())
+        }))
     }
 
     /// <p>Show a list of the predictive inbox placement tests that you've performed, regardless of their statuses. For predictive inbox placement tests that are complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results.</p>
@@ -4255,13 +4290,14 @@ pub trait PinpointEmail: Clone + Sync + Send + 'static {
     >;
 
     /// Auto-paginating version of `list_deliverability_test_reports`
-    fn list_deliverability_test_reports_pages(
-        &self,
-        input: ListDeliverabilityTestReportsRequest,
-    ) -> RusotoStream<DeliverabilityTestReport, ListDeliverabilityTestReportsError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_deliverability_test_reports(state.clone())
-        })
+    fn list_deliverability_test_reports_pages<'a>(
+        &'a self,
+        mut input: ListDeliverabilityTestReportsRequest,
+    ) -> RusotoStream<'a, DeliverabilityTestReport, ListDeliverabilityTestReportsError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_deliverability_test_reports(input.clone())
+        }))
     }
 
     /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
@@ -4280,13 +4316,14 @@ pub trait PinpointEmail: Clone + Sync + Send + 'static {
     ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>>;
 
     /// Auto-paginating version of `list_email_identities`
-    fn list_email_identities_pages(
-        &self,
-        input: ListEmailIdentitiesRequest,
-    ) -> RusotoStream<IdentityInfo, ListEmailIdentitiesError> {
-        all_pages(self.clone(), input, move |client, state| {
-            client.list_email_identities(state.clone())
-        })
+    fn list_email_identities_pages<'a>(
+        &'a self,
+        mut input: ListEmailIdentitiesRequest,
+    ) -> RusotoStream<'a, IdentityInfo, ListEmailIdentitiesError> {
+        Box::new(aws_stream(input.take_pagination_token(), move |token| {
+            input.set_pagination_token(token);
+            self.list_email_identities(input.clone())
+        }))
     }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
