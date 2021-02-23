@@ -18,8 +18,8 @@ pub trait Paged {
     fn take_pagination_token(&mut self) -> Self::Token;
 
     /// Get the token for getting the next page
-    // COW because while wost iplementations will return a reference
-    // Some need to assemble the token so reference
+    // COW because while most iplementations will return a reference
+    // Some need to assemble the token so reference would not live past end of method
     fn pagination_token(&self) -> Cow<Self::Token>;
 }
 
@@ -39,6 +39,7 @@ pub trait PagedOutput: Paged {
     fn into_pagination_page(self) -> Vec<Self::Item>;
 
     /// Are there more pages of results after this one
+    // normally just `pagination_token().is_some()` but some service have a field for this
     fn has_another_page(&self) -> bool;
 }
 
