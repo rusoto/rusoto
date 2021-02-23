@@ -31,7 +31,8 @@ log = "0.4.1"
 md-5 = "0.9"
 base64 = "0.13"
 hex = "0.4"
-serde = "1"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
 sha2 = "0.9"
 percent-encoding = "2"
 pin-project-lite = "0.2"
@@ -42,7 +43,6 @@ version = "0.46.0"
 path = "../credential"
 
 [dev-dependencies]
-serde_json = "1"
 serde_test = "1"
 tokio = { version = "1.0", features = ["io-util"] }
 
