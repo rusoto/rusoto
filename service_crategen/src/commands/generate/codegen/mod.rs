@@ -500,7 +500,9 @@ where
 
             if let Some(ref variants) = shape.shape_enum {
                 if variants.len() > 0 {
-                    let generated = generate_enum(&type_name, variants);
+                    let generated = generate_enum(&type_name, variants, serialized &&
+                        protocol_generator.serialize_trait().is_some(), deserialized &&
+                        protocol_generator.deserialize_trait().is_some());
                     writeln!(writer, "{}", generated)?;
                 }
             }
@@ -551,19 +553,34 @@ fn get_variant_name(variant: &str) -> String {
     }
 }
 
-fn generate_enum(name: &str, variants: &Vec<String>) -> String {
+fn generate_enum(name: &str, variants: &Vec<String>, serialized: bool, deserialized: bool) -> String {
     let variant_names: BTreeMap<String, String> = variants
         .iter()
         .map(|v| (v.clone(), get_variant_name(&v)))
         .collect();
 
-    format!(
+        let seralize_cfg = if serialized {
+            ""
+        } else if deserialized {
+                "#[cfg(any(test, feature = \"serialize_structs\"))]"
+            }  else {
+                "#[cfg(feature = \"serialize_structs\")]"
+            };
+
+        let deseralize_cfg = if deserialized {
+            ""
+        }  else {
+            "#[cfg(feature = \"deserialize_structs\")]"
+        };
+
+        format!(
         "
 
-        struct Unknown{name}(String);
+        #[derive(Clone,Debug,Eq,PartialEq,Hash)]
+        pub struct Unknown{name}{{name: String}}
 
         #[allow(non_camel_case_types)]
-        #[derive(Clone,Debug,Eq,PartialEq)]
+        #[derive(Clone,Debug,Eq,PartialEq,Hash)]
         #[non_exhaustive]
         pub enum {name} {{
             {variants},
@@ -571,11 +588,56 @@ fn generate_enum(name: &str, variants: &Vec<String>) -> String {
             UnknownVariant(Unknown{name})
         }}
 
+        impl Default for {name} {{
+            fn default() -> Self {{
+                \"\".into()
+            }}
+        }}
+
+        impl fmt::Display for {name} {{
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
+                f.write_str(self.into())
+            }}
+        }}
+
+        impl rusoto_core::param::ToParam for {name} {{
+            fn to_param(&self) -> String {{
+                self.to_string()
+            }}
+        }}
+
         impl Into<String> for {name} {{
             fn into(self) -> String {{
                 match self {{
                     {matches},
-                    UnknownVariant(Unknown{name}(original)) => original
+                    {name}::UnknownVariant(Unknown{name}{{name: original}}) => original
+                }}
+            }}
+        }}
+
+        impl<'a> Into<&'a str> for &'a {name} {{
+            fn into(self) -> &'a str {{
+                match self {{
+                    {str_matches},
+                    {name}::UnknownVariant(Unknown{name}{{name: original}}) => original
+                }}
+            }}
+        }}
+
+        impl From<&str> for {name} {{
+            fn from(name: &str) -> Self {{
+                match name {{
+                    {reverse_matches},
+                    _ => {name}::UnknownVariant(Unknown{name}{{name: name.to_owned()}})
+                }}
+            }}
+        }}
+
+        impl From<String> for {name} {{
+            fn from(name: String) -> Self {{
+                match &*name {{
+                    {reverse_matches},
+                    _ => {name}::UnknownVariant(Unknown{name}{{name}})
                 }}
             }}
         }}
@@ -583,10 +645,27 @@ fn generate_enum(name: &str, variants: &Vec<String>) -> String {
         impl ::std::str::FromStr for {name} {{
             type Err = ();
             fn from_str(s: &str) -> Result<Self, Self::Err> {{
-                Ok(match s {{
-                    {reverse_matches},
-                    _ => UnknownVariant(Unknown{name}(original))
-                }})
+                Ok(s.into())
+            }}
+        }}
+
+        {seralize_cfg}
+        impl Serialize for {name} {{
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: serde::Serializer,
+            {{
+                serializer.serialize_str(self.into())
+            }}
+        }}
+
+        {deseralize_cfg}
+        impl<'de> Deserialize<'de> for {name} {{
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {{
+                Ok(String::deserialize(deserializer)?.into())
             }}
         }}
         ",
@@ -601,11 +680,18 @@ fn generate_enum(name: &str, variants: &Vec<String>) -> String {
             .map(|(s, v)| format!("{}::{} => \"{}\".to_string()", name, v, s))
             .collect::<Vec<_>>()
             .join(",\n"),
+        str_matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("{}::{} => &\"{}\"", name, v, s))
+            .collect::<Vec<_>>()
+            .join(",\n"),
         reverse_matches = variant_names
             .iter()
             .map(|(s, v)| format!("\"{}\" => {}::{}", s, name, v))
             .collect::<Vec<_>>()
-            .join(",\n")
+            .join(",\n"),
+        seralize_cfg = seralize_cfg,
+        deseralize_cfg = deseralize_cfg,
     )
 }
 

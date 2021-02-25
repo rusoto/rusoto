@@ -377,6 +377,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> String {
     let deserialize = match shape.shape_type {
         ShapeType::String if percent_decode => "|s| Ok(rusoto_core::signature::decode_uri(&s))",
+        ShapeType::String if shape.shape_enum.is_some() => "|s| Ok(s.into())",
         ShapeType::String | ShapeType::Timestamp => "Ok",
         ShapeType::Integer | ShapeType::Long => "|s| Ok(i64::from_str(&s).unwrap())",
         ShapeType::Double => "|s| Ok(f64::from_str(&s).unwrap())",

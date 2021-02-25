@@ -322,6 +322,7 @@ fn generate_serializer_signature(name: &str) -> String {
 fn generate_primitive_serializer(shape: &Shape) -> String {
     let value_str = match shape.shape_type {
         ShapeType::Blob => "std::str::from_utf8(obj).expect(\"Not a UTF-8 string\")",
+        ShapeType::String if shape.shape_enum.is_some() => "obj.into()",
         ShapeType::String | ShapeType::Timestamp => "obj",
         _ => "&obj.to_string()",
     };

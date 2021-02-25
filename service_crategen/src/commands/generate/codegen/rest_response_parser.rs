@@ -126,6 +126,7 @@ fn parse_single_header(
 
 fn generate_header_primitive_parser(service: &Service<'_>, shape: &Shape) -> Option<&'static str> {
     let statement = match shape.shape_type {
+        ShapeType::String if shape.shape_enum.is_some() => "value.into()",
         ShapeType::String => return None,
         ShapeType::Timestamp => match service.protocol() {
             "rest-json" => "value.parse::<f64>().unwrap()",

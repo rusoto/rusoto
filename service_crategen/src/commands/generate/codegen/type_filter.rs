@@ -44,9 +44,14 @@ fn recurse_find_serializable_shapes(
         ShapeType::Structure => {
             if let Some(ref members) = shape.members {
                 for member in members.values() {
+                    let member_shape = service
+                        .get_shape(&member.shape)
+                        .expect("Shape type missing from service definition");
+                    let header = member.location == Some("header".to_owned())
+                        || member.location == Some("headers".to_owned());
+                    let is_enum = member_shape.shape_enum.is_some();
                     if Some(true) != member.deprecated
-                        && member.location != Some("header".to_owned())
-                        && member.location != Some("headers".to_owned())
+                        && (!header || is_enum)
                         && !types.contains(&member.shape)
                     {
                         recurse_find_serializable_shapes(service, types, &member.shape);
