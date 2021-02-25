@@ -5,6 +5,7 @@ extern crate rusoto_core;
 
 use rusoto_application_autoscaling::{
     ApplicationAutoScaling, ApplicationAutoScalingClient, DescribeScalingPoliciesRequest,
+    ServiceNamespace,
 };
 use rusoto_core::Region;
 
@@ -13,7 +14,7 @@ async fn should_describe_scaling_policies() {
     let client = ApplicationAutoScalingClient::new(Region::UsEast1);
 
     let request = DescribeScalingPoliciesRequest {
-        service_namespace: "ec2".to_owned(),
+        service_namespace: ServiceNamespace::Ec2,
         ..Default::default()
     };
 

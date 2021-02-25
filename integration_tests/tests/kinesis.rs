@@ -16,7 +16,10 @@ use rand::{thread_rng, Rng};
 use tokio::time::{sleep, timeout};
 
 use rusoto_core::Region;
-use rusoto_kinesis::{Kinesis, KinesisClient, ListStreamsInput};
+use rusoto_kinesis::{
+    ConsumerStatus, EncryptionType, Kinesis, KinesisClient, ListStreamsInput, ShardIteratorType,
+    StreamStatus,
+};
 
 #[async_trait]
 trait AsyncCleanup {
@@ -113,7 +116,7 @@ async fn should_listen_for_shard_events() {
                 ..Default::default()
             }).await.unwrap();
 
-            if steam_desc_result.stream_description.stream_status == "CREATING" {
+            if steam_desc_result.stream_description.stream_status == StreamStatus::Creating {
                 println!("Stream {} still initializing, waiting...", stream.name);
                 sleep(std::time::Duration::from_secs(2)).await;
                 continue;
@@ -123,13 +126,14 @@ async fn should_listen_for_shard_events() {
         }
 
         if let Ok(kms_id) = std::env::var("KMS_ID") {
-            client.start_stream_encryption(rusoto_kinesis::StartStreamEncryptionInput {
-                encryption_type: "KMS".to_string(),
-                key_id: kms_id,
-                stream_name: stream.name.clone(),
-            })
-            .await
-            .unwrap();
+            client
+                .start_stream_encryption(rusoto_kinesis::StartStreamEncryptionInput {
+                    encryption_type: EncryptionType::Kms,
+                    key_id: kms_id,
+                    stream_name: stream.name.clone(),
+                })
+                .await
+                .unwrap();
         }
 
         tokio::time::sleep(Duration::from_secs(10)).await;
@@ -150,8 +154,8 @@ async fn should_listen_for_shard_events() {
                 ..Default::default()
             }).await.unwrap();
 
-            if consumer_desc_result.consumer_description.consumer_status == "CREATING" {
                 println!("Consumer for stream {} still initializing, waiting...", stream.name);
+            if consumer_desc_result.consumer_description.consumer_status == ConsumerStatus::Creating {
                 sleep(std::time::Duration::from_secs(2)).await;
                 continue;
             } else {
@@ -176,7 +180,7 @@ async fn should_listen_for_shard_events() {
                 starting_position: rusoto_kinesis::StartingPosition {
                     sequence_number: None,
                     timestamp: None,
-                    type_: "TRIM_HORIZON".to_string()
+                    type_: ShardIteratorType::TrimHorizon,
                 },
             })
             .await

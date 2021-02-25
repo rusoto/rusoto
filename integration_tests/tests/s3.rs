@@ -19,10 +19,11 @@ use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider, Static
 use rusoto_core::{Region, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
-    CORSConfiguration, CORSRule, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-    CompletedPart, CopyObjectRequest, CreateBucketRequest, CreateMultipartUploadRequest,
-    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
-    ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
+    BucketCannedACL, CORSConfiguration, CORSRule, CompleteMultipartUploadRequest,
+    CompletedMultipartUpload, CompletedPart, CopyObjectRequest, CreateBucketRequest,
+    CreateMultipartUploadRequest, DeleteBucketRequest, DeleteObjectRequest, GetObjectError,
+    GetObjectRequest, HeadObjectRequest, ListObjectsRequest, ListObjectsV2Request,
+    MetadataDirective, ObjectCannedACL, PutBucketCorsRequest, PutObjectRequest, S3Client,
     StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
 };
 
@@ -98,7 +99,7 @@ impl TestS3Client {
         tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     }
 
-    async fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
+    async fn create_test_bucket_with_acl(&self, name: String, acl: Option<BucketCannedACL>) {
         let create_bucket_req = CreateBucketRequest {
             bucket: name.clone(),
             acl,
@@ -219,7 +220,9 @@ async fn test_puts_gets_deletes() {
 
     let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
-    test_client.create_test_bucket_with_acl(bucket_name.clone(), Some("public-read".to_owned())).await;
+    test_client
+        .create_test_bucket_with_acl(bucket_name.clone(), Some(BucketCannedACL::PublicRead))
+        .await;
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -240,8 +243,9 @@ async fn test_puts_gets_deletes() {
         &test_client.bucket_name,
         &filename,
         &"tests/sample-data/no_credentials",
-        Some("public-read".to_owned()),
-    ).await;
+        Some(ObjectCannedACL::PublicRead),
+    )
+    .await;
 
     // PUT a second copy of the object with tighter acls
     test_put_object_with_filename(
@@ -842,7 +846,7 @@ async fn test_put_object_with_filename_and_acl(
     bucket: &str,
     dest_filename: &str,
     local_filename: &str,
-    acl: Option<String>,
+    acl: Option<ObjectCannedACL>,
 ) {
     let mut f = File::open(local_filename).unwrap();
     let mut contents: Vec<u8> = Vec::new();
@@ -975,7 +979,7 @@ async fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
         copy_source: format!("{}/{}", bucket, filename),
         cache_control: Some("max-age=123".to_owned()),
         content_type: Some("application/json".to_owned()),
-        metadata_directive: Some("REPLACE".to_owned()),
+        metadata_directive: Some(MetadataDirective::Replace),
         ..Default::default()
     };
 
@@ -993,7 +997,7 @@ async fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) 
         copy_source: rusoto_s3::util::encode_key(format!("{}/{}", bucket, filename)),
         cache_control: Some("max-age=123".to_owned()),
         content_type: Some("application/json".to_owned()),
-        metadata_directive: Some("REPLACE".to_owned()),
+        metadata_directive: Some(MetadataDirective::Replace),
         ..Default::default()
     };
 
